@@ -28,6 +28,7 @@ namespace Piranha.Manager.Controllers
     [Route("manager/api/media")]
     [Authorize(Policy = Permission.Admin)]
     [ApiController]
+    [AutoValidateAntiforgeryToken]
     public class MediaApiController : Controller
     {
         private readonly MediaService _service;
@@ -153,10 +154,10 @@ namespace Piranha.Manager.Controllers
             }
         }
 
-        [Route("folder/delete/{id:Guid}")]
-        [HttpGet]
+        [Route("folder/delete")]
+        [HttpDelete]
         [Authorize(Policy = Permission.MediaDeleteFolder)]
-        public async Task<IActionResult> DeleteFolder(Guid id)
+        public async Task<IActionResult> DeleteFolder([FromBody]Guid id)
         {
             try
             {
@@ -299,7 +300,7 @@ namespace Piranha.Manager.Controllers
         }
 
         [Route("delete")]
-        [HttpPost]
+        [HttpDelete]
         [Consumes("application/json")]
         [Authorize(Policy = Permission.MediaDelete)]
         public async Task<IActionResult> Delete([FromBody] IEnumerable<Guid> items)

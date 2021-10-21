@@ -3,7 +3,9 @@
 .actions {
     white-space: nowrap;
 
-    a {
+    a, button {
+        background-color: transparent;
+        border: none;
         display: inline-block;
         width: 1.5rem;
         height: 1.5rem;

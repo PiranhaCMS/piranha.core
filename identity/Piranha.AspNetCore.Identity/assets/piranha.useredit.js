@@ -48,9 +48,7 @@ piranha.useredit= new Vue({
             console.log(JSON.stringify(self.userModel));
             fetch(piranha.baseUrl + "manager/user/save", {
                 method: "post",
-                headers: {
-                    "Content-Type": "application/json"
-                },
+                headers: piranha.utils.antiForgeryHeaders(),
                 body: JSON.stringify(self.userModel)
             })
             .then(function (response) {
@@ -102,9 +100,7 @@ piranha.useredit= new Vue({
                     var ok = false;
                     fetch(piranha.baseUrl + "manager/user/delete", {
                         method: "delete",
-                        headers: {
-                            "Content-Type": "application/json"
-                        },
+                        headers: piranha.utils.antiForgeryHeaders(),
                         body: JSON.stringify(userId)
                     })
                     .then(function (response) { 

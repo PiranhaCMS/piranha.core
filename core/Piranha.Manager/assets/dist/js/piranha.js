@@ -155,6 +155,7 @@ piranha.dropzone = new function () {
         var defaultOptions = {
             paramName: 'Uploads',
             url: piranha.baseUrl + "manager/api/media/upload",
+            headers: piranha.utils.antiForgeryHeaders(false),
             thumbnailWidth: 70,
             thumbnailHeight: 70,
             previewsContainer: selector + " .media-list",
@@ -296,7 +297,28 @@ piranha.utils = {
     },
     strLength: function (str) {
         return str != null ? str.length : 0;
-    }
+    },
+    antiForgery: function () {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            let c = cookies[i].trim().split('=');
+            if (c[0] === piranha.antiForgery.cookieName) {
+                return c[1];
+            }
+        }
+        return "";
+    },
+    antiForgeryHeaders: function (isJson) {
+        var headers = {};
+
+        if (isJson === undefined || isJson === true)
+        {
+            headers["Content-Type"] = "application/json";
+        }
+        headers[piranha.antiForgery.headerName] = piranha.utils.antiForgery();
+
+        return headers;
+    }    
 };
 
 Date.prototype.addDays = function(days) {
@@ -479,6 +501,13 @@ piranha.notifications = new Vue({
         items: [],
     },
     methods: {
+        unauthorized: function() {
+            this.push({
+                type: "danger",
+                body: "Request sender could not be verified by the server.",
+                hide: true
+            });
+        },
         push: function (notification) {
 
             notification.style = {
@@ -753,9 +782,7 @@ piranha.mediapicker = new Vue({
             if (self.folderName !== "") {
                 fetch(piranha.baseUrl + "manager/api/media/folder/save" + (self.filter ? "?filter=" + self.filter : ""), {
                     method: "post",
-                    headers: {
-                        "Content-Type": "application/json",
-                    },
+                    headers: piranha.utils.antiForgeryHeaders(),
                     body: JSON.stringify({
                         parentId: self.currentFolderId,
                         name: self.folderName
@@ -772,8 +799,13 @@ piranha.mediapicker = new Vue({
                         self.items = result.media;
                     }
 
-                    // Push status to notification hub
-                    piranha.notifications.push(result.status);
+                    if (result.status != 400) {
+                        // Push status to notification hub
+                        piranha.notifications.push(result.status);
+                    } else {
+                        // Unauthorized request
+                        piranha.notifications.unauthorized();
+                    }
                 })
                 .catch(function (error) {
                     console.log("error:", error);
@@ -1123,22 +1155,25 @@ piranha.languageedit = new Vue({
                 self.loading = true;
                 fetch(piranha.baseUrl + "manager/api/language", {
                     method: "post",
-                    headers: {
-                        "Content-Type": "application/json",
-                    },
+                    headers: piranha.utils.antiForgeryHeaders(),
                     body: JSON.stringify({
                         items: JSON.parse(JSON.stringify(self.items))
                     })
                 })
                 .then(function (response) { return response.json(); })
                 .then(function (result) {
-                    //if (result.status.type === "success")
-                    //{
+                    if (result.status.type === "success") {
                         self.bind(result);
-                    //}
-
-                    // Push status to notification hub
-                    // piranha.notifications.push(result.status);
+                    }
+                    
+                    if (result.status != 400) {
+                        // Push status to notification hub
+                        piranha.notifications.push(result.status);
+                    } else {
+                        // Unauthorized request
+                        piranha.notifications.unauthorized();
+                        self.loading = false;
+                    }
                 })
                 .catch(function (error) {
                     console.log("error:", error);
@@ -1151,20 +1186,23 @@ piranha.languageedit = new Vue({
             self.loading = true;
             fetch(piranha.baseUrl + "manager/api/language/" + item.id, {
                 method: "delete",
-                headers: {
-                    "Content-Type": "application/json",
-                },
+                headers: piranha.utils.antiForgeryHeaders(),
                 body: JSON.stringify(item)
             })
             .then(function (response) { return response.json(); })
             .then(function (result) {
-                //if (result.status.type === "success")
-                //{
+                if (result.status.type === "success") {
                     self.bind(result);
-                //}
+                }
 
-                // Push status to notification hub
-                // piranha.notifications.push(result.status);
+                if (result.status != 400) {
+                    // Push status to notification hub
+                    piranha.notifications.push(result.status);
+                } else {
+                    // Unauthorized request
+                    piranha.notifications.unauthorized();
+                    self.loading = false;
+                }
             })
             .catch(function (error) {
                 console.log("error:", error);

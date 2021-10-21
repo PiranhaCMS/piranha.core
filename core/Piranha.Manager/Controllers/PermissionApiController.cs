@@ -22,6 +22,7 @@ namespace Piranha.Manager.Controllers
     [Route("manager/api/permissions")]
     [Authorize(Policy = Permission.Admin)]
     [ApiController]
+    [AutoValidateAntiforgeryToken]
     public class PermissionApiController : Controller
     {
         private readonly IAuthorizationService _auth;

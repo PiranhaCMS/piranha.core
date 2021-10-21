@@ -104,10 +104,9 @@ namespace Piranha.Manager.LocalAuth.Areas.Manager.Pages
 
             if (!string.IsNullOrEmpty(returnUrl))
             {
-                return LocalRedirect(returnUrl);
+                return LocalRedirect($"~/manager/login/auth?returnUrl={ returnUrl }");
             }
-
-            return new RedirectToPageResult("Index");
+            return LocalRedirect("~/manager/login/auth");
         }
     }
 }

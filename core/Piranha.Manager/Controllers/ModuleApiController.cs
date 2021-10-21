@@ -23,6 +23,7 @@ namespace Piranha.Manager.Controllers
     [Route("manager/api/module")]
     [Authorize(Policy = Permission.Admin)]
     [ApiController]
+    [AutoValidateAntiforgeryToken]
     public class ModuleApiController : Controller
     {
         private readonly ModuleService _service;

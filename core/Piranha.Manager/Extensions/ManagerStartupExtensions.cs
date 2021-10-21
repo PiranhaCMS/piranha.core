@@ -22,22 +22,39 @@ public static class ManagerStartupExtensions
     /// Uses the Piranha Manager services if simple startup is used.
     /// </summary>
     /// <param name="serviceBuilder">The service builder</param>
+    /// <param name="options">The optional options</param>
     /// <param name="jsonOptions">Optional JSON options</param>
     /// <returns>The updated builder</returns>
     public static PiranhaServiceBuilder UseManager(this PiranhaServiceBuilder serviceBuilder,
+        Action<ManagerOptions> options = null,
         Action<MvcNewtonsoftJsonOptions> jsonOptions = null)
     {
-        // Add dependent services
-        serviceBuilder.Services.AddLocalization(options =>
-            options.ResourcesPath = "Resources"
-        );
-        serviceBuilder.Services.AddControllersWithViews();
-        serviceBuilder.Services.AddRazorPages()
-            .AddPiranhaManagerOptions(jsonOptions);
+        // Perform optional configuration
+        var managerOptions = new ManagerOptions();
+        options?.Invoke(managerOptions);
 
         // Add manager services
         serviceBuilder.Services.AddPiranhaManager();
 
+        // Add dependent ASP.NET services
+        serviceBuilder.Services.AddLocalization(o =>
+            o.ResourcesPath = "Resources"
+        );
+        serviceBuilder.Services.AddControllersWithViews();
+        serviceBuilder.Services.AddRazorPages()
+            .AddPiranhaManagerOptions(jsonOptions);
+        serviceBuilder.Services.AddAntiforgery(o =>
+        {
+            o.HeaderName = managerOptions.XsrfHeaderName; 
+        });
+
+        // Add options
+        serviceBuilder.Services.Configure<ManagerOptions>(o => 
+        {
+            o.JsonOptions = managerOptions.JsonOptions;
+            o.XsrfCookieName = managerOptions.XsrfCookieName;
+            o.XsrfHeaderName = managerOptions.XsrfHeaderName;
+        }); 
         return serviceBuilder;
     }
 

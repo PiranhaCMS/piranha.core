@@ -1,4 +1,5 @@
-﻿@{
+﻿@inject Microsoft.Extensions.Options.IOptions<ManagerOptions> Options
+@{
     var module = Piranha.App.Modules.Get<Piranha.Manager.Module>();
     var prerelease = Piranha.Utils.IsPreRelease(typeof(Piranha.Manager.Module).Assembly) ? "pre-release" : "";
     var isRightToLeft =  @System.Globalization.CultureInfo.CurrentCulture.TextInfo.IsRightToLeft;
@@ -53,6 +54,10 @@
         var piranha = {};
         window.piranha = piranha;
         piranha.baseUrl = "@Url.Content("~/")";
+        piranha.antiForgery = {
+            cookieName: "@Options.Value.XsrfCookieName",
+            headerName: "@Options.Value.XsrfHeaderName"
+        };
     </script>
 
     <partial name="~/Areas/Manager/Shared/Partial/_EditorConfig.cshtml" />

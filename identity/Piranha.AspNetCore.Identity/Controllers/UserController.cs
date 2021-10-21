@@ -28,6 +28,7 @@ namespace Piranha.AspNetCore.Identity.Controllers
     /// Manager controller for managing users accounts.
     /// </summary>
     [Area("Manager")]
+    [AutoValidateAntiforgeryToken]
     public class UserController : ManagerController
     {
         private readonly IDb _db;

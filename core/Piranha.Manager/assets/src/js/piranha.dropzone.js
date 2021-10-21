@@ -14,6 +14,7 @@ piranha.dropzone = new function () {
         var defaultOptions = {
             paramName: 'Uploads',
             url: piranha.baseUrl + "manager/api/media/upload",
+            headers: piranha.utils.antiForgeryHeaders(false),
             thumbnailWidth: 70,
             thumbnailHeight: 70,
             previewsContainer: selector + " .media-list",

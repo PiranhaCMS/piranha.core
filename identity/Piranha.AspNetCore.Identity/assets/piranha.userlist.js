@@ -50,9 +50,7 @@ piranha.userlist = new Vue({
                 onConfirm: function () {
                     fetch(piranha.baseUrl + "manager/user/delete", {
                         method: "delete",
-                        headers: {
-                            "Content-Type": "application/json"
-                        },
+                        headers: piranha.utils.antiForgeryHeaders(),
                         body: JSON.stringify(user.id)
                     })
                     .then(function (response) { return response.json(); })

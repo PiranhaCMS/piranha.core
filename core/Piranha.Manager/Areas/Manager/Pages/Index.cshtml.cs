@@ -24,7 +24,7 @@ namespace Piranha.Manager.Models
         {
             _service = service;
         }
-        public async Task<IActionResult> OnGet()
+        public async Task<IActionResult> OnGet(string returnUrl = null)
         {
             var items = await Menu.Items.GetForUser(HttpContext.User, _service);
 

@@ -85,9 +85,7 @@ piranha.siteedit = new Vue({
 
             fetch(piranha.baseUrl + "manager/api/site/save", {
                 method: "post",
-                headers: {
-                    "Content-Type": "application/json",
-                },
+                headers: piranha.utils.antiForgeryHeaders(),
                 body: JSON.stringify(model)
             })
             .then(function (response) { return response.json(); })
@@ -104,9 +102,7 @@ piranha.siteedit = new Vue({
 
                         fetch(piranha.baseUrl + "manager/api/site/savecontent", {
                             method: "post",
-                            headers: {
-                                "Content-Type": "application/json",
-                            },
+                            headers: piranha.utils.antiForgeryHeaders(),
                             body: JSON.stringify(content)
                         })
                         .then(function (contentResponse) { return contentResponse.json(); })
@@ -121,7 +117,13 @@ piranha.siteedit = new Vue({
                                     self.callback = null;
                                 }
                             } else {
-                                piranha.notifications.push(contentResult);
+                                if (result.status != 400) {
+                                    // Push status to notification hub
+                                    piranha.notifications.push(contentResult);
+                                } else {
+                                    // Unauthorized request
+                                    piranha.notifications.unauthorized();
+                                }
                             }
                         })
                         .catch(function (error) {
@@ -216,9 +218,7 @@ piranha.siteedit = new Vue({
 
             fetch(piranha.baseUrl + "manager/api/site/delete", {
                 method: "delete",
-                headers: {
-                    "Content-Type": "application/json"
-                },
+                headers: piranha.utils.antiForgeryHeaders(),
                 body: JSON.stringify(self.id)
             })
             .then(function (response) { return response.json(); })
