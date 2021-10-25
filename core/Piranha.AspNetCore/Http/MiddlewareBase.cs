@@ -91,5 +91,24 @@ namespace Piranha.AspNetCore.Http
             }
             return false;
         }
+
+        /// <summary>
+        /// Checks if this is a manager request.
+        /// </summary>
+        /// <param name="url">The url</param>
+        /// <returns>If the given url is for the manager application</returns>
+        protected bool IsManagerRequest(string url)
+        {
+            if (string.IsNullOrEmpty(url))
+            {
+                return false;
+            }
+
+            if (url.StartsWith("/manager/") || url == "/manager")
+            {
+                return true;
+            }
+            return false;
+        }
     }
 }

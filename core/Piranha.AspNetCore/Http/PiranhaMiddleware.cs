@@ -51,7 +51,7 @@ namespace Piranha.AspNetCore.Http
         {
             var appConfig = new Config(api);
 
-            if (!IsHandled(context) && !context.Request.Path.Value.StartsWith("/manager/assets/"))
+            if (!IsHandled(context) && !IsManagerRequest(context.Request.Path.Value))
             {
                 var url = context.Request.Path.HasValue ? context.Request.Path.Value : "";
                 var segments = !string.IsNullOrEmpty(url) ? url.Substring(1).Split(new char[] { '/' }, StringSplitOptions.RemoveEmptyEntries) : new string[] { };
