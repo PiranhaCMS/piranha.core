@@ -8,6 +8,13 @@ piranha.notifications = new Vue({
         items: [],
     },
     methods: {
+        unauthorized: function() {
+            this.push({
+                type: "danger",
+                body: "Request sender could not be verified by the server.",
+                hide: true
+            });
+        },
         push: function (notification) {
 
             notification.style = {

@@ -246,9 +246,7 @@ piranha.postedit = new Vue({
 
             fetch(route, {
                 method: "post",
-                headers: {
-                    "Content-Type": "application/json",
-                },
+                headers: piranha.utils.antiForgeryHeaders(),
                 body: JSON.stringify(model)
             })
             .then(function (response) { return response.json(); })
@@ -278,27 +276,32 @@ piranha.postedit = new Vue({
         revert: function () {
             var self = this;
 
-            fetch(piranha.baseUrl + "manager/api/post/revert/" + self.id)
-                .then(function (response) { return response.json(); })
-                .then(function (result) {
-                    self.bind(result);
+            fetch(piranha.baseUrl + "manager/api/post/revert", {
+                method: "post",
+                headers: piranha.utils.antiForgeryHeaders(),
+                body: JSON.stringify(self.id)
+            })
+            .then(function (response) { return response.json(); })
+            .then(function (result) {
+                self.bind(result);
 
-                    Vue.nextTick(function () {
-                        $("#selectedCategory").select2({
-                            tags: true,
-                            selectOnClose: true,
-                            placeholder: piranha.resources.texts.addCategory
-                        });
-                        $("#selectedTags").select2({
-                            tags: true,
-                            selectOnClose: false,
-                            placeholder: piranha.resources.texts.addTags
-                        });
+                Vue.nextTick(function () {
+                    $("#selectedCategory").select2({
+                        tags: true,
+                        selectOnClose: true,
+                        placeholder: piranha.resources.texts.addCategory
                     });
+                    $("#selectedTags").select2({
+                        tags: true,
+                        selectOnClose: false,
+                        placeholder: piranha.resources.texts.addTags
+                    });
+                });
 
-                    piranha.notifications.push(result.status);
-                })
-                .catch(function (error) { console.log("error:", error );
+                piranha.notifications.push(result.status);
+            })
+            .catch(function (error) { 
+                console.log("error:", error );
             });
         },
         remove: function () {
@@ -311,7 +314,11 @@ piranha.postedit = new Vue({
                 confirmIcon: "fas fa-trash",
                 confirmText: piranha.resources.texts.delete,
                 onConfirm: function () {
-                    fetch(piranha.baseUrl + "manager/api/post/delete/" + self.id)
+                    fetch(piranha.baseUrl + "manager/api/post/delete", {
+                        method: "delete",
+                        headers: piranha.utils.antiForgeryHeaders(),
+                        body: JSON.stringify(self.id)
+                    })
                     .then(function (response) { return response.json(); })
                     .then(function (result) {
                         piranha.notifications.push(result);

@@ -280,9 +280,7 @@ piranha.pageedit = new Vue({
 
             fetch(route, {
                 method: "post",
-                headers: {
-                    "Content-Type": "application/json",
-                },
+                headers: piranha.utils.antiForgeryHeaders(),
                 body: JSON.stringify(model)
             })
             .then(function (response) { return response.json(); })
@@ -314,29 +312,38 @@ piranha.pageedit = new Vue({
         revert: function () {
             var self = this;
 
-            fetch(piranha.baseUrl + "manager/api/page/revert/" + self.id)
-                .then(function (response) { return response.json(); })
-                .then(function (result) {
-                    self.bind(result);
+            fetch(piranha.baseUrl + "manager/api/page/revert", {
+                method: "post",
+                headers: piranha.utils.antiForgeryHeaders(),
+                body: JSON.stringify(self.id)
+            })
+            .then(function (response) { return response.json(); })
+            .then(function (result) {
+                self.bind(result);
 
-                    piranha.notifications.push(result.status);
-                })
-                .catch(function (error) { console.log("error:", error );
+                piranha.notifications.push(result.status);
+            })
+            .catch(function (error) { 
+                console.log("error:", error );
             });
         },
         detach: function () {
             var self = this;
 
-            fetch(piranha.baseUrl + "manager/api/page/detach/" + self.id)
-                .then(function (response) { return response.json(); })
-                .then(function (result) {
-                    self.bind(result);
+            fetch(piranha.baseUrl + "manager/api/page/detach", {
+                method: "post",
+                headers: piranha.utils.antiForgeryHeaders(),
+                body: JSON.stringify(self.id)
+            })
+            .then(function (response) { return response.json(); })
+            .then(function (result) {
+                self.bind(result);
 
-                    piranha.notifications.push(result.status);
-                })
-                .catch(function (error) { console.log("error:", error );
+                piranha.notifications.push(result.status);
+            })
+            .catch(function (error) { 
+                console.log("error:", error );
             });
-
         },
         remove: function () {
             var self = this;
@@ -348,7 +355,11 @@ piranha.pageedit = new Vue({
                 confirmIcon: "fas fa-trash",
                 confirmText: piranha.resources.texts.delete,
                 onConfirm: function () {
-                    fetch(piranha.baseUrl + "manager/api/page/delete/" + self.id)
+                    fetch(piranha.baseUrl + "manager/api/page/delete", {
+                        method: "delete",
+                        headers: piranha.utils.antiForgeryHeaders(),
+                        body: JSON.stringify(self.id)
+                    })
                     .then(function (response) { return response.json(); })
                     .then(function (result) {
                         piranha.notifications.push(result);

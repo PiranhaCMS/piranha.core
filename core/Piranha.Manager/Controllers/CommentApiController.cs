@@ -24,8 +24,15 @@ namespace Piranha.Manager.Controllers
     [Route("manager/api/comment")]
     [Authorize(Policy = Permission.Admin)]
     [ApiController]
+    [AutoValidateAntiforgeryToken]
     public class CommentApiController : Controller
     {
+        public class ApprovalModel
+        {
+            public Guid Id { get; set; }
+            public Guid? ParentId { get; set; }
+        }
+
         private readonly CommentService _service;
         private readonly ManagerLocalizer _localizer;
 
@@ -50,14 +57,14 @@ namespace Piranha.Manager.Controllers
             return _service.Get(id);
         }
 
-        [Route("approve/{id}/{parentId?}")]
-        [HttpGet]
+        [Route("approve")]
+        [HttpPost]
         [Authorize(Policy = Permission.CommentsApprove)]
-        public async Task<CommentListModel> Approve(Guid id, Guid? parentId = null)
+        public async Task<CommentListModel> Approve(ApprovalModel model)
         {
-            await _service.ApproveAsync(id);
+            await _service.ApproveAsync(model.Id).ConfigureAwait(false);
 
-            var result = await List(parentId);
+            var result = await List(model.ParentId).ConfigureAwait(false);
 
             result.Status = new StatusMessage
             {
@@ -67,14 +74,14 @@ namespace Piranha.Manager.Controllers
             return result;
         }
 
-        [Route("unapprove/{id}/{parentId?}")]
-        [HttpGet]
+        [Route("unapprove")]
+        [HttpPost]
         [Authorize(Policy = Permission.CommentsApprove)]
-        public async Task<CommentListModel> UnApprove(Guid id, Guid? parentId = null)
+        public async Task<CommentListModel> UnApprove(ApprovalModel model)
         {
-            await _service.UnApproveAsync(id);
+            await _service.UnApproveAsync(model.Id).ConfigureAwait(false);
 
-            var result = await List(parentId);
+            var result = await List(model.ParentId).ConfigureAwait(false);
 
             result.Status = new StatusMessage
             {
@@ -84,12 +91,12 @@ namespace Piranha.Manager.Controllers
             return result;
         }
 
-        [Route("delete/{id}")]
-        [HttpGet]
+        [Route("delete")]
+        [HttpDelete]
         [Authorize(Policy = Permission.CommentsDelete)]
-        public async Task<StatusMessage> Delete(Guid id)
+        public async Task<StatusMessage> Delete([FromBody]Guid id)
         {
-            await _service.DeleteAsync(id);
+            await _service.DeleteAsync(id).ConfigureAwait(false);
 
             var result = new StatusMessage
             {

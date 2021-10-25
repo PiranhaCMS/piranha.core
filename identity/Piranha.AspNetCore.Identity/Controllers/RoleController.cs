@@ -18,6 +18,7 @@ using Piranha.Manager.Controllers;
 namespace Piranha.AspNetCore.Identity.Controllers
 {
     [Area("Manager")]
+    [AutoValidateAntiforgeryToken]
     public class RoleController : ManagerController
     {
         private readonly IDb _db;
@@ -66,7 +67,7 @@ namespace Piranha.AspNetCore.Identity.Controllers
             return View("Edit", model);
         }
 
-        [HttpGet]
+        [HttpPost]
         [Route("/manager/role/delete")]
         [Authorize(Policy = Permissions.RolesDelete)]
         public IActionResult Delete(Guid id)

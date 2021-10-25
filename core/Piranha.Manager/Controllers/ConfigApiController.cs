@@ -22,6 +22,7 @@ namespace Piranha.Manager.Controllers
     [Route("manager/api/config")]
     [Authorize(Policy = Permission.Admin)]
     [ApiController]
+    [AutoValidateAntiforgeryToken]
     public class ConfigApiController : Controller
     {
         private readonly ConfigService _service;

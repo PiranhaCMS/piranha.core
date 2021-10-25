@@ -25,6 +25,7 @@ namespace Piranha.Manager.Controllers
     [Route("manager/api/site")]
     [Authorize(Policy = Permission.Admin)]
     [ApiController]
+    [AutoValidateAntiforgeryToken]
     public class SiteApiController : Controller
     {
         private readonly SiteService _service;
