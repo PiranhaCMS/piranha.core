@@ -645,6 +645,30 @@ Vue.component("image-block", {
   },
   template: "\n<div class=\"block-body has-media-picker rounded\" :class=\"{ empty: isEmpty }\">\n    <img class=\"rounded\" :src=\"mediaUrl\">\n    <div class=\"media-picker\">\n        <div class=\"btn-group float-right\">\n            <button :id=\"uid + '-aspect'\" class=\"btn btn-info btn-aspect text-center\" data-toggle=\"dropdown\" aria-haspopup=\"true\" aria-expanded=\"false\">\n                <i v-if=\"model.aspect.value === 0\" class=\"fas fa-cog\"></i>\n                <img v-else :src=\"iconUrl\">\n            </button>\n            <div class=\"dropdown-menu aspect-menu\" :aria-labelledby=\"uid + '-aspect'\">\n                <label class=\"mb-0\">{{ piranha.resources.texts.aspectLabel }}</label>\n                <div class=\"dropdown-divider\"></div>\n                <a v-on:click.prevent=\"selectAspect(0)\" class=\"dropdown-item\" :class=\"{ active: isAspectSelected(0) }\" href=\"#\">\n                    <img :src=\"piranha.utils.formatUrl('~/manager/assets/img/icons/img-original.svg')\"><span>{{ piranha.resources.texts.aspectOriginal }}</span>\n                </a>\n                <a v-on:click.prevent=\"selectAspect(1)\" class=\"dropdown-item\" :class=\"{ active: isAspectSelected(1) }\" href=\"#\">\n                    <img :src=\"piranha.utils.formatUrl('~/manager/assets/img/icons/img-landscape.svg')\"><span>{{ piranha.resources.texts.aspectLandscape }}</span>\n                </a>\n                <a v-on:click.prevent=\"selectAspect(2)\" class=\"dropdown-item\" :class=\"{ active: isAspectSelected(2) }\" href=\"#\">\n                    <img :src=\"piranha.utils.formatUrl('~/manager/assets/img/icons/img-portrait.svg')\"><span>{{ piranha.resources.texts.aspectPortrait }}</span>\n                </a>\n                <a v-on:click.prevent=\"selectAspect(3)\" class=\"dropdown-item\" :class=\"{ active: isAspectSelected(3) }\" href=\"#\">\n                    <img :src=\"piranha.utils.formatUrl('~/manager/assets/img/icons/img-landscape.svg')\"><span>{{ piranha.resources.texts.aspectWidescreen }}</span>\n                </a>\n                <a v-on:click.prevent=\"selectAspect(4)\" class=\"dropdown-item\" :class=\"{ active: isAspectSelected(4) }\" href=\"#\">\n                    <img :src=\"piranha.utils.formatUrl('~/manager/assets/img/icons/img-square.svg')\"><span>{{ piranha.resources.texts.aspectSquare }}</span>\n                </a>\n            </div>\n            <button v-on:click.prevent=\"select\" class=\"btn btn-primary text-center\">\n                <i class=\"fas fa-plus\"></i>\n            </button>\n            <button v-on:click.prevent=\"remove\" class=\"btn btn-danger text-center\">\n                <i class=\"fas fa-times\"></i>\n            </button>\n        </div>\n        <div class=\"card text-left\">\n            <div class=\"card-body\" v-if=\"isEmpty\">\n                &nbsp;\n            </div>\n            <div class=\"card-body\" v-else>\n                {{ model.body.media.filename }}\n            </div>\n        </div>\n    </div>\n</div>\n"
 });
+Vue.component("markdown-block", {
+  props: ["uid", "model"],
+  methods: {
+    onBlur: function (e) {
+      // Tell parent that title has been updated
+      var title = this.model.body.value.replace(/(<([^>]+)>)/ig, "");
+
+      if (title.length > 40) {
+        title = title.substring(0, 40) + "...";
+      }
+
+      this.$emit('update-title', {
+        uid: this.uid,
+        title: title
+      });
+    }
+  },
+  computed: {
+    isEmpty: function () {
+      return piranha.utils.isEmptyText(this.model.body.value);
+    }
+  },
+  template: "\n<div class=\"block-body\" :class=\"{ empty: isEmpty }\">\n    <markdown-field :uid=\"uid\" :model=\"model.body\" />\n</div>\n"
+});
 Vue.component("missing-block", {
   props: ["model"],
   template: "\n<div class=\"alert alert-danger text-center\" role=\"alert\">No component registered for <code>{{ model.type }}</code></div>\n"
@@ -1279,7 +1303,7 @@ Vue.component("markdown-field", {
     update: function (md) {
       this.model.value = md; // Tell parent that title has been updated
 
-      if (this.meta.notifyChange) {
+      if (this.meta && this.meta.notifyChange) {
         var title = this.model.value;
 
         if (title.length > 40) {

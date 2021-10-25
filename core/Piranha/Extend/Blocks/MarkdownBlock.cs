@@ -16,13 +16,13 @@ namespace Piranha.Extend.Blocks
     /// <summary>
     /// Single column HTML block.
     /// </summary>
-    [BlockType(Name = "Content", Category = "Content", Icon = "fas fa-paragraph", Component = "html-block")]
-    public class HtmlBlock : Block, ISearchable, ITranslatable
+    [BlockType(Name = "Markdown", Category = "Content", Icon = "fab fa-markdown", Component = "markdown-block")]
+    public class MarkdownBlock : Block, ISearchable, ITranslatable
     {
         /// <summary>
-        /// Gets/sets the HTML body.
+        /// Gets/sets the Markdown body.
         /// </summary>
-        public HtmlField Body { get; set; }
+        public MarkdownField Body { get; set; }
 
         /// <summary>
         /// Gets the title of the block when used in a block group.
@@ -32,7 +32,9 @@ namespace Piranha.Extend.Blocks
         {
             if (Body?.Value != null)
             {
-                var title = Regex.Replace(Body.Value, @"<[^>]*>", "");
+                var html = App.Markdown.Transform(Body.Value);
+
+                var title = Regex.Replace(html, @"<[^>]*>", "");
 
                 if (title.Length > 40)
                 {
@@ -52,12 +54,12 @@ namespace Piranha.Extend.Blocks
         }
 
         /// <summary>
-        /// Implicitly converts the Html block to a string.
+        /// Implicitly converts the markdown block to a HTML string.
         /// </summary>
         /// <param name="block">The block</param>
-        public static implicit operator string(HtmlBlock block)
+        public static implicit operator string(MarkdownBlock block)
         {
-            return block.Body?.Value;
-        }        
+            return App.Markdown.Transform(block.Body?.Value);
+        }
     }
 }

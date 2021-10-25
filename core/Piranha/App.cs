@@ -238,6 +238,7 @@ namespace Piranha
             Instance._blocks.Register<Extend.Blocks.HtmlColumnBlock>();
             Instance._blocks.Register<Extend.Blocks.ImageBlock>();
             Instance._blocks.Register<Extend.Blocks.ImageGalleryBlock>();
+            Instance._blocks.Register<Extend.Blocks.MarkdownBlock>();
             Instance._blocks.Register<Extend.Blocks.PageBlock>();
             Instance._blocks.Register<Extend.Blocks.PostBlock>();
             Instance._blocks.Register<Extend.Blocks.QuoteBlock>();

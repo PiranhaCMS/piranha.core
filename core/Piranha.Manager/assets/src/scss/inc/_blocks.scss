@@ -223,6 +223,24 @@
     }
 }
 
+.markdown-block {
+    .markdown-field{
+        border: none;
+
+        .editor-toolbar:not(.fullscreen) {
+            border: solid 1px $gray-400;
+        }
+
+        .CodeMirror:not(.CodeMirror-fullscreen) {
+            padding-left: 0;
+            min-height: 150px;
+        }
+        .CodeMirror-scroll:not(.CodeMirror-fullscreen) {
+            min-height: 150px;
+        }
+    }
+}
+
 .text-block {
     .block-body {
         display: grid;

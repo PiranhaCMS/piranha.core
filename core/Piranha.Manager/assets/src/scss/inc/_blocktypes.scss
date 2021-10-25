@@ -4,7 +4,7 @@
     color: $black;
     font-weight: bold;
     text-transform: uppercase;
-    padding: .25rem 1rem;
+    padding: .25rem 0;
     margin: .25rem 0;
 }
 
@@ -14,7 +14,7 @@
 
 .blocktype {
     display: inline-block;
-    width: 25%;
+    width: 20%;
     padding: .25rem;
 
     .btn {
@@ -31,13 +31,13 @@
 
     i {
         display: block;
-        font-size: 1.2rem;
+        font-size: 1rem;
         margin-bottom: .5rem;
     }
 
     span {
         display: block;
-        font-size: .8rem;
+        font-size: .75rem;
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;

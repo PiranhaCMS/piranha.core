@@ -14,7 +14,7 @@
 
             <!-- Tabs -->
             <ul class="nav nav-tabs" role="tablist">
-                <li class="nav-item">
+                <li v-if="regions.length > 0" class="nav-item">
                     <a v-on:click.prevent="selectRegion({ uid: 'uid-settings' })" href="#" class="nav-link" :class="{ active: selectedRegion.uid === 'uid-settings' }">@Localizer.General["Settings"]</a>
                 </li>
                 <li v-for="(region) in regions" class="nav-item">

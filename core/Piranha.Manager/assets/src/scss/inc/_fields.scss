@@ -83,6 +83,13 @@
                 padding: .4rem 1rem;
                 margin-right: 1rem;
                 border: solid 1px $gray-400;
+
+                span {
+                    display: block;
+                    white-space: nowrap;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                }
             }
         }
     }

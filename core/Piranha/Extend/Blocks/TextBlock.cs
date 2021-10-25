@@ -43,5 +43,14 @@ namespace Piranha.Extend.Blocks
         {
             return !string.IsNullOrEmpty(Body.Value) ? Body.Value : "";
         }
+
+        /// <summary>
+        /// Implicitly converts the Text block to a string.
+        /// </summary>
+        /// <param name="block">The block</param>
+        public static implicit operator string(TextBlock block)
+        {
+            return block.Body?.Value;
+        }            
     }
 }

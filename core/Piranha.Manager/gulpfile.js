@@ -212,6 +212,7 @@ var js = [
             "assets/src/js/components/blocks/html-block.vue",
             "assets/src/js/components/blocks/html-column-block.vue",
             "assets/src/js/components/blocks/image-block.vue",
+            "assets/src/js/components/blocks/markdown-block.vue",
             "assets/src/js/components/blocks/missing-block.vue",
             "assets/src/js/components/blocks/page-block.vue",
             "assets/src/js/components/blocks/post-block.vue",
