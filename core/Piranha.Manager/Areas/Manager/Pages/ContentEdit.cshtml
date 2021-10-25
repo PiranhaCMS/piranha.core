@@ -122,8 +122,8 @@
                     </div>
                 </div>
                 <div class="region-center content-center">
-                    <div class="row">
-                        <div v-if="usePrimaryImage" class="col">
+                    <div v-if="(usePrimaryImage || useExcerpt) && !useBlocks && contentRegions.length === 0" class="row">
+                        <div v-if="usePrimaryImage && !useBlocks && contentRegions.length === 0" class="col">
                             <div class="form-group">
                                 <label>@Localizer.Content["Primary image"]</label>
                                 <div class="block image-block primary-image primary-image-modal">
@@ -151,7 +151,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div v-if="useExcerpt" class="col">
+                        <div v-if="useExcerpt && !useBlocks && contentRegions.length === 0" class="col">
                             <div class="form-group">
                                 <label>@Localizer.Content["Excerpt"]</label>
                                 <div v-if="useHtmlExcerpt" class="block text-block ingress" :class="{ empty: isExcerptEmpty }">

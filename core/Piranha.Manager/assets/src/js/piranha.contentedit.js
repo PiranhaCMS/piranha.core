@@ -131,6 +131,16 @@ piranha.contentedit = new Vue({
                     icon: null,
                 };
             }
+
+            // Select first applicable setting
+            if ((this.usePrimaryImage || this.useExcerpt) && (this.useBlocks || this.contentRegions.length > 0))
+            {
+                this.selectedSetting = "uid-settings";
+            }
+            else if (this.settingRegions.length > 0)
+            {
+                this.selectedSetting = this.settingRegions[0].meta.uid;
+            }
         },
         load: function (id, languageId) {
             var self = this;
