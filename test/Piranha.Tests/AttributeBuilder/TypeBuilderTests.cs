@@ -53,8 +53,7 @@ namespace Piranha.Tests.AttributeBuilder
         {
             public class BodyRegion
             {
-                [Field]
-                [FieldDescription("This is the title")]
+                [Field(Description = "This is the title")]
                 public Extend.Fields.TextField Title { get; set; }
                 [Field(Title = "Main Body")]
                 public Extend.Fields.TextField Body { get; set; }
@@ -63,8 +62,7 @@ namespace Piranha.Tests.AttributeBuilder
             [Region(Title = "Intro", ListTitle = "Default", ListPlaceholder = "Add new item", ListExpand = false, Icon = "fa fas-fish")]
             public IList<Extend.Fields.TextField> Slider { get; set; }
 
-            [Region(Title = "Main content")]
-            [RegionDescription("This is where you enter the main content")]
+            [Region(Title = "Main content", Description = "This is where you enter the main content")]
             public BodyRegion Content { get; set; }
         }
 
@@ -96,8 +94,7 @@ namespace Piranha.Tests.AttributeBuilder
         {
             public class BodyRegion
             {
-                [Field]
-                [FieldDescription("This is the title")]
+                [Field(Description = "This is the title")]
                 public Extend.Fields.TextField Title { get; set; }
                 [Field(Title = "Main Body")]
                 public Extend.Fields.TextField Body { get; set; }
@@ -106,8 +103,7 @@ namespace Piranha.Tests.AttributeBuilder
             [Region(Title = "Intro", ListTitle = "Default", ListPlaceholder = "Add new item", ListExpand = false, Icon = "fa fas-fish")]
             public IList<Extend.Fields.TextField> Slider { get; set; }
 
-            [Region(Title = "Main content")]
-            [RegionDescription("This is where you enter the main content")]
+            [Region(Title = "Main content", Description = "This is where you enter the main content")]
             public BodyRegion Content { get; set; }
         }
 

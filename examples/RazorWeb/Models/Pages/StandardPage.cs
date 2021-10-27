@@ -17,7 +17,7 @@ namespace RazorWeb.Models
     /// <summary>
     /// Basic page with main content in markdown.
     /// </summary>
-    [PageType(Title = "Standard Page")]
+    [PageType(Title = "Standard Page", Description = "Standard page with a hero")]
     [ContentTypeRoute(Title = "Narrow", Route = "/page")]
     [ContentTypeRoute(Title = "Wide", Route = "/pagewide")]
     public class StandardPage : Page<StandardPage>

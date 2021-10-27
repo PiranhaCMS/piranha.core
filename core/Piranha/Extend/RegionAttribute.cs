@@ -25,6 +25,11 @@ namespace Piranha.Extend
         public string Title { get; set; }
 
         /// <summary>
+        /// Gets/sets the optional description.
+        /// </summary>
+        public string Description { get; set; }
+
+        /// <summary>
         /// Gets/sets the field that will be used to generate the list
         /// item title if the region is used in a collection.
         /// </summary>

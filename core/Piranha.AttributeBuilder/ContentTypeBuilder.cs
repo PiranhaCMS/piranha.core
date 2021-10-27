@@ -358,6 +358,7 @@ namespace Piranha.AttributeBuilder
                     Id = attr.Id,
                     CLRType = type.GetTypeInfo().AssemblyQualifiedName,
                     Title = attr.Title,
+                    Description = attr.Description,
                     UseBlocks = attr.UseBlocks,
                     UsePrimaryImage = attr.UsePrimaryImage,
                     UseExcerpt = attr.UseExcerpt,
@@ -582,6 +583,7 @@ namespace Piranha.AttributeBuilder
                 {
                     Id = prop.Name,
                     Title = attr.Title,
+                    Description = attr.Description,
                     Collection = isCollection,
                     ListTitleField = attr.ListTitle,
                     ListTitlePlaceholder = attr.ListPlaceholder,
@@ -591,13 +593,6 @@ namespace Piranha.AttributeBuilder
                     Width = attr.Width
                 };
                 int? sortOrder = attr.SortOrder != Int32.MaxValue ? attr.SortOrder : (int?)null;
-
-                // Get optional description
-                var descAttr = prop.GetCustomAttribute<RegionDescriptionAttribute>();
-                if (descAttr != null)
-                {
-                    regionType.Description = descAttr.Text;
-                }
 
                 Type type = null;
 
@@ -683,18 +678,12 @@ namespace Piranha.AttributeBuilder
                     {
                         Id = prop.Name,
                         Title = attr.Title,
+                        Description = attr.Description,
                         Type = appFieldType.TypeName,
                         Options = attr.Options,
                         Placeholder = attr.Placeholder
                     };
                     int? sortOrder = attr.SortOrder != Int32.MaxValue ? attr.SortOrder : (int?)null;
-
-                    // Get optional description
-                    var descAttr = prop.GetCustomAttribute<FieldDescriptionAttribute>();
-                    if (descAttr != null)
-                    {
-                        fieldType.Description = descAttr.Text;
-                    }
 
                     // Get optional settings
                     fieldType.Settings = Utils.GetFieldSettings(prop);

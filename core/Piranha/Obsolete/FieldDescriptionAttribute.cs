@@ -13,10 +13,11 @@ using System;
 namespace Piranha.Extend
 {
     /// <summary>
-    /// Attribute for marking a property as a region.
+    /// Attribute for adding a description to a field.
     /// </summary>
     [AttributeUsage(AttributeTargets.Property)]
-    public class RegionDescriptionAttribute : Attribute
+    [Obsolete("Please refer to Description on the FieldAttribute instead.", true)]
+    public class FieldDescriptionAttribute : Attribute
     {
         /// <summary>
         /// Gets/sets the optional description text.
@@ -26,14 +27,14 @@ namespace Piranha.Extend
         /// <summary>
         /// Default constructor.
         /// </summary>
-        public RegionDescriptionAttribute() { }
+        public FieldDescriptionAttribute() { }
 
         /// <summary>
         /// Creates a new description attribute and
         /// sets the description text.
         /// </summary>
         /// <param name="text">The description text</param>
-        public RegionDescriptionAttribute(string text)
+        public FieldDescriptionAttribute(string text)
         {
             Text = text;
         }

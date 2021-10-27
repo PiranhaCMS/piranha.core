@@ -65,6 +65,7 @@ namespace Piranha.Manager.Services
                 {
                     Id = t.Id,
                     Title = t.Title,
+                    Description = t.Description,
                     AddUrl = "manager/page/add/"
                 }).ToList()
             };

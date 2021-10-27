@@ -40,8 +40,10 @@ namespace MvcWeb.Models.Regions
         [Field(Placeholder = "Etiam porta sem malesuada magna mollis euismod.")]
         public MediaField Media { get; set; }
 
-        [Field(Placeholder = "Etiam porta sem malesuada magna mollis euismod.")]
-        [FieldDescription("Duis mollis, est non <strong>commodo luctus</strong>, nisi erat porttitor ligula, eget lacinia odio sem nec elit. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.")]
+        [Field(
+            Placeholder = "Etiam porta sem malesuada magna mollis euismod.",
+            Description = "Duis mollis, est non <strong>commodo luctus</strong>, nisi erat porttitor ligula, eget lacinia odio sem nec elit. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus."
+        )]
         public VideoField Video { get; set; }
 
         [Field(Placeholder = "Etiam porta sem malesuada magna mollis euismod.")]

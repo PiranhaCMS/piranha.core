@@ -37,8 +37,7 @@ namespace RazorWeb.Models.Regions
         /// <summary>
         /// Gets/sets the optional ingress.
         /// </summary>
-        [Field]
-        [FieldDescription("Optional text that is shown on top of the background image")]
+        [Field(Description = "Optional text that is shown on top of the background image")]
         public HtmlField Ingress { get; set; }
     }
 }

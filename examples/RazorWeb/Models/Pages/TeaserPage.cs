@@ -26,12 +26,13 @@ namespace RazorWeb.Models
         /// <summary>
         /// Gets/sets the page header.
         /// </summary>
-        [Region]
-        [RegionDescription("The Hero is shown on the top of your page")]
+        [Region(Description = "The Hero is shown on the top of your page")]
         public Regions.Hero Hero { get; set; }
 
-        [Region(Title = "All fields")]
-        [RegionDescription("Vestibulum id ligula porta felis euismod <strong>semper</strong>. Curabitur blandit tempus porttitor.")]
+        [Region(
+            Title = "All fields",
+            Description = "Vestibulum id ligula porta felis euismod <strong>semper</strong>. Curabitur blandit tempus porttitor."
+        )]
         public Regions.AllFields AllFields { get; set; }
 
         [Region(Title = "Images", ListTitle = "Title", ListPlaceholder = "New image", Icon = "fas fa-images", ListExpand = false)]

@@ -63,13 +63,7 @@ namespace Piranha.Manager.Services
                         field.Meta.Name = !string.IsNullOrWhiteSpace(attr.Title) ? attr.Title : field.Meta.Name;
                         field.Meta.Placeholder = attr.Placeholder;
                         field.Meta.IsHalfWidth = attr.Options.HasFlag(FieldOption.HalfWidth);
-                    }
-
-                    // Check if we have field description meta-data available
-                    var descAttr = prop.GetCustomAttribute<FieldDescriptionAttribute>();
-                    if (descAttr != null)
-                    {
-                        field.Meta.Description = descAttr.Text;
+                        field.Meta.Description = attr.Description;
                     }
                     fields.Add(field);
                 }

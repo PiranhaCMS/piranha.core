@@ -25,6 +25,11 @@ namespace Piranha.Extend
         public string Title { get; set; }
 
         /// <summary>
+        /// Gets/sets the optional description.
+        /// </summary>
+        public string Description { get; set; }
+
+        /// <summary>
         /// Gets/sets the field options.
         /// </summary>
         public FieldOption Options { get; set; }

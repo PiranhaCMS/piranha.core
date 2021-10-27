@@ -39,6 +39,11 @@ namespace Piranha.Models
         public string Title { get; set; }
 
         /// <summary>
+        /// Gets/sets the optional description.
+        /// </summary>
+        public string Description { get; set; }
+
+        /// <summary>
         /// Gets/sets the available regions.
         /// </summary>
         public IList<ContentTypeRegion> Regions { get; set; } = new List<ContentTypeRegion>();
