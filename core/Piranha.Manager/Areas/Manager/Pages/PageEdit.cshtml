@@ -41,6 +41,15 @@
             });
         </script>
     }
+    else if (action == "copy")
+    {
+        <script>
+            piranha.permissions.load(function () {
+                piranha.pageedit.copy("@RouteData.Values["id"]", "@RouteData.Values["pageType"]");
+                $(".title input").focus();
+            });
+        </script>
+    }
     else if (action == "copyrelative")
     {
         <script>

@@ -148,7 +148,7 @@ namespace Piranha.Manager.Services
             {
                 page.Id = Guid.NewGuid();
                 page.SiteId = siteId;
-                page.SortOrder = (await _api.Sites.GetSitemapAsync(page.SiteId)).Count;
+                page.SortOrder = (await _api.Sites.GetSitemapAsync(page.SiteId, false)).Count;
 
                 // Perform manager init
                 await _factory.InitDynamicManagerAsync(page,
@@ -180,6 +180,26 @@ namespace Piranha.Manager.Services
 
                    return Transform(page, false);
                 }
+            }
+            return null;
+        }
+
+        public async Task<PageEditModel> Copy(Guid sourceId, Guid siteId)
+        {
+            var original = await _api.Pages.GetByIdAsync(sourceId);
+
+            if (original != null)
+            {
+                var page = await _api.Pages.CopyAsync(original);
+
+                page.SiteId = siteId;
+                page.SortOrder = (await _api.Sites.GetSitemapAsync(page.SiteId, false)).Count;
+
+                // Perform manager init
+                await _factory.InitDynamicManagerAsync(page,
+                    App.PageTypes.GetById(page.TypeId));
+
+                return Transform(page, false);
             }
             return null;
         }

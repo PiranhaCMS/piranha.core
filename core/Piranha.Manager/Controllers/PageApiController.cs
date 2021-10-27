@@ -133,7 +133,21 @@ namespace Piranha.Manager.Controllers
         }
 
         /// <summary>
-        /// Creates a new page of the specified type.
+        /// Creates a new page by copying the specified page.
+        /// </summary>
+        /// <param name="sourceId">The page that should be copied</param>
+        /// <param name="siteId">The site id</param>
+        /// <returns>The page edit model</returns>
+        [Route("copy/{sourceId}/{siteId}")]
+        [HttpGet]
+        [Authorize(Policy = Permission.PagesAdd)]
+        public async Task<PageEditModel> CopyRelative(Guid sourceId, Guid siteId)
+        {
+            return await _service.Copy(sourceId, siteId);
+        }
+
+        /// <summary>
+        /// Creates a new page in the specified position by copying the specified page.
         /// </summary>
         /// <param name="sourceId">The page that should be copied</param>
         /// <param name="pageId">The page the new page should be position relative to</param>

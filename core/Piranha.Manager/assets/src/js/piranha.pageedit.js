@@ -201,6 +201,17 @@ piranha.pageedit = new Vue({
                 .catch(function (error) { console.log("error:", error );
             });
         },
+        copy: function (source, siteId) {
+            var self = this;
+
+            fetch(piranha.baseUrl + "manager/api/page/copy/" + source + "/" + siteId)
+                .then(function (response) { return response.json(); })
+                .then(function (result) {
+                    self.bind(result);
+                })
+                .catch(function (error) { console.log("error:", error );
+            });
+        },
         copyrelative: function (source, id, after) {
             var self = this;
 
