@@ -57,7 +57,13 @@ piranha.siteedit = new Vue({
             fetch(piranha.baseUrl + "manager/api/site/content/" + id)
                 .then(function (response) { return response.json(); })
                 .then(function (result) {
-                    self.regions = result.regions;
+                    if (result.status !== 404) {
+                        console.log("Setting regions");
+                        self.regions = result.regions;
+                    } else {
+                        console.log("Setting regions to empty array");
+                        self.regions = [];
+                    }
                 })
                 .catch(function (error) { console.log("error:", error ); });
         },
@@ -130,6 +136,9 @@ piranha.siteedit = new Vue({
                             console.log("error:", error );
                         });
                     } else {
+                        // Push status to notification hub
+                        piranha.notifications.push(result);
+                        
                         $("#siteedit").modal("hide");
                         if (self.callback)
                         {

@@ -83,7 +83,10 @@
                 padding: .4rem 1rem;
                 margin-right: 1rem;
                 border: solid 1px $gray-400;
-
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                
                 span {
                     display: block;
                     white-space: nowrap;
