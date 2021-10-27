@@ -5,7 +5,7 @@
     <Company>Piranha CMS</Company>
     <Copyright>Copyright (c) .NET Foundation and Contributors</Copyright>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
-    <PackageTags>cms mvc aspnetcore netstandard</PackageTags>
+    <PackageTags>cms mvc razorpages aspnetcore netstandard</PackageTags>
     <PackageIcon>piranha.png</PackageIcon>
     <PackageProjectUrl>https://github.com/piranhacms/piranha.core</PackageProjectUrl>
     <RepositoryUrl>https://github.com/piranhacms/piranha.core</RepositoryUrl>

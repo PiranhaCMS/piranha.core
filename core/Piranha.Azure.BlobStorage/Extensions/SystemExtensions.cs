@@ -1,6 +1,6 @@
 namespace System
 {
-    internal static class SystemExtensions
+    internal static class BlobStorageSystemExtensions
     {
         internal static bool IsSuccessStatusCode(this int @this)
         {

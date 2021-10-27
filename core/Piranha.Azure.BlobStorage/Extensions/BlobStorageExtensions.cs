@@ -20,11 +20,9 @@ public static class BlobStorageExtensions
     /// Adds the Azure BlobStorage module.
     /// </summary>
     /// <param name="serviceBuilder">The service builder</param>
-    /// <param name="credential">
-    /// The token credential used to sign requests.
-    /// </param>
+    /// <param name="credential">The token credential used to sign requests.</param>
     /// <param name="blobContainerUri">
-    /// A <see cref="Uri"/> referencing the blob service.
+    /// A <see cref="Uri"/> referencing the blob service. 
     /// This is likely to be similar to "https://{account_name}.blob.core.windows.net".
     /// </param>
     /// <param name="naming">How uploaded media files should be named</param>
@@ -67,9 +65,7 @@ public static class BlobStorageExtensions
     /// Adds the services for the Azure BlobStorage service.
     /// </summary>
     /// <param name="services">The current service collection</param>
-    /// <param name="credential">
-    /// The token credential used to sign requests.
-    /// </param>
+    /// <param name="credential">The token credential used to sign requests.</param>
     /// <param name="blobContainerUri">
     /// A <see cref="Uri"/> referencing the blob service.
     /// This is likely to be similar to "https://{account_name}.blob.core.windows.net".
