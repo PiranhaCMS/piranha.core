@@ -33,7 +33,7 @@ namespace Piranha.AspNetCore.Hosting
                 builder
                     .UseSecurityMiddleware()
                     .UseStaticFiles()
-                    .UseMiddleware<PiranhaMiddleware>()
+                    .UseMiddleware<RoutingMiddleware>()
                     .UseMiddleware<SitemapMiddleware>();
                 next(builder);
             };

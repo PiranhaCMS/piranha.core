@@ -25,7 +25,7 @@ namespace Piranha.AspNetCore.Http
     /// <summary>
     /// The main application middleware.
     /// </summary>
-    public class PiranhaMiddleware : MiddlewareBase
+    public class RoutingMiddleware : MiddlewareBase
     {
         private readonly RoutingOptions _options;
 
@@ -35,7 +35,7 @@ namespace Piranha.AspNetCore.Http
         /// <param name="next">The next middleware in the pipeline</param>
         /// <param name="options">The current routing options</param>
         /// <param name="factory">The logger factory</param>
-        public PiranhaMiddleware(RequestDelegate next, IOptions<RoutingOptions> options, ILoggerFactory factory = null) : base(next, factory)
+        public RoutingMiddleware(RequestDelegate next, IOptions<RoutingOptions> options, ILoggerFactory factory = null) : base(next, factory)
         {
             _options = options.Value;
         }
