@@ -146,7 +146,7 @@ namespace Piranha.AspNetCore.Http
                 //
                 // Check if we shouldn't handle empty requests for start page
                 //
-                if (segments.Length == 0 && !_options.UseStartpageRouting)
+                if (segments.Length <= pos && !_options.UseStartpageRouting)
                 {
                     await _next.Invoke(context);
                     return;
