@@ -13,9 +13,15 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="ChangeDefaultConfirm" xml:space="preserve">
-    <value>更改默认语言会影响应用程序的行为方式，并且应该在初始设置中进行配置。</value>
+    <value>變更預設語系將影響應用程式的設置。</value>
   </data>
   <data name="RemoveLanguageConfirm" xml:space="preserve">
-    <value>这个功能 &lt;strong>不能&lt;/strong> 回复，将永久删除 {{ currentDelete.title }} 及所有的 &lt;strong>转换&lt;/strong> 字串。所有网站的 {{ currentDelete.title }} 将会变成预设语系内容。</value>
+    <value>這個功能 &lt;strong>不能&lt;/strong> 回復，將永久刪除 {{ currentDelete.title }} 及所有的 &lt;strong>轉換&lt;/strong> 字串。所有的網站的 {{ currentDelete.title }} 將會變成預設語系的內容。</value>
+  </data>
+  <data name="The language was successfully saved" xml:space="preserve">
+    <value>The language was successfully saved</value>
+  </data>
+  <data name="The language was successfully deleted" xml:space="preserve">
+    <value>The language was successfully deleted</value>
   </data>
 </root>
