@@ -18,4 +18,10 @@
   <data name="RemoveLanguageConfirm" xml:space="preserve">
     <value>这个功能 &lt;strong>不能&lt;/strong> 回复，将永久删除 {{ currentDelete.title }} 及所有的 &lt;strong>转换&lt;/strong> 字串。所有网站的 {{ currentDelete.title }} 将会变成预设语系内容。</value>
   </data>
+  <data name="The language was successfully saved" xml:space="preserve">
+    <value>The language was successfully saved</value>
+  </data>
+  <data name="The language was successfully deleted" xml:space="preserve">
+    <value>The language was successfully deleted</value>
+  </data>
 </root>

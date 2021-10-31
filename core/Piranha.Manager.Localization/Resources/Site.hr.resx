@@ -1,0 +1,39 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Add site" xml:space="preserve">
+    <value>Add site</value>
+  </data>
+  <data name="Are you really sure?" xml:space="preserve">
+    <value>Are you really sure?</value>
+  </data>
+  <data name="Edit site" xml:space="preserve">
+    <value>Edit site</value>
+  </data>
+  <data name="Hostnames" xml:space="preserve">
+    <value>Hostnames</value>
+  </data>
+  <data name="Logo" xml:space="preserve">
+    <value>Logo</value>
+  </data>
+  <data name="If this should be the default site of the installation." xml:space="preserve">
+    <value>If this should be the default site of the installation.</value>
+  </data>
+  <data name="Please type in the name of the site to confirm." xml:space="preserve">
+    <value>Please type in the name of the site to confirm.</value>
+  </data>
+  <data name="ConfirmDelete" xml:space="preserve">
+    <value>This action &lt;strong>cannot&lt;/strong> be undone. This will permanently delete the site {{ title }} and all of its &lt;strong>pages&lt;/strong>, &lt;strong>archives&lt;/strong> and &lt;strong>posts&lt;/strong>.</value>
+  </data>
+</root>
