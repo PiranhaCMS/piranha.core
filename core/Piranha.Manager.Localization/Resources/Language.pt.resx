@@ -18,4 +18,10 @@
   <data name="RemoveLanguageConfirm" xml:space="preserve">
     <value>Esta ação &lt;strong>não pode ser&lt;/strong> desfeita. Isto irá excluir permanentemente o idioma {{ currentDelete.title }} e todas as suas &lt;strong>traduções&lt;/strong>. Qualquer site que tenha selecionado {{ currentDelete.title }} como seu idioma será atribuído ao idioma padrão.</value>
   </data>
+  <data name="The language was successfully saved" xml:space="preserve">
+    <value>The language was successfully saved</value>
+  </data>
+  <data name="The language was successfully deleted" xml:space="preserve">
+    <value>The language was successfully deleted</value>
+  </data>
 </root>
