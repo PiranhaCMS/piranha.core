@@ -18,4 +18,10 @@
   <data name="RemoveLanguageConfirm" xml:space="preserve">
     <value>This action &lt;strong>cannot&lt;/strong> be undone. This will permanently delete the language {{ currentDelete.title }} and all of its &lt;strong>translations&lt;/strong>. Any sites that have selected {{ currentDelete.title }} as their language will be assigned the default language.</value>
   </data>
+  <data name="The language was successfully saved" xml:space="preserve">
+    <value>The language was successfully saved</value>
+  </data>
+  <data name="The language was successfully deleted" xml:space="preserve">
+    <value>The language was successfully deleted</value>
+  </data>
 </root>
