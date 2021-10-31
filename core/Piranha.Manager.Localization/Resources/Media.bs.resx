@@ -1,0 +1,90 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Add folder" xml:space="preserve">
+    <value>Add folder</value>
+  </data>
+  <data name="Drop files here or click to upload." xml:space="preserve">
+    <value>Drop files here or click to upload.</value>
+  </data>
+  <data name="Download media" xml:space="preserve">
+    <value>Download media</value>
+  </data>
+  <data name="Folder name" xml:space="preserve">
+    <value>Folder name</value>
+  </data>
+  <data name="Folder name is mandatory." xml:space="preserve">
+    <value>Folder name is mandatory.</value>
+  </data>
+  <data name="Gallery" xml:space="preserve">
+    <value>Gallery</value>
+  </data>
+  <data name="Media" xml:space="preserve">
+    <value>Media</value>
+  </data>
+  <data name="Media preview is not available" xml:space="preserve">
+    <value>Media preview is not available</value>
+  </data>
+  <data name="Open media in new tab" xml:space="preserve">
+    <value>Open media in new tab</value>
+  </data>
+  <data name="Select media" xml:space="preserve">
+    <value>Select media</value>
+  </data>
+  <data name="Your browser does not support the video tag." xml:space="preserve">
+    <value>Your browser does not support the video tag.</value>
+  </data>
+  <data name="List" xml:space="preserve">
+    <value>List</value>
+  </data>
+  <data name="Preferred aspect" xml:space="preserve">
+    <value>Preferred aspect</value>
+  </data>
+  <data name="Original" xml:space="preserve">
+    <value>Original</value>
+  </data>
+  <data name="Landscape" xml:space="preserve">
+    <value>Landscape</value>
+  </data>
+  <data name="Portrait" xml:space="preserve">
+    <value>Portrait</value>
+  </data>
+  <data name="Widescreen" xml:space="preserve">
+    <value>Widescreen</value>
+  </data>
+  <data name="Square" xml:space="preserve">
+    <value>Square</value>
+  </data>
+  <data name="Are you sure you want to delete selected media?" xml:space="preserve">
+    <value>Are you sure you want to delete selected media?</value>
+  </data>
+  <data name="Delete selected items" xml:space="preserve">
+    <value>Delete selected items</value>
+  </data>
+  <data name="Media file was successfully moved." xml:space="preserve">
+    <value>Media file was successfully moved.</value>
+  </data>
+  <data name="Media files was successfully moved." xml:space="preserve">
+    <value>Media files was successfully moved.</value>
+  </data>
+  <data name="The media file was not found." xml:space="preserve">
+    <value>The media file was not found.</value>
+  </data>
+  <data name="The media file was successfully deleted" xml:space="preserve">
+    <value>The media file was successfully deleted</value>
+  </data>
+  <data name="The media files was successfully deleted" xml:space="preserve">
+    <value>The media files was successfully deleted</value>
+  </data>
+</root>
