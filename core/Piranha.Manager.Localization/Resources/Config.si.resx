@@ -72,7 +72,7 @@
   </data>
 
   <data name="Approve comments" xml:space="preserve">
-    <value>Approve comments</value>
+    <value>අදහස් අනුමත කරන්න</value>
   </data>
   <data name="Close comments after" xml:space="preserve">
     <value>Close comments after</value>
@@ -84,10 +84,10 @@
     <value>Collapse blocks</value>
   </data>
   <data name="Comments page size" xml:space="preserve">
-    <value>Comments page size</value>
+    <value>අදහස් පිටුවේ ප්‍රමාණය</value>
   </data>
   <data name="Enable page comments" xml:space="preserve">
-    <value>Enable page comments</value>
+    <value>පිටුවේ අදහස් සබල කරන්න</value>
   </data>
   <data name="Enable post comments" xml:space="preserve">
     <value>Enable post comments</value>
