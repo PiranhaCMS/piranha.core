@@ -55,13 +55,13 @@
     <value>Original</value>
   </data>
   <data name="Landscape" xml:space="preserve">
-    <value>Landscape</value>
+    <value>තිරස්</value>
   </data>
   <data name="Portrait" xml:space="preserve">
-    <value>Portrait</value>
+    <value>සිරස්</value>
   </data>
   <data name="Widescreen" xml:space="preserve">
-    <value>Widescreen</value>
+    <value>පුළුල්තිරය</value>
   </data>
   <data name="Square" xml:space="preserve">
     <value>Square</value>
