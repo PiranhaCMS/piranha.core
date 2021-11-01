@@ -13,13 +13,13 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Add" xml:space="preserve">
-    <value>Add</value>
+    <value>එකතු</value>
   </data>
   <data name="Advanced" xml:space="preserve">
     <value>Advanced</value>
   </data>
   <data name="All" xml:space="preserve">
-    <value>All</value>
+    <value>සියල්ල</value>
   </data>
   <data name="An error occurred" xml:space="preserve">
     <value>An error occurred</value>
@@ -52,13 +52,13 @@
     <value>Description</value>
   </data>
   <data name="Details" xml:space="preserve">
-    <value>Details</value>
+    <value>විස්තර</value>
   </data>
   <data name="Dimensions" xml:space="preserve">
     <value>Dimensions</value>
   </data>
   <data name="Download" xml:space="preserve">
-    <value>Download</value>
+    <value>බාගන්න</value>
   </data>
   <data name="Draft" xml:space="preserve">
     <value>Draft</value>
@@ -67,19 +67,19 @@
     <value>Drafts</value>
   </data>
   <data name="Email address" xml:space="preserve">
-    <value>Email address</value>
+    <value>වි-තැපැල් ලිපිනය</value>
   </data>
   <data name="Email address is mandatory." xml:space="preserve">
     <value>Email address is mandatory.</value>
   </data>
   <data name="Filename" xml:space="preserve">
-    <value>Filename</value>
+    <value>ගොනුවේ නම</value>
   </data>
   <data name="Height" xml:space="preserve">
-    <value>Height</value>
+    <value>උස</value>
   </data>
   <data name="Edit" xml:space="preserve">
-    <value>Edit</value>
+    <value>සංස්කරණය</value>
   </data>
   <data name="Empty" xml:space="preserve">
     <value>Empty</value>
@@ -91,19 +91,19 @@
     <value>General information</value>
   </data>
   <data name="History" xml:space="preserve">
-    <value>History</value>
+    <value>ඉතිහාසය</value>
   </data>
   <data name="Internal id" xml:space="preserve">
-    <value>Internal id</value>
+    <value>අභ්‍යන්තර හැඳු.</value>
   </data>
   <data name="Is default" xml:space="preserve">
     <value>Is default</value>
   </data>
   <data name="Language" xml:space="preserve">
-    <value>Language</value>
+    <value>භාෂාව</value>
   </data>
   <data name="Languages" xml:space="preserve">
-    <value>Languages</value>
+    <value>භාෂා</value>
   </data>
   <data name="Login" xml:space="preserve">
     <value>Login</value>
@@ -127,7 +127,7 @@
     <value>Modified</value>
   </data>
   <data name="Name" xml:space="preserve">
-    <value>Name</value>
+    <value>නම</value>
   </data>
   <data name="Name is mandatory." xml:space="preserve">
     <value>Name is mandatory.</value>
@@ -136,19 +136,19 @@
     <value>Open public URL in new tab</value>
   </data>
   <data name="Password" xml:space="preserve">
-    <value>Password</value>
+    <value>මුරපදය</value>
   </data>
   <data name="Permanent" xml:space="preserve">
     <value>Permanent</value>
   </data>
   <data name="Permissions" xml:space="preserve">
-    <value>Permissions</value>
+    <value>අවසර</value>
   </data>
   <data name="Pixels" xml:space="preserve">
     <value>Pixels</value>
   </data>
   <data name="Preview" xml:space="preserve">
-    <value>Preview</value>
+    <value>පෙරදසුන</value>
   </data>
   <data name="Publish" xml:space="preserve">
     <value>Publish</value>
