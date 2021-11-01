@@ -172,28 +172,28 @@
     <value>Route</value>
   </data>
   <data name="Save" xml:space="preserve">
-    <value>Save</value>
+    <value>සුරකින්න</value>
   </data>
   <data name="Scheduled" xml:space="preserve">
     <value>Scheduled</value>
   </data>
   <data name="Search..." xml:space="preserve">
-    <value>Search...</value>
+    <value>සොයන්න...</value>
   </data>
   <data name="Select block" xml:space="preserve">
     <value>Select block</value>
   </data>
   <data name="Settings" xml:space="preserve">
-    <value>Settings</value>
+    <value>සැකසුම්</value>
   </data>
   <data name="SEO" xml:space="preserve">
     <value>SEO</value>
   </data>
   <data name="Sharing" xml:space="preserve">
-    <value>Sharing</value>
+    <value>බෙදාගැනීම</value>
   </data>
   <data name="Size" xml:space="preserve">
-    <value>Size</value>
+    <value>ප්‍රමාණය</value>
   </data>
   <data name="Slug" xml:space="preserve">
     <value>Slug</value>
