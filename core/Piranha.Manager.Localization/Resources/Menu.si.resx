@@ -16,25 +16,25 @@
     <value>Content</value>
   </data>
   <data name="Settings" xml:space="preserve">
-    <value>Settings</value>
+    <value>සැකසුම්</value>
   </data>
   <data name="System" xml:space="preserve">
-    <value>System</value>
+    <value>පද්ධතිය</value>
   </data>
   <data name="Pages" xml:space="preserve">
-    <value>Pages</value>
+    <value>පිටු</value>
   </data>
   <data name="Media" xml:space="preserve">
-    <value>Media</value>
+    <value>මාධ්‍යය</value>
   </data>
   <data name="Aliases" xml:space="preserve">
-    <value>Aliases</value>
+    <value>අපනාම</value>
   </data>
   <data name="Sites" xml:space="preserve">
-    <value>Sites</value>
+    <value>අඩවි</value>
   </data>
   <data name="Config" xml:space="preserve">
-    <value>Config</value>
+    <value>වින්‍යාසය</value>
   </data>
   <data name="Modules" xml:space="preserve">
     <value>Modules</value>
@@ -43,12 +43,12 @@
     <value>Logout</value>
   </data>
   <data name="Comments" xml:space="preserve">
-    <value>Comments</value>
+    <value>අදහස්</value>
   </data>
   <data name="Roles" xml:space="preserve">
     <value>Roles</value>
   </data>
   <data name="Users" xml:space="preserve">
-    <value>Users</value>
+    <value>පරිශිලකයින්</value>
   </data>
 </root>
