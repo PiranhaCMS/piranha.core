@@ -16,7 +16,7 @@
     <value>එකතු</value>
   </data>
   <data name="Advanced" xml:space="preserve">
-    <value>Advanced</value>
+    <value>වැඩිදුර</value>
   </data>
   <data name="All" xml:space="preserve">
     <value>සියල්ල</value>
@@ -25,25 +25,25 @@
     <value>An error occurred</value>
   </data>
   <data name="Cancel" xml:space="preserve">
-    <value>Cancel</value>
+    <value>අවලංගු</value>
   </data>
   <data name="Content" xml:space="preserve">
-    <value>Content</value>
+    <value>අන්තර්ගතය</value>
   </data>
   <data name="Continue" xml:space="preserve">
-    <value>Continue</value>
+    <value>ඉදිරියට</value>
   </data>
   <data name="Content type" xml:space="preserve">
-    <value>Content type</value>
+    <value>අන්තර්ගත වර්ගය</value>
   </data>
   <data name="Copy" xml:space="preserve">
-    <value>Copy</value>
+    <value>පිටපත්</value>
   </data>
   <data name="Culture" xml:space="preserve">
     <value>Culture</value>
   </data>
   <data name="Default" xml:space="preserve">
-    <value>Default</value>
+    <value>පෙරනිමි</value>
   </data>
   <data name="Delete" xml:space="preserve">
     <value>Delete</value>
@@ -199,22 +199,22 @@
     <value>Slug</value>
   </data>
   <data name="System" xml:space="preserve">
-    <value>System</value>
+    <value>පද්ධතිය</value>
   </data>
   <data name="Temporary" xml:space="preserve">
-    <value>Temporary</value>
+    <value>තාවකාලිකව</value>
   </data>
   <data name="Title" xml:space="preserve">
-    <value>Title</value>
+    <value>සිරැසිය</value>
   </data>
   <data name="Update" xml:space="preserve">
-    <value>Update</value>
+    <value>යාවත්කාල</value>
   </data>
   <data name="Update password" xml:space="preserve">
-    <value>Update password</value>
+    <value>මුරපදය යාවත්කාල</value>
   </data>
   <data name="Username" xml:space="preserve">
-    <value>Username</value>
+    <value>පරිශීලක නාමය</value>
   </data>
   <data name="Username is mandatory." xml:space="preserve">
     <value>Username is mandatory.</value>
@@ -223,7 +223,7 @@
     <value>Title is mandatory.</value>
   </data>
   <data name="Type" xml:space="preserve">
-    <value>Type</value>
+    <value>වර්ගය</value>
   </data>
   <data name="Unpublish" xml:space="preserve">
     <value>Unpublish</value>
@@ -232,27 +232,27 @@
     <value>Unpublished</value>
   </data>
   <data name="Users" xml:space="preserve">
-    <value>Users</value>
+    <value>පරිශිලකයින්</value>
   </data>
   <data name="Version" xml:space="preserve">
-    <value>Version</value>
+    <value>අනුවාදය</value>
   </data>
   <data name="Width" xml:space="preserve">
-    <value>Width</value>
+    <value>පළල</value>
   </data>
   <data name="Archives and Comments" xml:space="preserve">
-    <value>Archives and Comments</value>
+    <value>සංරක්‍ෂිත සහ අදහස්</value>
   </data>
   <data name="Author" xml:space="preserve">
-    <value>Author</value>
+    <value>කතෘ</value>
   </data>
   <data name="Comments" xml:space="preserve">
-    <value>Comments</value>
+    <value>අදහස්</value>
   </data>
   <data name="Created" xml:space="preserve">
-    <value>Created</value>
+    <value>සෑදිණි</value>
   </data>
   <data name="Username and/or password are incorrect." xml:space="preserve">
-    <value>Username and/or password are incorrect.</value>
+    <value>පරිශීලක නාමය සහ/හෝ මුරපදය වැරදියි.</value>
   </data>
 </root>
