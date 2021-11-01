@@ -13,7 +13,7 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Config" xml:space="preserve">
-    <value>Config</value>
+    <value>වින්‍යාසය</value>
   </data>
   <data name="Hierarchical page slugs" xml:space="preserve">
     <value>Hierarchical page slugs</value>
@@ -28,10 +28,10 @@
     <value>Archive page size</value>
   </data>
   <data name="Caching" xml:space="preserve">
-    <value>Caching</value>
+    <value>නිහිතගත වීම</value>
   </data>
   <data name="Page cache expiration (minutes)" xml:space="preserve">
-    <value>Page cache expiration (minutes)</value>
+    <value>පිටුවේ නිහිතය කල් ඉකුත් වීම (විනාඩි)</value>
   </data>
   <data name="Page revisions" xml:space="preserve">
     <value>Page revisions</value>
