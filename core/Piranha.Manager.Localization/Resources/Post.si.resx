@@ -19,7 +19,7 @@
     <value>Add or select existing tags (optional)</value>
   </data>
   <data name="All categories" xml:space="preserve">
-    <value>All categories</value>
+    <value>සියළුම ප්‍රවර්ග</value>
   </data>
   <data name="An error occured while deleting the post" xml:space="preserve">
     <value>An error occured while deleting the post</value>
@@ -28,10 +28,10 @@
     <value>An error occured while saving the post</value>
   </data>
   <data name="Categories" xml:space="preserve">
-    <value>Categories</value>
+    <value>ප්‍රවර්ග</value>
   </data>
   <data name="Category" xml:space="preserve">
-    <value>Category</value>
+    <value>ප්‍රවර්ගය</value>
   </data>
   <data name="Edit post" xml:space="preserve">
 	  <value>Edit post</value>
