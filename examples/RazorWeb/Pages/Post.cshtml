@@ -1,103 +1,101 @@
 @page
-@model SinglePostWithComments<BlogPost>
+@model SinglePostWithComments<StandardPost>
 @{
-    ViewData["Title"] = Model.Data.Title;
+    ViewData["Title"] = !string.IsNullOrEmpty(Model.Data.MetaTitle) ? Model.Data.MetaTitle : Model.Data.Title;
+    var hasImage = Model.Data.PrimaryImage.HasValue;
+    var archive = await WebApp.Api.Pages.GetByIdAsync(Model.Data.BlogId);
 }
-@section head
-{
+@section head {
     @WebApp.MetaTags(Model.Data)
 }
 
-<div class="container body-container body-top">
-    <div class="row justify-content-center">
-        <div class="col-lg-8 col-md-10 col-xs-12">
-            <h1>@Model.Data.Title</h1>
-            <p class="small">
-                <strong>In</strong> <a href="@WebApp.Url(Model.Data.Category)">@Model.Data.Category.Title</a> <span class="sep">&#9670;</span>
-                <strong>Tags</strong>
+<header @(hasImage ? "class=has-image" : "") @(hasImage ? $"style=background-image:url({ @Url.Content(WebApp.Media.ResizeImage(Model.Data.PrimaryImage, 1920, 400)) })" : "")>
+    <div class="dimmer"></div>
+    <div class="container text-center">
+        <h1>@Model.Data.Title</h1>
+        <p class="post-meta">
+            <span>
+                In <a href="@archive.Permalink/category/@Model.Data.Category.Slug">@Model.Data.Category.Title</a>
+            </span>
+            <span>
+                Tags
                 @foreach (var tag in Model.Data.Tags)
                 {
-                    <a href="@WebApp.Url(tag)">#@tag.Title</a>
+                    <a href="@archive.Permalink/tag/@tag.Slug">#@tag.Slug</a>
                 }
-                <span class="sep">&#9670;</span>
-                @if (Model.Data.Published.HasValue)
-                {
-                    <strong>Published</strong> @Model.Data.Published.Value.ToString("yyyy-MM-dd")
-                }
-                else
-                {
-                    <strong>Unpublished</strong>
-                }
-                @if (Model.Data.EnableComments && Model.Data.CommentCount > 0)
-                {
-                    <span class="sep">&#9670;</span>
+            </span>
+            @if (Model.Data.IsPublished)
+            {
+                <span>
+                    Published @Model.Data.Published.Value.ToShortDateString()
+                </span>
+            }
+            @if (Model.Data.EnableComments && Model.Data.CommentCount > 0)
+            {
+                <span>
                     <a href="#comments">@Model.Data.CommentCount @(Model.Data.CommentCount == 1 ? "comment" : "comments")</a>
-                }
-            </p>
-        </div>
+                </span>
+            }
+        </p>
+        @if (!string.IsNullOrWhiteSpace(Model.Data.Excerpt))
+        {
+            <div class="row justify-content-center">
+                <div class="col-lg-8 lead">
+                    @Html.Raw(Model.Data.Excerpt)
+                </div>
+            </div>
+        }
     </div>
+</header>
 
-    @if (Model.Data.PrimaryImage.HasValue)
+<main>
+    @foreach (var block in Model.Data.Blocks)
     {
-        <div class="row justify-content-center">
-            <div class="col-lg-10 col-md-12">
-                <img class="primary-image" src="@WebApp.Url(Model.Data.PrimaryImage)">
+        <div class="block @block.CssName()">
+            <div class="container">
+                @Html.DisplayFor(m => block, block.GetType().Name)
             </div>
         </div>
     }
-
-    <div class="row justify-content-center">
-        <div class="col col-lg-8 col-md-10">
-            @if (!string.IsNullOrEmpty(Model.Data.Excerpt))
-            {
-                <p class="lead">@Model.Data.Excerpt</p>
-            }
-
-            @Html.DisplayFor(m => m.Data.Blocks)
-        </div>
-    </div>
-
     @if (Model.Data.EnableComments)
     {
-        <div class="row justify-content-center comments">
-            <div id="comments" class="col col-lg-8 col-md-10">
-                @if (Model.Data.IsCommentsOpen)
-                {
-                    <div class="alert alert-warning mt-2 mb-5">
-                        <form asp-page-handler="SaveComment" method="post">
-                            @Html.AntiForgeryToken()
-                            @Html.Hidden("Id", Model.Data.Id)
+        <div id="comments" class="container comments">
+            @if (Model.Data.IsCommentsOpen)
+            {
+                <div class="alert alert-comment mt-2 mb-5">
+                    <form asp-page-handler="SaveComment" method="post">
+                        @Html.AntiForgeryToken()
+                        @Html.Hidden("Id", Model.Data.Id)
 
-                            <h4 class="mb-3">Leave a comment</h4>
-                            <p class="mb-4"><small>
-                                Please note that we won't show your email to others, or use it for sending
-                                unwanted emails. We will only use it to render your Gravatar image and to
-                                validate you as a real person.
-                            </small></p>
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        <input name="CommentAuthor" type="text" class="form-control form-control-sm" placeholder="Your name">
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <input name="CommentEmail" type="text" class="form-control form-control-sm" placeholder="Your email address">
+                        <h3 class="mb-3">Leave a comment</h3>
+                        <p class="mb-4">
+                            Please note that we won't show your email to others, or use it for sending
+                            unwanted emails. We will only use it to render your Gravatar image and to
+                            validate you as a real person.
+                        </p>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <input name="CommentAuthor" type="text" class="form-control" placeholder="Your name">
                                 </div>
                             </div>
-                            <div class="form-group">
-                                <input name="CommentUrl" type="text" class="form-control form-control-sm" placeholder="An (optional) URL to your website">
+                            <div class="col-md-6">
+                                <input name="CommentEmail" type="text" class="form-control" placeholder="Your email address">
                             </div>
-                            <div class="form-group">
-                                <textarea name="CommentBody" rows="6" class="form-control form-control-sm" placeholder="Your awesome comment"></textarea>
-                            </div>
-                            <div class="form-group text-left">
-                                <button class="btn btn-sm btn-success">Post Comment</button>
-                            </div>
-                        </form>
-                    </div>
-                }
-                @Html.DisplayFor(m => m.Comments)
-            </div>
+                        </div>
+                        <div class="form-group">
+                            <input name="CommentUrl" type="text" class="form-control" placeholder="An (optional) URL to your website">
+                        </div>
+                        <div class="form-group">
+                            <textarea name="CommentBody" rows="6" class="form-control" placeholder="Your awesome comment"></textarea>
+                        </div>
+                        <div class="form-group text-left">
+                            <button class="btn btn-success">Post Comment</button>
+                        </div>
+                    </form>
+                </div>
+            }
+            @Html.DisplayFor(m => m.Comments)
         </div>
     }
-</div>
+</main>

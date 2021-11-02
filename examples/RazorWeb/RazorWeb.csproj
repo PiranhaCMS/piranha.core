@@ -1,16 +1,12 @@
-﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
-    <NoWarn>$(NoWarn);1591</NoWarn>
     <GenerateDocumentationFile>false</GenerateDocumentationFile>
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="wwwroot\uploads\" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="6.0.0-rc.1.21452.10">
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="6.0.0-rc.2.21480.5">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
     </PackageReference>
@@ -20,16 +16,16 @@
     <ProjectReference Include="..\..\core\Piranha\Piranha.csproj" />
     <ProjectReference Include="..\..\core\Piranha.AspNetCore\Piranha.AspNetCore.csproj" />
     <ProjectReference Include="..\..\core\Piranha.AttributeBuilder\Piranha.AttributeBuilder.csproj" />
-    <ProjectReference Include="..\..\core\Piranha.Azure.BlobStorage\Piranha.Azure.BlobStorage.csproj" />
     <ProjectReference Include="..\..\core\Piranha.ImageSharp\Piranha.ImageSharp.csproj" />
     <ProjectReference Include="..\..\core\Piranha.Local.FileStorage\Piranha.Local.FileStorage.csproj" />
     <ProjectReference Include="..\..\core\Piranha.Manager\Piranha.Manager.csproj" />
+    <ProjectReference Include="..\..\core\Piranha.Manager.LocalAuth\Piranha.Manager.LocalAuth.csproj" />
     <ProjectReference Include="..\..\core\Piranha.Manager.TinyMCE\Piranha.Manager.TinyMCE.csproj" />
     <ProjectReference Include="..\..\data\Piranha.Data.EF.SQLite\Piranha.Data.EF.SQLite.csproj" />
     <ProjectReference Include="..\..\data\Piranha.Data.EF.SQLServer\Piranha.Data.EF.SQLServer.csproj" />
     <ProjectReference Include="..\..\data\Piranha.Data.EF.MySql\Piranha.Data.EF.MySql.csproj" />
     <ProjectReference Include="..\..\data\Piranha.Data.EF.PostgreSql\Piranha.Data.EF.PostgreSql.csproj" />
     <ProjectReference Include="..\..\identity\Piranha.AspNetCore.Identity.SQLite\Piranha.AspNetCore.Identity.SQLite.csproj" />
-    <ProjectReference Include="..\..\identity\Piranha.AspNetCore.Identity.SQLServer\Piranha.AspNetCore.Identity.SQLServer.csproj" />
   </ItemGroup>
+
 </Project>

@@ -1,37 +1,26 @@
-﻿/*
- * Copyright (c) .NET Foundation and Contributors
- *
- * This software may be modified and distributed under the terms
- * of the MIT license.  See the LICENSE file for details.
- *
- * http://github.com/piranhacms/piranha.core
- *
- */
-
-using System;
-using System.Linq;
+﻿using System;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Piranha;
 using Piranha.AspNetCore.Services;
 using Piranha.Models;
+using MvcWeb.Models;
 
 namespace MvcWeb.Controllers
 {
+    [ApiExplorerSettings(IgnoreApi = true)]
     public class CmsController : Controller
     {
         private readonly IApi _api;
-        private readonly IDb _db;
         private readonly IModelLoader _loader;
 
         /// <summary>
         /// Default constructor.
         /// </summary>
-        /// <param name="app">The current app</param>
-        public CmsController(IApi api, IDb db, IModelLoader loader)
+        /// <param name="api">The current api</param>
+        public CmsController(IApi api, IModelLoader loader)
         {
             _api = api;
-            _db = db;
             _loader = loader;
         }
 
@@ -44,83 +33,99 @@ namespace MvcWeb.Controllers
         /// <param name="page">The optional page</param>
         /// <param name="category">The optional category</param>
         /// <param name="tag">The optional tag</param>
-        [HttpGet]
+        /// <param name="draft">If a draft is requested</param>
         [Route("archive")]
         public async Task<IActionResult> Archive(Guid id, int? year = null, int? month = null, int? page = null,
-            Guid? category = null, Guid? tag = null)
+            Guid? category = null, Guid? tag = null, bool draft = false)
         {
-            var model = await _api.Pages.GetByIdAsync<Models.BlogArchive>(id);
-            model.Archive = await _api.Archives.GetByIdAsync(id, page, category, tag, year, month);
+            try
+            {
+                var model = await _loader.GetPageAsync<StandardArchive>(id, HttpContext.User, draft);
+                model.Archive = await _api.Archives.GetByIdAsync<PostInfo>(id, page, category, tag, year, month);
 
-            return View(model);
+                return View(model);
+            }
+            catch (UnauthorizedAccessException)
+            {
+                return Unauthorized();
+            }
         }
 
         /// <summary>
         /// Gets the page with the given id.
         /// </summary>
         /// <param name="id">The unique page id</param>
-        [HttpGet]
+        /// <param name="draft">If a draft is requested</param>
         [Route("page")]
         public async Task<IActionResult> Page(Guid id, bool draft = false)
         {
-            var model = await _loader.GetPageAsync<Models.StandardPage>(id, HttpContext.User, draft);
+            try
+            {
+                var model = await _loader.GetPageAsync<StandardPage>(id, HttpContext.User, draft);
 
-            return View(model);
-        }
-
-        /// <summary>
-        /// Gets the page with the given id.
-        /// </summary>
-        /// <param name="id">The unique page id</param>
-        [HttpGet]
-        [Route("pagewide")]
-        public async Task<IActionResult> PageWide(Guid id, bool draft = false)
-        {
-            var model = await _loader.GetPageAsync<Models.StandardPage>(id, HttpContext.User, draft);
-
-            return View(model);
+                return View(model);
+            }
+            catch (UnauthorizedAccessException)
+            {
+                return Unauthorized();
+            }
         }
 
         /// <summary>
         /// Gets the post with the given id.
         /// </summary>
         /// <param name="id">The unique post id</param>
-        ///
-        [HttpGet]
+        /// <param name="draft">If a draft is requested</param>
         [Route("post")]
         public async Task<IActionResult> Post(Guid id, bool draft = false)
         {
-            var model = await _loader.GetPostAsync<Models.BlogPost>(id, HttpContext.User, draft);
+            try
+            {
+                var model = await _loader.GetPostAsync<StandardPost>(id, HttpContext.User, draft);
 
-            return View(model);
+                if (model.IsCommentsOpen)
+                {
+                    model.Comments = await _api.Posts.GetAllCommentsAsync(model.Id, true);
+                }
+                return View(model);
+            }
+            catch
+            {
+                return Unauthorized();
+            }
         }
 
         /// <summary>
-        /// Gets the teaser page with the given id.
+        /// Saves the given comment and then redirects to the post.
         /// </summary>
-        /// <param name="id">The page id</param>
-        /// <param name="startpage">If this is the startpage of the site</param>
-        [HttpGet]
-        [Route("teaserpage")]
-        public async Task<IActionResult> TeaserPage(Guid id, bool startpage = false, bool draft = false)
+        /// <param name="id">The unique post id</param>
+        /// <param name="commentModel">The comment model</param>
+        [HttpPost]
+        [Route("post/comment")]
+        public async Task<IActionResult> SavePostComment(SaveCommentModel commentModel)
         {
-            var model = await _loader.GetPageAsync<Models.TeaserPage>(id, HttpContext.User, draft);
-
-            if (startpage)
+            try
             {
-                var latest = _db.Posts
-                    .Where(p => p.Published <= DateTime.Now)
-                    .OrderByDescending(p => p.Published)
-                    .Take(1)
-                    .Select(p => p.Id);
-                if (latest.Count() > 0)
+                var model = await _loader.GetPostAsync<StandardPost>(commentModel.Id, HttpContext.User);
+
+                // Create the comment
+                var comment = new PostComment
                 {
-                    model.LatestPost = await _api.Posts
-                        .GetByIdAsync<PostInfo>(latest.First());
-                }
-                return View("startpage", model);
+                    IpAddress = Request.HttpContext.Connection.RemoteIpAddress.ToString(),
+                    UserAgent = Request.Headers.ContainsKey("User-Agent") ? Request.Headers["User-Agent"].ToString() : "",
+                    Author = commentModel.CommentAuthor,
+                    Email = commentModel.CommentEmail,
+                    Url = commentModel.CommentUrl,
+                    Body = commentModel.CommentBody
+                };
+                await _api.Posts.SaveCommentAndVerifyAsync(commentModel.Id, comment);
+
+                return Redirect(model.Permalink + "#comments");
             }
-            return View(model);
+            catch (UnauthorizedAccessException)
+            {
+                return Unauthorized();
+            }
         }
     }
 }
