@@ -202,20 +202,19 @@ namespace Piranha.AspNetCore.Identity.Controllers
         {
             var user = _db.Users.FirstOrDefault(u => u.Id == id);
 
-            var currentUser = await _userManager.GetUserAsync(HttpContext.User);
-            if (currentUser != null && user.Id == currentUser.Id)
-            {
-                return BadRequest(GetErrorMessage(_localizer.Security["Can't delete yourself."]));
-            }
-
             if (user != null)
             {
+                var currentUser = await _userManager.GetUserAsync(HttpContext.User);
+                if (currentUser != null && user.Id == currentUser.Id)
+                {
+                    return BadRequest(GetErrorMessage(_localizer.Security["Can't delete yourself."]));
+                }
+
                 _db.Users.Remove(user);
                 _db.SaveChanges();
 
                 return Ok(GetSuccessMessage(_localizer.Security["The user has been deleted."]));
             }
-
             return NotFound(GetErrorMessage(_localizer.Security["The user could not be found."]));
         }
 
