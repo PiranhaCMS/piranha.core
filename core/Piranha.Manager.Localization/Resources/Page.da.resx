@@ -18,6 +18,9 @@
   <data name="An error occured while deleting the page" xml:space="preserve">
     <value>Der opstod en fejl under sletning af siden</value>
   </data>
+  <data name="An error occured while saving the page" xml:space="preserve">
+    <value>Der opstod en fejl under lagring af siden</value>
+  </data>
   <data name="Archive" xml:space="preserve">
     <value>Arkiv</value>
   </data>
@@ -37,10 +40,10 @@
     <value>Markér for at skjule siden i menuer</value>
   </data>
   <data name="If the page should be indexed by search engines." xml:space="preserve">
-    <value>If the page should be indexed by search engines.</value>
+    <value>Markér for at lade søgemaskiner indeksere siden.</value>
   </data>
   <data name="If links from this page should be indexed." xml:space="preserve">
-    <value>If links from this page should be indexed.</value>
+    <value>Markér for at indeksere links på denne side.</value>
   </data>
   <data name="Meta title" xml:space="preserve">
     <value>Metatitel</value>

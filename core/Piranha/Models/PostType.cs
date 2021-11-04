@@ -9,6 +9,7 @@
  */
 
 using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace Piranha.Models
@@ -33,6 +34,12 @@ namespace Piranha.Models
         /// post type. The default value is true.
         /// </summary>
         public bool UseExcerpt { get; set; } = true;
+
+        /// <summary>
+        /// Gets/sets the allowed block types. An empty collection means
+        /// that all types are allowed.
+        /// </summary>
+        public IList<string> BlockItemTypes { get; set; } = new List<string>();
 
         /// <summary>
         /// Validates that the post type is correctly defined.

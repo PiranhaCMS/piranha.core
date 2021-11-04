@@ -13,21 +13,33 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Excerpt" xml:space="preserve">
-    <value>Excerpt</value>
+    <value>摘录</value>
   </data>
   <data name="Meta index" xml:space="preserve">
-    <value>Meta index</value>
+    <value>关键值索引</value>
   </data>
   <data name="Meta follow" xml:space="preserve">
-    <value>Meta follow</value>
+    <value>关键值流程</value>
   </data>
   <data name="Meta priority" xml:space="preserve">
-    <value>Meta priority</value>
+    <value>关健值优先</value>
   </data>
   <data name="Primary image" xml:space="preserve">
-    <value>Primary image</value>
+    <value>主要图像</value>
   </data>
   <data name="Search engine priority, compared to other content in the same site." xml:space="preserve">
-    <value>Search engine priority, compared to other content in the same site.</value>
+    <value>与同一站点中的其他内容相比，搜索引擎优先级。</value>
+  </data>
+  <data name="The content was successfully deleted" xml:space="preserve">
+    <value>内容已成功删除</value>
+  </data>
+  <data name="An error occured while deleting the content" xml:space="preserve">
+    <value>删除内容时发生错误</value>
+  </data>
+  <data name="The content was successfully saved" xml:space="preserve">
+    <value>内容已成功保存</value>
+  </data>
+  <data name="An error occured while saving the content" xml:space="preserve">
+    <value>保存内容时发生错误</value>
   </data>
 </root>

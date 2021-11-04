@@ -125,7 +125,6 @@ namespace Piranha.Manager.Services
                 CurrentFolderId = folderId,
                 ParentFolderId = null,
                 Structure = await _api.Media.GetStructureAsync()
-                
             };
 
             model.CurrentFolderBreadcrumb = await GetFolderBreadCrumb(model.Structure, folderId);
@@ -181,7 +180,8 @@ namespace Piranha.Manager.Services
                 .Select(f => new MediaListModel.FolderItem
                 {
                     Id = f.Id,
-                    Name = f.Name
+                    Name = f.Name,
+                    ItemCount = f.MediaCount
                 }).ToList();
 
             if (width.HasValue)

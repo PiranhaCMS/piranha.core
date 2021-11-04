@@ -23,7 +23,7 @@ namespace Piranha
         private static volatile bool IsInitialized = false;
 
         /// <summary>
-        /// The object mutext used for initializing the context.
+        /// The object mutex used for initializing the context.
         /// </summary>
         private static readonly object Mutex = new object();
 
@@ -51,6 +51,21 @@ namespace Piranha
         /// Gets/sets the content set.
         /// </summary>
         public DbSet<Data.Content> Content { get; set; }
+
+        /// <summary>
+        /// Gets/sets the content block set.
+        /// </summary>
+        public DbSet<Data.ContentBlock> ContentBlocks { get; set; }
+
+        /// <summary>
+        /// Gets/sets the content block field set.
+        /// </summary>
+        public DbSet<Data.ContentBlockField> ContentBlockFields { get; set; }
+
+        /// <summary>
+        /// Gets/sets the content block field translation set.
+        /// </summary>
+        public DbSet<Data.ContentBlockFieldTranslation> ContentBlockFieldTranslations { get; set; }
 
         /// <summary>
         /// Gets/sets the content field set.
@@ -255,9 +270,20 @@ namespace Piranha
             mb.Entity<Data.Category>().Property(c => c.Slug).IsRequired().HasMaxLength(64);
             mb.Entity<Data.Category>().HasIndex(c => new { c.BlogId, c.Slug }).IsUnique();
 
-
             mb.Entity<Data.Content>().ToTable("Piranha_Content");
             mb.Entity<Data.Content>().Property(p => p.TypeId).HasMaxLength(64).IsRequired();
+            mb.Entity<Data.Content>().Ignore(p => p.SelectedLanguageId);
+
+            mb.Entity<Data.ContentBlock>().ToTable("Piranha_ContentBlocks");
+            mb.Entity<Data.ContentBlock>().Property(b => b.CLRType).IsRequired().HasMaxLength(256);
+
+            mb.Entity<Data.ContentBlockField>().ToTable("Piranha_ContentBlockFields");
+            mb.Entity<Data.ContentBlockField>().Property(f => f.FieldId).IsRequired().HasMaxLength(64);
+            mb.Entity<Data.ContentBlockField>().Property(f => f.CLRType).IsRequired().HasMaxLength(256);
+            mb.Entity<Data.ContentBlockField>().HasIndex(f => new { f.BlockId, f.FieldId, f.SortOrder }).IsUnique();
+
+            mb.Entity<Data.ContentBlockFieldTranslation>().ToTable("Piranha_ContentBlockFieldTranslations");
+            mb.Entity<Data.ContentBlockFieldTranslation>().HasKey(t => new { t.FieldId, t.LanguageId });
 
             mb.Entity<Data.ContentField>().ToTable("Piranha_ContentFields");
             mb.Entity<Data.ContentField>().Property(f => f.RegionId).HasMaxLength(64).IsRequired();

@@ -1,15 +1,11 @@
-﻿/*
- * Copyright (c) .NET Foundation and Contributors
- *
- * This software may be modified and distributed under the terms
- * of the MIT license.  See the LICENSE file for details.
- *
- * http://github.com/tidyui/coreweb
- *
- */
-
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 
 namespace MvcWeb
 {

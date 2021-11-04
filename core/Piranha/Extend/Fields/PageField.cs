@@ -17,7 +17,7 @@ namespace Piranha.Extend.Fields
     public class PageField : IField, IEquatable<PageField>
     {
         /// <summary>
-        /// Gets/sets the media id.
+        /// Gets/sets the page id.
         /// </summary>
         /// <returns></returns>
         public Guid? Id { get; set; }

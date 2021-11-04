@@ -10,6 +10,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Caching.Memory;
@@ -710,6 +711,23 @@ namespace Piranha.Tests.Services
 
                 Assert.NotNull(post);
                 Assert.Equal(4, post.Tags.Count);
+            }
+        }
+
+        [Fact]
+        public async Task AddDuplicateSlugShouldThrow()
+        {
+            using (var api = CreateApi())
+            {
+                var post = await MyPost.CreateAsync(api);
+                post.BlogId = BLOG_ID;
+                post.Title = "My first post";
+                post.Published = DateTime.Now;
+
+                await Assert.ThrowsAsync<ValidationException>(async () =>
+                {
+                    await api.Posts.SaveAsync(post);
+                });
             }
         }
 

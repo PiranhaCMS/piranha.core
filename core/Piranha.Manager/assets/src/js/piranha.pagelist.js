@@ -39,7 +39,11 @@ piranha.pagelist = new Vue({
                 confirmIcon: "fas fa-trash",
                 confirmText: piranha.resources.texts.delete,
                 onConfirm: function () {
-                    fetch(piranha.baseUrl + "manager/api/page/delete/" + id)
+                    fetch(piranha.baseUrl + "manager/api/page/delete", {
+                        method: "delete",
+                        headers: piranha.utils.antiForgeryHeaders(),
+                        body: JSON.stringify(id)
+                    })
                     .then(function (response) { return response.json(); })
                     .then(function (result) {
                         piranha.notifications.push(result);
@@ -60,9 +64,7 @@ piranha.pagelist = new Vue({
                     callback: function (l, e) {
                         fetch(piranha.baseUrl + "manager/api/page/move", {
                             method: "post",
-                            headers: {
-                                "Content-Type": "application/json"
-                            },
+                            headers: piranha.utils.antiForgeryHeaders(),
                             body: JSON.stringify({
                                 id: $(e).attr("data-id"),
                                 items: $(l).nestable("serialize")
@@ -118,6 +120,32 @@ piranha.pagelist = new Vue({
                     self.addSiteTitle = e.title;
                 }
             });
+        },
+        collapse: function () {
+            for (var n = 0; n < this.sites.length; n++)
+            {
+                for (var i = 0; i < this.sites[n].pages.length; i++)
+                {
+                    this.changeVisibility(this.sites[n].pages[i], false);
+                }
+            }
+        },
+        expand: function () {
+            for (var n = 0; n < this.sites.length; n++)
+            {
+                for (var i = 0; i < this.sites[n].pages.length; i++)
+                {
+                    this.changeVisibility(this.sites[n].pages[i], true);
+                }
+            }
+        },
+        changeVisibility: function (page, expanded) {
+            page.isExpanded = expanded;
+
+            for (var n = 0; n < page.items.length; n++)
+            {
+                this.changeVisibility(page.items[n], expanded);
+            }
         }
     },
     created: function () {

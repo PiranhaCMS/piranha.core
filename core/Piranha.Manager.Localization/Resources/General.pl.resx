@@ -16,7 +16,7 @@
     <value>Dodaj</value>
   </data>
   <data name="Advanced" xml:space="preserve">
-    <value>Advanced</value>
+    <value>Zaawansowane</value>
   </data>
   <data name="All" xml:space="preserve">
     <value>Wszystkie</value>
@@ -43,7 +43,7 @@
     <value>Kultura</value>
   </data>
   <data name="Default" xml:space="preserve">
-    <value>Default</value>
+    <value>Domyślny</value>
   </data>
   <data name="Delete" xml:space="preserve">
     <value>Usuń</value>
@@ -100,10 +100,10 @@
     <value>Jest domyślny</value>
   </data>
   <data name="Language" xml:space="preserve">
-    <value>Language</value>
+    <value>Język</value>
   </data>
   <data name="Languages" xml:space="preserve">
-    <value>Languages</value>
+    <value>Języki</value>
   </data>
   <data name="Login" xml:space="preserve">
     <value>Login</value>
@@ -190,7 +190,7 @@
     <value>SEO</value>
   </data>
   <data name="Sharing" xml:space="preserve">
-    <value>Sharing</value>
+    <value>Udostępnianie</value>
   </data>
   <data name="Size" xml:space="preserve">
     <value>Wielkość</value>

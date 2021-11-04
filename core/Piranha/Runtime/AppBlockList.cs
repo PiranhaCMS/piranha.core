@@ -58,7 +58,7 @@ namespace Piranha.Runtime
         /// <returns>The processed item</returns>
         protected override AppBlock OnRegister<TValue>(AppBlock item)
         {
-            var attr = typeof(TValue).GetTypeInfo().GetCustomAttribute<BlockTypeAttribute>();
+            var attr = typeof(TValue).GetCustomAttribute<BlockTypeAttribute>();
             if (attr != null)
             {
                 item.Name = attr.Name;
@@ -68,15 +68,29 @@ namespace Piranha.Runtime
                 item.IsUnlisted = attr.IsUnlisted;
                 item.IsGeneric = attr.IsGeneric;
                 item.Component = !string.IsNullOrWhiteSpace(attr.Component) ? attr.Component : "missing-block";
+                item.Width = attr.Width;
+                item.Init.InitMethod = Utils.GetMethod<TValue>("Init");
+                item.Init.InitManagerMethod = Utils.GetMethod<TValue>("InitManager");
 
                 if (attr is BlockGroupTypeAttribute groupAttr)
                 {
-                    item.UseCustomView = groupAttr.UseCustomView;
-                    item.Display = groupAttr.Display;
+                    item.Component =
+                        groupAttr.Display == Models.BlockDisplayMode.Horizontal ? "block-group-horizontal" :
+                        groupAttr.Display == Models.BlockDisplayMode.Vertical ? "block-group-vertical" :
+                        "block-group";
+
+                    if (!string.IsNullOrWhiteSpace(groupAttr.Component))
+                    {
+                        item.Component = groupAttr.Component;
+                    }
                 }
             }
+            else
+            {
+                throw new CustomAttributeFormatException($"Mandatory attribute missing for registered block { typeof(TValue).Name }");
+            }
 
-            var itemAttrs = typeof(TValue).GetTypeInfo().GetCustomAttributes(typeof(BlockItemTypeAttribute));
+            var itemAttrs = typeof(TValue).GetCustomAttributes(typeof(BlockItemTypeAttribute));
             foreach (var itemAttr in itemAttrs)
             {
                 var itemType = ((BlockItemTypeAttribute)itemAttr).Type;

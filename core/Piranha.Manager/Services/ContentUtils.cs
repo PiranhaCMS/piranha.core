@@ -42,6 +42,8 @@ namespace Piranha.Manager.Services
                             Id = prop.Name,
                             Name = prop.Name,
                             Component = fieldType.Component,
+                            IsTranslatable = typeof(ITranslatable).IsAssignableFrom(fieldType.Type),
+                            Settings = Utils.GetFieldSettings(prop)
                         }
                     };
 
@@ -61,13 +63,7 @@ namespace Piranha.Manager.Services
                         field.Meta.Name = !string.IsNullOrWhiteSpace(attr.Title) ? attr.Title : field.Meta.Name;
                         field.Meta.Placeholder = attr.Placeholder;
                         field.Meta.IsHalfWidth = attr.Options.HasFlag(FieldOption.HalfWidth);
-                    }
-
-                    // Check if we have field description meta-data available
-                    var descAttr = prop.GetCustomAttribute<FieldDescriptionAttribute>();
-                    if (descAttr != null)
-                    {
-                        field.Meta.Description = descAttr.Text;
+                        field.Meta.Description = attr.Description;
                     }
                     fields.Add(field);
                 }
@@ -82,6 +78,7 @@ namespace Piranha.Manager.Services
             if (blockType != null)
             {
                 var pageBlock = (Block)Activator.CreateInstance(blockType.Type);
+                pageBlock.Id = blockGeneric.Id;
 
                 foreach (var field in blockGeneric.Model)
                 {

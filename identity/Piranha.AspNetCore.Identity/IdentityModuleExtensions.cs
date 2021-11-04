@@ -19,6 +19,7 @@ using Piranha;
 using Piranha.AspNetCore.Identity;
 using Piranha.AspNetCore.Identity.Data;
 using Piranha.Manager;
+using Piranha.Manager.LocalAuth;
 
 using IDb = Piranha.AspNetCore.Identity.IDb;
 using Module = Piranha.AspNetCore.Identity.Module;
@@ -39,6 +40,13 @@ public static class IdentityModuleExtensions
         Action<CookieAuthenticationOptions> cookieOptions = null)
         where T : Db<T>
     {
+        services
+            .AddRazorPages()
+            .AddRazorPagesOptions(options =>
+        {
+            options.Conventions.AllowAnonymousToAreaPage("Manager", "/login");
+        });
+
         // Add the identity module
         App.Modules.Register<Module>();
 
@@ -204,6 +212,9 @@ public static class IdentityModuleExtensions
     /// <returns>The builder</returns>
     public static IApplicationBuilder UsePiranhaIdentity(this IApplicationBuilder builder)
     {
+        // Set logout url to point to local auth
+        Piranha.App.Modules.Manager().LogoutUrl = "~/manager/logout";
+
         //
         // Add the embedded resources
         //

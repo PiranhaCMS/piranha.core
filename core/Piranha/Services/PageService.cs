@@ -650,6 +650,13 @@ namespace Piranha.Services
                 throw new ValidationException("The generated slug is empty as the title only contains special characters, please specify a slug to save the page.");
             }
 
+            // Ensure that the slug is unique
+            var duplicate = await GetBySlugAsync(model.Slug, model.SiteId);
+            if (duplicate != null && duplicate.Id != model.Id)
+            {
+                throw new ValidationException("The specified slug already exists, please create a unique slug");
+            }
+
             // Check if we're changing the state
             var current = await _repo.GetById<PageInfo>(model.Id).ConfigureAwait(false);
             var changeState = IsPublished(current) != IsPublished(model);
@@ -660,7 +667,7 @@ namespace Piranha.Services
             App.Hooks.OnBeforeSave<PageBase>(model);
 
             // Handle revisions and save
-            if (IsPublished(current) && isDraft)
+            if ((IsPublished(current) || IsScheduled(current) ) && isDraft)
             {
                 // We're saving a draft since we have a previously
                 // published version of the page
@@ -727,7 +734,7 @@ namespace Piranha.Services
         /// </summary>
         /// <param name="pageId">The unique page id</param>
         /// <param name="model">The comment model</param>
-        public Task SaveCommentAsync(Guid pageId, Comment model)
+        public Task SaveCommentAsync(Guid pageId, PageComment model)
         {
             return SaveCommentAsync(pageId, model, false);
         }
@@ -737,7 +744,7 @@ namespace Piranha.Services
         /// </summary>
         /// <param name="pageId">The unique page id</param>
         /// <param name="model">The comment model</param>
-        public Task SaveCommentAndVerifyAsync(Guid pageId, Comment model)
+        public Task SaveCommentAndVerifyAsync(Guid pageId, PageComment model)
         {
             return SaveCommentAsync(pageId, model, true);
         }
@@ -1049,9 +1056,19 @@ namespace Piranha.Services
         /// </summary>
         /// <param name="model">The page model</param>
         /// <returns>If the page is published</returns>
-        private bool IsPublished (PageBase model)
+        private bool IsPublished(PageBase model)
         {
             return model != null && model.Published.HasValue && model.Published.Value <= DateTime.Now;
+        }
+
+        /// <summary>
+        /// Checks if the given page is scheduled
+        /// </summary>
+        /// <param name="model">The page model</param>
+        /// <returns>If the page is scheduled</returns>
+        private bool IsScheduled(PageBase model)
+        {
+            return model != null && model.Published.HasValue && model.Published.Value > DateTime.Now;
         }
     }
 }

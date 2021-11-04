@@ -18,6 +18,12 @@ namespace Piranha.Data
     public sealed class Content : ContentBase<ContentField>, ICategorized, ITranslatable
     {
         /// <summary>
+        /// The currently selected language id. This is only used for
+        /// mapping and is not stored in the database.
+        /// </summary>
+        internal Guid? SelectedLanguageId { get; set; }
+
+        /// <summary>
         /// Gets/sets the optional category id.
         /// </summary>
         public Guid? CategoryId { get; set; }
@@ -41,6 +47,11 @@ namespace Piranha.Data
         /// Gets/sets the optional category.
         /// </summary>
         public Taxonomy Category { get; set; }
+
+        /// <summary>
+        /// Gets/sets the available blocks.
+        /// </summary>
+        public IList<ContentBlock> Blocks { get; set; } = new List<ContentBlock>();
 
         /// <summary>
         /// Gets/sets the available tags.
@@ -79,9 +90,16 @@ namespace Piranha.Data
                     Translations.Add(translation);
                 }
                 translation.Title = content.Title;
+                translation.Excerpt = content.Excerpt;
+                translation.LastModified = DateTime.Now;
             }
         }
 
+        /// <summary>
+        /// Gets the translation for the specified language.
+        /// </summary>
+        /// <param name="languageId">The language id</param>
+        /// <returns>The translation</returns>
         public object GetTranslation(Guid languageId)
         {
             return Translations.FirstOrDefault(t => t.LanguageId == languageId);

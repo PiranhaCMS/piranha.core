@@ -22,7 +22,7 @@
     <value>Muokkaa sivustoa</value>
   </data>
   <data name="Hostnames" xml:space="preserve">
-    <value>Hostnames</value>
+    <value>Isäntäpalvelimet (hostnames)</value>
   </data>
   <data name="Logo" xml:space="preserve">
     <value>Logo</value>

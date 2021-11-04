@@ -25,6 +25,7 @@ namespace Piranha.Manager.Controllers
     [Route("manager/api/alias")]
     [Authorize(Policy = Permission.Admin)]
     [ApiController]
+    [AutoValidateAntiforgeryToken]
     public class AliasApiController : Controller
     {
         private readonly IApi _api;
@@ -61,7 +62,7 @@ namespace Piranha.Manager.Controllers
         [Route("save")]
         [HttpPost]
         [Authorize(Policy = Permission.AliasesEdit)]
-        public async Task<IActionResult> Save(AliasListModel.ListItem model)
+        public async Task<IActionResult> Save(AliasListModel.AliasItem model)
         {
             try
             {
@@ -95,10 +96,10 @@ namespace Piranha.Manager.Controllers
         /// </summary>
         /// <param name="id">The alias id</param>
         /// <returns>The updated list model</returns>
-        [Route("delete/{id:Guid}")]
-        [HttpGet]
+        [Route("delete")]
+        [HttpDelete]
         [Authorize(Policy = Permission.AliasesDelete)]
-        public async Task<IActionResult> Delete(Guid id)
+        public async Task<IActionResult> Delete([FromBody]Guid id)
         {
             var alias = await _service.Delete(id);
 

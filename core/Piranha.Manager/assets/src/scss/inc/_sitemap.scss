@@ -25,6 +25,10 @@
     display: flex;
     margin-bottom: 2px;
 
+    &.dimmed {
+        opacity: .6;
+    }
+
     >div:not(.handle) {
         padding: .75rem 1rem;
     }

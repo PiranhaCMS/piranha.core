@@ -18,4 +18,10 @@
   <data name="RemoveLanguageConfirm" xml:space="preserve">
     <value>Diese Aktion &lt;strong>kann nicht&lt;/strong> rückgängig gemacht werden. Dadurch wird die Sprache {{ currentDelete.title }} und die zugehörigen &lt;strong>Übersetzungen&lt;/strong> dauerhaft gelöscht. Allen Sites, die {{ currentDelete.title }} als Sprache ausgewählt haben, wird die Standardsprache zugewiesen.</value>
   </data>
+  <data name="The language was successfully saved" xml:space="preserve">
+    <value>Die Sprache wurde erfolgreich gespeichert</value>
+  </data>
+  <data name="The language was successfully deleted" xml:space="preserve">
+    <value>Die Sprache wurde erfolgreich entfernt</value>
+  </data>
 </root>

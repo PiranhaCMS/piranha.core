@@ -20,7 +20,7 @@ using Piranha.Repositories;
 
 namespace Piranha.Services
 {
-    public class MediaService : IMediaService
+    public class MediaService : IMediaService, IInitializable
     {
         private readonly IMediaRepository _repo;
         private readonly IParamService _paramService;
@@ -144,7 +144,7 @@ namespace Piranha.Services
         }
 
         /// <summary>
-        /// Gets the hierachical media structure.
+        /// Gets the hierarchical media structure.
         /// </summary>
         /// <returns>The media structure</returns>
         public async Task<MediaStructure> GetStructureAsync()
@@ -248,49 +248,37 @@ namespace Piranha.Services
             model.ContentType = type.ContentType;
             model.LastModified = DateTime.Now;
 
+            Stream stream = null;
+            if (content is BinaryMediaContent binaryContent)
+            {
+                stream = new MemoryStream(binaryContent.Data);
+            }
+            else if (content is StreamMediaContent streamContent)
+            {
+                stream = streamContent.Data;
+            }
+
             // Pre-process if this is an image
             if (_processor != null && type.AllowProcessing && model.Type == MediaType.Image)
             {
-                byte[] bytes;
+                // Make sure to apply auto orientation according to exif
+                var memStream = new MemoryStream();
+                _processor.AutoOrient(stream, memStream);
 
-                if (content is BinaryMediaContent)
-                {
-                    bytes = ((BinaryMediaContent)content).Data;
-                }
-                else
-                {
-                    var reader = new BinaryReader(((StreamMediaContent)content).Data);
-                    bytes = reader.ReadBytes((int)reader.BaseStream.Length);
-                    ((StreamMediaContent)content).Data.Position = 0;
-                }
-
-                int width, height;
-
-                _processor.GetSize(bytes, out width, out height);
+                // Get the image size
+                _processor.GetSize(memStream, out var width, out var height);
                 model.Width = width;
                 model.Height = height;
+
+                stream = memStream;
             }
 
             // Upload to storage
             using (var session = await _storage.OpenAsync().ConfigureAwait(false))
             {
-                if (content is BinaryMediaContent)
-                {
-                    var bc = (BinaryMediaContent)content;
-
-                    model.Size = bc.Data.Length;
-                    await session.PutAsync(model, model.Filename,
-                        model.ContentType, bc.Data).ConfigureAwait(false);
-                }
-                else if (content is StreamMediaContent)
-                {
-                    var sc = (StreamMediaContent)content;
-                    var stream = sc.Data;
-
-                    model.Size = sc.Data.Length;
-                    await session.PutAsync(model, model.Filename,
-                        model.ContentType, stream).ConfigureAwait(false);
-                }
+                model.Size = stream.Length;
+                await session.PutAsync(model, model.Filename,
+                    model.ContentType, stream).ConfigureAwait(false);
             }
 
             App.Hooks.OnBeforeSave(model);
@@ -353,7 +341,7 @@ namespace Piranha.Services
         }
 
         /// <summary>
-        /// Ensures that the image version with the given size exsists
+        /// Ensures that the image version with the given size exists
         /// and returns its public URL.
         /// </summary>
         /// <param name="id">The unique id</param>
@@ -451,9 +439,11 @@ namespace Piranha.Services
 
                         if (upload)
                         {
-                            return await session.PutAsync(media, GetResourceName(media, width, height), media.ContentType,
-                                    output)
-                                .ConfigureAwait(false);
+                            await session.PutAsync(media, GetResourceName(media, width, height), media.ContentType,
+                                    output).ConfigureAwait(false);
+
+                            var info = new FileInfo(media.Filename);
+                            return GetPublicUrl(media, width, height, info.Extension);
                         }
                         //When moving this out of its parent method, realized that if the mutex failed, it would just fall back to the null instead of trying to return the issue.
                         //Added this to ensure that queries didn't just give up if they weren't the first to the party.
@@ -683,6 +673,17 @@ namespace Piranha.Services
                     return cdn + _storage.GetResourceName(media, name);
                 }
                 return _storage.GetPublicUrl(media, name);
+            }
+        }
+
+        /// <summary>
+        /// Initialize the Storage service is it implements IInitializable.
+        /// </summary>
+        public void Init()
+        {
+            if (_storage is IInitializable initializableStorage)
+            {
+                initializableStorage.Init();
             }
         }
     }

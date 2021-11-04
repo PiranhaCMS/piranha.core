@@ -2,6 +2,7 @@
 
 html {
     min-width: 768px;
+    direction: ltr;
 }
 
 body {
@@ -52,4 +53,8 @@ div.pre-release {
     text-transform: uppercase;
     font-weight: bold;
     font-size: .8rem;
+}
+
+.dimmed {
+    opacity: .6;
 }

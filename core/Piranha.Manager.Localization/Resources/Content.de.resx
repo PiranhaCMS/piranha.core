@@ -30,4 +30,16 @@
   <data name="Search engine priority, compared to other content in the same site." xml:space="preserve">
     <value>Suchmaschinenpriorität, verglichen mit anderen Inhalten auf der gleichen Website.</value>
   </data>
+  <data name="The content was successfully deleted" xml:space="preserve">
+    <value>Der Inhalt wurde erfolgreich gelöscht</value>
+  </data>
+  <data name="An error occured while deleting the content" xml:space="preserve">
+    <value>Fehler beim Löschen des Inhalts</value>
+  </data>
+  <data name="The content was successfully saved" xml:space="preserve">
+    <value>Der Inhalt wurde erfolgreich gespeichert</value>
+  </data>
+  <data name="An error occured while saving the content" xml:space="preserve">
+    <value>Fehler beim Speichern des Inhalts</value>
+  </data>
 </root>

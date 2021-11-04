@@ -18,4 +18,10 @@
   <data name="RemoveLanguageConfirm" xml:space="preserve">
     <value>Denne handling kan &lt;strong>ikke&lt;/strong> fortrydes. Dette vil permanent slette sproget {{ currentDelete.title }} og alle dets &lt;strong>oversættelser&lt;/strong>. Alle websteder, der har valgt {{ currentDelete.title }} som deres sprog, vil blive indstillet til standardsproget.</value>
   </data>
+  <data name="The language was successfully saved" xml:space="preserve">
+    <value>The language was successfully saved</value>
+  </data>
+  <data name="The language was successfully deleted" xml:space="preserve">
+    <value>The language was successfully deleted</value>
+  </data>
 </root>

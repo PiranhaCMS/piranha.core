@@ -1,0 +1,24 @@
+.post-meta {
+    font-size: 0.875rem;
+
+    span:not(:last-child) {
+        &::after {
+            content: "\25C6";
+            display: inline-block;
+            padding: 0 .25rem;
+        }
+    }
+}
+
+.archive {
+    article {
+        padding-bottom: 1rem;
+    }
+}
+
+.comments {
+    .alert {
+        background: #f4f4f4;
+        padding: 2rem 2.5rem;
+    }
+}

@@ -285,7 +285,8 @@ namespace Piranha.AttributeBuilder
                     Id = attr.Id,
                     Title = attr.Title,
                     CLRType = type.Name, // type.AssemblyQualifiedName,
-                    Icon = attr.Icon
+                    Icon = attr.Icon,
+                    IsHidden = attr.IsHidden
                 };
             }
             return null;
@@ -323,6 +324,7 @@ namespace Piranha.AttributeBuilder
                     Group = group.Id,
                     UseExcerpt = attr.UseExcerpt,
                     UsePrimaryImage = attr.UsePrimaryImage,
+                    UseBlocks = typeof(IBlockContent).IsAssignableFrom(type),
                     UseCategory = typeof(ICategorizedContent).IsAssignableFrom(type),
                     UseTags = typeof(ITaggedContent).IsAssignableFrom(type),
                     CustomEditors = GetEditors(type),
@@ -356,6 +358,7 @@ namespace Piranha.AttributeBuilder
                     Id = attr.Id,
                     CLRType = type.GetTypeInfo().AssemblyQualifiedName,
                     Title = attr.Title,
+                    Description = attr.Description,
                     UseBlocks = attr.UseBlocks,
                     UsePrimaryImage = attr.UsePrimaryImage,
                     UseExcerpt = attr.UseExcerpt,
@@ -395,6 +398,13 @@ namespace Piranha.AttributeBuilder
                     }
                 }
 
+                // Add block types
+                var blockTypes = type.GetCustomAttributes<BlockItemTypeAttribute>();
+                foreach (var blockType in blockTypes)
+                {
+                    pageType.BlockItemTypes.Add(blockType.Type.FullName);
+                }
+
                 return pageType;
             }
             return null;
@@ -419,7 +429,7 @@ namespace Piranha.AttributeBuilder
                 }
 
                 // Create post type
-                return new PostType
+                var postType = new PostType
                 {
                     Id = attr.Id,
                     CLRType = type.GetTypeInfo().AssemblyQualifiedName,
@@ -431,6 +441,15 @@ namespace Piranha.AttributeBuilder
                     CustomEditors = GetEditors(type),
                     Regions = GetRegions(type)
                 };
+
+                // Add block types
+                var blockTypes = type.GetCustomAttributes<BlockItemTypeAttribute>();
+                foreach (var blockType in blockTypes)
+                {
+                    postType.BlockItemTypes.Add(blockType.Type.FullName);
+                }
+
+                return postType;
             }
             return null;
         }
@@ -564,21 +583,16 @@ namespace Piranha.AttributeBuilder
                 {
                     Id = prop.Name,
                     Title = attr.Title,
+                    Description = attr.Description,
                     Collection = isCollection,
                     ListTitleField = attr.ListTitle,
                     ListTitlePlaceholder = attr.ListPlaceholder,
                     ListExpand = attr.ListExpand,
                     Icon = attr.Icon,
-                    Display = attr.Display
+                    Display = attr.Display,
+                    Width = attr.Width
                 };
                 int? sortOrder = attr.SortOrder != Int32.MaxValue ? attr.SortOrder : (int?)null;
-
-                // Get optional description
-                var descAttr = prop.GetCustomAttribute<RegionDescriptionAttribute>();
-                if (descAttr != null)
-                {
-                    regionType.Description = descAttr.Text;
-                }
 
                 Type type = null;
 
@@ -614,13 +628,24 @@ namespace Piranha.AttributeBuilder
                 }
                 else
                 {
+                    var sortedFields = new List<Tuple<int?, ContentTypeField>>();
                     foreach (var fieldProp in type.GetProperties(App.PropertyBindings))
                     {
                         var fieldType = GetFieldType(fieldProp);
 
                         if (fieldType != null)
-                            regionType.Fields.Add(fieldType);
+                        {
+                            sortedFields.Add(fieldType);
+                        }
                     }
+
+                    // First add sorted fields
+                    foreach (var fieldType in sortedFields.Where(t => t.Item1.HasValue))
+                        regionType.Fields.Add(fieldType.Item2);
+                    // Then add the unsorted fields
+                    foreach (var fieldType in sortedFields.Where(t => !t.Item1.HasValue))
+                        regionType.Fields.Add(fieldType.Item2);                    
+
                     // Skip regions without fields.
                     if (regionType.Fields.Count == 0)
                     {
@@ -632,7 +657,7 @@ namespace Piranha.AttributeBuilder
             return null;
         }
 
-        private ContentTypeField GetFieldType(PropertyInfo prop)
+        private Tuple<int?, ContentTypeField> GetFieldType(PropertyInfo prop)
         {
             var attr = prop.GetCustomAttribute<FieldAttribute>();
 
@@ -653,44 +678,17 @@ namespace Piranha.AttributeBuilder
                     {
                         Id = prop.Name,
                         Title = attr.Title,
+                        Description = attr.Description,
                         Type = appFieldType.TypeName,
                         Options = attr.Options,
                         Placeholder = attr.Placeholder
                     };
-
-                    // Get optional description
-                    var descAttr = prop.GetCustomAttribute<FieldDescriptionAttribute>();
-                    if (descAttr != null)
-                    {
-                        fieldType.Description = descAttr.Text;
-                    }
+                    int? sortOrder = attr.SortOrder != Int32.MaxValue ? attr.SortOrder : (int?)null;
 
                     // Get optional settings
-                    var settingsAttr = prop.GetCustomAttribute<FieldSettingsAttribute>();
-                    if (settingsAttr != null)
-                    {
-                        foreach (var setting in settingsAttr.GetType().GetProperties(BindingFlags.Instance|BindingFlags.Public|BindingFlags.DeclaredOnly))
-                        {
-                            if (fieldType.Settings.TryGetValue(setting.Name, out var existing))
-                            {
-                                if (!(existing is IList))
-                                {
-                                    existing = new ArrayList()
-                                    {
-                                        existing
-                                    };
-                                    fieldType.Settings[setting.Name] = existing;
-                                }
+                    fieldType.Settings = Utils.GetFieldSettings(prop);
 
-                                ((IList)existing).Add(setting.GetValue(settingsAttr));
-                            }
-                            else
-                            {
-                                fieldType.Settings[setting.Name] = setting.GetValue(settingsAttr);
-                            }
-                        }
-                    }
-                    return fieldType;
+                    return new Tuple<int?, ContentTypeField>(sortOrder, fieldType);
                 }
             }
             return null;

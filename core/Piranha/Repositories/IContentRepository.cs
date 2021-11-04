@@ -35,6 +35,36 @@ namespace Piranha.Repositories
         Task<T> GetById<T>(Guid id, Guid languageId) where T : GenericContent;
 
         /// <summary>
+        /// Gets all available categories for the specified group.
+        /// </summary>
+        /// <param name="groupId">The group id</param>
+        /// <returns>The available categories</returns>
+        Task<IEnumerable<Taxonomy>> GetAllCategories(string groupId);
+
+        /// <summary>
+        /// Gets all available tags for the specified groupd.
+        /// </summary>
+        /// <param name="groupId">The group id</param>
+        /// <returns>The available tags</returns>
+        Task<IEnumerable<Taxonomy>> GetAllTags(string groupId);
+
+        /// <summary>
+        /// Gets the current translation status for the content model
+        /// with the given id.
+        /// </summary>
+        /// <param name="contentId">The unique content id</param>
+        /// <returns>The translation status</returns>
+        Task<TranslationStatus> GetTranslationStatusById(Guid contentId);
+
+        /// <summary>
+        /// Gets the translation summary for the content group with
+        /// the given id.
+        /// </summary>
+        /// <param name="groupId">The group id</param>
+        /// <returns>The translation summary</returns>
+        Task<TranslationSummary> GetTranslationStatusByGroup(string groupId);
+
+        /// <summary>
         /// Saves the given content model
         /// </summary>
         /// <param name="model">The content model</param>

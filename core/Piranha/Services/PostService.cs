@@ -703,6 +703,13 @@ namespace Piranha.Services
                 throw new ValidationException("The generated slug is empty as the title only contains special characters, please specify a slug to save the post.");
             }
 
+            // Ensure that the slug is unique
+            var duplicate = await GetBySlugAsync(model.BlogId, model.Slug);
+            if (duplicate != null && duplicate.Id != model.Id)
+            {
+                throw new ValidationException("The specified slug already exists, please create a unique slug");
+            }
+
             // Ensure category
             if (model.Category == null || (string.IsNullOrWhiteSpace(model.Category.Title) && string.IsNullOrWhiteSpace(model.Category.Slug)))
             {
@@ -715,7 +722,7 @@ namespace Piranha.Services
             // Handle revisions and save
             var current = await _repo.GetById<PostInfo>(model.Id).ConfigureAwait(false);
 
-            if (IsPublished(current) && isDraft)
+            if ((IsPublished(current) || IsScheduled(current)) && isDraft)
             {
                 // We're saving a draft since we have a previously
                 // published version of the post
@@ -1007,5 +1014,16 @@ namespace Piranha.Services
         {
             return model != null && model.Published.HasValue && model.Published.Value <= DateTime.Now;
         }
+
+        /// <summary>
+        /// Checks if the given post is scheduled
+        /// </summary>
+        /// <param name="model">The post model</param>
+        /// <returns>If the post is scheduled</returns>
+        private bool IsScheduled(PostBase model)
+        {
+            return model != null && model.Published.HasValue && model.Published.Value > DateTime.Now;
+        }
+
     }
 }

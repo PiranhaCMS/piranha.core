@@ -54,7 +54,7 @@ namespace Piranha.Manager.Services
             {
                 Sites = (await _api.Sites.GetAllAsync())
                     .OrderByDescending(s => s.IsDefault)
-                    .Select(s => new PageListModel.SiteItem
+                    .Select(s => new PageListModel.PageSite
                 {
                     Id = s.Id,
                     Title = s.Title,
@@ -65,6 +65,7 @@ namespace Piranha.Manager.Services
                 {
                     Id = t.Id,
                     Title = t.Title,
+                    Description = t.Description,
                     AddUrl = "manager/page/add/"
                 }).ToList()
             };
@@ -77,7 +78,7 @@ namespace Piranha.Manager.Services
         }
 
         /// <summary>
-        /// Gets the hierachical page structure for the specified site.
+        /// Gets the hierarchical page structure for the specified site.
         /// </summary>
         /// <param name="siteId">The site id</param>
         /// <returns>The structure</returns>
@@ -118,7 +119,7 @@ namespace Piranha.Manager.Services
                 SiteTitle = site.Title,
                 Sites = (await _api.Sites.GetAllAsync())
                     .OrderByDescending(s => s.IsDefault)
-                    .Select(s => new PageListModel.SiteItem
+                    .Select(s => new PageListModel.PageSite
                 {
                     Id = s.Id,
                     Title = s.Title,
@@ -147,7 +148,7 @@ namespace Piranha.Manager.Services
             {
                 page.Id = Guid.NewGuid();
                 page.SiteId = siteId;
-                page.SortOrder = (await _api.Sites.GetSitemapAsync(page.SiteId)).Count;
+                page.SortOrder = (await _api.Sites.GetSitemapAsync(page.SiteId, false)).Count;
 
                 // Perform manager init
                 await _factory.InitDynamicManagerAsync(page,
@@ -179,6 +180,26 @@ namespace Piranha.Manager.Services
 
                    return Transform(page, false);
                 }
+            }
+            return null;
+        }
+
+        public async Task<PageEditModel> Copy(Guid sourceId, Guid siteId)
+        {
+            var original = await _api.Pages.GetByIdAsync(sourceId);
+
+            if (original != null)
+            {
+                var page = await _api.Pages.CopyAsync(original);
+
+                page.SiteId = siteId;
+                page.SortOrder = (await _api.Sites.GetSitemapAsync(page.SiteId, false)).Count;
+
+                // Perform manager init
+                await _factory.InitDynamicManagerAsync(page,
+                    App.PageTypes.GetById(page.TypeId));
+
+                return Transform(page, false);
             }
             return null;
         }
@@ -512,6 +533,8 @@ namespace Piranha.Manager.Services
                 IsExpanded = level < expandedLevels,
                 IsCopy = item.OriginalPageId.HasValue,
                 IsRestricted = item.Permissions.Count > 0,
+                IsScheduled = item.Published.HasValue && item.Published.Value > DateTime.Now,
+                IsUnpublished = !item.Published.HasValue,
                 Permalink = item.Permalink
             };
 
@@ -551,6 +574,7 @@ namespace Piranha.Manager.Services
                 PrimaryImage = page.PrimaryImage,
                 Excerpt = page.Excerpt,
                 IsHidden = page.IsHidden,
+                IsScheduled = page.Published.HasValue && page.Published.Value > DateTime.Now,
                 Published = page.Published.HasValue ? page.Published.Value.ToString("yyyy-MM-dd") : null,
                 PublishedTime = page.Published.HasValue ? page.Published.Value.ToString("HH:mm") : null,
                 RedirectUrl = page.RedirectUrl,
@@ -596,7 +620,8 @@ namespace Piranha.Manager.Services
                         IsCollection = regionType.Collection,
                         Expanded = regionType.ListExpand,
                         Icon = regionType.Icon,
-                        Display = regionType.Display.ToString().ToLower()
+                        Display = regionType.Display.ToString().ToLower(),
+                        Width = regionType.Width.ToString().ToLower()
                     }
                 };
                 var regionListModel = ((IDictionary<string, object>)page.Regions)[regionType.Id];
@@ -681,19 +706,14 @@ namespace Piranha.Manager.Services
                         {
                             Name = blockType.Name,
                             Icon = blockType.Icon,
-                            Component = "block-group",
+                            Component = blockType.Component,
+                            Width = blockType.Width.ToString().ToLower(),
                             IsGroup = true,
                             IsReadonly = page.OriginalPageId.HasValue,
                             isCollapsed = config.ManagerDefaultCollapsedBlocks,
                             ShowHeader = !config.ManagerDefaultCollapsedBlockGroupHeaders
                         }
                     };
-
-                    if (blockType.Display != BlockDisplayMode.MasterDetail)
-                    {
-                        group.Meta.Component = blockType.Display == BlockDisplayMode.Horizontal ?
-                            "block-group-horizontal" : "block-group-vertical";
-                    }
 
                     group.Fields = ContentUtils.GetBlockFields(block);
 
@@ -714,7 +734,8 @@ namespace Piranha.Manager.Services
                                     Name = blockType.Name,
                                     Title = child.GetTitle(),
                                     Icon = blockType.Icon,
-                                    Component = blockType.Component
+                                    Component = blockType.Component,
+                                    Width = blockType.Width.ToString().ToLower()
                                 }
                             });
                         }
@@ -723,6 +744,7 @@ namespace Piranha.Manager.Services
                             // Generic block item model
                             group.Items.Add(new BlockGenericModel
                             {
+                                Id = child.Id,
                                 IsActive = firstChild,
                                 Model = ContentUtils.GetBlockFields(child),
                                 Type = child.Type,
@@ -732,6 +754,7 @@ namespace Piranha.Manager.Services
                                     Title = child.GetTitle(),
                                     Icon = blockType.Icon,
                                     Component = blockType.Component,
+                                    Width = blockType.Width.ToString().ToLower()
                                 }
                             });
                         }
@@ -753,6 +776,7 @@ namespace Piranha.Manager.Services
                                 Title = block.GetTitle(),
                                 Icon = blockType.Icon,
                                 Component = blockType.Component,
+                                Width = blockType.Width.ToString().ToLower(),
                                 IsReadonly = page.OriginalPageId.HasValue,
                                 isCollapsed = config.ManagerDefaultCollapsedBlocks
                             }
@@ -763,6 +787,7 @@ namespace Piranha.Manager.Services
                         // Generic block item model
                         model.Blocks.Add(new BlockGenericModel
                         {
+                            Id = block.Id,
                             Model = ContentUtils.GetBlockFields(block),
                             Type = block.Type,
                             Meta = new BlockMeta
@@ -771,6 +796,7 @@ namespace Piranha.Manager.Services
                                 Title = block.GetTitle(),
                                 Icon = blockType.Icon,
                                 Component = blockType.Component,
+                                Width = blockType.Width.ToString().ToLower(),
                                 IsReadonly = page.OriginalPageId.HasValue,
                                 isCollapsed = config.ManagerDefaultCollapsedBlocks
                             }
@@ -796,7 +822,7 @@ namespace Piranha.Manager.Services
         {
             if (!string.IsNullOrEmpty(model.Published))
             {
-                var str = model.Published;
+                var str = model.Published.Substring(0, 10);
 
                 if (!string.IsNullOrEmpty(model.PublishedTime))
                 {

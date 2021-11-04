@@ -1,6 +1,7 @@
 @page "~/manager/page/{routeAction}/{id}/{pageType?}/{after?}"
 @model PageEditViewModel
 @inject ManagerLocalizer Localizer
+@inject Piranha.Config Config
 @{
     ViewBag.Title = Localizer.Page["Edit page"];
     ViewBag.MenuItem = "Pages";
@@ -40,6 +41,15 @@
             });
         </script>
     }
+    else if (action == "copy")
+    {
+        <script>
+            piranha.permissions.load(function () {
+                piranha.pageedit.copy("@RouteData.Values["id"]", "@RouteData.Values["pageType"]");
+                $(".title input").focus();
+            });
+        </script>
+    }
     else if (action == "copyrelative")
     {
         <script>
@@ -59,6 +69,8 @@
                 <li class="breadcrumb-item"><a href="~/manager/pages">@Localizer.Menu["Pages"]</a></li>
                 <li class="breadcrumb-item active" aria-current="page">@Localizer.General["Edit"]</li>
                 <li v-if="isCopy" class="badge-item app" :class="{ ready: !loading }"><span class="badge badge-warning">@Localizer.General["Copy"]</span></li>
+                <li v-if="isScheduled" class="badge-item app" :class="{ ready: !loading }"><span class="badge badge-info"><i class="fas fa-calendar-alt"></i> @Localizer.General["Scheduled"]</span></li>
+                <li v-if="state === 'unpublished'" class="badge-item app" :class="{ ready: !loading }"><span class="badge badge-info"><i class="fas fa-unlink"></i> @Localizer.General["Unpublished"]</span></li>
                 <li v-if="state === 'draft'" class="badge-item app" :class="{ ready: !loading }"><span class="badge badge-info"><i class="fas fa-pen"></i> @Localizer.General["Draft"]</span></li>
             </ol>
         </nav>
@@ -133,14 +145,14 @@
         <!-- Blocks -->
         <div class="card" :class="{ 'd-none': selectedRegion.uid != 'uid-blocks' }">
             <div class="card-body" v-bind:class="{ readonly: isCopy }">
-                <div id="content-blocks" class="blocks">
+                <div id="content-blocks" class="blocks@(Config.ManagerOutlined ? " blocks-outline" : "")">
                     <a v-if="!isCopy" href="#" class="block-add unsortable" v-on:click.prevent="piranha.blockpicker.open(piranha.pageedit.addBlock, 0)">
                         <hr>
                         <i class="fas fa-plus-circle"></i>
                     </a>
                     <span v-else class="block-add unsortable"><hr><i class="fas fa-plus-circle"></i></span>
                     <div v-for="(block, index) in blocks" v-bind:key="block.meta.uid">
-                        <div :class="'block ' + block.meta.component + (block.meta.isCollapsed ? ' collapsed' : '')">
+                        <div :class="'block ' + block.meta.component + (block.meta.isCollapsed ? ' collapsed' : '') + (block.meta.width === 'full' ? ' block-full' : '')">
                             <div :id="'tb-' + block.meta.uid" class="component-toolbar"></div>
                             <div class="block-header">
                                 <div class="title">
@@ -188,7 +200,7 @@
         <!-- Content Regions -->
         <div class="card" :class="{ 'd-none': selectedRegion.uid != region.meta.uid }" v-for="region in contentRegions">
             <div class="card-body">
-                <div class="region region-center" :class="{ readonly: isCopy }">
+                <div class="region" :class="{ readonly: isCopy, 'region-center': region.meta.width === 'centered' }">
                     <region v-bind:content="'page'" v-bind:type="typeId" v-bind:model="region"></region>
                     <div class="content-blocker"></div>
                 </div>

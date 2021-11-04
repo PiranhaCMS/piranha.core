@@ -17,24 +17,8 @@ namespace Piranha.Data
     /// Reusable content block.
     /// </summary>
     [Serializable]
-    public sealed class Block
+    public sealed class Block : BlockBase<BlockField>
     {
-        /// <summary>
-        /// Gets/sets the unique id.
-        /// </summary>
-        public Guid Id { get; set; }
-
-        /// <summary>
-        /// This is not part of the data model. It's only used
-        /// for internal mapping.
-        /// </summary>
-        public Guid? ParentId { get; set; }
-
-        /// <summary>
-        /// Gets/sets the CLR type of the block.
-        /// </summary>
-        public string CLRType { get; set; }
-
         /// <summary>
         /// Gets/sets the optional title. This property
         /// is only used for reusable blocks within the
@@ -56,10 +40,5 @@ namespace Piranha.Data
         /// Gets/sets the last modification date.
         /// </summary>
         public DateTime LastModified { get; set; }
-
-        /// <summary>
-        /// Gets/sets the available fields.
-        /// </summary>
-        public IList<BlockField> Fields { get; set; } = new List<BlockField>();
     }
 }

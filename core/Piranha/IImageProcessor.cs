@@ -64,5 +64,12 @@ namespace Piranha
         /// <param name="width">The requested width</param>
         /// <param name="height">The requested height</param>
         void CropScale(Stream source, Stream dest, int width, int height);
+
+        /// <summary>
+        /// Auto orients the image according to exif information.
+        /// </summary>
+        /// <param name="source">The image data stream</param>
+        /// <param name="dest">The destination stream</param>
+        void AutoOrient(Stream source, Stream dest);
     }
 }

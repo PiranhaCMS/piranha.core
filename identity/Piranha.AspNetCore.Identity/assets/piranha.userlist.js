@@ -48,7 +48,11 @@ piranha.userlist = new Vue({
                 confirmIcon: "fas fa-trash",
                 confirmText: piranha.resources.texts.delete,
                 onConfirm: function () {
-                    fetch(piranha.baseUrl + "manager/user/delete/" + user.id)
+                    fetch(piranha.baseUrl + "manager/user/delete", {
+                        method: "delete",
+                        headers: piranha.utils.antiForgeryHeaders(),
+                        body: JSON.stringify(user.id)
+                    })
                     .then(function (response) { return response.json(); })
                     .then(function (result) {
                         piranha.notifications.push(result.status);

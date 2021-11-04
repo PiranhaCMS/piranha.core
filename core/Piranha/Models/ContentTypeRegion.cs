@@ -65,6 +65,11 @@ namespace Piranha.Models
         public RegionDisplayMode Display { get; set; }
 
         /// <summary>
+        /// Gets/sets the editor width.
+        /// </summary>
+        public EditorWidth Width { get; set; }
+
+        /// <summary>
         /// Gets/sets the available fields.
         /// </summary>
         public IList<ContentTypeField> Fields { get; set; } = new List<ContentTypeField>();

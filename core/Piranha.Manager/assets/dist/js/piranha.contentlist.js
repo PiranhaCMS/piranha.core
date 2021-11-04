@@ -49,7 +49,11 @@ piranha.contentlist = new Vue({
                 confirmIcon: "fas fa-trash",
                 confirmText: piranha.resources.texts.delete,
                 onConfirm: function () {
-                    fetch(piranha.baseUrl + "manager/api/content/delete/" + id)
+                    fetch(piranha.baseUrl + "manager/api/content/delete", {
+                        method: "delete",
+                        headers: piranha.utils.antiForgeryHeaders(),
+                        body: JSON.stringify(id)
+                    })
                     .then(function (response) { return response.json(); })
                     .then(function (result) {
                         piranha.notifications.push(result);

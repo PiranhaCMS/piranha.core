@@ -23,6 +23,11 @@ namespace Piranha.Manager.Models.Content
         public string Title { get; set; }
 
         /// <summary>
+        /// Gets/sets the optional description.
+        /// </summary>
+        public string Description { get; set; }
+
+        /// <summary>
         /// Gets/sets the url for adding a new content model for the type.
         /// </summary>
         public string AddUrl { get; set; }

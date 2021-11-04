@@ -9,13 +9,17 @@
  */
 
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Reflection;
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 using Newtonsoft.Json;
+using Piranha.Extend;
+using Piranha.Runtime;
 
 namespace Piranha
 {
@@ -71,16 +75,26 @@ namespace Piranha
                 .Replace("ä", "a")
                 .Replace("á", "a")
                 .Replace("à", "a")
+                .Replace("ã", "a")
+                .Replace("â", "a")
                 .Replace("ö", "o")
                 .Replace("ó", "o")
                 .Replace("ò", "o")
+                .Replace("ô", "o")
+                .Replace("õ", "o")
                 .Replace("é", "e")
                 .Replace("è", "e")
+                .Replace("ê", "e")
                 .Replace("í", "i")
-                .Replace("ì", "i");
+                .Replace("ì", "i")
+                .Replace("ú", "u")
+                .Replace("ž", "z")
+                .Replace("š", "s")
+                .Replace("č", "c")
+                .Replace("ç", "c");
 
             // Remove special characters
-            slug = Regex.Replace(slug, @"[^a-z0-9-/ ]", "").Replace("--", "-");
+            slug = Regex.Replace(slug, @"[^a-z\u0600-\u06FF0-9-/ ]", "").Replace("--", "-");
 
             // Remove whitespaces
             slug = Regex.Replace(slug.Replace("-", " "), @"\s+", " ").Replace(" ", "-");
@@ -105,7 +119,7 @@ namespace Piranha
         /// </summary>
         /// <param name="str">The string</param>
         /// <returns>The internal id</returns>
-        public static string GenerateInteralId(string str)
+        public static string GenerateInternalId(string str)
         {
             var ti = new CultureInfo("en-US", false).TextInfo;
             return ti.ToTitleCase(GenerateSlug(str).Replace('-', ' ')).Replace(" ", "");
@@ -300,6 +314,70 @@ namespace Piranha
             {
                 property.SetValue(instance, value);
             }
+        }
+
+        /// <summary>
+        /// Gets the app method with the given name for the specified type.
+        /// </summary>
+        /// <param name="name">The method name</param>
+        /// <typeparam name="T">The type</typeparam>
+        /// <returns>The method if found, otherwise null</returns>
+        internal static AppMethod GetMethod<T>(string name)
+        {
+            var methodInfo = typeof(T).GetMethod(name);
+
+            if (methodInfo != null)
+            {
+                var method = new AppMethod
+                {
+                    Method = methodInfo,
+                    IsAsync = typeof(Task).IsAssignableFrom(methodInfo.ReturnType)
+                };
+
+                foreach (var p in methodInfo.GetParameters())
+                {
+                    method.ParameterTypes.Add(p.ParameterType);
+                }
+                return method;
+            }
+            return null;
+        }
+
+        /// <summary>
+        /// Gets the attribute defined settings for the given property.
+        /// </summary>
+        /// <param name="prop">The property info</param>
+        /// <returns>The settings</returns>
+        public static IDictionary<string, object> GetFieldSettings(PropertyInfo prop)
+        {
+            var settings = new Dictionary<string, object>();
+
+            // Get optional settings
+            var settingsAttr = prop.GetCustomAttribute<FieldSettingsAttribute>();
+            if (settingsAttr != null)
+            {
+                foreach (var setting in settingsAttr.GetType().GetProperties(BindingFlags.Instance|BindingFlags.Public|BindingFlags.DeclaredOnly))
+                {
+                    if (settings.TryGetValue(setting.Name, out var existing))
+                    {
+                        if (!(existing is IList))
+                        {
+                            existing = new ArrayList()
+                            {
+                                existing
+                            };
+                            settings[setting.Name] = existing;
+                        }
+
+                        ((IList)existing).Add(setting.GetValue(settingsAttr));
+                    }
+                    else
+                    {
+                        settings[setting.Name] = setting.GetValue(settingsAttr);
+                    }
+                }
+            }
+            return settings;
         }
     }
 }

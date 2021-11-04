@@ -27,6 +27,11 @@ namespace Piranha.AspNetCore.Helpers
         Guid Id { get; set; }
 
         /// <summary>
+        /// Gets/sets the language id of the currently requested site.
+        /// </summary>
+        Guid LanguageId { get; set; }
+
+        /// <summary>
         /// Gets/sets the optional culture of the requested site.
         /// </summary>
         string Culture { get; set; }

@@ -15,7 +15,7 @@ namespace Piranha.Data.EF.SQLite.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "5.0.0-rc.2.20475.6");
+                .HasAnnotation("ProductVersion", "5.0.0");
 
             modelBuilder.Entity("Piranha.Data.Alias", b =>
                 {
@@ -189,6 +189,84 @@ namespace Piranha.Data.EF.SQLite.Migrations
                     b.ToTable("Piranha_Content");
                 });
 
+            modelBuilder.Entity("Piranha.Data.ContentBlock", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("CLRType")
+                        .IsRequired()
+                        .HasMaxLength(256)
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("ContentId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid?>("ParentId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("SortOrder")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ContentId");
+
+                    b.ToTable("Piranha_ContentBlocks");
+                });
+
+            modelBuilder.Entity("Piranha.Data.ContentBlockField", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("BlockId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("CLRType")
+                        .IsRequired()
+                        .HasMaxLength(256)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("FieldId")
+                        .IsRequired()
+                        .HasMaxLength(64)
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("SortOrder")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Value")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("BlockId", "FieldId", "SortOrder")
+                        .IsUnique();
+
+                    b.ToTable("Piranha_ContentBlockFields");
+                });
+
+            modelBuilder.Entity("Piranha.Data.ContentBlockFieldTranslation", b =>
+                {
+                    b.Property<Guid>("FieldId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("LanguageId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Value")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("FieldId", "LanguageId");
+
+                    b.HasIndex("LanguageId");
+
+                    b.ToTable("Piranha_ContentBlockFieldTranslations");
+                });
+
             modelBuilder.Entity("Piranha.Data.ContentField", b =>
                 {
                     b.Property<Guid>("Id")
@@ -262,6 +340,9 @@ namespace Piranha.Data.EF.SQLite.Migrations
                         .HasMaxLength(64)
                         .HasColumnType("TEXT");
 
+                    b.Property<bool>("IsHidden")
+                        .HasColumnType("INTEGER");
+
                     b.Property<DateTime>("LastModified")
                         .HasColumnType("TEXT");
 
@@ -299,6 +380,9 @@ namespace Piranha.Data.EF.SQLite.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Excerpt")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("LastModified")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Title")
@@ -1345,6 +1429,47 @@ namespace Piranha.Data.EF.SQLite.Migrations
                     b.Navigation("Type");
                 });
 
+            modelBuilder.Entity("Piranha.Data.ContentBlock", b =>
+                {
+                    b.HasOne("Piranha.Data.Content", "Content")
+                        .WithMany("Blocks")
+                        .HasForeignKey("ContentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Content");
+                });
+
+            modelBuilder.Entity("Piranha.Data.ContentBlockField", b =>
+                {
+                    b.HasOne("Piranha.Data.ContentBlock", "Block")
+                        .WithMany("Fields")
+                        .HasForeignKey("BlockId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Block");
+                });
+
+            modelBuilder.Entity("Piranha.Data.ContentBlockFieldTranslation", b =>
+                {
+                    b.HasOne("Piranha.Data.ContentBlockField", "Field")
+                        .WithMany("Translations")
+                        .HasForeignKey("FieldId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Piranha.Data.Language", "Language")
+                        .WithMany()
+                        .HasForeignKey("LanguageId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Field");
+
+                    b.Navigation("Language");
+                });
+
             modelBuilder.Entity("Piranha.Data.ContentField", b =>
                 {
                     b.HasOne("Piranha.Data.Content", "Content")
@@ -1669,10 +1794,22 @@ namespace Piranha.Data.EF.SQLite.Migrations
 
             modelBuilder.Entity("Piranha.Data.Content", b =>
                 {
+                    b.Navigation("Blocks");
+
                     b.Navigation("Fields");
 
                     b.Navigation("Tags");
 
+                    b.Navigation("Translations");
+                });
+
+            modelBuilder.Entity("Piranha.Data.ContentBlock", b =>
+                {
+                    b.Navigation("Fields");
+                });
+
+            modelBuilder.Entity("Piranha.Data.ContentBlockField", b =>
+                {
                     b.Navigation("Translations");
                 });
 

@@ -1,27 +1,9 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netstandard2.1</TargetFramework>
-    <Version>9.0.0-alpha3</Version>
-    <Company>Piranha CMS</Company>
-    <DocumentationFile>bin\$(Configuration)\$(TargetFramework)\$(AssemblyName).xml</DocumentationFile>
+    <TargetFramework>net6.0</TargetFramework>
     <NoWarn>$(NoWarn);1591</NoWarn>
-    <PublishRepositoryUrl>true</PublishRepositoryUrl>
-    <EmbedUntrackedSources>true</EmbedUntrackedSources>
-    <IncludeSymbols>true</IncludeSymbols>
-    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
-
-    <PackageId>Piranha.Data.EF.MySql</PackageId>
-    <PackageVersion>9.0.0-alpha3</PackageVersion>
-    <Authors>Piranha CMS</Authors>
     <Description>Entity Framework Core migration package for MySql</Description>
-    <Copyright>Copyright (c) .NET Foundation and Contributors</Copyright>
-    <PackageTags>cms mvc aspnetcore netstandard</PackageTags>
-    <PackageLicenseExpression>MIT</PackageLicenseExpression>
-    <PackageIcon>piranha.png</PackageIcon>
-    <PackageProjectUrl>https://github.com/piranhacms/piranha.core</PackageProjectUrl>
-    <RepositoryUrl>https://github.com/piranhacms/piranha.core</RepositoryUrl>
-    <RepositoryType>git</RepositoryType>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(GITHUB_ACTIONS)' == 'true'">
@@ -30,16 +12,9 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0" PrivateAssets="all" />
-    <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="5.0.0-alpha.1" />
+    <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="6.0.0-preview.7" />
     <ProjectReference Include="..\Piranha.Data.EF\Piranha.Data.EF.csproj" />
     <ProjectReference Include="..\..\core\Piranha\Piranha.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Include="piranha.png">
-      <Pack>True</Pack>
-      <PackagePath></PackagePath>
-    </None>
   </ItemGroup>
 
 </Project>

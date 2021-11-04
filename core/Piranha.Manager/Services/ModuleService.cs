@@ -26,7 +26,7 @@ namespace Piranha.Manager.Services
                 Items = App.Modules
                     .OrderBy(m => m.Instance.Author)
                     .ThenBy(m => m.Instance.Name)
-                    .Select(m => new ModuleListModel.ListItem
+                    .Select(m => new ModuleListModel.ModuleItem
                     {
                         Author = m.Instance.Author,
                         Name = m.Instance.Name,

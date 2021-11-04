@@ -264,7 +264,13 @@ public static class PiranhaUrlExtensions
     /// <returns>The url</returns>
     public static string AbsoluteContentUrl(this IApplicationService app, string url)
     {
-        return $"{ AbsoluteUrlStart(app) }{ ContentUrl(app, url) }";
+        var contentUrl = ContentUrl(app, url);
+
+        if (contentUrl.ToLower().StartsWith("http"))
+        {
+            return contentUrl;
+        }
+        return $"{ AbsoluteUrlStart(app) }{ contentUrl }";
     }
 
     /// <summary>

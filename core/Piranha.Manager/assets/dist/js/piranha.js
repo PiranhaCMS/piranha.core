@@ -155,6 +155,7 @@ piranha.dropzone = new function () {
         var defaultOptions = {
             paramName: 'Uploads',
             url: piranha.baseUrl + "manager/api/media/upload",
+            headers: piranha.utils.antiForgeryHeaders(false),
             thumbnailWidth: 70,
             thumbnailHeight: 70,
             previewsContainer: selector + " .media-list",
@@ -296,7 +297,28 @@ piranha.utils = {
     },
     strLength: function (str) {
         return str != null ? str.length : 0;
-    }
+    },
+    antiForgery: function () {
+        const cookies = document.cookie.split(";");
+        for (let i = 0; i < cookies.length; i++) {
+            let c = cookies[i].trim().split("=");
+            if (c[0] === piranha.antiForgery.cookieName) {
+                return c[1];
+            }
+        }
+        return "";
+    },
+    antiForgeryHeaders: function (isJson) {
+        var headers = {};
+
+        if (isJson === undefined || isJson === true)
+        {
+            headers["Content-Type"] = "application/json";
+        }
+        headers[piranha.antiForgery.headerName] = piranha.utils.antiForgery();
+
+        return headers;
+    }    
 };
 
 Date.prototype.addDays = function(days) {
@@ -404,7 +426,18 @@ piranha.blockpicker = new Vue({
         open: function (callback, index, parentType) {
             var self = this;
 
-            fetch(piranha.baseUrl + "manager/api/content/blocktypes" + (parentType != null ? "/" + parentType : ""))
+            var url = piranha.baseUrl + "manager/api/content/blocktypes";
+
+            if (piranha.pageedit)
+            {
+                url += "/page/" + piranha.pageedit.typeId;
+            }
+            else if (piranha.postedit)
+            {
+                url += "/post/" + piranha.postedit.typeId;
+            }
+
+            fetch(url + (parentType != null ? "/" + parentType : ""))
                 .then(function (response) { return response.json(); })
                 .then(function (result) {
                     if (result.typeCount > 1) {
@@ -468,6 +501,13 @@ piranha.notifications = new Vue({
         items: [],
     },
     methods: {
+        unauthorized: function() {
+            this.push({
+                type: "danger",
+                body: "Request sender could not be verified by the server.",
+                hide: true
+            });
+        },
         push: function (notification) {
 
             notification.style = {
@@ -496,6 +536,101 @@ piranha.notifications = new Vue({
             }, 200);
         }
     }
+});
+/*global
+    piranha
+*/
+
+piranha.contentpicker = new Vue({
+    el: "#contentpicker",
+    data: {
+        search: '',
+        groups: [],
+        items: [],
+        currentGroupId: null,
+        currentGroupTitle: null,
+        currentGroupIcon: null,
+        filter: null,
+        callback: null,
+    },
+    computed: {
+        filteredItems: function () {
+            var self = this;
+
+            return this.items.filter(function (item) {
+                if (self.search.length > 0) {
+                    return item.title.toLowerCase().indexOf(self.search.toLowerCase()) > -1
+                }
+                return true;
+            });
+        }
+    },
+    methods: {
+        bind: function (result, partial) {
+            this.currentGroupId = result.group.id;
+            this.currentGroupTitle = result.group.title;
+            this.currentGroupIcon = result.group.icon;
+            this.types = result.types;
+            this.items = result.items.map(function (i) {
+                var type = result.types.find(function (t) {
+                    return t.id === i.typeId;
+                });
+
+                i.type = type.title || i.typeId;
+
+                return i;
+            });
+
+            if (!partial)
+            {
+                // Only bind groups if this is a full reload
+                this.groups = result.groups;
+            }
+        },
+        load: function (groupId, partial) {
+            var url = piranha.baseUrl + "manager/api/content/" + (groupId ? groupId + "/" : "") + "list";
+            var self = this;
+
+            fetch(url)
+                .then(function (response) { return response.json(); })
+                .then(function (result) {
+                    self.bind(result, partial);
+                })
+                .catch(function (error) { console.log("error:", error ); });
+        },
+        loadGroups: function () {
+
+        },
+        refresh: function () {
+            this.load(piranha.contentpicker.currentGroupId, true);
+        },
+        open: function (groupId, callback) {
+            this.search = '';
+            this.callback = callback;
+
+            this.load(groupId);
+
+            $("#contentpicker").modal("show");
+        },
+        onEnter: function () {
+            if (this.filteredItems.length == 1) {
+                this.select(this.filteredItems[0]);
+            }
+        },
+        select: function (item) {
+            this.callback(JSON.parse(JSON.stringify(item)));
+            this.callback = null;
+            this.search = "";
+
+            $("#contentpicker").modal("hide");
+        }
+    }
+});
+
+$(document).ready(function() {
+    $("#contentpicker").on("shown.bs.modal", function() {
+        $("#contentpickerSearch").trigger("focus");
+    });
 });
 /*global
     piranha
@@ -647,9 +782,7 @@ piranha.mediapicker = new Vue({
             if (self.folderName !== "") {
                 fetch(piranha.baseUrl + "manager/api/media/folder/save" + (self.filter ? "?filter=" + self.filter : ""), {
                     method: "post",
-                    headers: {
-                        "Content-Type": "application/json",
-                    },
+                    headers: piranha.utils.antiForgeryHeaders(),
                     body: JSON.stringify({
                         parentId: self.currentFolderId,
                         name: self.folderName
@@ -666,8 +799,13 @@ piranha.mediapicker = new Vue({
                         self.items = result.media;
                     }
 
-                    // Push status to notification hub
-                    piranha.notifications.push(result.status);
+                    if (result.status !== 400) {
+                        // Push status to notification hub
+                        piranha.notifications.push(result.status);
+                    } else {
+                        // Unauthorized request
+                        piranha.notifications.unauthorized();
+                    }
                 })
                 .catch(function (error) {
                     console.log("error:", error);
@@ -1017,22 +1155,25 @@ piranha.languageedit = new Vue({
                 self.loading = true;
                 fetch(piranha.baseUrl + "manager/api/language", {
                     method: "post",
-                    headers: {
-                        "Content-Type": "application/json",
-                    },
+                    headers: piranha.utils.antiForgeryHeaders(),
                     body: JSON.stringify({
                         items: JSON.parse(JSON.stringify(self.items))
                     })
                 })
                 .then(function (response) { return response.json(); })
                 .then(function (result) {
-                    //if (result.status.type === "success")
-                    //{
+                    if (result.status.type === "success") {
                         self.bind(result);
-                    //}
-
-                    // Push status to notification hub
-                    // piranha.notifications.push(result.status);
+                    }
+                    
+                    if (result.status !== 400) {
+                        // Push status to notification hub
+                        piranha.notifications.push(result.status);
+                    } else {
+                        // Unauthorized request
+                        piranha.notifications.unauthorized();
+                        self.loading = false;
+                    }
                 })
                 .catch(function (error) {
                     console.log("error:", error);
@@ -1045,20 +1186,23 @@ piranha.languageedit = new Vue({
             self.loading = true;
             fetch(piranha.baseUrl + "manager/api/language/" + item.id, {
                 method: "delete",
-                headers: {
-                    "Content-Type": "application/json",
-                },
+                headers: piranha.utils.antiForgeryHeaders(),
                 body: JSON.stringify(item)
             })
             .then(function (response) { return response.json(); })
             .then(function (result) {
-                //if (result.status.type === "success")
-                //{
+                if (result.status.type === "success") {
                     self.bind(result);
-                //}
+                }
 
-                // Push status to notification hub
-                // piranha.notifications.push(result.status);
+                if (result.status !== 400) {
+                    // Push status to notification hub
+                    piranha.notifications.push(result.status);
+                } else {
+                    // Unauthorized request
+                    piranha.notifications.unauthorized();
+                    self.loading = false;
+                }
             })
             .catch(function (error) {
                 console.log("error:", error);

@@ -57,7 +57,13 @@ piranha.siteedit = new Vue({
             fetch(piranha.baseUrl + "manager/api/site/content/" + id)
                 .then(function (response) { return response.json(); })
                 .then(function (result) {
-                    self.regions = result.regions;
+                    if (result.status !== 404) {
+                        console.log("Setting regions");
+                        self.regions = result.regions;
+                    } else {
+                        console.log("Setting regions to empty array");
+                        self.regions = [];
+                    }
                 })
                 .catch(function (error) { console.log("error:", error ); });
         },
@@ -85,15 +91,11 @@ piranha.siteedit = new Vue({
 
             fetch(piranha.baseUrl + "manager/api/site/save", {
                 method: "post",
-                headers: {
-                    "Content-Type": "application/json",
-                },
+                headers: piranha.utils.antiForgeryHeaders(),
                 body: JSON.stringify(model)
             })
             .then(function (response) { return response.json(); })
             .then(function (result) {
-                piranha.notifications.push(result);
-
                 if (result.type === "success") {
                     // Check if we should save content as well
                     if (self.id != null && self.typeId != null) {
@@ -106,20 +108,43 @@ piranha.siteedit = new Vue({
 
                         fetch(piranha.baseUrl + "manager/api/site/savecontent", {
                             method: "post",
-                            headers: {
-                                "Content-Type": "application/json",
-                            },
+                            headers: piranha.utils.antiForgeryHeaders(),
                             body: JSON.stringify(content)
                         })
-                        .catch(function (error) { console.log("error:", error ); });
-                    }
+                        .then(function (contentResponse) { return contentResponse.json(); })
+                        .then(function (contentResult) {
+                            if (contentResult.type === "success") {
+                                piranha.notifications.push(result);
 
-                    $("#siteedit").modal("hide");
-
-                    if (self.callback)
-                    {
-                        self.callback();
-                        self.callback = null;
+                                $("#siteedit").modal("hide");
+                                if (self.callback)
+                                {
+                                    self.callback();
+                                    self.callback = null;
+                                }
+                            } else {
+                                if (result.status !== 400) {
+                                    // Push status to notification hub
+                                    piranha.notifications.push(contentResult);
+                                } else {
+                                    // Unauthorized request
+                                    piranha.notifications.unauthorized();
+                                }
+                            }
+                        })
+                        .catch(function (error) {
+                            console.log("error:", error );
+                        });
+                    } else {
+                        // Push status to notification hub
+                        piranha.notifications.push(result);
+                        
+                        $("#siteedit").modal("hide");
+                        if (self.callback)
+                        {
+                            self.callback();
+                            self.callback = null;
+                        }
                     }
                 }
             })
@@ -200,22 +225,26 @@ piranha.siteedit = new Vue({
 
             var self = this;
 
-            fetch(piranha.baseUrl + "manager/api/site/delete/" + self.id)
-                .then(function (response) { return response.json(); })
-                .then(function (result) {
-                    piranha.notifications.push(result);
+            fetch(piranha.baseUrl + "manager/api/site/delete", {
+                method: "delete",
+                headers: piranha.utils.antiForgeryHeaders(),
+                body: JSON.stringify(self.id)
+            })
+            .then(function (response) { return response.json(); })
+            .then(function (result) {
+                piranha.notifications.push(result);
 
-                    if (result.type === "success") {
-                        $("#siteedit").modal("hide");
+                if (result.type === "success") {
+                    $("#siteedit").modal("hide");
 
-                        if (self.callback)
-                        {
-                            self.callback();
-                            self.callback = null;
-                        }
+                    if (self.callback)
+                    {
+                        self.callback();
+                        self.callback = null;
                     }
-                })
-                .catch(function (error) { console.log("error:", error ); });
+                }
+            })
+            .catch(function (error) { console.log("error:", error ); });
         },
         selectRegion: function (region) {
             this.selectedRegion = region;

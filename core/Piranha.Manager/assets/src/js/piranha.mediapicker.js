@@ -148,9 +148,7 @@ piranha.mediapicker = new Vue({
             if (self.folderName !== "") {
                 fetch(piranha.baseUrl + "manager/api/media/folder/save" + (self.filter ? "?filter=" + self.filter : ""), {
                     method: "post",
-                    headers: {
-                        "Content-Type": "application/json",
-                    },
+                    headers: piranha.utils.antiForgeryHeaders(),
                     body: JSON.stringify({
                         parentId: self.currentFolderId,
                         name: self.folderName
@@ -167,8 +165,13 @@ piranha.mediapicker = new Vue({
                         self.items = result.media;
                     }
 
-                    // Push status to notification hub
-                    piranha.notifications.push(result.status);
+                    if (result.status !== 400) {
+                        // Push status to notification hub
+                        piranha.notifications.push(result.status);
+                    } else {
+                        // Unauthorized request
+                        piranha.notifications.unauthorized();
+                    }
                 })
                 .catch(function (error) {
                     console.log("error:", error);

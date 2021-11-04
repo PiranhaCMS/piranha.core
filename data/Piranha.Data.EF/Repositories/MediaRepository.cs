@@ -81,9 +81,13 @@ namespace Piranha.Repositories
         /// </summary>
         /// <param name="ids">One or several media id</param>
         /// <returns>The matching media</returns>
-        public Task<IEnumerable<Models.Media>> GetById(params Guid[] ids) => _db.Media.AsNoTracking()
-            .Include(c => c.Versions).Where(m => ids.Contains(m.Id)).OrderBy(m => m.Filename).ToArrayAsync()
-            .ContinueWith(t => t.Result.Select(m => (Models.Media) m));
+        public Task<IEnumerable<Models.Media>> GetById(params Guid[] ids) => 
+            _db.Media.AsNoTracking()
+                .Include(c => c.Versions)
+                .Where(m => ids.Contains(m.Id))
+                .OrderBy(m => m.Filename)
+                .ToArrayAsync()
+                .ContinueWith(t => t.Result.Select(m => (Models.Media) m));
 
         /// <summary>
         /// Gets the media with the given id.
@@ -114,7 +118,7 @@ namespace Piranha.Repositories
                 .FirstOrDefaultAsync(f => f.Id == id);
 
         /// <summary>
-        /// Gets the hierachical media structure.
+        /// Gets the hierarchical media structure.
         /// </summary>
         /// <returns>The media structure</returns>
         public async Task<Models.MediaStructure> GetStructure()

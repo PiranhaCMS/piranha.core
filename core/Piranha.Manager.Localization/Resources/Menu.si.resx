@@ -1,0 +1,54 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Content" xml:space="preserve">
+    <value>අන්තර්ගතය</value>
+  </data>
+  <data name="Settings" xml:space="preserve">
+    <value>සැකසුම්</value>
+  </data>
+  <data name="System" xml:space="preserve">
+    <value>පද්ධතිය</value>
+  </data>
+  <data name="Pages" xml:space="preserve">
+    <value>පිටු</value>
+  </data>
+  <data name="Media" xml:space="preserve">
+    <value>මාධ්‍යය</value>
+  </data>
+  <data name="Aliases" xml:space="preserve">
+    <value>අපනාම</value>
+  </data>
+  <data name="Sites" xml:space="preserve">
+    <value>අඩවි</value>
+  </data>
+  <data name="Config" xml:space="preserve">
+    <value>වින්‍යාසය</value>
+  </data>
+  <data name="Modules" xml:space="preserve">
+    <value>Modules</value>
+  </data>
+  <data name="Logout" xml:space="preserve">
+    <value>Logout</value>
+  </data>
+  <data name="Comments" xml:space="preserve">
+    <value>අදහස්</value>
+  </data>
+  <data name="Roles" xml:space="preserve">
+    <value>Roles</value>
+  </data>
+  <data name="Users" xml:space="preserve">
+    <value>පරිශිලකයින්</value>
+  </data>
+</root>

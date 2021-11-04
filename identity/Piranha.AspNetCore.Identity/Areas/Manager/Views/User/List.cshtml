@@ -60,7 +60,7 @@
                         <img v-if="user.gravatarUrl" :src="user.gravatarUrl" :alt="'Gravatar for ' + user.email" style="padding-right: 10px">
                         @if ((await Auth.AuthorizeAsync(User, Piranha.AspNetCore.Identity.Permissions.UsersEdit)).Succeeded)
                         {
-                            <a :href="'/manager/user/' + user.id">{{ user.userName }}</a>
+                            <a :href="'@Url.Content("~/manager/user/")' + user.id">{{ user.userName }}</a>
                         }
                         else
                         {

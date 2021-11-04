@@ -56,9 +56,7 @@ piranha.config = new Vue({
 
             fetch(piranha.baseUrl + "manager/api/config/save", {
                     method: "post",
-                    headers: {
-                        "Content-Type": "application/json",
-                    },
+                    headers: piranha.utils.antiForgeryHeaders(),
                     body: JSON.stringify({
                         hierarchicalPageSlugs: self.model.hierarchicalPageSlugs,
                         expandedSitemapLevels: self.model.expandedSitemapLevels,
@@ -80,8 +78,13 @@ piranha.config = new Vue({
                 })
                 .then(function (response) { return response.json(); })
                 .then(function (result) {
-                    // Push status to notification hub
-                    piranha.notifications.push(result.status);
+                    if (result.status !== 400) {
+                        // Push status to notification hub
+                        piranha.notifications.push(result.status);
+                    } else {
+                        // Unauthorized request
+                        piranha.notifications.unauthorized();
+                    }
                 })
                 .catch(function (error) {
                     console.log("error:", error);

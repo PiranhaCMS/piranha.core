@@ -47,7 +47,7 @@ namespace Piranha.Services
         /// <summary>
         /// Gets the default side.
         /// </summary>
-        /// <returns>The modell, or NULL if it doesnt exist</returns>
+        /// <returns>The model, or NULL if it doesnt exist</returns>
         Task<Site> GetDefaultAsync();
 
         /// <summary>
@@ -66,7 +66,7 @@ namespace Piranha.Services
         Task<T> GetContentByIdAsync<T>(Guid id) where T : SiteContent<T>;
 
         /// <summary>
-        /// Gets the hierachical sitemap structure.
+        /// Gets the hierarchical sitemap structure.
         /// </summary>
         /// <param name="id">The optional site id</param>
         /// <param name="onlyPublished">If only published items should be included</param>

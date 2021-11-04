@@ -25,6 +25,7 @@ namespace Piranha.Manager.Controllers
     [Route("manager/api/site")]
     [Authorize(Policy = Permission.Admin)]
     [ApiController]
+    [AutoValidateAntiforgeryToken]
     public class SiteApiController : Controller
     {
         private readonly SiteService _service;
@@ -166,10 +167,10 @@ namespace Piranha.Manager.Controllers
         /// </summary>
         /// <param name="id">The unique id</param>
         /// <returns>The result of the operation</returns>
-        [Route("delete/{id}")]
-        [HttpGet]
+        [Route("delete")]
+        [HttpDelete]
         [Authorize(Policy = Permission.SitesDelete)]
-        public async Task<StatusMessage> Delete(Guid id)
+        public async Task<StatusMessage> Delete([FromBody]Guid id)
         {
             try
             {

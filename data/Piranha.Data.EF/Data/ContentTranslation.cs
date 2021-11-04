@@ -36,6 +36,11 @@ namespace Piranha.Data
         public string Excerpt { get; set; }
 
         /// <summary>
+        /// Gets/sets the last modification date.
+        /// </summary>
+        public DateTime LastModified { get; set; }
+
+        /// <summary>
         /// Gets/sets the content.
         /// </summary>
         public Content Content { get; set; }

@@ -58,6 +58,22 @@ namespace Piranha.Manager
         public const string SitesEdit = "PiranhaSitesEdit";
         public const string SitesSave = "PiranhaSitesSave";
 
+        public static readonly PermissionsStructure PermissionsStructure =
+            // Admin Permission
+            new(Admin, new PermissionsStructure[]
+            {
+                new(Aliases, new PermissionsStructure[] {new(AliasesDelete), new(AliasesEdit)}),
+                new(Comments, new PermissionsStructure[] {new(CommentsApprove), new(CommentsDelete) }),
+                new(Config, new PermissionsStructure[] {new(ConfigEdit) }),
+                new(Content, new PermissionsStructure[] {new(ContentAdd), new(ContentEdit) , new(ContentSave) , new(ContentDelete) }),
+                new(Language, new PermissionsStructure[] {new(LanguageAdd), new(LanguageEdit) , new(LanguageDelete) }),
+                new(Media, new PermissionsStructure[] {new(MediaAdd), new(MediaDelete) , new(MediaEdit) , new(MediaAddFolder), new(MediaDeleteFolder) }),
+                new(Modules),
+                new(Pages, new PermissionsStructure[] {new(PagesAdd), new(PagesDelete) , new(PagesEdit) , new(PagesPublish), new(PagesSave) }),
+                new(Posts, new PermissionsStructure[] {new(PostsAdd), new(PostsDelete) , new(PostsEdit) , new(PostsPublish), new(PostsSave) }),
+                new(Sites, new PermissionsStructure[] {new(SitesAdd), new(SitesDelete) , new(SitesEdit) , new(SitesSave) }),
+            });
+
         public static string[] All() {
             return new [] {
                 Admin,

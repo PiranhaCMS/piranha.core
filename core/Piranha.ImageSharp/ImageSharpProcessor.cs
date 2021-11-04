@@ -26,11 +26,11 @@ namespace Piranha.ImageSharp
         /// <param name="height">The returned height</param>
         public void GetSize(Stream stream, out int width, out int height)
         {
-            using (var image = Image.Load(stream))
-            {
-                width = image.Width;
-                height = image.Height;
-            }
+            var imageInfo = Image.Identify(stream);
+            width = imageInfo.Width;
+            height = imageInfo.Height;
+
+            stream.Position = 0;
         }
 
         /// <summary>
@@ -41,11 +41,9 @@ namespace Piranha.ImageSharp
         /// <param name="height">The returned height</param>
         public void GetSize(byte[] bytes, out int width, out int height)
         {
-            using (var image = Image.Load(bytes))
-            {
-                width = image.Width;
-                height = image.Height;
-            }
+            var imageInfo = Image.Identify(bytes);
+            width = imageInfo.Width;
+            height = imageInfo.Height;
         }
 
         /// <summary>
@@ -140,6 +138,22 @@ namespace Piranha.ImageSharp
                 }));
 
                 image.Save(dest, format);
+            }
+        }
+
+        /// <summary>
+        /// Auto orients the image according to exif information.
+        /// </summary>
+        /// <param name="source">The image data stream</param>
+        /// <param name="dest">The destination stream</param>
+        public void AutoOrient(Stream source, Stream dest)
+        {
+            using (var image = Image.Load(source, out IImageFormat format))
+            {
+                image.Mutate(x => x.AutoOrient());
+                image.Save(dest, format);
+
+                dest.Position = 0;
             }
         }
     }

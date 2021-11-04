@@ -9,7 +9,10 @@
  */
 
 using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.Dynamic;
 using System.Linq;
 using System.Threading.Tasks;
 using Piranha.Extend;
@@ -17,9 +20,6 @@ using Piranha.Extend.Fields;
 using Piranha.Models;
 using Piranha.Manager.Models;
 using Piranha.Services;
-using System.Collections;
-using System.Dynamic;
-using System.ComponentModel.DataAnnotations;
 
 namespace Piranha.Manager.Services
 {
@@ -46,13 +46,19 @@ namespace Piranha.Manager.Services
         /// <returns>Gets the list model.</returns>
         public async Task<ContentListModel> GetListAsync(string contentGroup)
         {
-            var group = App.ContentGroups.GetById(contentGroup);
-            var types = App.ContentTypes.GetByGroupId(contentGroup);
-            var items = await _api.Content.GetAllAsync<ContentInfo>(contentGroup);
+            var groups = contentGroup == null ?
+                App.ContentGroups.ToList() :
+                new List<ContentGroup>();
+            var group = contentGroup == null ?
+                App.ContentGroups.GetById(groups.First().Id) :
+                App.ContentGroups.GetById(contentGroup);
+            var types = App.ContentTypes.GetByGroupId(group.Id);
+            var items = await _api.Content.GetAllAsync<ContentInfo>(group.Id);
 
             return new ContentListModel
             {
                 Group = group,
+                Groups = groups,
                 Items = items
                     .Select(i => new ContentListModel.ContentItem
                         {
@@ -78,10 +84,16 @@ namespace Piranha.Manager.Services
         /// Get the content edit model by contnet id
         /// </summary>
         /// <param name="id">The content id</param>
+        /// <param name="languageId">The optional language id</param>
         /// <returns>Edit model</returns>
-        public async Task<ContentEditModel> GetByIdAsync(Guid id)
+        public async Task<ContentEditModel> GetByIdAsync(Guid id, Guid? languageId = null)
         {
-            var content = await _api.Content.GetByIdAsync<DynamicContent>(id);
+            if (!languageId.HasValue)
+            {
+                languageId = (await _api.Languages.GetDefaultAsync()).Id;
+            }
+
+            var content = await _api.Content.GetByIdAsync<DynamicContent>(id, languageId);
             if (content != null)
             {
                 var type =  App.ContentTypes.GetById(content.TypeId);
@@ -91,18 +103,17 @@ namespace Piranha.Manager.Services
                 await _factory.InitDynamicManagerAsync(content,
                     App.ContentTypes.GetById(content.TypeId));
 
-                var model = Transform(content);
+                var model = await Transform(content);
 
+                model.LanguageId = languageId;
                 model.TypeId = type.Id;
                 model.TypeTitle = type.Title;
                 model.GroupId = group.Id;
                 model.GroupTitle = group.Title;
-
                 model.State = ContentState.Published;
 
                 return model;
             }
-
             return null;
         }
 
@@ -122,14 +133,15 @@ namespace Piranha.Manager.Services
 
                 await _factory.InitDynamicManagerAsync(content, type);
 
-                var model = Transform(content);
+                var model = await Transform(content);
 
+                model.LanguageId = (await _api.Languages.GetDefaultAsync()).Id;
                 model.TypeId = type.Id;
                 model.TypeTitle = type.Title;
                 model.GroupId = group.Id;
                 model.GroupTitle = group.Title;
                 model.State = ContentState.New;
-                
+
                 return model;
             }
 
@@ -151,7 +163,7 @@ namespace Piranha.Manager.Services
                     model.Id = Guid.NewGuid();
                 }
 
-                var content = await _api.Content.GetByIdAsync(model.Id);
+                var content = await _api.Content.GetByIdAsync(model.Id, model.LanguageId);
 
                 if (content == null)
                 {
@@ -163,6 +175,28 @@ namespace Piranha.Manager.Services
                 content.Title = model.Title;
                 content.Excerpt = model.Excerpt;
                 content.PrimaryImage = model.PrimaryImage;
+
+                // Save category
+                if (contentType.UseCategory)
+                {
+                    content.Category = new Taxonomy
+                    {
+                        Title = model.SelectedCategory
+                    };
+                }
+
+                // Save tags
+                if (contentType.UseTags)
+                {
+                    content.Tags.Clear();
+                    foreach (var tag in model.SelectedTags)
+                    {
+                        content.Tags.Add(new Taxonomy
+                        {
+                            Title = tag
+                        });
+                    }
+                }
 
                 // Save regions
                 foreach (var region in contentType.Regions)
@@ -217,8 +251,64 @@ namespace Piranha.Manager.Services
                     }
                 }
 
+                // Save blocks
+                content.Blocks.Clear();
+
+                foreach (var block in model.Blocks)
+                {
+                    if (block is Models.Content.BlockGroupModel blockGroup)
+                    {
+                        var groupType = App.Blocks.GetByType(blockGroup.Type);
+
+                        if (groupType != null)
+                        {
+                            var pageBlock = (BlockGroup)Activator.CreateInstance(groupType.Type);
+
+                            pageBlock.Id = blockGroup.Id;
+                            pageBlock.Type = blockGroup.Type;
+
+                            foreach (var field in blockGroup.Fields)
+                            {
+                                var prop = pageBlock.GetType().GetProperty(field.Meta.Id, App.PropertyBindings);
+                                prop.SetValue(pageBlock, field.Model);
+                            }
+
+                            foreach (var item in blockGroup.Items)
+                            {
+                                if (item is Models.Content.BlockItemModel blockItem)
+                                {
+                                    pageBlock.Items.Add(blockItem.Model);
+                                }
+                                else if (item is Models.Content.BlockGenericModel blockGeneric)
+                                {
+                                    var transformed = ContentUtils.TransformGenericBlock(blockGeneric);
+
+                                    if (transformed != null)
+                                    {
+                                        pageBlock.Items.Add(transformed);
+                                    }
+                                }
+                            }
+                            content.Blocks.Add(pageBlock);
+                        }
+                    }
+                    else if (block is Models.Content.BlockItemModel blockItem)
+                    {
+                        content.Blocks.Add(blockItem.Model);
+                    }
+                    else if (block is Models.Content.BlockGenericModel blockGeneric)
+                    {
+                        var transformed = ContentUtils.TransformGenericBlock(blockGeneric);
+
+                        if (transformed != null)
+                        {
+                            content.Blocks.Add(transformed);
+                        }
+                    }
+                }
+
                 // Save content
-                await _api.Content.SaveAsync(content);
+                await _api.Content.SaveAsync(content, model.LanguageId);
             }
             else
             {
@@ -240,20 +330,33 @@ namespace Piranha.Manager.Services
         /// </summary>
         /// <param name="content">The dynamic content object</param>
         /// <returns>Edit model</returns>
-        private ContentEditModel Transform(DynamicContent content)
+        private async Task<ContentEditModel> Transform(DynamicContent content)
         {
             var config = new Config(_api);
             var type = App.ContentTypes.GetById(content.TypeId);
-            
+            var languages = await _api.Languages.GetAllAsync();
+            var categories = await _api.Content.GetAllCategoriesAsync(type.Group);
+            var tags = await _api.Content.GetAllTagsAsync(type.Group);
+
             var model = new ContentEditModel
             {
                 Id = content.Id,
                 TypeId = content.TypeId,
                 PrimaryImage = content.PrimaryImage,
                 Title = content.Title,
+                Excerpt = content.Excerpt,
+                UseBlocks = type.UseBlocks,
+                UseCategory = type.UseCategory,
+                UseTags = type.UseTags,
                 UsePrimaryImage = type.UsePrimaryImage,
                 UseExcerpt = type.UseExcerpt,
-                UseHtmlExcerpt = config.HtmlExcerpt
+                UseHtmlExcerpt = config.HtmlExcerpt,
+                UseTranslations = languages.Count() > 1,
+                Languages = languages,
+                SelectedCategory = type.UseCategory ? content.Category?.Title : null,
+                SelectedTags = type.UseTags ? content.Tags.Select(t => t.Title).ToList() : null,
+                Categories = categories.Select(c => c.Title).ToList(),
+                Tags = tags.Select(c => c.Title).ToList()
             };
 
             foreach (var regionType in type.Regions)
@@ -298,7 +401,9 @@ namespace Piranha.Manager.Services
                                 Component = appFieldType.Component,
                                 Placeholder = fieldType.Placeholder,
                                 IsHalfWidth = fieldType.Options.HasFlag(FieldOption.HalfWidth),
-                                Description = fieldType.Description
+                                IsTranslatable = typeof(ITranslatable).IsAssignableFrom(appFieldType.Type),
+                                Description = fieldType.Description,
+                                Settings = fieldType.Settings
                             }
                         };
 
@@ -339,6 +444,120 @@ namespace Piranha.Manager.Services
                 model.Regions.Add(region);
             }
 
+            if (type.UseBlocks)
+            {
+                model.UseBlocks = true;
+
+                foreach (var block in content.Blocks)
+                {
+                    var blockType = App.Blocks.GetByType(block.Type);
+
+                    if (block is BlockGroup)
+                    {
+                        var group = new Models.Content.BlockGroupModel
+                        {
+                            Id = block.Id,
+                            Type = block.Type,
+                            Meta = new Models.Content.BlockMeta
+                            {
+                                Name = blockType.Name,
+                                Icon = blockType.Icon,
+                                Component = blockType.Component,
+                                Width = blockType.Width.ToString().ToLower(),
+                                IsGroup = true,
+                                isCollapsed = config.ManagerDefaultCollapsedBlocks,
+                                ShowHeader = !config.ManagerDefaultCollapsedBlockGroupHeaders
+                            }
+                        };
+
+                        group.Fields = ContentUtils.GetBlockFields(block);
+
+                        bool firstChild = true;
+                        foreach (var child in ((BlockGroup)block).Items)
+                        {
+                            blockType = App.Blocks.GetByType(child.Type);
+
+                            if (!blockType.IsGeneric)
+                            {
+                                // Regular block item model
+                                group.Items.Add(new Models.Content.BlockItemModel
+                                {
+                                    IsActive = firstChild,
+                                    Model = child,
+                                    Meta = new Models.Content.BlockMeta
+                                    {
+                                        Name = blockType.Name,
+                                        Title = child.GetTitle(),
+                                        Icon = blockType.Icon,
+                                        Component = blockType.Component,
+                                        Width = blockType.Width.ToString().ToLower()
+                                    }
+                                });
+                            }
+                            else
+                            {
+                                // Generic block item model
+                                group.Items.Add(new Models.Content.BlockGenericModel
+                                {
+                                    Id = child.Id,
+                                    IsActive = firstChild,
+                                    Model = ContentUtils.GetBlockFields(child),
+                                    Type = child.Type,
+                                    Meta = new Models.Content.BlockMeta
+                                    {
+                                        Name = blockType.Name,
+                                        Title = child.GetTitle(),
+                                        Icon = blockType.Icon,
+                                        Component = blockType.Component,
+                                        Width = blockType.Width.ToString().ToLower()
+                                    }
+                                });
+                            }
+                            firstChild = false;
+                        }
+                        model.Blocks.Add(group);
+                    }
+                    else
+                    {
+                        if (!blockType.IsGeneric)
+                        {
+                            // Regular block item model
+                            model.Blocks.Add(new Models.Content.BlockItemModel
+                            {
+                                Model = block,
+                                Meta = new Models.Content.BlockMeta
+                                {
+                                    Name = blockType.Name,
+                                    Title = block.GetTitle(),
+                                    Icon = blockType.Icon,
+                                    Component = blockType.Component,
+                                    Width = blockType.Width.ToString().ToLower(),
+                                    isCollapsed = config.ManagerDefaultCollapsedBlocks
+                                }
+                            });
+                        }
+                        else
+                        {
+                            // Generic block item model
+                            model.Blocks.Add(new Models.Content.BlockGenericModel
+                            {
+                                Id = block.Id,
+                                Model = ContentUtils.GetBlockFields(block),
+                                Type = block.Type,
+                                Meta = new Models.Content.BlockMeta
+                                {
+                                    Name = blockType.Name,
+                                    Title = block.GetTitle(),
+                                    Icon = blockType.Icon,
+                                    Component = blockType.Component,
+                                    Width = blockType.Width.ToString().ToLower(),
+                                    isCollapsed = config.ManagerDefaultCollapsedBlocks
+                                }
+                            });
+                        }
+                    }
+                }
+            }
 
             // Custom editors
             foreach (var editor in type.CustomEditors)

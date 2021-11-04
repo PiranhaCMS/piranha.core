@@ -31,7 +31,7 @@ namespace Piranha.Manager.Models
         /// <summary>
         /// Gets/sets the available sites.
         /// </summary>
-        public IList<PageListModel.SiteItem> Sites { get; set; } = new List<PageListModel.SiteItem>();
+        public IList<PageListModel.PageSite> Sites { get; set; } = new List<PageListModel.PageSite>();
 
         /// <summary>
         /// Gets/sets the items in the currently selected site.

@@ -34,7 +34,7 @@ namespace Piranha.Extend
 
                 if (string.IsNullOrWhiteSpace(Id))
                 {
-                    Id = Utils.GenerateInteralId(value);
+                    Id = Utils.GenerateInternalId(value);
                 }
             }
         }
@@ -43,5 +43,11 @@ namespace Piranha.Extend
         /// Gets/set the icon css.
         /// </summary>
         public string Icon { get; set; }
+
+        /// <summary>
+        /// Gets/sets if the content group should be hidden from the
+        /// menu or not. The default value is false.
+        /// </summary>
+        public bool IsHidden { get; set; }
     }
 }

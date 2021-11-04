@@ -1,0 +1,78 @@
+﻿@page "~/manager/login"
+@model Piranha.Manager.LocalAuth.Areas.Manager.Pages.LoginModel
+@inject Piranha.Manager.ManagerLocalizer Localizer
+@{
+    Layout = null;
+    var module = Piranha.App.Modules.Get<Piranha.Manager.Module>();
+    var prerelease = Piranha.Utils.IsPreRelease(typeof(Piranha.Manager.Module).Assembly) ? "pre-release" : "";
+}
+<!doctype html>
+<html lang="en" style="min-height:100%">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <link rel="stylesheet" href="~/manager/assets/css/slim.min.css">
+    @foreach (var style in module.Styles) {
+        <link href="@Url.Content(style)" rel="stylesheet" type="text/css" />
+    }
+
+    <title>@Localizer.General["Login"]</title>
+</head>
+<body id="login" class="@prerelease">
+    @if (!string.IsNullOrEmpty(prerelease))
+    {
+    <div class="pre-release">Pre-release</div>
+    }
+    <div class="container">
+        <form method="post" class="needs-validation" novalidate>
+            @Html.AntiForgeryToken()
+            <div class="card card-login @(!Model.ModelState.IsValid ? "has-error" : "")">
+                <div class="card-body card-body-logo">
+                    <div class="logo"></div>
+                    <p class="banner">
+                        Piranha CMS
+                        <small>@Localizer.General["Version"] @Piranha.Utils.GetAssemblyVersion(typeof(Piranha.Manager.Module).Assembly)</small>
+                    </p>
+                </div>
+
+                @if (!Model.ModelState.IsValid)
+                {
+                    <p class="error-message">@string.Join("\r\n", ModelState.SelectMany(p => p.Value.Errors).Select(e => e.ErrorMessage))</p>
+                }
+
+                <div class="card-body card-body-form">
+                    <div class="form-group">
+                        <label for="username" class="col-form-label col-form-label-lg">@Localizer.General["Username"]</label>
+                        <input autofocus id="username" required name="username" type="text" class="form-control form-control-lg text-center" placeholder="@Localizer.General["Username"].Value.ToLower()">
+                    </div>
+                    <div class="form-group">
+                        <label for="password" class="col-form-label col-form-label-lg">@Localizer.General["Password"]</label>
+                        <input name="password" required type="password" class="form-control form-control-lg text-center" placeholder="@Localizer.General["Password"].Value.ToLower()">
+                    </div>
+                    <button class="btn btn-lg btn-block btn-primary" type="submit">
+                        <i class="fas fa-check"></i>
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+    <script>
+        (function () {
+            'use strict';
+            window.addEventListener('load', function () {
+                var forms = document.getElementsByClassName('needs-validation');
+                var validation = Array.prototype.filter.call(forms, function (form) {
+                    form.addEventListener('submit', function (event) {
+                        if (form.checkValidity() === false) {
+                            event.preventDefault();
+                            event.stopPropagation();
+                        }
+                        form.classList.add('was-validated');
+                    }, false);
+                });
+            }, false);
+        })();
+    </script>
+</body>
+</html>

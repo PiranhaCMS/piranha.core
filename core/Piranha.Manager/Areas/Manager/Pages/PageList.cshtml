@@ -60,15 +60,10 @@
                                     <span v-else class="title">{{ site.title }} <small style="display:none">(<code>{{ site.slug }}</code>)</small></span>
                                 </div>
                                 <div>
-                                    <div v-if="piranha.permissions.pages.add" class="btn-group" role="group">
-                                        <button id="pageGroup" type="button" class="btn btn-sm btn-primary btn-labeled dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                            <i class="fas fa-plus"></i>
-                                            @Localizer.Page["Add page"]
-                                        </button>
-                                        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="pageGroup">
-                                            <a class="dropdown-item" :href="piranha.baseUrl + type.addUrl + site.id + '/' + type.id" v-for="type in pageTypes">{{ type.title }}</a>
-                                        </div>
-                                    </div>
+                                    <button v-if="piranha.permissions.pages.add" id="pageGroup" type="button" v-on:click.prevent="piranha.pagelist.add(site.id, null, false)" class="btn btn-sm btn-primary btn-labeled">
+                                        <i class="fas fa-plus"></i>
+                                        @Localizer.Page["Add page"]
+                                    </button>
                                 </div>
                             </div>
                             <div class="sitemap sitemap-container dd" data-id="{ site.id }">

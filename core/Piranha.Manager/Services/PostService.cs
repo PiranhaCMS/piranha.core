@@ -476,6 +476,7 @@ namespace Piranha.Manager.Services
                 UsePrimaryImage = type.UsePrimaryImage,
                 UseExcerpt = type.UseExcerpt,
                 UseHtmlExcerpt = config.HtmlExcerpt,
+                IsScheduled = post.Published.HasValue && post.Published.Value > DateTime.Now,
                 SelectedRoute = route == null ? null : new RouteModel
                 {
                     Title = route.Title,
@@ -510,7 +511,8 @@ namespace Piranha.Manager.Services
                         IsCollection = regionType.Collection,
                         Expanded = regionType.ListExpand,
                         Icon = regionType.Icon,
-                        Display = regionType.Display.ToString().ToLower()
+                        Display = regionType.Display.ToString().ToLower(),
+                        Width = regionType.Width.ToString().ToLower()
                     }
                 };
                 var regionListModel = ((IDictionary<string, object>)post.Regions)[regionType.Id];
@@ -594,18 +596,13 @@ namespace Piranha.Manager.Services
                         {
                             Name = blockType.Name,
                             Icon = blockType.Icon,
-                            Component = "block-group",
+                            Component = blockType.Component,
+                            Width = blockType.Width.ToString().ToLower(),
                             IsGroup = true,
                             isCollapsed = config.ManagerDefaultCollapsedBlocks,
                             ShowHeader = !config.ManagerDefaultCollapsedBlockGroupHeaders
                         }
                     };
-
-                    if (blockType.Display != BlockDisplayMode.MasterDetail)
-                    {
-                        group.Meta.Component = blockType.Display == BlockDisplayMode.Horizontal ?
-                            "block-group-horizontal" : "block-group-vertical";
-                    }
 
                     group.Fields = ContentUtils.GetBlockFields(block);
 
@@ -625,7 +622,8 @@ namespace Piranha.Manager.Services
                                     Name = blockType.Name,
                                     Title = child.GetTitle(),
                                     Icon = blockType.Icon,
-                                    Component = blockType.Component
+                                    Component = blockType.Component,
+                                    Width = blockType.Width.ToString().ToLower()
                                 }
                             });
                         }
@@ -634,6 +632,7 @@ namespace Piranha.Manager.Services
                             // Generic block item model
                             group.Items.Add(new BlockGenericModel
                             {
+                                Id = child.Id,
                                 IsActive = firstChild,
                                 Model = ContentUtils.GetBlockFields(child),
                                 Type = child.Type,
@@ -643,6 +642,7 @@ namespace Piranha.Manager.Services
                                     Title = child.GetTitle(),
                                     Icon = blockType.Icon,
                                     Component = blockType.Component,
+                                    Width = blockType.Width.ToString().ToLower()
                                 }
                             });
                         }
@@ -664,6 +664,7 @@ namespace Piranha.Manager.Services
                                 Title = block.GetTitle(),
                                 Icon = blockType.Icon,
                                 Component = blockType.Component,
+                                Width = blockType.Width.ToString().ToLower(),
                                 isCollapsed = config.ManagerDefaultCollapsedBlocks
                             }
                         });
@@ -673,6 +674,7 @@ namespace Piranha.Manager.Services
                         // Generic block item model
                         model.Blocks.Add(new BlockGenericModel
                         {
+                            Id = block.Id,
                             Model = ContentUtils.GetBlockFields(block),
                             Type = block.Type,
                             Meta = new BlockMeta
@@ -681,6 +683,7 @@ namespace Piranha.Manager.Services
                                 Title = block.GetTitle(),
                                 Icon = blockType.Icon,
                                 Component = blockType.Component,
+                                Width = blockType.Width.ToString().ToLower(),
                                 isCollapsed = config.ManagerDefaultCollapsedBlocks
                             }
                         });

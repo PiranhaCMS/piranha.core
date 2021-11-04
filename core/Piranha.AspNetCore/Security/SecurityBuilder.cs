@@ -22,17 +22,17 @@ namespace Piranha.AspNetCore.Security
         /// <summary>
         /// The policy builder.
         /// </summary>
-        private readonly AuthorizationOptions _options;
+        private readonly AuthorizationOptions _authorization;
         private readonly PiranhaServiceBuilder _builder;
 
         /// <summary>
         /// Default constructor.
         /// </summary>
-        /// <param name="options">The authorization options</param>
+        /// <param name="authorization">The authorization options</param>
         /// <param name="builder">The service builder</param>
-        public SecurityBuilder(AuthorizationOptions options, PiranhaServiceBuilder builder)
+        public SecurityBuilder(AuthorizationOptions authorization, PiranhaServiceBuilder builder)
         {
-            _options = options;
+            _authorization = authorization;
             _builder = builder;
         }
 
@@ -45,7 +45,7 @@ namespace Piranha.AspNetCore.Security
         public SecurityBuilder UsePermission(string name, string title = null)
         {
             // Add a policy with the specified name
-            _options.AddPolicy(name, policy =>
+            _authorization.AddPolicy(name, policy =>
             {
                 // Require a claim with the same name as the policy
                 policy.RequireClaim(name, name);

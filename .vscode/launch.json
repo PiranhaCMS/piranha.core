@@ -6,7 +6,7 @@
             "type": "coreclr",
             "request": "launch",
             "preLaunchTask": "build",
-            "program": "${workspaceRoot}/examples/RazorWeb/bin/Debug/netcoreapp3.1/RazorWeb.dll",
+            "program": "${workspaceRoot}/examples/RazorWeb/bin/Debug/net5.0/RazorWeb.dll",
             "args": [],
             "cwd": "${workspaceRoot}/examples/RazorWeb",
             "stopAtEntry": false,

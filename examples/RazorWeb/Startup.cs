@@ -1,51 +1,73 @@
-﻿/*
- * Copyright (c) .NET Foundation and Contributors
- *
- * This software may be modified and distributed under the terms
- * of the MIT license.  See the LICENSE file for details.
- *
- * http://github.com/tidyui/coreweb
- *
- */
-
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Piranha;
-using Piranha.Data.EF.SQLite;
-using Piranha.AspNetCore.Identity.SQLite;
 using Piranha.AttributeBuilder;
-using Piranha.Local;
+using Piranha.AspNetCore.Identity.SQLite;
+using Piranha.Data.EF.SQLite;
+using Piranha.Manager.Editor;
 
 namespace RazorWeb
 {
     public class Startup
     {
+        private readonly IConfiguration _config;
+
+        /// <summary>
+        /// Default constructor.
+        /// </summary>
+        /// <param name="configuration">The current configuration</param>
+        public Startup(IConfiguration configuration)
+        {
+            _config = configuration;
+        }
+
         // This method gets called by the runtime. Use this method to add services to the container.
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
+            // Service setup
             services.AddPiranha(options =>
             {
+                /**
+                 * This will enable automatic reload of .cshtml
+                 * without restarting the application. However since
+                 * this adds a slight overhead it should not be
+                 * enabled in production.
+                 */
                 options.AddRazorRuntimeCompilation = true;
 
-                options.UseFileStorage(naming: FileStorageNaming.UniqueFolderNames);
-                options.UseImageSharp();
+                options.UseCms();
                 options.UseManager();
+
+                options.UseFileStorage(naming: Piranha.Local.FileStorageNaming.UniqueFolderNames);
+                options.UseImageSharp();
                 options.UseTinyMCE();
                 options.UseMemoryCache();
 
-                options.UseEF<SQLiteDb>(db =>
-                    db.UseSqlite("Filename=./piranha.razorweb.db"));
-                options.UseIdentityWithSeed<IdentitySQLiteDb>(db =>
-                    db.UseSqlite("Filename=./piranha.razorweb.db"));
+                var connectionString = _config.GetConnectionString("piranha");
+                options.UseEF<SQLiteDb>(db => db.UseSqlite(connectionString));
+                options.UseIdentityWithSeed<IdentitySQLiteDb>(db => db.UseSqlite(connectionString));
 
+                /**
+                 * Here you can configure the different permissions
+                 * that you want to use for securing content in the
+                 * application.
                 options.UseSecurity(o =>
                 {
-                    o.UsePermission("Subscriber");
+                    o.UsePermission("WebUser", "Web User");
                 });
+                 */
+
+                /**
+                 * Here you can specify the login url for the front end
+                 * application. This does not affect the login url of
+                 * the manager interface.
+                options.LoginUrl = "login";
+                 */
             });
         }
 
@@ -57,15 +79,8 @@ namespace RazorWeb
                 app.UseDeveloperExceptionPage();
             }
 
+            // Initialize Piranha
             App.Init(api);
-
-            // Configure cache level
-            App.CacheLevel = Piranha.Cache.CacheLevel.Full;
-
-            // Register custom components
-            App.Blocks.Register<MyWeb.Blocks.RawHtmlBlock>();
-            App.Modules.Manager().Scripts.Add("~/assets/custom-blocks.js");
-            App.Modules.Manager().Styles.Add("~/assets/custom-blocks.css");
 
             // Build content types
             new ContentTypeBuilder(api)
@@ -73,25 +88,17 @@ namespace RazorWeb
                 .Build()
                 .DeleteOrphans();
 
-            // Configure editor
-            Piranha.Manager.Editor.EditorConfig.FromFile("editorconfig.json");
+            // Configure Tiny MCE
+            EditorConfig.FromFile("editorconfig.json");
 
-            /**
-             *
-             * Test another culture in the UI
-             *
-            var cultureInfo = new System.Globalization.CultureInfo("en-US");
-            System.Globalization.CultureInfo.DefaultThreadCurrentCulture = cultureInfo;
-            System.Globalization.CultureInfo.DefaultThreadCurrentUICulture = cultureInfo;
-             */
-
-            app.UsePiranha(options =>
-            {
+            // Middleware setup
+            app.UsePiranha(options => {
                 options.UseManager();
                 options.UseTinyMCE();
                 options.UseIdentity();
             });
 
+            // Seed test data
             Seed.RunAsync(api).GetAwaiter().GetResult();
         }
     }

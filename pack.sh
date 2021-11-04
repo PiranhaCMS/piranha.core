@@ -8,12 +8,14 @@ dotnet build -c Release
 # Create all NuGet packages
 dotnet pack core/Piranha/Piranha.csproj --no-build -c Release -o ./artifacts
 dotnet pack core/Piranha.AspNetCore/Piranha.AspNetCore.csproj --no-build -c Release -o ./artifacts
+dotnet pack core/Piranha.AspNetCore.Hosting/Piranha.AspNetCore.Hosting.csproj --no-build -c Release -o ./artifacts
 dotnet pack core/Piranha.AspNetCore.SimpleSecurity/Piranha.AspNetCore.SimpleSecurity.csproj --no-build -c Release -o ./artifacts
 dotnet pack core/Piranha.AttributeBuilder/Piranha.AttributeBuilder.csproj --no-build -c Release -o ./artifacts
 dotnet pack core/Piranha.Azure.BlobStorage/Piranha.Azure.BlobStorage.csproj --no-build -c Release -o ./artifacts
 dotnet pack core/Piranha.ImageSharp/Piranha.ImageSharp.csproj --no-build -c Release -o ./artifacts
 dotnet pack core/Piranha.Local.FileStorage/Piranha.Local.FileStorage.csproj --no-build -c Release -o ./artifacts
 dotnet pack core/Piranha.Manager/Piranha.Manager.csproj --no-build -c Release -o ./artifacts
+dotnet pack core/Piranha.Manager.LocalAuth/Piranha.Manager.LocalAuth.csproj --no-build -c Release -o ./artifacts
 dotnet pack core/Piranha.Manager.Localization/Piranha.Manager.Localization.csproj --no-build -c Release -o ./artifacts
 dotnet pack core/Piranha.Manager.Summernote/Piranha.Manager.Summernote.csproj --no-build -c Release -o ./artifacts
 dotnet pack core/Piranha.Manager.TinyMCE/Piranha.Manager.TinyMCE.csproj --no-build -c Release -o ./artifacts

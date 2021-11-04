@@ -16,14 +16,14 @@ namespace Piranha.Manager.Extensions
 {
     internal static class RoutedContentExtensions
     {
-        public static string GetState(this RoutedContentBase post, bool isDraft)
+        public static string GetState(this RoutedContentBase content, bool isDraft)
         {
-            if (post.Created == DateTime.MinValue)
+            if (content.Created == DateTime.MinValue)
             {
                 return ContentState.New;
             }
 
-            if (post.Published.HasValue)
+            if (content.Published.HasValue)
             {
                 return isDraft ? ContentState.Draft : ContentState.Published;
             }

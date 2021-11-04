@@ -2,23 +2,23 @@
 @using Piranha.Extend.Blocks
 @{
     var unique = "gallery-" + Guid.NewGuid().ToString();
+    var images = Model.Items
+        .Where(i => i.GetType() == typeof(ImageBlock) && ((ImageBlock)i).Body.HasValue)
+        .ToList();
 }
 
 <div id="@unique" class="carousel slide gallery-block" data-ride="carousel">
     <ol class="carousel-indicators">
-        @for (var n = 0; n < Model.Items.Count; n++)
+        @for (var n = 0; n < images.Count; n++)
         {
             <li data-target="#@unique" data-slide-to="@n" class="@(n == 0 ? "active" : "")"></li>
         }
     </ol>
     <div class="carousel-inner">
-        @foreach (var item in Model.Items)
+        @foreach (var item in images)
         {
-            <div class="carousel-item @(item == Model.Items.First() ? "active" : "")">
-                @{
-                    var image = ((ImageBlock) item).Body.Media;
-                }
-                <img src="@Url.Content(WebApp.Media.ResizeImage(image, 890, 482))" class="d-block w-100" alt="@image.AltText" title="@image.Title">
+            <div class="carousel-item @(item == images.First() ? "active" : "")">
+                <img src="@Url.Content(WebApp.Media.ResizeImage(((ImageBlock)item).Body.Media, 1100, 450))" class="d-block w-100">
             </div>
         }
     </div>

@@ -45,7 +45,7 @@ namespace Piranha.Manager.Models
         /// <summary>
         /// Gets/sets the content type group title.
         /// </summary>
-        public string GroupTitle { get; set; }  
+        public string GroupTitle { get; set; }
 
         /// <summary>
         /// Gets/sets the mandatory title.
@@ -61,11 +61,6 @@ namespace Piranha.Manager.Models
         /// Gets/sets the optional excerpt.
         /// </summary>
         public string Excerpt { get; set; }
-
-        /// <summary>
-        /// Gets/sets if blocks should be used.
-        /// </summary>
-        public bool UseBlocks { get; set; } = false;
 
         /// <summary>
         /// Gets/sets if the content type should be
@@ -89,7 +84,7 @@ namespace Piranha.Manager.Models
         /// Gets/sets if excerpt should in HTML-format. The
         /// default value is false.
         /// </summary>
-        public bool UseHtmlExcerpt { get; set; } = false;
+        public bool UseHtmlExcerpt { get; set; }
 
         /// <summary>
         /// Gets/sets if tags should be used for the content type.
@@ -107,6 +102,11 @@ namespace Piranha.Manager.Models
         public string State { get; set; }
 
         /// <summary>
+        /// Gets/sets if blocks should be used.
+        /// </summary>
+        public bool UseBlocks { get; set; } = true;
+
+        /// <summary>
         /// Gets/sets the available blocks.
         /// </summary>
         public IList<Content.BlockModel> Blocks { get; set; } = new List<Content.BlockModel>();
@@ -120,5 +120,30 @@ namespace Piranha.Manager.Models
         /// Gets/sets the available custom editors.
         /// </summary>
         public IList<Content.EditorModel> Editors { get; set; } = new List<Content.EditorModel>();
+
+        /// <summary>
+        /// Gets/sets the available languages.
+        /// </summary>
+        public IEnumerable<Language> Languages { get; set; } = new List<Language>();
+
+        /// <summary>
+        /// Gets/sets the selected category.
+        /// </summary>
+        public string SelectedCategory { get; set; }
+
+        /// <summary>
+        /// Gets/sets the selected tags.
+        /// </summary>
+        public List<string> SelectedTags { get; set; } = new List<string>();
+
+        /// <summary>
+        /// Gets/sets the available categories.
+        /// </summary>
+        public IEnumerable<string> Categories { get; set; } = new List<string>();
+
+        /// <summary>
+        /// Gets/sets the available tags.
+        /// </summary>
+        public IEnumerable<string> Tags { get; set; } = new List<string>();
     }
 }

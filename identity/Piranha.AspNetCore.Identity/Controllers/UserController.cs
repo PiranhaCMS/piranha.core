@@ -28,6 +28,7 @@ namespace Piranha.AspNetCore.Identity.Controllers
     /// Manager controller for managing users accounts.
     /// </summary>
     [Area("Manager")]
+    [AutoValidateAntiforgeryToken]
     public class UserController : ManagerController
     {
         private readonly IDb _db;
@@ -79,7 +80,6 @@ namespace Piranha.AspNetCore.Identity.Controllers
         public IActionResult Edit(Guid id)
         {
             return View(id);
-            //return View(UserEditModel.GetById(_db, id));
         }
 
         /// <summary>
@@ -92,7 +92,6 @@ namespace Piranha.AspNetCore.Identity.Controllers
         public UserEditModel Get(Guid id)
         {
             return UserEditModel.GetById(_db, id);
-            //return View(UserEditModel.GetById(_db, id));
         }
 
         /// <summary>
@@ -104,7 +103,6 @@ namespace Piranha.AspNetCore.Identity.Controllers
         public UserEditModel Add()
         {
             return UserEditModel.Create(_db);
-            //return View("Edit", UserEditModel.Create(_db));
         }
 
         /// <summary>
@@ -197,27 +195,26 @@ namespace Piranha.AspNetCore.Identity.Controllers
         /// Deletes the user with the given id.
         /// </summary>
         /// <param name="id">The user id</param>
-        [HttpGet]
-        [Route("/manager/user/delete/{id:Guid}")]
-        [Authorize(Policy = Permissions.UsersSave)]
-        public async Task<IActionResult> Delete(Guid id)
+        [HttpDelete]
+        [Route("/manager/user/delete")]
+        [Authorize(Policy = Permissions.UsersDelete)]
+        public async Task<IActionResult> Delete([FromBody]Guid id)
         {
             var user = _db.Users.FirstOrDefault(u => u.Id == id);
 
-            var currentUser = await _userManager.GetUserAsync(HttpContext.User);
-            if (currentUser != null && user.Id == currentUser.Id)
-            {
-                return BadRequest(GetErrorMessage(_localizer.Security["Can't delete yourself."]));
-            }
-
             if (user != null)
             {
+                var currentUser = await _userManager.GetUserAsync(HttpContext.User);
+                if (currentUser != null && user.Id == currentUser.Id)
+                {
+                    return BadRequest(GetErrorMessage(_localizer.Security["Can't delete yourself."]));
+                }
+
                 _db.Users.Remove(user);
                 _db.SaveChanges();
 
                 return Ok(GetSuccessMessage(_localizer.Security["The user has been deleted."]));
             }
-
             return NotFound(GetErrorMessage(_localizer.Security["The user could not be found."]));
         }
 

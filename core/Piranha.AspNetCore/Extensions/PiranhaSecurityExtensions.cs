@@ -16,6 +16,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Piranha;
+using Piranha.AspNetCore.Http;
 using Piranha.AspNetCore.Security;
 using Piranha.Models;
 
@@ -29,16 +30,21 @@ public static class PiranhaSecurityExtensions
     /// Adds authorization with the given application policies to the aplication.
     /// </summary>
     /// <param name="builder">The service builder</param>
-    /// <param name="options">The security options</param>
+    /// <param name="builderOptions">The security builder options</param>
+    /// <param name="securityOptions">The security options</param>
     /// <returns>The service builder</returns>
-    public static PiranhaServiceBuilder UseSecurity(this PiranhaServiceBuilder builder, Action<SecurityBuilder> options)
+    public static PiranhaServiceBuilder UseSecurity(this PiranhaServiceBuilder builder, 
+        Action<SecurityBuilder> builderOptions, Action<SecurityOptions> securityOptions = null)
     {
+        // Configure
+        builder.Services.Configure<SecurityOptions>(o => securityOptions?.Invoke(o));
+
         // Add authentication
         builder.Services.AddAuthorization(o =>
         {
-            // Invoke the security options
+            // Invoke the builder options
             var securityBuilder = new SecurityBuilder(o, builder);
-            options?.Invoke(securityBuilder);
+            builderOptions?.Invoke(securityBuilder);
         });
         return builder;
     }
@@ -50,7 +56,7 @@ public static class PiranhaSecurityExtensions
     /// <returns>The update builder</returns>
     public static IApplicationBuilder UseSecurityMiddleware(this IApplicationBuilder builder)
     {
-        return builder.UseMiddleware<Piranha.AspNetCore.Security.SecurityMiddleware>();
+        return builder.UseMiddleware<SecurityMiddleware>();
     }
 
     /// <summary>

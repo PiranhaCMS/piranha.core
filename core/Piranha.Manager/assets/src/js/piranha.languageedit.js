@@ -52,22 +52,25 @@ piranha.languageedit = new Vue({
                 self.loading = true;
                 fetch(piranha.baseUrl + "manager/api/language", {
                     method: "post",
-                    headers: {
-                        "Content-Type": "application/json",
-                    },
+                    headers: piranha.utils.antiForgeryHeaders(),
                     body: JSON.stringify({
                         items: JSON.parse(JSON.stringify(self.items))
                     })
                 })
                 .then(function (response) { return response.json(); })
                 .then(function (result) {
-                    //if (result.status.type === "success")
-                    //{
+                    if (result.status.type === "success") {
                         self.bind(result);
-                    //}
-
-                    // Push status to notification hub
-                    // piranha.notifications.push(result.status);
+                    }
+                    
+                    if (result.status !== 400) {
+                        // Push status to notification hub
+                        piranha.notifications.push(result.status);
+                    } else {
+                        // Unauthorized request
+                        piranha.notifications.unauthorized();
+                        self.loading = false;
+                    }
                 })
                 .catch(function (error) {
                     console.log("error:", error);
@@ -80,20 +83,23 @@ piranha.languageedit = new Vue({
             self.loading = true;
             fetch(piranha.baseUrl + "manager/api/language/" + item.id, {
                 method: "delete",
-                headers: {
-                    "Content-Type": "application/json",
-                },
+                headers: piranha.utils.antiForgeryHeaders(),
                 body: JSON.stringify(item)
             })
             .then(function (response) { return response.json(); })
             .then(function (result) {
-                //if (result.status.type === "success")
-                //{
+                if (result.status.type === "success") {
                     self.bind(result);
-                //}
+                }
 
-                // Push status to notification hub
-                // piranha.notifications.push(result.status);
+                if (result.status !== 400) {
+                    // Push status to notification hub
+                    piranha.notifications.push(result.status);
+                } else {
+                    // Unauthorized request
+                    piranha.notifications.unauthorized();
+                    self.loading = false;
+                }
             })
             .catch(function (error) {
                 console.log("error:", error);

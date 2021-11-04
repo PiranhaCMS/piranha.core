@@ -20,12 +20,13 @@ using Piranha.Manager.Services;
 namespace Piranha.Manager.Controllers
 {
     /// <summary>
-    /// Api controller for page management.
+    /// Api controller for post management.
     /// </summary>
     [Area("Manager")]
     [Route("manager/api/post")]
     [Authorize(Policy = Permission.Admin)]
     [ApiController]
+    [AutoValidateAntiforgeryToken]
     public class PostApiController : Controller
     {
         private readonly PostService _service;
@@ -162,10 +163,10 @@ namespace Piranha.Manager.Controllers
             return ret;
         }
 
-        [Route("revert/{id}")]
-        [HttpGet]
+        [Route("revert")]
+        [HttpPost]
         [Authorize(Policy = Permission.PostsSave)]
-        public async Task<PostEditModel> Revert(Guid id)
+        public async Task<PostEditModel> Revert([FromBody]Guid id)
         {
             var post = await _service.GetById(id, false);
 
@@ -193,10 +194,10 @@ namespace Piranha.Manager.Controllers
         /// </summary>
         /// <param name="id">The unique id</param>
         /// <returns>The result of the operation</returns>
-        [Route("delete/{id}")]
-        [HttpGet]
+        [Route("delete")]
+        [HttpDelete]
         [Authorize(Policy = Permission.PostsDelete)]
-        public async Task<StatusMessage> Delete(Guid id)
+        public async Task<StatusMessage> Delete([FromBody]Guid id)
         {
             try
             {

@@ -41,6 +41,8 @@
                 <li class="breadcrumb-item"><a href="~/manager/pages">@Localizer.Menu["Pages"]</a></li>
                 <li class="breadcrumb-item"><a :href="piranha.baseUrl + 'manager/page/edit/' + blogId">@Localizer.General["Edit"]</a></li>
                 <li class="breadcrumb-item active" aria-current="page">@Localizer.Post["Edit post"]</li>
+                <li v-if="isScheduled" class="badge-item app" :class="{ ready: !loading }"><span class="badge badge-info"><i class="fas fa-calendar-alt"></i> @Localizer.General["Scheduled"]</span></li>
+                <li v-if="state === 'unpublished'" class="badge-item app" :class="{ ready: !loading }"><span class="badge badge-info"><i class="fas fa-unlink"></i> @Localizer.General["Unpublished"]</span></li>
                 <li v-if="state === 'draft'" class="badge-item app" :class="{ ready: !loading }"><span class="badge badge-info"><i class="fas fa-pen"></i> @Localizer.General["Draft"]</span></li>
             </ol>
         </nav>
@@ -121,7 +123,7 @@
                         <i class="fas fa-plus-circle"></i>
                     </a>
                     <div v-for="(block, index) in blocks" v-bind:key="block.meta.uid">
-                        <div :class="'block ' + block.meta.component + (block.meta.isCollapsed ? ' collapsed' : '')">
+                        <div :class="'block ' + block.meta.component + (block.meta.isCollapsed ? ' collapsed' : '') + (block.meta.width === 'full' ? ' block-full' : '')">
                             <div :id="'tb-' + block.meta.uid" class="component-toolbar"></div>
                             <div class="block-header">
                                 <div class="title">
@@ -167,7 +169,7 @@
         <!-- Content Regions -->
         <div class="card" :class="{ 'd-none': selectedRegion.uid != region.meta.uid }" v-for="region in contentRegions">
             <div class="card-body">
-                <div class="region region-center">
+                <div class="region" :class="{ 'region-center': region.meta.width === 'centered' }">
                     <region v-bind:content="'post'" v-bind:type="typeId" v-bind:model="region"></region>
                 </div>
             </div>

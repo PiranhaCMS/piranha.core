@@ -22,12 +22,13 @@ using Piranha.Models;
 namespace Piranha.Manager.Controllers
 {
     /// <summary>
-    /// Api controller for alias management.
+    /// Api controller for media management.
     /// </summary>
     [Area("Manager")]
     [Route("manager/api/media")]
     [Authorize(Policy = Permission.Admin)]
     [ApiController]
+    [AutoValidateAntiforgeryToken]
     public class MediaApiController : Controller
     {
         private readonly MediaService _service;
@@ -61,7 +62,7 @@ namespace Piranha.Manager.Controllers
         /// <summary>
         /// Gets the image url for the specified dimensions.
         /// </summary>
-        /// <param name="id">The unqie id</param>
+        /// <param name="id">The unique id</param>
         /// <param name="width">The optional width</param>
         /// <param name="height">The optional height</param>
         /// <returns>The public url</returns>
@@ -109,7 +110,7 @@ namespace Piranha.Manager.Controllers
                 return Ok(new StatusMessage
                 {
                     Type = StatusMessage.Success,
-                    Body = _localizer.Media["The meta information was succesfully updated"]
+                    Body = _localizer.Media["The meta information was successfully updated"]
                 });
             }
             else
@@ -143,7 +144,7 @@ namespace Piranha.Manager.Controllers
             }
             catch (ValidationException e)
             {
-                var result = new AliasListModel();
+                var result = new MediaListModel();
                 result.Status = new StatusMessage
                 {
                     Type = StatusMessage.Error,
@@ -153,10 +154,10 @@ namespace Piranha.Manager.Controllers
             }
         }
 
-        [Route("folder/delete/{id:Guid}")]
-        [HttpGet]
+        [Route("folder/delete")]
+        [HttpDelete]
         [Authorize(Policy = Permission.MediaDeleteFolder)]
-        public async Task<IActionResult> DeleteFolder(Guid id)
+        public async Task<IActionResult> DeleteFolder([FromBody]Guid id)
         {
             try
             {
@@ -299,7 +300,7 @@ namespace Piranha.Manager.Controllers
         }
 
         [Route("delete")]
-        [HttpPost]
+        [HttpDelete]
         [Consumes("application/json")]
         [Authorize(Policy = Permission.MediaDelete)]
         public async Task<IActionResult> Delete([FromBody] IEnumerable<Guid> items)

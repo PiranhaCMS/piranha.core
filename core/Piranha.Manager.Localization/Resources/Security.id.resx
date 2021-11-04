@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Username is used by another user." xml:space="preserve">
+    <value>Nama pengguna telah digunakan sebelumnya oleh pengguna lain.</value>
+  </data>
+  <data name="Email address is used by another user." xml:space="preserve">
+    <value>Alamat email telah digunakan sebelumnya oleh pengguna lain.</value>
+  </data>
+  <data name="The user could not be found." xml:space="preserve">
+    <value>Pengguna tidak dapat ditemukan.</value>
+  </data>
+  <data name="Email address is mandatory." xml:space="preserve">
+    <value>Alamat email harus diisi.</value>
+  </data>
+  <data name="The new passwords does not match." xml:space="preserve">
+    <value>Kata sandi yang baru tidak cocok.</value>
+  </data>
+  <data name="Password is mandatory when creating a new user." xml:space="preserve">
+    <value>Kata sandi harus diisi ketika membuat pengguna yang baru.</value>
+  </data>
+  <data name="The user could not be saved." xml:space="preserve">
+    <value>Pengguna tidak dapat di simpan.</value>
+  </data>
+  <data name="User is saved." xml:space="preserve">
+    <value>Pengguna telah disimpan.</value>
+  </data>
+  <data name="Are you sure you want to delete this user?" xml:space="preserve">
+    <value>Apakah anda yakin ingin menghapus pengguna ini?</value>
+  </data>
+  <data name="The user has been deleted." xml:space="preserve">
+    <value>Pengguna telah dihapus.</value>
+  </data>
+  <data name="Can't delete yourself." xml:space="preserve">
+    <value>Anda tidak dapat menghapus diri sendiri.</value>
+  </data>
+
+  <data name="New password" xml:space="preserve">
+    <value>Kata sandi yang baru</value>
+  </data>
+  <data name="Confirm password" xml:space="preserve">
+    <value>Konfirmasi kata sandi</value>
+  </data>
+</root>

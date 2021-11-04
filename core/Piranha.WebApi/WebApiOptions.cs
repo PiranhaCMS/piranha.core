@@ -16,6 +16,6 @@ namespace Piranha.WebApi
         /// Gets/sets if anonymous users should be able to access
         /// the api. The default value is false.
         /// </summary>
-        public bool AllowAnonymousAccess { get; set; } = false;
+        public bool AllowAnonymousAccess { get; set; }
     }
 }

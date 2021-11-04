@@ -88,7 +88,7 @@ namespace Piranha.AspNetCore.Models
         public virtual async Task<IActionResult> OnPostSaveComment(Guid id, bool draft = false)
         {
             // Create the comment
-            var comment = new Comment
+            var comment = new PostComment
             {
                 IpAddress = Request.HttpContext.Connection.RemoteIpAddress.ToString(),
                 UserAgent = Request.Headers.ContainsKey("User-Agent") ? Request.Headers["User-Agent"].ToString() : "",

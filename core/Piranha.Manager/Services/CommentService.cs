@@ -48,7 +48,7 @@ namespace Piranha.Manager.Services
             {
                 var post = await _api.Posts.GetByIdAsync<PostInfo>(postComment.ContentId);
 
-                model.Comments.Add(new CommentListModel.ListItem
+                model.Comments.Add(new CommentListModel.CommentItem
                 {
                     Id = postComment.Id,
                     ArticleTitle = post?.Title,
@@ -67,7 +67,7 @@ namespace Piranha.Manager.Services
             {
                 var page = await _api.Pages.GetByIdAsync<PageInfo>(pageComment.ContentId);
 
-                model.Comments.Add(new CommentListModel.ListItem
+                model.Comments.Add(new CommentListModel.CommentItem
                 {
                     Id = pageComment.Id,
                     ArticleTitle = page?.Title,
@@ -92,20 +92,22 @@ namespace Piranha.Manager.Services
         public async Task ApproveAsync(Guid id)
         {
             var comment = await _api.Posts.GetCommentByIdAsync(id);
+            if (comment == null)
+            {
+                comment = await _api.Pages.GetCommentByIdAsync(id);
+            }
 
             if (comment != null)
             {
                 comment.IsApproved = true;
-                await _api.Posts.SaveCommentAsync(comment.ContentId, comment);
-            }
-            else
-            {
-                comment = await _api.Pages.GetCommentByIdAsync(id);
 
-                if (comment != null)
+                if (comment is PageComment pageComment)
                 {
-                    comment.IsApproved = true;
-                    await _api.Pages.SaveCommentAsync(comment.ContentId, comment);
+                    await _api.Pages.SaveCommentAsync(comment.ContentId, pageComment);
+                }
+                else if (comment is PostComment postComment)
+                {
+                    await _api.Posts.SaveCommentAsync(comment.ContentId, postComment);
                 }
             }
         }
@@ -113,20 +115,22 @@ namespace Piranha.Manager.Services
         public async Task UnApproveAsync(Guid id)
         {
             var comment = await _api.Posts.GetCommentByIdAsync(id);
+            if (comment == null)
+            {
+                comment = await _api.Pages.GetCommentByIdAsync(id);
+            }
 
             if (comment != null)
             {
                 comment.IsApproved = false;
-                await _api.Posts.SaveCommentAsync(comment.ContentId, comment);
-            }
-            else
-            {
-                comment = await _api.Pages.GetCommentByIdAsync(id);
 
-                if (comment != null)
+                if (comment is PageComment pageComment)
                 {
-                    comment.IsApproved = false;
-                    await _api.Pages.SaveCommentAsync(comment.ContentId, comment);
+                    await _api.Pages.SaveCommentAsync(comment.ContentId, pageComment);
+                }
+                else if (comment is PostComment postComment)
+                {
+                    await _api.Posts.SaveCommentAsync(comment.ContentId, postComment);
                 }
             }
         }

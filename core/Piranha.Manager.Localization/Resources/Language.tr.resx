@@ -18,4 +18,10 @@
   <data name="RemoveLanguageConfirm" xml:space="preserve">
     <value>Bu hareket &lt;strong>geri alınamaz&lt;/strong>. Bu yol, {{ currentDelete.title }} lisanı ve ona ait tüm &lt;strong>tercümeleri&lt;/strong> kalıcı olarak siler. Bu {{ currentDelete.title }} lisan olarak seçen tüm sayfalara, tabii olan lisan tahsis edilir.</value>
   </data>
+  <data name="The language was successfully saved" xml:space="preserve">
+    <value>The language was successfully saved</value>
+  </data>
+  <data name="The language was successfully deleted" xml:space="preserve">
+    <value>The language was successfully deleted</value>
+  </data>
 </root>

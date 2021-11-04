@@ -25,6 +25,11 @@ namespace Piranha.Extend
         public string Title { get; set; }
 
         /// <summary>
+        /// Gets/sets the optional description.
+        /// </summary>
+        public string Description { get; set; }
+
+        /// <summary>
         /// Gets/sets the field options.
         /// </summary>
         public FieldOption Options { get; set; }
@@ -34,5 +39,10 @@ namespace Piranha.Extend
         /// text based fields.
         /// </summary>
         public string Placeholder { get; set; }
+
+        /// <summary>
+        /// Gets/sets the optional sort order.
+        /// </summary>
+        public int SortOrder { get; set; } = Int32.MaxValue;
     }
 }

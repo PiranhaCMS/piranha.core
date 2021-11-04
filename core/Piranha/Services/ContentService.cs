@@ -11,7 +11,6 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Reflection;
 using System.Threading.Tasks;
 using Piranha.Models;
 using Piranha.Repositories;
@@ -75,10 +74,11 @@ namespace Piranha.Services
         /// group id.
         /// </summary>
         /// <param name="groupId">The optional group id</param>
+        /// <param name="languageId">The optional language id</param>
         /// <returns>The available content</returns>
-        public Task<IEnumerable<DynamicContent>> GetAllAsync(string groupId = null)
+        public Task<IEnumerable<DynamicContent>> GetAllAsync(string groupId = null, Guid? languageId = null)
         {
-            return GetAllAsync<DynamicContent>(groupId);
+            return GetAllAsync<DynamicContent>(groupId, languageId);
         }
 
         /// <summary>
@@ -87,15 +87,16 @@ namespace Piranha.Services
         /// </summary>
         /// <typeparam name="T">The model type</typeparam>
         /// <param name="groupId">The optional group id</param>
+        /// <param name="languageId">The optional language id</param>
         /// <returns>The available content</returns>
-        public async Task<IEnumerable<T>> GetAllAsync<T>(string groupId = null) where T : GenericContent
+        public async Task<IEnumerable<T>> GetAllAsync<T>(string groupId = null, Guid? languageId = null) where T : GenericContent
         {
             var models = new List<T>();
             var all = await _repo.GetAll(groupId).ConfigureAwait(false);
 
             foreach (var contentId in all)
             {
-                var content = await GetByIdAsync<T>(contentId).ConfigureAwait(false);
+                var content = await GetByIdAsync<T>(contentId, languageId).ConfigureAwait(false);
 
                 if (content != null)
                 {
@@ -174,12 +175,61 @@ namespace Piranha.Services
         }
 
         /// <summary>
+        /// Gets all available categories for the specified group.
+        /// </summary>
+        /// <param name="groupId">The group id</param>
+        /// <returns>The available categories</returns>
+        public Task<IEnumerable<Taxonomy>> GetAllCategoriesAsync(string groupId)
+        {
+            return _repo.GetAllCategories(groupId);
+        }
+
+        /// <summary>
+        /// Gets all available tags for the specified groupd.
+        /// </summary>
+        /// <param name="groupId">The group id</param>
+        /// <returns>The available tags</returns>
+        public Task<IEnumerable<Taxonomy>> GetAllTagsAsync(string groupId)
+        {
+            return _repo.GetAllTags(groupId);
+        }
+
+        /// <summary>
+        /// Gets the current translation status for the content model
+        /// with the given id.
+        /// </summary>
+        /// <param name="contentId">The unique content id</param>
+        /// <returns>The translation status</returns>
+        public Task<TranslationStatus> GetTranslationStatusByIdAsync(Guid contentId)
+        {
+            return _repo.GetTranslationStatusById(contentId);
+        }
+
+        /// <summary>
+        /// Gets the translation summary for the content group with
+        /// the given id.
+        /// </summary>
+        /// <param name="groupId">The group id</param>
+        /// <returns>The translation summary</returns>
+        public Task<TranslationSummary> GetTranslationStatusByGroupAsync(string groupId)
+        {
+            return _repo.GetTranslationStatusByGroup(groupId);
+        }
+
+        /// <summary>
         /// Saves the given content model
         /// </summary>
         /// <param name="model">The content model</param>
         /// <param name="languageId">The optional language id</param>
         public async Task SaveAsync<T>(T model, Guid? languageId = null) where T : GenericContent
         {
+            // Make sure we have valid content type
+            var type = App.ContentTypes.GetById(model.TypeId);
+            if (type == null)
+            {
+                throw new ValidationException("Content type is missing");
+            }
+
             // Make sure we have an Id
             if (model.Id == Guid.Empty)
             {
@@ -197,11 +247,14 @@ namespace Piranha.Services
             Validator.ValidateObject(model, context, true);
 
             // Ensure category
-            if (model is ICategorizedContent categorizedModel)
+            if (type.UseCategory)
             {
-                if (categorizedModel.Category == null || (string.IsNullOrWhiteSpace(categorizedModel.Category.Title) && string.IsNullOrWhiteSpace(categorizedModel.Category.Slug)))
+                if (model is ICategorizedContent categorizedModel)
                 {
-                    throw new ValidationException("The Category field is required");
+                    if (categorizedModel.Category == null || (string.IsNullOrWhiteSpace(categorizedModel.Category.Title) && string.IsNullOrWhiteSpace(categorizedModel.Category.Slug)))
+                    {
+                        throw new ValidationException("The Category field is required");
+                    }
                 }
             }
 

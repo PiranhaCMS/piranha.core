@@ -13,9 +13,9 @@ using Microsoft.Extensions.DependencyInjection;
 namespace Piranha
 {
     /// <summary>
-    /// Service builder for simple application startup.
+    /// Service builder for application startup.
     /// </summary>
-    public class PiranhaServiceBuilder : PiranhaRouteConfig
+    public class PiranhaServiceBuilder
     {
         /// <summary>
         /// The inner Service collection.

@@ -19,11 +19,6 @@ namespace Piranha.AttributeBuilder
     public class ContentTypeAttribute : ContentTypeBaseAttribute
     {
         /// <summary>
-        /// Gets/sets the group name of the content type.
-        /// </summary>
-        public string Group { get; set; }
-
-        /// <summary>
         /// Gets/sets if excerpt should be used for the
         /// content type. The default value is true.
         /// </summary>

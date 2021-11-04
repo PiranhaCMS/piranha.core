@@ -26,6 +26,7 @@ namespace Piranha.Manager.Controllers
     [Route("manager/api/page")]
     [Authorize(Policy = Permission.Admin)]
     [ApiController]
+    [AutoValidateAntiforgeryToken]
     public class PageApiController : Controller
     {
         private readonly PageService _service;
@@ -132,7 +133,21 @@ namespace Piranha.Manager.Controllers
         }
 
         /// <summary>
-        /// Creates a new page of the specified type.
+        /// Creates a new page by copying the specified page.
+        /// </summary>
+        /// <param name="sourceId">The page that should be copied</param>
+        /// <param name="siteId">The site id</param>
+        /// <returns>The page edit model</returns>
+        [Route("copy/{sourceId}/{siteId}")]
+        [HttpGet]
+        [Authorize(Policy = Permission.PagesAdd)]
+        public async Task<PageEditModel> CopyRelative(Guid sourceId, Guid siteId)
+        {
+            return await _service.Copy(sourceId, siteId);
+        }
+
+        /// <summary>
+        /// Creates a new page in the specified position by copying the specified page.
         /// </summary>
         /// <param name="sourceId">The page that should be copied</param>
         /// <param name="pageId">The page the new page should be position relative to</param>
@@ -151,10 +166,10 @@ namespace Piranha.Manager.Controllers
         /// </summary>
         /// <param name="pageId">The page id</param>
         /// <returns>The page edit model</returns>
-        [Route("detach/{pageId}")]
-        [HttpGet]
+        [Route("detach")]
+        [HttpPost]
         [Authorize(Policy = Permission.PagesEdit)]
-        public async Task<PageEditModel> Detach(Guid pageId)
+        public async Task<PageEditModel> Detach([FromBody]Guid pageId)
         {
             var model = await _service.Detach(pageId);
 
@@ -227,10 +242,10 @@ namespace Piranha.Manager.Controllers
             return ret;
         }
 
-        [Route("revert/{id}")]
-        [HttpGet]
+        [Route("revert")]
+        [HttpPost]
         [Authorize(Policy = Permission.PagesSave)]
-        public async Task<PageEditModel> Revert(Guid id)
+        public async Task<PageEditModel> Revert([FromBody]Guid id)
         {
             var page = await _service.GetById(id, false);
 
@@ -257,10 +272,10 @@ namespace Piranha.Manager.Controllers
         /// </summary>
         /// <param name="id">The unique id</param>
         /// <returns>The result of the operation</returns>
-        [Route("delete/{id}")]
-        [HttpGet]
+        [Route("delete")]
+        [HttpDelete]
         [Authorize(Policy = Permission.PagesDelete)]
-        public async Task<StatusMessage> Delete(Guid id)
+        public async Task<StatusMessage> Delete([FromBody]Guid id)
         {
             try
             {

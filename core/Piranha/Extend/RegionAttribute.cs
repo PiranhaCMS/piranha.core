@@ -25,6 +25,11 @@ namespace Piranha.Extend
         public string Title { get; set; }
 
         /// <summary>
+        /// Gets/sets the optional description.
+        /// </summary>
+        public string Description { get; set; }
+
+        /// <summary>
         /// Gets/sets the field that will be used to generate the list
         /// item title if the region is used in a collection.
         /// </summary>
@@ -40,7 +45,7 @@ namespace Piranha.Extend
         /// Gets/sets if all lite items should be expanded in the UI.
         /// This works best for single field regions or smaller regions.
         /// </summary>
-        public bool ListExpand { get; set; } = false;
+        public bool ListExpand { get; set; }
 
         /// <summary>
         /// Gets/sets the optional sort order.
@@ -57,5 +62,10 @@ namespace Piranha.Extend
         /// the manager interface.
         /// </summary>
         public RegionDisplayMode Display { get; set; }
+
+        /// <summary>
+        /// Gets/sets the editor width. The default value is "Centered".
+        /// </summary>
+        public EditorWidth Width { get; set; } = EditorWidth.Centered;
     }
 }

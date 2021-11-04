@@ -18,7 +18,7 @@ export default {
             this.model.value = md;
 
             // Tell parent that title has been updated
-            if (this.meta.notifyChange) {
+            if (this.meta && this.meta.notifyChange) {
                 var title = this.model.value;
                 if (title.length > 40) {
                     title = title.substring(0, 40) + "...";

@@ -15,7 +15,7 @@ namespace Piranha.Manager.Models
 {
     public class CommentListModel
     {
-        public class ListItem
+        public class CommentItem
         {
             public Guid Id { get; set; }
             public string Author { get; set; }
@@ -37,7 +37,7 @@ namespace Piranha.Manager.Models
         /// <summary>
         /// Gets/sets the available comments.
         /// </summary>
-        public IList<ListItem> Comments { get; set; } = new List<ListItem>();
+        public IList<CommentItem> Comments { get; set; } = new List<CommentItem>();
 
         /// <summary>
         /// Gets/sets the optional status message from the last operation.

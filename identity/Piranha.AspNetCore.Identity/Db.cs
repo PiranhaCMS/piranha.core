@@ -34,7 +34,7 @@ namespace Piranha.AspNetCore.Identity
         private static volatile bool IsInitialized;
 
         /// <summary>
-        ///     The object mutext used for initializing the context.
+        ///     The object mutex used for initializing the context.
         /// </summary>
         private static readonly object Mutex = new object();
 

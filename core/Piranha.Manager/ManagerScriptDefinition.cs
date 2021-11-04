@@ -39,7 +39,7 @@ namespace Piranha.Manager
         /// </summary>
         public ECrossOriginPolicy CrossOriginValue { get; }
 
-        public bool RenderBeforeCoreScripts { get; set; } = false;
+        public bool RenderBeforeCoreScripts { get; set; }
 
         public string GetCrossOriginValueStrValue(bool includeAttributeName = false)
         {

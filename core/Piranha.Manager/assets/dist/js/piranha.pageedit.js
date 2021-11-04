@@ -52,6 +52,7 @@ piranha.pageedit = new Vue({
         },
         selectedPermissions: [],
         isCopy: false,
+        isScheduled: false,
         saving: false,
         savingDraft: false,
         selectedRegion: {
@@ -93,7 +94,7 @@ piranha.pageedit = new Vue({
                 description =  piranha.resources.texts.medium;
             else if (this.metaPriority <= 0.9)
                 description =  piranha.resources.texts.high;
-            
+
             return description += " (" + this.metaPriority + ")";
         }
     },
@@ -142,6 +143,7 @@ piranha.pageedit = new Vue({
             this.useExcerpt = model.useExcerpt;
             this.useHtmlExcerpt = model.useHtmlExcerpt;
             this.isCopy = model.isCopy;
+            this.isScheduled = model.isScheduled;
             this.selectedRoute = model.selectedRoute;
             this.routes = model.routes;
             this.permissions = model.permissions;
@@ -192,6 +194,17 @@ piranha.pageedit = new Vue({
             var self = this;
 
             fetch(piranha.baseUrl + "manager/api/page/createrelative/" + id + "/" + pageType + "/" + after)
+                .then(function (response) { return response.json(); })
+                .then(function (result) {
+                    self.bind(result);
+                })
+                .catch(function (error) { console.log("error:", error );
+            });
+        },
+        copy: function (source, siteId) {
+            var self = this;
+
+            fetch(piranha.baseUrl + "manager/api/page/copy/" + source + "/" + siteId)
                 .then(function (response) { return response.json(); })
                 .then(function (result) {
                     self.bind(result);
@@ -278,9 +291,7 @@ piranha.pageedit = new Vue({
 
             fetch(route, {
                 method: "post",
-                headers: {
-                    "Content-Type": "application/json",
-                },
+                headers: piranha.utils.antiForgeryHeaders(),
                 body: JSON.stringify(model)
             })
             .then(function (response) { return response.json(); })
@@ -312,29 +323,38 @@ piranha.pageedit = new Vue({
         revert: function () {
             var self = this;
 
-            fetch(piranha.baseUrl + "manager/api/page/revert/" + self.id)
-                .then(function (response) { return response.json(); })
-                .then(function (result) {
-                    self.bind(result);
+            fetch(piranha.baseUrl + "manager/api/page/revert", {
+                method: "post",
+                headers: piranha.utils.antiForgeryHeaders(),
+                body: JSON.stringify(self.id)
+            })
+            .then(function (response) { return response.json(); })
+            .then(function (result) {
+                self.bind(result);
 
-                    piranha.notifications.push(result.status);
-                })
-                .catch(function (error) { console.log("error:", error );
+                piranha.notifications.push(result.status);
+            })
+            .catch(function (error) { 
+                console.log("error:", error );
             });
         },
         detach: function () {
             var self = this;
 
-            fetch(piranha.baseUrl + "manager/api/page/detach/" + self.id)
-                .then(function (response) { return response.json(); })
-                .then(function (result) {
-                    self.bind(result);
+            fetch(piranha.baseUrl + "manager/api/page/detach", {
+                method: "post",
+                headers: piranha.utils.antiForgeryHeaders(),
+                body: JSON.stringify(self.id)
+            })
+            .then(function (response) { return response.json(); })
+            .then(function (result) {
+                self.bind(result);
 
-                    piranha.notifications.push(result.status);
-                })
-                .catch(function (error) { console.log("error:", error );
+                piranha.notifications.push(result.status);
+            })
+            .catch(function (error) { 
+                console.log("error:", error );
             });
-
         },
         remove: function () {
             var self = this;
@@ -346,7 +366,11 @@ piranha.pageedit = new Vue({
                 confirmIcon: "fas fa-trash",
                 confirmText: piranha.resources.texts.delete,
                 onConfirm: function () {
-                    fetch(piranha.baseUrl + "manager/api/page/delete/" + self.id)
+                    fetch(piranha.baseUrl + "manager/api/page/delete", {
+                        method: "delete",
+                        headers: piranha.utils.antiForgeryHeaders(),
+                        body: JSON.stringify(self.id)
+                    })
                     .then(function (response) { return response.json(); })
                     .then(function (result) {
                         piranha.notifications.push(result);
@@ -431,7 +455,11 @@ piranha.pageedit = new Vue({
             }
         },
         onExcerptBlur: function (e) {
-            this.excerpt = e.target.innerHTML;
+            if (this.useHtmlExcerpt) {
+                this.excerpt = tinyMCE.activeEditor.getContent();
+            } else {
+                this.excerpt = e.target.innerHTML;
+            }
         }
     },
     created: function () {

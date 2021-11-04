@@ -178,6 +178,11 @@ namespace Piranha.Runtime
         /// Gets the hooks available for params.
         /// </summary>
         public ServiceHooks<Param> Param { get; } = new ServiceHooks<Param>();
+        
+        /// <summary>
+        /// Gets the hooks available for generic content.
+        /// </summary>
+        public ServiceHooks<GenericContent> GenericContent { get; } = new ServiceHooks<GenericContent>();
 
         /// <summary>
         /// Gets the hooks available for posts.
