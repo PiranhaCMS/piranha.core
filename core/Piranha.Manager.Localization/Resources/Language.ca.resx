@@ -19,9 +19,9 @@
     <value>Aquesta acció &lt;strong>no es pot desfer&lt;/strong>. S'eliminarà de forma permanent l'idioma {{ currentDelete.title }} i totes les seves &lt;strong>traduccions&lt;/strong>. Tots els llocs web que tinguin seleccionat {{ currentDelete.title }} com el seu idioma es reasignaran a l'idioma per defecte.</value>
   </data>
   <data name="The language was successfully saved" xml:space="preserve">
-    <value>The language was successfully saved</value>
+    <value>L'idioma s'ha desat correctament</value>
   </data>
   <data name="The language was successfully deleted" xml:space="preserve">
-    <value>The language was successfully deleted</value>
+    <value>L'idioma s'ha esborrat correctament</value>
   </data>
 </root>
