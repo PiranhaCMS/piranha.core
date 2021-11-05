@@ -19,7 +19,7 @@
     <value>S'ha produït un error en suprimir la pàgina</value>
   </data>
   <data name="An error occured while saving the page" xml:space="preserve">
-    <value>An error occured while saving the page</value>
+    <value>S'ha produït un error al desar la pàgina</value>
   </data>
   <data name="Archive" xml:space="preserve">
     <value>Archive</value>
