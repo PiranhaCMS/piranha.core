@@ -196,7 +196,7 @@
     <value>Mida</value>
   </data>
   <data name="Slug" xml:space="preserve">
-    <value>Slug</value>
+    <value>URL amigable</value>
   </data>
   <data name="System" xml:space="preserve">
     <value>Sistema</value>
@@ -241,7 +241,7 @@
     <value>Amplada</value>
   </data>
   <data name="Archives and Comments" xml:space="preserve">
-    <value>Archives and Comments</value>
+    <value>Arxiu i comentaris</value>
   </data>
   <data name="Author" xml:space="preserve">
     <value>Autor/a</value>
