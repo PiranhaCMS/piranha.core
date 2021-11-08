@@ -16,7 +16,7 @@ jobs:
     - name: Setup .NET
       uses: actions/setup-dotnet@v1
       with:
-        dotnet-version: 6.0.100-rc.2.21505.57
+        dotnet-version: 6.0
     - name: Install tools
       run: |
         nuget install -Verbosity quiet opencover -Version 4.6.519 -OutputDirectory tools
