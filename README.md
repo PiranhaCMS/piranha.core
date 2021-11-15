@@ -77,7 +77,7 @@ admin / password
 
 For production scenarios we advise you to remove this user, or change the password
 **and** update the password strength policy. More information on this can be found in
-the official documentation [here](http://piranhacms.org/docs/architecture/authentication/identity).
+the [official documentation here](http://piranhacms.org/docs/architecture/authentication/identity).
 
 ### Build and update javascript/css assets
 
