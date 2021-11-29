@@ -54,9 +54,7 @@ piranha.preview = new Vue({
 
             fetch(piranha.baseUrl + "manager/api/media/meta/save", {
                 method: "post",
-                headers: {
-                    "Content-Type": "application/json",
-                },
+                headers: piranha.utils.antiForgeryHeaders(),
                 body: JSON.stringify(model)
             })
             .then(function (response) { return response.json(); })
