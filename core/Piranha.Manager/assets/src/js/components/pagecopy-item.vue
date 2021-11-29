@@ -5,7 +5,7 @@
                 <a v-if="!item.isCopy && piranha.pagelist.addPageId !== null" :href="piranha.baseUrl + 'manager/page/copyrelative/' + item.id + '/' + piranha.pagelist.addPageId + '/' + piranha.pagelist.addAfter">
                     {{ item.title }}
                 </a>
-                <a v-else-if="!item.isCopy && piranha.pagelist.addPageId === null" :href="piranha.baseUrl + 'manager/page/copy/' + item.id + '/' + piranha.pagelist.addSiteId">
+                <a v-else-if="!item.isCopy && piranha.pagelist.addPageId === null" :href="piranha.baseUrl + 'manager/page/copy/' + item.id + '/' + piranha.pagelist.addToSiteId">
                     {{ item.title }}
                 </a>
                 <a href="#" v-else>

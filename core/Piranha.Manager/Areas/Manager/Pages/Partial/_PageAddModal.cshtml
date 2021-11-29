@@ -30,7 +30,7 @@
                                 <tr v-for="(type) in pageTypes">
                                     <td>
                                         <a v-if="addPageId !== null" :href="piranha.baseUrl + 'manager/page/addrelative/' + addPageId + '/' + type.id + '/' + addAfter">{{ type.title }}</a>
-                                        <a v-else :href="piranha.baseUrl + type.addUrl + addSiteId + '/' + type.id">{{ type.title }}</a>
+                                        <a v-else :href="piranha.baseUrl + type.addUrl + addToSiteId + '/' + type.id">{{ type.title }}</a>
                                         <span v-if="type.description !== null" class="d-block dimmed">{{ type.description }}</span>
                                     </td>
                                 </tr>

@@ -5,7 +5,7 @@ Vue.component("pagecopy-item", {
       item.isExpanded = !item.isExpanded;
     }
   },
-  template: "\n<li class=\"dd-item\" :class=\"{ expanded: item.isExpanded || item.items.length === 0 }\">\n    <div class=\"sitemap-item expanded\">\n        <div class=\"link\" :class=\"{ readonly: item.isCopy }\">\n            <a v-if=\"!item.isCopy && piranha.pagelist.addPageId !== null\" :href=\"piranha.baseUrl + 'manager/page/copyrelative/' + item.id + '/' + piranha.pagelist.addPageId + '/' + piranha.pagelist.addAfter\">\n                {{ item.title }}\n            </a>\n            <a v-else-if=\"!item.isCopy && piranha.pagelist.addPageId === null\" :href=\"piranha.baseUrl + 'manager/page/copy/' + item.id + '/' + piranha.pagelist.addSiteId\">\n                {{ item.title }}\n            </a>\n            <a href=\"#\" v-else>\n                {{ item.title }}\n                <span v-if=\"item.isCopy\" class=\"badge badge-warning\">{{ piranha.resources.texts.copy }}</span>\n            </a>\n            <div class=\"content-blocker\"></div>\n        </div>\n        <div class=\"type d-none d-md-block\">\n            {{ item.typeName }}\n        </div>\n    </div>\n    <ol class=\"dd-list\" v-if=\"item.items.length > 0\">\n        <pagecopy-item v-for=\"child in item.items\" v-bind:key=\"child.id\" v-bind:item=\"child\"></pagecopy-item>\n    </ol>\n</li>\n"
+  template: "\n<li class=\"dd-item\" :class=\"{ expanded: item.isExpanded || item.items.length === 0 }\">\n    <div class=\"sitemap-item expanded\">\n        <div class=\"link\" :class=\"{ readonly: item.isCopy }\">\n            <a v-if=\"!item.isCopy && piranha.pagelist.addPageId !== null\" :href=\"piranha.baseUrl + 'manager/page/copyrelative/' + item.id + '/' + piranha.pagelist.addPageId + '/' + piranha.pagelist.addAfter\">\n                {{ item.title }}\n            </a>\n            <a v-else-if=\"!item.isCopy && piranha.pagelist.addPageId === null\" :href=\"piranha.baseUrl + 'manager/page/copy/' + item.id + '/' + piranha.pagelist.addToSiteId\">\n                {{ item.title }}\n            </a>\n            <a href=\"#\" v-else>\n                {{ item.title }}\n                <span v-if=\"item.isCopy\" class=\"badge badge-warning\">{{ piranha.resources.texts.copy }}</span>\n            </a>\n            <div class=\"content-blocker\"></div>\n        </div>\n        <div class=\"type d-none d-md-block\">\n            {{ item.typeName }}\n        </div>\n    </div>\n    <ol class=\"dd-list\" v-if=\"item.items.length > 0\">\n        <pagecopy-item v-for=\"child in item.items\" v-bind:key=\"child.id\" v-bind:item=\"child\"></pagecopy-item>\n    </ol>\n</li>\n"
 });
 Vue.component("sitemap-item", {
   props: ["item"],
@@ -30,6 +30,7 @@ piranha.pagelist = new Vue({
         pageTypes: [],
         addSiteId: null,
         addSiteTitle: null,
+        addToSiteId: null,
         addPageId: null,
         addAfter: true
     },
@@ -114,6 +115,7 @@ piranha.pagelist = new Vue({
             var self = this;
 
             self.addSiteId = siteId;
+            self.addToSiteId = siteId;
             self.addPageId = pageId;
             self.addAfter = after;
 
