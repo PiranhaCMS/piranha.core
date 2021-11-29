@@ -38,7 +38,7 @@ namespace Piranha.Manager.Controllers
 
         [Route("{returnUrl?}")]
         [HttpGet]
-        public IActionResult SetAuthCookie(string returnUrl = null)
+        public IActionResult SetAuthCookie([FromQuery]string returnUrl = null)
         {
             var tokens = _antiForgery.GetAndStoreTokens(HttpContext);
             Response.Cookies.Append(_options.XsrfCookieName, tokens.RequestToken, new CookieOptions
