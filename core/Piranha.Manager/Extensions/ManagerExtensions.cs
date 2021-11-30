@@ -65,6 +65,19 @@ public static class ManagerModuleExtensions
         // Add SignalR
         services.AddSignalR();
 
+        // Add preview policies
+        services.AddAuthorization(o =>
+        {
+            o.AddPolicy(Piranha.Security.Permission.PagePreview, policy =>
+            {
+                policy.RequireClaim(Piranha.Security.Permission.PagePreview, Piranha.Security.Permission.PagePreview);
+            });
+            o.AddPolicy(Piranha.Security.Permission.PostPreview, policy =>
+            {
+                policy.RequireClaim(Piranha.Security.Permission.PostPreview, Piranha.Security.Permission.PostPreview);
+            });
+        });
+
         // Setup authorization policies
         services.AddAuthorization(o =>
         {
@@ -115,11 +128,13 @@ public static class ManagerModuleExtensions
     /// <param name="builder">The application builder</param>
     /// <returns>The builder</returns>
     public static IApplicationBuilder UsePiranhaManager(this IApplicationBuilder builder) {
-        return builder.UseStaticFiles(new StaticFileOptions
-        {
-            FileProvider = new EmbeddedFileProvider(typeof(ManagerModuleExtensions).Assembly, "Piranha.Manager.assets.dist"),
-            RequestPath = "/manager/assets"
-        });
+        return builder
+            .UseStaticFiles()
+            .UseStaticFiles(new StaticFileOptions
+            {
+                FileProvider = new EmbeddedFileProvider(typeof(ManagerModuleExtensions).Assembly, "Piranha.Manager.assets.dist"),
+                RequestPath = "/manager/assets"
+            });
     }
 
     /// <summary>
