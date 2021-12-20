@@ -51,14 +51,17 @@
                 </td>
                 <td class="text-center">@role.UserCount</td>
                 <td class="actions one">
-                    @if ((await Auth.AuthorizeAsync(User, Piranha.AspNetCore.Identity.Permissions.RolesDelete)).Succeeded)
+                    @if (role.NormalizedName != "SYSADMIN")
                     {
-                        <form method="post" action="~/manager/role/delete">
-                            <input type="hidden" name="id" value="@role.Id">
-                            <button class="danger">
-                                <span class="fas fa-trash"></span>
-                            </button>
-                        </form>
+                        @if ((await Auth.AuthorizeAsync(User, Piranha.AspNetCore.Identity.Permissions.RolesDelete)).Succeeded)
+                        {
+                            <form method="post" action="~/manager/role/delete">
+                                <input type="hidden" name="id" value="@role.Id">
+                                <button class="danger">
+                                    <span class="fas fa-trash"></span>
+                                </button>
+                            </form>
+                        }
                     }
                 </td>
             </tr>
