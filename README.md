@@ -18,11 +18,11 @@
 
 ## About
 
-This is a **complete rewrite** of Piranha CMS for `.NET Core`. The goal of this rewrite
-is to create a version capable of targeting multiple platforms & frameworks with minimal
-dependencies, but still provide a flexible & high performance CMS library.
+This is a **complete rewrite** of Piranha CMS. The goal of this rewrite is to create 
+a version capable of targeting multiple platforms & frameworks with minimal dependencies, 
+but still provide a flexible & high performance CMS library.
 
-Piranha is currently built for `.NET 5` and uses in its simplest form the following awesome packages:
+Piranha is currently built for `.NET 6` and uses in its simplest form the following awesome packages:
 
 * [AutoMapper](https://github.com/AutoMapper/AutoMapper)
 * [Markdig](https://github.com/xoofx/markdig)
@@ -33,7 +33,7 @@ Piranha is currently built for `.NET 5` and uses in its simplest form the follow
 
 ### Prerequisites
 
-* [.NET 5.0 SDK](https://dotnet.microsoft.com/download/dotnet/5.0)
+* [.NET 6.0 SDK](https://dotnet.microsoft.com/download/dotnet/6.0)
 * An IDE or Editor of your choice
 
 ### Create a new project from our templates
@@ -77,7 +77,7 @@ admin / password
 
 For production scenarios we advise you to remove this user, or change the password
 **and** update the password strength policy. More information on this can be found in
-the official documentation [here](http://piranhacms.org/docs/architecture/authentication/identity).
+the [official documentation here](http://piranhacms.org/docs/architecture/authentication/identity).
 
 ### Build and update javascript/css assets
 

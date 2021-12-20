@@ -85,10 +85,13 @@ namespace Piranha.AspNetCore.Identity.Models
                     return result;
                 }
 
-                result = await userManager.SetEmailAsync(user, User.Email);
-                if (!result.Succeeded)
+                if (await userManager.GetEmailAsync(user) != User.Email)
                 {
-                    return result;
+                    result = await userManager.SetEmailAsync(user, User.Email);
+                    if (!result.Succeeded)
+                    {
+                        return result;
+                    }
                 }
             }
 
