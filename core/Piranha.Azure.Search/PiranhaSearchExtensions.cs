@@ -19,13 +19,14 @@ public static class PiranhaSearchExtensions
     /// Adds the Azure Search module.
     /// </summary>
     /// <param name="serviceBuilder">The service builder</param>
-    /// <param name="serviceName">The unique name of the azure search service</param>
+    /// <param name="serviceUrl">The url of the azure search service</param>
     /// <param name="apiKey">The admin api key</param>
+    /// <param name="index">The name of the search index</param>
     /// <returns>The services</returns>
     public static PiranhaServiceBuilder UseAzureSearch(this PiranhaServiceBuilder serviceBuilder,
-        string serviceName, string apiKey)
+        string serviceUrl, string apiKey, string index)
     {
-        serviceBuilder.Services.AddPiranhaAzureSearch(serviceName, apiKey);
+        serviceBuilder.Services.AddPiranhaAzureSearch(serviceUrl, apiKey, index);
 
         return serviceBuilder;
     }
@@ -34,17 +35,18 @@ public static class PiranhaSearchExtensions
     /// Adds the Azure Search module.
     /// </summary>
     /// <param name="services">The current service collection</param>
-    /// <param name="serviceName">The unique name of the azure search service</param>
+    /// <param name="serviceUrl">The url of the azure search service</param>
     /// <param name="apiKey">The admin api key</param>
+    /// <param name="index">The name of the search index</param>
     /// <returns>The services</returns>
     public static IServiceCollection AddPiranhaAzureSearch(this IServiceCollection services,
-        string serviceName, string apiKey)
+        string serviceUrl, string apiKey, string index)
     {
         // Add the identity module
         App.Modules.Register<Module>();
 
         // Register the search service
-        services.AddSingleton<ISearch>(new AzureSearchService(serviceName, apiKey));
+        services.AddSingleton<ISearch>(new AzureSearchService(serviceUrl, apiKey, index));
 
         return services;
     }
