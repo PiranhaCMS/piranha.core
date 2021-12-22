@@ -70,10 +70,8 @@ namespace Piranha.Azure.Search.Services
         /// <param name="page">The page</param>
         public async Task SavePageAsync(PageBase page)
         {
-
             var client = CreateSearchClient();
 
-            //var indexClient = _searchClient.in.Indexes.GetClient(_index);
             var body = new StringBuilder();
 
             foreach (var block in page.Blocks)
