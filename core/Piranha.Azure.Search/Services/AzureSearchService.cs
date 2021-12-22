@@ -87,15 +87,6 @@ namespace Piranha.Azure.Search.Services
 
             var cleaned = cleanSpaces.Replace(cleanHtml.Replace(body.ToString(), " "), " ").Trim();
 
-            string subtitle = "";
-
-            var Regions = ((dynamic)page).Regions;
-
-            if (((IDictionary<String, object>)Regions).ContainsKey("ThemeRegion"))
-            {
-                subtitle = ((dynamic)page).Regions.ThemeRegion.SubTitle.Value != null ? ((dynamic)page).Regions.ThemeRegion.SubTitle.Value.ToString() : string.Empty;
-            }
-
             IndexDocumentsBatch<Content> batch = IndexDocumentsBatch.Create(
                 IndexDocumentsAction.MergeOrUpload(
                                 new Content
@@ -145,22 +136,6 @@ namespace Piranha.Azure.Search.Services
 
             var cleaned = cleanSpaces.Replace(cleanHtml.Replace(body.ToString(), " "), " ").Trim();
 
-            string timeToRead = string.Empty;
-            string subtitle = string.Empty;
-            string coreSystem = string.Empty;
-            string productType = string.Empty;
-
-            var regions = ((dynamic)post).Regions;
-
-            if (((IDictionary<String, object>)regions).ContainsKey("ProductRegion"))
-            {
-                timeToRead = ((dynamic)post).Regions.ProductRegion.TimeToRead.Value != null ? ((dynamic)post).Regions.ProductRegion.TimeToRead.Value.ToString() : string.Empty;
-                subtitle = ((dynamic)post).Regions.ProductRegion.SubTitle.Value != null ? ((dynamic)post).Regions.ProductRegion.SubTitle.Value.ToString() : string.Empty;
-                coreSystem = ((dynamic)post).Regions.ProductRegion.CoreSystem.Value != null ? ((dynamic)post).Regions.ProductRegion.CoreSystem.Value.ToString() : string.Empty;
-                productType = ((dynamic)post).Regions.ProductRegion.ProductType.Value != null ? ((dynamic)post).Regions.ProductRegion.ProductType.Value.ToString() : string.Empty;
-
-            }
-
             IndexDocumentsBatch<Content> batch = IndexDocumentsBatch.Create(
                 IndexDocumentsAction.MergeOrUpload(
                                 new Content
@@ -187,7 +162,6 @@ namespace Piranha.Azure.Search.Services
             var client = CreateSearchClient();
             var batch = IndexDocumentsBatch.Delete("contentId", new List<string> { post.Id.ToString() });
             await client.IndexDocumentsAsync(batch);
-
         }
 
         /// <summary>
