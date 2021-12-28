@@ -32,7 +32,8 @@ namespace Piranha.AspNetCore.Identity.Models
                     .Select(r => new ListItem
                     {
                         Id = r.Id,
-                        Name = r.Name
+                        Name = r.Name,
+                        NormalizedName = r.NormalizedName
                     }).ToList()
             };
 
@@ -41,6 +42,7 @@ namespace Piranha.AspNetCore.Identity.Models
                 role.UserCount = db.UserRoles
                     .Count(r => r.RoleId == role.Id);
             }
+
             return model;
         }
 
@@ -48,6 +50,7 @@ namespace Piranha.AspNetCore.Identity.Models
         {
             public Guid Id { get; set; }
             public string Name { get; set; }
+            public string NormalizedName { get; set; }
             public int UserCount { get; set; }
         }
     }
