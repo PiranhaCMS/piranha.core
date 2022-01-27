@@ -18,6 +18,7 @@ using System.Collections.Generic;
 /// The schema set will be used as the default schema in the database context that this extension is configured.
 /// Used by the <see cref="PiranhaEFExtensions.UseCustomDatabaseSchema(DbContextOptionsBuilder, string)"/> extension method.
 /// </summary>
+/// <inheritdoc />
 internal class PiranhaEFDatabaseSchemaExtension : IDbContextOptionsExtension
 {
     public PiranhaEFDatabaseSchemaExtension(string schema) => SetSchema(schema);
@@ -44,10 +45,12 @@ internal class PiranhaEFDatabaseSchemaExtension : IDbContextOptionsExtension
 
     public void ApplyServices(IServiceCollection services)
     {
+        // This extension does not apply any additional services
     }
 
     public void Validate(IDbContextOptions options)
     {
+        // This extension does not participate in options validation
     }
 }
 
@@ -55,19 +58,21 @@ internal class PiranhaEFDatabaseSchemaExtension : IDbContextOptionsExtension
 /// The database schema extension info.
 /// Used by <see cref="PiranhaEFDatabaseSchemaExtension"/> extension.
 /// </summary>
+/// <inheritdoc />
 internal class PiranhaEFDarabaseSchemaExtensionInfo : DbContextOptionsExtensionInfo
 {
     public PiranhaEFDarabaseSchemaExtensionInfo(IDbContextOptionsExtension extension) : base(extension)
     {
     }
 
-    public override bool IsDatabaseProvider { get; } = false;
     public override string LogFragment { get; } = string.Empty;
+    public override bool IsDatabaseProvider { get; }
 
     public override int GetServiceProviderHashCode() => 0;
 
     public override void PopulateDebugInfo(IDictionary<string, string> debugInfo)
     {
+        // This extension does not provide additional debug info
     }
 
     public override bool ShouldUseSameServiceProvider(DbContextOptionsExtensionInfo other) => true;
