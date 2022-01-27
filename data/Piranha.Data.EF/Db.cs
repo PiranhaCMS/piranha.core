@@ -9,6 +9,8 @@
  */
 
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Storage;
 using System;
 using System.Linq;
 
@@ -223,11 +225,25 @@ namespace Piranha
         public DbSet<Data.Taxonomy> Taxonomies { get; set; }
 
         /// <summary>
+        /// Gets the default database schema. 
+        /// </summary>
+        /// <remarks>
+        /// If null, the database schema will fall back to the default value used by the database connection.
+        /// </remarks>
+        protected string DatabaseSchema { get; }
+
+        /// <summary>
         /// Default constructor.
         /// </summary>
         /// <param name="options">Configuration options</param>
         public Db(DbContextOptions<T> options) : base(options)
         {
+            var schemaExtension = options.FindExtension<PiranhaEFDatabaseSchemaExtension>();
+            if (schemaExtension != null)
+            {
+                DatabaseSchema = schemaExtension.Schema;
+            }
+
             if (!IsInitialized)
             {
                 lock (Mutex)
@@ -251,6 +267,11 @@ namespace Piranha
         /// <param name="mb">The current model builder</param>
         protected override void OnModelCreating(ModelBuilder mb)
         {
+            if (DatabaseSchema is not null)
+            {
+                mb.HasDefaultSchema(DatabaseSchema);
+            }
+
             mb.Entity<Data.Alias>().ToTable("Piranha_Aliases");
             mb.Entity<Data.Alias>().Property(a => a.AliasUrl).IsRequired().HasMaxLength(256);
             mb.Entity<Data.Alias>().Property(a => a.RedirectUrl).IsRequired().HasMaxLength(256);
@@ -433,7 +454,6 @@ namespace Piranha
             mb.Entity<Data.Site>().Property(s => s.Culture).HasMaxLength(6);
             mb.Entity<Data.Site>().HasOne(s => s.Language).WithMany().OnDelete(DeleteBehavior.Restrict);
             mb.Entity<Data.Site>().HasIndex(s => s.InternalId).IsUnique();
-
 
             mb.Entity<Data.SiteField>().ToTable("Piranha_SiteFields");
             mb.Entity<Data.SiteField>().Property(f => f.RegionId).HasMaxLength(64).IsRequired();
