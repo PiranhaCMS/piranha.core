@@ -249,7 +249,7 @@ piranha.siteedit = new Vue({
         selectRegion: function (region) {
             this.selectedRegion = region;
         },
-        refreshLanguageList: function () {
+        refreshLanguageList() {
             fetch(piranha.baseUrl + "manager/api/language")
                 .then(function (response) {
                     return response.json();

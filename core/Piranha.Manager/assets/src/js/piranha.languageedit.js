@@ -174,7 +174,7 @@ piranha.languageedit = new Vue({
             }
             return isValid;
         },
-        refreshLanguageList: function () {
+        refreshLanguageList() {
             if (piranha.siteedit) {
                 piranha.siteedit.refreshLanguageList();
             }
