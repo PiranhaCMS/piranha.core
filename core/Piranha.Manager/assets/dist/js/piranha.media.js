@@ -235,25 +235,34 @@ piranha.media = new Vue({
         remove: function (id) {
             var self = this;
 
-            fetch(piranha.baseUrl + "manager/api/media/delete", {
-                method: "delete",
-                headers: piranha.utils.antiForgeryHeaders(),
-                body: JSON.stringify([id])
-            })
-            .then(function (response) { return response.json(); })
-            .then(function (result) {
-                // Refresh
-                self.refresh();
+            piranha.alert.open({
+                title: piranha.resources.texts.delete,
+                body: piranha.resources.texts.deleteMediaSelectionConfirm,
+                confirmCss: "btn-danger",
+                confirmIcon: "fas fa-trash",
+                confirmText: piranha.resources.texts.delete,
+                onConfirm: function () {
+                    fetch(piranha.baseUrl + "manager/api/media/delete", {
+                        method: "delete",
+                        headers: piranha.utils.antiForgeryHeaders(),
+                        body: JSON.stringify([id])
+                    })
+                        .then(function (response) { return response.json(); })
+                        .then(function (result) {
+                            // Refresh
+                            self.refresh();
 
-                if (result.status !== 400) {
-                    // Push status to notification hub
-                    piranha.notifications.push(result.status);
-                } else {
-                    // Unauthorized request
-                    piranha.notifications.unauthorized();
+                            if (result.status !== 400) {
+                                // Push status to notification hub
+                                piranha.notifications.push(result.status);
+                            } else {
+                                // Unauthorized request
+                                piranha.notifications.unauthorized();
+                            }
+                        })
+                        .catch(function (error) { console.log("error:", error); });
                 }
-            })
-            .catch(function (error) { console.log("error:", error ); });
+            });
         },
         removeSelection: function () {
             var self = this;
@@ -291,27 +300,36 @@ piranha.media = new Vue({
         removeFolder: function (id) {
             var self = this;
 
-            fetch(piranha.baseUrl + "manager/api/media/folder/delete", {
-                method: "delete",
-                headers: piranha.utils.antiForgeryHeaders(),
-                body: JSON.stringify(id)
-            })
-            .then(function (response) { return response.json(); })
-            .then(function (result) {
-                self.bind(result);
+            piranha.alert.open({
+                title: piranha.resources.texts.delete,
+                body: piranha.resources.texts.deleteMediaSelectionConfirm,
+                confirmCss: "btn-danger",
+                confirmIcon: "fas fa-trash",
+                confirmText: piranha.resources.texts.delete,
+                onConfirm: function () {
+                    fetch(piranha.baseUrl + "manager/api/media/folder/delete", {
+                        method: "delete",
+                        headers: piranha.utils.antiForgeryHeaders(),
+                        body: JSON.stringify(id)
+                    })
+                        .then(function (response) { return response.json(); })
+                        .then(function (result) {
+                            self.bind(result);
 
-                history.pushState({ folderId: id }, "", piranha.baseUrl + "manager/media" + (id ? "/" + id : ""));
-                document.title = result.currentFolderName ? result.currentFolderName : "Media";
+                            history.pushState({ folderId: id }, "", piranha.baseUrl + "manager/media" + (id ? "/" + id : ""));
+                            document.title = result.currentFolderName ? result.currentFolderName : "Media";
 
-                if (result.status !== 400) {
-                    // Push status to notification hub
-                    piranha.notifications.push(result.status);
-                } else {
-                    // Unauthorized request
-                    piranha.notifications.unauthorized();
+                            if (result.status !== 400) {
+                                // Push status to notification hub
+                                piranha.notifications.push(result.status);
+                            } else {
+                                // Unauthorized request
+                                piranha.notifications.unauthorized();
+                            }
+                        })
+                        .catch(function (error) { console.log("error:", error); });
                 }
-            })
-            .catch(function (error) { console.log("error:", error ); });
+            });
         }
     },
     computed: {
