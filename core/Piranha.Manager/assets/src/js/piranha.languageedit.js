@@ -64,6 +64,8 @@ piranha.languageedit = new Vue({
                     }
                     
                     if (result.status !== 400) {
+                        // Refresh language list
+                        self.refreshLanguageList();
                         // Push status to notification hub
                         piranha.notifications.push(result.status);
                     } else {
@@ -93,6 +95,8 @@ piranha.languageedit = new Vue({
                 }
 
                 if (result.status !== 400) {
+                    // Refresh language list
+                    self.refreshLanguageList();
                     // Push status to notification hub
                     piranha.notifications.push(result.status);
                 } else {
@@ -169,6 +173,11 @@ piranha.languageedit = new Vue({
                 Vue.set(this.items, n, this.items[n]);
             }
             return isValid;
+        },
+        refreshLanguageList() {
+            if (piranha.siteedit) {
+                piranha.siteedit.refreshLanguageList();
+            }
         }
     }
 });
