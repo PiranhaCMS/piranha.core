@@ -40,6 +40,16 @@ namespace Piranha.Tests.Services
     }
 
     [Collection("Integration tests")]
+    public class MediaTestsDistributedTwoLevelCache : MediaTests
+    {
+        public override Task InitializeAsync()
+        {
+            _cache = new Cache.DistributedTwoLevelCache((IMemoryCache)_services.GetService(typeof(IMemoryCache)), (IDistributedCache)_services.GetService(typeof(IDistributedCache)));
+            return base.InitializeAsync();
+        }
+    }
+
+    [Collection("Integration tests")]
     public class MediaTests : BaseTestsAsync
     {
         private Guid image1Id;
@@ -157,6 +167,7 @@ namespace Piranha.Tests.Services
             {
                 Assert.Equal(((Api)api).IsCached,
                     this.GetType() == typeof(MediaTestsMemoryCache) ||
+                    this.GetType() == typeof(MediaTestsDistributedTwoLevelCache) ||
                     this.GetType() == typeof(MediaTestsDistributedCache));
             }
         }

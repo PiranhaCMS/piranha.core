@@ -39,6 +39,16 @@ namespace Piranha.Tests.Services
     }
 
     [Collection("Integration tests")]
+    public class ParamTestsDistributedTwoLevelCache : ParamTests
+    {
+        public override Task InitializeAsync()
+        {
+            _cache = new Cache.DistributedTwoLevelCache((IMemoryCache)_services.GetService(typeof(IMemoryCache)), (IDistributedCache)_services.GetService(typeof(IDistributedCache)));
+            return base.InitializeAsync();
+        }
+    }
+
+    [Collection("Integration tests")]
     public class ParamTests : BaseTestsAsync
     {
         private const string PARAM_1 = "MyFirstParam";
@@ -91,6 +101,7 @@ namespace Piranha.Tests.Services
             {
                 Assert.Equal(((Api)api).IsCached,
                     this.GetType() == typeof(ParamTestsMemoryCache) ||
+                    this.GetType() == typeof(ParamTestsDistributedTwoLevelCache) ||
                     this.GetType() == typeof(ParamTestsDistributedCache));
             }
         }
