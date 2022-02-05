@@ -249,6 +249,18 @@ piranha.siteedit = new Vue({
         selectRegion: function (region) {
             this.selectedRegion = region;
         },
+        refreshLanguageList() {
+            fetch(piranha.baseUrl + "manager/api/language")
+                .then(function (response) {
+                    return response.json();
+                })
+                .then(function (result) {
+                    self.languages = result.items;
+                })
+                .catch(function (error) {
+                    console.log("error:", error);
+                });
+        }
     },
     updated: function () {
         this.loading = false;

@@ -4,9 +4,9 @@
  *
  * This software may be modified and distributed under the terms
  * of the MIT license.  See the LICENSE file for details.
- * 
- * http://github.com/piranhacms/piranha.core
- * 
+ *
+ * https://github.com/piranhacms/piranha.core
+ *
  */
 
 using Microsoft.EntityFrameworkCore;
@@ -27,7 +27,7 @@ namespace Piranha.AspNetCore.Identity.PostgreSQL
         /// </summary>
         /// <param name="args">The arguments</param>
         /// <returns>The db context</returns>
-        public IdentityPostgreSQLDb CreateDbContext(string[] args) 
+        public IdentityPostgreSQLDb CreateDbContext(string[] args)
         {
             var builder = new DbContextOptionsBuilder<IdentityPostgreSQLDb>();
             builder.UseNpgsql("server=localhost;port=5432;database=piranha;uid=root;password=password");
