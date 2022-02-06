@@ -28,16 +28,16 @@
     <value>اندازه صفحه بایگانی</value>
   </data>
   <data name="Caching" xml:space="preserve">
-    <value>Caching</value>
+    <value>حافظه موقت</value>
   </data>
   <data name="Page cache expiration (minutes)" xml:space="preserve">
-    <value>Page cache expiration (minutes)</value>
+    <value>انقضای حافظه موقت صفحه (دقیقه)</value>
   </data>
   <data name="Page revisions" xml:space="preserve">
     <value>بازبینی صفحه</value>
   </data>
   <data name="Post cache expiration (minutes)" xml:space="preserve">
-    <value>Post cache expiration (minutes)</value>
+    <value>انقضای حافظه موقت نوشته (دقیقه)</value>
   </data>
   <data name="Post revisions" xml:space="preserve">
     <value>بازبینی صفحه</value>
