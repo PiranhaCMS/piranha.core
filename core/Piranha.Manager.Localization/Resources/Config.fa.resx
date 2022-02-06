@@ -47,7 +47,7 @@
   </data>
 
   <data name="If page slugs should take their parent slug into account when being generated. This is prefered for larger sitemaps." xml:space="preserve">
-    <value>If page slugs should take their parent slug into account when being generated. This is prefered for larger sitemaps.</value>
+    <value>در صورتی که اسلاگ های صفحه باید اسلاگ والدین خود را هنگام تولید در نظر بگیرند. این برای Sitemap بزرگتر ترجیح داده می شود.</value>
   </data>
   <data name="The default number of levels that should be expanded in the page sitemap. This is useful for smaller sitemaps." xml:space="preserve">
     <value>The default number of levels that should be expanded in the page sitemap. This is useful for smaller sitemaps.</value>
@@ -93,7 +93,7 @@
     <value>فعال بودن نظرات برای نوشته</value>
   </data>
   <data name="Manager list size" xml:space="preserve">
-    <value>Manager list size</value>
+    <value>مدیریت سایز لیست ها</value>
   </data>
   <data name="If block group headers should be collapsed by default when opening a page or post in the manager." xml:space="preserve">
     <value>If block group headers should be collapsed by default when opening a page or post in the manager.</value>
