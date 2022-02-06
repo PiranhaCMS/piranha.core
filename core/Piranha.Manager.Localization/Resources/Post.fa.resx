@@ -61,18 +61,18 @@
     <value>If links from this post should be indexed.</value>
   </data>
   <data name="The post was successfully deleted" xml:space="preserve">
-    <value>The post was successfully deleted</value>
+    <value>نوشته با موفقیت حذف شد</value>
   </data>
   <data name="The post was successfully published" xml:space="preserve">
-    <value>The post was successfully published</value>
+    <value>نوشته با موفقیت انتشار شد</value>
   </data>
   <data name="The post was successfully unpublished" xml:space="preserve">
-    <value>The post was successfully unpublished</value>
+    <value>نوشته با موفقیت لغو انتشار شد</value>
   </data>
   <data name="The post was successfully saved" xml:space="preserve">
-    <value>The post was successfully saved</value>
+    <value>نوشته با موفقیت ذخیره شد</value>
   </data>
   <data name="The post was successfully reverted to its previous state" xml:space="preserve">
-    <value>The post was successfully reverted to its previous state</value>
+    <value>نوشتهبا موفقیت به حالت قبلی خود برگردانده شد</value>
   </data>
 </root>
