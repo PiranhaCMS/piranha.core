@@ -22,16 +22,16 @@
     <value>ویرایش سایت</value>
   </data>
   <data name="Hostnames" xml:space="preserve">
-    <value>Hostnames</value>
+    <value>آدرس سایت</value>
   </data>
   <data name="Logo" xml:space="preserve">
     <value>لوگو</value>
   </data>
   <data name="If this should be the default site of the installation." xml:space="preserve">
-    <value>If this should be the default site of the installation.</value>
+    <value>این باید در سایت پیش فرض نصب شده باشد.</value>
   </data>
   <data name="Please type in the name of the site to confirm." xml:space="preserve">
-    <value>Please type in the name of the site to confirm.</value>
+    <value>لطفا برای تایید نام سایت را تایپ کنید.</value>
   </data>
   <data name="ConfirmDelete" xml:space="preserve">
     <value>This action &lt;strong>cannot&lt;/strong> be undone. This will permanently delete the site {{ title }} and all of its &lt;strong>pages&lt;/strong>, &lt;strong>archives&lt;/strong> and &lt;strong>posts&lt;/strong>.</value>

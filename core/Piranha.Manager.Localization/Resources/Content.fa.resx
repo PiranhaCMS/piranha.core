@@ -22,7 +22,7 @@
     <value>Meta follow</value>
   </data>
   <data name="Meta priority" xml:space="preserve">
-    <value>Meta priority</value>
+    <value>Meta Priority</value>
   </data>
   <data name="Primary image" xml:space="preserve">
     <value>تصویر اصلی</value>
@@ -31,15 +31,15 @@
     <value>اولویت موتور جستجو، در مقایسه با سایر مطالب موجود در همان سایت.</value>
   </data>
   <data name="The content was successfully deleted" xml:space="preserve">
-    <value>The content was successfully deleted</value>
+    <value>محتوا با موفقیت حذف شد</value>
   </data>
   <data name="An error occured while deleting the content" xml:space="preserve">
-    <value>An error occured while deleting the content</value>
+    <value>هنگام حذف محتوا خطایی روی داد</value>
   </data>
   <data name="The content was successfully saved" xml:space="preserve">
-    <value>The content was successfully saved</value>
+    <value>محتوا با موفقیت ذخیره شد</value>
   </data>
   <data name="An error occured while saving the content" xml:space="preserve">
-    <value>An error occured while saving the content</value>
+    <value>خطایی هنگام ذخیره سند رخ داده است</value>
   </data>
 </root>
