@@ -28,16 +28,16 @@
     <value>اندازه صفحه بایگانی</value>
   </data>
   <data name="Caching" xml:space="preserve">
-    <value>Caching</value>
+    <value>حافظه موقت</value>
   </data>
   <data name="Page cache expiration (minutes)" xml:space="preserve">
-    <value>Page cache expiration (minutes)</value>
+    <value>انقضای حافظه موقت صفحه (دقیقه)</value>
   </data>
   <data name="Page revisions" xml:space="preserve">
     <value>بازبینی صفحه</value>
   </data>
   <data name="Post cache expiration (minutes)" xml:space="preserve">
-    <value>Post cache expiration (minutes)</value>
+    <value>انقضای حافظه موقت نوشته (دقیقه)</value>
   </data>
   <data name="Post revisions" xml:space="preserve">
     <value>بازبینی صفحه</value>
@@ -47,7 +47,7 @@
   </data>
 
   <data name="If page slugs should take their parent slug into account when being generated. This is prefered for larger sitemaps." xml:space="preserve">
-    <value>If page slugs should take their parent slug into account when being generated. This is prefered for larger sitemaps.</value>
+    <value>در صورتی که اسلاگ های صفحه باید اسلاگ والدین خود را هنگام تولید در نظر بگیرند. این برای Sitemap بزرگتر ترجیح داده می شود.</value>
   </data>
   <data name="The default number of levels that should be expanded in the page sitemap. This is useful for smaller sitemaps." xml:space="preserve">
     <value>The default number of levels that should be expanded in the page sitemap. This is useful for smaller sitemaps.</value>
@@ -81,10 +81,10 @@
     <value>Collapse block headers</value>
   </data>
   <data name="Collapse blocks" xml:space="preserve">
-    <value>Collapse blocks</value>
+    <value>بستن بلوک ها</value>
   </data>
   <data name="Comments page size" xml:space="preserve">
-    <value>Comments page size</value>
+    <value>اندازه صفحه نظرات</value>
   </data>
   <data name="Enable page comments" xml:space="preserve">
     <value>فعال بودن نظرات برای صفحه</value>
@@ -93,7 +93,7 @@
     <value>فعال بودن نظرات برای نوشته</value>
   </data>
   <data name="Manager list size" xml:space="preserve">
-    <value>Manager list size</value>
+    <value>مدیریت سایز لیست ها</value>
   </data>
   <data name="If block group headers should be collapsed by default when opening a page or post in the manager." xml:space="preserve">
     <value>If block group headers should be collapsed by default when opening a page or post in the manager.</value>
