@@ -50,19 +50,19 @@
     <value>در صورتی که اسلاگ های صفحه باید اسلاگ والدین خود را هنگام تولید در نظر بگیرند. این برای Sitemap بزرگتر ترجیح داده می شود.</value>
   </data>
   <data name="The default number of levels that should be expanded in the page sitemap. This is useful for smaller sitemaps." xml:space="preserve">
-    <value>The default number of levels that should be expanded in the page sitemap. This is useful for smaller sitemaps.</value>
+    <value>تعداد پیش فرض سطوحی که باید در نقشه سایت صفحه گسترش یابد. این برای نقشه های سایت کوچکتر مفید است.</value>
   </data>
   <data name="The default page size for archive pages. Please note that this this can be overridden for specific archives." xml:space="preserve">
-    <value>The default page size for archive pages. Please note that this this can be overridden for specific archives.</value>
+    <value>اندازه صفحه پیش فرض برای صفحات آرشیو. لطفاً توجه داشته باشید که این می تواند برای بایگانی های خاص لغو شود.</value>
   </data>
   <data name="The maximum number of page revisions that should be stored for each page. A value of 0 means no limitation." xml:space="preserve">
-    <value>The maximum number of page revisions that should be stored for each page. A value of 0 means no limitation.</value>
+    <value>حداکثر تعداد ویرایش های صفحه که باید برای هر صفحه ذخیره شود. مقدار 0 به معنای عدم محدودیت است.</value>
   </data>
   <data name="The maximum number of post revisions that should be stored for each post. A value of 0 means no limitation." xml:space="preserve">
-    <value>The maximum number of post revisions that should be stored for each post. A value of 0 means no limitation.</value>
+    <value>حداکثر تعداد بازبینی های پستی که باید برای هر پست ذخیره شود. مقدار 0 به معنای عدم محدودیت است.</value>
   </data>
   <data name="The time in minutes that web browsers can use pages before asking the server for new updates." xml:space="preserve">
-    <value>The time in minutes that web browsers can use pages before asking the server for new updates.</value>
+    <value>مدت زمانی که مرورگرهای وب می‌توانند از صفحات قبل از درخواست به‌روزرسانی‌های جدید از سرور استفاده کنند.</value>
   </data>
   <data name="The time in minutes that web browsers can use posts before asking the server for new updates." xml:space="preserve">
     <value>مدت زمانی که مرورگرهای وب می‌توانند از پست‌ها قبل از درخواست به‌روزرسانی جدید از سرور استفاده کنند.</value>
