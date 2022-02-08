@@ -50,6 +50,6 @@
     <value>Τα σχόλια είναι ανοικτά.</value>
   </data>
   <data name="Comments were closed" xml:space="preserve">
-    <value>Comments were closed</value>
+    <value>Τα σχόλια είναι απενεργοποιημένα</value>
   </data>
 </root>
