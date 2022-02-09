@@ -18,7 +18,7 @@ namespace Piranha
     public class PiranhaServiceBuilder
     {
         /// <summary>
-        /// The inner Service collection.
+        /// The inner service collection.
         /// </summary>
         public readonly IServiceCollection Services;
 
