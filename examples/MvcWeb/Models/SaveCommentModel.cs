@@ -1,5 +1,3 @@
-using System;
-
 namespace MvcWeb.Models
 {
     public class SaveCommentModel
