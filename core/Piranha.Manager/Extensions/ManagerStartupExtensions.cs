@@ -66,7 +66,8 @@ public static class ManagerStartupExtensions
     public static PiranhaApplicationBuilder UseManager(this PiranhaApplicationBuilder applicationBuilder)
     {
         applicationBuilder.Builder.UsePiranhaManager();
-        applicationBuilder.Builder.UseEndpoints(endpoints =>
+
+        applicationBuilder.UseEndpoints(endpoints =>
         {
             endpoints.MapControllerRoute(
                 name: "default",
@@ -74,7 +75,6 @@ public static class ManagerStartupExtensions
 
             endpoints.MapPiranhaManager();
         });
-
         return applicationBuilder;
     }
 }

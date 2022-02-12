@@ -8,7 +8,10 @@
  *
  */
 
+using System;
+using System.Collections.Generic;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Routing;
 
 namespace Piranha.AspNetCore
 {
@@ -23,12 +26,22 @@ namespace Piranha.AspNetCore
         public readonly IApplicationBuilder Builder;
 
         /// <summary>
+        /// The currently registered endpoint configurations.
+        /// </summary>
+        internal List<Action<IEndpointRouteBuilder>> Endpoints { get; } = new();
+
+        /// <summary>
         /// Default constructor.
         /// </summary>
         /// <param name="builder">The current application builder</param>
         public PiranhaApplicationBuilder(IApplicationBuilder builder)
         {
             Builder = builder;
+        }
+
+        public void UseEndpoints(Action<IEndpointRouteBuilder> configuration)
+        {
+            Endpoints.Add(configuration);
         }
     }
 }
