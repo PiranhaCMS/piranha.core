@@ -39,6 +39,12 @@ namespace Piranha.AspNetCore
             Builder = builder;
         }
 
+        /// <summary>
+        /// Adds an endpoint configuration to the application builder. This
+        /// can be called multiple times, and the endpoints will be added
+        /// in the order they were added.
+        /// </summary>
+        /// <param name="configuration">The endpoint configuration</param>
         public void UseEndpoints(Action<IEndpointRouteBuilder> configuration)
         {
             Endpoints.Add(configuration);
