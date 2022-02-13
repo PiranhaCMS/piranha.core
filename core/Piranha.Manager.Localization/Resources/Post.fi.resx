@@ -70,9 +70,9 @@
     <value>Viestin julkaisu on peruutettu onnistuneesti</value>
   </data>
   <data name="The post was successfully saved" xml:space="preserve">
-    <value>Viestin tallennus onnistui</value>
+    <value>Viesti tallennettu onnistuneesti</value>
   </data>
   <data name="The post was successfully reverted to its previous state" xml:space="preserve">
-    <value>The post was successfully reverted to its previous state</value>
+    <value>Viesti palautettu onnistuneesti aiempaan tilaan</value>
   </data>
 </root>
