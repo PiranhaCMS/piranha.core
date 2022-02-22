@@ -22,10 +22,10 @@
     <value>Kaikki kategoriat</value>
   </data>
   <data name="An error occured while deleting the post" xml:space="preserve">
-    <value>An error occured while deleting the post</value>
+    <value>Tapahtui virhe viestiä poistettaessa</value>
   </data>
   <data name="An error occured while saving the post" xml:space="preserve">
-    <value>An error occured while saving the post</value>
+    <value>Tapahtui virhe viestin tallennuksessa</value>
   </data>
   <data name="Categories" xml:space="preserve">
     <value>Kategoriat</value>
@@ -61,18 +61,18 @@
     <value>Jos linkit tästä viestistä pitäisi indeksoida.</value>
   </data>
   <data name="The post was successfully deleted" xml:space="preserve">
-    <value>The post was successfully deleted</value>
+    <value>Viesti poistettiin onnistuneesti</value>
   </data>
   <data name="The post was successfully published" xml:space="preserve">
-    <value>The post was successfully published</value>
+    <value>Viesti julkaistiin onnistuneesti</value>
   </data>
   <data name="The post was successfully unpublished" xml:space="preserve">
-    <value>The post was successfully unpublished</value>
+    <value>Viestin julkaisu on peruutettu onnistuneesti</value>
   </data>
   <data name="The post was successfully saved" xml:space="preserve">
-    <value>The post was successfully saved</value>
+    <value>Viesti tallennettu onnistuneesti</value>
   </data>
   <data name="The post was successfully reverted to its previous state" xml:space="preserve">
-    <value>The post was successfully reverted to its previous state</value>
+    <value>Viesti palautettu onnistuneesti aiempaan tilaan</value>
   </data>
 </root>

@@ -19,7 +19,7 @@
     <value>Tapahtui virhe sivua poistettaessa</value>
   </data>
   <data name="An error occured while saving the page" xml:space="preserve">
-    <value>An error occured while saving the page</value>
+    <value>Tapahtui virhe sivun tallennuksessa</value>
   </data>
   <data name="Archive" xml:space="preserve">
     <value>Arkisto</value>

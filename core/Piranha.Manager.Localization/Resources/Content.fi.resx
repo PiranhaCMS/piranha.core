@@ -31,15 +31,15 @@
     <value>Hakukoneen prioriteetti, verrattuna muuhun sisältöön samalla sivustolla.</value>
   </data>
   <data name="The content was successfully deleted" xml:space="preserve">
-    <value>The content was successfully deleted</value>
+    <value>Sisällön poisto onnistui</value>
   </data>
   <data name="An error occured while deleting the content" xml:space="preserve">
-    <value>An error occured while deleting the content</value>
+    <value>Tapahtui virhe sisältöä poistettaessa</value>
   </data>
   <data name="The content was successfully saved" xml:space="preserve">
-    <value>The content was successfully saved</value>
+    <value>Sisältö tallennettu onnistuneesti</value>
   </data>
   <data name="An error occured while saving the content" xml:space="preserve">
-    <value>An error occured while saving the content</value>
+    <value>Tapahtui virhe sisällön tallennuksessa</value>
   </data>
 </root>

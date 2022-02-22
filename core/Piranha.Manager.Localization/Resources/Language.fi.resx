@@ -19,9 +19,9 @@
     <value>Tätä toimintoa &lt;strong>ei voi&lt;/strong> peruuttaa. Tämä poistaa pysyvästi kielen {{ currentDelete.title }} ja kaikki sen &lt;strong>käännökset&lt;/strong>. Kaikki sivustot, jotka ovat valinneet {{ currentDelete.title }} kielekseen, asetetaan oletuskielelle.</value>
   </data>
   <data name="The language was successfully saved" xml:space="preserve">
-    <value>The language was successfully saved</value>
+    <value>Kielen tallennus onnistui</value>
   </data>
   <data name="The language was successfully deleted" xml:space="preserve">
-    <value>The language was successfully deleted</value>
+    <value>Kielen poisto onnistui</value>
   </data>
 </root>
