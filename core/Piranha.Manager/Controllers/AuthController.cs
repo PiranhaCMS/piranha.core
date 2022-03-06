@@ -43,12 +43,13 @@ namespace Piranha.Manager.Controllers
             var tokens = _antiForgery.GetAndStoreTokens(HttpContext);
             Response.Cookies.Append(_options.XsrfCookieName, tokens.RequestToken, new CookieOptions
             {
-                HttpOnly = false
-            });    
+                HttpOnly = false,
+                IsEssential = true
+            });
             if (!string.IsNullOrEmpty(returnUrl))
             {
                 return LocalRedirect(returnUrl);
-            }        
+            }
             return LocalRedirect("~/manager");
         }
     }
