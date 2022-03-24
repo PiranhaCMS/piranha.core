@@ -47,9 +47,9 @@
     <value>Comentariile nu sunt permise pentru conținutul nepublicat.</value>
   </data>
   <data name="Comments are currently open." xml:space="preserve">
-    <value>Comments are currently open.</value>
+    <value>Comentariile sunt permise în prezent.</value>
   </data>
   <data name="Comments were closed" xml:space="preserve">
-    <value>Comments were closed</value>
+    <value>Comentariile nu mai sunt permise</value>
   </data>
 </root>
