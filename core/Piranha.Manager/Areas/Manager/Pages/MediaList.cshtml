@@ -8,7 +8,7 @@
 }
 @section script
 {
-    <script src="~/manager/assets/js/piranha.media.min.js"></script>
+    <script src="~/manager/assets/js/piranha.media.min.js?v=@Piranha.Utils.GetAssemblyVersionHash(typeof(Piranha.Manager.Module).Assembly)"></script>
 
     <script>
         piranha.permissions.load(function () {

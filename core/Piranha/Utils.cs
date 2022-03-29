@@ -239,6 +239,16 @@ namespace Piranha
         }
 
         /// <summary>
+        /// Gets the hashed version string of the given assembly.
+        /// </summary>
+        /// <param name="assembly">The assembly</param>
+        /// <returns>The hashed version string</returns>
+        public static string GetAssemblyVersionHash(Assembly assembly)
+        {
+            return GetAssemblyVersion(assembly).GetHashCode().ToString();
+        }
+
+        /// <summary>
         /// Checks if the given assembly is a pre-release.
         /// </summary>
         /// <param name="assembly">The assembly</param>

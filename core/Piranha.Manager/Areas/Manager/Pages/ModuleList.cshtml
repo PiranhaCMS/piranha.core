@@ -7,7 +7,7 @@
 }
 @section script
 {
-    <script src="~/manager/assets/js/piranha.module.min.js"></script>
+    <script src="~/manager/assets/js/piranha.module.min.js?v=@Piranha.Utils.GetAssemblyVersionHash(typeof(Piranha.Manager.Module).Assembly)"></script>
 }
 
 <div id="module">

@@ -3,6 +3,7 @@
     var module = Piranha.App.Modules.Get<Piranha.Manager.Module>();
     var prerelease = Piranha.Utils.IsPreRelease(typeof(Piranha.Manager.Module).Assembly) ? "pre-release" : "";
     var isRightToLeft =  @System.Globalization.CultureInfo.CurrentCulture.TextInfo.IsRightToLeft;
+    var version = Piranha.Utils.GetAssemblyVersionHash(typeof(Piranha.Manager.Module).Assembly);
 }
 <!doctype html>
 <html lang="en">
@@ -11,11 +12,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     @if(isRightToLeft)
     {
-        <link rel="stylesheet" href="~/manager/assets/css/full.rtl.min.css">
+        <link rel="stylesheet" href="~/manager/assets/css/full.rtl.min.css?v=@version">
     }
     else
     {
-        <link rel="stylesheet" href="~/manager/assets/css/full.min.css">
+        <link rel="stylesheet" href="~/manager/assets/css/full.min.css?v=@version">
     }
     <link rel="icon" href="~/manager/assets/img/logo.png">
 
@@ -65,10 +66,10 @@
     @RenderSection("partials", required: false)
 
 <environment include="Development">
-    <script type="text/javascript" src="~/manager/assets/js/piranha-deps-dev.js"></script>
+    <script type="text/javascript" src="~/manager/assets/js/piranha-deps-dev.js?v=@version"></script>
 </environment>
 <environment exclude="Development">
-    <script type="text/javascript" src="~/manager/assets/js/piranha-deps.min.js"></script>
+    <script type="text/javascript" src="~/manager/assets/js/piranha-deps.min.js?v=@version"></script>
 </environment>
     @foreach (var script in module.Scripts.Where(s => s.RenderBeforeCoreScripts))
     {
@@ -85,7 +86,7 @@
             <script type="@script.Type" src="@Url.Content(script.Src)" integrity="@script.Integrity" crossorigin="@script.GetCrossOriginValueStrValue()"></script>
         }
     }
-    <script type="text/javascript" src="~/manager/assets/js/piranha.min.js"></script>
+    <script type="text/javascript" src="~/manager/assets/js/piranha.min.js?v=@version"></script>
     <script type="text/javascript">
         Vue.prototype.piranha = window.piranha;
     </script>
