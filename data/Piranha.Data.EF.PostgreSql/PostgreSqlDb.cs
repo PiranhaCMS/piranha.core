@@ -8,6 +8,7 @@
  *
  */
 
+using System;
 using Microsoft.EntityFrameworkCore;
 
 namespace Piranha.Data.EF.PostgreSql
@@ -21,6 +22,7 @@ namespace Piranha.Data.EF.PostgreSql
         /// <param name="options">Configuration options</param>
         public PostgreSqlDb(DbContextOptions<PostgreSqlDb> options) : base(options)
         {
+            AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
         }
     }
 }
