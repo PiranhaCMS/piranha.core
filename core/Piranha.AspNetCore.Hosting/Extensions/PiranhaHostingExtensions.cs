@@ -50,6 +50,14 @@ public static class PiranhaHostingExtensions
 
         options?.Invoke(applicationBuilder);
 
+        // Configure all registered endpoints
+        applicationBuilder.Builder.UseEndpoints(endpoints =>
+        {
+            foreach (var endpoint in applicationBuilder.Endpoints)
+            {
+                endpoint.Invoke(endpoints);
+            }
+        });
         return applicationBuilder.Builder;
     }
 
@@ -75,7 +83,7 @@ public static class PiranhaHostingExtensions
 
             // Configure all registered endpoints
             application.Builder.UseEndpoints(endpoints =>
-            { 
+            {
                 foreach (var endpoint in application.Endpoints)
                 {
                     endpoint.Invoke(endpoints);
