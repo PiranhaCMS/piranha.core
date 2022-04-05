@@ -87,10 +87,10 @@
     <value>Comments page size</value>
   </data>
   <data name="Enable page comments" xml:space="preserve">
-    <value>Enable page comments</value>
+    <value>Permite postarea de comentarii pe pagină</value>
   </data>
   <data name="Enable post comments" xml:space="preserve">
-    <value>Enable post comments</value>
+    <value>Permite adaugarea de comentarii pe postare</value>
   </data>
   <data name="Manager list size" xml:space="preserve">
     <value>Manager list size</value>
