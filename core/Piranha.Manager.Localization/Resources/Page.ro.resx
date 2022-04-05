@@ -79,27 +79,27 @@
     <value>Pagina a fost detașată cu succes de la original</value>
   </data>
   <data name="The page was successfully published" xml:space="preserve">
-    <value>The page was successfully published</value>
+    <value>Pagina a fost postată cu succes</value>
   </data>
   <data name="The page was successfully unpublished" xml:space="preserve">
     <value>The page was successfully unpublished</value>
   </data>
   <data name="The page was successfully saved" xml:space="preserve">
-    <value>The page was successfully saved</value>
+    <value>Pagina a fost salvată cu succes</value>
   </data>
   <data name="The page was successfully reverted to its previous state" xml:space="preserve">
-    <value>The page was successfully reverted to its previous state</value>
+    <value>Pagina a revenit cu succes la starea anterioară</value>
   </data>
   <data name="This is a copy. In order to edit the content of the page you first need to detach it from the original. If you want to keep the page as a copy you should edit the content of the original page." xml:space="preserve">
-    <value>This is a copy. In order to edit the content of the page you first need to detach it from the original. If you want to keep the page as a copy you should edit the content of the original page.</value>
+    <value>Aceasta este o copie. Pentru a edita conţinutul paginii trebuie mai întâi să-l detaşaţi de original. Dacă doriţi să păstraţi pagina ca o copie, trebuie să editaţi conţinutul paginii originale.</value>
   </data>
   <data name="Welcome to your new page. Click on the button above to add your first block of content!" xml:space="preserve">
-    <value>Welcome to your new page. Click on the button above to add your first block of content!</value>
+    <value>Bine ați venit pe noua pagină. Faceți clic pe butonul de mai sus pentru a adăuga primul dvs. bloc de conținut!</value>
   </data>
   <data name="Your page title" xml:space="preserve">
-    <value>Your page title</value>
+    <value>Titlul paginii tale</value>
   </data>
   <data name="If comments should be enabled for this page" xml:space="preserve">
-    <value>If comments should be enabled for this page</value>
+    <value>Dacă comentariile ar trebui să fie activate pentru această pagină</value>
   </data>
 </root>
