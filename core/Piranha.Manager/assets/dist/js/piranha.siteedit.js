@@ -11,7 +11,6 @@ piranha.siteedit = new Vue({
         languageId: null,
         title: null,
         internalId: null,
-        culture: null,
         description: null,
         logo: {
             id: null,
@@ -44,7 +43,6 @@ piranha.siteedit = new Vue({
                     self.languageId = result.languageId;
                     self.title = result.title;
                     self.internalId = result.internalId;
-                    self.culture = result.culture;
                     self.description = result.description;
                     self.logo = result.logo;
                     self.hostnames = result.hostnames;
@@ -58,10 +56,8 @@ piranha.siteedit = new Vue({
                 .then(function (response) { return response.json(); })
                 .then(function (result) {
                     if (result.status !== 404) {
-                        console.log("Setting regions");
                         self.regions = result.regions;
                     } else {
-                        console.log("Setting regions to empty array");
                         self.regions = [];
                     }
                 })
@@ -82,7 +78,6 @@ piranha.siteedit = new Vue({
                 languageId: this.languageId,
                 title: this.title,
                 internalId: this.internalId,
-                culture: this.culture,
                 description: this.description,
                 logo: this.logo,
                 hostnames: this.hostnames,
@@ -138,7 +133,7 @@ piranha.siteedit = new Vue({
                     } else {
                         // Push status to notification hub
                         piranha.notifications.push(result);
-                        
+
                         $("#siteedit").modal("hide");
                         if (self.callback)
                         {
@@ -191,7 +186,6 @@ piranha.siteedit = new Vue({
                     self.typeId = result.typeId;
                     self.title = result.title;
                     self.internalId = result.internalId;
-                    self.culture = result.culture;
                     self.description = result.description;
                     self.hostnames = result.hostnames;
                     self.isDefault = result.isDefault;

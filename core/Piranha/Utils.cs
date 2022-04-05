@@ -245,7 +245,7 @@ namespace Piranha
         /// <returns>The hashed version string</returns>
         public static string GetAssemblyVersionHash(Assembly assembly)
         {
-            return GetAssemblyVersion(assembly).GetHashCode().ToString();
+            return Math.Abs(GetAssemblyVersion(assembly).GetHashCode()).ToString();
         }
 
         /// <summary>
