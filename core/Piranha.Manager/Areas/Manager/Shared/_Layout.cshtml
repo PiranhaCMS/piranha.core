@@ -1,4 +1,5 @@
 ﻿@inject Microsoft.Extensions.Options.IOptions<ManagerOptions> Options
+@inject Piranha.Config Config
 @{
     var module = Piranha.App.Modules.Get<Piranha.Manager.Module>();
     var prerelease = Piranha.Utils.IsPreRelease(typeof(Piranha.Manager.Module).Assembly) ? "pre-release" : "";
@@ -59,6 +60,7 @@
             cookieName: "@Options.Value.XsrfCookieName",
             headerName: "@Options.Value.XsrfHeaderName"
         };
+        piranha.xhrTimeout = @Config.ManagerXhrTimeout;
     </script>
 
     <partial name="~/Areas/Manager/Shared/Partial/_EditorConfig.cshtml" />

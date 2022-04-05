@@ -247,20 +247,20 @@ piranha.media = new Vue({
                         headers: piranha.utils.antiForgeryHeaders(),
                         body: JSON.stringify([id])
                     })
-                        .then(function (response) { return response.json(); })
-                        .then(function (result) {
-                            // Refresh
-                            self.refresh();
+                    .then(function (response) { return response.json(); })
+                    .then(function (result) {
+                        // Refresh
+                        self.refresh();
 
-                            if (result.status !== 400) {
-                                // Push status to notification hub
-                                piranha.notifications.push(result.status);
-                            } else {
-                                // Unauthorized request
-                                piranha.notifications.unauthorized();
-                            }
-                        })
-                        .catch(function (error) { console.log("error:", error); });
+                        if (result.status !== 400) {
+                            // Push status to notification hub
+                            piranha.notifications.push(result);
+                        } else {
+                            // Unauthorized request
+                            piranha.notifications.unauthorized();
+                        }
+                    })
+                    .catch(function (error) { console.log("error:", error); });
                 }
             });
         },
