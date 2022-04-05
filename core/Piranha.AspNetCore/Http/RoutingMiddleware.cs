@@ -108,9 +108,13 @@ namespace Piranha.AspNetCore.Http
 
                 if (site != null)
                 {
+                    // Get the selected language
+                    var language = await api.Languages.GetByIdAsync(site.LanguageId)
+                        .ConfigureAwait(false);
+
                     // Update application service
                     service.Site.Id = site.Id;
-                    service.Site.Culture = site.Culture;
+                    service.Site.Culture = language?.Culture;
                     service.Site.Sitemap = await api.Sites.GetSitemapAsync(site.Id);
 
                     // Set preferred hostname & prefix
@@ -130,7 +134,7 @@ namespace Piranha.AspNetCore.Http
                     }
 
                     // Set current culture if specified in site
-                    if (!string.IsNullOrEmpty(site.Culture))
+                    if (!string.IsNullOrEmpty(service.Site.Culture))
                     {
                         var cultureInfo = new CultureInfo(service.Site.Culture);
                         CultureInfo.CurrentCulture = CultureInfo.CurrentUICulture = cultureInfo;

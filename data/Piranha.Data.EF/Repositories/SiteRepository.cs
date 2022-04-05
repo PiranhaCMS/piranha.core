@@ -71,7 +71,6 @@ namespace Piranha.Repositories
                     Logo = site.LogoId.HasValue ? site.LogoId.Value : new ImageField(),
                     Hostnames = site.Hostnames,
                     IsDefault = site.IsDefault,
-                    Culture = site.Culture,
                     ContentLastModified = site.ContentLastModified,
                     Created = site.Created,
                     LastModified = site.LastModified
@@ -111,7 +110,6 @@ namespace Piranha.Repositories
                     Logo = site.LogoId.HasValue ? site.LogoId.Value : new ImageField(),
                     Hostnames = site.Hostnames,
                     IsDefault = site.IsDefault,
-                    Culture = site.Culture,
                     ContentLastModified = site.ContentLastModified,
                     Created = site.Created,
                     LastModified = site.LastModified
@@ -151,7 +149,6 @@ namespace Piranha.Repositories
                     Logo = site.LogoId.HasValue ? site.LogoId.Value : new ImageField(),
                     Hostnames = site.Hostnames,
                     IsDefault = site.IsDefault,
-                    Culture = site.Culture,
                     ContentLastModified = site.ContentLastModified,
                     Created = site.Created,
                     LastModified = site.LastModified
@@ -190,7 +187,6 @@ namespace Piranha.Repositories
                     Logo = site.LogoId.HasValue ? site.LogoId.Value : new ImageField(),
                     Hostnames = site.Hostnames,
                     IsDefault = site.IsDefault,
-                    Culture = site.Culture,
                     ContentLastModified = site.ContentLastModified,
                     Created = site.Created,
                     LastModified = site.LastModified
@@ -293,7 +289,6 @@ namespace Piranha.Repositories
             site.Description = model.Description;
             site.LogoId = model.Logo?.Id;
             site.Hostnames = model.Hostnames;
-            site.Culture = model.Culture;
             site.IsDefault = model.IsDefault;
             site.ContentLastModified = model.ContentLastModified;
             site.LastModified = DateTime.Now;

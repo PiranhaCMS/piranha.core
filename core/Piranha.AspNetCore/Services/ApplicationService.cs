@@ -122,9 +122,11 @@ namespace Piranha.AspNetCore.Services
                 // Store the current site id & get the sitemap
                 if (site != null)
                 {
+                    var language = await Api.Languages.GetByIdAsync(site.LanguageId);
+
                     Site.Id = site.Id;
                     Site.LanguageId = site.LanguageId;
-                    Site.Culture = site.Culture;
+                    Site.Culture = language?.Culture;
                     Site.Sitemap = await Api.Sites.GetSitemapAsync(Site.Id);
 
                     var siteHost = GetFirstHost(site);
