@@ -37,19 +37,19 @@
     <value>Utilizatorul a fost salvat.</value>
   </data>
   <data name="Are you sure you want to delete this user?" xml:space="preserve">
-    <value>Are you sure you want to delete this user?</value>
+    <value>Sunteți sigur că doriți să ștergeți acest utilizator?</value>
   </data>
   <data name="The user has been deleted." xml:space="preserve">
-    <value>The user has been deleted.</value>
+    <value>Utilizatorul a fost șters.</value>
   </data>
   <data name="Can't delete yourself." xml:space="preserve">
-    <value>Can't delete yourself.</value>
+    <value>Nu te poți șterge singur.</value>
   </data>
 
   <data name="New password" xml:space="preserve">
-    <value>New password</value>
+    <value>Noua parolă</value>
   </data>
   <data name="Confirm password" xml:space="preserve">
-    <value>Confirm password</value>
+    <value>Confirmă parola</value>
   </data>
 </root>
