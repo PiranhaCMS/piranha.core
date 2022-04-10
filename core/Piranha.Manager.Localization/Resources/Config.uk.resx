@@ -22,7 +22,7 @@
     <value>Чи slug сторінки має включати slug батьківської сторінки.</value>
   </data>
   <data name="Expanded levels in the sitemap" xml:space="preserve">
-    <value>Розширені рівні в sitemap</value>
+    <value>Розширені рівні в мапі сайту</value>
   </data>
   <data name="Archive page size" xml:space="preserve">
     <value>Розмір сторінки архіву</value>
@@ -47,16 +47,16 @@
   </data>
 
   <data name="If page slugs should take their parent slug into account when being generated. This is prefered for larger sitemaps." xml:space="preserve">
-    <value>Чи сторінка повинна враховувати батьківський slug при створенні. Це краще для великих sitemap.</value>
+    <value>Чи сторінка повинна враховувати батьківський slug при створенні. Це краще для великих мап сайту.</value>
   </data>
   <data name="The default number of levels that should be expanded in the page sitemap. This is useful for smaller sitemaps." xml:space="preserve">
-    <value>The default number of levels that should be expanded in the page sitemap. This is useful for smaller sitemaps.</value>
+    <value>Кількість рівнів мапи сайту, що мають бути розгорнуті на сторінці. Корисно для малих мап сайту.</value>
   </data>
   <data name="The default page size for archive pages. Please note that this this can be overridden for specific archives." xml:space="preserve">
-    <value>The default page size for archive pages. Please note that this this can be overridden for specific archives.</value>
+    <value>Розмір сторінки архіву за замовчуванням. Зверніть увагу, що це може бути перевизначено для конкретних архівів.</value>
   </data>
   <data name="The maximum number of page revisions that should be stored for each page. A value of 0 means no limitation." xml:space="preserve">
-    <value>The maximum number of page revisions that should be stored for each page. A value of 0 means no limitation.</value>
+    <value>Максимальна кількість переглядів сторінок, які повинні зберігатися для кожної сторінки. Значення 0 означає без обмежень.</value>
   </data>
   <data name="The maximum number of post revisions that should be stored for each post. A value of 0 means no limitation." xml:space="preserve">
     <value>The maximum number of post revisions that should be stored for each post. A value of 0 means no limitation.</value>
