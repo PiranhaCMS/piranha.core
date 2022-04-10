@@ -16,13 +16,13 @@
     <value>Додати</value>
   </data>
   <data name="Advanced" xml:space="preserve">
-    <value>Advanced</value>
+    <value>Додатково</value>
   </data>
   <data name="All" xml:space="preserve">
     <value>Все</value>
   </data>
   <data name="An error occurred" xml:space="preserve">
-    <value>An error occurred</value>
+    <value>Виникла помилка</value>
   </data>
   <data name="Cancel" xml:space="preserve">
     <value>Скасувати</value>
@@ -43,7 +43,7 @@
     <value>Культура</value>
   </data>
   <data name="Default" xml:space="preserve">
-    <value>Default</value>
+    <value>За замовчуванням</value>
   </data>
   <data name="Delete" xml:space="preserve">
     <value>Видалити</value>
@@ -100,10 +100,10 @@
     <value>За замовчуванням</value>
   </data>
   <data name="Language" xml:space="preserve">
-    <value>Language</value>
+    <value>Мова</value>
   </data>
   <data name="Languages" xml:space="preserve">
-    <value>Languages</value>
+    <value>Мови</value>
   </data>
   <data name="Login" xml:space="preserve">
     <value>Логін</value>
@@ -190,7 +190,7 @@
     <value>SEO</value>
   </data>
   <data name="Sharing" xml:space="preserve">
-    <value>Sharing</value>
+    <value>Розповсюдження</value>
   </data>
   <data name="Size" xml:space="preserve">
     <value>Розмір</value>
@@ -241,18 +241,18 @@
     <value>Ширина</value>
   </data>
   <data name="Archives and Comments" xml:space="preserve">
-    <value>Archives and Comments</value>
+    <value>Архіви та Коментарі</value>
   </data>
   <data name="Author" xml:space="preserve">
-    <value>Author</value>
+    <value>Автор</value>
   </data>
   <data name="Comments" xml:space="preserve">
-    <value>Comments</value>
+    <value>Коментарі</value>
   </data>
   <data name="Created" xml:space="preserve">
-    <value>Created</value>
+    <value>Створено</value>
   </data>
   <data name="Username and/or password are incorrect." xml:space="preserve">
-    <value>Username and/or password are incorrect.</value>
+    <value>Ім'я користувача та/або пароль неправильні.</value>
   </data>
 </root>
