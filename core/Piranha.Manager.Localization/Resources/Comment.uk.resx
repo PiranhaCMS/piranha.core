@@ -14,16 +14,16 @@
   </resheader>
 
   <data name="Approved" xml:space="preserve">
-    <value>Approved</value>
+    <value>Схвалено</value>
   </data>
   <data name="ApprovedSingle" xml:space="preserve">
-    <value>Approved</value>
+    <value>Схвалено</value>
   </data>
   <data name="Pending" xml:space="preserve">
-    <value>Pending</value>
+    <value>Очікує</value>
   </data>
   <data name="Comment" xml:space="preserve">
-    <value>Comment</value>
+    <value>Коментар</value>
   </data>
   <data name="Response to" xml:space="preserve">
     <value>Response to</value>
