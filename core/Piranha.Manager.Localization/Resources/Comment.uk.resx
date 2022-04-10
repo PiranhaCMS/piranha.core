@@ -41,15 +41,15 @@
     <value>Протягом скількох днів дозволено коментувати</value>
   </data>
   <data name="Comments are not allowed." xml:space="preserve">
-    <value>Коментарі не дозволяються.</value>
+    <value>Коментарі не дозволено.</value>
   </data>
   <data name="Comments are not allowed for unpublished content." xml:space="preserve">
-    <value>Не дозволяються коментарі до неопублікованого контенту.</value>
+    <value>Коментарі не дозволено для неопублікованого контенту.</value>
   </data>
   <data name="Comments are currently open." xml:space="preserve">
     <value>Коментарі відкриті.</value>
   </data>
   <data name="Comments were closed" xml:space="preserve">
-    <value>Comments were closed</value>
+    <value>Коментарі було закрито</value>
   </data>
 </root>
