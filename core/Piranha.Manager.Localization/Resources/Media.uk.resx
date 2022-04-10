@@ -46,22 +46,22 @@
     <value>Ваш браузер не підтримує тег video.</value>
   </data>
   <data name="List" xml:space="preserve">
-    <value>List</value>
+    <value>Список</value>
   </data>
   <data name="Preferred aspect" xml:space="preserve">
-    <value>Preferred aspect</value>
+    <value>Бажаний вигляд</value>
   </data>
   <data name="Original" xml:space="preserve">
-    <value>Original</value>
+    <value>Оригінал</value>
   </data>
   <data name="Landscape" xml:space="preserve">
-    <value>Landscape</value>
+    <value>Альбомна</value>
   </data>
   <data name="Portrait" xml:space="preserve">
-    <value>Portrait</value>
+    <value>Портретна</value>
   </data>
   <data name="Widescreen" xml:space="preserve">
-    <value>Widescreen</value>
+    <value>Широкий екран</value>
   </data>
   <data name="Square" xml:space="preserve">
     <value>Square</value>
