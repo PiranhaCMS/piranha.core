@@ -16,22 +16,22 @@
     <value>Налаштування</value>
   </data>
   <data name="Hierarchical page slugs" xml:space="preserve">
-    <value>Hierarchical page slugs</value>
+    <value>Ієрархічні slug сторінок</value>
   </data>
   <data name="If page slugs should include the parent slug." xml:space="preserve">
-    <value>If page slugs should include the parent slug.</value>
+    <value>Чи slug сторінки має включати slug батьківської сторінки.</value>
   </data>
   <data name="Expanded levels in the sitemap" xml:space="preserve">
-    <value>Expanded levels in the sitemap</value>
+    <value>Розширені рівні в sitemap</value>
   </data>
   <data name="Archive page size" xml:space="preserve">
-    <value>Archive page size</value>
+    <value>Розмір сторінки архіву</value>
   </data>
   <data name="Caching" xml:space="preserve">
     <value>Кешування</value>
   </data>
   <data name="Page cache expiration (minutes)" xml:space="preserve">
-    <value>Page cache expiration (minutes)</value>
+    <value>Термін дії кешу сторінок (хвилини)</value>
   </data>
   <data name="Page revisions" xml:space="preserve">
     <value>Ревізії сторінки</value>
@@ -43,11 +43,11 @@
     <value>Ревізії посту</value>
   </data>
   <data name="Media CDN" xml:space="preserve">
-    <value>Media CDN</value>
+    <value>Медіа CDN</value>
   </data>
 
   <data name="If page slugs should take their parent slug into account when being generated. This is prefered for larger sitemaps." xml:space="preserve">
-    <value>If page slugs should take their parent slug into account when being generated. This is prefered for larger sitemaps.</value>
+    <value>Чи сторінка повинна враховувати батьківський slug при створенні. Це краще для великих sitemap.</value>
   </data>
   <data name="The default number of levels that should be expanded in the page sitemap. This is useful for smaller sitemaps." xml:space="preserve">
     <value>The default number of levels that should be expanded in the page sitemap. This is useful for smaller sitemaps.</value>
