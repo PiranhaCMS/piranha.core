@@ -46,45 +46,45 @@
     <value>Ваш браузер не підтримує тег video.</value>
   </data>
   <data name="List" xml:space="preserve">
-    <value>List</value>
+    <value>Список</value>
   </data>
   <data name="Preferred aspect" xml:space="preserve">
-    <value>Preferred aspect</value>
+    <value>Бажаний вигляд</value>
   </data>
   <data name="Original" xml:space="preserve">
-    <value>Original</value>
+    <value>Оригінал</value>
   </data>
   <data name="Landscape" xml:space="preserve">
-    <value>Landscape</value>
+    <value>Альбом</value>
   </data>
   <data name="Portrait" xml:space="preserve">
-    <value>Portrait</value>
+    <value>Портрет</value>
   </data>
   <data name="Widescreen" xml:space="preserve">
-    <value>Widescreen</value>
+    <value>Широкий екран</value>
   </data>
   <data name="Square" xml:space="preserve">
-    <value>Square</value>
+    <value>Квадрат</value>
   </data>
   <data name="Are you sure you want to delete selected media?" xml:space="preserve">
-    <value>Are you sure you want to delete selected media?</value>
+    <value>Ви дійсно бажаєте видалити вибрані медіа?</value>
   </data>
   <data name="Delete selected items" xml:space="preserve">
-    <value>Delete selected items</value>
+    <value>Видалити обрані елементи</value>
   </data>
   <data name="Media file was successfully moved." xml:space="preserve">
-    <value>Media file was successfully moved.</value>
+    <value>Медіафайл успішно переміщений.</value>
   </data>
   <data name="Media files was successfully moved." xml:space="preserve">
-    <value>Media files was successfully moved.</value>
+    <value>Медіафайли успішно переміщені.</value>
   </data>
   <data name="The media file was not found." xml:space="preserve">
-    <value>The media file was not found.</value>
+    <value>Медіафайл не знайдено.</value>
   </data>
   <data name="The media file was successfully deleted" xml:space="preserve">
-    <value>The media file was successfully deleted</value>
+    <value>Медіафайл успішно видалено</value>
   </data>
   <data name="The media files was successfully deleted" xml:space="preserve">
-    <value>The media files was successfully deleted</value>
+    <value>Медіафайли успішно видалено</value>
   </data>
 </root>

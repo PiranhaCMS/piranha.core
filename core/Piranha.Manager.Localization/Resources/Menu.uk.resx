@@ -28,7 +28,7 @@
     <value>Медіа</value>
   </data>
   <data name="Aliases" xml:space="preserve">
-    <value>Псевдоніми</value>
+    <value>Перенаправлення</value>
   </data>
   <data name="Sites" xml:space="preserve">
     <value>Сайти</value>
@@ -40,15 +40,15 @@
     <value>Модулі</value>
   </data>
   <data name="Logout" xml:space="preserve">
-    <value>Вихід</value>
+    <value>Вийти</value>
   </data>
   <data name="Comments" xml:space="preserve">
-    <value>Comments</value>
+    <value>Коментарі</value>
   </data>
   <data name="Roles" xml:space="preserve">
-    <value>Roles</value>
+    <value>Ролі</value>
   </data>
   <data name="Users" xml:space="preserve">
-    <value>Users</value>
+    <value>Користувачі</value>
   </data>
 </root>

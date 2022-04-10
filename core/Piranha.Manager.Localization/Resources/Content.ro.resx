@@ -25,21 +25,21 @@
     <value>Meta priority</value>
   </data>
   <data name="Primary image" xml:space="preserve">
-    <value>Primary image</value>
+    <value>Imagine principală</value>
   </data>
   <data name="Search engine priority, compared to other content in the same site." xml:space="preserve">
-    <value>Search engine priority, compared to other content in the same site.</value>
+    <value>Prioritatea motorului de căutare, comparativ cu alte conținuturi din același site.</value>
   </data>
   <data name="The content was successfully deleted" xml:space="preserve">
-    <value>The content was successfully deleted</value>
+    <value>Conținutul a fost eliminat cu succes</value>
   </data>
   <data name="An error occured while deleting the content" xml:space="preserve">
-    <value>An error occured while deleting the content</value>
+    <value>A apărut o eroare la ștergerea conținutului</value>
   </data>
   <data name="The content was successfully saved" xml:space="preserve">
-    <value>The content was successfully saved</value>
+    <value>Conținutul a fost salvat cu succes</value>
   </data>
   <data name="An error occured while saving the content" xml:space="preserve">
-    <value>An error occured while saving the content</value>
+    <value>A apărut o eroare la salvarea conținutului</value>
   </data>
 </root>

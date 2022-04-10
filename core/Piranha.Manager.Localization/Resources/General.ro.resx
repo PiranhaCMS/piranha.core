@@ -13,7 +13,7 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Add" xml:space="preserve">
-    <value>Add</value>
+    <value>Adaugă</value>
   </data>
   <data name="Advanced" xml:space="preserve">
     <value>Advanced</value>
@@ -22,64 +22,64 @@
     <value>All</value>
   </data>
   <data name="An error occurred" xml:space="preserve">
-    <value>An error occurred</value>
+    <value>A intervenit o eroare</value>
   </data>
   <data name="Cancel" xml:space="preserve">
-    <value>Cancel</value>
+    <value>Anulează</value>
   </data>
   <data name="Content" xml:space="preserve">
-    <value>Content</value>
+    <value>Conţinut</value>
   </data>
   <data name="Continue" xml:space="preserve">
-    <value>Continue</value>
+    <value>Continuă</value>
   </data>
   <data name="Content type" xml:space="preserve">
-    <value>Content type</value>
+    <value>Tip de conținut</value>
   </data>
   <data name="Copy" xml:space="preserve">
-    <value>Copy</value>
+    <value>Copiază</value>
   </data>
   <data name="Culture" xml:space="preserve">
-    <value>Culture</value>
+    <value>Cultură</value>
   </data>
   <data name="Default" xml:space="preserve">
-    <value>Default</value>
+    <value>Implicit</value>
   </data>
   <data name="Delete" xml:space="preserve">
-    <value>Delete</value>
+    <value>Ștergeți</value>
   </data>
   <data name="Description" xml:space="preserve">
-    <value>Description</value>
+    <value>Descriere</value>
   </data>
   <data name="Details" xml:space="preserve">
-    <value>Details</value>
+    <value>Detalii</value>
   </data>
   <data name="Dimensions" xml:space="preserve">
-    <value>Dimensions</value>
+    <value>Dimensiuni</value>
   </data>
   <data name="Download" xml:space="preserve">
     <value>Download</value>
   </data>
   <data name="Draft" xml:space="preserve">
-    <value>Draft</value>
+    <value>Ciornă</value>
   </data>
   <data name="Drafts" xml:space="preserve">
-    <value>Drafts</value>
+    <value>Ciorne</value>
   </data>
   <data name="Email address" xml:space="preserve">
-    <value>Email address</value>
+    <value>Adresă de email</value>
   </data>
   <data name="Email address is mandatory." xml:space="preserve">
-    <value>Email address is mandatory.</value>
+    <value>Adresa de e-mail este obligatorie.</value>
   </data>
   <data name="Filename" xml:space="preserve">
-    <value>Filename</value>
+    <value>Nume fișier</value>
   </data>
   <data name="Height" xml:space="preserve">
-    <value>Height</value>
+    <value>Înălțime</value>
   </data>
   <data name="Edit" xml:space="preserve">
-    <value>Edit</value>
+    <value>Editează</value>
   </data>
   <data name="Empty" xml:space="preserve">
     <value>Empty</value>
@@ -88,10 +88,10 @@
     <value>General</value>
   </data>
   <data name="General information" xml:space="preserve">
-    <value>General information</value>
+    <value>Informații generale</value>
   </data>
   <data name="History" xml:space="preserve">
-    <value>History</value>
+    <value>Istoric</value>
   </data>
   <data name="Internal id" xml:space="preserve">
     <value>Internal id</value>
