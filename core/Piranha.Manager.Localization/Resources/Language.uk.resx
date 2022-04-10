@@ -16,7 +16,7 @@
     <value>Зміна мови за замовчуванням вплине на спосіб поведінки програми та має бути налаштована під час початкового налаштування.</value>
   </data>
   <data name="RemoveLanguageConfirm" xml:space="preserve">
-    <value>This action &lt;strong>cannot&lt;/strong> be undone. This will permanently delete the language {{ currentDelete.title }} and all of its &lt;strong>translations&lt;/strong>. Any sites that have selected {{ currentDelete.title }} as their language will be assigned the default language.</value>
+    <value>Цю дію буде &lt;strong>неможливо&lt;/strong> скасувати. Це остаточно видалить мову {{ currentDelete.title }} і &lt;strong>всі переклади&lt;/strong>. Будь-які сайти з вибраною {{ currentDelete.title }} як їхня мова буде встановлена за замовчуванням.</value>
   </data>
   <data name="The language was successfully saved" xml:space="preserve">
     <value>Мова була успішно збережена</value>
