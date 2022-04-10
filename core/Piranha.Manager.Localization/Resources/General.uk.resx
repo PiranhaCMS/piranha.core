@@ -19,7 +19,7 @@
     <value>Додатково</value>
   </data>
   <data name="All" xml:space="preserve">
-    <value>Все</value>
+    <value>Всі</value>
   </data>
   <data name="An error occurred" xml:space="preserve">
     <value>Виникла помилка</value>
@@ -28,7 +28,7 @@
     <value>Скасувати</value>
   </data>
   <data name="Content" xml:space="preserve">
-    <value>Контент</value>
+    <value>Вміст</value>
   </data>
   <data name="Continue" xml:space="preserve">
     <value>Продовжити</value>
@@ -40,7 +40,7 @@
     <value>Копіювати</value>
   </data>
   <data name="Culture" xml:space="preserve">
-    <value>Культура</value>
+    <value>Мова</value>
   </data>
   <data name="Default" xml:space="preserve">
     <value>За замовчуванням</value>
@@ -67,10 +67,10 @@
     <value>Чернетки</value>
   </data>
   <data name="Email address" xml:space="preserve">
-    <value>Адреса електронної пошти</value>
+    <value>Email адреса</value>
   </data>
   <data name="Email address is mandatory." xml:space="preserve">
-    <value>Адреса електронної пошти є обов'язковою.</value>
+    <value>Email адреса є обов'язковою.</value>
   </data>
   <data name="Filename" xml:space="preserve">
     <value>Назва файлу</value>
@@ -106,10 +106,10 @@
     <value>Мови</value>
   </data>
   <data name="Login" xml:space="preserve">
-    <value>Логін</value>
+    <value>Увійти</value>
   </data>
   <data name="Logout" xml:space="preserve">
-    <value>Вихід</value>
+    <value>Вийти</value>
   </data>
   <data name="Looks like there's no items here. Click on the button above to get started!" xml:space="preserve">
     <value>Тут немає елементів. Натисніть на кнопку вище, щоб почати!</value>
