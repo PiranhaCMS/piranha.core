@@ -25,15 +25,15 @@
     <value>Назви хостів</value>
   </data>
   <data name="Logo" xml:space="preserve">
-    <value>Logo</value>
+    <value>Логотип</value>
   </data>
   <data name="If this should be the default site of the installation." xml:space="preserve">
-    <value>If this should be the default site of the installation.</value>
+    <value>Чи це має бути сайтом за замовчуванням.</value>
   </data>
   <data name="Please type in the name of the site to confirm." xml:space="preserve">
     <value>Будь ласка, введіть назву сайту для підтвердження.</value>
   </data>
   <data name="ConfirmDelete" xml:space="preserve">
-    <value>This action &lt;strong>cannot&lt;/strong> be undone. This will permanently delete the site {{ title }} and all of its &lt;strong>pages&lt;/strong>, &lt;strong>archives&lt;/strong> and &lt;strong>posts&lt;/strong>.</value>
+    <value>Цю дію буде &lt;strong>неможливо&lt;/strong> скасувати. Це остаточно видалить сайт {{ title }} та всі його &lt;strong>сторінки&lt;/strong> &lt;strong>архіви&lt;/strong> та &lt;strong>публікації&lt;/strong>.</value>
   </data>
 </root>
