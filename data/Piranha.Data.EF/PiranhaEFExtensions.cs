@@ -9,11 +9,18 @@
  */
 
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using Microsoft.EntityFrameworkCore.Migrations;
+using Microsoft.EntityFrameworkCore.Migrations.Internal;
 using Microsoft.Extensions.DependencyInjection;
 using Piranha;
 using Piranha.Repositories;
 using Piranha.Services;
 using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
 
 public static class PiranhaEFExtensions
 {
@@ -91,5 +98,29 @@ public static class PiranhaEFExtensions
         services.Add(new ServiceDescriptor(typeof(IDb), typeof(T), scope));
 
         return services;
+    }
+
+    /// <summary>
+    /// Adds a custom database schema that will be used by the database context being configured.
+    /// </summary>
+    /// <param name="builder">The database context options builder.</param>
+    /// <param name="schema">The database schema.</param>
+    /// <returns>A database context options builder.</returns>
+    /// <exception cref="ArgumentException">Throws when <paramref name="schema"/> is null or empty.</exception>
+    public static DbContextOptionsBuilder UseCustomDatabaseSchema(this DbContextOptionsBuilder builder, string schema)
+    {
+        var extension = builder.Options.FindExtension<PiranhaEFDatabaseSchemaExtension>();
+        if (extension == null)
+        {
+            extension = new PiranhaEFDatabaseSchemaExtension(schema);
+        }
+        else
+        {
+            extension.SetSchema(schema);
+        }
+
+        ((IDbContextOptionsBuilderInfrastructure)builder).AddOrUpdateExtension(extension);
+
+        return builder;
     }
 }
