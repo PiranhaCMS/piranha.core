@@ -38,7 +38,7 @@ namespace Piranha.Manager.Models
             }
 
             Id = page.Id;
-            Permalink = page.Permalink + "?draft=true";
+            Permalink = $"/?draft=true&preview=true&pageid={Id}";
 
             return Page();
         }

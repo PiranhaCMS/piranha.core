@@ -16,6 +16,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using Microsoft.Extensions.Primitives;
 using Microsoft.Net.Http.Headers;
 using Piranha.AspNetCore.Services;
 using Piranha.Models;
@@ -98,6 +99,16 @@ namespace Piranha.AspNetCore.Http
                             .ConfigureAwait(false);
                     }
                 }
+                PageBase page = null;
+
+                if (context.Request.Query.TryGetValue("preview", out StringValues host) &&
+    host.First().ToLower() == "true" &&
+    context.Request.Query.TryGetValue("pageid", out StringValues pageid) &&
+    Guid.TryParse(pageid.First(), out Guid previewPageId))
+                {
+                    page = await api.Pages.GetByIdAsync(previewPageId);
+                    site = await api.Sites.GetByIdAsync(page.SiteId);
+                }
 
                 // If we didn't find the site, get the default site
                 if (site == null)
@@ -169,10 +180,11 @@ namespace Piranha.AspNetCore.Http
                 //
                 // 4: Get the current page
                 //
-                PageBase page = null;
                 PageType pageType = null;
-
-                if (segments.Length > pos)
+                if (page != null)
+                {
+                }
+                else if (segments.Length > pos)
                 {
                     // Scan for the most unique slug
                     for (var n = segments.Length; n > pos; n--)
@@ -453,7 +465,8 @@ namespace Piranha.AspNetCore.Http
                         context.Request.QueryString =
                             new QueryString(context.Request.QueryString.Value + "&" + strQuery);
                     }
-                    else {
+                    else
+                    {
                         context.Request.QueryString =
                             new QueryString("?" + strQuery);
                     }
