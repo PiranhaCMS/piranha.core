@@ -8,9 +8,6 @@
  *
  */
 
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
 using Piranha.Models;
 
 namespace Piranha.Runtime

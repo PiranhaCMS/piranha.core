@@ -8,8 +8,6 @@
  *
  */
 
-using System;
-using System.Threading.Tasks;
 using Xunit;
 using Piranha.Models;
 

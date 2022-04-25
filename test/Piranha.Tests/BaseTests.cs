@@ -8,7 +8,6 @@
  *
  */
 
-using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Piranha.Data.EF.SQLite;

@@ -8,10 +8,6 @@
  *
  */
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-
 namespace Piranha.AspNetCore.Identity.Models
 {
     public class UserListModel

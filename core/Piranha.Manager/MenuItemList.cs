@@ -8,9 +8,6 @@
  *
  */
 
-using System.Collections.Generic;
-using System.Linq;
-
 namespace Piranha.Manager
 {
     public class MenuItemList : List<MenuItem>

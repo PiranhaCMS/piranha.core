@@ -8,7 +8,6 @@
  *
  */
 
-using System;
 using Piranha.Models;
 
 namespace Piranha.Extend

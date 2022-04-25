@@ -8,9 +8,6 @@
  *
  */
 
-using System;
-using System.Collections.Generic;
-
 namespace Piranha.Manager.Models
 {
     public class PostModalModel

@@ -8,7 +8,6 @@
  *
  */
 
-using System;
 using AutoMapper;
 using Piranha.Data.EF;
 

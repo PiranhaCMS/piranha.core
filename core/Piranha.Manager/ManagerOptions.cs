@@ -8,7 +8,6 @@
  *
  */
 
-using System;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Piranha.Manager

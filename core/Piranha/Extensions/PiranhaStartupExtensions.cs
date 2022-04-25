@@ -8,7 +8,6 @@
  *
  */
 
-using System;
 using Microsoft.Extensions.DependencyInjection;
 using Piranha;
 using Piranha.Services;

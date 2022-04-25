@@ -8,9 +8,6 @@
  *
  */
 
-using System;
-using System.Linq;
-
 namespace Piranha.Models
 {
     [Serializable]

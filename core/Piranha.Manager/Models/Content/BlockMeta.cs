@@ -8,8 +8,6 @@
  *
  */
 
-using Piranha.Models;
-
 namespace Piranha.Manager.Models.Content
 {
     /// <summary>

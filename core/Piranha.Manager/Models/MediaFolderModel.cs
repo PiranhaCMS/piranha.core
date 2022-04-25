@@ -8,8 +8,6 @@
  *
  */
 
-using System;
-
 namespace Piranha.Manager.Models
 {
     public class MediaFolderModel

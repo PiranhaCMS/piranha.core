@@ -8,10 +8,7 @@
  *
  */
 
-using System.Threading.Tasks;
 using Xunit;
-using Piranha.Repositories;
-using Piranha.Services;
 
 namespace Piranha.Tests
 {

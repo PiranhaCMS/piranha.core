@@ -8,8 +8,6 @@
  *
  */
 
-using System;
-
 namespace Piranha.Models
 {
     public interface ITypeModel

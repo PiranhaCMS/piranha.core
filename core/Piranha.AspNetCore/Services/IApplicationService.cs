@@ -8,8 +8,6 @@
  *
  */
 
-using System;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Piranha.AspNetCore.Helpers;
 using Piranha.Models;

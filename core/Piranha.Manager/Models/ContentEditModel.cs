@@ -8,8 +8,6 @@
  *
  */
 
-using System;
-using System.Collections.Generic;
 using Piranha.Extend.Fields;
 using Piranha.Models;
 

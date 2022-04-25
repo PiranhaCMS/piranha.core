@@ -11,8 +11,6 @@
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.Formats;
 using SixLabors.ImageSharp.Processing;
-using System;
-using System.IO;
 
 namespace Piranha.ImageSharp
 {

@@ -8,8 +8,6 @@
  *
  */
 
-using System;
-using System.Linq;
 using AutoMapper;
 using Piranha.Extend;
 

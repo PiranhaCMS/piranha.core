@@ -8,9 +8,6 @@
  *
  */
 
-using System.Collections.Generic;
-using System.Linq;
-
 namespace Piranha.Manager.Extend
 {
     public class ActionList<T> : List<T> where T : IAction

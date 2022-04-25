@@ -8,9 +8,6 @@
  *
  */
 
-using System;
-using Newtonsoft.Json;
-
 namespace Piranha.Data
 {
     /// <summary>

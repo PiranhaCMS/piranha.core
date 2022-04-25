@@ -8,7 +8,6 @@
  *
  */
 
-using System.IO;
 using Xunit;
 using Piranha.ImageSharp;
 

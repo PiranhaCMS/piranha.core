@@ -8,8 +8,6 @@
  *
  */
 
-using System;
-
 namespace Piranha.Extend.Fields
 {
     [FieldType(Name = "Date", Shorthand = "Date", Component = "date-field")]

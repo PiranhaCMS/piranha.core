@@ -8,8 +8,6 @@
  *
  */
 
-using System.Collections.Generic;
-
 namespace Piranha.Manager
 {
     /// <summary>

@@ -8,7 +8,6 @@
  *
  */
 
-using System;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Piranha;

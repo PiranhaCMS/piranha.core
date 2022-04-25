@@ -8,8 +8,6 @@
  *
  */
 
-using System;
-
 namespace Piranha.Manager.Extend
 {
     public class ModalAction : IAction

@@ -8,9 +8,6 @@
  *
  */
 
-using System;
-using System.Threading.Tasks;
-
 namespace Piranha.Extend.Fields
 {
     [FieldType(Name = "Page", Shorthand = "Page", Component = "page-field")]

@@ -8,7 +8,6 @@
  *
  */
 
-using System;
 using Xunit;
 
 namespace Piranha.Tests.Utils

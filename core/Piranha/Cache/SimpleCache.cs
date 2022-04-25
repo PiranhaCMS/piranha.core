@@ -9,7 +9,6 @@
  */
 
 using System.Collections.Concurrent;
-using System.Collections.Generic;
 
 namespace Piranha.Cache
 {

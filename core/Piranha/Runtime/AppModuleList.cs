@@ -9,7 +9,6 @@
  */
 
 using Piranha.Extend;
-using System;
 
 namespace Piranha.Runtime
 {

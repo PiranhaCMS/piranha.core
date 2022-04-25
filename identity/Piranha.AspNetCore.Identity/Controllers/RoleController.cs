@@ -8,8 +8,6 @@
  *
  */
 
-using System;
-using System.Linq;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Piranha.AspNetCore.Identity.Models;

@@ -8,7 +8,6 @@
  *
  */
 
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Options;
 using Piranha.AspNetCore.Security;

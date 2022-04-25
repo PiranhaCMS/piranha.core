@@ -11,8 +11,6 @@
 
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
-using Npgsql;
-using Npgsql.EntityFrameworkCore;
 
 
 namespace Piranha.Data.EF.PostgreSql

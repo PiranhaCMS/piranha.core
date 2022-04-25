@@ -8,9 +8,6 @@
  *
  */
 
-using System;
-using System.Threading.Tasks;
-
 namespace Piranha.Extend.Fields
 {
     [FieldType(Name = "Post", Shorthand = "Post", Component = "post-field")]

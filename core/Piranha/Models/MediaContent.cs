@@ -8,9 +8,6 @@
  *
  */
 
-using System;
-using System.IO;
-
 namespace Piranha.Models
 {
     /// <summary>

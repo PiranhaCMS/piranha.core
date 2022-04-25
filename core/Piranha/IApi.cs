@@ -8,7 +8,6 @@
  *
  */
 
-using System;
 using Piranha.Services;
 
 namespace Piranha

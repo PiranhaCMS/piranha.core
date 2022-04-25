@@ -8,8 +8,6 @@
  *
  */
 
-using System;
-using System.Linq;
 using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.DependencyInjection;
 using Piranha;

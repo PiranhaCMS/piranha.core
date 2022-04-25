@@ -8,11 +8,6 @@
  *
  */
 
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
 using Xunit;
 using Piranha.Data;
 using Piranha.Extend.Blocks;

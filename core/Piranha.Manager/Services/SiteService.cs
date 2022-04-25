@@ -8,13 +8,9 @@
  *
  */
 
-using System;
 using System.Collections;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Dynamic;
-using System.Linq;
-using System.Threading.Tasks;
 using Piranha.Extend;
 using Piranha.Extend.Fields;
 using Piranha.Models;

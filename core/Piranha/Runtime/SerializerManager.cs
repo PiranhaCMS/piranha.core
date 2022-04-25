@@ -9,8 +9,6 @@
  */
 
 using Piranha.Extend;
-using System;
-using System.Collections.Generic;
 
 namespace Piranha.Runtime
 {

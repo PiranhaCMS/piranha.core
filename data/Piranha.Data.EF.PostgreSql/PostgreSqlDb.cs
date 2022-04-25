@@ -8,7 +8,6 @@
  *
  */
 
-using System;
 using Microsoft.EntityFrameworkCore;
 
 namespace Piranha.Data.EF.PostgreSql

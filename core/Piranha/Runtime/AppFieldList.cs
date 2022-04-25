@@ -8,10 +8,8 @@
  *
  */
 
-using Piranha.Extend;
-using System.Linq;
 using System.Reflection;
-using System.Threading.Tasks;
+using Piranha.Extend;
 
 namespace Piranha.Runtime
 {

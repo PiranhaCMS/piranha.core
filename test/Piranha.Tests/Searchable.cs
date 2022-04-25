@@ -8,7 +8,6 @@
  *
  */
 
-using System.Collections.Generic;
 using System.Text;
 using Xunit;
 using Piranha.Extend;

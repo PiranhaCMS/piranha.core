@@ -8,8 +8,6 @@
  *
  */
 
-using System.Threading.Tasks;
-
 namespace Piranha.AspNetCore.Identity
 {
     /// <summary>

@@ -13,7 +13,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Piranha;
 using Piranha.Repositories;
 using Piranha.Services;
-using System;
 
 public static class PiranhaEFExtensions
 {

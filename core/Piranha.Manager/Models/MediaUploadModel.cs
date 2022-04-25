@@ -8,8 +8,6 @@
  *
  */
 
-using System;
-using System.Collections.Generic;
 using Microsoft.AspNetCore.Http;
 
 namespace Piranha.Manager.Models

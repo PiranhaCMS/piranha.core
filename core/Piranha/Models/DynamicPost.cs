@@ -8,7 +8,6 @@
  *
  */
 
-using System;
 using System.Dynamic;
 
 namespace Piranha.Models

@@ -8,7 +8,6 @@
  *
  */
 
-using System;
 using Azure.Core;
 using Microsoft.Extensions.DependencyInjection;
 using Piranha;

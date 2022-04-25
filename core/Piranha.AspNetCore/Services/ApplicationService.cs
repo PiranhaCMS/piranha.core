@@ -8,12 +8,9 @@
  *
  */
 
-using Microsoft.AspNetCore.Http;
-using System;
-using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
-using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 using Piranha.AspNetCore.Helpers;
 using Piranha.Models;
 

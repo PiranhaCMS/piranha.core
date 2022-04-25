@@ -8,10 +8,6 @@
  *
  */
 
-using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-
 namespace Piranha.Services
 {
     public interface IContentService<TContent, TField, TModelBase>

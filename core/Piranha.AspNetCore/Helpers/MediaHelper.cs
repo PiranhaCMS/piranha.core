@@ -8,7 +8,6 @@
  *
  */
 
-using System;
 using Piranha.Extend.Fields;
 using Piranha.Extend.Blocks;
 using Piranha.Models;

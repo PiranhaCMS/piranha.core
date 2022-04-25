@@ -8,7 +8,6 @@
  *
  */
 
-using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Piranha.Runtime

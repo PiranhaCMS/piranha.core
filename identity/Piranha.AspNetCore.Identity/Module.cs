@@ -8,7 +8,6 @@
  *
  */
 
-using System.Collections.Generic;
 using Piranha.Extend;
 using Piranha.Manager;
 using Piranha.Security;

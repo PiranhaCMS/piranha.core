@@ -8,7 +8,6 @@
  *
  */
 
-using System.Linq;
 using Piranha.Manager.Models;
 
 namespace Piranha.Manager.Services

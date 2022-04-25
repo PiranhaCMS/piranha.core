@@ -8,8 +8,6 @@
  *
  */
 
-using System.IO;
-
 namespace Piranha
 {
     /// <summary>

@@ -8,7 +8,6 @@
  *
  */
 
-using System;
 using System.ComponentModel.DataAnnotations;
 using Piranha.Extend.Fields;
 

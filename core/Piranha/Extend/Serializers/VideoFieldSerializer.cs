@@ -8,7 +8,6 @@
  *
  */
 
-using System;
 using Piranha.Extend.Fields;
 
 namespace Piranha.Extend.Serializers

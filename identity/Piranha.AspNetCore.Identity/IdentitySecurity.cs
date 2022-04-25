@@ -8,7 +8,6 @@
  *
  */
 
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Piranha.AspNetCore.Identity.Data;
 using Piranha.Manager.LocalAuth;

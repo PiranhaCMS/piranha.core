@@ -10,7 +10,6 @@
 
 using Piranha.Services;
 using Piranha.Repositories;
-using System;
 
 namespace Piranha
 {

@@ -8,8 +8,6 @@
  *
  */
 
-using Piranha.Extend.Fields;
-
 namespace Piranha.Extend.Blocks
 {
     /// <summary>

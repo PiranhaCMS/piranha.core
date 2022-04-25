@@ -9,7 +9,6 @@
  */
 
 using System.Security.Claims;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 
 namespace Piranha.Manager

@@ -8,7 +8,6 @@
  *
  */
 
-using System;
 using Piranha.Manager.Models;
 using Piranha.Models;
 

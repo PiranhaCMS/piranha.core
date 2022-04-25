@@ -8,7 +8,6 @@
  *
  */
 
-using System;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Piranha.Manager.Models;

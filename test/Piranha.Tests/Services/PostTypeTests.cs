@@ -8,8 +8,6 @@
  *
  */
 
-using System.Collections.Generic;
-using System.Threading.Tasks;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Caching.Distributed;
 using Xunit;

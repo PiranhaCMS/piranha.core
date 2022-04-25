@@ -8,14 +8,10 @@
  *
  */
 
+using System.Collections;
+using System.Reflection;
 using Piranha.Extend;
 using Piranha.Models;
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Reflection;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace Piranha.AttributeBuilder
 {

@@ -8,8 +8,6 @@
  *
  */
 
-using System;
-
 namespace Piranha.Extend.Serializers
 {
     public class IntegerFieldSerializer<T> : ISerializer where T : Fields.SimpleField<int?>

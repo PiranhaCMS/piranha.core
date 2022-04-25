@@ -8,7 +8,6 @@
  *
  */
 
-using System;
 using Microsoft.AspNetCore.Http;
 
 namespace Piranha.AspNetCore.Http
