@@ -2,7 +2,7 @@
  * Copyright (c) .NET Foundation and Contributors
  *
  * This software may be modified and distributed under the terms
- * of the MIT license.  See the LICENSE file for details.
+ * of the MIT license. See the LICENSE file for details.
  *
  * https://github.com/piranhacms/piranha.core
  *
@@ -178,7 +178,7 @@ namespace Piranha.Runtime
         /// Gets the hooks available for params.
         /// </summary>
         public ServiceHooks<Param> Param { get; } = new ServiceHooks<Param>();
-        
+
         /// <summary>
         /// Gets the hooks available for generic content.
         /// </summary>

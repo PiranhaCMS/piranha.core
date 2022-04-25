@@ -2,7 +2,7 @@
  * Copyright (c) .NET Foundation and Contributors
  *
  * This software may be modified and distributed under the terms
- * of the MIT license.  See the LICENSE file for details.
+ * of the MIT license. See the LICENSE file for details.
  *
  * https://github.com/piranhacms/piranha.core
  *
@@ -77,7 +77,7 @@ namespace Piranha.Azure
         /// <returns>The public url</returns>
         public string GetPublicUrl(Media media, string id)
         {
-            return media == null || string.IsNullOrWhiteSpace(id) ? null : 
+            return media == null || string.IsNullOrWhiteSpace(id) ? null :
                 $"{ _blobContainerClient.Uri.AbsoluteUri }/{ GetResourceName(media, id, true) }";
         }
 
@@ -101,8 +101,8 @@ namespace Piranha.Azure
         /// <returns>The public url</returns>
         public string GetResourceName(Media media, string filename, bool encode)
         {
-            return _naming == BlobStorageNaming.UniqueFileNames ? 
-                $"{ media.Id }-{ (encode ? System.Web.HttpUtility.UrlPathEncode(filename) : filename) }" : 
+            return _naming == BlobStorageNaming.UniqueFileNames ?
+                $"{ media.Id }-{ (encode ? System.Web.HttpUtility.UrlPathEncode(filename) : filename) }" :
                 $"{ media.Id }/{ (encode ? System.Web.HttpUtility.UrlPathEncode(filename) : filename) }";
         }
 

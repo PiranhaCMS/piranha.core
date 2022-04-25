@@ -2,7 +2,7 @@
  * Copyright (c) .NET Foundation and Contributors
  *
  * This software may be modified and distributed under the terms
- * of the MIT license.  See the LICENSE file for details.
+ * of the MIT license. See the LICENSE file for details.
  *
  * https://github.com/piranhacms/piranha.core
  *
@@ -33,7 +33,7 @@ public static class PiranhaSecurityExtensions
     /// <param name="builderOptions">The security builder options</param>
     /// <param name="securityOptions">The security options</param>
     /// <returns>The service builder</returns>
-    public static PiranhaServiceBuilder UseSecurity(this PiranhaServiceBuilder builder, 
+    public static PiranhaServiceBuilder UseSecurity(this PiranhaServiceBuilder builder,
         Action<SecurityBuilder> builderOptions, Action<SecurityOptions> securityOptions = null)
     {
         // Configure

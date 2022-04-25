@@ -2,7 +2,7 @@
  * Copyright (c) .NET Foundation and Contributors
  *
  * This software may be modified and distributed under the terms
- * of the MIT license.  See the LICENSE file for details.
+ * of the MIT license. See the LICENSE file for details.
  *
  * https://github.com/piranhacms/piranha.core
  *
@@ -81,7 +81,7 @@ namespace Piranha.Manager.Services
         /// <param name="structure">The complete media folder structure</param>
         /// <param name="folderId">The folder id</param>
         /// <returns></returns>
-        private async Task<List<MediaFolderSimple>> GetFolderBreadCrumbReversed(MediaStructure structure, Guid? folderId) 
+        private async Task<List<MediaFolderSimple>> GetFolderBreadCrumbReversed(MediaStructure structure, Guid? folderId)
         {
             var folders = new List<MediaFolderSimple>();
 
@@ -128,7 +128,7 @@ namespace Piranha.Manager.Services
             };
 
             model.CurrentFolderBreadcrumb = await GetFolderBreadCrumb(model.Structure, folderId);
-            
+
             model.RootCount = model.Structure.MediaCount;
             model.TotalCount = model.Structure.TotalCount;
 

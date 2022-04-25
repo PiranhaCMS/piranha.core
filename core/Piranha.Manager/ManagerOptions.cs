@@ -2,7 +2,7 @@
  * Copyright (c) .NET Foundation and Contributors
  *
  * This software may be modified and distributed under the terms
- * of the MIT license.  See the LICENSE file for details.
+ * of the MIT license. See the LICENSE file for details.
  *
  * https://github.com/piranhacms/piranha.core
  *
@@ -23,7 +23,7 @@ namespace Piranha.Manager
 
         /// <summary>
         /// Gets/sets the name of the header the manager will use to send back the
-        /// anti forgery information to the API. The default is "X-XSRF-TOKEN". 
+        /// anti forgery information to the API. The default is "X-XSRF-TOKEN".
         /// </summary>
         public string XsrfHeaderName { get; set; } = "X-XSRF-TOKEN";
 

@@ -2,7 +2,7 @@
  * Copyright (c) .NET Foundation and Contributors
  *
  * This software may be modified and distributed under the terms
- * of the MIT license.  See the LICENSE file for details.
+ * of the MIT license. See the LICENSE file for details.
  *
  * https://github.com/piranhacms/piranha.core
  *
@@ -45,16 +45,16 @@ public static class ManagerStartupExtensions
             .AddPiranhaManagerOptions(jsonOptions);
         serviceBuilder.Services.AddAntiforgery(o =>
         {
-            o.HeaderName = managerOptions.XsrfHeaderName; 
+            o.HeaderName = managerOptions.XsrfHeaderName;
         });
 
         // Add options
-        serviceBuilder.Services.Configure<ManagerOptions>(o => 
+        serviceBuilder.Services.Configure<ManagerOptions>(o =>
         {
             o.JsonOptions = managerOptions.JsonOptions;
             o.XsrfCookieName = managerOptions.XsrfCookieName;
             o.XsrfHeaderName = managerOptions.XsrfHeaderName;
-        }); 
+        });
         return serviceBuilder;
     }
 

@@ -2,7 +2,7 @@
  * Copyright (c) .NET Foundation and Contributors
  *
  * This software may be modified and distributed under the terms
- * of the MIT license.  See the LICENSE file for details.
+ * of the MIT license. See the LICENSE file for details.
  *
  * https://github.com/piranhacms/piranha.core
  *
@@ -644,7 +644,7 @@ namespace Piranha.AttributeBuilder
                         regionType.Fields.Add(fieldType.Item2);
                     // Then add the unsorted fields
                     foreach (var fieldType in sortedFields.Where(t => !t.Item1.HasValue))
-                        regionType.Fields.Add(fieldType.Item2);                    
+                        regionType.Fields.Add(fieldType.Item2);
 
                     // Skip regions without fields.
                     if (regionType.Fields.Count == 0)
