@@ -13,13 +13,13 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Add site" xml:space="preserve">
-    <value>Add site</value>
+    <value>إضافة موقع</value>
   </data>
   <data name="Are you really sure?" xml:space="preserve">
-    <value>Are you really sure?</value>
+    <value>هل أنت متأكد؟</value>
   </data>
   <data name="Edit site" xml:space="preserve">
-    <value>Edit site</value>
+    <value>تحرير الموقع</value>
   </data>
   <data name="Hostnames" xml:space="preserve">
     <value>Hostnames</value>
