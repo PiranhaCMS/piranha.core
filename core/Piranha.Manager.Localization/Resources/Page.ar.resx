@@ -43,7 +43,7 @@
     <value>فهرسة الصفحة بواسطة محركات البحث.</value>
   </data>
   <data name="If links from this page should be indexed." xml:space="preserve">
-    <value>If links from this page should be indexed.</value>
+    <value>فهرسة الروابط من هذه الصفحة.</value>
   </data>
   <data name="Meta title" xml:space="preserve">
     <value>Meta title</value>
@@ -94,12 +94,12 @@
     <value>هذه نسخة. من أجل تعديل محتوى الصفحة تحتاج أولاً إلى فصلها عن الأصل. إذا كنت ترغب في الاحتفاظ بالصفحة كنسخة فيجب عليك تعديل محتوى الصفحة الأصلية.</value>
   </data>
   <data name="Welcome to your new page. Click on the button above to add your first block of content!" xml:space="preserve">
-    <value>Welcome to your new page. Click on the button above to add your first block of content!</value>
+    <value>مرحبا بك في الصفحة الجديدة. انقر على الزر أعلاه لإضافة أول محتوى للصفحة!</value>
   </data>
   <data name="Your page title" xml:space="preserve">
-    <value>Your page title</value>
+    <value>عنوان الصفحة الخاصة بك</value>
   </data>
   <data name="If comments should be enabled for this page" xml:space="preserve">
-    <value>If comments should be enabled for this page</value>
+    <value>تمكين التعليقات لهذه الصفحة</value>
   </data>
 </root>
