@@ -14,42 +14,42 @@
   </resheader>
 
   <data name="Approved" xml:space="preserve">
-    <value>Approved</value>
+    <value>تمت الموافقة</value>
   </data>
   <data name="ApprovedSingle" xml:space="preserve">
-    <value>Approved</value>
+    <value>تمت الموافقة</value>
   </data>
   <data name="Pending" xml:space="preserve">
-    <value>Pending</value>
+    <value>في إنتظار المُراجعة</value>
   </data>
   <data name="Comment" xml:space="preserve">
-    <value>Comment</value>
+    <value>تعليق</value>
   </data>
   <data name="Response to" xml:space="preserve">
-    <value>Response to</value>
+    <value>الرد على</value>
   </data>
   <data name="The comment was successfully approved" xml:space="preserve">
-    <value>The comment was successfully approved</value>
+    <value>تمت الموافقة على التعليق بنجاح</value>
   </data>
   <data name="The comment was successfully unapproved" xml:space="preserve">
-    <value>The comment was successfully unapproved</value>
+    <value>تم رفض التعليق بنجاح</value>
   </data>
   <data name="The comment was successfully deleted" xml:space="preserve">
-    <value>The comment was successfully deleted</value>
+    <value>تم حذف التعليق بنجاح</value>
   </data>
   <data name="Days allowed for commenting" xml:space="preserve">
-    <value>Days allowed for commenting</value>
+    <value>الأيام المسموح بها للتعليق</value>
   </data>
   <data name="Comments are not allowed." xml:space="preserve">
-    <value>Comments are not allowed.</value>
+    <value>التعليقات غير مسموح بها.</value>
   </data>
   <data name="Comments are not allowed for unpublished content." xml:space="preserve">
-    <value>Comments are not allowed for unpublished content.</value>
+    <value>التعليقات غير مسموح بها للمحتوى غير المنشور.</value>
   </data>
   <data name="Comments are currently open." xml:space="preserve">
-    <value>Comments are currently open.</value>
+    <value>التعليقات مفتوحة حاليا.</value>
   </data>
   <data name="Comments were closed" xml:space="preserve">
-    <value>Comments were closed</value>
+    <value>تم إغلاق التعليقات</value>
   </data>
 </root>
