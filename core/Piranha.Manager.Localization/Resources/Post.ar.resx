@@ -13,13 +13,13 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Add or select existing category" xml:space="preserve">
-    <value>Add or select existing category</value>
+    <value>إضافة أو تحديد فئة موجودة</value>
   </data>
   <data name="Add or select existing tags (optional)" xml:space="preserve">
     <value>Add or select existing tags (optional)</value>
   </data>
   <data name="All categories" xml:space="preserve">
-    <value>All categories</value>
+    <value>جميع الفئات</value>
   </data>
   <data name="An error occured while deleting the post" xml:space="preserve">
     <value>An error occured while deleting the post</value>
