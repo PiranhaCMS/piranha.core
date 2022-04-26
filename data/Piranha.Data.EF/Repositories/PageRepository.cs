@@ -937,26 +937,6 @@ namespace Piranha.Repositories
                 model.CommentCount = await _db.PageComments.CountAsync(c => c.PageId == model.Id && c.IsApproved).ConfigureAwait(false);
             }
             model.CloseCommentsAfterDays = page.CloseCommentsAfterDays;
-
-            // Blocks
-            if (!(model is Models.IContentInfo))
-            {
-                if (page.Blocks.Count > 0)
-                {
-                    foreach (var pageBlock in page.Blocks.OrderBy(b => b.SortOrder))
-                    {
-                        if (pageBlock.Block.ParentId.HasValue)
-                        {
-                            var parent = page.Blocks.FirstOrDefault(b => b.BlockId == pageBlock.Block.ParentId.Value);
-                            if (parent != null)
-                            {
-                                pageBlock.Block.ParentId = parent.Block.Id;
-                            }
-                        }
-                    }
-                    model.Blocks = _contentService.TransformBlocks(page.Blocks.OrderBy(b => b.SortOrder).Select(b => b.Block));
-                }
-            }
         }
 
         /// <summary>

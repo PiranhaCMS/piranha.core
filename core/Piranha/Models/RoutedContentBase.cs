@@ -110,7 +110,7 @@ namespace Piranha.Models
         /// <summary>
         /// Gets/sets the available blocks.
         /// </summary>
-        public IList<Extend.Block> Blocks { get; set; } = new List<Extend.Block>();
+        public virtual IList<Extend.Block> Blocks { get; set; } = new List<Extend.Block>();
 
         /// <summary>
         /// Gets/sets if comments should be enabled.

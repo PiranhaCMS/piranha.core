@@ -27,6 +27,7 @@ namespace Piranha.Data
         /// This property is not used any more, but is kept for atm
         /// backwards compatible SQLite migrations.
         /// </summary>
+        [Obsolete("Remove")]
         public Guid? ParentId { get; set; }
 
         /// <summary>
@@ -38,6 +39,11 @@ namespace Piranha.Data
         /// Gets/sets the block id.
         /// </summary>
         public Guid BlockId { get; set; }
+
+        /// <summary>
+        /// Gets/sets the section id.
+        /// </summary>
+        public string SectionId { get; set; }
 
         /// <summary>
         /// Gets/sets the zero based sort index.

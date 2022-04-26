@@ -39,6 +39,7 @@ piranha.pageedit = new Vue({
         pendingCommentCount: 0,
         state: "new",
         blocks: [],
+        sections: [],
         regions: [],
         editors: [],
         useBlocks: true,
@@ -136,6 +137,7 @@ piranha.pageedit = new Vue({
             this.pendingCommentCount = model.pendingCommentCount;
             this.state = model.state;
             this.blocks = model.blocks;
+            this.sections = model.sections;
             this.regions = model.regions;
             this.editors = model.editors;
             this.useBlocks = model.useBlocks;
@@ -281,6 +283,7 @@ piranha.pageedit = new Vue({
                 closeCommentsAfterDays: self.closeCommentsAfterDays,
                 isCopy: self.isCopy,
                 blocks: JSON.parse(JSON.stringify(self.blocks)),
+                sections: JSON.parse(JSON.stringify(self.sections)),
                 regions: JSON.parse(JSON.stringify(self.regions)),
                 selectedRoute: self.selectedRoute,
                 selectedPermissions: self.selectedPermissions,
@@ -334,7 +337,7 @@ piranha.pageedit = new Vue({
 
                 piranha.notifications.push(result.status);
             })
-            .catch(function (error) { 
+            .catch(function (error) {
                 console.log("error:", error );
             });
         },
@@ -352,7 +355,7 @@ piranha.pageedit = new Vue({
 
                 piranha.notifications.push(result.status);
             })
-            .catch(function (error) { 
+            .catch(function (error) {
                 console.log("error:", error );
             });
         },

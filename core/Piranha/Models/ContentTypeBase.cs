@@ -44,16 +44,32 @@ namespace Piranha.Models
         /// <summary>
         /// Gets/sets the available regions.
         /// </summary>
-        public IList<ContentTypeRegion> Regions { get; set; } = new List<ContentTypeRegion>();
+        public IList<ContentTypeRegion> Regions { get; set; }
 
         /// <summary>
         /// Gets/sets the optional routes.
         /// </summary>
-        public IList<ContentTypeRoute> Routes { get; set; } = new List<ContentTypeRoute>();
+        public IList<ContentTypeRoute> Routes { get; set; }
+
+        /// <summary>
+        /// Gets/sets the available block sections.
+        /// </summary>
+        public IList<ContentTypeSection> Sections { get; set; }
 
         /// <summary>
         /// Gets/sets the optional custom editors.
         /// </summary>
-        public IList<ContentTypeEditor> CustomEditors { get; set; } = new List<ContentTypeEditor>();
+        public IList<ContentTypeEditor> CustomEditors { get; set; }
+
+        /// <summary>
+        /// Default constructor.
+        /// </summary>
+        public ContentTypeBase()
+        {
+            Regions = new List<ContentTypeRegion>();
+            Routes = new List<ContentTypeRoute>();
+            Sections = new List<ContentTypeSection>();
+            CustomEditors = new List<ContentTypeEditor>();
+        }
     }
 }

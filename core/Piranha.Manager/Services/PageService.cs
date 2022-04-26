@@ -688,6 +688,132 @@ namespace Piranha.Manager.Services
                 model.Regions.Add(region);
             }
 
+            foreach (var sectionType in type.Sections)
+            {
+                var section = new BlockSection
+                {
+                    Id = sectionType.Id,
+                    Title = sectionType.Title
+                };
+
+                if (page.Sections.ContainsKey(sectionType.Id))
+                {
+                    foreach (var block in page.Sections[sectionType.Id])
+                    {
+                        var blockType = App.Blocks.GetByType(block.Type);
+
+                        if (block is BlockGroup)
+                        {
+                            var group = new BlockGroupModel
+                            {
+                                Id = block.Id,
+                                Type = block.Type,
+                                Meta = new BlockMeta
+                                {
+                                    Name = blockType.Name,
+                                    Icon = blockType.Icon,
+                                    Component = blockType.Component,
+                                    Width = blockType.Width.ToString().ToLower(),
+                                    IsGroup = true,
+                                    IsReadonly = page.OriginalPageId.HasValue,
+                                    isCollapsed = config.ManagerDefaultCollapsedBlocks,
+                                    ShowHeader = !config.ManagerDefaultCollapsedBlockGroupHeaders
+                                }
+                            };
+
+                            group.Fields = ContentUtils.GetBlockFields(block);
+
+                            bool firstChild = true;
+                            foreach (var child in ((BlockGroup)block).Items)
+                            {
+                                blockType = App.Blocks.GetByType(child.Type);
+
+                                if (!blockType.IsGeneric)
+                                {
+                                    // Regular block item model
+                                    group.Items.Add(new BlockItemModel
+                                    {
+                                        IsActive = firstChild,
+                                        Model = child,
+                                        Meta = new BlockMeta
+                                        {
+                                            Name = blockType.Name,
+                                            Title = child.GetTitle(),
+                                            Icon = blockType.Icon,
+                                            Component = blockType.Component,
+                                            Width = blockType.Width.ToString().ToLower()
+                                        }
+                                    });
+                                }
+                                else
+                                {
+                                    // Generic block item model
+                                    group.Items.Add(new BlockGenericModel
+                                    {
+                                        Id = child.Id,
+                                        IsActive = firstChild,
+                                        Model = ContentUtils.GetBlockFields(child),
+                                        Type = child.Type,
+                                        Meta = new BlockMeta
+                                        {
+                                            Name = blockType.Name,
+                                            Title = child.GetTitle(),
+                                            Icon = blockType.Icon,
+                                            Component = blockType.Component,
+                                            Width = blockType.Width.ToString().ToLower()
+                                        }
+                                    });
+                                }
+                                firstChild = false;
+                            }
+                            section.Blocks.Add(group);
+                        }
+                        else
+                        {
+                            if (!blockType.IsGeneric)
+                            {
+                                // Regular block item model
+                                section.Blocks.Add(new BlockItemModel
+                                {
+                                    Model = block,
+                                    Meta = new BlockMeta
+                                    {
+                                        Name = blockType.Name,
+                                        Title = block.GetTitle(),
+                                        Icon = blockType.Icon,
+                                        Component = blockType.Component,
+                                        Width = blockType.Width.ToString().ToLower(),
+                                        IsReadonly = page.OriginalPageId.HasValue,
+                                        isCollapsed = config.ManagerDefaultCollapsedBlocks
+                                    }
+                                });
+                            }
+                            else
+                            {
+                                // Generic block item model
+                                section.Blocks.Add(new BlockGenericModel
+                                {
+                                    Id = block.Id,
+                                    Model = ContentUtils.GetBlockFields(block),
+                                    Type = block.Type,
+                                    Meta = new BlockMeta
+                                    {
+                                        Name = blockType.Name,
+                                        Title = block.GetTitle(),
+                                        Icon = blockType.Icon,
+                                        Component = blockType.Component,
+                                        Width = blockType.Width.ToString().ToLower(),
+                                        IsReadonly = page.OriginalPageId.HasValue,
+                                        isCollapsed = config.ManagerDefaultCollapsedBlocks
+                                    }
+                                });
+                            }
+                        }
+                    }
+                }
+                model.Sections.Add(section);
+            }
+
             foreach (var block in page.Blocks)
             {
                 var blockType = App.Blocks.GetByType(block.Type);

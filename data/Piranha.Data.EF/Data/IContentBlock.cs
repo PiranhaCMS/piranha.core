@@ -34,5 +34,10 @@ namespace Piranha.Data
         /// Gets/sets the block data.
         /// </summary>
         Block Block { get; set; }
+
+        /// <summary>
+        /// Gets/sets the section id.
+        /// </summary>
+        string SectionId { get; set; }
     }
 }

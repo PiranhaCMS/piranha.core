@@ -11,7 +11,7 @@
 namespace Piranha.Data
 {
     [Serializable]
-    public sealed class Page : RoutedContentBase<PageField>
+    public sealed class Page : RoutedContentBase<PageField>, IContentBlockModel
     {
         /// <summary>
         /// Gets/sets the page type id.
@@ -115,5 +115,13 @@ namespace Piranha.Data
         /// Gets/sets the optional page this page is a copy of
         /// </summary>
         public Guid? OriginalPageId { get; set; }
+
+        /// <summary>
+        /// Gets the available blocks.
+        /// </summary>
+        public IEnumerable<IContentBlock> GetBlocks()
+        {
+            return Blocks;
+        }
     }
 }

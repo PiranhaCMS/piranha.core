@@ -16,7 +16,7 @@ namespace Piranha.Models
     /// Dynamic content model.
     /// </summary>
     [Serializable]
-    public class DynamicContent : Content<DynamicContent>, IDynamicContent, ICategorizedContent, ITaggedContent, IBlockContent
+    public class DynamicContent : Content<DynamicContent>, IDynamicContent, IDynamicBlockContent, ICategorizedContent, ITaggedContent, IBlockContent
     {
         /// <summary>
         /// Gets/sets the regions.
@@ -37,5 +37,11 @@ namespace Piranha.Models
         /// Gets/sets the blocks.
         /// </summary>
         public IList<Extend.Block> Blocks { get; set; } = new List<Extend.Block>();
+
+        /// <summary>
+        /// Gets/sets the available block sections.
+        /// </summary>
+        public IDictionary<string, IList<Extend.Block>> Sections { get; set; } =
+            new Dictionary<string, IList<Extend.Block>>();
     }
 }

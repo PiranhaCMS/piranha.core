@@ -160,6 +160,59 @@ namespace Piranha.Services
                     }
                 }
 
+                //
+                // 7: Map blocks
+                //
+                if (type.Sections.Count > 0)
+                {
+                    if (content is IContentBlockModel contentBlockModel)
+                    {
+                        var blocks = contentBlockModel.GetBlocks();
+
+                        foreach (var section in type.Sections)
+                        {
+                            var sectionBlocks = blocks.Where(b => b.SectionId == section.Id);
+
+                            if (sectionBlocks.Any())
+                            {
+                                foreach (var block in sectionBlocks.OrderBy(b => b.SortOrder))
+                                {
+                                    if (block.Block.ParentId.HasValue)
+                                    {
+                                        var parent = sectionBlocks.FirstOrDefault(b => b.BlockId == block.Block.ParentId.Value);
+                                        if (parent != null)
+                                        {
+                                            block.Block.ParentId = parent.Block.Id;
+                                        }
+                                    }
+                                }
+
+                                if (model is IDynamicBlockContent dynamicBlockContent)
+                                {
+                                    dynamicBlockContent.Sections[section.Id] =
+                                        TransformBlocks(sectionBlocks.OrderBy(b => b.SortOrder).Select(b => b.Block));
+
+                                    // If this is the old default section, make sure we expose
+                                    // the blocks through the old block property.
+                                    if (section.Id == "Blocks")
+                                    {
+                                        dynamicBlockContent.Blocks = dynamicBlockContent.Sections[section.Id];
+                                    }
+                                }
+                                else
+                                {
+                                    var prop = model.GetType().GetProperty(section.Id, App.PropertyBindings);
+                                    if (prop != null)
+                                    {
+                                        prop.SetValue(model,
+                                            TransformBlocks(sectionBlocks.OrderBy(b => b.SortOrder).Select(b => b.Block)));
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+
                 if (process != null)
                 {
                     await process(content, model).ConfigureAwait(false);

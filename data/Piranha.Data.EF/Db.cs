@@ -274,6 +274,7 @@ namespace Piranha
 
             mb.Entity<Data.ContentBlock>().ToTable("Piranha_ContentBlocks");
             mb.Entity<Data.ContentBlock>().Property(b => b.CLRType).IsRequired().HasMaxLength(256);
+            mb.Entity<Data.ContentBlock>().Property(b => b.SectionId).IsRequired().HasMaxLength(64).HasDefaultValue("Blocks");
 
             mb.Entity<Data.ContentBlockField>().ToTable("Piranha_ContentBlockFields");
             mb.Entity<Data.ContentBlockField>().Property(f => f.FieldId).IsRequired().HasMaxLength(64);
@@ -349,6 +350,7 @@ namespace Piranha
 
             mb.Entity<Data.PageBlock>().ToTable("Piranha_PageBlocks");
             mb.Entity<Data.PageBlock>().HasIndex(b => new { b.PageId, b.SortOrder }).IsUnique();
+            mb.Entity<Data.PageBlock>().Property(b => b.SectionId).IsRequired().HasMaxLength(64).HasDefaultValue("Blocks");
 
             mb.Entity<Data.PageComment>().ToTable("Piranha_PageComments");
             mb.Entity<Data.PostComment>().Property(c => c.UserId).HasMaxLength(128);
@@ -396,6 +398,7 @@ namespace Piranha
 
             mb.Entity<Data.PostBlock>().ToTable("Piranha_PostBlocks");
             mb.Entity<Data.PostBlock>().HasIndex(b => new { b.PostId, b.SortOrder }).IsUnique();
+            mb.Entity<Data.PostBlock>().Property(b => b.SectionId).IsRequired().HasMaxLength(64).HasDefaultValue("Blocks");
 
             mb.Entity<Data.PostComment>().ToTable("Piranha_PostComments");
             mb.Entity<Data.PostComment>().Property(c => c.UserId).HasMaxLength(128);

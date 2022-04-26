@@ -111,6 +111,11 @@
                     <i class="fas fa-pen-alt"></i>@Localizer.General["Main content"]
                 </a>
             </li>
+            <li v-for="section in sections" class="nav-item">
+                <a class="nav-link" v-on:click.prevent="selectRegion({ uid: 'uid-section-' + section.id })" :class="{ active: selectedRegion.uid === 'uid-section-' + section.id }" href="#">
+                    <i class="fas fa-pen-alt"></i>{{ section.title }}
+                </a>
+            </li>
             <li v-for="editor in editors" class="nav-item">
                 <a class="nav-link" v-on:click.prevent="selectRegion(editor)" :class="{ active: selectedRegion.uid == editor.uid }" href="#">
                     <i :class="editor.icon"></i>{{ editor.name }}

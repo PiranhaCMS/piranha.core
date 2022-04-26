@@ -11,7 +11,7 @@
 namespace Piranha.Data
 {
     [Serializable]
-    public sealed class Post : RoutedContentBase<PostField>
+    public sealed class Post : RoutedContentBase<PostField>, IContentBlockModel
     {
         /// <summary>
         /// Gets/sets the post type id.
@@ -92,5 +92,13 @@ namespace Piranha.Data
         /// Gets/sets the available permissions.
         /// </summary>
         public IList<PostPermission> Permissions { get; set; } = new List<PostPermission>();
+
+        /// <summary>
+        /// Gets the available blocks.
+        /// </summary>
+        public IEnumerable<IContentBlock> GetBlocks()
+        {
+            return Blocks;
+        }
     }
 }

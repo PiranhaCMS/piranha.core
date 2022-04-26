@@ -46,6 +46,11 @@ namespace Piranha.Manager.Models.Content
         public IList<BlockModel> Blocks { get; set; } = new List<BlockModel>();
 
         /// <summary>
+        /// Gets/sets the available block sections.
+        /// </summary>
+        public IList<BlockSection> Sections = new List<BlockSection>();
+
+        /// <summary>
         /// Gets/sets the available regions.
         /// </summary>
         public IList<RegionModel> Regions { get; set; } = new List<RegionModel>();

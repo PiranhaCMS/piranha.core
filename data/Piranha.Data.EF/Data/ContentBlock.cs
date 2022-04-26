@@ -24,6 +24,11 @@ namespace Piranha.Data
         public Guid ContentId { get; set; }
 
         /// <summary>
+        /// Gets/sets the section id.
+        /// </summary>
+        public string SectionId { get; set; }
+
+        /// <summary>
         /// Gets/sets the zero based sort index.
         /// </summary>
         public int SortOrder { get; set; }

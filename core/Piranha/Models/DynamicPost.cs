@@ -16,11 +16,17 @@ namespace Piranha.Models
     /// Dynamic page model.
     /// </summary>
     [Serializable]
-    public class DynamicPost : Post<DynamicPost>, IDynamicContent
+    public class DynamicPost : Post<DynamicPost>, IDynamicContent, IDynamicBlockContent
     {
         /// <summary>
         /// Gets/sets the regions.
         /// </summary>
         public dynamic Regions { get; set; } = new ExpandoObject();
+
+        /// <summary>
+        /// Gets/sets the available block sections.
+        /// </summary>
+        public IDictionary<string, IList<Extend.Block>> Sections { get; set; } =
+            new Dictionary<string, IList<Extend.Block>>();
     }
 }
