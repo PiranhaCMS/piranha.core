@@ -19,6 +19,8 @@ namespace Piranha.Models
     [Serializable]
     public abstract class RoutedContentBase : ContentBase, IBlockContent, IMeta, ICommentModel
     {
+        private IList<Extend.Block> _blocks = new List<Extend.Block>();
+
         /// <summary>
         /// Gets/sets the unique slug.
         /// </summary>
@@ -110,7 +112,28 @@ namespace Piranha.Models
         /// <summary>
         /// Gets/sets the available blocks.
         /// </summary>
-        public virtual IList<Extend.Block> Blocks { get; set; } = new List<Extend.Block>();
+        public virtual IList<Extend.Block> Blocks
+        {
+            get
+            {
+                if (this is IDynamicBlockContent dynamicModel)
+                {
+                    return dynamicModel.Sections["Blocks"];
+                }
+                return _blocks;
+            }
+            set
+            {
+                if (this is IDynamicBlockContent dynamicModel)
+                {
+                    dynamicModel.Sections["Blocks"] = value;
+                }
+                else
+                {
+                    _blocks = value;
+                }
+            }
+        }
 
         /// <summary>
         /// Gets/sets if comments should be enabled.

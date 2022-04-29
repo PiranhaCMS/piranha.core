@@ -191,13 +191,6 @@ namespace Piranha.Services
                                 {
                                     dynamicBlockContent.Sections[section.Id] =
                                         TransformBlocks(sectionBlocks.OrderBy(b => b.SortOrder).Select(b => b.Block));
-
-                                    // If this is the old default section, make sure we expose
-                                    // the blocks through the old block property.
-                                    if (section.Id == "Blocks")
-                                    {
-                                        dynamicBlockContent.Blocks = dynamicBlockContent.Sections[section.Id];
-                                    }
                                 }
                                 else
                                 {
@@ -323,7 +316,35 @@ namespace Piranha.Services
                     }
                 }
             }
+
+            //
+            // 6: MapBlocks
+            //
+            foreach (var sectionType in type.Sections)
+            {
+                var blocks = GetSectionBlocks(model, sectionType.Id);
+            }
             return content;
+        }
+
+        private IList<Extend.Block> GetSectionBlocks(Models.ContentBase model, string key)
+        {
+            if (model is IDynamicBlockContent blockContent)
+            {
+                if (blockContent.Sections.ContainsKey(key))
+                {
+                    return blockContent.Sections[key];
+                }
+            }
+            else
+            {
+                var sectionProp = model.GetType().GetProperty(key, App.PropertyBindings);
+                if (sectionProp != null)
+                {
+                    return (IList<Extend.Block>)sectionProp.GetValue(model);
+                }
+            }
+            return null;
         }
 
         /// <summary>

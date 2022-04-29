@@ -349,7 +349,7 @@ namespace Piranha
             mb.Entity<Data.Page>().HasIndex(p => new { p.SiteId, p.Slug }).IsUnique();
 
             mb.Entity<Data.PageBlock>().ToTable("Piranha_PageBlocks");
-            mb.Entity<Data.PageBlock>().HasIndex(b => new { b.PageId, b.SortOrder }).IsUnique();
+            mb.Entity<Data.PageBlock>().HasIndex(b => new { b.PageId, b.SectionId, b.SortOrder }).IsUnique();
             mb.Entity<Data.PageBlock>().Property(b => b.SectionId).IsRequired().HasMaxLength(64).HasDefaultValue("Blocks");
 
             mb.Entity<Data.PageComment>().ToTable("Piranha_PageComments");
@@ -397,7 +397,7 @@ namespace Piranha
             mb.Entity<Data.Post>().HasIndex(p => new { p.BlogId, p.Slug }).IsUnique();
 
             mb.Entity<Data.PostBlock>().ToTable("Piranha_PostBlocks");
-            mb.Entity<Data.PostBlock>().HasIndex(b => new { b.PostId, b.SortOrder }).IsUnique();
+            mb.Entity<Data.PostBlock>().HasIndex(b => new { b.PostId, b.SectionId, b.SortOrder }).IsUnique();
             mb.Entity<Data.PostBlock>().Property(b => b.SectionId).IsRequired().HasMaxLength(64).HasDefaultValue("Blocks");
 
             mb.Entity<Data.PostComment>().ToTable("Piranha_PostComments");

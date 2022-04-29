@@ -145,6 +145,15 @@ namespace Piranha.Services
                         ((IDictionary<string, object>)((IDynamicContent)model).Regions).Add(regionType.Id, region);
                     }
                 }
+
+                if (model is IDynamicBlockContent blockModel)
+                {
+                    blockModel.Sections["Blocks"] = new List<Block>();
+                    foreach (var sectionType in type.Sections)
+                    {
+                        blockModel.Sections[sectionType.Id] = new List<Block>();
+                    }
+                }
                 return model;
             }
         }
@@ -198,6 +207,15 @@ namespace Piranha.Services
                     if (region != null)
                     {
                         modelType.SetPropertyValue(regionType.Id, model, region);
+                    }
+                }
+
+                foreach (var sectionType in type.Sections)
+                {
+                    var prop = modelType.GetProperty(sectionType.Id, App.PropertyBindings);
+                    if (prop != null)
+                    {
+                        prop.SetValue(model, new List<Block>());
                     }
                 }
                 return model;

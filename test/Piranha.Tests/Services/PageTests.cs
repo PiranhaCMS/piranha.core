@@ -122,6 +122,13 @@ namespace Piranha.Tests.Services
             public MyFourthField Body { get; set; }
         }
 
+        [PageType(Title = "My MultipleSectionPage")]
+        public class MyMultipleSectionsPage : Models.Page<MyMultipleSectionsPage>
+        {
+            [Section]
+            public IList<Block> Aside { get; set; }
+        }
+
         public override async Task InitializeAsync()
         {
             _services = CreateServiceCollection()
@@ -140,6 +147,7 @@ namespace Piranha.Tests.Services
                     .AddType(typeof(MyPage))
                     .AddType(typeof(MyCollectionPage))
                     .AddType(typeof(MyDIPage))
+                    .AddType(typeof(MyMultipleSectionsPage))
                     .Build();
 
                 var site = new Site
@@ -816,6 +824,102 @@ namespace Piranha.Tests.Services
                 {
                     await api.Pages.SaveAsync(page);
                 });
+            }
+        }
+
+        [Fact]
+        public async Task AddMultipleSections()
+        {
+            using (var api = CreateApi())
+            {
+                var page = await api.Pages.CreateAsync<MyMultipleSectionsPage>();
+
+                page.SiteId = SITE_ID;
+                page.Title = "Multiple sections";
+                page.Blocks.Add(new Extend.Blocks.TextBlock
+                {
+                    Body = "Main body"
+                });
+                page.Aside.Add(new Extend.Blocks.TextBlock
+                {
+                    Body = "Aside"
+                });
+                page.Published = DateTime.Now;
+
+                await api.Pages.SaveAsync(page);
+
+                page = await api.Pages.GetByIdAsync<MyMultipleSectionsPage>(page.Id);
+
+                Assert.NotNull(page);
+                Assert.NotEmpty(page.Blocks);
+                Assert.NotEmpty(page.Aside);
+                Assert.Equal("Main body", page.Blocks[0].GetTitle());
+                Assert.Equal("Aside", page.Aside[0].GetTitle());
+            }
+        }
+
+        [Fact]
+        public async Task CreateMultipleSections_SectionShouldNotBeNull()
+        {
+            using (var api = CreateApi())
+            {
+                var page = await api.Pages.CreateAsync<MyMultipleSectionsPage>();
+
+                Assert.NotNull(page.Aside);
+            }
+        }
+
+        [Fact]
+        public async Task AddMultipleSectionsDynamic()
+        {
+            using (var api = CreateApi())
+            {
+                var page = await api.Pages.CreateAsync<DynamicPage>("MyMultipleSectionsPage");
+
+                page.SiteId = SITE_ID;
+                page.Title = "Multiple sections";
+                page.Blocks.Add(new Extend.Blocks.TextBlock
+                {
+                    Body = "Main body"
+                });
+                page.Sections["Aside"].Add(new Extend.Blocks.TextBlock
+                {
+                    Body = "Aside"
+                });
+                page.Published = DateTime.Now;
+
+                await api.Pages.SaveAsync(page);
+
+                page = await api.Pages.GetByIdAsync(page.Id);
+
+                Assert.NotNull(page);
+                Assert.NotEmpty(page.Blocks);
+                Assert.NotEmpty(page.Sections["Blocks"]);
+                Assert.NotEmpty(page.Sections["Aside"]);
+                Assert.Equal("Main body", page.Blocks[0].GetTitle());
+                Assert.Equal("Aside", page.Sections["Aside"][0].GetTitle());
+            }
+        }
+
+        [Fact]
+        public async Task CreateMultipleSectionsDynamic_SectionShouldNotBeNull()
+        {
+            using (var api = CreateApi())
+            {
+                var page = await api.Pages.CreateAsync<DynamicPage>("MyMultipleSectionsPage");
+
+                Assert.NotNull(page.Sections["Aside"]);
+            }
+        }
+
+        [Fact]
+        public async Task CreateMultipleSectionsDynamic_DefaultSectionShouldNotBeNull()
+        {
+            using (var api = CreateApi())
+            {
+                var page = await api.Pages.CreateAsync<DynamicPage>("MyMultipleSectionsPage");
+
+                Assert.NotNull(page.Sections["Blocks"]);
             }
         }
 

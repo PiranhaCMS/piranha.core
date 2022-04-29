@@ -389,57 +389,66 @@ namespace Piranha.Manager.Services
                     }
 
                     // Save blocks
-                    page.Blocks.Clear();
-
-                    foreach (var block in model.Blocks)
+                    foreach (var section in model.Sections)
                     {
-                        if (block is BlockGroupModel blockGroup)
+                        if (!page.Sections.TryGetValue(section.Id, out var blocks))
                         {
-                            var groupType = App.Blocks.GetByType(blockGroup.Type);
+                            blocks = new List<Block>();
+                            page.Sections[section.Id] = blocks;
+                        }
 
-                            if (groupType != null)
+                        blocks.Clear();
+
+                        foreach (var block in section.Blocks)
+                        {
+                            if (block is BlockGroupModel blockGroup)
                             {
-                                var pageBlock = (BlockGroup)Activator.CreateInstance(groupType.Type);
+                                var groupType = App.Blocks.GetByType(blockGroup.Type);
 
-                                pageBlock.Id = blockGroup.Id;
-                                pageBlock.Type = blockGroup.Type;
-
-                                foreach (var field in blockGroup.Fields)
+                                if (groupType != null)
                                 {
-                                    var prop = pageBlock.GetType().GetProperty(field.Meta.Id, App.PropertyBindings);
-                                    prop.SetValue(pageBlock, field.Model);
-                                }
+                                    var pageBlock = (BlockGroup)Activator.CreateInstance(groupType.Type);
 
-                                foreach (var item in blockGroup.Items)
-                                {
-                                    if (item is BlockItemModel blockItem)
+                                    pageBlock.Id = blockGroup.Id;
+                                    pageBlock.Type = blockGroup.Type;
+
+                                    foreach (var field in blockGroup.Fields)
                                     {
-                                        pageBlock.Items.Add(blockItem.Model);
+                                        var prop = pageBlock.GetType().GetProperty(field.Meta.Id, App.PropertyBindings);
+                                        prop.SetValue(pageBlock, field.Model);
                                     }
-                                    else if (item is BlockGenericModel blockGeneric)
-                                    {
-                                        var transformed = ContentUtils.TransformGenericBlock(blockGeneric);
 
-                                        if (transformed != null)
+                                    foreach (var item in blockGroup.Items)
+                                    {
+                                        if (item is BlockItemModel blockItem)
                                         {
-                                            pageBlock.Items.Add(transformed);
+                                            pageBlock.Items.Add(blockItem.Model);
+                                        }
+                                        else if (item is BlockGenericModel blockGeneric)
+                                        {
+                                            var transformed = ContentUtils.TransformGenericBlock(blockGeneric);
+
+                                            if (transformed != null)
+                                            {
+                                                pageBlock.Items.Add(transformed);
+                                            }
                                         }
                                     }
+                                    blocks.Add(pageBlock);
                                 }
-                                page.Blocks.Add(pageBlock);
                             }
-                        }
-                        else if (block is BlockItemModel blockItem)
-                        {
-                            page.Blocks.Add(blockItem.Model);
-                        }
-                        else if (block is BlockGenericModel blockGeneric)
-                        {
-                            var transformed = ContentUtils.TransformGenericBlock(blockGeneric);
-
-                            if (transformed != null)
+                            else if (block is BlockItemModel blockItem)
                             {
-                                page.Blocks.Add(transformed);
+                                blocks.Add(blockItem.Model);
+                            }
+                            else if (block is BlockGenericModel blockGeneric)
+                            {
+                                var transformed = ContentUtils.TransformGenericBlock(blockGeneric);
+
+                                if (transformed != null)
+                                {
+                                    blocks.Add(transformed);
+                                }
                             }
                         }
                     }

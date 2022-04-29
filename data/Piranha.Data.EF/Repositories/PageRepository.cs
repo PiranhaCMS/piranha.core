@@ -758,108 +758,117 @@ namespace Piranha.Repositories
                 }
 
                 // Transform blocks
-                var blockModels = model.Blocks;
-
-                if (blockModels != null)
+                foreach (var sectionType in type.Sections)
                 {
-                    var blocks = _contentService.TransformBlocks(blockModels);
-                    var current = blocks.Select(b => b.Id).ToArray();
+                    var blockModels = GetSectionBlocks(model, sectionType.Id);
 
-                    // Delete removed blocks
-                    var removed = page.Blocks
-                        .Where(b => !current.Contains(b.BlockId) && !b.Block.IsReusable && b.Block.ParentId == null)
-                        .Select(b => b.Block);
-                    var removedItems = page.Blocks
-                        .Where(b => !current.Contains(b.BlockId) && b.Block.ParentId != null && removed.Select(p => p.Id).ToList().Contains(b.Block.ParentId.Value))
-                        .Select(b => b.Block);
-
-                    if (!isDraft)
+                    if (blockModels != null)
                     {
-                        _db.Blocks.RemoveRange(removed);
-                        _db.Blocks.RemoveRange(removedItems);
-                    }
+                        var blocks = _contentService.TransformBlocks(blockModels);
+                        var current = blocks.Select(b => b.Id).ToArray();
 
-                    // Delete the old page blocks
-                    page.Blocks.Clear();
-
-                    // Now map the new block
-                    for (var n = 0; n < blocks.Count; n++)
-                    {
-                        IQueryable<Block> blockQuery = _db.Blocks;
-                        if (isDraft)
-                        {
-                            blockQuery = blockQuery.AsNoTracking();
-                        }
-
-                        var block = await blockQuery
-                            .Include(b => b.Fields)
-                            .FirstOrDefaultAsync(b => b.Id == blocks[n].Id)
-                            .ConfigureAwait(false);
-
-                        if (block == null)
-                        {
-                            block = new Block
-                            {
-                                Id = blocks[n].Id != Guid.Empty ? blocks[n].Id : Guid.NewGuid(),
-                                Created = DateTime.Now
-                            };
-                            if (!isDraft)
-                            {
-                                await _db.Blocks.AddAsync(block).ConfigureAwait(false);
-                            }
-                        }
-                        block.ParentId = blocks[n].ParentId;
-                        block.CLRType = blocks[n].CLRType;
-                        block.IsReusable = blocks[n].IsReusable;
-                        block.Title = blocks[n].Title;
-                        block.LastModified = DateTime.Now;
-
-                        var currentFields = blocks[n].Fields.Select(f => f.FieldId).Distinct();
-                        var removedFields = block.Fields.Where(f => !currentFields.Contains(f.FieldId));
+                        // Delete removed blocks
+                        var removed = page.Blocks
+                            .Where(b => b.SectionId == sectionType.Id && !current.Contains(b.BlockId) && !b.Block.IsReusable && b.Block.ParentId == null)
+                            .Select(b => b.Block);
+                        var removedItems = page.Blocks
+                            .Where(b => b.SectionId == sectionType.Id && !current.Contains(b.BlockId) && b.Block.ParentId != null && removed.Select(p => p.Id).ToList().Contains(b.Block.ParentId.Value))
+                            .Select(b => b.Block);
 
                         if (!isDraft)
                         {
-                            _db.BlockFields.RemoveRange(removedFields);
+                            _db.Blocks.RemoveRange(removed);
+                            _db.Blocks.RemoveRange(removedItems);
                         }
 
-                        foreach (var newField in blocks[n].Fields)
+                        // Delete the old page blocks for this section
+                        foreach (var oldBlock in page.Blocks.Where(b => b.SectionId == sectionType.Id).ToArray())
                         {
-                            var field = block.Fields.FirstOrDefault(f => f.FieldId == newField.FieldId);
-                            if (field == null)
+                            page.Blocks.Remove(oldBlock);
+                        }
+
+                        // Now map the new block
+                        for (var n = 0; n < blocks.Count; n++)
+                        {
+                            IQueryable<Block> blockQuery = _db.Blocks;
+                            if (isDraft)
                             {
-                                field = new BlockField
+                                blockQuery = blockQuery.AsNoTracking();
+                            }
+
+                            var block = await blockQuery
+                                .Include(b => b.Fields)
+                                .FirstOrDefaultAsync(b => b.Id == blocks[n].Id)
+                                .ConfigureAwait(false);
+
+                            if (block == null)
+                            {
+                                block = new Block
                                 {
-                                    Id = newField.Id != Guid.Empty ? newField.Id : Guid.NewGuid(),
-                                    BlockId = block.Id,
-                                    FieldId = newField.FieldId
+                                    Id = blocks[n].Id != Guid.Empty ? blocks[n].Id : Guid.NewGuid(),
+                                    Created = DateTime.Now
                                 };
                                 if (!isDraft)
                                 {
-                                    await _db.BlockFields.AddAsync(field).ConfigureAwait(false);
+                                    await _db.Blocks.AddAsync(block).ConfigureAwait(false);
                                 }
-                                block.Fields.Add(field);
                             }
-                            field.SortOrder = newField.SortOrder;
-                            field.CLRType = newField.CLRType;
-                            field.Value = newField.Value;
-                        }
+                            block.ParentId = blocks[n].ParentId;
+                            block.CLRType = blocks[n].CLRType;
+                            block.IsReusable = blocks[n].IsReusable;
+                            block.Title = blocks[n].Title;
+                            block.LastModified = DateTime.Now;
 
-                        // Create the page block
-                        var pageBlock = new PageBlock
-                        {
-                            Id = Guid.NewGuid(),
-                            BlockId = block.Id,
-                            Block = block,
-                            PageId = page.Id,
-                            SortOrder = n
-                        };
-                        if (!isDraft)
-                        {
-                            await _db.PageBlocks.AddAsync(pageBlock).ConfigureAwait(false);
+                            var currentFields = blocks[n].Fields.Select(f => f.FieldId).Distinct();
+                            var removedFields = block.Fields.Where(f => !currentFields.Contains(f.FieldId));
+
+                            if (!isDraft)
+                            {
+                                _db.BlockFields.RemoveRange(removedFields);
+                            }
+
+                            foreach (var newField in blocks[n].Fields)
+                            {
+                                var field = block.Fields.FirstOrDefault(f => f.FieldId == newField.FieldId);
+                                if (field == null)
+                                {
+                                    field = new BlockField
+                                    {
+                                        Id = newField.Id != Guid.Empty ? newField.Id : Guid.NewGuid(),
+                                        BlockId = block.Id,
+                                        FieldId = newField.FieldId
+                                    };
+                                    if (!isDraft)
+                                    {
+                                        await _db.BlockFields.AddAsync(field).ConfigureAwait(false);
+                                    }
+                                    block.Fields.Add(field);
+                                }
+                                field.SortOrder = newField.SortOrder;
+                                field.CLRType = newField.CLRType;
+                                field.Value = newField.Value;
+                            }
+
+                            // Create the page block
+                            var pageBlock = new PageBlock
+                            {
+                                Id = Guid.NewGuid(),
+                                BlockId = block.Id,
+                                Block = block,
+                                PageId = page.Id,
+                                SectionId = sectionType.Id,
+                                SortOrder = n
+                            };
+                            if (!isDraft)
+                            {
+                                await _db.PageBlocks.AddAsync(pageBlock).ConfigureAwait(false);
+                            }
+                            page.Blocks.Add(pageBlock);
                         }
-                        page.Blocks.Add(pageBlock);
                     }
                 }
+
+                //var blockModels = model.Blocks;
                 if (!isDraft)
                 {
                     await _db.SaveChangesAsync().ConfigureAwait(false);
@@ -890,6 +899,27 @@ namespace Piranha.Repositories
             }
             return affected;
         }
+
+        private IList<Extend.Block> GetSectionBlocks(Models.PageBase page, string key)
+        {
+            if (page is Models.DynamicPage dynamicPage)
+            {
+                if (dynamicPage.Sections.ContainsKey(key))
+                {
+                    return dynamicPage.Sections[key];
+                }
+            }
+            else
+            {
+                var sectionProp = page.GetType().GetProperty(key, App.PropertyBindings);
+                if (sectionProp != null)
+                {
+                    return (IList<Extend.Block>)sectionProp.GetValue(page);
+                }
+            }
+            return null;
+        }
+
 
         /// <summary>
         /// Gets the base query for loading pages.

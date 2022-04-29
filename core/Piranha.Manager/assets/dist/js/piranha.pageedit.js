@@ -38,7 +38,7 @@ piranha.pageedit = new Vue({
         commentCount: null,
         pendingCommentCount: 0,
         state: "new",
-        blocks: [],
+        sections: [],
         regions: [],
         editors: [],
         useBlocks: true,
@@ -56,7 +56,7 @@ piranha.pageedit = new Vue({
         saving: false,
         savingDraft: false,
         selectedRegion: {
-            uid: "uid-blocks",
+            uid: "uid-section-0",
             name: null,
             icon: null,
         },
@@ -135,7 +135,7 @@ piranha.pageedit = new Vue({
             this.commentCount = model.commentCount;
             this.pendingCommentCount = model.pendingCommentCount;
             this.state = model.state;
-            this.blocks = model.blocks;
+            this.sections = model.sections;
             this.regions = model.regions;
             this.editors = model.editors;
             this.useBlocks = model.useBlocks;
@@ -162,7 +162,7 @@ piranha.pageedit = new Vue({
                 }
             } else {
                 this.selectedRegion = {
-                    uid: "uid-blocks",
+                    uid: "uid-section-0",
                     name: null,
                     icon: null,
                 };
@@ -280,7 +280,7 @@ piranha.pageedit = new Vue({
                 enableComments: self.enableComments,
                 closeCommentsAfterDays: self.closeCommentsAfterDays,
                 isCopy: self.isCopy,
-                blocks: JSON.parse(JSON.stringify(self.blocks)),
+                sections: JSON.parse(JSON.stringify(self.sections)),
                 regions: JSON.parse(JSON.stringify(self.regions)),
                 selectedRoute: self.selectedRoute,
                 selectedPermissions: self.selectedPermissions,
@@ -334,7 +334,7 @@ piranha.pageedit = new Vue({
 
                 piranha.notifications.push(result.status);
             })
-            .catch(function (error) { 
+            .catch(function (error) {
                 console.log("error:", error );
             });
         },
@@ -352,7 +352,7 @@ piranha.pageedit = new Vue({
 
                 piranha.notifications.push(result.status);
             })
-            .catch(function (error) { 
+            .catch(function (error) {
                 console.log("error:", error );
             });
         },
@@ -381,33 +381,37 @@ piranha.pageedit = new Vue({
                 }
             });
         },
-        addBlock: function (type, pos) {
+        addBlock: function (type, sectionIndex, itemIndex) {
+            var self = this;
+
             fetch(piranha.baseUrl + "manager/api/content/block/" + type)
                 .then(function (response) { return response.json(); })
                 .then(function (result) {
-                    piranha.pageedit.blocks.splice(pos, 0, result.body);
+                    self.sections[sectionIndex].blocks.splice(itemIndex, 0, result.body);
                 })
                 .catch(function (error) { console.log("error:", error );
             });
         },
-        moveBlock: function (from, to) {
-            this.blocks.splice(to, 0, this.blocks.splice(from, 1)[0])
+        moveBlock: function (sectionIndex, from, to) {
+            this.sections[sectionIndex].blocks.splice(to, 0, this.sections[sectionIndex].blocks.splice(from, 1)[0])
         },
         collapseBlock: function (block) {
             block.meta.isCollapsed = !block.meta.isCollapsed;
         },
-        removeBlock: function (block) {
-            var index = this.blocks.indexOf(block);
+        removeBlock: function (sectionIndex, block) {
+            var index = this.sections[sectionIndex].blocks.indexOf(block);
 
             if (index !== -1) {
-                this.blocks.splice(index, 1);
+                this.sections[sectionIndex].blocks.splice(index, 1);
             }
         },
         updateBlockTitle: function (e) {
-            for (var n = 0; n < this.blocks.length; n++) {
-                if (this.blocks[n].meta.uid === e.uid) {
-                    this.blocks[n].meta.title = e.title;
-                    break;
+            for (var i = 0; i < this.sections.length; i++) {
+                for (var n = 0; n < this.sections[i].blocks.length; n++) {
+                    if (this.sections[i].blocks[n].meta.uid === e.uid) {
+                        this.sections[i].blocks[n].meta.title = e.title;
+                        break;
+                    }
                 }
             }
         },
@@ -465,19 +469,24 @@ piranha.pageedit = new Vue({
     created: function () {
     },
     updated: function () {
-        if (this.loading)
-        {
-            sortable("#content-blocks", {
-                handle: ".handle",
-                items: ":not(.unsortable)"
-            })[0].addEventListener("sortupdate", function (e) {
-                piranha.pageedit.moveBlock(e.detail.origin.index, e.detail.destination.index);
-            });
+        if (this.loading) {
+            for (var n = 0; n < this.sections.length; n++) {
+                sortable("#content-blocks-" + n, {
+                    handle: ".handle",
+                    items: ":not(.unsortable)"
+                })[0].addEventListener("sortupdate", function (e) {
+                    var sectionIndex = $(e.detail.origin.container).data("index");
+                    piranha.pageedit.moveBlock(sectionIndex, e.detail.origin.index, e.detail.destination.index);
+                });
+            }
             piranha.editor.addInline('excerpt-body', 'excerpt-toolbar');
-        }
-        else {
-            sortable("#content-blocks", "disable");
-            sortable("#content-blocks", "enable");
+        } else {
+            for (var n = 0; n < this.sections.length; n++) {
+                var sectionIndex = n;
+
+                sortable("#content-blocks-" + sectionIndex, "disable");
+                sortable("#content-blocks-" + sectionIndex, "enable");
+            }
         }
 
         this.loading = false;

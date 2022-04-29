@@ -71,6 +71,8 @@ app.UsePiranha(options =>
     options.UseManager();
     options.UseTinyMCE();
     options.UseIdentity();
+
+    RazorWeb.Seed.RunAsync(options.Api).GetAwaiter().GetResult();
 });
 
 app.Run();

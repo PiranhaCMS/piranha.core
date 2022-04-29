@@ -8,6 +8,7 @@ piranha.blockpicker = new Vue({
         filter: "",
         categories: [],
         index: 0,
+        sectionIndex: 0,
         callback: null
     },
     computed: {
@@ -24,7 +25,7 @@ piranha.blockpicker = new Vue({
         }
     },
     methods: {
-        open: function (callback, index, parentType) {
+        open: function (callback, sectionIndex, itemIndex, parentType) {
             var self = this;
 
             var url = piranha.baseUrl + "manager/api/content/blocktypes";
@@ -44,23 +45,25 @@ piranha.blockpicker = new Vue({
                     if (result.typeCount > 1) {
                         // Several applicable block types, open modal
                         self.filter = "";
-                        self.index = index;
+                        self.sectionIndex = sectionIndex;
+                        self.index = itemIndex;
                         self.callback = callback;
                         self.categories = result.categories;
 
                         $("#blockpicker").modal("show");
                     } else {
                         // There's only one valid block type, select it
-                        callback(result.categories[0].items[0].type, index);
+                        callback(result.categories[0].items[0].type, sectionIndex, itemIndex);
                     }
                 })
                 .catch(function (error) { console.log("error:", error );
             });
         },
         select: function (item) {
-            this.callback(item.type, this.index);
+            this.callback(item.type, this.sectionIndex, this.index);
 
             this.index = 0;
+            this.sectionIndex = 0;
             this.callback = null;
 
             $("#blockpicker").modal("hide");
