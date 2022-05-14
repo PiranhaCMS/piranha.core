@@ -13,40 +13,40 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Add folder" xml:space="preserve">
-    <value>Add folder</value>
+    <value>Adăugare folder</value>
   </data>
   <data name="Drop files here or click to upload." xml:space="preserve">
-    <value>Drop files here or click to upload.</value>
+    <value>Trage fișiere aici sau apasă pentru a selecta.</value>
   </data>
   <data name="Download media" xml:space="preserve">
-    <value>Download media</value>
+    <value>Descarcă media</value>
   </data>
   <data name="Folder name" xml:space="preserve">
-    <value>Folder name</value>
+    <value>Nume folder</value>
   </data>
   <data name="Folder name is mandatory." xml:space="preserve">
-    <value>Folder name is mandatory.</value>
+    <value>Numele folderului este obligatoriu.</value>
   </data>
   <data name="Gallery" xml:space="preserve">
-    <value>Gallery</value>
+    <value>Galerie</value>
   </data>
   <data name="Media" xml:space="preserve">
     <value>Media</value>
   </data>
   <data name="Media preview is not available" xml:space="preserve">
-    <value>Media preview is not available</value>
+    <value>Previzualizarea media nu este disponibilă</value>
   </data>
   <data name="Open media in new tab" xml:space="preserve">
     <value>Open media in new tab</value>
   </data>
   <data name="Select media" xml:space="preserve">
-    <value>Select media</value>
+    <value>Selectați media</value>
   </data>
   <data name="Your browser does not support the video tag." xml:space="preserve">
-    <value>Your browser does not support the video tag.</value>
+    <value>Browser-ul dvs. nu suportă eticheta video.</value>
   </data>
   <data name="List" xml:space="preserve">
-    <value>List</value>
+    <value>Listă</value>
   </data>
   <data name="Preferred aspect" xml:space="preserve">
     <value>Preferred aspect</value>
@@ -58,7 +58,7 @@
     <value>Landscape</value>
   </data>
   <data name="Portrait" xml:space="preserve">
-    <value>Portrait</value>
+    <value>Orientare tip portret</value>
   </data>
   <data name="Widescreen" xml:space="preserve">
     <value>Widescreen</value>
@@ -67,24 +67,24 @@
     <value>Square</value>
   </data>
   <data name="Are you sure you want to delete selected media?" xml:space="preserve">
-    <value>Are you sure you want to delete selected media?</value>
+    <value>Sunteți sigur că doriți să ștergeți media-ul selectat?</value>
   </data>
   <data name="Delete selected items" xml:space="preserve">
-    <value>Delete selected items</value>
+    <value>Ștergeți articolele selectate</value>
   </data>
   <data name="Media file was successfully moved." xml:space="preserve">
-    <value>Media file was successfully moved.</value>
+    <value>Fișierul media a fost mutat cu succes.</value>
   </data>
   <data name="Media files was successfully moved." xml:space="preserve">
-    <value>Media files was successfully moved.</value>
+    <value>Fișierele media au fost mutate cu succes.</value>
   </data>
   <data name="The media file was not found." xml:space="preserve">
-    <value>The media file was not found.</value>
+    <value>Fişierul media nu a fost găsit.</value>
   </data>
   <data name="The media file was successfully deleted" xml:space="preserve">
-    <value>The media file was successfully deleted</value>
+    <value>Fișierul media a fost șters cu succes</value>
   </data>
   <data name="The media files was successfully deleted" xml:space="preserve">
-    <value>The media files was successfully deleted</value>
+    <value>Fișierele media au fost șterse cu succes</value>
   </data>
 </root>

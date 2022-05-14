@@ -2,16 +2,12 @@
  * Copyright (c) .NET Foundation and Contributors
  *
  * This software may be modified and distributed under the terms
- * of the MIT license.  See the LICENSE file for details.
+ * of the MIT license. See the LICENSE file for details.
  *
  * https://github.com/piranhacms/piranha.core
  *
  */
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Piranha.Data;
 using Piranha.Data.EF;
@@ -71,7 +67,6 @@ namespace Piranha.Repositories
                     Logo = site.LogoId.HasValue ? site.LogoId.Value : new ImageField(),
                     Hostnames = site.Hostnames,
                     IsDefault = site.IsDefault,
-                    Culture = site.Culture,
                     ContentLastModified = site.ContentLastModified,
                     Created = site.Created,
                     LastModified = site.LastModified
@@ -111,7 +106,6 @@ namespace Piranha.Repositories
                     Logo = site.LogoId.HasValue ? site.LogoId.Value : new ImageField(),
                     Hostnames = site.Hostnames,
                     IsDefault = site.IsDefault,
-                    Culture = site.Culture,
                     ContentLastModified = site.ContentLastModified,
                     Created = site.Created,
                     LastModified = site.LastModified
@@ -151,7 +145,6 @@ namespace Piranha.Repositories
                     Logo = site.LogoId.HasValue ? site.LogoId.Value : new ImageField(),
                     Hostnames = site.Hostnames,
                     IsDefault = site.IsDefault,
-                    Culture = site.Culture,
                     ContentLastModified = site.ContentLastModified,
                     Created = site.Created,
                     LastModified = site.LastModified
@@ -190,7 +183,6 @@ namespace Piranha.Repositories
                     Logo = site.LogoId.HasValue ? site.LogoId.Value : new ImageField(),
                     Hostnames = site.Hostnames,
                     IsDefault = site.IsDefault,
-                    Culture = site.Culture,
                     ContentLastModified = site.ContentLastModified,
                     Created = site.Created,
                     LastModified = site.LastModified
@@ -293,7 +285,6 @@ namespace Piranha.Repositories
             site.Description = model.Description;
             site.LogoId = model.Logo?.Id;
             site.Hostnames = model.Hostnames;
-            site.Culture = model.Culture;
             site.IsDefault = model.IsDefault;
             site.ContentLastModified = model.ContentLastModified;
             site.LastModified = DateTime.Now;

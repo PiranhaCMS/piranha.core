@@ -20,6 +20,7 @@ piranha.dropzone = new function () {
             previewsContainer: selector + " .media-list",
             previewTemplate: document.querySelector( "#media-upload-template").innerHTML,
             uploadMultiple: true,
+            timeout: piranha.xhrTimeout * 1000,
             init: function () {
                 var self = this;
 

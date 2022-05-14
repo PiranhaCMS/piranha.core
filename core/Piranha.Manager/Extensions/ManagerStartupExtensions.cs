@@ -2,13 +2,12 @@
  * Copyright (c) .NET Foundation and Contributors
  *
  * This software may be modified and distributed under the terms
- * of the MIT license.  See the LICENSE file for details.
+ * of the MIT license. See the LICENSE file for details.
  *
  * https://github.com/piranhacms/piranha.core
  *
  */
 
-using System;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
@@ -45,16 +44,16 @@ public static class ManagerStartupExtensions
             .AddPiranhaManagerOptions(jsonOptions);
         serviceBuilder.Services.AddAntiforgery(o =>
         {
-            o.HeaderName = managerOptions.XsrfHeaderName; 
+            o.HeaderName = managerOptions.XsrfHeaderName;
         });
 
         // Add options
-        serviceBuilder.Services.Configure<ManagerOptions>(o => 
+        serviceBuilder.Services.Configure<ManagerOptions>(o =>
         {
             o.JsonOptions = managerOptions.JsonOptions;
             o.XsrfCookieName = managerOptions.XsrfCookieName;
             o.XsrfHeaderName = managerOptions.XsrfHeaderName;
-        }); 
+        });
         return serviceBuilder;
     }
 
@@ -66,7 +65,8 @@ public static class ManagerStartupExtensions
     public static PiranhaApplicationBuilder UseManager(this PiranhaApplicationBuilder applicationBuilder)
     {
         applicationBuilder.Builder.UsePiranhaManager();
-        applicationBuilder.Builder.UseEndpoints(endpoints =>
+
+        applicationBuilder.UseEndpoints(endpoints =>
         {
             endpoints.MapControllerRoute(
                 name: "default",
@@ -74,7 +74,6 @@ public static class ManagerStartupExtensions
 
             endpoints.MapPiranhaManager();
         });
-
         return applicationBuilder;
     }
 }

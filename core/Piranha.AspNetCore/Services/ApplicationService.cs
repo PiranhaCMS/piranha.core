@@ -2,18 +2,15 @@
  * Copyright (c) .NET Foundation and Contributors
  *
  * This software may be modified and distributed under the terms
- * of the MIT license.  See the LICENSE file for details.
+ * of the MIT license. See the LICENSE file for details.
  *
  * https://github.com/piranhacms/piranha.core
  *
  */
 
-using Microsoft.AspNetCore.Http;
-using System;
-using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
-using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 using Piranha.AspNetCore.Helpers;
 using Piranha.Models;
 
@@ -122,9 +119,11 @@ namespace Piranha.AspNetCore.Services
                 // Store the current site id & get the sitemap
                 if (site != null)
                 {
+                    var language = await Api.Languages.GetByIdAsync(site.LanguageId);
+
                     Site.Id = site.Id;
                     Site.LanguageId = site.LanguageId;
-                    Site.Culture = site.Culture;
+                    Site.Culture = language?.Culture;
                     Site.Sitemap = await Api.Sites.GetSitemapAsync(Site.Id);
 
                     var siteHost = GetFirstHost(site);

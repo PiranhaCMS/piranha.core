@@ -13,7 +13,7 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Config" xml:space="preserve">
-    <value>Config</value>
+    <value>Configurare</value>
   </data>
   <data name="Hierarchical page slugs" xml:space="preserve">
     <value>Hierarchical page slugs</value>
@@ -87,10 +87,10 @@
     <value>Comments page size</value>
   </data>
   <data name="Enable page comments" xml:space="preserve">
-    <value>Enable page comments</value>
+    <value>Permite postarea de comentarii pe pagină</value>
   </data>
   <data name="Enable post comments" xml:space="preserve">
-    <value>Enable post comments</value>
+    <value>Permite adaugarea de comentarii pe postare</value>
   </data>
   <data name="Manager list size" xml:space="preserve">
     <value>Manager list size</value>

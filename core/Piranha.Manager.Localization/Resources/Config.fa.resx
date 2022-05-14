@@ -16,10 +16,10 @@
     <value>پیکربندی</value>
   </data>
   <data name="Hierarchical page slugs" xml:space="preserve">
-    <value>Hierarchical page slugs</value>
+    <value>slugs صفحه سلسله مراتبی</value>
   </data>
   <data name="If page slugs should include the parent slug." xml:space="preserve">
-    <value>If page slugs should include the parent slug.</value>
+    <value>اگر slug صفحه باید شامل slug والد باشد.</value>
   </data>
   <data name="Expanded levels in the sitemap" xml:space="preserve">
     <value>سطح گسترش یافته در نقشه سایت</value>
@@ -28,16 +28,16 @@
     <value>اندازه صفحه بایگانی</value>
   </data>
   <data name="Caching" xml:space="preserve">
-    <value>Caching</value>
+    <value>حافظه موقت</value>
   </data>
   <data name="Page cache expiration (minutes)" xml:space="preserve">
-    <value>Page cache expiration (minutes)</value>
+    <value>انقضای حافظه موقت صفحه (دقیقه)</value>
   </data>
   <data name="Page revisions" xml:space="preserve">
     <value>بازبینی صفحه</value>
   </data>
   <data name="Post cache expiration (minutes)" xml:space="preserve">
-    <value>Post cache expiration (minutes)</value>
+    <value>انقضای حافظه موقت نوشته (دقیقه)</value>
   </data>
   <data name="Post revisions" xml:space="preserve">
     <value>بازبینی صفحه</value>
@@ -47,44 +47,44 @@
   </data>
 
   <data name="If page slugs should take their parent slug into account when being generated. This is prefered for larger sitemaps." xml:space="preserve">
-    <value>If page slugs should take their parent slug into account when being generated. This is prefered for larger sitemaps.</value>
+    <value>در صورتی که اسلاگ های صفحه باید اسلاگ والدین خود را هنگام تولید در نظر بگیرند. این برای Sitemap بزرگتر ترجیح داده می شود.</value>
   </data>
   <data name="The default number of levels that should be expanded in the page sitemap. This is useful for smaller sitemaps." xml:space="preserve">
-    <value>The default number of levels that should be expanded in the page sitemap. This is useful for smaller sitemaps.</value>
+    <value>تعداد پیش فرض سطوحی که باید در نقشه سایت صفحه گسترش یابد. این برای نقشه های سایت کوچکتر مفید است.</value>
   </data>
   <data name="The default page size for archive pages. Please note that this this can be overridden for specific archives." xml:space="preserve">
-    <value>The default page size for archive pages. Please note that this this can be overridden for specific archives.</value>
+    <value>اندازه صفحه پیش فرض برای صفحات آرشیو. لطفاً توجه داشته باشید که این می تواند برای بایگانی های خاص لغو شود.</value>
   </data>
   <data name="The maximum number of page revisions that should be stored for each page. A value of 0 means no limitation." xml:space="preserve">
-    <value>The maximum number of page revisions that should be stored for each page. A value of 0 means no limitation.</value>
+    <value>حداکثر تعداد ویرایش های صفحه که باید برای هر صفحه ذخیره شود. مقدار 0 به معنای عدم محدودیت است.</value>
   </data>
   <data name="The maximum number of post revisions that should be stored for each post. A value of 0 means no limitation." xml:space="preserve">
-    <value>The maximum number of post revisions that should be stored for each post. A value of 0 means no limitation.</value>
+    <value>حداکثر تعداد بازبینی های پستی که باید برای هر پست ذخیره شود. مقدار 0 به معنای عدم محدودیت است.</value>
   </data>
   <data name="The time in minutes that web browsers can use pages before asking the server for new updates." xml:space="preserve">
-    <value>The time in minutes that web browsers can use pages before asking the server for new updates.</value>
+    <value>مدت زمانی که مرورگرهای وب می‌توانند از صفحات قبل از درخواست به‌روزرسانی‌های جدید از سرور استفاده کنند.</value>
   </data>
   <data name="The time in minutes that web browsers can use posts before asking the server for new updates." xml:space="preserve">
-    <value>The time in minutes that web browsers can use posts before asking the server for new updates.</value>
+    <value>مدت زمانی که مرورگرهای وب می‌توانند از پست‌ها قبل از درخواست به‌روزرسانی جدید از سرور استفاده کنند.</value>
   </data>
   <data name="The full URL (including any folder name) to the CDN used to serve uploaded media. Leave blank to use default storage URL." xml:space="preserve">
-    <value>The full URL (including any folder name) to the CDN used to serve uploaded media. Leave blank to use default storage URL.</value>
+    <value>URL کامل (شامل نام هر پوشه) CDN مورد استفاده برای ارائه رسانه آپلود شده. برای استفاده از URL ذخیره سازی پیش فرض، آن را خالی بگذارید.</value>
   </data>
 
   <data name="Approve comments" xml:space="preserve">
     <value>تأیید نظرات</value>
   </data>
   <data name="Close comments after" xml:space="preserve">
-    <value>Close comments after</value>
+    <value>بستن کامنت ها بعد از</value>
   </data>
   <data name="Collapse block headers" xml:space="preserve">
-    <value>Collapse block headers</value>
+    <value>بستن headers بلوک</value>
   </data>
   <data name="Collapse blocks" xml:space="preserve">
-    <value>Collapse blocks</value>
+    <value>بستن بلوک ها</value>
   </data>
   <data name="Comments page size" xml:space="preserve">
-    <value>Comments page size</value>
+    <value>اندازه صفحه نظرات</value>
   </data>
   <data name="Enable page comments" xml:space="preserve">
     <value>فعال بودن نظرات برای صفحه</value>
@@ -93,13 +93,13 @@
     <value>فعال بودن نظرات برای نوشته</value>
   </data>
   <data name="Manager list size" xml:space="preserve">
-    <value>Manager list size</value>
+    <value>مدیریت سایز لیست ها</value>
   </data>
   <data name="If block group headers should be collapsed by default when opening a page or post in the manager." xml:space="preserve">
-    <value>If block group headers should be collapsed by default when opening a page or post in the manager.</value>
+    <value>اگر هنگام باز کردن یک صفحه یا پست در مدیر باید سرصفحه‌های گروه بلوک به طور پیش‌فرض جمع شوند.</value>
   </data>
   <data name="If blocks should be collapsed by default when opening a page or post in the manager." xml:space="preserve">
-    <value>If blocks should be collapsed by default when opening a page or post in the manager.</value>
+    <value>اگر هنگام باز کردن یک صفحه یا پست در مدیر، بلوک ها باید به طور پیش فرض جمع شوند.</value>
   </data>
   <data name="If comments should be approved by default. Please note that this can be overridden by third party moderation services." xml:space="preserve">
     <value>اگر نظرات باید به طور پیش فرض تأیید شوند. لطفا توجه داشته باشید که ممکن است توسط سرویس‌های ثالث نادیده گرفته شود.</value>
@@ -111,12 +111,12 @@
     <value>اگر باید نظرات به صورت پیش فرض برای نوشته‌ها فعال باشد. لطفاً توجه داشته باشید که این مورد برای نوشته‌های خاص قابل لغو است.</value>
   </data>
   <data name="The default page size when loading comments. Please note that this this can be overridden for specific pages." xml:space="preserve">
-    <value>The default page size when loading comments. Please note that this this can be overridden for specific pages.</value>
+    <value>اندازه صفحه پیش فرض هنگام بارگیری نظرات. لطفاً توجه داشته باشید که این می تواند برای صفحات خاصی لغو شود.</value>
   </data>
   <data name="The number of days commenting should be open after publish date. A value of 0 means forever." xml:space="preserve">
-    <value>The number of days commenting should be open after publish date. A value of 0 means forever.</value>
+    <value>تعداد روزهای ارسال نظر باید پس از تاریخ انتشار باز باشد. مقدار 0 به معنای همیشه است.</value>
   </data>
   <data name="The page size for lists within the manager interface." xml:space="preserve">
-    <value>The page size for lists within the manager interface.</value>
+    <value>اندازه صفحه برای لیست ها در رابط مدیر.</value>
   </data>
 </root>

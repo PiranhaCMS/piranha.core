@@ -19,10 +19,10 @@
     <value>Сталася помилка під час видалення сторінки</value>
   </data>
   <data name="An error occured while saving the page" xml:space="preserve">
-    <value>An error occured while saving the page</value>
+    <value>Сталася помилка під час збереження сторінки</value>
   </data>
   <data name="Archive" xml:space="preserve">
-    <value>Archive</value>
+    <value>Архів</value>
   </data>
   <data name="Detach page" xml:space="preserve">
     <value>Від'єднати сторінку</value>
@@ -40,13 +40,13 @@
     <value>Чи має сторінка бути прихованою в карті сайту</value>
   </data>
   <data name="If the page should be indexed by search engines." xml:space="preserve">
-    <value>If the page should be indexed by search engines.</value>
+    <value>Чи повинна сторінка індексуватися у пошукових системах.</value>
   </data>
   <data name="If links from this page should be indexed." xml:space="preserve">
-    <value>If links from this page should be indexed.</value>
+    <value>Чи повинні посилання на цій сторінці індексуватися у пошукових системах.</value>
   </data>
   <data name="Meta title" xml:space="preserve">
-    <value>Meta title</value>
+    <value>Meta назва</value>
   </data>
   <data name="Meta keywords" xml:space="preserve">
     <value>Мета-ключові слова</value>
@@ -55,13 +55,13 @@
     <value>Мета-опис</value>
   </data>
   <data name="Og title" xml:space="preserve">
-    <value>Og title</value>
+    <value>Og назва</value>
   </data>
   <data name="Og image" xml:space="preserve">
-    <value>Og image</value>
+    <value>Og зображення</value>
   </data>
   <data name="Og description" xml:space="preserve">
-    <value>Og description</value>
+    <value>Og опис</value>
   </data>
   <data name="Navigation title" xml:space="preserve">
     <value>Заголовок навігації</value>
@@ -100,6 +100,6 @@
     <value>Заголовок вашої сторінки</value>
   </data>
   <data name="If comments should be enabled for this page" xml:space="preserve">
-    <value>If comments should be enabled for this page</value>
+    <value>Чи повинні коментарі бути увімкненні для цієї сторінки</value>
   </data>
 </root>

@@ -8,7 +8,7 @@
 }
 @section script
 {
-    <script src="~/manager/assets/js/piranha.comment.min.js"></script>
+    <script src="~/manager/assets/js/piranha.comment.min.js?v=@Piranha.Utils.GetAssemblyVersionHash(typeof(Piranha.Manager.Module).Assembly)"></script>
     <script>
         piranha.permissions.load(function () {
             piranha.comment.load("@RouteData.Values["id"]");

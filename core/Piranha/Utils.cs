@@ -2,21 +2,18 @@
  * Copyright (c) .NET Foundation and Contributors
  *
  * This software may be modified and distributed under the terms
- * of the MIT license.  See the LICENSE file for details.
+ * of the MIT license. See the LICENSE file for details.
  *
  * https://github.com/piranhacms/piranha.core
  *
  */
 
-using System;
 using System.Collections;
-using System.Collections.Generic;
 using System.Globalization;
 using System.Reflection;
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 using Newtonsoft.Json;
 using Piranha.Extend;
 using Piranha.Runtime;
@@ -236,6 +233,16 @@ namespace Piranha
             var version = assembly.GetName().Version;
 
             return $"{version.Major}.{version.Minor}.{version.Build}";
+        }
+
+        /// <summary>
+        /// Gets the hashed version string of the given assembly.
+        /// </summary>
+        /// <param name="assembly">The assembly</param>
+        /// <returns>The hashed version string</returns>
+        public static string GetAssemblyVersionHash(Assembly assembly)
+        {
+            return Math.Abs(GetAssemblyVersion(assembly).GetHashCode()).ToString();
         }
 
         /// <summary>

@@ -12,7 +12,7 @@
 {
     <script src="@Url.Content(Piranha.Manager.Editor.EditorScripts.MainScriptUrl)"></script>
     <script src="@Url.Content(Piranha.Manager.Editor.EditorScripts.EditorScriptUrl)"></script>
-    <script src="~/manager/assets/js/piranha.contentlist.min.js"></script>
+    <script src="~/manager/assets/js/piranha.contentlist.min.js?v=@Piranha.Utils.GetAssemblyVersionHash(typeof(Piranha.Manager.Module).Assembly)"></script>
 
     <script type="text/javascript">
         piranha.contentlist.load('@contentGroup');
@@ -21,8 +21,8 @@
 
 @section partials
 {
-   
-} 
+
+}
 
 <div id="contentlist">
     <div class="top">
@@ -60,7 +60,7 @@
             </thead>
             <tbody>
                 <tr v-for="item in items">
-                    <td>                        
+                    <td>
                         <a :href="piranha.baseUrl + 'manager/content/edit/' + item.typeId +  '/' + item.id">{{ item.title }}</a>
                     </td>
                     <td>

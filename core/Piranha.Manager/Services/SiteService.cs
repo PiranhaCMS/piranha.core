@@ -2,19 +2,15 @@
  * Copyright (c) .NET Foundation and Contributors
  *
  * This software may be modified and distributed under the terms
- * of the MIT license.  See the LICENSE file for details.
+ * of the MIT license. See the LICENSE file for details.
  *
  * https://github.com/piranhacms/piranha.core
  *
  */
 
-using System;
 using System.Collections;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Dynamic;
-using System.Linq;
-using System.Threading.Tasks;
 using Piranha.Extend;
 using Piranha.Extend.Fields;
 using Piranha.Models;
@@ -113,7 +109,6 @@ namespace Piranha.Manager.Services
             site.LanguageId = model.LanguageId;
             site.Title = model.Title;
             site.InternalId = model.InternalId;
-            site.Culture = model.Culture;
             site.Hostnames = model.Hostnames;
             site.Description = model.Description;
             site.Logo = model.Logo;
@@ -224,7 +219,6 @@ namespace Piranha.Manager.Services
                 LanguageId = site.LanguageId,
                 Title = site.Title,
                 InternalId = site.InternalId,
-                Culture = site.Culture,
                 Description = site.Description,
                 Logo = site.Logo,
                 Hostnames = site.Hostnames,

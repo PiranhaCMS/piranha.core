@@ -2,16 +2,12 @@
  * Copyright (c) .NET Foundation and Contributors
  *
  * This software may be modified and distributed under the terms
- * of the MIT license.  See the LICENSE file for details.
+ * of the MIT license. See the LICENSE file for details.
  *
  * https://github.com/piranhacms/piranha.core
  *
  */
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Piranha.Data;
 using Piranha.Data.EF;
@@ -81,7 +77,7 @@ namespace Piranha.Repositories
         /// </summary>
         /// <param name="ids">One or several media id</param>
         /// <returns>The matching media</returns>
-        public Task<IEnumerable<Models.Media>> GetById(params Guid[] ids) => 
+        public Task<IEnumerable<Models.Media>> GetById(params Guid[] ids) =>
             _db.Media.AsNoTracking()
                 .Include(c => c.Versions)
                 .Where(m => ids.Contains(m.Id))

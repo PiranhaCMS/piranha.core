@@ -2,13 +2,12 @@
  * Copyright (c) .NET Foundation and Contributors
  *
  * This software may be modified and distributed under the terms
- * of the MIT license.  See the LICENSE file for details.
+ * of the MIT license. See the LICENSE file for details.
  *
  * https://github.com/piranhacms/piranha.core
  *
  */
 
-using System;
 using Azure.Core;
 using Microsoft.Extensions.DependencyInjection;
 using Piranha;
@@ -22,7 +21,7 @@ public static class BlobStorageExtensions
     /// <param name="serviceBuilder">The service builder</param>
     /// <param name="credential">The token credential used to sign requests.</param>
     /// <param name="blobContainerUri">
-    /// A <see cref="Uri"/> referencing the blob service. 
+    /// A <see cref="Uri"/> referencing the blob service.
     /// This is likely to be similar to "https://{account_name}.blob.core.windows.net".
     /// </param>
     /// <param name="naming">How uploaded media files should be named</param>
@@ -39,7 +38,7 @@ public static class BlobStorageExtensions
 
         return serviceBuilder;
     }
-    
+
     /// <summary>
     /// Adds the Azure BlobStorage module.
     /// </summary>

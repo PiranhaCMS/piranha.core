@@ -2,13 +2,12 @@
  * Copyright (c) .NET Foundation and Contributors
  *
  * This software may be modified and distributed under the terms
- * of the MIT license.  See the LICENSE file for details.
+ * of the MIT license. See the LICENSE file for details.
  *
  * https://github.com/piranhacms/piranha.core
  *
  */
 
-using System;
 using Piranha.Models;
 using Piranha.Services;
 
@@ -42,6 +41,7 @@ namespace Piranha
         public static readonly string MANAGER_DEFAULT_COLLAPSED_BLOCKS = "ManagerDefaultCollapsedBlocks";
         public static readonly string MANAGER_DEFAULT_COLLAPSED_BLOCKGROUPHEADERS = "ManagerDefaultCollapsedBlockGroupHeaders";
         public static readonly string MANAGER_OUTLINED = "ManagerOutlined";
+        public static readonly string MANAGER_XHR_TIMEOUT = "ManagerXhrTimeout";
         public static readonly string PAGES_HIERARCHICAL_SLUGS = "HierarchicalPageSlugs";
         public static readonly string PAGE_REVISIONS = "PageRevisions";
         public static readonly string POST_REVISIONS = "PostRevisions";
@@ -412,6 +412,31 @@ namespace Piranha
                     param = new Param
                     {
                         Key = MANAGER_OUTLINED
+                    };
+                }
+                param.Value = value.ToString();
+                _service.SaveAsync(param).GetAwaiter().GetResult();
+            }
+        }
+
+        /// <summary>
+        /// Gets/sets the timeout for XHR requests in the manager interface in seconds. This is for
+        /// example used when uploading binary files to the manager. The default value is 30.
+        /// </summary>
+        public int ManagerXhrTimeout {
+            get {
+                var param = _service.GetByKeyAsync(MANAGER_XHR_TIMEOUT).GetAwaiter().GetResult();
+                if (param != null)
+                    return Convert.ToInt32(param.Value);
+                return 30;
+            }
+            set {
+                var param = _service.GetByKeyAsync(MANAGER_XHR_TIMEOUT).GetAwaiter().GetResult();
+                if (param == null)
+                {
+                    param = new Param
+                    {
+                        Key = MANAGER_XHR_TIMEOUT
                     };
                 }
                 param.Value = value.ToString();

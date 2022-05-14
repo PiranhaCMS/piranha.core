@@ -2,14 +2,12 @@
  * Copyright (c) .NET Foundation and Contributors
  *
  * This software may be modified and distributed under the terms
- * of the MIT license.  See the LICENSE file for details.
+ * of the MIT license. See the LICENSE file for details.
  *
  * https://github.com/piranhacms/piranha.core
  *
  */
 
-using System;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Piranha.Manager.Models;
@@ -58,7 +56,7 @@ namespace Piranha.Manager.Controllers
         [HttpPost]
         public async Task<IActionResult> Save(LanguageEditModel model)
         {
-            try 
+            try
             {
                 var result = await _service.Save(model);
 
@@ -68,7 +66,7 @@ namespace Piranha.Manager.Controllers
                     Body = _localizer.Language["The language was successfully saved"]
                 };
 
-                return Ok(result);                
+                return Ok(result);
             }
             catch (Exception e)
             {
@@ -77,8 +75,8 @@ namespace Piranha.Manager.Controllers
                 {
                     Type = StatusMessage.Error,
                     Body = e.Message
-                };   
-                return BadRequest(result);             
+                };
+                return BadRequest(result);
             }
         }
 
@@ -90,7 +88,7 @@ namespace Piranha.Manager.Controllers
         [HttpDelete]
         public async Task<IActionResult> Delete(Guid id)
         {
-            try 
+            try
             {
                 var result = await _service.Delete(id);
 
@@ -100,7 +98,7 @@ namespace Piranha.Manager.Controllers
                     Body = _localizer.Language["The language was successfully deleted"]
                 };
 
-                return Ok(result);              
+                return Ok(result);
             }
             catch (Exception e)
             {
@@ -109,8 +107,8 @@ namespace Piranha.Manager.Controllers
                 {
                     Type = StatusMessage.Error,
                     Body = e.Message
-                };   
-                return BadRequest(result);             
+                };
+                return BadRequest(result);
             }
         }
     }

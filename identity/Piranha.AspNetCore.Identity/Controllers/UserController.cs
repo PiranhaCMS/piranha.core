@@ -2,16 +2,12 @@
  * Copyright (c) .NET Foundation and Contributors
  *
  * This software may be modified and distributed under the terms
- * of the MIT license.  See the LICENSE file for details.
+ * of the MIT license. See the LICENSE file for details.
  *
  * https://github.com/piranhacms/piranha.core
  *
  */
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -218,19 +214,19 @@ namespace Piranha.AspNetCore.Identity.Controllers
             return NotFound(GetErrorMessage(_localizer.Security["The user could not be found."]));
         }
 
-        private AliasListModel GetSuccessMessage(string message)
+        private AsyncResult GetSuccessMessage(string message)
         {
             return GetMessage(message, StatusMessage.Success);
         }
 
-        private AliasListModel GetErrorMessage(string errorMessage)
+        private AsyncResult GetErrorMessage(string errorMessage)
         {
             return GetMessage(!string.IsNullOrWhiteSpace(errorMessage) ? errorMessage :  _localizer.General["An error occurred"], StatusMessage.Error);
         }
 
-        private AliasListModel GetMessage(string message, string type)
+        private AsyncResult GetMessage(string message, string type)
         {
-            var result = new AliasListModel();
+            var result = new AsyncResult();
             result.Status = new StatusMessage
             {
                 Type = type,
