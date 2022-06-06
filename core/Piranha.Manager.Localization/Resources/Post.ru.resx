@@ -55,10 +55,10 @@
     <value>Комментарии включены для этого поста</value>
   </data>
   <data name="If the post should be indexed by search engines." xml:space="preserve">
-    <value>If the post should be indexed by search engines.</value>
+    <value>Пост должен быть проиндексирован поисковыми системами.</value>
   </data>
   <data name="If links from this post should be indexed." xml:space="preserve">
-    <value>If links from this post should be indexed.</value>
+    <value>Ссылки из этого поста должны быть проиндексированы.</value>
   </data>
   <data name="The post was successfully deleted" xml:space="preserve">
     <value>Пост успешно удален</value>
