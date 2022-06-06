@@ -93,7 +93,7 @@
     <value>Включить комментарии для поста</value>
   </data>
   <data name="Manager list size" xml:space="preserve">
-    <value>Manager list size</value>
+    <value>Размер списка в менеджере</value>
   </data>
   <data name="If block group headers should be collapsed by default when opening a page or post in the manager." xml:space="preserve">
     <value>Группы блоков должны быть свернуты по умолчанию при открытии страницы или поста в редакторе.</value>
@@ -117,6 +117,6 @@
     <value>Количество дней после даты публикации, когда разрешено оставлять комментарии. Значение "0" означает навсегда.</value>
   </data>
   <data name="The page size for lists within the manager interface." xml:space="preserve">
-    <value>Размер страницы для списков в интерфейсе менеджера.</value>
+    <value>Количество страниц в списках в интерфейсе менеджера.</value>
   </data>
 </root>
