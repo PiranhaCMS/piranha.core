@@ -16,7 +16,7 @@
     <value>Добавить</value>
   </data>
   <data name="Advanced" xml:space="preserve">
-    <value>Advanced</value>
+    <value>Дополнительные</value>
   </data>
   <data name="All" xml:space="preserve">
     <value>Все</value>
@@ -190,7 +190,7 @@
     <value>SEO</value>
   </data>
   <data name="Sharing" xml:space="preserve">
-    <value>Sharing</value>
+    <value>Публикация</value>
   </data>
   <data name="Size" xml:space="preserve">
     <value>Размер</value>
