@@ -34,13 +34,13 @@
     <value>Срок действия кэша страниц (минут)</value>
   </data>
   <data name="Page revisions" xml:space="preserve">
-    <value>Версии страницы</value>
+    <value>История изменений страницы</value>
   </data>
   <data name="Post cache expiration (minutes)" xml:space="preserve">
     <value>Срок действия кеша постов (минут)</value>
   </data>
   <data name="Post revisions" xml:space="preserve">
-    <value>Версии постов</value>
+    <value>История изменений постов</value>
   </data>
   <data name="Media CDN" xml:space="preserve">
     <value>Медиа CDN</value>
@@ -56,10 +56,10 @@
     <value>Размер страницы по умолчанию для архивов. Обратите внимание, что это может быть переопределено для определенных архивов.</value>
   </data>
   <data name="The maximum number of page revisions that should be stored for each page. A value of 0 means no limitation." xml:space="preserve">
-    <value>Максимальное количество версий, которые должны быть сохранены, для каждой страницы. Значение 0 означает отсутствие ограничений.</value>
+    <value>Максимальное количество историй изменений, которые должны быть сохранены, для каждой страницы. Значение 0 означает отсутствие ограничений.</value>
   </data>
   <data name="The maximum number of post revisions that should be stored for each post. A value of 0 means no limitation." xml:space="preserve">
-    <value>Максимальное количество версий, которые должны быть сохранены, для каждого поста. Значение 0 означает отсутствие ограничений.</value>
+    <value>Максимальное количество историй изменений, которые должны быть сохранены, для каждого поста. Значение 0 означает отсутствие ограничений.</value>
   </data>
   <data name="The time in minutes that web browsers can use pages before asking the server for new updates." xml:space="preserve">
     <value>Время в минутах, в течение которого веб-браузеры могут использовать страницы, прежде чем запрашивать у сервера новые обновления.</value>
