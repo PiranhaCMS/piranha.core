@@ -52,6 +52,12 @@ namespace Piranha.Models
         public bool UseTags { get; set; }
 
         /// <summary>
+        /// Gets/sets the allowed block types. An empty collection means
+        /// that all types are allowed.
+        /// </summary>
+        public IList<string> BlockItemTypes { get; set; } = new List<string>();
+
+        /// <summary>
         /// Validates that the content type is correctly defined.
         /// </summary>
         public void Ensure()

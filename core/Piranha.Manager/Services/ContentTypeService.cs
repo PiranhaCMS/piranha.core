@@ -86,6 +86,32 @@ namespace Piranha.Manager.Services
         }
 
         /// <summary>
+        /// Gets the currently available block types for the
+        /// specified content type.
+        /// </summary>
+        /// <param name="contentType">The content type id</param>
+        /// <param name="parentType">The optional parent group type</param>
+        /// <returns>The block list model</returns>
+        public BlockListModel GetContentTypeBlockTypes(string contentType, string parentType = null)
+        {
+            var type = App.ContentTypes.GetById(contentType);
+            var model = GetBlockTypes(parentType);
+
+            if (type != null && type.BlockItemTypes.Count > 0)
+            {
+                // First remove all block types that are not allowed
+                foreach (var category in model.Categories)
+                {
+                    category.Items = category.Items.Where(i => type.BlockItemTypes.Contains(i.Type)).ToList();
+                }
+
+                // Secondly remove all empty categories
+                model.Categories = model.Categories.Where(c => c.Items.Count > 0).ToList();
+            }
+            return model;
+        }
+
+        /// <summary>
         /// Gets the currently available block types.
         /// </summary>
         /// <param name="parentType">The optional parent group type</param>
