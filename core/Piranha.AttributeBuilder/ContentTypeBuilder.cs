@@ -312,7 +312,7 @@ namespace Piranha.AttributeBuilder
                     throw new ArgumentException($"[{ type.Name }] Id and Title is mandatory for content types.");
                 }
 
-                return new ContentType
+                var contentType= new ContentType
                 {
                     Id = attr.Id,
                     CLRType = type.GetTypeInfo().AssemblyQualifiedName,
@@ -326,6 +326,14 @@ namespace Piranha.AttributeBuilder
                     CustomEditors = GetEditors(type),
                     Regions = GetRegions(type)
                 };
+                // Add block types
+                var blockTypes = type.GetCustomAttributes<BlockItemTypeAttribute>();
+                foreach (var blockType in blockTypes)
+                {
+                    contentType.BlockItemTypes.Add(blockType.Type.FullName);
+                }
+
+                return contentType;
             }
             return null;
         }

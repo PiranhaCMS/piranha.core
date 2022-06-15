@@ -69,6 +69,20 @@ namespace Piranha.Manager.Controllers
         }
 
         /// <summary>
+        /// Gets the currently available block types for the
+        /// specified content type.
+        /// </summary>
+        /// <param name="contentType">The content type id</param>
+        /// <param name="parentType">The optional parent group type</param>
+        /// <returns>The block list model</returns>
+        [Route("blocktypes/content/{contentType}/{parentType?}")]
+        [HttpGet]
+        public BlockListModel GetBlockTypesForContentType(string contentType, string parentType = null)
+        {
+            return _contentType.GetContentTypeBlockTypes(contentType, parentType);
+        }
+
+        /// <summary>
         /// Gets the currently available block types.
         /// </summary>
         /// <param name="parentType">The optional parent group type</param>

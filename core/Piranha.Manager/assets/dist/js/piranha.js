@@ -429,13 +429,14 @@ piranha.blockpicker = new Vue({
 
             var url = piranha.baseUrl + "manager/api/content/blocktypes";
 
-            if (piranha.pageedit)
-            {
+            if (piranha.pageedit) {
                 url += "/page/" + piranha.pageedit.typeId;
             }
-            else if (piranha.postedit)
-            {
+            else if (piranha.postedit) {
                 url += "/post/" + piranha.postedit.typeId;
+            }
+            else if (piranha.contentedit) {
+                url += "/content/" + piranha.contentedit.typeId;
             }
 
             fetch(url + (parentType != null ? "/" + parentType : ""))
