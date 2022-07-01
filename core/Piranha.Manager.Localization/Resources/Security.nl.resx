@@ -52,4 +52,11 @@
   <data name="Confirm password" xml:space="preserve">
     <value>Confirm password</value>
   </data>
+
+  <data name="The role could not be found." xml:space="preserve">
+    <value>The role could not be found.</value>
+  </data>
+  <data name="The role has been deleted." xml:space="preserve">
+    <value>The role has been deleted.</value>
+  </data>
 </root>
