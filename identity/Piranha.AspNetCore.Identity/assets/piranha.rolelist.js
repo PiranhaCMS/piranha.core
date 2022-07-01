@@ -22,7 +22,13 @@ piranha.rolelist = new Vue({
 
                         self.loading = false;
                     })
-                    .catch(function (error) { console.log("error:", error); });
+                    .catch(function (error) {
+                        piranha.notifications.push({
+                            body: error,
+                            type: "danger",
+                            hide: true
+                        });
+                    });
             });
         },
         remove: function (role) {
@@ -56,8 +62,6 @@ piranha.rolelist = new Vue({
                             self.load();
                         })
                         .catch(function (error) {
-                            console.log("error:", error);
-
                             piranha.notifications.push({
                                 body: error,
                                 type: "danger",
