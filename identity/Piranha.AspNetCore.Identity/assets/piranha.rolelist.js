@@ -9,10 +9,10 @@ piranha.rolelist = new Vue({
         roles: []
     },
     methods: {
-        bind: function (result) {
+        bind(result) {
             this.roles = result.roles;
         },
-        load: function () {
+        load() {
             var self = this;
             piranha.permissions.load(function () {
                 fetch(piranha.baseUrl + "manager/roles/list")
@@ -31,10 +31,10 @@ piranha.rolelist = new Vue({
                     });
             });
         },
-        remove: function (role) {
-            var self = this;
-            var roleInfo = "";
-            
+        remove(role) {
+            const self = this;
+            let roleInfo = "";
+
             if (role) {
                 if (role.name && role.name.length > 0) {
                     roleInfo += ' <br/>"' + role.name + '"';
@@ -50,7 +50,7 @@ piranha.rolelist = new Vue({
                 confirmCss: "btn-danger",
                 confirmIcon: "fas fa-trash",
                 confirmText: piranha.resources.texts.delete,
-                onConfirm: function () {
+                onConfirm() {
                     fetch(piranha.baseUrl + "manager/role/delete/" + role.id, {
                         method: "delete",
                         headers: piranha.utils.antiForgeryHeaders()
