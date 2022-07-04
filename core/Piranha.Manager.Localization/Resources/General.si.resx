@@ -13,19 +13,19 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Add" xml:space="preserve">
-    <value>එකතු</value>
+    <value>එකතු කරන්න</value>
   </data>
   <data name="Advanced" xml:space="preserve">
-    <value>වැඩිදුර</value>
+    <value>තව දුරටත්</value>
   </data>
   <data name="All" xml:space="preserve">
     <value>සියල්ල</value>
   </data>
   <data name="An error occurred" xml:space="preserve">
-    <value>An error occurred</value>
+    <value>දෝෂයක් සිදු විය</value>
   </data>
   <data name="Cancel" xml:space="preserve">
-    <value>අවලංගු</value>
+    <value>වගේ</value>
   </data>
   <data name="Content" xml:space="preserve">
     <value>අන්තර්ගතය</value>
@@ -40,37 +40,37 @@
     <value>පිටපත්</value>
   </data>
   <data name="Culture" xml:space="preserve">
-    <value>Culture</value>
+    <value>සංස්කෘතිය</value>
   </data>
   <data name="Default" xml:space="preserve">
     <value>පෙරනිමි</value>
   </data>
   <data name="Delete" xml:space="preserve">
-    <value>Delete</value>
+    <value>මකන්න</value>
   </data>
   <data name="Description" xml:space="preserve">
-    <value>Description</value>
+    <value>විස්තර</value>
   </data>
   <data name="Details" xml:space="preserve">
     <value>විස්තර</value>
   </data>
   <data name="Dimensions" xml:space="preserve">
-    <value>Dimensions</value>
+    <value>මාන</value>
   </data>
   <data name="Download" xml:space="preserve">
     <value>බාගන්න</value>
   </data>
   <data name="Draft" xml:space="preserve">
-    <value>Draft</value>
+    <value>කෙටුම්පත</value>
   </data>
   <data name="Drafts" xml:space="preserve">
-    <value>Drafts</value>
+    <value>කෙටුම්පත්</value>
   </data>
   <data name="Email address" xml:space="preserve">
     <value>වි-තැපැල් ලිපිනය</value>
   </data>
   <data name="Email address is mandatory." xml:space="preserve">
-    <value>Email address is mandatory.</value>
+    <value>ඊමේල් ලිපිනය අනිවාර්ය වේ.</value>
   </data>
   <data name="Filename" xml:space="preserve">
     <value>ගොනුවේ නම</value>
@@ -82,13 +82,13 @@
     <value>සංස්කරණය</value>
   </data>
   <data name="Empty" xml:space="preserve">
-    <value>Empty</value>
+    <value>හිස්</value>
   </data>
   <data name="General" xml:space="preserve">
-    <value>General</value>
+    <value>ජනරාල්</value>
   </data>
   <data name="General information" xml:space="preserve">
-    <value>General information</value>
+    <value>සාමාන්ය තොරතුරු</value>
   </data>
   <data name="History" xml:space="preserve">
     <value>ඉතිහාසය</value>
@@ -97,7 +97,7 @@
     <value>අභ්‍යන්තර හැඳු.</value>
   </data>
   <data name="Is default" xml:space="preserve">
-    <value>Is default</value>
+    <value>පෙරනිමි වේ</value>
   </data>
   <data name="Language" xml:space="preserve">
     <value>භාෂාව</value>
@@ -106,82 +106,82 @@
     <value>භාෂා</value>
   </data>
   <data name="Login" xml:space="preserve">
-    <value>Login</value>
+    <value>ඇතුල් වන්න</value>
   </data>
   <data name="Logout" xml:space="preserve">
-    <value>Logout</value>
+    <value>පිටවීම</value>
   </data>
   <data name="Looks like there's no items here. Click on the button above to get started!" xml:space="preserve">
-    <value>Looks like there's no items here. Click on the button above to get started!</value>
+    <value>මෙහි අයිතම කිසිවක් නොමැති බව පෙනේ. ආරම්භ කිරීමට ඉහත බොත්තම මත ක්ලික් කරන්න!</value>
   </data>
   <data name="Looks like there's no items here. Click on the button below to get started!" xml:space="preserve">
-    <value>Looks like there's no items here. Click on the button below to get started!</value>
+    <value>මෙහි අයිතම කිසිවක් නොමැති බව පෙනේ. ආරම්භ කිරීමට පහත බොත්තම ක්ලික් කරන්න!</value>
   </data>
   <data name="Looks like there's no items here. Click on the button to the left to get started!" xml:space="preserve">
-    <value>Looks like there's no items here. Click on the button to the left to get started!</value>
+    <value>මෙහි අයිතම කිසිවක් නොමැති බව පෙනේ. ආරම්භ කිරීමට වම් පස ඇති බොත්තම මත ක්ලික් කරන්න!</value>
   </data>
   <data name="Main content" xml:space="preserve">
-    <value>Main content</value>
+    <value>ප්රධාන අන්තර්ගතය</value>
   </data>
   <data name="Modified" xml:space="preserve">
-    <value>Modified</value>
+    <value>වෙනස් කර ඇත</value>
   </data>
   <data name="Name" xml:space="preserve">
     <value>නම</value>
   </data>
   <data name="Name is mandatory." xml:space="preserve">
-    <value>Name is mandatory.</value>
+    <value>නම අනිවාර්යයි.</value>
   </data>
   <data name="Open public URL in new tab" xml:space="preserve">
-    <value>Open public URL in new tab</value>
+    <value>පොදු URL නව ටැබයක විවෘත කරන්න</value>
   </data>
   <data name="Password" xml:space="preserve">
     <value>මුරපදය</value>
   </data>
   <data name="Permanent" xml:space="preserve">
-    <value>Permanent</value>
+    <value>ස්ථිර</value>
   </data>
   <data name="Permissions" xml:space="preserve">
     <value>අවසර</value>
   </data>
   <data name="Pixels" xml:space="preserve">
-    <value>Pixels</value>
+    <value>පික්සල</value>
   </data>
   <data name="Preview" xml:space="preserve">
     <value>පෙරදසුන</value>
   </data>
   <data name="Publish" xml:space="preserve">
-    <value>Publish</value>
+    <value>ප්‍රකාශ කරන්න</value>
   </data>
   <data name="Publish date" xml:space="preserve">
-    <value>Publish date</value>
+    <value>ප්‍රකාශන දිනය</value>
   </data>
   <data name="Redirect" xml:space="preserve">
-    <value>Redirect</value>
+    <value>යළි හරවා යැවීම</value>
   </data>
   <data name="Redirect Type" xml:space="preserve">
-    <value>Redirect Type</value>
+    <value>හරවා යැවීමේ වර්ගය</value>
   </data>
   <data name="Revert" xml:space="preserve">
-    <value>Revert</value>
+    <value>ආපසු හරවන්න</value>
   </data>
   <data name="Roles" xml:space="preserve">
-    <value>Roles</value>
+    <value>භූමිකාවන්</value>
   </data>
   <data name="Route" xml:space="preserve">
-    <value>Route</value>
+    <value>මාර්ගය</value>
   </data>
   <data name="Save" xml:space="preserve">
     <value>සුරකින්න</value>
   </data>
   <data name="Scheduled" xml:space="preserve">
-    <value>Scheduled</value>
+    <value>කාලසටහන්ගත කර ඇත</value>
   </data>
   <data name="Search..." xml:space="preserve">
     <value>සොයන්න...</value>
   </data>
   <data name="Select block" xml:space="preserve">
-    <value>Select block</value>
+    <value>බ්ලොක් තෝරන්න</value>
   </data>
   <data name="Settings" xml:space="preserve">
     <value>සැකසුම්</value>
@@ -196,7 +196,7 @@
     <value>ප්‍රමාණය</value>
   </data>
   <data name="Slug" xml:space="preserve">
-    <value>Slug</value>
+    <value>හම්බෙල්ලන්</value>
   </data>
   <data name="System" xml:space="preserve">
     <value>පද්ධතිය</value>
@@ -217,31 +217,31 @@
     <value>පරිශීලක නාමය</value>
   </data>
   <data name="Username is mandatory." xml:space="preserve">
-    <value>Username is mandatory.</value>
+    <value>පරිශීලක නාමය අනිවාර්ය වේ.</value>
   </data>
   <data name="Title is mandatory." xml:space="preserve">
-    <value>Title is mandatory.</value>
+    <value>මාතෘකාව අනිවාර්ය වේ.</value>
   </data>
   <data name="Type" xml:space="preserve">
     <value>වර්ගය</value>
   </data>
   <data name="Unpublish" xml:space="preserve">
-    <value>Unpublish</value>
+    <value>ප්‍රකාශනය ඉවත් කරන්න</value>
   </data>
   <data name="Unpublished" xml:space="preserve">
-    <value>Unpublished</value>
+    <value>ප්‍රකාශනය නොකළ</value>
   </data>
   <data name="Users" xml:space="preserve">
     <value>පරිශිලකයින්</value>
   </data>
   <data name="Version" xml:space="preserve">
-    <value>අනුවාදය</value>
+    <value>වෙනස්</value>
   </data>
   <data name="Width" xml:space="preserve">
-    <value>පළල</value>
+    <value>පුළුල්</value>
   </data>
   <data name="Archives and Comments" xml:space="preserve">
-    <value>සංරක්‍ෂිත සහ අදහස්</value>
+    <value>සංරක්ෂිත සහ අදහස්</value>
   </data>
   <data name="Author" xml:space="preserve">
     <value>කතෘ</value>
@@ -250,7 +250,7 @@
     <value>අදහස්</value>
   </data>
   <data name="Created" xml:space="preserve">
-    <value>සෑදිණි</value>
+    <value>ලබාිණි</value>
   </data>
   <data name="Username and/or password are incorrect." xml:space="preserve">
     <value>පරිශීලක නාමය සහ/හෝ මුරපදය වැරදියි.</value>
