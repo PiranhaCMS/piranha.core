@@ -19,16 +19,16 @@
     <value>වි-තැපෑල වෙනත් පරිශීලකයෙකු භාවිතා කර ඇත.</value>
   </data>
   <data name="The user could not be found." xml:space="preserve">
-    <value>The user could not be found.</value>
+    <value>පරිශීලකයා සොයාගත නොහැකි විය.</value>
   </data>
   <data name="Email address is mandatory." xml:space="preserve">
-    <value>Email address is mandatory.</value>
+    <value>ඊමේල් ලිපිනය අනිවාර්ය වේ.</value>
   </data>
   <data name="The new passwords does not match." xml:space="preserve">
     <value>නව මුරපද නොගැළපේ.</value>
   </data>
   <data name="Password is mandatory when creating a new user." xml:space="preserve">
-    <value>Password is mandatory when creating a new user.</value>
+    <value>නව පරිශීලකයෙකු නිර්මාණය කිරීමේදී මුරපදය අනිවාර්ය වේ.</value>
   </data>
   <data name="The user could not be saved." xml:space="preserve">
     <value>පරිශීලක සුරැකීමට නොහැකි විය.</value>
@@ -37,19 +37,19 @@
     <value>පරිශීලක සුරැකිණි.</value>
   </data>
   <data name="Are you sure you want to delete this user?" xml:space="preserve">
-    <value>Are you sure you want to delete this user?</value>
+    <value>ඔබට මෙම පරිශීලකයා මැකීමට අවශ්‍ය බව විශ්වාසද?</value>
   </data>
   <data name="The user has been deleted." xml:space="preserve">
-    <value>The user has been deleted.</value>
+    <value>පරිශීලකයා මකා ඇත.</value>
   </data>
   <data name="Can't delete yourself." xml:space="preserve">
-    <value>Can't delete yourself.</value>
+    <value>ඔබම මකා දැමිය නොහැක.</value>
   </data>
 
   <data name="New password" xml:space="preserve">
     <value>නව මුරපදය</value>
   </data>
   <data name="Confirm password" xml:space="preserve">
-    <value>Confirm password</value>
+    <value>මුරපදය තහවුරු කරන්න</value>
   </data>
 </root>
