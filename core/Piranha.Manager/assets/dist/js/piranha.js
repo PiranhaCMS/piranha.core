@@ -287,6 +287,9 @@ piranha.permissions = {
 */
 
 piranha.utils = {
+    getOrigin() {
+        return window.location.origin;
+    },
     formatUrl: function (str) {
         return str.replace("~/", piranha.baseUrl);
     },
