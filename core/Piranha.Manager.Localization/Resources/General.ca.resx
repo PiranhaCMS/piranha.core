@@ -255,4 +255,7 @@
   <data name="Username and/or password are incorrect." xml:space="preserve">
     <value>El nom d'usuari o la contrasenya són incorrectes.</value>
   </data>
+  <data name="User account locked out." xml:space="preserve">
+    <value>User account locked out.</value>
+  </data>
 </root>

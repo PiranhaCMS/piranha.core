@@ -255,4 +255,7 @@
   <data name="Username and/or password are incorrect." xml:space="preserve">
     <value>Неверное имя пользователя или пароль.</value>
   </data>
+  <data name="User account locked out." xml:space="preserve">
+    <value>Аккаунт заблокирован.</value>
+  </data>
 </root>
