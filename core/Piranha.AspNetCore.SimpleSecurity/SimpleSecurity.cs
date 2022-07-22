@@ -11,6 +11,7 @@
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Piranha.Manager.LocalAuth;
 
 namespace Piranha.AspNetCore
@@ -59,7 +60,7 @@ namespace Piranha.AspNetCore
         /// <param name="username">The username</param>
         /// <param name="password">The password</param>
         /// <returns>If the user was signed in</returns>
-        public async Task<bool> SignIn(object context, string username, string password)
+        public async Task<SignInResult> SignIn(object context, string username, string password)
         {
             if (context is HttpContext)
             {
@@ -80,9 +81,9 @@ namespace Piranha.AspNetCore
 
                     await ((HttpContext)context).SignInAsync("Piranha.SimpleSecurity", principle);
 
-                    return true;
+                    return SignInResult.Success;
                 }
-                return false;
+                return SignInResult.Failed;
             }
             throw new ArgumentException("SimpleSecurity only works with a HttpContext");
         }

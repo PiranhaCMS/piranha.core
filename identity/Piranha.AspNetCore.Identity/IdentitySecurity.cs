@@ -42,16 +42,15 @@ namespace Piranha.AspNetCore.Identity
         /// <param name="context">The current application context</param>
         /// <param name="username">The username</param>
         /// <param name="password">The password</param>
-        /// <returns>If the user was signed in</returns>
-        public async Task<bool> SignIn(object context, string username, string password)
+        /// <returns>SignInResult</returns>
+        public async Task<SignInResult> SignIn(object context, string username, string password)
         {
             if (_seed != null)
             {
                 await _seed.CreateAsync();
             }
 
-            var result = await _signInManager.PasswordSignInAsync(username, password, false, false);
-            return result.Succeeded;
+            return await _signInManager.PasswordSignInAsync(username, password, false, true);
         }
 
         /// <summary>
