@@ -59,7 +59,7 @@ namespace Piranha.AspNetCore
         /// <param name="context">The current application context</param>
         /// <param name="username">The username</param>
         /// <param name="password">The password</param>
-        /// <returns>If the user was signed in</returns>
+        /// <returns>SignInResult</returns>
         public async Task<SignInResult> SignIn(object context, string username, string password)
         {
             if (context is HttpContext)

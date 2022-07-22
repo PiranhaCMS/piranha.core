@@ -24,7 +24,7 @@ namespace Piranha.Manager.LocalAuth
         /// <param name="context">The current application context</param>
         /// <param name="username">The username</param>
         /// <param name="password">The password</param>
-        /// <returns>If the user was signed in</returns>
+        /// <returns>SignInResult</returns>
         Task<SignInResult> SignIn(object context, string username, string password);
 
         /// <summary>
