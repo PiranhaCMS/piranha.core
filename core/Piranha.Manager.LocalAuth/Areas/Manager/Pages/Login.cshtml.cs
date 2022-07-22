@@ -9,9 +9,9 @@
  */
 
 using System.ComponentModel.DataAnnotations;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using SignInResult = Microsoft.AspNetCore.Identity.SignInResult;
 
 namespace Piranha.Manager.LocalAuth.Areas.Manager.Pages
 {
@@ -95,10 +95,13 @@ namespace Piranha.Manager.LocalAuth.Areas.Manager.Pages
         {
             await _service.SignOut(HttpContext);
 
-            if (!ModelState.IsValid || !await _service.SignIn(HttpContext, Input.Username, Input.Password))
+            var signInResult = await _service.SignIn(HttpContext, Input.Username, Input.Password);
+            
+            if (!ModelState.IsValid || !signInResult.Succeeded)
             {
                 ModelState.Clear();
-                ModelState.AddModelError(string.Empty, _localizer.General["Username and/or password are incorrect."].Value);
+                AddModelErrorBySignInResult(signInResult);
+
                 return Page();
             }
 
@@ -107,6 +110,18 @@ namespace Piranha.Manager.LocalAuth.Areas.Manager.Pages
                 return LocalRedirect($"~/manager/login/auth?returnUrl={ returnUrl }");
             }
             return LocalRedirect("~/manager/login/auth");
+        }
+        
+        private void AddModelErrorBySignInResult(SignInResult signInResult)
+        {
+            if (signInResult.IsLockedOut)
+            {
+                ModelState.AddModelError(string.Empty, _localizer.General["User account locked out."].Value);
+            }
+            else
+            {
+                ModelState.AddModelError(string.Empty, _localizer.General["Username and/or password are incorrect."].Value);
+            }
         }
     }
 }
