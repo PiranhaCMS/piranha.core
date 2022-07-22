@@ -8,6 +8,8 @@
  *
  */
 
+using Microsoft.AspNetCore.Identity;
+
 namespace Piranha.Manager.LocalAuth
 {
     /// <summary>
@@ -23,7 +25,7 @@ namespace Piranha.Manager.LocalAuth
         /// <param name="username">The username</param>
         /// <param name="password">The password</param>
         /// <returns>If the user was signed in</returns>
-        Task<bool> SignIn(object context, string username, string password);
+        Task<SignInResult> SignIn(object context, string username, string password);
 
         /// <summary>
         /// Signs out the current user.
