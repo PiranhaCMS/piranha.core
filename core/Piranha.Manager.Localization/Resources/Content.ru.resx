@@ -16,19 +16,19 @@
     <value>Цитата</value>
   </data>
   <data name="Meta index" xml:space="preserve">
-    <value>Meta index</value>
+    <value>Индексировать</value>
   </data>
   <data name="Meta follow" xml:space="preserve">
-    <value>Meta follow</value>
+    <value>Анализировать ссылки</value>
   </data>
   <data name="Meta priority" xml:space="preserve">
-    <value>Meta priority</value>
+    <value>Приоритет meta-тега</value>
   </data>
   <data name="Primary image" xml:space="preserve">
     <value>Основное изображение</value>
   </data>
   <data name="Search engine priority, compared to other content in the same site." xml:space="preserve">
-    <value>Search engine priority, compared to other content in the same site.</value>
+    <value>Приоритет поисковой системы, в сравнении с другим содержимым того же сайта.</value>
   </data>
   <data name="The content was successfully deleted" xml:space="preserve">
     <value>Контент был успешно удален</value>

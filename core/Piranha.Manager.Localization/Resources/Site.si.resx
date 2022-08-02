@@ -22,7 +22,7 @@
     <value>අඩවිය සංස්කරණය</value>
   </data>
   <data name="Hostnames" xml:space="preserve">
-    <value>සත්කාරක නාම</value>
+    <value>සත්කාරක නම</value>
   </data>
   <data name="Logo" xml:space="preserve">
     <value>ලාංඡනය</value>
@@ -31,9 +31,9 @@
     <value>ස්ථාපනයේ පෙරනිමි අඩවිය මෙය විය යුතු නම්.</value>
   </data>
   <data name="Please type in the name of the site to confirm." xml:space="preserve">
-    <value>Please type in the name of the site to confirm.</value>
+    <value>තහවුරු කිරීමට කරුණාකර අඩවියේ නම ටයිප් කරන්න.</value>
   </data>
   <data name="ConfirmDelete" xml:space="preserve">
-    <value>This action &lt;strong>cannot&lt;/strong> be undone. This will permanently delete the site {{ title }} and all of its &lt;strong>pages&lt;/strong>, &lt;strong>archives&lt;/strong> and &lt;strong>posts&lt;/strong>.</value>
+    <value>මෙම ක්‍රියාව &lt;strong&gt;&lt;/strong&gt; පසුගමනය කළ නොහැක. මෙය වෙබ් අඩවිය {{ title }} සහ එහි සියලුම &lt;strong&gt;පිටු&lt;/strong&gt;, &lt;strong&gt;සංරක්ෂිත&lt;/strong&gt; සහ &lt;strong&gt;posts&lt;/strong&gt; ස්ථිරවම මකනු ඇත.</value>
   </data>
 </root>

@@ -13,42 +13,42 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Content" xml:space="preserve">
-    <value>Content</value>
+    <value>المحتوى</value>
   </data>
   <data name="Settings" xml:space="preserve">
-    <value>Settings</value>
+    <value>الإعدادات</value>
   </data>
   <data name="System" xml:space="preserve">
-    <value>System</value>
+    <value>النظام</value>
   </data>
   <data name="Pages" xml:space="preserve">
-    <value>Pages</value>
+    <value>الصفحات</value>
   </data>
   <data name="Media" xml:space="preserve">
-    <value>Media</value>
+    <value>الوسائط</value>
   </data>
   <data name="Aliases" xml:space="preserve">
-    <value>Aliases</value>
+    <value>الأسماء البديلة</value>
   </data>
   <data name="Sites" xml:space="preserve">
-    <value>Sites</value>
+    <value>المواقع</value>
   </data>
   <data name="Config" xml:space="preserve">
-    <value>Config</value>
+    <value>التهيئة</value>
   </data>
   <data name="Modules" xml:space="preserve">
-    <value>Modules</value>
+    <value>الوحدات</value>
   </data>
   <data name="Logout" xml:space="preserve">
-    <value>Logout</value>
+    <value>تسجيل الخروج</value>
   </data>
   <data name="Comments" xml:space="preserve">
-    <value>Comments</value>
+    <value>التعليقات</value>
   </data>
   <data name="Roles" xml:space="preserve">
-    <value>Roles</value>
+    <value>الأدوار</value>
   </data>
   <data name="Users" xml:space="preserve">
-    <value>Users</value>
+    <value>المستخدمين</value>
   </data>
 </root>
