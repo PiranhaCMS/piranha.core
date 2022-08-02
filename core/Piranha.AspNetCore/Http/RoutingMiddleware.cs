@@ -197,6 +197,16 @@ namespace Piranha.AspNetCore.Http
 
                 if (page != null)
                 {
+                    if (!page.IsPublished)
+                    {
+                        // If the page isn't published, and this isn't a request for a draft, skip the request
+                        if (!context.Request.Query.ContainsKey("draft") || context.Request.Query["draft"] != "true")
+                        {
+                            await _next.Invoke(context);
+                            return;
+                        }
+                    }
+
                     pageType = App.PageTypes.GetById(page.TypeId);
                     service.PageId = page.Id;
 
