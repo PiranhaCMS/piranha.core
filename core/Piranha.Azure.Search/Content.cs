@@ -9,15 +9,15 @@
  */
 
 using System.ComponentModel.DataAnnotations;
-using Microsoft.Azure.Search;
-using Microsoft.Azure.Search.Models;
+using Azure.Search.Documents.Indexes;
+using Azure.Search.Documents.Indexes.Models;
+using Piranha.Models;
 
 namespace Piranha.Azure.Search
 {
     /// <summary>
     /// Search index model for Azure Search.
     /// </summary>
-    [SerializePropertyNamesAsCamelCase]
     public class Content
     {
         /// <summary>
@@ -29,46 +29,37 @@ namespace Piranha.Azure.Search
         /// <summary>
         /// Gets/sets the content slug.
         /// </summary>
-        [IsSearchable]
-        [Analyzer(AnalyzerName.AsString.StandardLucene)]
+        [SearchableField(AnalyzerName = LexicalAnalyzerName.Values.StandardLucene)]
         public string Slug { get; set; }
 
         /// <summary>
         /// Gets/sets the content type.
         /// </summary>
-        [IsFilterable]
+        [SimpleField(IsFilterable = true)]
         public string ContentType { get; set; }
 
         /// <summary>
         /// Gets/sets the main title.
         /// </summary>
-        [IsSearchable]
-        [IsSortable]
-        [Analyzer(AnalyzerName.AsString.StandardLucene)]
+        [SearchableField(AnalyzerName = LexicalAnalyzerName.Values.StandardLucene, IsSortable = true)]
         public string Title { get; set; }
 
         /// <summary>
         /// Gets/sets the optional category.
         /// </summary>
-        [IsFilterable]
-        [IsSearchable]
-        [IsSortable]
-        [Analyzer(AnalyzerName.AsString.StandardLucene)]
+        [SearchableField(AnalyzerName = LexicalAnalyzerName.Values.StandardLucene, IsFilterable = true, IsSortable = true)]
         public string Category { get; set; }
 
         /// <summary>
         /// Gets/sets the optional tags.
         /// </summary>
-        [IsFilterable]
-        [IsSearchable]
-        [Analyzer(AnalyzerName.AsString.StandardLucene)]
+        [SearchableField(AnalyzerName = LexicalAnalyzerName.Values.StandardLucene, IsFilterable = true, IsFacetable = true)]
         public IList<string> Tags { get; set; } = new List<string>();
 
         /// <summary>
         /// Gets/sets the main body.
         /// </summary>
-        [IsSearchable]
-        [Analyzer(AnalyzerName.AsString.StandardLucene)]
+        [SearchableField(AnalyzerName = LexicalAnalyzerName.Values.StandardLucene)]
         public string Body { get; set; }
     }
 }
