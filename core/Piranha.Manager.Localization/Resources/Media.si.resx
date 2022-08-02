@@ -16,43 +16,43 @@
     <value>බහාලුම එකතුකරන්න</value>
   </data>
   <data name="Drop files here or click to upload." xml:space="preserve">
-    <value>Drop files here or click to upload.</value>
+    <value>ගොනු මෙහි දමන්න හෝ උඩුගත කිරීමට ක්ලික් කරන්න.</value>
   </data>
   <data name="Download media" xml:space="preserve">
-    <value>මාධ්‍ය බාගන්න</value>
+    <value>මාධ්‍ය භාරගන්න</value>
   </data>
   <data name="Folder name" xml:space="preserve">
-    <value>බහාලුමේ නම</value>
+    <value>බහලුමේ නම</value>
   </data>
   <data name="Folder name is mandatory." xml:space="preserve">
-    <value>Folder name is mandatory.</value>
+    <value>ෆෝල්ඩරයේ නම අනිවාර්ය වේ.</value>
   </data>
   <data name="Gallery" xml:space="preserve">
-    <value>Gallery</value>
+    <value>ගැලරිය</value>
   </data>
   <data name="Media" xml:space="preserve">
-    <value>මාධ්‍යය</value>
+    <value>මාධ්යය</value>
   </data>
   <data name="Media preview is not available" xml:space="preserve">
-    <value>Media preview is not available</value>
+    <value>මාධ්‍ය පෙරදසුන නොමැත</value>
   </data>
   <data name="Open media in new tab" xml:space="preserve">
-    <value>Open media in new tab</value>
+    <value>නව ටැබයක මාධ්‍ය විවෘත කරන්න</value>
   </data>
   <data name="Select media" xml:space="preserve">
-    <value>Select media</value>
+    <value>මාධ්ය තෝරන්න</value>
   </data>
   <data name="Your browser does not support the video tag." xml:space="preserve">
-    <value>Your browser does not support the video tag.</value>
+    <value>ඔබගේ බ්‍රවුසරය වීඩියෝ ටැගයට සහය නොදක්වයි.</value>
   </data>
   <data name="List" xml:space="preserve">
-    <value>List</value>
+    <value>ලැයිස්තුව</value>
   </data>
   <data name="Preferred aspect" xml:space="preserve">
-    <value>Preferred aspect</value>
+    <value>කැමති පැත්ත</value>
   </data>
   <data name="Original" xml:space="preserve">
-    <value>Original</value>
+    <value>මුල්</value>
   </data>
   <data name="Landscape" xml:space="preserve">
     <value>තිරස්</value>
@@ -64,27 +64,27 @@
     <value>පුළුල්තිරය</value>
   </data>
   <data name="Square" xml:space="preserve">
-    <value>Square</value>
+    <value>චතුරස්රය</value>
   </data>
   <data name="Are you sure you want to delete selected media?" xml:space="preserve">
-    <value>Are you sure you want to delete selected media?</value>
+    <value>ඔබට තෝරාගත් මාධ්‍ය මැකීමට අවශ්‍ය බව විශ්වාසද?</value>
   </data>
   <data name="Delete selected items" xml:space="preserve">
-    <value>Delete selected items</value>
+    <value>තෝරාගත් අයිතම මකන්න</value>
   </data>
   <data name="Media file was successfully moved." xml:space="preserve">
-    <value>Media file was successfully moved.</value>
+    <value>මාධ්‍ය ගොනුව සාර්ථකව ගෙන යන ලදී.</value>
   </data>
   <data name="Media files was successfully moved." xml:space="preserve">
-    <value>Media files was successfully moved.</value>
+    <value>මාධ්‍ය ගොනු සාර්ථකව ගෙන යන ලදී.</value>
   </data>
   <data name="The media file was not found." xml:space="preserve">
-    <value>The media file was not found.</value>
+    <value>මාධ්‍ය ගොනුව හමු නොවීය.</value>
   </data>
   <data name="The media file was successfully deleted" xml:space="preserve">
-    <value>The media file was successfully deleted</value>
+    <value>මාධ්‍ය ගොනුව සාර්ථකව මකා දමන ලදී</value>
   </data>
   <data name="The media files was successfully deleted" xml:space="preserve">
-    <value>The media files was successfully deleted</value>
+    <value>මාධ්‍ය ගොනු සාර්ථකව මකා දමන ලදී</value>
   </data>
 </root>

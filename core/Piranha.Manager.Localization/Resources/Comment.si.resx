@@ -20,36 +20,36 @@
     <value>අනුමතයි</value>
   </data>
   <data name="Pending" xml:space="preserve">
-    <value>Pending</value>
+    <value>පොරොත්තුවෙන්</value>
   </data>
   <data name="Comment" xml:space="preserve">
     <value>අදහස</value>
   </data>
   <data name="Response to" xml:space="preserve">
-    <value>Response to</value>
+    <value>සඳහා ප්රතිචාර</value>
   </data>
   <data name="The comment was successfully approved" xml:space="preserve">
-    <value>අදහස සාර්ථකව අනුමත කෙරිණි</value>
+    <value>අදහස සාර්ථකව අනුමත කර ඇත</value>
   </data>
   <data name="The comment was successfully unapproved" xml:space="preserve">
-    <value>The comment was successfully unapproved</value>
+    <value>අදහස සාර්ථකව අනුමත නොකළේය</value>
   </data>
   <data name="The comment was successfully deleted" xml:space="preserve">
-    <value>The comment was successfully deleted</value>
+    <value>අදහස සාර්ථකව මකා දමන ලදී</value>
   </data>
   <data name="Days allowed for commenting" xml:space="preserve">
-    <value>අදහස් දැක්වීමට ඉඩ ඇති දවස්</value>
+    <value>අදහස් දැක්වීමට ඉඩ ඇති දින</value>
   </data>
   <data name="Comments are not allowed." xml:space="preserve">
     <value>අදහස් දැක්වීමට ඉඩ නැත.</value>
   </data>
   <data name="Comments are not allowed for unpublished content." xml:space="preserve">
-    <value>Comments are not allowed for unpublished content.</value>
+    <value>ප්‍රකාශනය නොකළ අන්තර්ගතය සඳහා අදහස් දැක්වීමට ඉඩ නොදේ.</value>
   </data>
   <data name="Comments are currently open." xml:space="preserve">
-    <value>Comments are currently open.</value>
+    <value>අදහස් දැනට විවෘතයි.</value>
   </data>
   <data name="Comments were closed" xml:space="preserve">
-    <value>Comments were closed</value>
+    <value>අදහස් වසා ඇත</value>
   </data>
 </root>

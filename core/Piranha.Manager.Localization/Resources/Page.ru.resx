@@ -40,10 +40,10 @@
     <value>Страница должна быть скрыта на карте сайта</value>
   </data>
   <data name="If the page should be indexed by search engines." xml:space="preserve">
-    <value>If the page should be indexed by search engines.</value>
+    <value>Страница должна быть проиндексирована поисковыми системами.</value>
   </data>
   <data name="If links from this page should be indexed." xml:space="preserve">
-    <value>If links from this page should be indexed.</value>
+    <value>Ссылки из этой страницы должны быть проиндексированы.</value>
   </data>
   <data name="Meta title" xml:space="preserve">
     <value>Мета заголовок</value>
@@ -55,13 +55,13 @@
     <value>Описание (Meta)</value>
   </data>
   <data name="Og title" xml:space="preserve">
-    <value>Og title</value>
+    <value>Open Graph заголовок</value>
   </data>
   <data name="Og image" xml:space="preserve">
-    <value>Og image</value>
+    <value>Open Graph изображение</value>
   </data>
   <data name="Og description" xml:space="preserve">
-    <value>Og description</value>
+    <value>Open Graph описание</value>
   </data>
   <data name="Navigation title" xml:space="preserve">
     <value>Заголовок в навигации</value>

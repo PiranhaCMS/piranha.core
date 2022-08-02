@@ -19,7 +19,7 @@
     <value>Иерархия страниц</value>
   </data>
   <data name="If page slugs should include the parent slug." xml:space="preserve">
-    <value>Вложенные страницы должны включать родительский сегмент пути</value>
+    <value>Вложенные страницы должны включать родительский сегмент пути.</value>
   </data>
   <data name="Expanded levels in the sitemap" xml:space="preserve">
     <value>Развернутые уровни на карте сайта</value>
@@ -34,13 +34,13 @@
     <value>Срок действия кэша страниц (минут)</value>
   </data>
   <data name="Page revisions" xml:space="preserve">
-    <value>Ревизии страниц</value>
+    <value>История изменений страницы</value>
   </data>
   <data name="Post cache expiration (minutes)" xml:space="preserve">
     <value>Срок действия кеша постов (минут)</value>
   </data>
   <data name="Post revisions" xml:space="preserve">
-    <value>Равизии постов</value>
+    <value>История изменений постов</value>
   </data>
   <data name="Media CDN" xml:space="preserve">
     <value>Медиа CDN</value>
@@ -56,10 +56,10 @@
     <value>Размер страницы по умолчанию для архивов. Обратите внимание, что это может быть переопределено для определенных архивов.</value>
   </data>
   <data name="The maximum number of page revisions that should be stored for each page. A value of 0 means no limitation." xml:space="preserve">
-    <value>Максимальное количество ревизий страницы, которое должно быть сохранено для каждой страницы. Значение 0 означает отсутствие ограничений.</value>
+    <value>Максимальное количество историй изменений, которые должны быть сохранены, для каждой страницы. Значение 0 означает отсутствие ограничений.</value>
   </data>
   <data name="The maximum number of post revisions that should be stored for each post. A value of 0 means no limitation." xml:space="preserve">
-    <value>Максимальное количество ревизий постов, которое должно храниться для каждого поста. Значение 0 означает отсутствие ограничений.</value>
+    <value>Максимальное количество историй изменений, которые должны быть сохранены, для каждого поста. Значение 0 означает отсутствие ограничений.</value>
   </data>
   <data name="The time in minutes that web browsers can use pages before asking the server for new updates." xml:space="preserve">
     <value>Время в минутах, в течение которого веб-браузеры могут использовать страницы, прежде чем запрашивать у сервера новые обновления.</value>
@@ -93,7 +93,7 @@
     <value>Включить комментарии для поста</value>
   </data>
   <data name="Manager list size" xml:space="preserve">
-    <value>Manager list size</value>
+    <value>Размер списка в менеджере</value>
   </data>
   <data name="If block group headers should be collapsed by default when opening a page or post in the manager." xml:space="preserve">
     <value>Группы блоков должны быть свернуты по умолчанию при открытии страницы или поста в редакторе.</value>
@@ -102,13 +102,13 @@
     <value>Блоки должны быть свернуты по умолчанию при открытии страницы или поста в редакторе.</value>
   </data>
   <data name="If comments should be approved by default. Please note that this can be overridden by third party moderation services." xml:space="preserve">
-    <value>Комментарии будут быть одобрены по умолчанию. Пожалуйста, обратите внимание, что это может быть переопределено сторонними сервисами модерации.</value>
+    <value>Комментарии будут одобрены по умолчанию. Пожалуйста, обратите внимание, что это может быть переопределено сторонними сервисами модерации.</value>
   </data>
   <data name="If comments should be enabled for pages by default. Please note that this this can be overridden for specific pages." xml:space="preserve">
-    <value>Комментарии должны быть включены для страниц по умолчанию. Пожалуйста, обратите внимание, что это может быть переопределено для отдельных страниц.</value>
+    <value>Комментарии будут включены для страниц по умолчанию. Пожалуйста, обратите внимание, что это может быть переопределено для отдельных страниц.</value>
   </data>
   <data name="If comments should be enabled for posts by default. Please note that this this can be overridden for specific posts." xml:space="preserve">
-    <value>Комментарии должны быть включены для постов по умолчанию. Пожалуйста, обратите внимание, что это может быть переопределено для отдельных страниц.</value>
+    <value>Комментарии будут включены для постов по умолчанию. Пожалуйста, обратите внимание, что это может быть переопределено для отдельных постов.</value>
   </data>
   <data name="The default page size when loading comments. Please note that this this can be overridden for specific pages." xml:space="preserve">
     <value>Размер страницы по умолчанию при загрузке комментариев. Пожалуйста, обратите внимание, что это может быть переопределено для отдельных страниц.</value>
@@ -117,6 +117,6 @@
     <value>Количество дней после даты публикации, когда разрешено оставлять комментарии. Значение "0" означает навсегда.</value>
   </data>
   <data name="The page size for lists within the manager interface." xml:space="preserve">
-    <value>The page size for lists within the manager interface.</value>
+    <value>Количество страниц в списках в интерфейсе менеджера.</value>
   </data>
 </root>

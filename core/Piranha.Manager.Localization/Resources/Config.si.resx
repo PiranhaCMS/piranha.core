@@ -16,107 +16,107 @@
     <value>වින්‍යාසය</value>
   </data>
   <data name="Hierarchical page slugs" xml:space="preserve">
-    <value>Hierarchical page slugs</value>
+    <value>ධූරාවලි පිටු හම්බෙල්ලන්</value>
   </data>
   <data name="If page slugs should include the parent slug." xml:space="preserve">
-    <value>If page slugs should include the parent slug.</value>
+    <value>පිටු හම්බෙල්ලන් වල මාපිය හම්බෙල්ලන් ඇතුළත් විය යුතු නම්.</value>
   </data>
   <data name="Expanded levels in the sitemap" xml:space="preserve">
-    <value>Expanded levels in the sitemap</value>
+    <value>අඩවි සිතියමෙහි පුළුල් කළ මට්ටම්</value>
   </data>
   <data name="Archive page size" xml:space="preserve">
-    <value>Archive page size</value>
+    <value>පිටු ප්‍රමාණය සංරක්ෂණය කරන්න</value>
   </data>
   <data name="Caching" xml:space="preserve">
-    <value>නිහිතගත වීම</value>
+    <value>නිහිත වීම</value>
   </data>
   <data name="Page cache expiration (minutes)" xml:space="preserve">
     <value>පිටුවේ නිහිතය කල් ඉකුත් වීම (විනාඩි)</value>
   </data>
   <data name="Page revisions" xml:space="preserve">
-    <value>Page revisions</value>
+    <value>පිටු සංශෝධන</value>
   </data>
   <data name="Post cache expiration (minutes)" xml:space="preserve">
-    <value>Post cache expiration (minutes)</value>
+    <value>පසු හැඹිලි කල් ඉකුත්වීම (විනාඩි)</value>
   </data>
   <data name="Post revisions" xml:space="preserve">
-    <value>Post revisions</value>
+    <value>සංශෝධන පළ කරන්න</value>
   </data>
   <data name="Media CDN" xml:space="preserve">
-    <value>Media CDN</value>
+    <value>මාධ්ය CDN</value>
   </data>
 
   <data name="If page slugs should take their parent slug into account when being generated. This is prefered for larger sitemaps." xml:space="preserve">
-    <value>If page slugs should take their parent slug into account when being generated. This is prefered for larger sitemaps.</value>
+    <value>පිටු හම්බෙල්ලන් උත්පාදනය කිරීමේදී ඔවුන්ගේ මාපිය හම්බෙල්ලන් සැලකිල්ලට ගත යුතු නම්. මෙය විශාල අඩවි සිතියම් සඳහා වඩාත් කැමති වේ.</value>
   </data>
   <data name="The default number of levels that should be expanded in the page sitemap. This is useful for smaller sitemaps." xml:space="preserve">
-    <value>The default number of levels that should be expanded in the page sitemap. This is useful for smaller sitemaps.</value>
+    <value>පිටු අඩවි සිතියමේ පුළුල් කළ යුතු පෙරනිමි මට්ටම් ගණන. මෙය කුඩා අඩවි සිතියම් සඳහා ප්‍රයෝජනවත් වේ.</value>
   </data>
   <data name="The default page size for archive pages. Please note that this this can be overridden for specific archives." xml:space="preserve">
-    <value>The default page size for archive pages. Please note that this this can be overridden for specific archives.</value>
+    <value>සංරක්ෂිත පිටු සඳහා පෙරනිමි පිටු ප්‍රමාණය. මෙය විශේෂිත ලේඛනාගාර සඳහා අභිබවා යා හැකි බව කරුණාවෙන් සලකන්න.</value>
   </data>
   <data name="The maximum number of page revisions that should be stored for each page. A value of 0 means no limitation." xml:space="preserve">
-    <value>The maximum number of page revisions that should be stored for each page. A value of 0 means no limitation.</value>
+    <value>එක් එක් පිටුව සඳහා ගබඩා කළ යුතු උපරිම පිටු සංශෝධන ගණන. 0 අගයක් යනු සීමාවක් නැත.</value>
   </data>
   <data name="The maximum number of post revisions that should be stored for each post. A value of 0 means no limitation." xml:space="preserve">
-    <value>The maximum number of post revisions that should be stored for each post. A value of 0 means no limitation.</value>
+    <value>එක් එක් තනතුර සඳහා ගබඩා කළ යුතු උපරිම පශ්චාත් සංශෝධන ගණන. 0 අගයක් යනු සීමාවක් නැත.</value>
   </data>
   <data name="The time in minutes that web browsers can use pages before asking the server for new updates." xml:space="preserve">
-    <value>The time in minutes that web browsers can use pages before asking the server for new updates.</value>
+    <value>නව යාවත්කාලීන සඳහා සේවාදායකයෙන් විමසීමට පෙර වෙබ් බ්‍රව්සර්වලට පිටු භාවිත කළ හැකි මිනිත්තු කිහිපයකින් කාලය.</value>
   </data>
   <data name="The time in minutes that web browsers can use posts before asking the server for new updates." xml:space="preserve">
-    <value>The time in minutes that web browsers can use posts before asking the server for new updates.</value>
+    <value>නව යාවත්කාලීන සඳහා සේවාදායකයෙන් විමසීමට පෙර වෙබ් බ්‍රව්සර්වලට පළ කිරීම් භාවිත කළ හැකි මිනිත්තු කිහිපයකින් කාලය.</value>
   </data>
   <data name="The full URL (including any folder name) to the CDN used to serve uploaded media. Leave blank to use default storage URL." xml:space="preserve">
-    <value>The full URL (including any folder name) to the CDN used to serve uploaded media. Leave blank to use default storage URL.</value>
+    <value>උඩුගත කළ මාධ්‍ය සේවය කිරීමට භාවිතා කරන CDN වෙත සම්පූර්ණ URL (ඕනෑම ෆෝල්ඩර නමක් ඇතුළුව). පෙරනිමි ගබඩා URL භාවිතා කිරීමට හිස්ව තබන්න.</value>
   </data>
 
   <data name="Approve comments" xml:space="preserve">
     <value>අදහස් අනුමත කරන්න</value>
   </data>
   <data name="Close comments after" xml:space="preserve">
-    <value>Close comments after</value>
+    <value>පසුව අදහස් වසන්න</value>
   </data>
   <data name="Collapse block headers" xml:space="preserve">
-    <value>Collapse block headers</value>
+    <value>වාරණ ශීර්ෂ හකුළන්න</value>
   </data>
   <data name="Collapse blocks" xml:space="preserve">
-    <value>Collapse blocks</value>
+    <value>කුට්ටි කඩා දමන්න</value>
   </data>
   <data name="Comments page size" xml:space="preserve">
     <value>අදහස් පිටුවේ ප්‍රමාණය</value>
   </data>
   <data name="Enable page comments" xml:space="preserve">
-    <value>පිටුවේ අදහස් සබල කරන්න</value>
+    <value>පිටුවේ අදහස් ඉදිරිපත් කරන්න</value>
   </data>
   <data name="Enable post comments" xml:space="preserve">
-    <value>Enable post comments</value>
+    <value>පළ කිරීම් අදහස් සබල කරන්න</value>
   </data>
   <data name="Manager list size" xml:space="preserve">
-    <value>Manager list size</value>
+    <value>කළමනාකරු ලැයිස්තු ප්රමාණය</value>
   </data>
   <data name="If block group headers should be collapsed by default when opening a page or post in the manager." xml:space="preserve">
-    <value>If block group headers should be collapsed by default when opening a page or post in the manager.</value>
+    <value>බ්ලොක් කණ්ඩායම් ශීර්ෂයන් කළමනාකරු තුළ පිටුවක් හෝ පළ කිරීමක් විවෘත කිරීමේදී පෙරනිමියෙන් හකුළනු ලැබිය යුතු නම්.</value>
   </data>
   <data name="If blocks should be collapsed by default when opening a page or post in the manager." xml:space="preserve">
-    <value>If blocks should be collapsed by default when opening a page or post in the manager.</value>
+    <value>කළමනාකරු තුළ පිටුවක් හෝ පළ කිරීමක් විවෘත කරන විට කුට්ටි පෙරනිමියෙන් බිඳ දැමිය යුතු නම්.</value>
   </data>
   <data name="If comments should be approved by default. Please note that this can be overridden by third party moderation services." xml:space="preserve">
-    <value>If comments should be approved by default. Please note that this can be overridden by third party moderation services.</value>
+    <value>අදහස් පෙරනිමියෙන් අනුමත කළ යුතු නම්. තෙවන පාර්ශ්ව මධ්‍යස්ථ සේවා මගින් මෙය ප්‍රතික්‍ෂේප කළ හැකි බව කරුණාවෙන් සලකන්න.</value>
   </data>
   <data name="If comments should be enabled for pages by default. Please note that this this can be overridden for specific pages." xml:space="preserve">
-    <value>If comments should be enabled for pages by default. Please note that this this can be overridden for specific pages.</value>
+    <value>පෙරනිමියෙන් පිටු සඳහා අදහස් සක්‍රීය කළ යුතු නම්. මෙය විශේෂිත පිටු සඳහා අභිබවා යා හැකි බව කරුණාවෙන් සලකන්න.</value>
   </data>
   <data name="If comments should be enabled for posts by default. Please note that this this can be overridden for specific posts." xml:space="preserve">
-    <value>If comments should be enabled for posts by default. Please note that this this can be overridden for specific posts.</value>
+    <value>පෙරනිමියෙන් පළ කිරීම් සඳහා අදහස් සක්‍රීය කළ යුතු නම්. මෙය විශේෂිත තනතුරු සඳහා ප්‍රතික්‍ෂේප කළ හැකි බව කරුණාවෙන් සලකන්න.</value>
   </data>
   <data name="The default page size when loading comments. Please note that this this can be overridden for specific pages." xml:space="preserve">
-    <value>The default page size when loading comments. Please note that this this can be overridden for specific pages.</value>
+    <value>අදහස් පූරණය කිරීමේදී පෙරනිමි පිටු ප්‍රමාණය. මෙය විශේෂිත පිටු සඳහා අභිබවා යා හැකි බව කරුණාවෙන් සලකන්න.</value>
   </data>
   <data name="The number of days commenting should be open after publish date. A value of 0 means forever." xml:space="preserve">
-    <value>The number of days commenting should be open after publish date. A value of 0 means forever.</value>
+    <value>ප්‍රකාශන දිනට පසුව අදහස් දක්වන දින ගණන විවෘත විය යුතුය. 0 අගයක් යනු සදහටම යන්නයි.</value>
   </data>
   <data name="The page size for lists within the manager interface." xml:space="preserve">
-    <value>The page size for lists within the manager interface.</value>
+    <value>කළමනාකරු අතුරුමුහුණත තුළ ලැයිස්තු සඳහා පිටු විශාලත්වය.</value>
   </data>
 </root>

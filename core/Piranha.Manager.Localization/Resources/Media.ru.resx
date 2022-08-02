@@ -49,7 +49,7 @@
     <value>Список</value>
   </data>
   <data name="Preferred aspect" xml:space="preserve">
-    <value>Preferred aspect</value>
+    <value>Предпочитаемое соотношение</value>
   </data>
   <data name="Original" xml:space="preserve">
     <value>Исходный</value>
@@ -76,7 +76,7 @@
     <value>Медиа файл успешно перемещен.</value>
   </data>
   <data name="Media files was successfully moved." xml:space="preserve">
-    <value>Медиа файлы успешно перемещен.</value>
+    <value>Медиа файлы успешно перемещены.</value>
   </data>
   <data name="The media file was not found." xml:space="preserve">
     <value>Медиа файл не найден.</value>
