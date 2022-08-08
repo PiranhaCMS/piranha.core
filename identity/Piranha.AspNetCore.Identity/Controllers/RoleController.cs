@@ -11,6 +11,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Piranha.AspNetCore.Identity.Models;
+using Piranha.Manager;
 using Piranha.Manager.Controllers;
 
 namespace Piranha.AspNetCore.Identity.Controllers
@@ -21,7 +22,7 @@ namespace Piranha.AspNetCore.Identity.Controllers
     {
         private readonly IDb _db;
 
-        public RoleController(IDb db)
+        public RoleController(IDb db, ManagerLocalizer localizer) : base(localizer)
         {
             _db = db;
         }
@@ -31,7 +32,15 @@ namespace Piranha.AspNetCore.Identity.Controllers
         [Authorize(Policy = Permissions.Roles)]
         public IActionResult List()
         {
-            return View(RoleListModel.Get(_db));
+            return View();
+        }
+        
+        [HttpGet]
+        [Route("/manager/roles/list")]
+        [Authorize(Policy = Permissions.Roles)]
+        public RoleListModel Get()
+        {
+            return RoleListModel.Get(_db);
         }
 
         [HttpGet]
@@ -65,25 +74,23 @@ namespace Piranha.AspNetCore.Identity.Controllers
             return View("Edit", model);
         }
 
-        [HttpPost]
-        [Route("/manager/role/delete")]
+        [HttpDelete]
+        [Route("/manager/role/delete/{id:Guid}")]
         [Authorize(Policy = Permissions.RolesDelete)]
-        public IActionResult Delete(Guid id)
+        public IActionResult Delete([FromRoute] Guid id)
         {
             var role = _db.Roles
                 .FirstOrDefault(r => r.Id == id);
 
-            if (role != null)
+            if (role == null)
             {
-                _db.Roles.Remove(role);
-                _db.SaveChanges();
-
-                SuccessMessage("The role has been deleted.");
-                return RedirectToAction("List");
+                return NotFound(GetErrorMessage(_localizer.Security["The role could not be found."]));
             }
 
-            ErrorMessage("The role could not be deleted.", false);
-            return RedirectToAction("List");
+            _db.Roles.Remove(role);
+            _db.SaveChanges();
+
+            return Ok(GetSuccessMessage(_localizer.Security["The role has been deleted."]));
         }
     }
 }

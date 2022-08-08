@@ -10,6 +10,7 @@
 
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
+using Piranha.Manager.Models;
 
 namespace Piranha.Manager.Controllers
 {
@@ -19,6 +20,13 @@ namespace Piranha.Manager.Controllers
     [Area("Manager")]
     public abstract class ManagerController : Controller
     {
+        protected readonly ManagerLocalizer _localizer;
+
+        protected ManagerController(ManagerLocalizer localizer)
+        {
+            _localizer = localizer;
+        }
+
         public override void OnActionExecuting(ActionExecutingContext context)
         {
             if (TempData.ContainsKey("MessageCss"))
@@ -85,6 +93,27 @@ namespace Piranha.Manager.Controllers
                 TempData["MessageCss"] = Models.StatusMessage.Information;
                 TempData["Message"] = msg;
             }
+        }
+        
+        protected AsyncResult GetSuccessMessage(string message)
+        {
+            return GetMessage(message, StatusMessage.Success);
+        }
+
+        protected AsyncResult GetErrorMessage(string errorMessage)
+        {
+            return GetMessage(!string.IsNullOrWhiteSpace(errorMessage) ? errorMessage :  _localizer.General["An error occurred"], StatusMessage.Error);
+        }
+
+        protected AsyncResult GetMessage(string message, string type)
+        {
+            var result = new AsyncResult();
+            result.Status = new StatusMessage
+            {
+                Type = type,
+                Body = message
+            };
+            return result;
         }
     }
 }

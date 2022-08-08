@@ -29,7 +29,6 @@ namespace Piranha.AspNetCore.Identity.Controllers
     {
         private readonly IDb _db;
         private readonly UserManager<User> _userManager;
-        private readonly ManagerLocalizer _localizer;
 
         /// <summary>
         /// Default constructor.
@@ -37,11 +36,10 @@ namespace Piranha.AspNetCore.Identity.Controllers
         /// <param name="db">The current db context</param>
         /// <param name="userManager">The current user manager</param>
         /// <param name="localizer">The manager localizer</param>
-        public UserController(IDb db, UserManager<User> userManager, ManagerLocalizer localizer)
+        public UserController(IDb db, UserManager<User> userManager, ManagerLocalizer localizer) : base(localizer)
         {
             _db = db;
             _userManager = userManager;
-            _localizer = localizer;
         }
 
         /// <summary>
@@ -212,27 +210,6 @@ namespace Piranha.AspNetCore.Identity.Controllers
                 return Ok(GetSuccessMessage(_localizer.Security["The user has been deleted."]));
             }
             return NotFound(GetErrorMessage(_localizer.Security["The user could not be found."]));
-        }
-
-        private AsyncResult GetSuccessMessage(string message)
-        {
-            return GetMessage(message, StatusMessage.Success);
-        }
-
-        private AsyncResult GetErrorMessage(string errorMessage)
-        {
-            return GetMessage(!string.IsNullOrWhiteSpace(errorMessage) ? errorMessage :  _localizer.General["An error occurred"], StatusMessage.Error);
-        }
-
-        private AsyncResult GetMessage(string message, string type)
-        {
-            var result = new AsyncResult();
-            result.Status = new StatusMessage
-            {
-                Type = type,
-                Body = message
-            };
-            return result;
         }
     }
 }
