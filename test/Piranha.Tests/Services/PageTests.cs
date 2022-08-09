@@ -41,6 +41,16 @@ namespace Piranha.Tests.Services
     }
 
     [Collection("Integration tests")]
+    public class PageTestsDistributedTwoLevelCache : PageTests
+    {
+        public override async Task InitializeAsync()
+        {
+            _cache = new Cache.DistributedTwoLevelCache((IMemoryCache)_services.GetService(typeof(IMemoryCache)), (IDistributedCache)_services.GetService(typeof(IDistributedCache)));
+            await base.InitializeAsync();
+        }
+    }
+
+    [Collection("Integration tests")]
     public class PageTests : BaseTestsAsync
     {
         public readonly Guid SITE_ID = Guid.NewGuid();
@@ -283,6 +293,7 @@ namespace Piranha.Tests.Services
             {
                 Assert.Equal(((Api)api).IsCached,
                     this.GetType() == typeof(PageTestsMemoryCache) ||
+                    this.GetType() == typeof(PageTestsDistributedTwoLevelCache) ||
                     this.GetType() == typeof(PageTestsDistributedCache));
             }
         }

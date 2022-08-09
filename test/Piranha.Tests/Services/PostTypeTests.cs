@@ -36,6 +36,16 @@ namespace Piranha.Tests.Repositories
     }
 
     [Collection("Integration tests")]
+    public class PostTypeTestsDistributedTwoLevelCache : PostTypeTests
+    {
+        public override Task InitializeAsync()
+        {
+            _cache = new Cache.DistributedTwoLevelCache((IMemoryCache)_services.GetService(typeof(IMemoryCache)), (IDistributedCache)_services.GetService(typeof(IDistributedCache)));
+            return base.InitializeAsync();
+        }
+    }
+
+    [Collection("Integration tests")]
     public class PostTypeTests : BaseTestsAsync
     {
         private readonly List<PostType> postTypes = new List<PostType>
@@ -167,6 +177,7 @@ namespace Piranha.Tests.Repositories
             {
                 Assert.Equal(((Api)api).IsCached,
                     this.GetType() == typeof(PostTypeTestsMemoryCache) ||
+                    this.GetType() == typeof(PostTypeTestsDistributedTwoLevelCache) ||
                     this.GetType() == typeof(PostTypeTestsDistributedCache));
             }
         }

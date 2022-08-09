@@ -39,6 +39,16 @@ namespace Piranha.Tests.Services
     }
 
     [Collection("Integration tests")]
+    public class ContentTestsDistributedTwoLevelCache : ContentTests
+    {
+        public override async Task InitializeAsync()
+        {
+            _cache = new Cache.DistributedTwoLevelCache((IMemoryCache)_services.GetService(typeof(IMemoryCache)), (IDistributedCache)_services.GetService(typeof(IDistributedCache)));
+            await base.InitializeAsync();
+        }
+    }
+
+    [Collection("Integration tests")]
     public class ContentTests : BaseTestsAsync
     {
         private readonly Guid ID_1 = Guid.NewGuid();

@@ -35,6 +35,17 @@ namespace Piranha.Tests.Services
         }
     }
 
+
+    [Collection("Integration tests")]
+    public class AliasTestsDistributedTwoLevelCache : AliasTests
+    {
+        public override Task InitializeAsync()
+        {
+            _cache = new Cache.DistributedTwoLevelCache((IMemoryCache)_services.GetService(typeof(IMemoryCache)), (IDistributedCache)_services.GetService(typeof(IDistributedCache)));
+            return base.InitializeAsync();
+        }
+    }
+
     [Collection("Integration tests")]
     public class AliasTests : BaseTestsAsync
     {
@@ -107,7 +118,9 @@ namespace Piranha.Tests.Services
             using (var api = CreateApi()) {
                 Assert.Equal(((Api)api).IsCached,
                     this.GetType() == typeof(AliasTestsMemoryCache) ||
-                    this.GetType() == typeof(AliasTestsDistributedCache));
+                    this.GetType() == typeof(AliasTestsDistributedCache) ||
+                    this.GetType() == typeof(AliasTestsDistributedTwoLevelCache) 
+                    );
             }
         }
 
