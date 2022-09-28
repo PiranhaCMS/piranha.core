@@ -203,6 +203,7 @@ namespace Piranha
             Instance._mediaTypes.Images.Add(".jfif", "image/jpeg");
             Instance._mediaTypes.Images.Add(".gif", "image/gif");
             Instance._mediaTypes.Images.Add(".png", "image/png");
+            Instance._mediaTypes.Images.Add(".webp", "image/webp");
             Instance._mediaTypes.Videos.Add(".mp4", "video/mp4");
             Instance._mediaTypes.Audio.Add(".mp3", "audio/mpeg");
             Instance._mediaTypes.Audio.Add(".wav", "audio/wav");
