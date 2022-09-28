@@ -70,7 +70,7 @@
                             </div>
                         </div>
                         <span class="field-description small text-muted">
-                            http://localhost:5000/<span v-text="slug"></span>
+                            {{ piranha.utils.getOrigin() + "/" }}<span v-text="slug"></span>
                         </span>
                     </div>
                     <div class="form-group">
