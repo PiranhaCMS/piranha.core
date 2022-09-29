@@ -8,12 +8,9 @@
  *
  */
 
-namespace Piranha.Manager.Models
-{
-    /// <summary>
-    /// Page edit model.
-    /// </summary>
-    public class SiteContentEditModel : Content.ContentEditModel
-    {
-    }
-}
+namespace Piranha.Manager.Models;
+
+/// <summary>
+/// Page edit model.
+/// </summary>
+public class SiteContentEditModel : Content.ContentEditModel { }

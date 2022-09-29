@@ -8,33 +8,32 @@
  *
  */
 
-namespace Piranha.Extend
+namespace Piranha.Extend;
+
+/// <summary>
+/// Attribute for marking a property as a region.
+/// </summary>
+[AttributeUsage(AttributeTargets.Property)]
+[Obsolete("Please refer to Description on the RegionAttribute instead.", true)]
+public class RegionDescriptionAttribute : Attribute
 {
     /// <summary>
-    /// Attribute for marking a property as a region.
+    /// Gets/sets the optional description text.
     /// </summary>
-    [AttributeUsage(AttributeTargets.Property)]
-    [Obsolete("Please refer to Description on the RegionAttribute instead.", true)]
-    public class RegionDescriptionAttribute : Attribute
+    public string Text { get; set; }
+
+    /// <summary>
+    /// Default constructor.
+    /// </summary>
+    public RegionDescriptionAttribute() { }
+
+    /// <summary>
+    /// Creates a new description attribute and
+    /// sets the description text.
+    /// </summary>
+    /// <param name="text">The description text</param>
+    public RegionDescriptionAttribute(string text)
     {
-        /// <summary>
-        /// Gets/sets the optional description text.
-        /// </summary>
-        public string Text { get; set; }
-
-        /// <summary>
-        /// Default constructor.
-        /// </summary>
-        public RegionDescriptionAttribute() { }
-
-        /// <summary>
-        /// Creates a new description attribute and
-        /// sets the description text.
-        /// </summary>
-        /// <param name="text">The description text</param>
-        public RegionDescriptionAttribute(string text)
-        {
-            Text = text;
-        }
+        Text = text;
     }
 }

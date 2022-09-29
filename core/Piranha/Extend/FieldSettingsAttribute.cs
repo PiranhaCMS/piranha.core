@@ -8,13 +8,10 @@
  *
  */
 
-namespace Piranha.Extend
-{
-    /// <summary>
-    /// Base class for field settings.
-    /// </summary>
-    [AttributeUsage(AttributeTargets.Property)]
-    public abstract class FieldSettingsAttribute : Attribute
-    {
-    }
-}
+namespace Piranha.Extend;
+
+/// <summary>
+/// Base class for field settings.
+/// </summary>
+[AttributeUsage(AttributeTargets.Property)]
+public abstract class FieldSettingsAttribute : Attribute { }

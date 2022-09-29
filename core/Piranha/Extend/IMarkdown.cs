@@ -8,18 +8,17 @@
  *
  */
 
-namespace Piranha.Extend
+namespace Piranha.Extend;
+
+/// <summary>
+/// Interface for converting markdown to Html.
+/// </summary>
+public interface IMarkdown
 {
     /// <summary>
-    /// Interface for converting markdown to Html.
+    /// Transforms the given markdown string to html.
     /// </summary>
-    public interface IMarkdown
-    {
-        /// <summary>
-        /// Transforms the given markdown string to html.
-        /// </summary>
-        /// <param name="md">The markdown</param>
-        /// <returns>The transformed html</returns>
-        string Transform(string md);
-    }
+    /// <param name="md">The markdown</param>
+    /// <returns>The transformed html</returns>
+    string Transform(string md);
 }

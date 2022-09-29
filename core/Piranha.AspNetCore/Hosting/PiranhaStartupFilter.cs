@@ -12,30 +12,29 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Piranha.AspNetCore.Http;
 
-namespace Piranha.AspNetCore.Hosting
+namespace Piranha.AspNetCore.Hosting;
+
+/// <summary>
+/// Startup filter for adding application routing to the beginning
+/// of the pipeline.
+/// </summary>
+internal class PiranhaStartupFilter : IStartupFilter
 {
     /// <summary>
-    /// Startup filter for adding application routing to the beginning
-    /// of the pipeline.
+    /// Configures the application builder.
     /// </summary>
-    internal class PiranhaStartupFilter : IStartupFilter
+    /// <param name="next">The next filter</param>
+    /// <returns>The configure action</returns>
+    public Action<IApplicationBuilder> Configure(Action<IApplicationBuilder> next)
     {
-        /// <summary>
-        /// Configures the application builder.
-        /// </summary>
-        /// <param name="next">The next filter</param>
-        /// <returns>The configure action</returns>
-        public Action<IApplicationBuilder> Configure(Action<IApplicationBuilder> next)
+        return builder =>
         {
-            return builder =>
-            {
-                builder
-                    .UseSecurityMiddleware()
-                    .UseStaticFiles()
-                    .UseMiddleware<RoutingMiddleware>()
-                    .UseMiddleware<SitemapMiddleware>();
-                next(builder);
-            };
-        }
+            builder
+                .UseSecurityMiddleware()
+                .UseStaticFiles()
+                .UseMiddleware<RoutingMiddleware>()
+                .UseMiddleware<SitemapMiddleware>();
+            next(builder);
+        };
     }
 }

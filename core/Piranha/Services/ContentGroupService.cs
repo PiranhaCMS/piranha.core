@@ -13,120 +13,119 @@ using Piranha.Cache;
 using Piranha.Models;
 using Piranha.Repositories;
 
-namespace Piranha.Services
+namespace Piranha.Services;
+
+public class ContentGroupService : IContentGroupService
 {
-    public class ContentGroupService : IContentGroupService
+    private readonly IContentGroupRepository _repo;
+    private readonly ICache _cache;
+    private static readonly string CacheKey = "Piranha_ContentGroup";
+
+    /// <summary>
+    /// Default constructor.
+    /// </summary>
+    /// <param name="repo">The main repository</param>
+    /// <param name="cache">The optional model cache</param>
+    public ContentGroupService(IContentGroupRepository repo, ICache cache)
     {
-        private readonly IContentGroupRepository _repo;
-        private readonly ICache _cache;
-        private static readonly string CacheKey = "Piranha_ContentGroup";
+        _repo = repo;
 
-        /// <summary>
-        /// Default constructor.
-        /// </summary>
-        /// <param name="repo">The main repository</param>
-        /// <param name="cache">The optional model cache</param>
-        public ContentGroupService(IContentGroupRepository repo, ICache cache)
+        if (App.CacheLevel != CacheLevel.None)
         {
-            _repo = repo;
-
-            if (App.CacheLevel != CacheLevel.None)
-            {
-                _cache = cache;
-            }
+            _cache = cache;
         }
+    }
 
-        /// <summary>
-        /// Gets all available models.
-        /// </summary>
-        /// <returns>The available models</returns>
-        public Task<IEnumerable<ContentGroup>> GetAllAsync()
+    /// <summary>
+    /// Gets all available models.
+    /// </summary>
+    /// <returns>The available models</returns>
+    public Task<IEnumerable<ContentGroup>> GetAllAsync()
+    {
+        return GetGroups();
+    }
+
+    /// <summary>
+    /// Gets the model with the specified id.
+    /// </summary>
+    /// <param name="id">The unique id</param>
+    /// <returns>The model</returns>
+    public async Task<ContentGroup> GetByIdAsync(string id)
+    {
+        if (_cache != null && App.CacheLevel != CacheLevel.None)
         {
-            return GetGroups();
-        }
+            var groups = await GetGroups().ConfigureAwait(false);
 
-        /// <summary>
-        /// Gets the model with the specified id.
-        /// </summary>
-        /// <param name="id">The unique id</param>
-        /// <returns>The model</returns>
-        public async Task<ContentGroup> GetByIdAsync(string id)
+            return groups.FirstOrDefault(t => t.Id == id);
+        }
+        else
         {
-            if (_cache != null && App.CacheLevel != CacheLevel.None)
-            {
-                var groups = await GetGroups().ConfigureAwait(false);
-
-                return groups.FirstOrDefault(t => t.Id == id);
-            }
-            else
-            {
-                return await _repo.GetByIdAsync(id).ConfigureAwait(false);
-            }
+            return await _repo.GetByIdAsync(id).ConfigureAwait(false);
         }
+    }
 
-        /// <summary>
-        /// Adds or updates the given model in the database
-        /// depending on its state.
-        /// </summary>
-        /// <param name="model">The model</param>
-        public async Task SaveAsync(ContentGroup model)
+    /// <summary>
+    /// Adds or updates the given model in the database
+    /// depending on its state.
+    /// </summary>
+    /// <param name="model">The model</param>
+    public async Task SaveAsync(ContentGroup model)
+    {
+        // Validate model
+        var context = new ValidationContext(model);
+        Validator.ValidateObject(model, context, true);
+
+        // Call hooks & save
+        App.Hooks.OnBeforeSave(model);
+        await _repo.SaveAsync(model).ConfigureAwait(false);
+        App.Hooks.OnAfterSave(model);
+
+        // Clear cache
+        _cache?.Remove(CacheKey);
+    }
+
+    /// <summary>
+    /// Deletes the model with the specified id.
+    /// </summary>
+    /// <param name="id">The unique id</param>
+    public async Task DeleteAsync(string id)
+    {
+        var model = await _repo.GetByIdAsync(id).ConfigureAwait(false);
+
+        if (model != null)
         {
-            // Validate model
-            var context = new ValidationContext(model);
-            Validator.ValidateObject(model, context, true);
-
-            // Call hooks & save
-            App.Hooks.OnBeforeSave(model);
-            await _repo.SaveAsync(model).ConfigureAwait(false);
-            App.Hooks.OnAfterSave(model);
-
-            // Clear cache
-            _cache?.Remove(CacheKey);
+            await DeleteAsync(model).ConfigureAwait(false);
         }
+    }
 
-        /// <summary>
-        /// Deletes the model with the specified id.
-        /// </summary>
-        /// <param name="id">The unique id</param>
-        public async Task DeleteAsync(string id)
+    /// <summary>
+    /// Deletes the given model.
+    /// </summary>
+    /// <param name="model">The model</param>
+    public async Task DeleteAsync(ContentGroup model)
+    {
+        // Call hooks & delete
+        App.Hooks.OnBeforeDelete(model);
+        await _repo.DeleteAsync(model.Id).ConfigureAwait(false);
+        App.Hooks.OnAfterDelete(model);
+
+        // Clear cache
+        _cache?.Remove(CacheKey);
+    }
+
+    /// <summary>
+    /// Gets the content types from the database.
+    /// </summary>
+    private async Task<IEnumerable<ContentGroup>> GetGroups()
+    {
+        var groups = _cache?.Get<IEnumerable<ContentGroup>>(CacheKey);
+
+        if (groups == null)
         {
-            var model = await _repo.GetByIdAsync(id).ConfigureAwait(false);
+            groups = await _repo.GetAllAsync().ConfigureAwait(false);
 
-            if (model != null)
-            {
-                await DeleteAsync(model).ConfigureAwait(false);
-            }
+            _cache?.Set(CacheKey, groups);
         }
-
-        /// <summary>
-        /// Deletes the given model.
-        /// </summary>
-        /// <param name="model">The model</param>
-        public async Task DeleteAsync(ContentGroup model)
-        {
-            // Call hooks & delete
-            App.Hooks.OnBeforeDelete(model);
-            await _repo.DeleteAsync(model.Id).ConfigureAwait(false);
-            App.Hooks.OnAfterDelete(model);
-
-            // Clear cache
-            _cache?.Remove(CacheKey);
-        }
-
-        /// <summary>
-        /// Gets the content types from the database.
-        /// </summary>
-        private async Task<IEnumerable<ContentGroup>> GetGroups()
-        {
-            var groups = _cache?.Get<IEnumerable<ContentGroup>>(CacheKey);
-
-            if (groups == null)
-            {
-                groups = await _repo.GetAllAsync().ConfigureAwait(false);
-
-                _cache?.Set(CacheKey, groups);
-            }
-            return groups;
-        }
+        return groups;
     }
 }

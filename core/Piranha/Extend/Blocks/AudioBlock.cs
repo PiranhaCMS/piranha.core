@@ -10,27 +10,26 @@
 
 using Piranha.Extend.Fields;
 
-namespace Piranha.Extend.Blocks
+namespace Piranha.Extend.Blocks;
+
+/// <summary>
+/// Audio block.
+/// </summary>
+[BlockType(Name = "Audio", Category = "Media", Icon = "fas fa-headphones", Component = "audio-block")]
+public class AudioBlock : Block
 {
     /// <summary>
-    /// Audio block.
+    /// Gets/sets the Audio body.
     /// </summary>
-    [BlockType(Name = "Audio", Category = "Media", Icon = "fas fa-headphones", Component = "audio-block")]
-    public class AudioBlock : Block
+    public AudioField Body { get; set; }
+
+    public override string GetTitle()
     {
-        /// <summary>
-        /// Gets/sets the Audio body.
-        /// </summary>
-        public AudioField Body { get; set; }
-
-        public override string GetTitle()
+        if (Body != null && Body.Media != null)
         {
-            if (Body != null && Body.Media != null)
-            {
-                return Body.Media.Filename;
-            }
-
-            return "No audio selected";
+            return Body.Media.Filename;
         }
+
+        return "No audio selected";
     }
 }

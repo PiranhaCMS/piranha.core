@@ -8,16 +8,15 @@
  *
  */
 
-namespace Piranha.WebApi
+namespace Piranha.WebApi;
+
+/// <summary>
+/// The available api permissions.
+/// </summary>
+public static class Permissions
 {
-    /// <summary>
-    /// The available api permissions.
-    /// </summary>
-    public static class Permissions
-    {
-        public const string Media = "PiranhaApiMedia";
-        public const string Pages = "PiranhaApiPages";
-        public const string Posts = "PiranhaApiPosts";
-        public const string Sitemap = "PiranhaApiSitemap";
-    }
+    public const string Media = "PiranhaApiMedia";
+    public const string Pages = "PiranhaApiPages";
+    public const string Posts = "PiranhaApiPosts";
+    public const string Sitemap = "PiranhaApiSitemap";
 }

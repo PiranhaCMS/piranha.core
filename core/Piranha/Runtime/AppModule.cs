@@ -10,13 +10,12 @@
 
 using Piranha.Extend;
 
-namespace Piranha.Runtime
+namespace Piranha.Runtime;
+
+public sealed class AppModule : AppDataItem
 {
-    public sealed class AppModule : AppDataItem
-    {
-        /// <summary>
-        /// Gets/sets the module instance.
-        /// </summary>
-        public IModule Instance { get; set; }
-    }
+    /// <summary>
+    /// Gets/sets the module instance.
+    /// </summary>
+    public IModule Instance { get; set; }
 }

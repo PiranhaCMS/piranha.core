@@ -18,373 +18,372 @@ using Newtonsoft.Json;
 using Piranha.Extend;
 using Piranha.Runtime;
 
-namespace Piranha
+namespace Piranha;
+
+/// <summary>
+/// Utility methods.
+/// </summary>
+public static class Utils
 {
     /// <summary>
-    /// Utility methods.
+    /// Gets a subset of the given array as a new array.
     /// </summary>
-    public static class Utils
+    /// <typeparam name="T">The array type</typeparam>
+    /// <param name="arr">The array</param>
+    /// <param name="startpos">The startpos</param>
+    /// <param name="length">The length</param>
+    /// <returns>The new array</returns>
+    public static T[] Subset<T>(this T[] arr, int startpos = 0, int length = 0)
     {
-        /// <summary>
-        /// Gets a subset of the given array as a new array.
-        /// </summary>
-        /// <typeparam name="T">The array type</typeparam>
-        /// <param name="arr">The array</param>
-        /// <param name="startpos">The startpos</param>
-        /// <param name="length">The length</param>
-        /// <returns>The new array</returns>
-        public static T[] Subset<T>(this T[] arr, int startpos = 0, int length = 0)
+        List<T> tmp = new List<T>();
+
+        length = length > 0 ? length : arr.Length - startpos;
+
+        for (var i = 0; i < arr.Length; i++)
         {
-            List<T> tmp = new List<T>();
-
-            length = length > 0 ? length : arr.Length - startpos;
-
-            for (var i = 0; i < arr.Length; i++)
+            if (i >= startpos && i < (startpos + length))
             {
-                if (i >= startpos && i < (startpos + length))
-                {
-                    tmp.Add(arr[i]);
-                }
-            }
-            return tmp.ToArray();
-        }
-
-        /// <summary>
-        /// Generates a slug from the given string.
-        /// </summary>
-        /// <param name="str">The string</param>
-        /// <param name="hierarchical">If forward slashes should be allowed</param>
-        /// <returns>The slug</returns>
-        public static string GenerateSlug(string str, bool hierarchical = true)
-        {
-            if (App.Hooks != null && App.Hooks.OnGenerateSlug != null)
-            {
-                // Call the registered slug generation
-                return App.Hooks.OnGenerateSlug(str);
-            }
-
-            // Trim & make lower case
-            var slug = str.Trim().ToLower();
-
-            // Convert culture specific characters
-            slug = slug
-                .Replace("å", "a")
-                .Replace("ä", "a")
-                .Replace("á", "a")
-                .Replace("à", "a")
-                .Replace("ã", "a")
-                .Replace("â", "a")
-                .Replace("ö", "o")
-                .Replace("ó", "o")
-                .Replace("ò", "o")
-                .Replace("ô", "o")
-                .Replace("õ", "o")
-                .Replace("é", "e")
-                .Replace("è", "e")
-                .Replace("ê", "e")
-                .Replace("í", "i")
-                .Replace("ì", "i")
-                .Replace("ú", "u")
-                .Replace("ž", "z")
-                .Replace("š", "s")
-                .Replace("č", "c")
-                .Replace("ç", "c");
-
-            // Remove special characters
-            slug = Regex.Replace(slug, @"[^a-z\u0600-\u06FF0-9-/ ]", "").Replace("--", "-");
-
-            // Remove whitespaces
-            slug = Regex.Replace(slug.Replace("-", " "), @"\s+", " ").Replace(" ", "-");
-
-            // Remove slash if non-hierarchical
-            if (!hierarchical)
-                slug = slug.Replace("/", "-");
-
-            // Remove multiple dashes
-            slug = Regex.Replace(slug, @"[-]+", "-");
-
-            // Remove leading & trailing dashes
-            if (slug.EndsWith("-"))
-                slug = slug.Substring(0, slug.LastIndexOf("-"));
-            if (slug.StartsWith("-"))
-                slug = slug.Substring(Math.Min(slug.IndexOf("-") + 1, slug.Length));
-            return slug;
-        }
-
-        /// <summary>
-        /// Generates a camel cased internal id from the given string.
-        /// </summary>
-        /// <param name="str">The string</param>
-        /// <returns>The internal id</returns>
-        public static string GenerateInternalId(string str)
-        {
-            var ti = new CultureInfo("en-US", false).TextInfo;
-            return ti.ToTitleCase(GenerateSlug(str).Replace('-', ' ')).Replace(" ", "");
-        }
-
-        /// <summary>
-        /// Generates a ETag from the given name and date.
-        /// </summary>
-        /// <param name="name">The resource name</param>
-        /// <param name="date">The modification date</param>
-        /// <returns>The etag</returns>
-        public static string GenerateETag(string name, DateTime date)
-        {
-            var encoding = new UTF8Encoding();
-
-            using (var crypto = MD5.Create())
-            {
-                var str = name + date.ToString("yyyy-MM-dd HH:mm:ss");
-                var bytes = crypto.ComputeHash(encoding.GetBytes(str));
-                return $"\"{Convert.ToBase64String(bytes)}\"";
+                tmp.Add(arr[i]);
             }
         }
+        return tmp.ToArray();
+    }
 
-        /// <summary>
-        /// Gets the gravatar URL from the given parameters.
-        /// </summary>
-        /// <param name="email">The email address</param>
-        /// <param name="size">The requested size</param>
-        /// <returns>The gravatar URL</returns>
-        public static string GenerateGravatarUrl(string email, int size = 0)
+    /// <summary>
+    /// Generates a slug from the given string.
+    /// </summary>
+    /// <param name="str">The string</param>
+    /// <param name="hierarchical">If forward slashes should be allowed</param>
+    /// <returns>The slug</returns>
+    public static string GenerateSlug(string str, bool hierarchical = true)
+    {
+        if (App.Hooks != null && App.Hooks.OnGenerateSlug != null)
         {
-            using (var md5 = MD5.Create())
-            {
-                var bytes = md5.ComputeHash(Encoding.UTF8.GetBytes(email));
+            // Call the registered slug generation
+            return App.Hooks.OnGenerateSlug(str);
+        }
 
-                var sb = new StringBuilder(bytes.Length * 2);
-                for (var n = 0; n < bytes.Length; n++)
-                {
-                    sb.Append(bytes[n].ToString("X2"));
-                }
-                return "https://www.gravatar.com/avatar/" + sb.ToString().ToLower() +
-                       (size > 0 ? "?s=" + size : "");
+        // Trim & make lower case
+        var slug = str.Trim().ToLower();
+
+        // Convert culture specific characters
+        slug = slug
+            .Replace("å", "a")
+            .Replace("ä", "a")
+            .Replace("á", "a")
+            .Replace("à", "a")
+            .Replace("ã", "a")
+            .Replace("â", "a")
+            .Replace("ö", "o")
+            .Replace("ó", "o")
+            .Replace("ò", "o")
+            .Replace("ô", "o")
+            .Replace("õ", "o")
+            .Replace("é", "e")
+            .Replace("è", "e")
+            .Replace("ê", "e")
+            .Replace("í", "i")
+            .Replace("ì", "i")
+            .Replace("ú", "u")
+            .Replace("ž", "z")
+            .Replace("š", "s")
+            .Replace("č", "c")
+            .Replace("ç", "c");
+
+        // Remove special characters
+        slug = Regex.Replace(slug, @"[^a-z\u0600-\u06FF0-9-/ ]", "").Replace("--", "-");
+
+        // Remove whitespaces
+        slug = Regex.Replace(slug.Replace("-", " "), @"\s+", " ").Replace(" ", "-");
+
+        // Remove slash if non-hierarchical
+        if (!hierarchical)
+            slug = slug.Replace("/", "-");
+
+        // Remove multiple dashes
+        slug = Regex.Replace(slug, @"[-]+", "-");
+
+        // Remove leading & trailing dashes
+        if (slug.EndsWith("-"))
+            slug = slug.Substring(0, slug.LastIndexOf("-"));
+        if (slug.StartsWith("-"))
+            slug = slug.Substring(Math.Min(slug.IndexOf("-") + 1, slug.Length));
+        return slug;
+    }
+
+    /// <summary>
+    /// Generates a camel cased internal id from the given string.
+    /// </summary>
+    /// <param name="str">The string</param>
+    /// <returns>The internal id</returns>
+    public static string GenerateInternalId(string str)
+    {
+        var ti = new CultureInfo("en-US", false).TextInfo;
+        return ti.ToTitleCase(GenerateSlug(str).Replace('-', ' ')).Replace(" ", "");
+    }
+
+    /// <summary>
+    /// Generates a ETag from the given name and date.
+    /// </summary>
+    /// <param name="name">The resource name</param>
+    /// <param name="date">The modification date</param>
+    /// <returns>The etag</returns>
+    public static string GenerateETag(string name, DateTime date)
+    {
+        var encoding = new UTF8Encoding();
+
+        using (var crypto = MD5.Create())
+        {
+            var str = name + date.ToString("yyyy-MM-dd HH:mm:ss");
+            var bytes = crypto.ComputeHash(encoding.GetBytes(str));
+            return $"\"{Convert.ToBase64String(bytes)}\"";
+        }
+    }
+
+    /// <summary>
+    /// Gets the gravatar URL from the given parameters.
+    /// </summary>
+    /// <param name="email">The email address</param>
+    /// <param name="size">The requested size</param>
+    /// <returns>The gravatar URL</returns>
+    public static string GenerateGravatarUrl(string email, int size = 0)
+    {
+        using (var md5 = MD5.Create())
+        {
+            var bytes = md5.ComputeHash(Encoding.UTF8.GetBytes(email));
+
+            var sb = new StringBuilder(bytes.Length * 2);
+            for (var n = 0; n < bytes.Length; n++)
+            {
+                sb.Append(bytes[n].ToString("X2"));
             }
+            return "https://www.gravatar.com/avatar/" + sb.ToString().ToLower() +
+                    (size > 0 ? "?s=" + size : "");
         }
+    }
 
-        /// <summary>
-        ///
-        /// </summary>
-        /// <param name="bytes"></param>
-        /// <returns></returns>
-        public static string FormatByteSize(double bytes)
+    /// <summary>
+    ///
+    /// </summary>
+    /// <param name="bytes"></param>
+    /// <returns></returns>
+    public static string FormatByteSize(double bytes)
+    {
+        string[] SizeSuffixes = { "bytes", "KB", "MB", "GB" };
+
+        int index = 0;
+        if (bytes > 1023)
         {
-            string[] SizeSuffixes = { "bytes", "KB", "MB", "GB" };
-
-            int index = 0;
-            if (bytes > 1023)
+            do
             {
-                do
-                {
-                    bytes /= 1024;
-                    index++;
-                } while (bytes >= 1024 && index < 3);
-            }
-
-            return $"{bytes:0.00} {SizeSuffixes[index]}";
+                bytes /= 1024;
+                index++;
+            } while (bytes >= 1024 && index < 3);
         }
 
-        /// <summary>
-        /// Gets the first paragraph from the given html string.
-        /// </summary>
-        /// <param name="str">The string</param>
-        /// <returns>The first paragraph</returns>
-        public static string FirstParagraph(string str)
-        {
-            Regex reg = new Regex("<p[^>]*>.*?</p>");
-            var matches = reg.Matches(str);
+        return $"{bytes:0.00} {SizeSuffixes[index]}";
+    }
 
-            return matches.Count > 0 ? matches[0].Value : "";
+    /// <summary>
+    /// Gets the first paragraph from the given html string.
+    /// </summary>
+    /// <param name="str">The string</param>
+    /// <returns>The first paragraph</returns>
+    public static string FirstParagraph(string str)
+    {
+        Regex reg = new Regex("<p[^>]*>.*?</p>");
+        var matches = reg.Matches(str);
+
+        return matches.Count > 0 ? matches[0].Value : "";
+    }
+
+    /// <summary>
+    /// Gets the first paragraph from the given markdown field.
+    /// </summary>
+    /// <param name="md">The field</param>
+    /// <returns>The first paragraph</returns>
+    public static string FirstParagraph(Extend.Fields.MarkdownField md)
+    {
+        Regex reg = new Regex("<p[^>]*>.*?</p>");
+        var matches = reg.Matches(md.ToHtml());
+
+        return matches.Count > 0 ? matches[0].Value : "";
+    }
+
+    /// <summary>
+    /// Gets the first paragraph from the given html field.
+    /// </summary>
+    /// <param name="html">The field</param>
+    /// <returns>The first paragraph</returns>
+    public static string FirstParagraph(Extend.Fields.HtmlField html)
+    {
+        Regex reg = new Regex("<p[^>]*>.*?</p>");
+        var matches = reg.Matches(html.Value);
+
+        return matches.Count > 0 ? matches[0].Value : "";
+    }
+
+    /// <summary>
+    /// Gets the formatted three digit version number of the given assembly.
+    /// </summary>
+    /// <param name="assembly">The assembly</param>
+    /// <returns>The version string</returns>
+    public static string GetAssemblyVersion(Assembly assembly)
+    {
+        var version = assembly.GetName().Version;
+
+        return $"{version.Major}.{version.Minor}.{version.Build}";
+    }
+
+    /// <summary>
+    /// Gets the hashed version string of the given assembly.
+    /// </summary>
+    /// <param name="assembly">The assembly</param>
+    /// <returns>The hashed version string</returns>
+    public static string GetAssemblyVersionHash(Assembly assembly)
+    {
+        return Math.Abs(GetAssemblyVersion(assembly).GetHashCode()).ToString();
+    }
+
+    /// <summary>
+    /// Checks if the given assembly is a pre-release.
+    /// </summary>
+    /// <param name="assembly">The assembly</param>
+    /// <returns>If it is a pre-release</returns>
+    public static bool IsPreRelease(Assembly assembly)
+    {
+        var version = assembly.GetCustomAttribute<AssemblyInformationalVersionAttribute>().InformationalVersion.ToLower();
+
+        return version.Contains("alpha") || version.Contains("beta");
+    }
+
+    /// <summary>
+    /// Clones the entire given object into a new instance.
+    /// </summary>
+    /// <param name="obj">The object to clone</param>
+    /// <typeparam name="T">The object type</typeparam>
+    /// <returns>The cloned instance</returns>
+    public static T DeepClone<T>(T obj)
+    {
+        if (obj == null)
+        {
+            // Null value does not need to be cloned.
+            return default(T);
         }
 
-        /// <summary>
-        /// Gets the first paragraph from the given markdown field.
-        /// </summary>
-        /// <param name="md">The field</param>
-        /// <returns>The first paragraph</returns>
-        public static string FirstParagraph(Extend.Fields.MarkdownField md)
+        if (obj is ValueType)
         {
-            Regex reg = new Regex("<p[^>]*>.*?</p>");
-            var matches = reg.Matches(md.ToHtml());
-
-            return matches.Count > 0 ? matches[0].Value : "";
+            // Value types do not need to be cloned.
+            return obj;
         }
 
-        /// <summary>
-        /// Gets the first paragraph from the given html field.
-        /// </summary>
-        /// <param name="html">The field</param>
-        /// <returns>The first paragraph</returns>
-        public static string FirstParagraph(Extend.Fields.HtmlField html)
+        var settings = new JsonSerializerSettings
         {
-            Regex reg = new Regex("<p[^>]*>.*?</p>");
-            var matches = reg.Matches(html.Value);
+            TypeNameHandling = TypeNameHandling.All
+        };
+        var json = JsonConvert.SerializeObject(obj, settings);
 
-            return matches.Count > 0 ? matches[0].Value : "";
+        return JsonConvert.DeserializeObject<T>(json, settings);
+    }
+
+    /// <summary>
+    /// Gets the value of the property with the given name for the
+    /// given instance.
+    /// </summary>
+    /// <param name="type">The current type</param>
+    /// <param name="propertyName">The property name</param>
+    /// <param name="instance">The object instance</param>
+    /// <returns>The property value</returns>
+    public static object GetPropertyValue(this Type type, string propertyName, object instance)
+    {
+        var property = type.GetProperty(propertyName, App.PropertyBindings);
+
+        if (property != null)
+        {
+            return property.GetValue(instance);
         }
+        return null;
+    }
 
-        /// <summary>
-        /// Gets the formatted three digit version number of the given assembly.
-        /// </summary>
-        /// <param name="assembly">The assembly</param>
-        /// <returns>The version string</returns>
-        public static string GetAssemblyVersion(Assembly assembly)
+    /// <summary>
+    /// Sets the value of the property with the given name for the
+    /// given instance.
+    /// </summary>
+    /// <param name="type">The current type</param>
+    /// <param name="propertyName">The property name</param>
+    /// <param name="instance">The object instance</param>
+    /// <param name="value">The value to set</param>
+    public static void SetPropertyValue(this Type type, string propertyName, object instance, object value)
+    {
+        var property = type.GetProperty(propertyName, App.PropertyBindings);
+
+        if (property != null)
         {
-            var version = assembly.GetName().Version;
-
-            return $"{version.Major}.{version.Minor}.{version.Build}";
+            property.SetValue(instance, value);
         }
+    }
 
-        /// <summary>
-        /// Gets the hashed version string of the given assembly.
-        /// </summary>
-        /// <param name="assembly">The assembly</param>
-        /// <returns>The hashed version string</returns>
-        public static string GetAssemblyVersionHash(Assembly assembly)
+    /// <summary>
+    /// Gets the app method with the given name for the specified type.
+    /// </summary>
+    /// <param name="name">The method name</param>
+    /// <typeparam name="T">The type</typeparam>
+    /// <returns>The method if found, otherwise null</returns>
+    internal static AppMethod GetMethod<T>(string name)
+    {
+        var methodInfo = typeof(T).GetMethod(name);
+
+        if (methodInfo != null)
         {
-            return Math.Abs(GetAssemblyVersion(assembly).GetHashCode()).ToString();
-        }
-
-        /// <summary>
-        /// Checks if the given assembly is a pre-release.
-        /// </summary>
-        /// <param name="assembly">The assembly</param>
-        /// <returns>If it is a pre-release</returns>
-        public static bool IsPreRelease(Assembly assembly)
-        {
-            var version = assembly.GetCustomAttribute<AssemblyInformationalVersionAttribute>().InformationalVersion.ToLower();
-
-            return version.Contains("alpha") || version.Contains("beta");
-        }
-
-        /// <summary>
-        /// Clones the entire given object into a new instance.
-        /// </summary>
-        /// <param name="obj">The object to clone</param>
-        /// <typeparam name="T">The object type</typeparam>
-        /// <returns>The cloned instance</returns>
-        public static T DeepClone<T>(T obj)
-        {
-            if (obj == null)
+            var method = new AppMethod
             {
-                // Null value does not need to be cloned.
-                return default(T);
-            }
-
-            if (obj is ValueType)
-            {
-                // Value types do not need to be cloned.
-                return obj;
-            }
-
-            var settings = new JsonSerializerSettings
-            {
-                TypeNameHandling = TypeNameHandling.All
+                Method = methodInfo,
+                IsAsync = typeof(Task).IsAssignableFrom(methodInfo.ReturnType)
             };
-            var json = JsonConvert.SerializeObject(obj, settings);
 
-            return JsonConvert.DeserializeObject<T>(json, settings);
-        }
-
-        /// <summary>
-        /// Gets the value of the property with the given name for the
-        /// given instance.
-        /// </summary>
-        /// <param name="type">The current type</param>
-        /// <param name="propertyName">The property name</param>
-        /// <param name="instance">The object instance</param>
-        /// <returns>The property value</returns>
-        public static object GetPropertyValue(this Type type, string propertyName, object instance)
-        {
-            var property = type.GetProperty(propertyName, App.PropertyBindings);
-
-            if (property != null)
+            foreach (var p in methodInfo.GetParameters())
             {
-                return property.GetValue(instance);
+                method.ParameterTypes.Add(p.ParameterType);
             }
-            return null;
+            return method;
         }
+        return null;
+    }
 
-        /// <summary>
-        /// Sets the value of the property with the given name for the
-        /// given instance.
-        /// </summary>
-        /// <param name="type">The current type</param>
-        /// <param name="propertyName">The property name</param>
-        /// <param name="instance">The object instance</param>
-        /// <param name="value">The value to set</param>
-        public static void SetPropertyValue(this Type type, string propertyName, object instance, object value)
+    /// <summary>
+    /// Gets the attribute defined settings for the given property.
+    /// </summary>
+    /// <param name="prop">The property info</param>
+    /// <returns>The settings</returns>
+    public static IDictionary<string, object> GetFieldSettings(PropertyInfo prop)
+    {
+        var settings = new Dictionary<string, object>();
+
+        // Get optional settings
+        var settingsAttr = prop.GetCustomAttribute<FieldSettingsAttribute>();
+        if (settingsAttr != null)
         {
-            var property = type.GetProperty(propertyName, App.PropertyBindings);
-
-            if (property != null)
+            foreach (var setting in settingsAttr.GetType().GetProperties(BindingFlags.Instance|BindingFlags.Public|BindingFlags.DeclaredOnly))
             {
-                property.SetValue(instance, value);
-            }
-        }
-
-        /// <summary>
-        /// Gets the app method with the given name for the specified type.
-        /// </summary>
-        /// <param name="name">The method name</param>
-        /// <typeparam name="T">The type</typeparam>
-        /// <returns>The method if found, otherwise null</returns>
-        internal static AppMethod GetMethod<T>(string name)
-        {
-            var methodInfo = typeof(T).GetMethod(name);
-
-            if (methodInfo != null)
-            {
-                var method = new AppMethod
+                if (settings.TryGetValue(setting.Name, out var existing))
                 {
-                    Method = methodInfo,
-                    IsAsync = typeof(Task).IsAssignableFrom(methodInfo.ReturnType)
-                };
-
-                foreach (var p in methodInfo.GetParameters())
-                {
-                    method.ParameterTypes.Add(p.ParameterType);
-                }
-                return method;
-            }
-            return null;
-        }
-
-        /// <summary>
-        /// Gets the attribute defined settings for the given property.
-        /// </summary>
-        /// <param name="prop">The property info</param>
-        /// <returns>The settings</returns>
-        public static IDictionary<string, object> GetFieldSettings(PropertyInfo prop)
-        {
-            var settings = new Dictionary<string, object>();
-
-            // Get optional settings
-            var settingsAttr = prop.GetCustomAttribute<FieldSettingsAttribute>();
-            if (settingsAttr != null)
-            {
-                foreach (var setting in settingsAttr.GetType().GetProperties(BindingFlags.Instance|BindingFlags.Public|BindingFlags.DeclaredOnly))
-                {
-                    if (settings.TryGetValue(setting.Name, out var existing))
+                    if (!(existing is IList))
                     {
-                        if (!(existing is IList))
+                        existing = new ArrayList()
                         {
-                            existing = new ArrayList()
-                            {
-                                existing
-                            };
-                            settings[setting.Name] = existing;
-                        }
+                            existing
+                        };
+                        settings[setting.Name] = existing;
+                    }
 
-                        ((IList)existing).Add(setting.GetValue(settingsAttr));
-                    }
-                    else
-                    {
-                        settings[setting.Name] = setting.GetValue(settingsAttr);
-                    }
+                    ((IList)existing).Add(setting.GetValue(settingsAttr));
+                }
+                else
+                {
+                    settings[setting.Name] = setting.GetValue(settingsAttr);
                 }
             }
-            return settings;
         }
+        return settings;
     }
 }

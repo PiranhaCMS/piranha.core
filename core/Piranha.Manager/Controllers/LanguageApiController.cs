@@ -13,103 +13,102 @@ using Microsoft.AspNetCore.Mvc;
 using Piranha.Manager.Models;
 using Piranha.Manager.Services;
 
-namespace Piranha.Manager.Controllers
+namespace Piranha.Manager.Controllers;
+
+/// <summary>
+/// Api controller for language management.
+/// </summary>
+[Area("Manager")]
+[Route("manager/api/language")]
+[Authorize(Policy = Permission.Admin)]
+[ApiController]
+[AutoValidateAntiforgeryToken]
+public class LanguageApiController : Controller
 {
+    private readonly LanguageService _service;
+    private readonly ManagerLocalizer _localizer;
+
     /// <summary>
-    /// Api controller for language management.
+    /// Default constructor.
     /// </summary>
-    [Area("Manager")]
-    [Route("manager/api/language")]
-    [Authorize(Policy = Permission.Admin)]
-    [ApiController]
-    [AutoValidateAntiforgeryToken]
-    public class LanguageApiController : Controller
+    public LanguageApiController(LanguageService service, ManagerLocalizer localizer)
     {
-        private readonly LanguageService _service;
-        private readonly ManagerLocalizer _localizer;
+        _service = service;
+        _localizer = localizer;
+    }
 
-        /// <summary>
-        /// Default constructor.
-        /// </summary>
-        public LanguageApiController(LanguageService service, ManagerLocalizer localizer)
+    /// <summary>
+    /// Gets the edit model.
+    /// </summary>
+    /// <returns>The edit model</returns>
+    [Route("")]
+    [HttpGet]
+    public async Task<LanguageEditModel> Get()
+    {
+        return await _service.Get();
+    }
+
+    /// <summary>
+    /// Saves the edit model.
+    /// </summary>
+    /// <param name="model">The model</param>
+    [Route("")]
+    [HttpPost]
+    public async Task<IActionResult> Save(LanguageEditModel model)
+    {
+        try
         {
-            _service = service;
-            _localizer = localizer;
+            var result = await _service.Save(model);
+
+            result.Status = new StatusMessage
+            {
+                Type = StatusMessage.Success,
+                Body = _localizer.Language["The language was successfully saved"]
+            };
+
+            return Ok(result);
         }
-
-        /// <summary>
-        /// Gets the edit model.
-        /// </summary>
-        /// <returns>The edit model</returns>
-        [Route("")]
-        [HttpGet]
-        public async Task<LanguageEditModel> Get()
+        catch (Exception e)
         {
-            return await _service.Get();
+            var result = new LanguageEditModel();
+            result.Status = new StatusMessage
+            {
+                Type = StatusMessage.Error,
+                Body = e.Message
+            };
+            return BadRequest(result);
         }
+    }
 
-        /// <summary>
-        /// Saves the edit model.
-        /// </summary>
-        /// <param name="model">The model</param>
-        [Route("")]
-        [HttpPost]
-        public async Task<IActionResult> Save(LanguageEditModel model)
+    /// <summary>
+    /// Deletes the language with the given id.
+    /// </summary>
+    /// <param name="id">The unique id</param>
+    [Route("{id}")]
+    [HttpDelete]
+    public async Task<IActionResult> Delete(Guid id)
+    {
+        try
         {
-            try
-            {
-                var result = await _service.Save(model);
+            var result = await _service.Delete(id);
 
-                result.Status = new StatusMessage
-                {
-                    Type = StatusMessage.Success,
-                    Body = _localizer.Language["The language was successfully saved"]
-                };
-
-                return Ok(result);
-            }
-            catch (Exception e)
+            result.Status = new StatusMessage
             {
-                var result = new LanguageEditModel();
-                result.Status = new StatusMessage
-                {
-                    Type = StatusMessage.Error,
-                    Body = e.Message
-                };
-                return BadRequest(result);
-            }
+                Type = StatusMessage.Success,
+                Body = _localizer.Language["The language was successfully deleted"]
+            };
+
+            return Ok(result);
         }
-
-        /// <summary>
-        /// Deletes the language with the given id.
-        /// </summary>
-        /// <param name="id">The unique id</param>
-        [Route("{id}")]
-        [HttpDelete]
-        public async Task<IActionResult> Delete(Guid id)
+        catch (Exception e)
         {
-            try
+            var result = new LanguageEditModel();
+            result.Status = new StatusMessage
             {
-                var result = await _service.Delete(id);
-
-                result.Status = new StatusMessage
-                {
-                    Type = StatusMessage.Success,
-                    Body = _localizer.Language["The language was successfully deleted"]
-                };
-
-                return Ok(result);
-            }
-            catch (Exception e)
-            {
-                var result = new LanguageEditModel();
-                result.Status = new StatusMessage
-                {
-                    Type = StatusMessage.Error,
-                    Body = e.Message
-                };
-                return BadRequest(result);
-            }
+                Type = StatusMessage.Error,
+                Body = e.Message
+            };
+            return BadRequest(result);
         }
     }
 }

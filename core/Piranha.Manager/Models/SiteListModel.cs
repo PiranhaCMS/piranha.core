@@ -8,31 +8,30 @@
  *
  */
 
-namespace Piranha.Manager.Models
+namespace Piranha.Manager.Models;
+
+/// <summary>
+/// Site list model.
+/// </summary>
+public class SiteListModel
 {
     /// <summary>
-    /// Site list model.
+    /// Gets/sets the currently selected site id.
     /// </summary>
-    public class SiteListModel
-    {
-        /// <summary>
-        /// Gets/sets the currently selected site id.
-        /// </summary>
-        public Guid SiteId { get; set; }
+    public Guid SiteId { get; set; }
 
-        /// <summary>
-        /// Gets/sets the title of the currently selected site.
-        /// </summary>
-        public string SiteTitle { get; set; }
+    /// <summary>
+    /// Gets/sets the title of the currently selected site.
+    /// </summary>
+    public string SiteTitle { get; set; }
 
-        /// <summary>
-        /// Gets/sets the available sites.
-        /// </summary>
-        public IList<PageListModel.PageSite> Sites { get; set; } = new List<PageListModel.PageSite>();
+    /// <summary>
+    /// Gets/sets the available sites.
+    /// </summary>
+    public IList<PageListModel.PageSite> Sites { get; set; } = new List<PageListModel.PageSite>();
 
-        /// <summary>
-        /// Gets/sets the items in the currently selected site.
-        /// </summary>
-        public IList<PageListModel.PageItem> Items { get; set; } = new List<PageListModel.PageItem>();
-    }
+    /// <summary>
+    /// Gets/sets the items in the currently selected site.
+    /// </summary>
+    public IList<PageListModel.PageItem> Items { get; set; } = new List<PageListModel.PageItem>();
 }

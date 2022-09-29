@@ -10,15 +10,14 @@
 
 using Newtonsoft.Json;
 
-namespace Piranha.Data
-{
-    [Serializable]
-    public sealed class PagePermission
-    {
-        public Guid PageId { get; set; }
-        public string Permission { get; set; }
+namespace Piranha.Data;
 
-        [JsonIgnore]
-        public Page Page { get; set; }
-    }
+[Serializable]
+public sealed class PagePermission
+{
+    public Guid PageId { get; set; }
+    public string Permission { get; set; }
+
+    [JsonIgnore]
+    public Page Page { get; set; }
 }

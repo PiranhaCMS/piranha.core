@@ -8,14 +8,13 @@
  *
  */
 
-namespace Piranha.Data
+namespace Piranha.Data;
+
+[Serializable]
+public sealed class MediaFolder : Models.MediaFolder
 {
-    [Serializable]
-    public sealed class MediaFolder : Models.MediaFolder
-    {
-        /// <summary>
-        /// Gets/sets the available media.
-        /// </summary>
-        public IList<Media> Media { get; set; } = new List<Media>();
-    }
+    /// <summary>
+    /// Gets/sets the available media.
+    /// </summary>
+    public IList<Media> Media { get; set; } = new List<Media>();
 }

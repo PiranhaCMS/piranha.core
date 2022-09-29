@@ -8,19 +8,18 @@
  *
  */
 
-namespace Piranha.Data
-{
-    public class PostRevision : ContentRevisionBase
-    {
-        /// <summary>
-        /// Gets/sets the id of the post this revision
-        /// belongs to.
-        /// </summary>
-        public Guid PostId { get; set; }
+namespace Piranha.Data;
 
-        /// <summary>
-        /// Gets/sets the post this revision belongs to.
-        /// </summary>
-        public Post Post { get; set; }
-    }
+public class PostRevision : ContentRevisionBase
+{
+    /// <summary>
+    /// Gets/sets the id of the post this revision
+    /// belongs to.
+    /// </summary>
+    public Guid PostId { get; set; }
+
+    /// <summary>
+    /// Gets/sets the post this revision belongs to.
+    /// </summary>
+    public Post Post { get; set; }
 }

@@ -10,30 +10,29 @@
 
 using Piranha.Extend.Fields;
 
-namespace Piranha.Extend.Blocks
+namespace Piranha.Extend.Blocks;
+
+/// <summary>
+/// Block for referencing a content model.
+/// </summary>
+[BlockType(Name = "Content link", Category = "References", Icon = "fas fa-link", Component = "content-block")]
+public class ContentBlock : Block
 {
     /// <summary>
-    /// Block for referencing a content model.
+    /// Gets/sets the page link.
     /// </summary>
-    [BlockType(Name = "Content link", Category = "References", Icon = "fas fa-link", Component = "content-block")]
-    public class ContentBlock : Block
-    {
-        /// <summary>
-        /// Gets/sets the page link.
-        /// </summary>
-        public ContentField Body { get; set; }
+    public ContentField Body { get; set; }
 
-        /// <summary>
-        /// Gets the title of the block when used in a block group.
-        /// </summary>
-        /// <returns>The title</returns>
-        public override string GetTitle()
+    /// <summary>
+    /// Gets the title of the block when used in a block group.
+    /// </summary>
+    /// <returns>The title</returns>
+    public override string GetTitle()
+    {
+        if (Body != null && Body.Content != null)
         {
-            if (Body != null && Body.Content != null)
-            {
-                return Body.Content.Title;
-            }
-            return "No content selected";
+            return Body.Content.Title;
         }
+        return "No content selected";
     }
 }

@@ -8,32 +8,31 @@
  *
  */
 
-namespace Piranha.Security
+namespace Piranha.Security;
+
+/// <summary>
+/// An item in the permission manager.
+/// </summary>
+public class PermissionItem
 {
     /// <summary>
-    /// An item in the permission manager.
+    /// The name of the claim.
     /// </summary>
-    public class PermissionItem
-    {
-        /// <summary>
-        /// The name of the claim.
-        /// </summary>
-        public string Name { get; set; }
+    public string Name { get; set; }
 
-        /// <summary>
-        /// The display title.
-        /// </summary>
-        public string Title { get; set; }
+    /// <summary>
+    /// The display title.
+    /// </summary>
+    public string Title { get; set; }
 
-        /// <summary>
-        /// Gets/sets the optional category for grouping.
-        /// </summary>
-        public string Category { get; set; }
+    /// <summary>
+    /// Gets/sets the optional category for grouping.
+    /// </summary>
+    public string Category { get; set; }
 
-        /// <summary>
-        /// Gets/sets if this is an internal permissions used
-        /// by Piranha.
-        /// </summary>
-        public bool IsInternal { get; set; }
-    }
+    /// <summary>
+    /// Gets/sets if this is an internal permissions used
+    /// by Piranha.
+    /// </summary>
+    public bool IsInternal { get; set; }
 }

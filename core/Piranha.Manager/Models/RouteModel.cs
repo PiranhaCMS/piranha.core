@@ -8,11 +8,10 @@
  *
  */
 
-namespace Piranha.Manager.Models
+namespace Piranha.Manager.Models;
+
+public class RouteModel
 {
-    public class RouteModel
-    {
-        public string Title { get; set; }
-        public string Route { get; set; }
-    }
+    public string Title { get; set; }
+    public string Route { get; set; }
 }

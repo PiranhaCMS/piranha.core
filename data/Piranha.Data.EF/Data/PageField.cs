@@ -10,20 +10,19 @@
 
 using Newtonsoft.Json;
 
-namespace Piranha.Data
-{
-    [Serializable]
-    public sealed class PageField : ContentFieldBase
-    {
-        /// <summary>
-        /// Gets/sets the page id.
-        /// </summary>
-        public Guid PageId { get; set; }
+namespace Piranha.Data;
 
-        /// <summary>
-        /// Gets/sets the page.
-        /// </summary>
-        [JsonIgnore]
-        public Page Page { get; set; }
-    }
+[Serializable]
+public sealed class PageField : ContentFieldBase
+{
+    /// <summary>
+    /// Gets/sets the page id.
+    /// </summary>
+    public Guid PageId { get; set; }
+
+    /// <summary>
+    /// Gets/sets the page.
+    /// </summary>
+    [JsonIgnore]
+    public Page Page { get; set; }
 }

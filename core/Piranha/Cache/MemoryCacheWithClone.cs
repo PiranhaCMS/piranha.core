@@ -10,18 +10,17 @@
 
 using Microsoft.Extensions.Caching.Memory;
 
-namespace Piranha.Cache
+namespace Piranha.Cache;
+
+/// <summary>
+/// Simple in memory cache.
+/// </summary>
+[NoCoverage]
+public class MemoryCacheWithClone : MemoryCache
 {
     /// <summary>
-    /// Simple in memory cache.
+    /// Default constructor.
     /// </summary>
-    [NoCoverage]
-    public class MemoryCacheWithClone : MemoryCache
-    {
-        /// <summary>
-        /// Default constructor.
-        /// </summary>
-        /// <param name="cache">The currently configured cache</param>
-        public MemoryCacheWithClone(IMemoryCache cache) : base(cache, true) { }
-    }
+    /// <param name="cache">The currently configured cache</param>
+    public MemoryCacheWithClone(IMemoryCache cache) : base(cache, true) { }
 }

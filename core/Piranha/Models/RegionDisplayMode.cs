@@ -8,12 +8,11 @@
  *
  */
 
-namespace Piranha.Models
+namespace Piranha.Models;
+
+public enum RegionDisplayMode
 {
-    public enum RegionDisplayMode
-    {
-        Content,
-        Setting,
-        Hidden
-    }
+    Content,
+    Setting,
+    Hidden
 }

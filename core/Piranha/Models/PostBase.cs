@@ -10,29 +10,28 @@
 
 using System.ComponentModel.DataAnnotations;
 
-namespace Piranha.Models
+namespace Piranha.Models;
+
+/// <summary>
+/// Base class for post models.
+/// </summary>
+[Serializable]
+public abstract class PostBase : RoutedContentBase, ICategorizedContent, ITaggedContent
 {
     /// <summary>
-    /// Base class for post models.
+    /// Gets/sets the blog page id.
     /// </summary>
-    [Serializable]
-    public abstract class PostBase : RoutedContentBase, ICategorizedContent, ITaggedContent
-    {
-        /// <summary>
-        /// Gets/sets the blog page id.
-        /// </summary>
-        [Required]
-        public Guid BlogId { get; set; }
+    [Required]
+    public Guid BlogId { get; set; }
 
-        /// <summary>
-        /// Gets/sets the category.
-        /// </summary>
-        [Required]
-        public Taxonomy Category { get; set; }
+    /// <summary>
+    /// Gets/sets the category.
+    /// </summary>
+    [Required]
+    public Taxonomy Category { get; set; }
 
-        /// <summary>
-        /// Gets/sets the available tags.
-        /// </summary>
-        public IList<Taxonomy> Tags { get; set; } = new List<Taxonomy>();
-    }
+    /// <summary>
+    /// Gets/sets the available tags.
+    /// </summary>
+    public IList<Taxonomy> Tags { get; set; } = new List<Taxonomy>();
 }

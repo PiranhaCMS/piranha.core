@@ -8,11 +8,10 @@
  *
  */
 
-namespace Piranha.Models
+namespace Piranha.Models;
+
+public enum RedirectType
 {
-    public enum RedirectType
-    {
-        Permanent,
-        Temporary
-    }
+    Permanent,
+    Temporary
 }

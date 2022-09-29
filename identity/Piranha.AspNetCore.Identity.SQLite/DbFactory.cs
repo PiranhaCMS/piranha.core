@@ -12,26 +12,25 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
 
-namespace Piranha.AspNetCore.Identity.SQLite
+namespace Piranha.AspNetCore.Identity.SQLite;
+
+/// <summary>
+/// Factory for creating a db context. Only used in dev mode
+/// when creating migrations.
+/// </summary>
+[NoCoverage]
+public class DbFactory : IDesignTimeDbContextFactory<IdentitySQLiteDb>
 {
     /// <summary>
-    /// Factory for creating a db context. Only used in dev mode
-    /// when creating migrations.
+    /// Creates a new db context.
     /// </summary>
-    [NoCoverage]
-    public class DbFactory : IDesignTimeDbContextFactory<IdentitySQLiteDb>
+    /// <param name="args">The arguments</param>
+    /// <returns>The db context</returns>
+    public IdentitySQLiteDb CreateDbContext(string[] args)
     {
-        /// <summary>
-        /// Creates a new db context.
-        /// </summary>
-        /// <param name="args">The arguments</param>
-        /// <returns>The db context</returns>
-        public IdentitySQLiteDb CreateDbContext(string[] args)
-        {
-            var builder = new DbContextOptionsBuilder<IdentitySQLiteDb>();
-            builder.UseSqlite("Filename=./piranha.identity.db");
-            return new IdentitySQLiteDb(builder.Options);
-        }
+        var builder = new DbContextOptionsBuilder<IdentitySQLiteDb>();
+        builder.UseSqlite("Filename=./piranha.identity.db");
+        return new IdentitySQLiteDb(builder.Options);
     }
 }
 #endif

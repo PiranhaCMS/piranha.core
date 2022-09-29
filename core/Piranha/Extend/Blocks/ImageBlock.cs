@@ -10,35 +10,34 @@
 
 using Piranha.Extend.Fields;
 
-namespace Piranha.Extend.Blocks
+namespace Piranha.Extend.Blocks;
+
+/// <summary>
+/// Image block.
+/// </summary>
+[BlockType(Name = "Image", Category = "Media", Icon = "fas fa-image", Component = "image-block")]
+public class ImageBlock : Block
 {
     /// <summary>
-    /// Image block.
+    /// Gets/sets the image body.
     /// </summary>
-    [BlockType(Name = "Image", Category = "Media", Icon = "fas fa-image", Component = "image-block")]
-    public class ImageBlock : Block
+    public ImageField Body { get; set; }
+
+    /// <summary>
+    /// Gets/sets the selected image aspect.
+    /// </summary>
+    public SelectField<ImageAspect> Aspect { get; set; } = new SelectField<ImageAspect>();
+
+    /// <summary>
+    /// Gets the title of the block when used in a block group.
+    /// </summary>
+    /// <returns>The title</returns>
+    public override string GetTitle()
     {
-        /// <summary>
-        /// Gets/sets the image body.
-        /// </summary>
-        public ImageField Body { get; set; }
-
-        /// <summary>
-        /// Gets/sets the selected image aspect.
-        /// </summary>
-        public SelectField<ImageAspect> Aspect { get; set; } = new SelectField<ImageAspect>();
-
-        /// <summary>
-        /// Gets the title of the block when used in a block group.
-        /// </summary>
-        /// <returns>The title</returns>
-        public override string GetTitle()
+        if (Body != null && Body.Media != null)
         {
-            if (Body != null && Body.Media != null)
-            {
-                return Body.Media.Filename;
-            }
-            return "No image selected";
+            return Body.Media.Filename;
         }
+        return "No image selected";
     }
 }

@@ -8,44 +8,43 @@
  *
  */
 
-namespace Piranha.Data
+namespace Piranha.Data;
+
+[Serializable]
+public sealed class ContentTranslation
 {
-    [Serializable]
-    public sealed class ContentTranslation
-    {
-        /// <summary>
-        /// Gets/sets the content id.
-        /// </summary>
-        public Guid ContentId { get; set; }
+    /// <summary>
+    /// Gets/sets the content id.
+    /// </summary>
+    public Guid ContentId { get; set; }
 
-        /// <summary>
-        /// Gets/sets the language id.
-        /// </summary>
-        public Guid LanguageId { get; set; }
+    /// <summary>
+    /// Gets/sets the language id.
+    /// </summary>
+    public Guid LanguageId { get; set; }
 
-        /// <summary>
-        /// Gets/sets the main title.
-        /// </summary>
-	    public string Title { get; set; }
+    /// <summary>
+    /// Gets/sets the main title.
+    /// </summary>
+    public string Title { get; set; }
 
-        /// <summary>
-        /// Gets/sets the optional excerpt.
-        /// </summary>
-        public string Excerpt { get; set; }
+    /// <summary>
+    /// Gets/sets the optional excerpt.
+    /// </summary>
+    public string Excerpt { get; set; }
 
-        /// <summary>
-        /// Gets/sets the last modification date.
-        /// </summary>
-        public DateTime LastModified { get; set; }
+    /// <summary>
+    /// Gets/sets the last modification date.
+    /// </summary>
+    public DateTime LastModified { get; set; }
 
-        /// <summary>
-        /// Gets/sets the content.
-        /// </summary>
-        public Content Content { get; set; }
+    /// <summary>
+    /// Gets/sets the content.
+    /// </summary>
+    public Content Content { get; set; }
 
-        /// <summary>
-        /// Gets/sets the language.
-        /// </summary>
-        public Language Language { get; set; }
-    }
+    /// <summary>
+    /// Gets/sets the language.
+    /// </summary>
+    public Language Language { get; set; }
 }

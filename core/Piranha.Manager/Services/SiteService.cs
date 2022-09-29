@@ -18,315 +18,314 @@ using Piranha.Manager.Models;
 using Piranha.Manager.Models.Content;
 using Piranha.Services;
 
-namespace Piranha.Manager.Services
+namespace Piranha.Manager.Services;
+
+public class SiteService
 {
-    public class SiteService
+    private readonly IApi _api;
+    private readonly IContentFactory _factory;
+
+    /// <summary>
+    /// Default constructor.
+    /// </summary>
+    /// <param name="api">The current api</param>
+    /// <param name="factory">The content factory</param>
+    public SiteService(IApi api, IContentFactory factory)
     {
-        private readonly IApi _api;
-        private readonly IContentFactory _factory;
+        _api = api;
+        _factory = factory;
+    }
 
-        /// <summary>
-        /// Default constructor.
-        /// </summary>
-        /// <param name="api">The current api</param>
-        /// <param name="factory">The content factory</param>
-        public SiteService(IApi api, IContentFactory factory)
+    /// <summary>
+    /// Gets the edit model for the site with the given id.
+    /// </summary>
+    /// <param name="id">The unique id</param>
+    /// <returns>The edit model</returns>
+    public async Task<SiteEditModel> GetById(Guid id)
+    {
+        var site = await _api.Sites.GetByIdAsync(id);
+
+        if (site != null)
         {
-            _api = api;
-            _factory = factory;
+            var model = Transform(site);
+            model.Languages = await _api.Languages.GetAllAsync();
+
+            return model;
         }
+        return null;
+    }
 
-        /// <summary>
-        /// Gets the edit model for the site with the given id.
-        /// </summary>
-        /// <param name="id">The unique id</param>
-        /// <returns>The edit model</returns>
-        public async Task<SiteEditModel> GetById(Guid id)
+    /// <summary>
+    /// Gets the content edit model for the site with the given id.
+    /// </summary>
+    /// <param name="id">The unique id</param>
+    /// <returns>The edit model</returns>
+    public async Task<SiteContentEditModel> GetContentById(Guid id)
+    {
+        var site = await _api.Sites.GetContentByIdAsync(id);
+
+        if (site != null)
         {
-            var site = await _api.Sites.GetByIdAsync(id);
+            // Perform manager init
+            await _factory.InitDynamicManagerAsync(site,
+                App.SiteTypes.GetById(site.TypeId));
 
-            if (site != null)
-            {
-                var model = Transform(site);
-                model.Languages = await _api.Languages.GetAllAsync();
-
-                return model;
-            }
-            return null;
+            return Transform(site);
         }
+        return null;
+    }
 
-        /// <summary>
-        /// Gets the content edit model for the site with the given id.
-        /// </summary>
-        /// <param name="id">The unique id</param>
-        /// <returns>The edit model</returns>
-        public async Task<SiteContentEditModel> GetContentById(Guid id)
+
+    /// <summary>
+    /// Creates a new site edit model.
+    /// </summary>
+    /// <returns>The edit model</returns>
+    public async Task<SiteEditModel> Create()
+    {
+        return new SiteEditModel
         {
-            var site = await _api.Sites.GetContentByIdAsync(id);
+            Id = Guid.NewGuid(),
+            LanguageId = (await _api.Languages.GetDefaultAsync()).Id,
+            Languages = await _api.Languages.GetAllAsync()
+        };
+    }
 
-            if (site != null)
-            {
-                // Perform manager init
-                await _factory.InitDynamicManagerAsync(site,
-                    App.SiteTypes.GetById(site.TypeId));
+    /// <summary>
+    /// Saves the given site.
+    /// </summary>
+    /// <param name="model">The site edit model</param>
+    public async Task Save(SiteEditModel model)
+    {
+        var site = await _api.Sites.GetByIdAsync(model.Id);
 
-                return Transform(site);
-            }
-            return null;
-        }
-
-
-        /// <summary>
-        /// Creates a new site edit model.
-        /// </summary>
-        /// <returns>The edit model</returns>
-        public async Task<SiteEditModel> Create()
+        if (site == null)
         {
-            return new SiteEditModel
+            site = new Site
             {
-                Id = Guid.NewGuid(),
-                LanguageId = (await _api.Languages.GetDefaultAsync()).Id,
-                Languages = await _api.Languages.GetAllAsync()
+                Id = model.Id
             };
         }
+        site.SiteTypeId = model.TypeId;
+        site.LanguageId = model.LanguageId;
+        site.Title = model.Title;
+        site.InternalId = model.InternalId;
+        site.Hostnames = model.Hostnames;
+        site.Description = model.Description;
+        site.Logo = model.Logo;
+        site.IsDefault = model.IsDefault;
 
-        /// <summary>
-        /// Saves the given site.
-        /// </summary>
-        /// <param name="model">The site edit model</param>
-        public async Task Save(SiteEditModel model)
+        await _api.Sites.SaveAsync(site);
+    }
+
+    public async Task SaveContent(SiteContentEditModel model)
+    {
+        var siteType = App.SiteTypes.GetById(model.TypeId);
+
+        if (siteType != null)
         {
-            var site = await _api.Sites.GetByIdAsync(model.Id);
+            if (model.Id == Guid.Empty)
+            {
+                model.Id = Guid.NewGuid();
+            }
+
+            var site = await _api.Sites.GetContentByIdAsync(model.Id);
 
             if (site == null)
             {
-                site = new Site
-                {
-                    Id = model.Id
-                };
+                site = await _factory.CreateAsync<DynamicSiteContent>(siteType);
+                site.Id = model.Id;
             }
-            site.SiteTypeId = model.TypeId;
-            site.LanguageId = model.LanguageId;
+
+            site.TypeId = model.TypeId;
             site.Title = model.Title;
-            site.InternalId = model.InternalId;
-            site.Hostnames = model.Hostnames;
-            site.Description = model.Description;
-            site.Logo = model.Logo;
-            site.IsDefault = model.IsDefault;
 
-            await _api.Sites.SaveAsync(site);
-        }
-
-        public async Task SaveContent(SiteContentEditModel model)
-        {
-            var siteType = App.SiteTypes.GetById(model.TypeId);
-
-            if (siteType != null)
+            // Save regions
+            foreach (var region in siteType.Regions)
             {
-                if (model.Id == Guid.Empty)
+                var modelRegion = model.Regions
+                    .FirstOrDefault(r => r.Meta.Id == region.Id);
+
+                if (region.Collection)
                 {
-                    model.Id = Guid.NewGuid();
-                }
+                    var listRegion = (IRegionList)((IDictionary<string, object>)site.Regions)[region.Id];
 
-                var site = await _api.Sites.GetContentByIdAsync(model.Id);
+                    listRegion.Clear();
 
-                if (site == null)
-                {
-                    site = await _factory.CreateAsync<DynamicSiteContent>(siteType);
-                    site.Id = model.Id;
-                }
-
-                site.TypeId = model.TypeId;
-                site.Title = model.Title;
-
-                // Save regions
-                foreach (var region in siteType.Regions)
-                {
-                    var modelRegion = model.Regions
-                        .FirstOrDefault(r => r.Meta.Id == region.Id);
-
-                    if (region.Collection)
+                    foreach (var item in modelRegion.Items)
                     {
-                        var listRegion = (IRegionList)((IDictionary<string, object>)site.Regions)[region.Id];
-
-                        listRegion.Clear();
-
-                        foreach (var item in modelRegion.Items)
+                        if (region.Fields.Count == 1)
                         {
-                            if (region.Fields.Count == 1)
-                            {
-                                listRegion.Add(item.Fields[0].Model);
-                            }
-                            else
-                            {
-                                var postRegion = new ExpandoObject();
+                            listRegion.Add(item.Fields[0].Model);
+                        }
+                        else
+                        {
+                            var postRegion = new ExpandoObject();
 
-                                foreach (var field in region.Fields)
-                                {
-                                    var modelField = item.Fields
-                                        .FirstOrDefault(f => f.Meta.Id == field.Id);
-                                    ((IDictionary<string, object>)postRegion)[field.Id] = modelField.Model;
-                                }
-                                listRegion.Add(postRegion);
+                            foreach (var field in region.Fields)
+                            {
+                                var modelField = item.Fields
+                                    .FirstOrDefault(f => f.Meta.Id == field.Id);
+                                ((IDictionary<string, object>)postRegion)[field.Id] = modelField.Model;
                             }
+                            listRegion.Add(postRegion);
+                        }
+                    }
+                }
+                else
+                {
+                    var postRegion = ((IDictionary<string, object>)site.Regions)[region.Id];
+
+                    if (region.Fields.Count == 1)
+                    {
+                        ((IDictionary<string, object>)site.Regions)[region.Id] =
+                            modelRegion.Items[0].Fields[0].Model;
+                    }
+                    else
+                    {
+                        foreach (var field in region.Fields)
+                        {
+                            var modelField = modelRegion.Items[0].Fields
+                                .FirstOrDefault(f => f.Meta.Id == field.Id);
+                            ((IDictionary<string, object>)postRegion)[field.Id] = modelField.Model;
+                        }
+                    }
+                }
+            }
+
+            // Save site
+            await _api.Sites.SaveContentAsync(model.Id, site);
+        }
+        else
+        {
+            throw new ValidationException("Invalid Post Type.");
+        }
+    }
+
+    /// <summary>
+    /// Deletes the site with the given id.
+    /// </summary>
+    /// <param name="id">The unique id</param>
+    public Task Delete(Guid id)
+    {
+        return _api.Sites.DeleteAsync(id);
+    }
+
+    private SiteEditModel Transform(Site site)
+    {
+        return new SiteEditModel
+        {
+            Id = site.Id,
+            TypeId = site.SiteTypeId,
+            LanguageId = site.LanguageId,
+            Title = site.Title,
+            InternalId = site.InternalId,
+            Description = site.Description,
+            Logo = site.Logo,
+            Hostnames = site.Hostnames,
+            IsDefault = site.IsDefault,
+            SiteTypes = App.SiteTypes.Select(t => new ContentTypeModel
+            {
+                Id = t.Id,
+                Title = t.Title
+            }).ToList()
+        };
+    }
+
+    private SiteContentEditModel Transform(DynamicSiteContent site)
+    {
+        var type = App.SiteTypes.GetById(site.TypeId);
+
+        var model = new SiteContentEditModel
+        {
+            Id = site.Id,
+            TypeId = site.TypeId,
+            Title = site.Title,
+            UseBlocks = false
+        };
+
+        foreach (var regionType in type.Regions)
+        {
+            var region = new RegionModel
+            {
+                Meta = new RegionMeta
+                {
+                    Id = regionType.Id,
+                    Name = regionType.Title,
+                    Description = regionType.Description,
+                    Placeholder = regionType.ListTitlePlaceholder,
+                    IsCollection = regionType.Collection,
+                    Expanded = regionType.ListExpand,
+                    Icon = regionType.Icon,
+                    Display = regionType.Display.ToString().ToLower(),
+                    Width = regionType.Width.ToString().ToLower()
+                }
+            };
+            var regionListModel = ((IDictionary<string, object>)site.Regions)[regionType.Id];
+
+            if (!regionType.Collection)
+            {
+                var regionModel = (IRegionList)Activator.CreateInstance(typeof(RegionList<>).MakeGenericType(regionListModel.GetType()));
+                regionModel.Add(regionListModel);
+                regionListModel = regionModel;
+            }
+
+            foreach (var regionModel in (IEnumerable)regionListModel)
+            {
+                var regionItem = new RegionItemModel();
+
+                foreach (var fieldType in regionType.Fields)
+                {
+                    var appFieldType = App.Fields.GetByType(fieldType.Type);
+
+                    var field = new FieldModel
+                    {
+                        Meta = new FieldMeta
+                        {
+                            Id = fieldType.Id,
+                            Name = fieldType.Title,
+                            Component = appFieldType.Component,
+                            Placeholder = fieldType.Placeholder,
+                            IsHalfWidth = fieldType.Options.HasFlag(FieldOption.HalfWidth),
+                            Description = fieldType.Description
+                        }
+                    };
+
+                    if (typeof(SelectFieldBase).IsAssignableFrom(appFieldType.Type))
+                    {
+                        foreach(var item in ((SelectFieldBase)Activator.CreateInstance(appFieldType.Type)).Items)
+                        {
+                            field.Meta.Options.Add(Convert.ToInt32(item.Value), item.Title);
+                        }
+                    }
+
+                    if (regionType.Fields.Count > 1)
+                    {
+                        field.Model = (IField)((IDictionary<string, object>)regionModel)[fieldType.Id];
+
+                        if (regionType.ListTitleField == fieldType.Id)
+                        {
+                            regionItem.Title = field.Model.GetTitle();
+                            field.Meta.NotifyChange = true;
                         }
                     }
                     else
                     {
-                        var postRegion = ((IDictionary<string, object>)site.Regions)[region.Id];
-
-                        if (region.Fields.Count == 1)
-                        {
-                            ((IDictionary<string, object>)site.Regions)[region.Id] =
-                                modelRegion.Items[0].Fields[0].Model;
-                        }
-                        else
-                        {
-                            foreach (var field in region.Fields)
-                            {
-                                var modelField = modelRegion.Items[0].Fields
-                                    .FirstOrDefault(f => f.Meta.Id == field.Id);
-                                ((IDictionary<string, object>)postRegion)[field.Id] = modelField.Model;
-                            }
-                        }
+                        field.Model = (IField)regionModel;
+                        field.Meta.NotifyChange = true;
+                        regionItem.Title = field.Model.GetTitle();
                     }
+                    regionItem.Fields.Add(field);
                 }
 
-                // Save site
-                await _api.Sites.SaveContentAsync(model.Id, site);
-            }
-            else
-            {
-                throw new ValidationException("Invalid Post Type.");
-            }
-        }
-
-        /// <summary>
-        /// Deletes the site with the given id.
-        /// </summary>
-        /// <param name="id">The unique id</param>
-        public Task Delete(Guid id)
-        {
-            return _api.Sites.DeleteAsync(id);
-        }
-
-        private SiteEditModel Transform(Site site)
-        {
-            return new SiteEditModel
-            {
-                Id = site.Id,
-                TypeId = site.SiteTypeId,
-                LanguageId = site.LanguageId,
-                Title = site.Title,
-                InternalId = site.InternalId,
-                Description = site.Description,
-                Logo = site.Logo,
-                Hostnames = site.Hostnames,
-                IsDefault = site.IsDefault,
-                SiteTypes = App.SiteTypes.Select(t => new ContentTypeModel
+                if (string.IsNullOrWhiteSpace(regionItem.Title))
                 {
-                    Id = t.Id,
-                    Title = t.Title
-                }).ToList()
-            };
-        }
-
-        private SiteContentEditModel Transform(DynamicSiteContent site)
-        {
-            var type = App.SiteTypes.GetById(site.TypeId);
-
-            var model = new SiteContentEditModel
-            {
-                Id = site.Id,
-                TypeId = site.TypeId,
-                Title = site.Title,
-                UseBlocks = false
-            };
-
-            foreach (var regionType in type.Regions)
-            {
-                var region = new RegionModel
-                {
-                    Meta = new RegionMeta
-                    {
-                        Id = regionType.Id,
-                        Name = regionType.Title,
-                        Description = regionType.Description,
-                        Placeholder = regionType.ListTitlePlaceholder,
-                        IsCollection = regionType.Collection,
-                        Expanded = regionType.ListExpand,
-                        Icon = regionType.Icon,
-                        Display = regionType.Display.ToString().ToLower(),
-                        Width = regionType.Width.ToString().ToLower()
-                    }
-                };
-                var regionListModel = ((IDictionary<string, object>)site.Regions)[regionType.Id];
-
-                if (!regionType.Collection)
-                {
-                    var regionModel = (IRegionList)Activator.CreateInstance(typeof(RegionList<>).MakeGenericType(regionListModel.GetType()));
-                    regionModel.Add(regionListModel);
-                    regionListModel = regionModel;
+                    regionItem.Title = "...";
                 }
 
-                foreach (var regionModel in (IEnumerable)regionListModel)
-                {
-                    var regionItem = new RegionItemModel();
-
-                    foreach (var fieldType in regionType.Fields)
-                    {
-                        var appFieldType = App.Fields.GetByType(fieldType.Type);
-
-                        var field = new FieldModel
-                        {
-                            Meta = new FieldMeta
-                            {
-                                Id = fieldType.Id,
-                                Name = fieldType.Title,
-                                Component = appFieldType.Component,
-                                Placeholder = fieldType.Placeholder,
-                                IsHalfWidth = fieldType.Options.HasFlag(FieldOption.HalfWidth),
-                                Description = fieldType.Description
-                            }
-                        };
-
-                        if (typeof(SelectFieldBase).IsAssignableFrom(appFieldType.Type))
-                        {
-                            foreach(var item in ((SelectFieldBase)Activator.CreateInstance(appFieldType.Type)).Items)
-                            {
-                                field.Meta.Options.Add(Convert.ToInt32(item.Value), item.Title);
-                            }
-                        }
-
-                        if (regionType.Fields.Count > 1)
-                        {
-                            field.Model = (IField)((IDictionary<string, object>)regionModel)[fieldType.Id];
-
-                            if (regionType.ListTitleField == fieldType.Id)
-                            {
-                                regionItem.Title = field.Model.GetTitle();
-                                field.Meta.NotifyChange = true;
-                            }
-                        }
-                        else
-                        {
-                            field.Model = (IField)regionModel;
-                            field.Meta.NotifyChange = true;
-                            regionItem.Title = field.Model.GetTitle();
-                        }
-                        regionItem.Fields.Add(field);
-                    }
-
-                    if (string.IsNullOrWhiteSpace(regionItem.Title))
-                    {
-                        regionItem.Title = "...";
-                    }
-
-                    region.Items.Add(regionItem);
-                }
-                model.Regions.Add(region);
+                region.Items.Add(regionItem);
             }
-            return model;
+            model.Regions.Add(region);
         }
+        return model;
     }
 }

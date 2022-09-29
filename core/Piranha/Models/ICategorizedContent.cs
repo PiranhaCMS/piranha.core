@@ -8,16 +8,15 @@
  *
  */
 
-namespace Piranha.Models
+namespace Piranha.Models;
+
+/// <summary>
+/// Interface for content that should be categorized.
+/// </summary>
+public interface ICategorizedContent
 {
     /// <summary>
-    /// Interface for content that should be categorized.
+    /// Gets/sets the optional category.
     /// </summary>
-    public interface ICategorizedContent
-    {
-        /// <summary>
-        /// Gets/sets the optional category.
-        /// </summary>
-        Taxonomy Category { get; set; }
-    }
+    Taxonomy Category { get; set; }
 }

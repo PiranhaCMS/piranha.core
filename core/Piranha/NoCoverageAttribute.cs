@@ -8,12 +8,11 @@
  *
  */
 
-namespace Piranha
-{
-    /// <summary>
-    /// Simple attribute to exclude classes or methods from code
-    /// coverage.
-    /// </summary>
-    [AttributeUsage(AttributeTargets.Class|AttributeTargets.Method)]
-    public class NoCoverageAttribute : Attribute { }
-}
+namespace Piranha;
+
+/// <summary>
+/// Simple attribute to exclude classes or methods from code
+/// coverage.
+/// </summary>
+[AttributeUsage(AttributeTargets.Class|AttributeTargets.Method)]
+public class NoCoverageAttribute : Attribute { }

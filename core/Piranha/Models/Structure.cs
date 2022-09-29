@@ -8,109 +8,108 @@
  *
  */
 
-namespace Piranha.Models
+namespace Piranha.Models;
+
+/// <summary>
+/// Abstract class for building a hierarchical structure.
+/// </summary>
+[Serializable]
+public abstract class Structure<TThis, T> : List<T> where T : StructureItem<TThis, T> where TThis : Structure<TThis, T>
 {
     /// <summary>
-    /// Abstract class for building a hierarchical structure.
+    /// Gets the partial structure with the items positioned
+    /// below the item with the given id.
     /// </summary>
-    [Serializable]
-    public abstract class Structure<TThis, T> : List<T> where T : StructureItem<TThis, T> where TThis : Structure<TThis, T>
+    /// <param name="id">The unique id</param>
+    /// <param name="includeRootNode">If the root node should be included</param>
+    /// <returns>The partial structure</returns>
+    public TThis GetPartial(Guid? id, bool includeRootNode = false)
     {
-        /// <summary>
-        /// Gets the partial structure with the items positioned
-        /// below the item with the given id.
-        /// </summary>
-        /// <param name="id">The unique id</param>
-        /// <param name="includeRootNode">If the root node should be included</param>
-        /// <returns>The partial structure</returns>
-        public TThis GetPartial(Guid? id, bool includeRootNode = false)
+        if (id.HasValue)
         {
-            if (id.HasValue)
-            {
-                return GetPartialRecursive(this, id.Value, includeRootNode);
-            }
-            return (TThis)this;
+            return GetPartialRecursive(this, id.Value, includeRootNode);
         }
+        return (TThis)this;
+    }
 
-        /// <summary>
-        /// Gets the breadcrumb for the item with the given id.
-        /// </summary>
-        /// <param name="id">The unique id</param>
-        /// <returns>The breadcrumb</returns>
-        public IList<T> GetBreadcrumb(Guid? id)
+    /// <summary>
+    /// Gets the breadcrumb for the item with the given id.
+    /// </summary>
+    /// <param name="id">The unique id</param>
+    /// <returns>The breadcrumb</returns>
+    public IList<T> GetBreadcrumb(Guid? id)
+    {
+        if (id.HasValue)
         {
-            if (id.HasValue)
-            {
-                return GetBreadcrumbRecursive(this, id.Value);
-            }
-            return new List<T>();
+            return GetBreadcrumbRecursive(this, id.Value);
         }
+        return new List<T>();
+    }
 
-        /// <summary>
-        /// Gets the partial structure by going through the
-        /// items recursively.
-        /// </summary>
-        /// <param name="items">The items</param>
-        /// <param name="id">The unique id</param>
-        /// <param name="includeRootNode">If the root node should be included</param>
-        /// <returns>The partial structure if found</returns>
-        private TThis GetPartialRecursive(IList<T> items, Guid id, bool includeRootNode)
+    /// <summary>
+    /// Gets the partial structure by going through the
+    /// items recursively.
+    /// </summary>
+    /// <param name="items">The items</param>
+    /// <param name="id">The unique id</param>
+    /// <param name="includeRootNode">If the root node should be included</param>
+    /// <returns>The partial structure if found</returns>
+    private TThis GetPartialRecursive(IList<T> items, Guid id, bool includeRootNode)
+    {
+        foreach (var item in items)
         {
-            foreach (var item in items)
+            if (item.Id == id)
             {
-                if (item.Id == id)
+                if (includeRootNode)
                 {
-                    if (includeRootNode)
-                    {
-                        var structure = Activator.CreateInstance<TThis>();
-                        structure.Add(item);
+                    var structure = Activator.CreateInstance<TThis>();
+                    structure.Add(item);
 
-                        return structure;
-                    }
-                    else
-                    {
-                        return item.Items;
-                    }
+                    return structure;
                 }
-
-                var partial = GetPartialRecursive(item.Items, id, includeRootNode);
-
-                if (partial != null)
+                else
                 {
-                    return partial;
+                    return item.Items;
                 }
             }
-            return null;
-        }
 
-        /// <summary>
-        /// Gets the breadcrumb items by going through the
-        /// items recursively.
-        /// </summary>
-        /// <param name="items">The items</param>
-        /// <param name="id">The unique id</param>
-        /// <returns>The breadcrumb items</returns>
-        private IList<T> GetBreadcrumbRecursive(IList<T> items, Guid id)
-        {
-            foreach (var item in items)
+            var partial = GetPartialRecursive(item.Items, id, includeRootNode);
+
+            if (partial != null)
             {
-                if (item.Id == id)
-                {
-                    return new List<T> {
-                        item
-                    };
-                }
-
-                var crumb = GetBreadcrumbRecursive(item.Items, id);
-
-                if (crumb != null)
-                {
-                    crumb.Insert(0, item);
-
-                    return crumb;
-                }
+                return partial;
             }
-            return null;
         }
+        return null;
+    }
+
+    /// <summary>
+    /// Gets the breadcrumb items by going through the
+    /// items recursively.
+    /// </summary>
+    /// <param name="items">The items</param>
+    /// <param name="id">The unique id</param>
+    /// <returns>The breadcrumb items</returns>
+    private IList<T> GetBreadcrumbRecursive(IList<T> items, Guid id)
+    {
+        foreach (var item in items)
+        {
+            if (item.Id == id)
+            {
+                return new List<T> {
+                    item
+                };
+            }
+
+            var crumb = GetBreadcrumbRecursive(item.Items, id);
+
+            if (crumb != null)
+            {
+                crumb.Insert(0, item);
+
+                return crumb;
+            }
+        }
+        return null;
     }
 }

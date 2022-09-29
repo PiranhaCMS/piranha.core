@@ -12,72 +12,71 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Piranha.Manager.Models;
 
-namespace Piranha.Manager.Controllers
+namespace Piranha.Manager.Controllers;
+
+/// <summary>
+/// Api controller for getting user permissions.
+/// </summary>
+[Area("Manager")]
+[Route("manager/api/permissions")]
+[Authorize(Policy = Permission.Admin)]
+[ApiController]
+[AutoValidateAntiforgeryToken]
+public class PermissionApiController : Controller
 {
+    private readonly IAuthorizationService _auth;
+
     /// <summary>
-    /// Api controller for getting user permissions.
+    /// Default constructor.
     /// </summary>
-    [Area("Manager")]
-    [Route("manager/api/permissions")]
-    [Authorize(Policy = Permission.Admin)]
-    [ApiController]
-    [AutoValidateAntiforgeryToken]
-    public class PermissionApiController : Controller
+    public PermissionApiController(IAuthorizationService auth)
     {
-        private readonly IAuthorizationService _auth;
+        _auth = auth;
+    }
 
-        /// <summary>
-        /// Default constructor.
-        /// </summary>
-        public PermissionApiController(IAuthorizationService auth)
-        {
-            _auth = auth;
-        }
+    [HttpGet]
+    [Authorize(Policy = Permission.Admin)]
+    public async Task<PermissionModel> Get()
+    {
+        var model = new PermissionModel();
 
-        [HttpGet]
-        [Authorize(Policy = Permission.Admin)]
-        public async Task<PermissionModel> Get()
-        {
-            var model = new PermissionModel();
+        // Alias permissions
+        model.Aliases.Edit = (await _auth.AuthorizeAsync(User, Permission.AliasesEdit)).Succeeded;
+        model.Aliases.Delete = (await _auth.AuthorizeAsync(User, Permission.AliasesDelete)).Succeeded;
 
-            // Alias permissions
-            model.Aliases.Edit = (await _auth.AuthorizeAsync(User, Permission.AliasesEdit)).Succeeded;
-            model.Aliases.Delete = (await _auth.AuthorizeAsync(User, Permission.AliasesDelete)).Succeeded;
+        // Comment permissions
+        model.Comments.Approve = (await _auth.AuthorizeAsync(User, Permission.CommentsApprove)).Succeeded;
+        model.Comments.Delete = (await _auth.AuthorizeAsync(User, Permission.CommentsDelete)).Succeeded;
 
-            // Comment permissions
-            model.Comments.Approve = (await _auth.AuthorizeAsync(User, Permission.CommentsApprove)).Succeeded;
-            model.Comments.Delete = (await _auth.AuthorizeAsync(User, Permission.CommentsDelete)).Succeeded;
+        // Media permissions
+        model.Media.Add = (await _auth.AuthorizeAsync(User, Permission.MediaAdd)).Succeeded;
+        model.Media.AddFolder = (await _auth.AuthorizeAsync(User, Permission.MediaAddFolder)).Succeeded;
+        model.Media.Delete = (await _auth.AuthorizeAsync(User, Permission.MediaDelete)).Succeeded;
+        model.Media.DeleteFolder = (await _auth.AuthorizeAsync(User, Permission.MediaDeleteFolder)).Succeeded;
+        model.Media.Edit = (await _auth.AuthorizeAsync(User, Permission.MediaEdit)).Succeeded;
 
-            // Media permissions
-            model.Media.Add = (await _auth.AuthorizeAsync(User, Permission.MediaAdd)).Succeeded;
-            model.Media.AddFolder = (await _auth.AuthorizeAsync(User, Permission.MediaAddFolder)).Succeeded;
-            model.Media.Delete = (await _auth.AuthorizeAsync(User, Permission.MediaDelete)).Succeeded;
-            model.Media.DeleteFolder = (await _auth.AuthorizeAsync(User, Permission.MediaDeleteFolder)).Succeeded;
-            model.Media.Edit = (await _auth.AuthorizeAsync(User, Permission.MediaEdit)).Succeeded;
+        // Page permissions
+        model.Pages.Add = (await _auth.AuthorizeAsync(User, Permission.PagesAdd)).Succeeded;
+        model.Pages.Delete = (await _auth.AuthorizeAsync(User, Permission.PagesDelete)).Succeeded;
+        model.Pages.Edit = (await _auth.AuthorizeAsync(User, Permission.PagesEdit)).Succeeded;
+        model.Pages.Preview = (await _auth.AuthorizeAsync(User, Security.Permission.PagePreview)).Succeeded;
+        model.Pages.Publish = (await _auth.AuthorizeAsync(User, Permission.PagesPublish)).Succeeded;
+        model.Pages.Save = (await _auth.AuthorizeAsync(User, Permission.PagesSave)).Succeeded;
 
-            // Page permissions
-            model.Pages.Add = (await _auth.AuthorizeAsync(User, Permission.PagesAdd)).Succeeded;
-            model.Pages.Delete = (await _auth.AuthorizeAsync(User, Permission.PagesDelete)).Succeeded;
-            model.Pages.Edit = (await _auth.AuthorizeAsync(User, Permission.PagesEdit)).Succeeded;
-            model.Pages.Preview = (await _auth.AuthorizeAsync(User, Security.Permission.PagePreview)).Succeeded;
-            model.Pages.Publish = (await _auth.AuthorizeAsync(User, Permission.PagesPublish)).Succeeded;
-            model.Pages.Save = (await _auth.AuthorizeAsync(User, Permission.PagesSave)).Succeeded;
+        // Post permissions
+        model.Posts.Add = (await _auth.AuthorizeAsync(User, Permission.PostsAdd)).Succeeded;
+        model.Posts.Delete = (await _auth.AuthorizeAsync(User, Permission.PostsDelete)).Succeeded;
+        model.Posts.Edit = (await _auth.AuthorizeAsync(User, Permission.PostsEdit)).Succeeded;
+        model.Posts.Preview = (await _auth.AuthorizeAsync(User, Security.Permission.PostPreview)).Succeeded;
+        model.Posts.Publish = (await _auth.AuthorizeAsync(User, Permission.PostsPublish)).Succeeded;
+        model.Posts.Save = (await _auth.AuthorizeAsync(User, Permission.PostsSave)).Succeeded;
 
-            // Post permissions
-            model.Posts.Add = (await _auth.AuthorizeAsync(User, Permission.PostsAdd)).Succeeded;
-            model.Posts.Delete = (await _auth.AuthorizeAsync(User, Permission.PostsDelete)).Succeeded;
-            model.Posts.Edit = (await _auth.AuthorizeAsync(User, Permission.PostsEdit)).Succeeded;
-            model.Posts.Preview = (await _auth.AuthorizeAsync(User, Security.Permission.PostPreview)).Succeeded;
-            model.Posts.Publish = (await _auth.AuthorizeAsync(User, Permission.PostsPublish)).Succeeded;
-            model.Posts.Save = (await _auth.AuthorizeAsync(User, Permission.PostsSave)).Succeeded;
+        // Site permissions
+        model.Sites.Add = (await _auth.AuthorizeAsync(User, Permission.SitesAdd)).Succeeded;
+        model.Sites.Delete = (await _auth.AuthorizeAsync(User, Permission.SitesDelete)).Succeeded;
+        model.Sites.Edit = (await _auth.AuthorizeAsync(User, Permission.SitesEdit)).Succeeded;
+        model.Sites.Save = (await _auth.AuthorizeAsync(User, Permission.SitesSave)).Succeeded;
 
-            // Site permissions
-            model.Sites.Add = (await _auth.AuthorizeAsync(User, Permission.SitesAdd)).Succeeded;
-            model.Sites.Delete = (await _auth.AuthorizeAsync(User, Permission.SitesDelete)).Succeeded;
-            model.Sites.Edit = (await _auth.AuthorizeAsync(User, Permission.SitesEdit)).Succeeded;
-            model.Sites.Save = (await _auth.AuthorizeAsync(User, Permission.SitesSave)).Succeeded;
-
-            return model;
-        }
+        return model;
     }
 }

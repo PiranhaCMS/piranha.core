@@ -8,15 +8,14 @@
  *
  */
 
-namespace Piranha.Manager.Editor
+namespace Piranha.Manager.Editor;
+
+/// <summary>
+/// The different types of elements that can be styled.
+/// </summary>
+public enum EditorStyleType
 {
-    /// <summary>
-    /// The different types of elements that can be styled.
-    /// </summary>
-    public enum EditorStyleType
-    {
-        Block,
-        Format,
-        Inline
-    }
+    Block,
+    Format,
+    Inline
 }

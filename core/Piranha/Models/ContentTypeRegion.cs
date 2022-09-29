@@ -8,67 +8,66 @@
  *
  */
 
-namespace Piranha.Models
+namespace Piranha.Models;
+
+[Serializable]
+public sealed class ContentTypeRegion
 {
-    [Serializable]
-    public sealed class ContentTypeRegion
-    {
-        /// <summary>
-        /// Gets/sets the id.
-        /// </summary>
-        public string Id { get; set; }
+    /// <summary>
+    /// Gets/sets the id.
+    /// </summary>
+    public string Id { get; set; }
 
-        /// <summary>
-        /// Gets/sets the optional title.
-        /// </summary>
-        public string Title { get; set; }
+    /// <summary>
+    /// Gets/sets the optional title.
+    /// </summary>
+    public string Title { get; set; }
 
-        /// <summary>
-        /// Gets/sets if this region has a collection of values.
-        /// </summary>
-        public bool Collection { get; set; }
+    /// <summary>
+    /// Gets/sets if this region has a collection of values.
+    /// </summary>
+    public bool Collection { get; set; }
 
-        /// <summary>
-        /// Gets/sets the field that should be used to render list item title.
-        /// </summary>
-        public string ListTitleField { get; set; }
+    /// <summary>
+    /// Gets/sets the field that should be used to render list item title.
+    /// </summary>
+    public string ListTitleField { get; set; }
 
-        /// <summary>
-        /// Gets/sets the placeholder title that should be used for new items.
-        /// </summary>
-        public string ListTitlePlaceholder { get; set; }
+    /// <summary>
+    /// Gets/sets the placeholder title that should be used for new items.
+    /// </summary>
+    public string ListTitlePlaceholder { get; set; }
 
-        /// <summary>
-        /// Gets/sets if list items should be expandable. If not, the
-        /// content is placed directly in the title.
-        /// </summary>
-        public bool ListExpand { get; set; } = true;
+    /// <summary>
+    /// Gets/sets if list items should be expandable. If not, the
+    /// content is placed directly in the title.
+    /// </summary>
+    public bool ListExpand { get; set; } = true;
 
-        /// <summary>
-        /// Gets/sets the optional description to be shown in
-        /// the manager interface.
-        /// </summary>
-        public string Description { get; set; }
+    /// <summary>
+    /// Gets/sets the optional description to be shown in
+    /// the manager interface.
+    /// </summary>
+    public string Description { get; set; }
 
-        /// <summary>
-        /// Gets/sets the optional icon css.
-        /// </summary>
-        public string Icon { get; set; }
+    /// <summary>
+    /// Gets/sets the optional icon css.
+    /// </summary>
+    public string Icon { get; set; }
 
-        /// <summary>
-        /// Gets/sets how the region should be displayed in
-        /// the manager interface.
-        /// </summary>
-        public RegionDisplayMode Display { get; set; }
+    /// <summary>
+    /// Gets/sets how the region should be displayed in
+    /// the manager interface.
+    /// </summary>
+    public RegionDisplayMode Display { get; set; }
 
-        /// <summary>
-        /// Gets/sets the editor width.
-        /// </summary>
-        public EditorWidth Width { get; set; }
+    /// <summary>
+    /// Gets/sets the editor width.
+    /// </summary>
+    public EditorWidth Width { get; set; }
 
-        /// <summary>
-        /// Gets/sets the available fields.
-        /// </summary>
-        public IList<ContentTypeField> Fields { get; set; } = new List<ContentTypeField>();
-    }
+    /// <summary>
+    /// Gets/sets the available fields.
+    /// </summary>
+    public IList<ContentTypeField> Fields { get; set; } = new List<ContentTypeField>();
 }

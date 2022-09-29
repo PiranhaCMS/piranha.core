@@ -10,51 +10,50 @@
 
 using Piranha.Extend.Fields;
 
-namespace Piranha.Extend.Serializers
+namespace Piranha.Extend.Serializers;
+
+public class DateFieldSerializer : ISerializer
 {
-    public class DateFieldSerializer : ISerializer
+    /// <summary>
+    /// Serializes the given object.
+    /// </summary>
+    /// <param name="obj">The object</param>
+    /// <returns>The serialized value</returns>
+    public string Serialize(object obj)
     {
-        /// <summary>
-        /// Serializes the given object.
-        /// </summary>
-        /// <param name="obj">The object</param>
-        /// <returns>The serialized value</returns>
-        public string Serialize(object obj)
+        if (obj is DateField field)
         {
-            if (obj is DateField field)
+            if (field.Value.HasValue)
             {
-                if (field.Value.HasValue)
-                {
-                    return field.Value.Value.ToString("yyyy-MM-dd");
-                }
-                return null;
+                return field.Value.Value.ToString("yyyy-MM-dd");
             }
-            throw new ArgumentException("The given object doesn't match the serialization type");
+            return null;
         }
+        throw new ArgumentException("The given object doesn't match the serialization type");
+    }
 
-        /// <summary>
-        /// Deserializes the given string.
-        /// </summary>
-        /// <param name="str">The serialized value</param>
-        /// <returns>The object</returns>
-        public object Deserialize(string str)
+    /// <summary>
+    /// Deserializes the given string.
+    /// </summary>
+    /// <param name="str">The serialized value</param>
+    /// <returns>The object</returns>
+    public object Deserialize(string str)
+    {
+        var field = new DateField();
+
+        if (!string.IsNullOrWhiteSpace(str))
         {
-            var field = new DateField();
-
-            if (!string.IsNullOrWhiteSpace(str))
+            try
             {
-                try
-                {
-                    field.Value = DateTime.Parse(str);
-                }
-                catch
-                {
-                    // Let's not throw an exception, let's just
-                    // return a new empty field.
-                    field.Value = null;
-                }
+                field.Value = DateTime.Parse(str);
             }
-            return field;
+            catch
+            {
+                // Let's not throw an exception, let's just
+                // return a new empty field.
+                field.Value = null;
+            }
         }
+        return field;
     }
 }

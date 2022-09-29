@@ -10,17 +10,16 @@
 
 using Microsoft.EntityFrameworkCore;
 
-namespace Piranha.Data.EF.MySql
+namespace Piranha.Data.EF.MySql;
+
+[NoCoverage]
+public sealed class MySqlDb : Db<MySqlDb>
 {
-    [NoCoverage]
-    public sealed class MySqlDb : Db<MySqlDb>
+    /// <summary>
+    /// Default constructor.
+    /// </summary>
+    /// <param name="options">Configuration options</param>
+    public MySqlDb(DbContextOptions<MySqlDb> options) : base(options)
     {
-        /// <summary>
-        /// Default constructor.
-        /// </summary>
-        /// <param name="options">Configuration options</param>
-        public MySqlDb(DbContextOptions<MySqlDb> options) : base(options)
-        {
-        }
     }
 }

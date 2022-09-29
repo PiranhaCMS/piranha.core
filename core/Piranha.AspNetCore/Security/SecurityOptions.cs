@@ -8,16 +8,15 @@
  *
  */
 
-namespace Piranha.AspNetCore.Security
+namespace Piranha.AspNetCore.Security;
+
+/// <summary>
+/// The options available for the security middleware.
+/// </summary>
+public sealed class SecurityOptions
 {
     /// <summary>
-    /// The options available for the security middleware.
+    /// Gets/sets the login url.
     /// </summary>
-    public sealed class SecurityOptions
-    {
-        /// <summary>
-        /// Gets/sets the login url.
-        /// </summary>
-        public string LoginUrl { get; set; } = "/login";
-    }
+    public string LoginUrl { get; set; } = "/login";
 }

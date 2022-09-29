@@ -8,16 +8,15 @@
  *
  */
 
-namespace Piranha.Manager.Models.Content
+namespace Piranha.Manager.Models.Content;
+
+/// <summary>
+/// Edit model for blocks.
+/// </summary>
+public abstract class BlockModel
 {
     /// <summary>
-    /// Edit model for blocks.
+    /// Gets/sets the meta information.
     /// </summary>
-    public abstract class BlockModel
-    {
-        /// <summary>
-        /// Gets/sets the meta information.
-        /// </summary>
-        public BlockMeta Meta { get; set; }
-    }
+    public BlockMeta Meta { get; set; }
 }

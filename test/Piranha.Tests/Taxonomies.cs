@@ -10,18 +10,17 @@
 
 using Xunit;
 
-namespace Piranha.Tests
-{
-    public class Taxonomies
-    {
-        [Fact]
-        public void StringToTaxonomy() {
-            Models.Taxonomy t = "Test";
+namespace Piranha.Tests;
 
-            Assert.NotNull(t);
-            Assert.Equal(Guid.Empty, t.Id);
-            Assert.Equal("Test", t.Title);
-            Assert.Null(t.Slug);
-        }
+public class Taxonomies
+{
+    [Fact]
+    public void StringToTaxonomy() {
+        Models.Taxonomy t = "Test";
+
+        Assert.NotNull(t);
+        Assert.Equal(Guid.Empty, t.Id);
+        Assert.Equal("Test", t.Title);
+        Assert.Null(t.Slug);
     }
 }

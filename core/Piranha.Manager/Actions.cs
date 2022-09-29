@@ -10,190 +10,189 @@
 
 using Piranha.Manager.Extend;
 
-namespace Piranha.Manager
+namespace Piranha.Manager;
+
+/// <summary>
+/// Static class for defining the manager menu.
+/// </summary>
+public static class Actions
 {
-    /// <summary>
-    /// Static class for defining the manager menu.
-    /// </summary>
-    public static class Actions
+    public sealed class ModalActions
     {
-        public sealed class ModalActions
-        {
-            /// <summary>
-            /// Gets the available actions for the media preview modal.
-            /// </summary>
-            public ActionList<ModalAction> MediaPreview { get; private set; } = new ActionList<ModalAction>();
-
-            /// <summary>
-            /// Default constructor.
-            /// </summary>
-            internal ModalActions() { }
-        }
-
-        public sealed class ToolbarActions
-        {
-            /// <summary>
-            /// Gets the available actions for the alias view.
-            /// </summary>
-            public ActionList<ToolbarAction> AliasEdit { get; private set; } = new ActionList<ToolbarAction>
-            {
-                new ToolbarAction
-                {
-                    InternalId = "Add",
-                    ActionView = "Partial/Actions/_AliasAdd"
-                }
-            };
-
-            /// <summary>
-            /// Gets the available actions for the comments view.
-            /// </summary>
-            public ActionList<ToolbarAction> CommentList { get; private set; } = new ActionList<ToolbarAction>();
-
-            /// <summary>
-            /// Gets the available actions for the config view.
-            /// </summary>
-            public ActionList<ToolbarAction> ConfigEdit { get; private set; } = new ActionList<ToolbarAction>
-            {
-                new ToolbarAction
-                {
-                    InternalId = "Save",
-                    ActionView = "Partial/Actions/_ConfigSave"
-                }
-            };
-
-            /// <summary>
-            /// Gets the available actions for the content list view.
-            /// </summary>
-            public ActionList<ToolbarAction> ContentList { get; private set; } = new ActionList<ToolbarAction>();
-
-            /// <summary>
-            /// Gets the available actions for the content edit view.
-            /// </summary>
-            public ActionList<ToolbarAction> ContentEdit { get; private set; } = new ActionList<ToolbarAction>
-            {
-                new ToolbarAction
-                {
-                    InternalId = "Languages",
-                    ActionView = "Partial/Actions/_ContentLangPicker"
-                },
-                new ToolbarAction
-                {
-                    InternalId = "Settings",
-                    ActionView = "Partial/Actions/_ContentSettings"
-                },
-                new ToolbarAction
-                {
-                    InternalId = "Save",
-                    ActionView = "Partial/Actions/_ContentSave"
-                },
-                new ToolbarAction
-                {
-                    InternalId = "Delete",
-                    ActionView = "Partial/Actions/_ContentDelete"
-                }
-            };
-
-            /// <summary>
-            /// Gets the available actions for media list view.
-            /// </summary>
-            public ActionList<ToolbarAction> MediaList { get; private set; } = new ActionList<ToolbarAction>();
-
-            /// <summary>
-            /// Gets the available actions for the module list view.
-            /// </summary>
-            /// <returns></returns>
-            public ActionList<ToolbarAction> ModuleList { get; private set; } = new ActionList<ToolbarAction>();
-
-            /// <summary>
-            /// Gets the available actions for the page edit view.
-            /// </summary>
-            public ActionList<ToolbarAction> PageEdit { get; private set; } = new ActionList<ToolbarAction>
-            {
-                new ToolbarAction
-                {
-                    InternalId = "Settings",
-                    ActionView = "Partial/Actions/_PageSettings"
-                },
-                new ToolbarAction
-                {
-                    InternalId = "Preview",
-                    ActionView = "Partial/Actions/_PagePreview"
-                },
-                new ToolbarAction
-                {
-                    InternalId = "Save",
-                    ActionView = "Partial/Actions/_PageSave"
-                },
-                new ToolbarAction
-                {
-                    InternalId = "Delete",
-                    ActionView = "Partial/Actions/_PageDelete"
-                }
-            };
-
-            /// <summary>
-            /// Gets the actions available for the page list view.
-            /// </summary>
-            public ActionList<ToolbarAction> PageList { get; private set; } = new ActionList<ToolbarAction>
-            {
-                new ToolbarAction
-                {
-                    InternalId = "Expand",
-                    ActionView = "Partial/Actions/_PageListExpand"
-                },
-                new ToolbarAction
-                {
-                    InternalId = "Collapse",
-                    ActionView = "Partial/Actions/_PageListCollapse"
-                },
-                new ToolbarAction
-                {
-                    InternalId = "AddSite",
-                    ActionView = "Partial/Actions/_PageListAddSite"
-                },
-            };
-
-            /// <summary>
-            /// Gets the available actions for the page edit view.
-            /// </summary>
-            public ActionList<ToolbarAction> PostEdit { get; private set; } = new ActionList<ToolbarAction>
-            {
-                new ToolbarAction
-                {
-                    InternalId = "Settings",
-                    ActionView = "Partial/Actions/_PostSettings"
-                },
-                new ToolbarAction
-                {
-                    InternalId = "Preview",
-                    ActionView = "Partial/Actions/_PostPreview"
-                },
-                new ToolbarAction
-                {
-                    InternalId = "Save",
-                    ActionView = "Partial/Actions/_PostSave"
-                },
-                new ToolbarAction
-                {
-                    InternalId = "Delete",
-                    ActionView = "Partial/Actions/_PostDelete"
-                }
-            };
-
-            /// <summary>
-            /// Default constructor.
-            /// </summary>
-            internal ToolbarActions() { }
-        }
+        /// <summary>
+        /// Gets the available actions for the media preview modal.
+        /// </summary>
+        public ActionList<ModalAction> MediaPreview { get; private set; } = new ActionList<ModalAction>();
 
         /// <summary>
-        /// Gets the available modal actions.
+        /// Default constructor.
         /// </summary>
-        public static ModalActions Modals { get; private set; } = new ModalActions();
-
-        /// <summary>
-        /// Gets/sets the available toolbar actions.
-        /// </summary>
-        public static ToolbarActions Toolbars { get; private set; } = new ToolbarActions();
+        internal ModalActions() { }
     }
+
+    public sealed class ToolbarActions
+    {
+        /// <summary>
+        /// Gets the available actions for the alias view.
+        /// </summary>
+        public ActionList<ToolbarAction> AliasEdit { get; private set; } = new ActionList<ToolbarAction>
+        {
+            new ToolbarAction
+            {
+                InternalId = "Add",
+                ActionView = "Partial/Actions/_AliasAdd"
+            }
+        };
+
+        /// <summary>
+        /// Gets the available actions for the comments view.
+        /// </summary>
+        public ActionList<ToolbarAction> CommentList { get; private set; } = new ActionList<ToolbarAction>();
+
+        /// <summary>
+        /// Gets the available actions for the config view.
+        /// </summary>
+        public ActionList<ToolbarAction> ConfigEdit { get; private set; } = new ActionList<ToolbarAction>
+        {
+            new ToolbarAction
+            {
+                InternalId = "Save",
+                ActionView = "Partial/Actions/_ConfigSave"
+            }
+        };
+
+        /// <summary>
+        /// Gets the available actions for the content list view.
+        /// </summary>
+        public ActionList<ToolbarAction> ContentList { get; private set; } = new ActionList<ToolbarAction>();
+
+        /// <summary>
+        /// Gets the available actions for the content edit view.
+        /// </summary>
+        public ActionList<ToolbarAction> ContentEdit { get; private set; } = new ActionList<ToolbarAction>
+        {
+            new ToolbarAction
+            {
+                InternalId = "Languages",
+                ActionView = "Partial/Actions/_ContentLangPicker"
+            },
+            new ToolbarAction
+            {
+                InternalId = "Settings",
+                ActionView = "Partial/Actions/_ContentSettings"
+            },
+            new ToolbarAction
+            {
+                InternalId = "Save",
+                ActionView = "Partial/Actions/_ContentSave"
+            },
+            new ToolbarAction
+            {
+                InternalId = "Delete",
+                ActionView = "Partial/Actions/_ContentDelete"
+            }
+        };
+
+        /// <summary>
+        /// Gets the available actions for media list view.
+        /// </summary>
+        public ActionList<ToolbarAction> MediaList { get; private set; } = new ActionList<ToolbarAction>();
+
+        /// <summary>
+        /// Gets the available actions for the module list view.
+        /// </summary>
+        /// <returns></returns>
+        public ActionList<ToolbarAction> ModuleList { get; private set; } = new ActionList<ToolbarAction>();
+
+        /// <summary>
+        /// Gets the available actions for the page edit view.
+        /// </summary>
+        public ActionList<ToolbarAction> PageEdit { get; private set; } = new ActionList<ToolbarAction>
+        {
+            new ToolbarAction
+            {
+                InternalId = "Settings",
+                ActionView = "Partial/Actions/_PageSettings"
+            },
+            new ToolbarAction
+            {
+                InternalId = "Preview",
+                ActionView = "Partial/Actions/_PagePreview"
+            },
+            new ToolbarAction
+            {
+                InternalId = "Save",
+                ActionView = "Partial/Actions/_PageSave"
+            },
+            new ToolbarAction
+            {
+                InternalId = "Delete",
+                ActionView = "Partial/Actions/_PageDelete"
+            }
+        };
+
+        /// <summary>
+        /// Gets the actions available for the page list view.
+        /// </summary>
+        public ActionList<ToolbarAction> PageList { get; private set; } = new ActionList<ToolbarAction>
+        {
+            new ToolbarAction
+            {
+                InternalId = "Expand",
+                ActionView = "Partial/Actions/_PageListExpand"
+            },
+            new ToolbarAction
+            {
+                InternalId = "Collapse",
+                ActionView = "Partial/Actions/_PageListCollapse"
+            },
+            new ToolbarAction
+            {
+                InternalId = "AddSite",
+                ActionView = "Partial/Actions/_PageListAddSite"
+            },
+        };
+
+        /// <summary>
+        /// Gets the available actions for the page edit view.
+        /// </summary>
+        public ActionList<ToolbarAction> PostEdit { get; private set; } = new ActionList<ToolbarAction>
+        {
+            new ToolbarAction
+            {
+                InternalId = "Settings",
+                ActionView = "Partial/Actions/_PostSettings"
+            },
+            new ToolbarAction
+            {
+                InternalId = "Preview",
+                ActionView = "Partial/Actions/_PostPreview"
+            },
+            new ToolbarAction
+            {
+                InternalId = "Save",
+                ActionView = "Partial/Actions/_PostSave"
+            },
+            new ToolbarAction
+            {
+                InternalId = "Delete",
+                ActionView = "Partial/Actions/_PostDelete"
+            }
+        };
+
+        /// <summary>
+        /// Default constructor.
+        /// </summary>
+        internal ToolbarActions() { }
+    }
+
+    /// <summary>
+    /// Gets the available modal actions.
+    /// </summary>
+    public static ModalActions Modals { get; private set; } = new ModalActions();
+
+    /// <summary>
+    /// Gets/sets the available toolbar actions.
+    /// </summary>
+    public static ToolbarActions Toolbars { get; private set; } = new ToolbarActions();
 }

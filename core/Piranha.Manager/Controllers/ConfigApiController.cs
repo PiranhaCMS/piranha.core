@@ -13,72 +13,71 @@ using Microsoft.AspNetCore.Mvc;
 using Piranha.Manager.Models;
 using Piranha.Manager.Services;
 
-namespace Piranha.Manager.Controllers
+namespace Piranha.Manager.Controllers;
+
+/// <summary>
+/// Api controller for config management.
+/// </summary>
+[Area("Manager")]
+[Route("manager/api/config")]
+[Authorize(Policy = Permission.Admin)]
+[ApiController]
+[AutoValidateAntiforgeryToken]
+public class ConfigApiController : Controller
 {
+    private readonly ConfigService _service;
+
     /// <summary>
-    /// Api controller for config management.
+    /// Default constructor.
     /// </summary>
-    [Area("Manager")]
-    [Route("manager/api/config")]
-    [Authorize(Policy = Permission.Admin)]
-    [ApiController]
-    [AutoValidateAntiforgeryToken]
-    public class ConfigApiController : Controller
+    public ConfigApiController(ConfigService service)
     {
-        private readonly ConfigService _service;
+        _service = service;
+    }
 
-        /// <summary>
-        /// Default constructor.
-        /// </summary>
-        public ConfigApiController(ConfigService service)
+    /// <summary>
+    /// Gets the list model.
+    /// </summary>
+    /// <returns>The list model</returns>
+    [Route("")]
+    [HttpGet]
+    [Authorize(Policy = Permission.Config)]
+    public ConfigModel List()
+    {
+        return _service.Get();
+    }
+
+    /// <summary>
+    /// Save the given model.
+    /// </summary>
+    /// <param name="model">The config model</param>
+    [Route("save")]
+    [HttpPost]
+    [Authorize(Policy = Permission.ConfigEdit)]
+    public AsyncResult Save(ConfigModel model)
+    {
+        try
         {
-            _service = service;
+            _service.Save(model);
         }
-
-        /// <summary>
-        /// Gets the list model.
-        /// </summary>
-        /// <returns>The list model</returns>
-        [Route("")]
-        [HttpGet]
-        [Authorize(Policy = Permission.Config)]
-        public ConfigModel List()
+        catch
         {
-            return _service.Get();
-        }
-
-        /// <summary>
-        /// Save the given model.
-        /// </summary>
-        /// <param name="model">The config model</param>
-        [Route("save")]
-        [HttpPost]
-        [Authorize(Policy = Permission.ConfigEdit)]
-        public AsyncResult Save(ConfigModel model)
-        {
-            try
-            {
-                _service.Save(model);
-            }
-            catch
-            {
-                return new AsyncResult
-                {
-                    Status = new StatusMessage
-                    {
-                        Type = StatusMessage.Error,
-                        Body = "An error occurred while saving"
-                    }
-                };
-            }
             return new AsyncResult
             {
                 Status = new StatusMessage
                 {
-                    Type = StatusMessage.Success,
-                    Body = "The config was successfully saved"
+                    Type = StatusMessage.Error,
+                    Body = "An error occurred while saving"
                 }
             };
         }
+        return new AsyncResult
+        {
+            Status = new StatusMessage
+            {
+                Type = StatusMessage.Success,
+                Body = "The config was successfully saved"
+            }
+        };
     }
 }

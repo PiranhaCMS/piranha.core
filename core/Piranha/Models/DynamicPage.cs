@@ -10,17 +10,16 @@
 
 using System.Dynamic;
 
-namespace Piranha.Models
+namespace Piranha.Models;
+
+/// <summary>
+/// Dynamic page model.
+/// </summary>
+[Serializable]
+public class DynamicPage : GenericPage<DynamicPage>, IDynamicContent
 {
     /// <summary>
-    /// Dynamic page model.
+    /// Gets/sets the regions.
     /// </summary>
-    [Serializable]
-    public class DynamicPage : GenericPage<DynamicPage>, IDynamicContent
-    {
-        /// <summary>
-        /// Gets/sets the regions.
-        /// </summary>
-        public dynamic Regions { get; set; } = new ExpandoObject();
-    }
+    public dynamic Regions { get; set; } = new ExpandoObject();
 }

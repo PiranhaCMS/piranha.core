@@ -10,17 +10,16 @@
 
 using Microsoft.EntityFrameworkCore;
 
-namespace Piranha.Data.EF.SQLServer
+namespace Piranha.Data.EF.SQLServer;
+
+[NoCoverage]
+public sealed class SQLServerDb : Db<SQLServerDb>
 {
-    [NoCoverage]
-    public sealed class SQLServerDb : Db<SQLServerDb>
+    /// <summary>
+    /// Default constructor.
+    /// </summary>
+    /// <param name="options">Configuration options</param>
+    public SQLServerDb(DbContextOptions<SQLServerDb> options) : base(options)
     {
-        /// <summary>
-        /// Default constructor.
-        /// </summary>
-        /// <param name="options">Configuration options</param>
-        public SQLServerDb(DbContextOptions<SQLServerDb> options) : base(options)
-        {
-        }
     }
 }

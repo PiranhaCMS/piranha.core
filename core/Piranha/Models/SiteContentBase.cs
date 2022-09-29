@@ -8,11 +8,10 @@
  *
  */
 
-namespace Piranha.Models
-{
-    /// <summary>
-    /// Base class for site content models.
-    /// </summary>
-    [Serializable]
-    public abstract class SiteContentBase : ContentBase { }
-}
+namespace Piranha.Models;
+
+/// <summary>
+/// Base class for site content models.
+/// </summary>
+[Serializable]
+public abstract class SiteContentBase : ContentBase { }

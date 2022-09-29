@@ -8,15 +8,14 @@
  *
  */
 
-namespace Piranha.Data
+namespace Piranha.Data;
+
+/// <summary>
+/// The different types of taxonomies
+/// </summary>
+[Serializable]
+public enum TaxonomyType
 {
-    /// <summary>
-    /// The different types of taxonomies
-    /// </summary>
-    [Serializable]
-    public enum TaxonomyType
-    {
-        Category,
-        Tag
-    }
+    Category,
+    Tag
 }

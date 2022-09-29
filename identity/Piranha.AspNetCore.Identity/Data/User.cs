@@ -10,12 +10,9 @@
 
 using Microsoft.AspNetCore.Identity;
 
-namespace Piranha.AspNetCore.Identity.Data
-{
-    /// <summary>
-    /// The application user.
-    /// </summary>
-    public sealed class User : IdentityUser<Guid>
-    {
-    }
-}
+namespace Piranha.AspNetCore.Identity.Data;
+
+/// <summary>
+/// The application user.
+/// </summary>
+public sealed class User : IdentityUser<Guid> { }

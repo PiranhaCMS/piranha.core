@@ -10,12 +10,9 @@
 
 using Microsoft.AspNetCore.Identity;
 
-namespace Piranha.AspNetCore.Identity.Data
-{
-    /// <summary>
-    /// Application role.
-    /// </summary>
-    public sealed class Role : IdentityRole<Guid>
-    {
-    }
-}
+namespace Piranha.AspNetCore.Identity.Data;
+
+/// <summary>
+/// Application role.
+/// </summary>
+public sealed class Role : IdentityRole<Guid> { }

@@ -10,110 +10,109 @@
 
 using System.Collections;
 
-namespace Piranha.Runtime
+namespace Piranha.Runtime;
+
+public abstract class AppDataList<T, TItem> : IEnumerable<TItem> where TItem : AppDataItem
 {
-    public abstract class AppDataList<T, TItem> : IEnumerable<TItem> where TItem : AppDataItem
+    /// <summary>
+    /// The items collection.
+    /// </summary>
+    protected readonly List<TItem> _items = new List<TItem>();
+
+    /// <summary>
+    /// Registers a new item.
+    /// </summary>
+    /// <typeparam name="TValue">The value type</typeparam>
+    public virtual void Register<TValue>() where TValue : T
     {
-        /// <summary>
-        /// The items collection.
-        /// </summary>
-        protected readonly List<TItem> _items = new List<TItem>();
+        var type = typeof(TValue);
 
-        /// <summary>
-        /// Registers a new item.
-        /// </summary>
-        /// <typeparam name="TValue">The value type</typeparam>
-        public virtual void Register<TValue>() where TValue : T
+        //
+        // Make sure we don't register the same type multiple times.
+        //
+        if (_items.Where(i => i.Type == type).Count() == 0)
         {
-            var type = typeof(TValue);
+            var item = Activator.CreateInstance<TItem>();
 
-            //
-            // Make sure we don't register the same type multiple times.
-            //
-            if (_items.Where(i => i.Type == type).Count() == 0)
+            item.Type = type;
+            item.TypeName = type.ToString();
+
+            _items.Add(OnRegister<TValue>(item));
+        }
+    }
+
+    /// <summary>
+    /// Unregisters a previously registered item.
+    /// </summary>
+    /// <typeparam name="TValue">The value type</typeparam>
+    public virtual void UnRegister<TValue>() where TValue : T
+    {
+        var item = _items.SingleOrDefault(i => i.Type == typeof(TValue));
+        if (item != null)
+        {
+            _items.Remove(item);
+        }
+    }
+
+    /// <summary>
+    /// Gets a single item by its type.
+    /// </summary>
+    /// <param name="type">The type</param>
+    /// <returns>The item, null if not found</returns>
+    public virtual TItem GetByType(Type type)
+    {
+        return _items.SingleOrDefault(i => i.Type == type);
+    }
+
+    /// <summary>
+    /// Gets a single item by its full type name.
+    /// </summary>
+    /// <param name="typeName">The type name</param>
+    /// <returns>The item, null if not found</returns>
+    public virtual TItem GetByType(string typeName)
+    {
+        if (typeName != null)
+        {
+            // Temporary hotfix for poorly formatted CLR types
+            // for generic types
+            var versionIndex = typeName.IndexOf(",");
+            if (versionIndex != -1)
             {
-                var item = Activator.CreateInstance<TItem>();
+                var fixedName = typeName.Substring(0, versionIndex).Replace("[[", "[");
 
-                item.Type = type;
-                item.TypeName = type.ToString();
-
-                _items.Add(OnRegister<TValue>(item));
+                return _items.SingleOrDefault(i => i.TypeName.StartsWith(fixedName));
             }
         }
+        return _items.SingleOrDefault(i => i.TypeName == typeName);
+    }
 
-        /// <summary>
-        /// Unregisters a previously registered item.
-        /// </summary>
-        /// <typeparam name="TValue">The value type</typeparam>
-        public virtual void UnRegister<TValue>() where TValue : T
-        {
-            var item = _items.SingleOrDefault(i => i.Type == typeof(TValue));
-            if (item != null)
-            {
-                _items.Remove(item);
-            }
-        }
+    /// <summary>
+    /// Gets the generic enumerator for the items.
+    /// </summary>
+    /// <returns>The enumerator</returns>
+    public IEnumerator<TItem> GetEnumerator()
+    {
+        return _items.GetEnumerator();
+    }
 
-        /// <summary>
-        /// Gets a single item by its type.
-        /// </summary>
-        /// <param name="type">The type</param>
-        /// <returns>The item, null if not found</returns>
-        public virtual TItem GetByType(Type type)
-        {
-            return _items.SingleOrDefault(i => i.Type == type);
-        }
+    /// <summary>
+    /// Gets the enumerator for the items.
+    /// </summary>
+    /// <returns>The enumerator</returns>
+    IEnumerator IEnumerable.GetEnumerator()
+    {
+        return _items.GetEnumerator();
+    }
 
-        /// <summary>
-        /// Gets a single item by its full type name.
-        /// </summary>
-        /// <param name="typeName">The type name</param>
-        /// <returns>The item, null if not found</returns>
-        public virtual TItem GetByType(string typeName)
-        {
-            if (typeName != null)
-            {
-                // Temporary hotfix for poorly formatted CLR types
-                // for generic types
-                var versionIndex = typeName.IndexOf(",");
-                if (versionIndex != -1)
-                {
-                    var fixedName = typeName.Substring(0, versionIndex).Replace("[[", "[");
-
-                    return _items.SingleOrDefault(i => i.TypeName.StartsWith(fixedName));
-                }
-            }
-            return _items.SingleOrDefault(i => i.TypeName == typeName);
-        }
-
-        /// <summary>
-        /// Gets the generic enumerator for the items.
-        /// </summary>
-        /// <returns>The enumerator</returns>
-        public IEnumerator<TItem> GetEnumerator()
-        {
-            return _items.GetEnumerator();
-        }
-
-        /// <summary>
-        /// Gets the enumerator for the items.
-        /// </summary>
-        /// <returns>The enumerator</returns>
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return _items.GetEnumerator();
-        }
-
-        /// <summary>
-        /// Performs additional processing on the item before
-        /// adding it to the collection.
-        /// </summary>
-        /// <typeparam name="TValue">The value type</typeparam>
-        /// <param name="item">The item</param>
-        /// <returns>The processed item</returns>
-        protected virtual TItem OnRegister<TValue>(TItem item) where TValue : T
-        {
-            return item;
-        }
+    /// <summary>
+    /// Performs additional processing on the item before
+    /// adding it to the collection.
+    /// </summary>
+    /// <typeparam name="TValue">The value type</typeparam>
+    /// <param name="item">The item</param>
+    /// <returns>The processed item</returns>
+    protected virtual TItem OnRegister<TValue>(TItem item) where TValue : T
+    {
+        return item;
     }
 }

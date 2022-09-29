@@ -10,14 +10,13 @@
 
 using Xunit;
 
-namespace Piranha.Tests.Utils
+namespace Piranha.Tests.Utils;
+
+public class InternalId
 {
-    public class InternalId
-    {
-        //corrected to GenerateInternalId
-        [Fact]
-        public void ToTitleCase() {
-            Assert.Equal("MyTestValue", Piranha.Utils.GenerateInternalId("mY test vAlUE"));
-        }
+    //corrected to GenerateInternalId
+    [Fact]
+    public void ToTitleCase() {
+        Assert.Equal("MyTestValue", Piranha.Utils.GenerateInternalId("mY test vAlUE"));
     }
 }

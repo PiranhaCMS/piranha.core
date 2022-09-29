@@ -14,157 +14,156 @@ using Piranha.Extend;
 using Piranha.Extend.Blocks;
 using Piranha.Extend.Fields;
 
-namespace Piranha.Tests
+namespace Piranha.Tests;
+
+[Collection("Integration tests")]
+public class Searchable
 {
-    [Collection("Integration tests")]
-    public class Searchable
+    [Fact]
+    public void SearchHtmlField()
     {
-        [Fact]
-        public void SearchHtmlField()
+        var field = new HtmlField
         {
-            var field = new HtmlField
-            {
-                Value = "<p>Lorem ipsum</p>"
-            };
-            var search = field.GetIndexedContent();
+            Value = "<p>Lorem ipsum</p>"
+        };
+        var search = field.GetIndexedContent();
 
-            Assert.Equal(field.Value, search);
-        }
+        Assert.Equal(field.Value, search);
+    }
 
-        [Fact]
-        public void SearchMarkdownField()
+    [Fact]
+    public void SearchMarkdownField()
+    {
+        var field = new MarkdownField
         {
-            var field = new MarkdownField
-            {
-                Value = "# Header"
-            };
-            var search = field.GetIndexedContent();
+            Value = "# Header"
+        };
+        var search = field.GetIndexedContent();
 
-            Assert.Equal(field.ToHtml(), search);
-        }
+        Assert.Equal(field.ToHtml(), search);
+    }
 
-        [Fact]
-        public void SearchStringField()
+    [Fact]
+    public void SearchStringField()
+    {
+        var field = new StringField
         {
-            var field = new StringField
-            {
-                Value = "Lorem ipsum"
-            };
-            var search = field.GetIndexedContent();
+            Value = "Lorem ipsum"
+        };
+        var search = field.GetIndexedContent();
 
-            Assert.Equal(field.Value, search);
-        }
+        Assert.Equal(field.Value, search);
+    }
 
-        [Fact]
-        public void SearchTextField()
+    [Fact]
+    public void SearchTextField()
+    {
+        var field = new TextField
         {
-            var field = new TextField
-            {
-                Value = "Lorem ipsum"
-            };
-            var search = field.GetIndexedContent();
+            Value = "Lorem ipsum"
+        };
+        var search = field.GetIndexedContent();
 
-            Assert.Equal(field.Value, search);
-        }
+        Assert.Equal(field.Value, search);
+    }
 
-        [Fact]
-        public void SearchColumnBlock()
+    [Fact]
+    public void SearchColumnBlock()
+    {
+        var block = new ColumnBlock
         {
-            var block = new ColumnBlock
+            Items = new List<Block>
             {
-                Items = new List<Block>
+                new HtmlBlock
                 {
-                    new HtmlBlock
+                    Body = new HtmlField
                     {
-                        Body = new HtmlField
-                        {
-                            Value = "<p>Lorem</p>"
-                        }
-                    },
-                    new HtmlBlock
+                        Value = "<p>Lorem</p>"
+                    }
+                },
+                new HtmlBlock
+                {
+                    Body = new HtmlField
                     {
-                        Body = new HtmlField
-                        {
-                            Value = "<p>Ipsum</p>"
-                        }
+                        Value = "<p>Ipsum</p>"
                     }
                 }
-            };
-            var sb = new StringBuilder();
-            sb.AppendLine(((HtmlBlock)block.Items[0]).Body.Value);
-            sb.AppendLine(((HtmlBlock)block.Items[1]).Body.Value);
-            var value = sb.ToString();
-            var search = block.GetIndexedContent();
+            }
+        };
+        var sb = new StringBuilder();
+        sb.AppendLine(((HtmlBlock)block.Items[0]).Body.Value);
+        sb.AppendLine(((HtmlBlock)block.Items[1]).Body.Value);
+        var value = sb.ToString();
+        var search = block.GetIndexedContent();
 
-            Assert.Equal(value, search);
-        }
+        Assert.Equal(value, search);
+    }
 
-        [Fact]
-        public void SearchHtmlBlock()
+    [Fact]
+    public void SearchHtmlBlock()
+    {
+        var block = new HtmlBlock
         {
-            var block = new HtmlBlock
+            Body = new HtmlField
             {
-                Body = new HtmlField
-                {
-                    Value = "<p>Lorem ipsum</p>"
-                }
-            };
-            var search = block.GetIndexedContent();
+                Value = "<p>Lorem ipsum</p>"
+            }
+        };
+        var search = block.GetIndexedContent();
 
-            Assert.Equal(block.Body.Value, search);
-        }
+        Assert.Equal(block.Body.Value, search);
+    }
 
-        [Fact]
-        public void SearchHtmlColumnBlock()
+    [Fact]
+    public void SearchHtmlColumnBlock()
+    {
+        var block = new HtmlColumnBlock
         {
-            var block = new HtmlColumnBlock
+            Column1 = new HtmlField
             {
-                Column1 = new HtmlField
-                {
-                    Value = "<p>Lorem</p>"
-                },
-                Column2 = new HtmlField
-                {
-                    Value = "<p>Ipsum</p>"
-                }
-            };
-            var sb = new StringBuilder();
-            sb.AppendLine(block.Column1.Value);
-            sb.AppendLine(block.Column2.Value);
-            var value = sb.ToString();
-            var search = block.GetIndexedContent();
+                Value = "<p>Lorem</p>"
+            },
+            Column2 = new HtmlField
+            {
+                Value = "<p>Ipsum</p>"
+            }
+        };
+        var sb = new StringBuilder();
+        sb.AppendLine(block.Column1.Value);
+        sb.AppendLine(block.Column2.Value);
+        var value = sb.ToString();
+        var search = block.GetIndexedContent();
 
-            Assert.Equal(value, search);
-        }
+        Assert.Equal(value, search);
+    }
 
-        [Fact]
-        public void SearchQuoteBlock()
+    [Fact]
+    public void SearchQuoteBlock()
+    {
+        var block = new QuoteBlock
         {
-            var block = new QuoteBlock
+            Body = new TextField
             {
-                Body = new TextField
-                {
-                    Value = "Lorem ipsum"
-                }
-            };
-            var search = block.GetIndexedContent();
+                Value = "Lorem ipsum"
+            }
+        };
+        var search = block.GetIndexedContent();
 
-            Assert.Equal(block.Body.Value, search);
-        }
+        Assert.Equal(block.Body.Value, search);
+    }
 
-        [Fact]
-        public void SearchTextBlock()
+    [Fact]
+    public void SearchTextBlock()
+    {
+        var block = new TextBlock
         {
-            var block = new TextBlock
+            Body = new TextField
             {
-                Body = new TextField
-                {
-                    Value = "Lorem ipsum"
-                }
-            };
-            var search = block.GetIndexedContent();
+                Value = "Lorem ipsum"
+            }
+        };
+        var search = block.GetIndexedContent();
 
-            Assert.Equal(block.Body.Value, search);
-        }
+        Assert.Equal(block.Body.Value, search);
     }
 }

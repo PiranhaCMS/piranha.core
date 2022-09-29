@@ -10,21 +10,20 @@
 
 using Newtonsoft.Json;
 
-namespace Piranha.Data
-{
-    [Serializable]
-    public sealed class MediaVersion : Models.MediaVersion
-    {
-        /// <summary>
-        /// Gets/sets the id of the media this is
-        /// a version of.
-        /// </summary>
-        public Guid MediaId { get; set; }
+namespace Piranha.Data;
 
-        /// <summary>
-        /// Gets/sets the media this is a version of.
-        /// </summary>
-        [JsonIgnore]
-        public Media Media { get; set; }
-    }
+[Serializable]
+public sealed class MediaVersion : Models.MediaVersion
+{
+    /// <summary>
+    /// Gets/sets the id of the media this is
+    /// a version of.
+    /// </summary>
+    public Guid MediaId { get; set; }
+
+    /// <summary>
+    /// Gets/sets the media this is a version of.
+    /// </summary>
+    [JsonIgnore]
+    public Media Media { get; set; }
 }

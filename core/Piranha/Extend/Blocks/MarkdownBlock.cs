@@ -11,55 +11,54 @@
 using System.Text.RegularExpressions;
 using Piranha.Extend.Fields;
 
-namespace Piranha.Extend.Blocks
+namespace Piranha.Extend.Blocks;
+
+/// <summary>
+/// Single column HTML block.
+/// </summary>
+[BlockType(Name = "Markdown", Category = "Content", Icon = "fab fa-markdown", Component = "markdown-block")]
+public class MarkdownBlock : Block, ISearchable, ITranslatable
 {
     /// <summary>
-    /// Single column HTML block.
+    /// Gets/sets the Markdown body.
     /// </summary>
-    [BlockType(Name = "Markdown", Category = "Content", Icon = "fab fa-markdown", Component = "markdown-block")]
-    public class MarkdownBlock : Block, ISearchable, ITranslatable
+    public MarkdownField Body { get; set; }
+
+    /// <summary>
+    /// Gets the title of the block when used in a block group.
+    /// </summary>
+    /// <returns>The title</returns>
+    public override string GetTitle()
     {
-        /// <summary>
-        /// Gets/sets the Markdown body.
-        /// </summary>
-        public MarkdownField Body { get; set; }
-
-        /// <summary>
-        /// Gets the title of the block when used in a block group.
-        /// </summary>
-        /// <returns>The title</returns>
-        public override string GetTitle()
+        if (Body?.Value != null)
         {
-            if (Body?.Value != null)
+            var html = App.Markdown.Transform(Body.Value);
+
+            var title = Regex.Replace(html, @"<[^>]*>", "");
+
+            if (title.Length > 40)
             {
-                var html = App.Markdown.Transform(Body.Value);
-
-                var title = Regex.Replace(html, @"<[^>]*>", "");
-
-                if (title.Length > 40)
-                {
-                    title = title.Substring(0, 40) + "...";
-                }
-                return title;
+                title = title.Substring(0, 40) + "...";
             }
-            return "Empty";
+            return title;
         }
+        return "Empty";
+    }
 
-        /// <summary>
-        /// Gets the content that should be indexed for searching.
-        /// </summary>
-        public string GetIndexedContent()
-        {
-            return !string.IsNullOrEmpty(Body.Value) ? Body.Value : "";
-        }
+    /// <summary>
+    /// Gets the content that should be indexed for searching.
+    /// </summary>
+    public string GetIndexedContent()
+    {
+        return !string.IsNullOrEmpty(Body.Value) ? Body.Value : "";
+    }
 
-        /// <summary>
-        /// Implicitly converts the markdown block to a HTML string.
-        /// </summary>
-        /// <param name="block">The block</param>
-        public static implicit operator string(MarkdownBlock block)
-        {
-            return App.Markdown.Transform(block.Body?.Value);
-        }
+    /// <summary>
+    /// Implicitly converts the markdown block to a HTML string.
+    /// </summary>
+    /// <param name="block">The block</param>
+    public static implicit operator string(MarkdownBlock block)
+    {
+        return App.Markdown.Transform(block.Body?.Value);
     }
 }

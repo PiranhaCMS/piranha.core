@@ -8,10 +8,9 @@
  *
  */
 
-namespace Piranha
+namespace Piranha;
+
+public interface IInitializable
 {
-    public interface IInitializable
-    {
-        void Init();
-    }
+    void Init();
 }

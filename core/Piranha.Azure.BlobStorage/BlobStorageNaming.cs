@@ -8,15 +8,14 @@
  *
  */
 
-namespace Piranha.Azure
+namespace Piranha.Azure;
+
+/// <summary>
+/// How uploaded media files should be named to
+/// ensure unique paths.
+/// </summary>
+public enum BlobStorageNaming
 {
-    /// <summary>
-    /// How uploaded media files should be named to
-    /// ensure unique paths.
-    /// </summary>
-    public enum BlobStorageNaming
-    {
-        UniqueFileNames,
-        UniqueFolderNames
-    }
+    UniqueFileNames,
+    UniqueFolderNames
 }

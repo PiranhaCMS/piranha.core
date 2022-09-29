@@ -12,26 +12,25 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
 
-namespace Piranha.AspNetCore.Identity.SQLServer
+namespace Piranha.AspNetCore.Identity.SQLServer;
+
+/// <summary>
+/// Factory for creating a db context. Only used in dev mode
+/// when creating migrations.
+/// </summary>
+[NoCoverage]
+public class DbFactory : IDesignTimeDbContextFactory<IdentitySQLServerDb>
 {
     /// <summary>
-    /// Factory for creating a db context. Only used in dev mode
-    /// when creating migrations.
+    /// Creates a new db context.
     /// </summary>
-    [NoCoverage]
-    public class DbFactory : IDesignTimeDbContextFactory<IdentitySQLServerDb>
+    /// <param name="args">The arguments</param>
+    /// <returns>The db context</returns>
+    public IdentitySQLServerDb CreateDbContext(string[] args)
     {
-        /// <summary>
-        /// Creates a new db context.
-        /// </summary>
-        /// <param name="args">The arguments</param>
-        /// <returns>The db context</returns>
-        public IdentitySQLServerDb CreateDbContext(string[] args)
-        {
-            var builder = new DbContextOptionsBuilder<IdentitySQLServerDb>();
-            builder.UseSqlServer("Data Source=.\\SQLEXPRESS;Initial Catalog=piranha.core;Integrated Security=True;MultipleActiveResultSets=True");
-            return new IdentitySQLServerDb(builder.Options);
-        }
+        var builder = new DbContextOptionsBuilder<IdentitySQLServerDb>();
+        builder.UseSqlServer("Data Source=.\\SQLEXPRESS;Initial Catalog=piranha.core;Integrated Security=True;MultipleActiveResultSets=True");
+        return new IdentitySQLServerDb(builder.Options);
     }
 }
 #endif

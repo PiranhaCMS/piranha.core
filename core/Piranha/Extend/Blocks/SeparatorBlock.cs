@@ -8,17 +8,16 @@
  *
  */
 
-namespace Piranha.Extend.Blocks
+namespace Piranha.Extend.Blocks;
+
+/// <summary>
+/// Separator
+/// </summary>
+[BlockType(Name = "Separator", Category = "Content", Icon = "fas fa-divide", Component = "separator-block")]
+public class SeparatorBlock : Block
 {
-    /// <summary>
-    /// Separator
-    /// </summary>
-    [BlockType(Name = "Separator", Category = "Content", Icon = "fas fa-divide", Component = "separator-block")]
-    public class SeparatorBlock : Block
+    public override string GetTitle()
     {
-        public override string GetTitle()
-        {
-            return "----";
-        }
+        return "----";
     }
 }

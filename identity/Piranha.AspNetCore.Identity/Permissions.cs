@@ -8,39 +8,38 @@
  *
  */
 
-namespace Piranha.AspNetCore.Identity
-{
-    /// <summary>
-    /// The available identity permissions.
-    /// </summary>
-    public static class Permissions
-    {
-        public const string Roles = "PiranhaRoles";
-        public const string RolesAdd = "PiranhaRolesAdd";
-        public const string RolesDelete = "PiranhaRolesDelete";
-        public const string RolesEdit = "PiranhaRolesEdit";
-        public const string RolesSave = "PiranhaRolesSave";
-        public const string Users = "PiranhaUsers";
-        public const string UsersAdd = "PiranhaUsersAdd";
-        public const string UsersDelete = "PiranhaUsersDelete";
-        public const string UsersEdit = "PiranhaUsersEdit";
-        public const string UsersSave = "PiranhaUsersSave";
+namespace Piranha.AspNetCore.Identity;
 
-        public static string[] All()
+/// <summary>
+/// The available identity permissions.
+/// </summary>
+public static class Permissions
+{
+    public const string Roles = "PiranhaRoles";
+    public const string RolesAdd = "PiranhaRolesAdd";
+    public const string RolesDelete = "PiranhaRolesDelete";
+    public const string RolesEdit = "PiranhaRolesEdit";
+    public const string RolesSave = "PiranhaRolesSave";
+    public const string Users = "PiranhaUsers";
+    public const string UsersAdd = "PiranhaUsersAdd";
+    public const string UsersDelete = "PiranhaUsersDelete";
+    public const string UsersEdit = "PiranhaUsersEdit";
+    public const string UsersSave = "PiranhaUsersSave";
+
+    public static string[] All()
+    {
+        return new[]
         {
-            return new[]
-            {
-                Roles,
-                RolesAdd,
-                RolesDelete,
-                RolesEdit,
-                RolesSave,
-                Users,
-                UsersAdd,
-                UsersDelete,
-                UsersEdit,
-                UsersSave
-            };
-        }
+            Roles,
+            RolesAdd,
+            RolesDelete,
+            RolesEdit,
+            RolesSave,
+            Users,
+            UsersAdd,
+            UsersDelete,
+            UsersEdit,
+            UsersSave
+        };
     }
 }

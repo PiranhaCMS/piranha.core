@@ -11,120 +11,119 @@
 using System.Reflection;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Piranha.Extend.Fields
+namespace Piranha.Extend.Fields;
+
+/// <summary>
+/// Generic select field.
+/// </summary>
+[FieldType(Name = "DataSelect", Shorthand = "DataSelect", Component = "data-select-field")]
+public class DataSelectField<T> : DataSelectFieldBase where T : class
 {
     /// <summary>
-    /// Generic select field.
+    /// Gets the currently selected value.
     /// </summary>
-    [FieldType(Name = "DataSelect", Shorthand = "DataSelect", Component = "data-select-field")]
-    public class DataSelectField<T> : DataSelectFieldBase where T : class
+    public T Value { get; set; }
+
+    public async Task Init(IServiceProvider services)
     {
-        /// <summary>
-        /// Gets the currently selected value.
-        /// </summary>
-        public T Value { get; set; }
+        if (string.IsNullOrWhiteSpace(Id)) return;
 
-        public async Task Init(IServiceProvider services)
+        var get = typeof(T).GetMethod("GetById", BindingFlags.Public|BindingFlags.NonPublic|BindingFlags.Static);
+
+        if (get != null)
         {
-            if (string.IsNullOrWhiteSpace(Id)) return;
-
-            var get = typeof(T).GetMethod("GetById", BindingFlags.Public|BindingFlags.NonPublic|BindingFlags.Static);
-
-            if (get != null)
+            // Now inject any other parameters
+            using (var scope = services.CreateScope())
             {
-                // Now inject any other parameters
-                using (var scope = services.CreateScope())
+                var param = new List<object>();
+
+                // First add the current id to the params
+                param.Add(Id);
+
+                foreach (var p in get.GetParameters().Skip(1))
                 {
-                    var param = new List<object>();
+                    param.Add(scope.ServiceProvider.GetService(p.ParameterType));
+                }
 
-                    // First add the current id to the params
-                    param.Add(Id);
-
-                    foreach (var p in get.GetParameters().Skip(1))
+                // Check for async
+                if (typeof(Task<T>).IsAssignableFrom(get.ReturnType))
+                {
+                    Value = await ((Task<T>)get.Invoke(null, param.ToArray())).ConfigureAwait(false);
+                }
+                else
+                {
+                    await Task.Run(() =>
                     {
-                        param.Add(scope.ServiceProvider.GetService(p.ParameterType));
-                    }
-
-                    // Check for async
-                    if (typeof(Task<T>).IsAssignableFrom(get.ReturnType))
-                    {
-                        Value = await ((Task<T>)get.Invoke(null, param.ToArray())).ConfigureAwait(false);
-                    }
-                    else
-                    {
-                        await Task.Run(() =>
-                        {
-                            Value = (T)get.Invoke(null, param.ToArray());
-                        });
-                    }
+                        Value = (T)get.Invoke(null, param.ToArray());
+                    });
                 }
             }
         }
+    }
 
-        public async Task InitManager(IServiceProvider services)
+    public async Task InitManager(IServiceProvider services)
+    {
+        var get = typeof(T).GetMethod("GetList", BindingFlags.Public|BindingFlags.NonPublic|BindingFlags.Static);
+
+        if (get != null)
         {
-            var get = typeof(T).GetMethod("GetList", BindingFlags.Public|BindingFlags.NonPublic|BindingFlags.Static);
-
-            if (get != null)
+            using (var scope = services.CreateScope())
             {
-                using (var scope = services.CreateScope())
+                var param = new List<object>();
+
+                foreach (var p in get.GetParameters())
                 {
-                    var param = new List<object>();
+                    param.Add(scope.ServiceProvider.GetService(p.ParameterType));
+                }
 
-                    foreach (var p in get.GetParameters())
+                // Check for async
+                if (typeof(Task<IEnumerable<DataSelectFieldItem>>).IsAssignableFrom(get.ReturnType))
+                {
+                    Items = (await ((Task<IEnumerable<DataSelectFieldItem>>)get.Invoke(null, param.ToArray())).ConfigureAwait(false)).ToArray();
+                }
+                else
+                {
+                    await Task.Run(() =>
                     {
-                        param.Add(scope.ServiceProvider.GetService(p.ParameterType));
-                    }
-
-                    // Check for async
-                    if (typeof(Task<IEnumerable<DataSelectFieldItem>>).IsAssignableFrom(get.ReturnType))
-                    {
-                        Items = (await ((Task<IEnumerable<DataSelectFieldItem>>)get.Invoke(null, param.ToArray())).ConfigureAwait(false)).ToArray();
-                    }
-                    else
-                    {
-                        await Task.Run(() =>
-                        {
-                            Items = ((IEnumerable<DataSelectFieldItem>)get.Invoke(null, param.ToArray())).ToArray();
-                        });
-                    }
+                        Items = ((IEnumerable<DataSelectFieldItem>)get.Invoke(null, param.ToArray())).ToArray();
+                    });
                 }
             }
         }
+    }
 
-        public override string GetTitle()
+    public override string GetTitle()
+    {
+        if (Value != null)
         {
-            if (Value != null)
-            {
-                return Value.ToString();
-            }
-            return "Not item selected";
+            return Value.ToString();
         }
+        return "Not item selected";
     }
+}
 
-    public class DataSelectFieldItem
-    {
-        public string Id { get; set; }
-        public string Name { get; set; }
-    }
+public class DataSelectFieldItem
+{
+    public string Id { get; set; }
+    public string Name { get; set; }
+}
 
-    public abstract class DataSelectFieldBase : IField
-    {
-        /// <summary>
-        /// Gets/sets the id of the currently selected value.
-        /// </summary>
-        public string Id { get; set; }
+public abstract class DataSelectFieldBase : IField
+{
+    /// <summary>
+    /// Gets/sets the id of the currently selected value.
+    /// </summary>
+    public string Id { get; set; }
 
-        /// <summary>
-        /// Gets/sets the available items to selected from, this is
-        /// only used in the manager.
-        /// </summary>
-        public IEnumerable<DataSelectFieldItem> Items { get; set; }
+    /// <summary>
+    /// Gets/sets the available items to selected from, this is
+    /// only used in the manager.
+    /// </summary>
+    public IEnumerable<DataSelectFieldItem> Items { get; set; }
 
-        /// <summary>
-        /// Gets the list item title if this field is used in
-        /// a collection regions.
-        /// </summary>
-        public abstract string GetTitle();
-    }
+    /// <summary>
+    /// Gets the list item title if this field is used in
+    /// a collection regions.
+    /// </summary>
+    public abstract string GetTitle();
 }

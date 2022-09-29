@@ -10,41 +10,40 @@
 
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Piranha.Runtime
+namespace Piranha.Runtime;
+
+public sealed class AppInitMethod
 {
-    public sealed class AppInitMethod
+    /// <summary>
+    /// Gets/sets the init method.
+    /// </summary>
+    public AppMethod InitMethod { get; set; }
+
+    /// <summary>
+    /// Gets/sets the manager init method.
+    /// </summary>
+    public AppMethod InitManagerMethod { get; set; }
+
+    /// <summary>
+    /// Invokes the current method on the given instance.
+    /// </summary>
+    /// <param name="instance">The object instance</param>
+    /// <param name="scope">The current service scope</param>
+    /// <param name="managerInit">If manager init should be invoked</param>
+    public async Task InvokeAsync(object instance, IServiceScope scope, bool managerInit)
     {
-        /// <summary>
-        /// Gets/sets the init method.
-        /// </summary>
-        public AppMethod InitMethod { get; set; }
-
-        /// <summary>
-        /// Gets/sets the manager init method.
-        /// </summary>
-        public AppMethod InitManagerMethod { get; set; }
-
-        /// <summary>
-        /// Invokes the current method on the given instance.
-        /// </summary>
-        /// <param name="instance">The object instance</param>
-        /// <param name="scope">The current service scope</param>
-        /// <param name="managerInit">If manager init should be invoked</param>
-        public async Task InvokeAsync(object instance, IServiceScope scope, bool managerInit)
+        if (!managerInit)
         {
-            if (!managerInit)
+            if (InitMethod != null)
             {
-                if (InitMethod != null)
-                {
-                    await InitMethod.InvokeAsync(instance, scope).ConfigureAwait(false);
-                }
+                await InitMethod.InvokeAsync(instance, scope).ConfigureAwait(false);
             }
-            else
+        }
+        else
+        {
+            if (InitManagerMethod != null)
             {
-                if (InitManagerMethod != null)
-                {
-                    await InitManagerMethod.InvokeAsync(instance, scope).ConfigureAwait(false);
-                }
+                await InitManagerMethod.InvokeAsync(instance, scope).ConfigureAwait(false);
             }
         }
     }

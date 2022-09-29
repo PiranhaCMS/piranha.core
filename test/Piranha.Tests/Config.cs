@@ -10,153 +10,152 @@
 
 using Xunit;
 
-namespace Piranha.Tests
+namespace Piranha.Tests;
+
+[Collection("Integration tests")]
+public class Config : BaseTestsAsync
 {
-    [Collection("Integration tests")]
-    public class Config : BaseTestsAsync
+    /// <summary>
+    /// Sets up & initializes the tests.
+    /// </summary>
+    public override Task InitializeAsync()
     {
-        /// <summary>
-        /// Sets up & initializes the tests.
-        /// </summary>
-        public override Task InitializeAsync()
+        return Task.Run(() =>
         {
-            return Task.Run(() =>
+            using (var api = CreateApi())
             {
-                using (var api = CreateApi())
-                {
 
-                    using (var config = new Piranha.Config(api)) {
-                        config.ArchivePageSize = 0;
-                        config.CacheExpiresPages = 0;
-                        config.CacheExpiresPosts = 0;
-                        config.CommentsApprove = true;
-                        config.CommentsPageSize = 0;
-                        config.HierarchicalPageSlugs = true;
-                        config.ManagerExpandedSitemapLevels = 0;
-                    }
-                }
-            });
-        }
-
-        /// <summary>
-        /// Cleans up any possible data and resources
-        /// created by the test.
-        /// </summary>
-        public override Task DisposeAsync()
-        {
-            return Task.Run(() => {});
-        }
-
-        [Fact]
-        public void ArchivePageSize() {
-            using (var api = CreateApi()) {
                 using (var config = new Piranha.Config(api)) {
-                    Assert.Equal(0, config.ArchivePageSize);
-
-                    config.ArchivePageSize = 5;
-
-                    Assert.Equal(5, config.ArchivePageSize);
+                    config.ArchivePageSize = 0;
+                    config.CacheExpiresPages = 0;
+                    config.CacheExpiresPosts = 0;
+                    config.CommentsApprove = true;
+                    config.CommentsPageSize = 0;
+                    config.HierarchicalPageSlugs = true;
+                    config.ManagerExpandedSitemapLevels = 0;
                 }
             }
-        }
+        });
+    }
 
-        [Fact]
-        public void CacheExpiresPages() {
-            using (var api = CreateApi()) {
-                using (var config = new Piranha.Config(api)) {
-                    Assert.Equal(0, config.CacheExpiresPages);
+    /// <summary>
+    /// Cleans up any possible data and resources
+    /// created by the test.
+    /// </summary>
+    public override Task DisposeAsync()
+    {
+        return Task.Run(() => {});
+    }
 
-                    config.CacheExpiresPages = 30;
+    [Fact]
+    public void ArchivePageSize() {
+        using (var api = CreateApi()) {
+            using (var config = new Piranha.Config(api)) {
+                Assert.Equal(0, config.ArchivePageSize);
 
-                    Assert.Equal(30, config.CacheExpiresPages);
-                }
+                config.ArchivePageSize = 5;
+
+                Assert.Equal(5, config.ArchivePageSize);
             }
         }
+    }
 
-        [Fact]
-        public void CacheExpiresPosts() {
-            using (var api = CreateApi()) {
-                using (var config = new Piranha.Config(api)) {
-                    Assert.Equal(0, config.CacheExpiresPosts);
+    [Fact]
+    public void CacheExpiresPages() {
+        using (var api = CreateApi()) {
+            using (var config = new Piranha.Config(api)) {
+                Assert.Equal(0, config.CacheExpiresPages);
 
-                    config.CacheExpiresPosts = 30;
+                config.CacheExpiresPages = 30;
 
-                    Assert.Equal(30, config.CacheExpiresPosts);
-                }
+                Assert.Equal(30, config.CacheExpiresPages);
             }
         }
+    }
 
-        [Fact]
-        public void CommentsApprove() {
-            using (var api = CreateApi()) {
-                using (var config = new Piranha.Config(api)) {
-                    Assert.True(config.CommentsApprove);
+    [Fact]
+    public void CacheExpiresPosts() {
+        using (var api = CreateApi()) {
+            using (var config = new Piranha.Config(api)) {
+                Assert.Equal(0, config.CacheExpiresPosts);
 
-                    config.CommentsApprove = false;
+                config.CacheExpiresPosts = 30;
 
-                    Assert.False(config.CommentsApprove);
-                }
+                Assert.Equal(30, config.CacheExpiresPosts);
             }
         }
+    }
 
-        [Fact]
-        public void CommentsPageSize() {
-            using (var api = CreateApi()) {
-                using (var config = new Piranha.Config(api)) {
-                    Assert.Equal(0, config.CommentsPageSize);
+    [Fact]
+    public void CommentsApprove() {
+        using (var api = CreateApi()) {
+            using (var config = new Piranha.Config(api)) {
+                Assert.True(config.CommentsApprove);
 
-                    config.CommentsPageSize = 5;
+                config.CommentsApprove = false;
 
-                    Assert.Equal(5, config.CommentsPageSize);
-                }
+                Assert.False(config.CommentsApprove);
             }
         }
+    }
 
-        [Fact]
-        public void HierarchicalPageSlugs() {
-            using (var api = CreateApi()) {
-                using (var config = new Piranha.Config(api)) {
-                    Assert.True(config.HierarchicalPageSlugs);
+    [Fact]
+    public void CommentsPageSize() {
+        using (var api = CreateApi()) {
+            using (var config = new Piranha.Config(api)) {
+                Assert.Equal(0, config.CommentsPageSize);
 
-                    config.HierarchicalPageSlugs = false;
+                config.CommentsPageSize = 5;
 
-                    Assert.False(config.HierarchicalPageSlugs);
-                }
+                Assert.Equal(5, config.CommentsPageSize);
             }
         }
+    }
 
-        [Fact]
-        public void ManagerExpandedSitemapLevels() {
-            using (var api = CreateApi()) {
-                using (var config = new Piranha.Config(api)) {
-                    Assert.Equal(0, config.ManagerExpandedSitemapLevels);
+    [Fact]
+    public void HierarchicalPageSlugs() {
+        using (var api = CreateApi()) {
+            using (var config = new Piranha.Config(api)) {
+                Assert.True(config.HierarchicalPageSlugs);
 
-                    config.ManagerExpandedSitemapLevels = 3;
+                config.HierarchicalPageSlugs = false;
 
-                    Assert.Equal(3, config.ManagerExpandedSitemapLevels);
-                }
+                Assert.False(config.HierarchicalPageSlugs);
             }
         }
+    }
 
-        [Fact]
-        public void MediaCDN() {
-            using (var api = CreateApi()) {
-                using (var config = new Piranha.Config(api)) {
-                    config.MediaCDN = "https://mycdn.org/uploads/";
+    [Fact]
+    public void ManagerExpandedSitemapLevels() {
+        using (var api = CreateApi()) {
+            using (var config = new Piranha.Config(api)) {
+                Assert.Equal(0, config.ManagerExpandedSitemapLevels);
 
-                    Assert.Equal("https://mycdn.org/uploads/", config.MediaCDN);
-                }
+                config.ManagerExpandedSitemapLevels = 3;
+
+                Assert.Equal(3, config.ManagerExpandedSitemapLevels);
             }
         }
+    }
 
-        [Fact]
-        public void MediaCDNTrailingSlash() {
-            using (var api = CreateApi()) {
-                using (var config = new Piranha.Config(api)) {
-                    config.MediaCDN = "https://mycdn.org/uploads";
+    [Fact]
+    public void MediaCDN() {
+        using (var api = CreateApi()) {
+            using (var config = new Piranha.Config(api)) {
+                config.MediaCDN = "https://mycdn.org/uploads/";
 
-                    Assert.Equal("https://mycdn.org/uploads/", config.MediaCDN);
-                }
+                Assert.Equal("https://mycdn.org/uploads/", config.MediaCDN);
+            }
+        }
+    }
+
+    [Fact]
+    public void MediaCDNTrailingSlash() {
+        using (var api = CreateApi()) {
+            using (var config = new Piranha.Config(api)) {
+                config.MediaCDN = "https://mycdn.org/uploads";
+
+                Assert.Equal("https://mycdn.org/uploads/", config.MediaCDN);
             }
         }
     }

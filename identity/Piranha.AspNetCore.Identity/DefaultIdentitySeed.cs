@@ -11,53 +11,52 @@
 using Microsoft.AspNetCore.Identity;
 using Piranha.AspNetCore.Identity.Data;
 
-namespace Piranha.AspNetCore.Identity
+namespace Piranha.AspNetCore.Identity;
+
+/// <summary>
+/// Default identity security seed.
+/// </summary>
+public class DefaultIdentitySeed : IIdentitySeed
 {
     /// <summary>
-    /// Default identity security seed.
+    /// The private DbContext.
     /// </summary>
-    public class DefaultIdentitySeed : IIdentitySeed
+    private readonly IDb _db;
+
+    /// <summary>
+    /// The private user manager.
+    /// </summary>
+    private readonly UserManager<User> _userManager;
+
+    /// <summary>
+    /// Default constructor.
+    /// </summary>
+    /// <param name="db">The current DbContext</param>
+    /// <param name="userManager">The current UserManager</param>
+    public DefaultIdentitySeed(IDb db, UserManager<User> userManager)
     {
-        /// <summary>
-        /// The private DbContext.
-        /// </summary>
-        private readonly IDb _db;
+        _db = db;
+        _userManager = userManager;
+    }
 
-        /// <summary>
-        /// The private user manager.
-        /// </summary>
-        private readonly UserManager<User> _userManager;
-
-        /// <summary>
-        /// Default constructor.
-        /// </summary>
-        /// <param name="db">The current DbContext</param>
-        /// <param name="userManager">The current UserManager</param>
-        public DefaultIdentitySeed(IDb db, UserManager<User> userManager)
+    /// <summary>
+    /// Create the seed data.
+    /// </summary>
+    public async Task CreateAsync()
+    {
+        if (!_db.Users.Any())
         {
-            _db = db;
-            _userManager = userManager;
-        }
-
-        /// <summary>
-        /// Create the seed data.
-        /// </summary>
-        public async Task CreateAsync()
-        {
-            if (!_db.Users.Any())
+            var user = new User
             {
-                var user = new User
-                {
-                    UserName = "admin",
-                    Email = "admin@piranhacms.org",
-                    SecurityStamp = Guid.NewGuid().ToString()
-                };
-                var createResult = await _userManager.CreateAsync(user, "password");
+                UserName = "admin",
+                Email = "admin@piranhacms.org",
+                SecurityStamp = Guid.NewGuid().ToString()
+            };
+            var createResult = await _userManager.CreateAsync(user, "password");
 
-                if (createResult.Succeeded)
-                {
-                    await _userManager.AddToRoleAsync(user, "SysAdmin");
-                }
+            if (createResult.Succeeded)
+            {
+                await _userManager.AddToRoleAsync(user, "SysAdmin");
             }
         }
     }

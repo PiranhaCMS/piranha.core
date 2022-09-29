@@ -8,33 +8,32 @@
  *
  */
 
-namespace Piranha.Extend
+namespace Piranha.Extend;
+
+/// <summary>
+/// Attribute for adding a description to a field.
+/// </summary>
+[AttributeUsage(AttributeTargets.Property)]
+[Obsolete("Please refer to Description on the FieldAttribute instead.", true)]
+public class FieldDescriptionAttribute : Attribute
 {
     /// <summary>
-    /// Attribute for adding a description to a field.
+    /// Gets/sets the optional description text.
     /// </summary>
-    [AttributeUsage(AttributeTargets.Property)]
-    [Obsolete("Please refer to Description on the FieldAttribute instead.", true)]
-    public class FieldDescriptionAttribute : Attribute
+    public string Text { get; set; }
+
+    /// <summary>
+    /// Default constructor.
+    /// </summary>
+    public FieldDescriptionAttribute() { }
+
+    /// <summary>
+    /// Creates a new description attribute and
+    /// sets the description text.
+    /// </summary>
+    /// <param name="text">The description text</param>
+    public FieldDescriptionAttribute(string text)
     {
-        /// <summary>
-        /// Gets/sets the optional description text.
-        /// </summary>
-        public string Text { get; set; }
-
-        /// <summary>
-        /// Default constructor.
-        /// </summary>
-        public FieldDescriptionAttribute() { }
-
-        /// <summary>
-        /// Creates a new description attribute and
-        /// sets the description text.
-        /// </summary>
-        /// <param name="text">The description text</param>
-        public FieldDescriptionAttribute(string text)
-        {
-            Text = text;
-        }
+        Text = text;
     }
 }

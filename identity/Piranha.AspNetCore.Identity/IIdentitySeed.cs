@@ -8,16 +8,15 @@
  *
  */
 
-namespace Piranha.AspNetCore.Identity
+namespace Piranha.AspNetCore.Identity;
+
+/// <summary>
+/// Interface for creating a data seed for the identity module.
+/// </summary>
+public interface IIdentitySeed
 {
     /// <summary>
-    /// Interface for creating a data seed for the identity module.
+    /// Create the seed data.
     /// </summary>
-    public interface IIdentitySeed
-    {
-        /// <summary>
-        /// Create the seed data.
-        /// </summary>
-        Task CreateAsync();
-    }
+    Task CreateAsync();
 }

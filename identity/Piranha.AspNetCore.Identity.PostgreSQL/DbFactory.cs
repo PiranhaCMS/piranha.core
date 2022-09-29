@@ -12,26 +12,25 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
 
-namespace Piranha.AspNetCore.Identity.PostgreSQL
+namespace Piranha.AspNetCore.Identity.PostgreSQL;
+
+/// <summary>
+/// Factory for creating a db context. Only used in dev mode
+/// when creating migrations.
+/// </summary>
+[NoCoverage]
+public class DbFactory : IDesignTimeDbContextFactory<IdentityPostgreSQLDb>
 {
     /// <summary>
-    /// Factory for creating a db context. Only used in dev mode
-    /// when creating migrations.
+    /// Creates a new db context.
     /// </summary>
-    [NoCoverage]
-    public class DbFactory : IDesignTimeDbContextFactory<IdentityPostgreSQLDb>
+    /// <param name="args">The arguments</param>
+    /// <returns>The db context</returns>
+    public IdentityPostgreSQLDb CreateDbContext(string[] args)
     {
-        /// <summary>
-        /// Creates a new db context.
-        /// </summary>
-        /// <param name="args">The arguments</param>
-        /// <returns>The db context</returns>
-        public IdentityPostgreSQLDb CreateDbContext(string[] args)
-        {
-            var builder = new DbContextOptionsBuilder<IdentityPostgreSQLDb>();
-            builder.UseNpgsql("server=localhost;port=5432;database=piranha;uid=root;password=password");
-            return new IdentityPostgreSQLDb(builder.Options);
-        }
+        var builder = new DbContextOptionsBuilder<IdentityPostgreSQLDb>();
+        builder.UseNpgsql("server=localhost;port=5432;database=piranha;uid=root;password=password");
+        return new IdentityPostgreSQLDb(builder.Options);
     }
 }
 #endif

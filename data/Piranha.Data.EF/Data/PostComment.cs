@@ -8,19 +8,18 @@
  *
  */
 
-namespace Piranha.Data
-{
-    [Serializable]
-    public sealed class PostComment : Comment
-    {
-        /// <summary>
-        /// Gets/sets the post id.
-        /// </summary>
-        public Guid PostId { get; set; }
+namespace Piranha.Data;
 
-        /// <summary>
-        /// Gets/sets the post.
-        /// </summary>
-        public Post Post { get; set; }
-    }
+[Serializable]
+public sealed class PostComment : Comment
+{
+    /// <summary>
+    /// Gets/sets the post id.
+    /// </summary>
+    public Guid PostId { get; set; }
+
+    /// <summary>
+    /// Gets/sets the post.
+    /// </summary>
+    public Post Post { get; set; }
 }

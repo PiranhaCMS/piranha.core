@@ -12,82 +12,81 @@ using Piranha.Extend.Fields;
 using Piranha.Extend.Blocks;
 using Piranha.Models;
 
-namespace Piranha.AspNetCore.Helpers
+namespace Piranha.AspNetCore.Helpers;
+
+/// <summary>
+/// Helper for manipulating media files.
+/// </summary>
+public class MediaHelper : IMediaHelper
 {
+    private readonly IApi _api;
+
     /// <summary>
-    /// Helper for manipulating media files.
+    /// Default internal constructur.
     /// </summary>
-    public class MediaHelper : IMediaHelper
+    internal MediaHelper(IApi api)
     {
-        private readonly IApi _api;
+        _api = api;
+    }
 
-        /// <summary>
-        /// Default internal constructur.
-        /// </summary>
-        internal MediaHelper(IApi api)
+    /// <summary>
+    /// Resizes the given image to the given dimensions.
+    /// </summary>
+    /// <param name="image">The image field</param>
+    /// <param name="width">The width</param>
+    /// <param name="height">The optional height</param>
+    /// <returns>The public URL of the resized image</returns>
+    public string ResizeImage(ImageField image, int width, int? height = null)
+    {
+        if (image == null || image.Id == Guid.Empty)
+            return null;
+        return _api.Media.EnsureVersion(image.Id.Value, width, height);
+    }
+
+    /// <summary>
+    /// Resizes the given image to the given dimensions.
+    /// </summary>
+    /// <param name="image">The image</param>
+    /// <param name="width">The width</param>
+    /// <param name="height">The optional width</param>
+    /// <returns>The public URL of the resized image</returns>
+    public string ResizeImage(Media image, int width, int? height = null)
+    {
+        if (image == null || image.Id == Guid.Empty || image.Type != MediaType.Image)
+            return null;
+        return _api.Media.EnsureVersion(image.Id, width, height);
+    }
+
+    /// <summary>
+    /// Resizes the given image block according to the
+    /// preferred aspect.
+    /// </summary>
+    /// <param name="block">The image block</param>
+    /// <param name="width">The width</param>
+    /// <returns>The public URL of the resized image</returns>
+    public string ResizeImage(ImageBlock block, int width)
+    {
+        if (block == null || block.Body == null || block.Body.Media == null)
+            return null;
+
+        int? height = null;
+
+        if (block.Aspect.Value == ImageAspect.Landscape)
         {
-            _api = api;
+            height = Convert.ToInt32(width * 2 / 3);
         }
-
-        /// <summary>
-        /// Resizes the given image to the given dimensions.
-        /// </summary>
-        /// <param name="image">The image field</param>
-        /// <param name="width">The width</param>
-        /// <param name="height">The optional height</param>
-        /// <returns>The public URL of the resized image</returns>
-        public string ResizeImage(ImageField image, int width, int? height = null)
+        else if (block.Aspect.Value == ImageAspect.Portrait)
         {
-            if (image == null || image.Id == Guid.Empty)
-                return null;
-            return _api.Media.EnsureVersion(image.Id.Value, width, height);
+            height = Convert.ToInt32(width * 3 / 2);
         }
-
-        /// <summary>
-        /// Resizes the given image to the given dimensions.
-        /// </summary>
-        /// <param name="image">The image</param>
-        /// <param name="width">The width</param>
-        /// <param name="height">The optional width</param>
-        /// <returns>The public URL of the resized image</returns>
-        public string ResizeImage(Media image, int width, int? height = null)
+        else if (block.Aspect.Value == ImageAspect.Widescreen)
         {
-            if (image == null || image.Id == Guid.Empty || image.Type != MediaType.Image)
-                return null;
-            return _api.Media.EnsureVersion(image.Id, width, height);
+            height = Convert.ToInt32(width * 9 / 16);
         }
-
-        /// <summary>
-        /// Resizes the given image block according to the
-        /// preferred aspect.
-        /// </summary>
-        /// <param name="block">The image block</param>
-        /// <param name="width">The width</param>
-        /// <returns>The public URL of the resized image</returns>
-        public string ResizeImage(ImageBlock block, int width)
+        else if (block.Aspect.Value == ImageAspect.Square)
         {
-            if (block == null || block.Body == null || block.Body.Media == null)
-                return null;
-
-            int? height = null;
-
-            if (block.Aspect.Value == ImageAspect.Landscape)
-            {
-                height = Convert.ToInt32(width * 2 / 3);
-            }
-            else if (block.Aspect.Value == ImageAspect.Portrait)
-            {
-                height = Convert.ToInt32(width * 3 / 2);
-            }
-            else if (block.Aspect.Value == ImageAspect.Widescreen)
-            {
-                height = Convert.ToInt32(width * 9 / 16);
-            }
-            else if (block.Aspect.Value == ImageAspect.Square)
-            {
-                height = width;
-            }
-            return _api.Media.EnsureVersion(block.Body.Media.Id, width, height);
+            height = width;
         }
+        return _api.Media.EnsureVersion(block.Body.Media.Id, width, height);
     }
 }

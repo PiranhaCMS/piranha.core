@@ -8,8 +8,7 @@
  *
  */
 
-namespace Piranha.Data
-{
-    [Serializable]
-    public sealed class PostType : ContentTypeBase { }
-}
+namespace Piranha.Data;
+
+[Serializable]
+public sealed class PostType : ContentTypeBase { }

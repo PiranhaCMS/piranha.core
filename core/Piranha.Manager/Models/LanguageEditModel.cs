@@ -10,21 +10,20 @@
 
 using Piranha.Models;
 
-namespace Piranha.Manager.Models
+namespace Piranha.Manager.Models;
+
+/// <summary>
+/// Language modal edit model.
+/// </summary>
+public class LanguageEditModel
 {
     /// <summary>
-    /// Language modal edit model.
+    /// Gets/sets the available languages
     /// </summary>
-    public class LanguageEditModel
-    {
-        /// <summary>
-        /// Gets/sets the available languages
-        /// </summary>
-        public IEnumerable<Language> Items { get; set; } = new List<Language>();
+    public IEnumerable<Language> Items { get; set; } = new List<Language>();
 
-        /// <summary>
-        /// Gets/sets the optional status message from the last operation.
-        /// </summary>
-        public StatusMessage Status { get; set; }
-    }
+    /// <summary>
+    /// Gets/sets the optional status message from the last operation.
+    /// </summary>
+    public StatusMessage Status { get; set; }
 }

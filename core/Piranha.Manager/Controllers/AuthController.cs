@@ -14,43 +14,42 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 
-namespace Piranha.Manager.Controllers
+namespace Piranha.Manager.Controllers;
+
+[Area("Manager")]
+[Route("manager/login/auth")]
+[Authorize(Policy = Permission.Admin)]
+[ApiController]
+public sealed class AuthController : Controller
 {
-    [Area("Manager")]
-    [Route("manager/login/auth")]
-    [Authorize(Policy = Permission.Admin)]
-    [ApiController]
-    public sealed class AuthController : Controller
+    private readonly IAntiforgery _antiForgery;
+    private readonly ManagerOptions _options;
+
+    /// <summary>
+    /// Default constructor.
+    /// </summary>
+    /// <param name="antiforgery">The antiforgery service</param>
+    /// <param name="options">The manager options</param>
+    public AuthController(IAntiforgery antiforgery, IOptions<ManagerOptions> options)
     {
-        private readonly IAntiforgery _antiForgery;
-        private readonly ManagerOptions _options;
+        _antiForgery = antiforgery;
+        _options = options.Value;
+    }
 
-        /// <summary>
-        /// Default constructor.
-        /// </summary>
-        /// <param name="antiforgery">The antiforgery service</param>
-        /// <param name="options">The manager options</param>
-        public AuthController(IAntiforgery antiforgery, IOptions<ManagerOptions> options)
+    [Route("{returnUrl?}")]
+    [HttpGet]
+    public IActionResult SetAuthCookie([FromQuery]string returnUrl = null)
+    {
+        var tokens = _antiForgery.GetAndStoreTokens(HttpContext);
+        Response.Cookies.Append(_options.XsrfCookieName, tokens.RequestToken, new CookieOptions
         {
-            _antiForgery = antiforgery;
-            _options = options.Value;
-        }
-
-        [Route("{returnUrl?}")]
-        [HttpGet]
-        public IActionResult SetAuthCookie([FromQuery]string returnUrl = null)
+            HttpOnly = false,
+            IsEssential = true
+        });
+        if (!string.IsNullOrEmpty(returnUrl))
         {
-            var tokens = _antiForgery.GetAndStoreTokens(HttpContext);
-            Response.Cookies.Append(_options.XsrfCookieName, tokens.RequestToken, new CookieOptions
-            {
-                HttpOnly = false,
-                IsEssential = true
-            });
-            if (!string.IsNullOrEmpty(returnUrl))
-            {
-                return LocalRedirect(returnUrl);
-            }
-            return LocalRedirect("~/manager");
+            return LocalRedirect(returnUrl);
         }
+        return LocalRedirect("~/manager");
     }
 }

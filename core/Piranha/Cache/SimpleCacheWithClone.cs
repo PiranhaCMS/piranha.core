@@ -8,17 +8,16 @@
  *
  */
 
-namespace Piranha.Cache
+namespace Piranha.Cache;
+
+/// <summary>
+/// Simple in memory cache.
+/// </summary>
+[NoCoverage]
+public class SimpleCacheWithClone : SimpleCache
 {
     /// <summary>
-    /// Simple in memory cache.
+    /// Default constructor.
     /// </summary>
-    [NoCoverage]
-    public class SimpleCacheWithClone : SimpleCache
-    {
-        /// <summary>
-        /// Default constructor.
-        /// </summary>
-        public SimpleCacheWithClone() : base(true) { }
-    }
+    public SimpleCacheWithClone() : base(true) { }
 }

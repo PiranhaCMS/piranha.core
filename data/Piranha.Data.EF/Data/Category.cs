@@ -10,21 +10,20 @@
 
 using Newtonsoft.Json;
 
-namespace Piranha.Data
-{
-    [Serializable]
-    public sealed class Category : TaxonomyBase
-    {
-        /// <summary>
-        /// Gets/sets the id of the blog page this
-        /// category belongs to.
-        /// </summary>
-        public Guid BlogId { get; set; }
+namespace Piranha.Data;
 
-        /// <summary>
-        /// Gets/sets the blog page this category belongs to.
-        /// </summary>
-        [JsonIgnore]
-        public Page Blog { get; set; }
-    }
+[Serializable]
+public sealed class Category : TaxonomyBase
+{
+    /// <summary>
+    /// Gets/sets the id of the blog page this
+    /// category belongs to.
+    /// </summary>
+    public Guid BlogId { get; set; }
+
+    /// <summary>
+    /// Gets/sets the blog page this category belongs to.
+    /// </summary>
+    [JsonIgnore]
+    public Page Blog { get; set; }
 }

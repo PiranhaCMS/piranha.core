@@ -10,17 +10,16 @@
 
 using Microsoft.EntityFrameworkCore;
 
-namespace Piranha.Data.EF.SQLite
+namespace Piranha.Data.EF.SQLite;
+
+[NoCoverage]
+public sealed class SQLiteDb : Db<SQLiteDb>
 {
-    [NoCoverage]
-    public sealed class SQLiteDb : Db<SQLiteDb>
+    /// <summary>
+    /// Default constructor.
+    /// </summary>
+    /// <param name="options">Configuration options</param>
+    public SQLiteDb(DbContextOptions<SQLiteDb> options) : base(options)
     {
-        /// <summary>
-        /// Default constructor.
-        /// </summary>
-        /// <param name="options">Configuration options</param>
-        public SQLiteDb(DbContextOptions<SQLiteDb> options) : base(options)
-        {
-        }
     }
 }

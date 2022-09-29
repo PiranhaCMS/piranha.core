@@ -10,40 +10,39 @@
 
 using Xunit;
 
-namespace Piranha.Tests.Utils
+namespace Piranha.Tests.Utils;
+
+public class ETag
 {
-    public class ETag
-    {
-        [Fact]
-        public void UniqueById() {
-            var date = DateTime.Now;
+    [Fact]
+    public void UniqueById() {
+        var date = DateTime.Now;
 
-            var etag1 = Piranha.Utils.GenerateETag(Guid.NewGuid().ToString(), date);
-            var etag2 = Piranha.Utils.GenerateETag(Guid.NewGuid().ToString(), date);
+        var etag1 = Piranha.Utils.GenerateETag(Guid.NewGuid().ToString(), date);
+        var etag2 = Piranha.Utils.GenerateETag(Guid.NewGuid().ToString(), date);
 
-            Assert.NotEqual(etag1, etag2);
-        }
+        Assert.NotEqual(etag1, etag2);
+    }
 
-        [Fact]
-        public void UniqueByDate() {
-            var id = Guid.NewGuid().ToString();
-            var date = DateTime.Now;
+    [Fact]
+    public void UniqueByDate() {
+        var id = Guid.NewGuid().ToString();
+        var date = DateTime.Now;
 
-            var etag1 = Piranha.Utils.GenerateETag(id, date);
-            var etag2 = Piranha.Utils.GenerateETag(id, date.AddDays(-1));
+        var etag1 = Piranha.Utils.GenerateETag(id, date);
+        var etag2 = Piranha.Utils.GenerateETag(id, date.AddDays(-1));
 
-            Assert.NotEqual(etag1, etag2);
-        }
+        Assert.NotEqual(etag1, etag2);
+    }
 
-        [Fact]
-        public void EqualTags() {
-            var id = Guid.NewGuid().ToString();
-            var date = DateTime.Now;
+    [Fact]
+    public void EqualTags() {
+        var id = Guid.NewGuid().ToString();
+        var date = DateTime.Now;
 
-            var etag1 = Piranha.Utils.GenerateETag(id, date);
-            var etag2 = Piranha.Utils.GenerateETag(id, date);
+        var etag1 = Piranha.Utils.GenerateETag(id, date);
+        var etag2 = Piranha.Utils.GenerateETag(id, date);
 
-            Assert.Equal(etag1, etag2);
-        }
+        Assert.Equal(etag1, etag2);
     }
 }

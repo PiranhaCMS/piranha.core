@@ -11,143 +11,142 @@
 using Piranha.Manager.Models;
 using Piranha.Models;
 
-namespace Piranha.Manager.Services
+namespace Piranha.Manager.Services;
+
+public class CommentService
 {
-    public class CommentService
+    private readonly IApi _api;
+
+    /// <summary>
+    /// Default constructor.
+    /// </summary>
+    /// <param name="api">The current api</param>
+    public CommentService(IApi api)
     {
-        private readonly IApi _api;
+        _api = api;
+    }
 
-        /// <summary>
-        /// Default constructor.
-        /// </summary>
-        /// <param name="api">The current api</param>
-        public CommentService(IApi api)
+    /// <summary>
+    /// Gets the comment model.
+    /// </summary>
+    /// <param name="id">The optional content id</param>
+    /// <returns>The model</returns>
+    public async Task<CommentListModel> Get(Guid? id = null)
+    {
+        var model = new CommentListModel
         {
-            _api = api;
+            ContentId = id
+        };
+
+        var postComments = await _api.Posts.GetAllCommentsAsync(id, onlyApproved: false, pageSize: 0);
+        var pageComments = await _api.Pages.GetAllCommentsAsync(id, onlyApproved: false, pageSize: 0);
+
+        foreach (var postComment in postComments)
+        {
+            var post = await _api.Posts.GetByIdAsync<PostInfo>(postComment.ContentId);
+
+            model.Comments.Add(new CommentListModel.CommentItem
+            {
+                Id = postComment.Id,
+                ArticleTitle = post?.Title,
+                ArticleUrl = $"manager/post/edit/{ post?.Id }",
+                Author = postComment.Author,
+                AuthorImage = Utils.GenerateGravatarUrl(postComment.Email, 25),
+                Email = postComment.Email,
+                Body = postComment.Body,
+                IsApproved = postComment.IsApproved,
+                Created = postComment.Created.ToString("yyyy-MM-dd"),
+                CreatedDate = postComment.Created
+            });
         }
 
-        /// <summary>
-        /// Gets the comment model.
-        /// </summary>
-        /// <param name="id">The optional content id</param>
-        /// <returns>The model</returns>
-        public async Task<CommentListModel> Get(Guid? id = null)
+        foreach (var pageComment in pageComments)
         {
-            var model = new CommentListModel
+            var page = await _api.Pages.GetByIdAsync<PageInfo>(pageComment.ContentId);
+
+            model.Comments.Add(new CommentListModel.CommentItem
             {
-                ContentId = id
-            };
-
-            var postComments = await _api.Posts.GetAllCommentsAsync(id, onlyApproved: false, pageSize: 0);
-            var pageComments = await _api.Pages.GetAllCommentsAsync(id, onlyApproved: false, pageSize: 0);
-
-            foreach (var postComment in postComments)
-            {
-                var post = await _api.Posts.GetByIdAsync<PostInfo>(postComment.ContentId);
-
-                model.Comments.Add(new CommentListModel.CommentItem
-                {
-                    Id = postComment.Id,
-                    ArticleTitle = post?.Title,
-                    ArticleUrl = $"manager/post/edit/{ post?.Id }",
-                    Author = postComment.Author,
-                    AuthorImage = Utils.GenerateGravatarUrl(postComment.Email, 25),
-                    Email = postComment.Email,
-                    Body = postComment.Body,
-                    IsApproved = postComment.IsApproved,
-                    Created = postComment.Created.ToString("yyyy-MM-dd"),
-                    CreatedDate = postComment.Created
-                });
-            }
-
-            foreach (var pageComment in pageComments)
-            {
-                var page = await _api.Pages.GetByIdAsync<PageInfo>(pageComment.ContentId);
-
-                model.Comments.Add(new CommentListModel.CommentItem
-                {
-                    Id = pageComment.Id,
-                    ArticleTitle = page?.Title,
-                    ArticleUrl = $"manager/page/edit/{ page?.Id }",
-                    Author = pageComment.Author,
-                    AuthorImage = Utils.GenerateGravatarUrl(pageComment.Email, 25),
-                    Email = pageComment.Email,
-                    Body = pageComment.Body,
-                    IsApproved = pageComment.IsApproved,
-                    Created = pageComment.Created.ToString("yyyy-MM-dd"),
-                    CreatedDate = pageComment.Created
-                });
-            }
-
-            model.Comments = model.Comments
-                .OrderByDescending(c => c.CreatedDate)
-                .ToList();
-
-            return model;
+                Id = pageComment.Id,
+                ArticleTitle = page?.Title,
+                ArticleUrl = $"manager/page/edit/{ page?.Id }",
+                Author = pageComment.Author,
+                AuthorImage = Utils.GenerateGravatarUrl(pageComment.Email, 25),
+                Email = pageComment.Email,
+                Body = pageComment.Body,
+                IsApproved = pageComment.IsApproved,
+                Created = pageComment.Created.ToString("yyyy-MM-dd"),
+                CreatedDate = pageComment.Created
+            });
         }
 
-        public async Task ApproveAsync(Guid id)
+        model.Comments = model.Comments
+            .OrderByDescending(c => c.CreatedDate)
+            .ToList();
+
+        return model;
+    }
+
+    public async Task ApproveAsync(Guid id)
+    {
+        var comment = await _api.Posts.GetCommentByIdAsync(id);
+        if (comment == null)
         {
-            var comment = await _api.Posts.GetCommentByIdAsync(id);
-            if (comment == null)
+            comment = await _api.Pages.GetCommentByIdAsync(id);
+        }
+
+        if (comment != null)
+        {
+            comment.IsApproved = true;
+
+            if (comment is PageComment pageComment)
             {
-                comment = await _api.Pages.GetCommentByIdAsync(id);
+                await _api.Pages.SaveCommentAsync(comment.ContentId, pageComment);
             }
+            else if (comment is PostComment postComment)
+            {
+                await _api.Posts.SaveCommentAsync(comment.ContentId, postComment);
+            }
+        }
+    }
+
+    public async Task UnApproveAsync(Guid id)
+    {
+        var comment = await _api.Posts.GetCommentByIdAsync(id);
+        if (comment == null)
+        {
+            comment = await _api.Pages.GetCommentByIdAsync(id);
+        }
+
+        if (comment != null)
+        {
+            comment.IsApproved = false;
+
+            if (comment is PageComment pageComment)
+            {
+                await _api.Pages.SaveCommentAsync(comment.ContentId, pageComment);
+            }
+            else if (comment is PostComment postComment)
+            {
+                await _api.Posts.SaveCommentAsync(comment.ContentId, postComment);
+            }
+        }
+    }
+
+    public async Task DeleteAsync(Guid id)
+    {
+        var comment = await _api.Posts.GetCommentByIdAsync(id);
+
+        if (comment != null)
+        {
+            await _api.Posts.DeleteCommentAsync(id);
+        }
+        else
+        {
+            comment = await _api.Pages.GetCommentByIdAsync(id);
 
             if (comment != null)
             {
-                comment.IsApproved = true;
-
-                if (comment is PageComment pageComment)
-                {
-                    await _api.Pages.SaveCommentAsync(comment.ContentId, pageComment);
-                }
-                else if (comment is PostComment postComment)
-                {
-                    await _api.Posts.SaveCommentAsync(comment.ContentId, postComment);
-                }
-            }
-        }
-
-        public async Task UnApproveAsync(Guid id)
-        {
-            var comment = await _api.Posts.GetCommentByIdAsync(id);
-            if (comment == null)
-            {
-                comment = await _api.Pages.GetCommentByIdAsync(id);
-            }
-
-            if (comment != null)
-            {
-                comment.IsApproved = false;
-
-                if (comment is PageComment pageComment)
-                {
-                    await _api.Pages.SaveCommentAsync(comment.ContentId, pageComment);
-                }
-                else if (comment is PostComment postComment)
-                {
-                    await _api.Posts.SaveCommentAsync(comment.ContentId, postComment);
-                }
-            }
-        }
-
-        public async Task DeleteAsync(Guid id)
-        {
-            var comment = await _api.Posts.GetCommentByIdAsync(id);
-
-            if (comment != null)
-            {
-                await _api.Posts.DeleteCommentAsync(id);
-            }
-            else
-            {
-                comment = await _api.Pages.GetCommentByIdAsync(id);
-
-                if (comment != null)
-                {
-                    await _api.Pages.DeleteCommentAsync(id);
-                }
+                await _api.Pages.DeleteCommentAsync(id);
             }
         }
     }

@@ -10,14 +10,13 @@
 
 using Microsoft.EntityFrameworkCore;
 
-namespace Piranha.AspNetCore.Identity.SQLServer
+namespace Piranha.AspNetCore.Identity.SQLServer;
+
+public class IdentitySQLServerDb : Db<IdentitySQLServerDb>
 {
-    public class IdentitySQLServerDb : Db<IdentitySQLServerDb>
-    {
-        /// <summary>
-        /// Default constructor.
-        /// </summary>
-        /// <param name="options">Configuration options</param>
-        public IdentitySQLServerDb(DbContextOptions<IdentitySQLServerDb> options) : base(options) { }
-    }
+    /// <summary>
+    /// Default constructor.
+    /// </summary>
+    /// <param name="options">Configuration options</param>
+    public IdentitySQLServerDb(DbContextOptions<IdentitySQLServerDb> options) : base(options) { }
 }

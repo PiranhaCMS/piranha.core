@@ -12,193 +12,192 @@ using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
 using Piranha.Models;
 
-namespace Piranha.AspNetCore.Services
+namespace Piranha.AspNetCore.Services;
+
+/// <summary>
+/// The model loader is used for retrieving content models with
+/// built in permission checks for the current user.
+/// </summary>
+public class ModelLoader : IModelLoader
 {
     /// <summary>
-    /// The model loader is used for retrieving content models with
-    /// built in permission checks for the current user.
+    /// The current api.
     /// </summary>
-    public class ModelLoader : IModelLoader
+    protected readonly IApi _api;
+
+    /// <summary>
+    /// The current authorization service.
+    /// </summary>
+    protected readonly IAuthorizationService _auth;
+
+    /// <summary>
+    /// The current application service.
+    /// </summary>
+    protected readonly IApplicationService _app;
+
+    /// <summary>
+    /// Default constructor.
+    /// </summary>
+    /// <param name="api">The current api</param>
+    /// <param name="auth">The authorization service</param>
+    /// <param name="app">The application service</param>
+    public ModelLoader(IApi api, IAuthorizationService auth, IApplicationService app)
     {
-        /// <summary>
-        /// The current api.
-        /// </summary>
-        protected readonly IApi _api;
+        _api = api;
+        _auth = auth;
+        _app = app;
+    }
 
-        /// <summary>
-        /// The current authorization service.
-        /// </summary>
-        protected readonly IAuthorizationService _auth;
+    /// <summary>
+    /// Gets the specified page model for the given user. If the
+    /// user doesn't have access to the requested page an
+    /// UnauthorizedAccessException is thrown.
+    /// </summary>
+    /// <param name="id">The unique id</param>
+    /// <param name="user">The current user</param>
+    /// <param name="draft">If a draft should be loaded</param>
+    /// <typeparam name="T">The model type</typeparam>
+    /// <returns>The page model</returns>
+    public async Task<T> GetPageAsync<T>(Guid id, ClaimsPrincipal user, bool draft = false)
+        where T : PageBase
+    {
+        T model = null;
 
-        /// <summary>
-        /// The current application service.
-        /// </summary>
-        protected readonly IApplicationService _app;
-
-        /// <summary>
-        /// Default constructor.
-        /// </summary>
-        /// <param name="api">The current api</param>
-        /// <param name="auth">The authorization service</param>
-        /// <param name="app">The application service</param>
-        public ModelLoader(IApi api, IAuthorizationService auth, IApplicationService app)
+        if (!draft && _app.CurrentPage != null && _app.CurrentPage.Id == id && _app.CurrentPage is T)
         {
-            _api = api;
-            _auth = auth;
-            _app = app;
+            model = (T)_app.CurrentPage;
         }
 
-        /// <summary>
-        /// Gets the specified page model for the given user. If the
-        /// user doesn't have access to the requested page an
-        /// UnauthorizedAccessException is thrown.
-        /// </summary>
-        /// <param name="id">The unique id</param>
-        /// <param name="user">The current user</param>
-        /// <param name="draft">If a draft should be loaded</param>
-        /// <typeparam name="T">The model type</typeparam>
-        /// <returns>The page model</returns>
-        public async Task<T> GetPageAsync<T>(Guid id, ClaimsPrincipal user, bool draft = false)
-            where T : PageBase
+        // Check if we're requesting a draft
+        if (draft)
         {
-            T model = null;
-
-            if (!draft && _app.CurrentPage != null && _app.CurrentPage.Id == id && _app.CurrentPage is T)
+            // Check that the current user is authorized to preview pages
+            if ((await _auth.AuthorizeAsync(user, Piranha.Security.Permission.PagePreview)).Succeeded)
             {
-                model = (T)_app.CurrentPage;
-            }
+                // Get the draft, if available
+                model = await _api.Pages.GetDraftByIdAsync<T>(id);
 
-            // Check if we're requesting a draft
-            if (draft)
-            {
-                // Check that the current user is authorized to preview pages
-                if ((await _auth.AuthorizeAsync(user, Piranha.Security.Permission.PagePreview)).Succeeded)
+                if (model == null)
                 {
-                    // Get the draft, if available
-                    model = await _api.Pages.GetDraftByIdAsync<T>(id);
-
-                    if (model == null)
-                    {
-                        model = await _api.Pages.GetByIdAsync<T>(id);
-                    }
+                    model = await _api.Pages.GetByIdAsync<T>(id);
                 }
             }
+        }
 
-            // No draft loaded or requested, try to get the published page
-            if (model == null)
+        // No draft loaded or requested, try to get the published page
+        if (model == null)
+        {
+            model = await _api.Pages.GetByIdAsync<T>(id);
+
+            if (model != null)
             {
-                model = await _api.Pages.GetByIdAsync<T>(id);
-
-                if (model != null)
+                // Make sure the page is published
+                if (!model.Published.HasValue || model.Published.Value > DateTime.Now)
                 {
-                    // Make sure the page is published
-                    if (!model.Published.HasValue || model.Published.Value > DateTime.Now)
-                    {
-                        // No published version exists
-                        return null;
-                    }
-                }
-                else
-                {
-                    // No page found with the specified id
+                    // No published version exists
                     return null;
                 }
             }
-
-            // Check permissions
-            if (model.Permissions.Count > 0)
+            else
             {
-                var currentPermissions = App.Permissions.GetPublicPermissions()
-                    .Select(p => p.Name);
-
-                foreach (var permission in model.Permissions)
-                {
-                    // Make sure the permissions is still available as a
-                    // registered public permission.
-                    if (!currentPermissions.Contains(permission))
-                    {
-                        continue;
-                    }
-
-                    // Authorize
-                    if (!(await _auth.AuthorizeAsync(user, permission)).Succeeded)
-                    {
-                        throw new UnauthorizedAccessException();
-                    }
-                }
+                // No page found with the specified id
+                return null;
             }
-            return model;
         }
 
-        /// <summary>
-        /// Gets the specified post model for the given user. If the
-        /// user doesn't have access to the requested post an
-        /// UnauthorizedAccessException is thrown.
-        /// </summary>
-        /// <param name="id">The unique id</param>
-        /// <param name="user">The current user</param>
-        /// <param name="draft">If a draft should be loaded</param>
-        /// <typeparam name="T">The model type</typeparam>
-        /// <returns>The post model</returns>
-        public async Task<T> GetPostAsync<T>(Guid id, ClaimsPrincipal user, bool draft = false)
-            where T : PostBase
+        // Check permissions
+        if (model.Permissions.Count > 0)
         {
-            T model = null;
+            var currentPermissions = App.Permissions.GetPublicPermissions()
+                .Select(p => p.Name);
 
-            if (!draft && _app.CurrentPost != null && _app.CurrentPost.Id == id && _app.CurrentPost is T)
+            foreach (var permission in model.Permissions)
             {
-                model = (T)_app.CurrentPost;
-            }
-
-            // Check if we're requesting a draft
-            if (draft)
-            {
-                // Check that the current user is authorized to preview pages
-                if ((await _auth.AuthorizeAsync(user, Piranha.Security.Permission.PostPreview)).Succeeded)
+                // Make sure the permissions is still available as a
+                // registered public permission.
+                if (!currentPermissions.Contains(permission))
                 {
-                    // Get the draft, if available
-                    model = await _api.Posts.GetDraftByIdAsync<T>(id);
+                    continue;
+                }
 
-                    if (model == null)
-                    {
-                        model = await _api.Posts.GetByIdAsync<T>(id);
-                    }
+                // Authorize
+                if (!(await _auth.AuthorizeAsync(user, permission)).Succeeded)
+                {
+                    throw new UnauthorizedAccessException();
                 }
             }
+        }
+        return model;
+    }
 
-            // No draft loaded or requested, try to get the published page
-            if (model == null)
+    /// <summary>
+    /// Gets the specified post model for the given user. If the
+    /// user doesn't have access to the requested post an
+    /// UnauthorizedAccessException is thrown.
+    /// </summary>
+    /// <param name="id">The unique id</param>
+    /// <param name="user">The current user</param>
+    /// <param name="draft">If a draft should be loaded</param>
+    /// <typeparam name="T">The model type</typeparam>
+    /// <returns>The post model</returns>
+    public async Task<T> GetPostAsync<T>(Guid id, ClaimsPrincipal user, bool draft = false)
+        where T : PostBase
+    {
+        T model = null;
+
+        if (!draft && _app.CurrentPost != null && _app.CurrentPost.Id == id && _app.CurrentPost is T)
+        {
+            model = (T)_app.CurrentPost;
+        }
+
+        // Check if we're requesting a draft
+        if (draft)
+        {
+            // Check that the current user is authorized to preview pages
+            if ((await _auth.AuthorizeAsync(user, Piranha.Security.Permission.PostPreview)).Succeeded)
             {
-                model = await _api.Posts.GetByIdAsync<T>(id);
+                // Get the draft, if available
+                model = await _api.Posts.GetDraftByIdAsync<T>(id);
 
-                if (model != null)
+                if (model == null)
                 {
-                    // Make sure the page is published
-                    if (!model.Published.HasValue || model.Published.Value > DateTime.Now)
-                    {
-                        // No published version exists
-                        return null;
-                    }
+                    model = await _api.Posts.GetByIdAsync<T>(id);
                 }
-                else
+            }
+        }
+
+        // No draft loaded or requested, try to get the published page
+        if (model == null)
+        {
+            model = await _api.Posts.GetByIdAsync<T>(id);
+
+            if (model != null)
+            {
+                // Make sure the page is published
+                if (!model.Published.HasValue || model.Published.Value > DateTime.Now)
                 {
-                    // No page found with the specified id
+                    // No published version exists
                     return null;
                 }
             }
-
-            // Check permissions
-            if (model.Permissions.Count > 0)
+            else
             {
-                foreach (var permission in model.Permissions)
+                // No page found with the specified id
+                return null;
+            }
+        }
+
+        // Check permissions
+        if (model.Permissions.Count > 0)
+        {
+            foreach (var permission in model.Permissions)
+            {
+                if (!(await _auth.AuthorizeAsync(user, permission)).Succeeded)
                 {
-                    if (!(await _auth.AuthorizeAsync(user, permission)).Succeeded)
-                    {
-                        throw new UnauthorizedAccessException();
-                    }
+                    throw new UnauthorizedAccessException();
                 }
             }
-            return model;
         }
+        return model;
     }
 }

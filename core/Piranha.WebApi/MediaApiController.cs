@@ -11,82 +11,81 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Piranha.WebApi
+namespace Piranha.WebApi;
+
+[ApiController]
+[Route("api/media")]
+public class MediaApiController : Controller
 {
-    [ApiController]
-    [Route("api/media")]
-    public class MediaApiController : Controller
+    private readonly IApi _api;
+    private readonly IAuthorizationService _auth;
+
+    /// <summary>
+    /// Default constructor.
+    /// </summary>
+    /// <param name="api">The current api</param>
+    /// <param name="auth">The authorization service</param>
+    public MediaApiController(IApi api, IAuthorizationService auth)
     {
-        private readonly IApi _api;
-        private readonly IAuthorizationService _auth;
+        _api = api;
+        _auth = auth;
+    }
 
-        /// <summary>
-        /// Default constructor.
-        /// </summary>
-        /// <param name="api">The current api</param>
-        /// <param name="auth">The authorization service</param>
-        public MediaApiController(IApi api, IAuthorizationService auth)
+    /// <summary>
+    /// Gets the media asset with the specified id.
+    /// </summary>
+    /// <param name="id">The media id</param>
+    /// <returns>The media asset</returns>
+    [HttpGet]
+    [Route("{id:Guid}")]
+    public virtual async Task<IActionResult> GetById(Guid id)
+    {
+        if (!Module.AllowAnonymousAccess)
         {
-            _api = api;
-            _auth = auth;
-        }
-
-        /// <summary>
-        /// Gets the media asset with the specified id.
-        /// </summary>
-        /// <param name="id">The media id</param>
-        /// <returns>The media asset</returns>
-        [HttpGet]
-        [Route("{id:Guid}")]
-        public async Task<IActionResult> GetById(Guid id)
-        {
-            if (!Module.AllowAnonymousAccess)
+            if (!(await _auth.AuthorizeAsync(User, Permissions.Media)).Succeeded)
             {
-                if (!(await _auth.AuthorizeAsync(User, Permissions.Media)).Succeeded)
-                {
-                    return Unauthorized();
-                }
+                return Unauthorized();
             }
-            return Json(await _api.Media.GetByIdAsync(id));
         }
+        return Json(await _api.Media.GetByIdAsync(id));
+    }
 
-        /// <summary>
-        /// Gets all of the media assets located in the folder
-        /// with the specified id. Not providing a folder id will
-        /// return all of the media assets at root level.
-        /// </summary>
-        /// <param name="folderId">The optional folder id</param>
-        /// <returns></returns>
-        [HttpGet]
-        [Route("list/{folderId:Guid?}")]
-        public async Task<IActionResult> GetByFolderId(Guid? folderId = null)
+    /// <summary>
+    /// Gets all of the media assets located in the folder
+    /// with the specified id. Not providing a folder id will
+    /// return all of the media assets at root level.
+    /// </summary>
+    /// <param name="folderId">The optional folder id</param>
+    /// <returns></returns>
+    [HttpGet]
+    [Route("list/{folderId:Guid?}")]
+    public virtual async Task<IActionResult> GetByFolderId(Guid? folderId = null)
+    {
+        if (!Module.AllowAnonymousAccess)
         {
-            if (!Module.AllowAnonymousAccess)
+            if (!(await _auth.AuthorizeAsync(User, Permissions.Media)).Succeeded)
             {
-                if (!(await _auth.AuthorizeAsync(User, Permissions.Media)).Succeeded)
-                {
-                    return Unauthorized();
-                }
+                return Unauthorized();
             }
-            return Json(await _api.Media.GetAllByFolderIdAsync(folderId));
         }
+        return Json(await _api.Media.GetAllByFolderIdAsync(folderId));
+    }
 
-        /// <summary>
-        /// Gets the media folder structure.
-        /// </summary>
-        /// <returns></returns>
-        [HttpGet]
-        [Route("structure")]
-        public async Task<IActionResult> GetStructure()
+    /// <summary>
+    /// Gets the media folder structure.
+    /// </summary>
+    /// <returns></returns>
+    [HttpGet]
+    [Route("structure")]
+    public virtual async Task<IActionResult> GetStructure()
+    {
+        if (!Module.AllowAnonymousAccess)
         {
-            if (!Module.AllowAnonymousAccess)
+            if (!(await _auth.AuthorizeAsync(User, Permissions.Media)).Succeeded)
             {
-                if (!(await _auth.AuthorizeAsync(User, Permissions.Media)).Succeeded)
-                {
-                    return Unauthorized();
-                }
+                return Unauthorized();
             }
-            return Json(await _api.Media.GetStructureAsync());
         }
+        return Json(await _api.Media.GetStructureAsync());
     }
 }

@@ -10,13 +10,12 @@
 
 using Microsoft.AspNetCore.SignalR;
 
-namespace Piranha.Manager.Hubs
+namespace Piranha.Manager.Hubs;
+
+/// <summary>
+/// The SingalR Hub responsible for preview.
+/// </summary>
+public class PreviewHub : Hub
 {
-    /// <summary>
-    /// The SingalR Hub responsible for preview.
-    /// </summary>
-    public class PreviewHub : Hub
-    {
-        // Nothing special here
-    }
+    // Nothing special here
 }

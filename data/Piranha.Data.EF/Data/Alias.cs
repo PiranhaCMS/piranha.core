@@ -8,15 +8,14 @@
  *
  */
 
-namespace Piranha.Data
+namespace Piranha.Data;
+
+[Serializable]
+public sealed class Alias : Models.Alias
 {
-    [Serializable]
-    public sealed class Alias : Models.Alias
-    {
-        /// <summary>
-        /// Gets/sets the site this alias is for.
-        /// </summary>
-        /// <returns></returns>
-        public Site Site { get; set; }
-    }
+    /// <summary>
+    /// Gets/sets the site this alias is for.
+    /// </summary>
+    /// <returns></returns>
+    public Site Site { get; set; }
 }

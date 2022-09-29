@@ -8,17 +8,16 @@
  *
  */
 
-namespace Piranha.Extend
+namespace Piranha.Extend;
+
+/// <summary>
+/// Interface for fields.
+/// </summary>
+public interface IField
 {
     /// <summary>
-    /// Interface for fields.
+    /// Gets the list item title if this field is used in
+    /// a collection regions.
     /// </summary>
-    public interface IField
-    {
-        /// <summary>
-        /// Gets the list item title if this field is used in
-        /// a collection regions.
-        /// </summary>
-        string GetTitle();
-    }
+    string GetTitle();
 }

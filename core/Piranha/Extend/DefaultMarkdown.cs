@@ -10,31 +10,30 @@
 
 using Markdig;
 
-namespace Piranha.Extend
+namespace Piranha.Extend;
+
+/// <summary>
+/// Interface for converting markdown to Html.
+/// </summary>
+public class DefaultMarkdown : IMarkdown
 {
     /// <summary>
-    /// Interface for converting markdown to Html.
+    /// Gets/sets the additional pipeline to use
+    /// for markdown transformation.
     /// </summary>
-    public class DefaultMarkdown : IMarkdown
-    {
-        /// <summary>
-        /// Gets/sets the additional pipeline to use
-        /// for markdown transformation.
-        /// </summary>
-        public MarkdownPipeline _pipeline { get; set; }
+    public MarkdownPipeline _pipeline { get; set; }
 
-        /// <summary>
-        /// Transforms the given markdown string to html.
-        /// </summary>
-        /// <param name="md">The markdown</param>
-        /// <returns>The transformed html</returns>
-        public string Transform(string md)
+    /// <summary>
+    /// Transforms the given markdown string to html.
+    /// </summary>
+    /// <param name="md">The markdown</param>
+    /// <returns>The transformed html</returns>
+    public string Transform(string md)
+    {
+        if (!string.IsNullOrEmpty(md))
         {
-            if (!string.IsNullOrEmpty(md))
-            {
-                return Markdown.ToHtml(md, _pipeline);
-            }
-            return md;
+            return Markdown.ToHtml(md, _pipeline);
         }
+        return md;
     }
 }

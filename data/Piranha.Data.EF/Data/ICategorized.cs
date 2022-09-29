@@ -8,16 +8,15 @@
  *
  */
 
-namespace Piranha.Data
+namespace Piranha.Data;
+
+/// <summary>
+/// Interface for categorized content.
+/// </summary>
+public interface ICategorized
 {
     /// <summary>
-    /// Interface for categorized content.
+    /// Gets/sets the category id.
     /// </summary>
-    public interface ICategorized
-    {
-        /// <summary>
-        /// Gets/sets the category id.
-        /// </summary>
-        Guid? CategoryId { get; set; }
-    }
+    Guid? CategoryId { get; set; }
 }

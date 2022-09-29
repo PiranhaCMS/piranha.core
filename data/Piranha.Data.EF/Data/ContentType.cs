@@ -8,14 +8,13 @@
  *
  */
 
-namespace Piranha.Data
+namespace Piranha.Data;
+
+[Serializable]
+public sealed class ContentType : ContentTypeBase
 {
-    [Serializable]
-    public sealed class ContentType : ContentTypeBase
-    {
-        /// <summary>
-        /// Gets/sets the content group.
-        /// </summary>
-        public string Group { get; set; }
-    }
+    /// <summary>
+    /// Gets/sets the content group.
+    /// </summary>
+    public string Group { get; set; }
 }

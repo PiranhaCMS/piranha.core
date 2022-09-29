@@ -10,71 +10,70 @@
 
 using System.Collections.Concurrent;
 
-namespace Piranha.Cache
+namespace Piranha.Cache;
+
+/// <summary>
+/// Simple in memory cache.
+/// </summary>
+public class SimpleCache : ICache
 {
     /// <summary>
-    /// Simple in memory cache.
+    /// The private cache collection.
     /// </summary>
-    public class SimpleCache : ICache
+    private readonly IDictionary<string, object> _cache = new ConcurrentDictionary<string, object>();
+
+    /// <summary>
+    /// If returned objects should be cloned.
+    /// </summary>
+    private readonly bool _clone;
+
+    /// <summary>
+    /// Gets the model with the specified key from cache.
+    /// </summary>
+    /// <typeparam name="T">The model type</typeparam>
+    /// <param name="key">The unique key</param>
+    /// <returns>The cached model, null it wasn't found</returns>
+    public T Get<T>(string key)
     {
-        /// <summary>
-        /// The private cache collection.
-        /// </summary>
-        private readonly IDictionary<string, object> _cache = new ConcurrentDictionary<string, object>();
+        object value;
 
-        /// <summary>
-        /// If returned objects should be cloned.
-        /// </summary>
-        private readonly bool _clone;
-
-        /// <summary>
-        /// Gets the model with the specified key from cache.
-        /// </summary>
-        /// <typeparam name="T">The model type</typeparam>
-        /// <param name="key">The unique key</param>
-        /// <returns>The cached model, null it wasn't found</returns>
-        public T Get<T>(string key)
+        if (_cache.TryGetValue(key, out value))
         {
-            object value;
-
-            if (_cache.TryGetValue(key, out value))
+            if (!_clone)
             {
-                if (!_clone)
-                {
-                    return (T)value;
-                }
-                return Utils.DeepClone((T)value);
+                return (T)value;
             }
-            return default(T);
+            return Utils.DeepClone((T)value);
         }
+        return default(T);
+    }
 
-        /// <summary>
-        /// Default constructor.
-        /// </summary>
-        /// <param name="clone">If returned objects should be cloned</param>
-        public SimpleCache(bool clone = true)
-        {
-            _clone = clone;
-        }
+    /// <summary>
+    /// Default constructor.
+    /// </summary>
+    /// <param name="clone">If returned objects should be cloned</param>
+    public SimpleCache(bool clone = true)
+    {
+        _clone = clone;
+    }
 
-        /// <summary>
-        /// Sets the given model in the cache.
-        /// </summary>
-        /// <typeparam name="T">The model type</typeparam>
-        /// <param name="key">The unique key</param>
-        /// <param name="value">The model</param>
-        public void Set<T>(string key, T value)
-        {
-            _cache[key] = value;
-        }
+    /// <summary>
+    /// Sets the given model in the cache.
+    /// </summary>
+    /// <typeparam name="T">The model type</typeparam>
+    /// <param name="key">The unique key</param>
+    /// <param name="value">The model</param>
+    public void Set<T>(string key, T value)
+    {
+        _cache[key] = value;
+    }
 
-        /// <summary>
-        /// Removes the model with the specified key from cache.
-        /// </summary>
-        /// <param name="key">The unique key</param>
-        public void Remove(string key)
-        {
-            _cache.Remove(key);
-        }
+    /// <summary>
+    /// Removes the model with the specified key from cache.
+    /// </summary>
+    /// <param name="key">The unique key</param>
+    public void Remove(string key)
+    {
+        _cache.Remove(key);
     }
 }

@@ -10,27 +10,26 @@
 
 using Piranha.Extend.Fields;
 
-namespace Piranha.Extend.Blocks
+namespace Piranha.Extend.Blocks;
+
+/// <summary>
+/// Video block.
+/// </summary>
+[BlockType(Name = "Video", Category = "Media", Icon = "fas fa-video", Component = "video-block")]
+public class VideoBlock : Block
 {
     /// <summary>
-    /// Video block.
+    /// Gets/sets the video body.
     /// </summary>
-    [BlockType(Name = "Video", Category = "Media", Icon = "fas fa-video", Component = "video-block")]
-    public class VideoBlock : Block
+    public VideoField Body { get; set; }
+
+    public override string GetTitle()
     {
-        /// <summary>
-        /// Gets/sets the video body.
-        /// </summary>
-        public VideoField Body { get; set; }
-
-        public override string GetTitle()
+        if (Body != null && Body.Media != null)
         {
-            if (Body != null && Body.Media != null)
-            {
-                return Body.Media.Filename;
-            }
-
-            return "No video selected";
+            return Body.Media.Filename;
         }
+
+        return "No video selected";
     }
 }

@@ -10,28 +10,27 @@
 
 using Newtonsoft.Json;
 
-namespace Piranha.Data
+namespace Piranha.Data;
+
+/// <summary>
+/// Basic content block.
+/// </summary>
+[Serializable]
+public sealed class ContentBlock : BlockBase<ContentBlockField>
 {
     /// <summary>
-    /// Basic content block.
+    /// Gets/sets the content id.
     /// </summary>
-    [Serializable]
-    public sealed class ContentBlock : BlockBase<ContentBlockField>
-    {
-        /// <summary>
-        /// Gets/sets the content id.
-        /// </summary>
-        public Guid ContentId { get; set; }
+    public Guid ContentId { get; set; }
 
-        /// <summary>
-        /// Gets/sets the zero based sort index.
-        /// </summary>
-        public int SortOrder { get; set; }
+    /// <summary>
+    /// Gets/sets the zero based sort index.
+    /// </summary>
+    public int SortOrder { get; set; }
 
-        /// <summary>
-        /// Gets/sets the content.
-        /// </summary>
-        [JsonIgnore]
-        public Content Content { get; set; }
-    }
+    /// <summary>
+    /// Gets/sets the content.
+    /// </summary>
+    [JsonIgnore]
+    public Content Content { get; set; }
 }

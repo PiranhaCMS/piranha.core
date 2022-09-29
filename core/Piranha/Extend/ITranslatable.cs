@@ -8,10 +8,9 @@
  *
  */
 
-namespace Piranha.Extend
-{
-    /// <summary>
-    /// Interface for marking a block or field as translatable.
-    /// </summary>
-    public interface ITranslatable { }
-}
+namespace Piranha.Extend;
+
+/// <summary>
+/// Interface for marking a block or field as translatable.
+/// </summary>
+public interface ITranslatable { }

@@ -8,12 +8,11 @@
  *
  */
 
-namespace Piranha.Models
+namespace Piranha.Models;
+
+public enum BlockDisplayMode
 {
-    public enum BlockDisplayMode
-    {
-        MasterDetail,
-        Horizontal,
-        Vertical
-    }
+    MasterDetail,
+    Horizontal,
+    Vertical
 }

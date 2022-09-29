@@ -10,80 +10,79 @@
 
 using Microsoft.Extensions.Caching.Memory;
 
-namespace Piranha.Cache
+namespace Piranha.Cache;
+
+/// <summary>
+/// Simple in memory cache.
+/// </summary>
+public class MemoryCache : ICache
 {
     /// <summary>
-    /// Simple in memory cache.
+    /// The private memory cache.
     /// </summary>
-    public class MemoryCache : ICache
+    private readonly IMemoryCache _cache;
+
+    /// <summary>
+    /// If returned objects should be cloned.
+    /// </summary>
+    private readonly bool _clone;
+
+    /// <summary>
+    /// Default constructor.
+    /// </summary>
+    /// <param name="cache">The currently configured cache</param>
+    public MemoryCache(IMemoryCache cache)
     {
-        /// <summary>
-        /// The private memory cache.
-        /// </summary>
-        private readonly IMemoryCache _cache;
+        _cache = cache;
+    }
 
-        /// <summary>
-        /// If returned objects should be cloned.
-        /// </summary>
-        private readonly bool _clone;
+    /// <summary>
+    /// Default constructor.
+    /// </summary>
+    /// <param name="cache">The currently configured cache</param>
+    /// <param name="clone">If returned objects should be cloned</param>
+    protected MemoryCache(IMemoryCache cache, bool clone)
+    {
+        _cache = cache;
+        _clone = clone;
+    }
 
-        /// <summary>
-        /// Default constructor.
-        /// </summary>
-        /// <param name="cache">The currently configured cache</param>
-        public MemoryCache(IMemoryCache cache)
+    /// <summary>
+    /// Gets the model with the specified key from cache.
+    /// </summary>
+    /// <typeparam name="T">The model type</typeparam>
+    /// <param name="key">The unique key</param>
+    /// <returns>The cached model, null it wasn't found</returns>
+    public T Get<T>(string key)
+    {
+        if (_cache.TryGetValue<T>(key, out var obj))
         {
-            _cache = cache;
-        }
-
-        /// <summary>
-        /// Default constructor.
-        /// </summary>
-        /// <param name="cache">The currently configured cache</param>
-        /// <param name="clone">If returned objects should be cloned</param>
-        protected MemoryCache(IMemoryCache cache, bool clone)
-        {
-            _cache = cache;
-            _clone = clone;
-        }
-
-        /// <summary>
-        /// Gets the model with the specified key from cache.
-        /// </summary>
-        /// <typeparam name="T">The model type</typeparam>
-        /// <param name="key">The unique key</param>
-        /// <returns>The cached model, null it wasn't found</returns>
-        public T Get<T>(string key)
-        {
-            if (_cache.TryGetValue<T>(key, out var obj))
+            if (!_clone)
             {
-                if (!_clone)
-                {
-                    return obj;
-                }
-                return Utils.DeepClone(obj);
+                return obj;
             }
-            return default(T);
+            return Utils.DeepClone(obj);
         }
+        return default(T);
+    }
 
-        /// <summary>
-        /// Sets the given model in the cache.
-        /// </summary>
-        /// <typeparam name="T">The model type</typeparam>
-        /// <param name="key">The unique key</param>
-        /// <param name="value">The model</param>
-        public void Set<T>(string key, T value)
-        {
-            _cache.Set(key, value);
-        }
+    /// <summary>
+    /// Sets the given model in the cache.
+    /// </summary>
+    /// <typeparam name="T">The model type</typeparam>
+    /// <param name="key">The unique key</param>
+    /// <param name="value">The model</param>
+    public void Set<T>(string key, T value)
+    {
+        _cache.Set(key, value);
+    }
 
-        /// <summary>
-        /// Removes the model with the specified key from cache.
-        /// </summary>
-        /// <param name="key">The unique key</param>
-        public void Remove(string key)
-        {
-            _cache.Remove(key);
-        }
+    /// <summary>
+    /// Removes the model with the specified key from cache.
+    /// </summary>
+    /// <param name="key">The unique key</param>
+    public void Remove(string key)
+    {
+        _cache.Remove(key);
     }
 }

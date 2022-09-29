@@ -8,17 +8,16 @@
  *
  */
 
-namespace Piranha.Extend
+namespace Piranha.Extend;
+
+/// <summary>
+/// Base class for fields.
+/// </summary>
+public abstract class Field : IField
 {
     /// <summary>
-    /// Base class for fields.
+    /// Gets the list item title if this field is used in
+    /// a collection regions.
     /// </summary>
-    public abstract class Field : IField
-    {
-        /// <summary>
-        /// Gets the list item title if this field is used in
-        /// a collection regions.
-        /// </summary>
-        public abstract string GetTitle();
-    }
+    public abstract string GetTitle();
 }

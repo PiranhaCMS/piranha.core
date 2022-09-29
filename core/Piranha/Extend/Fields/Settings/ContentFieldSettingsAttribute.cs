@@ -8,17 +8,16 @@
  *
  */
 
-namespace Piranha.Extend.Fields.Settings
+namespace Piranha.Extend.Fields.Settings;
+
+/// <summary>
+/// Settings for content fields.
+/// </summary>
+[AttributeUsage(AttributeTargets.Property)]
+public class ContentFieldSettingsAttribute : FieldSettingsAttribute
 {
     /// <summary>
-    /// Settings for content fields.
+    /// Gets/sets the currently allowed group.
     /// </summary>
-    [AttributeUsage(AttributeTargets.Property)]
-    public class ContentFieldSettingsAttribute : FieldSettingsAttribute
-    {
-        /// <summary>
-        /// Gets/sets the currently allowed group.
-        /// </summary>
-        public string Group { get; set; }
-    }
+    public string Group { get; set; }
 }

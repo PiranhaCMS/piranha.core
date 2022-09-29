@@ -11,23 +11,22 @@
 using Piranha.Manager.Models;
 using Piranha.Models;
 
-namespace Piranha.Manager.Extensions
+namespace Piranha.Manager.Extensions;
+
+internal static class RoutedContentExtensions
 {
-    internal static class RoutedContentExtensions
+    public static string GetState(this RoutedContentBase content, bool isDraft)
     {
-        public static string GetState(this RoutedContentBase content, bool isDraft)
+        if (content.Created == DateTime.MinValue)
         {
-            if (content.Created == DateTime.MinValue)
-            {
-                return ContentState.New;
-            }
-
-            if (content.Published.HasValue)
-            {
-                return isDraft ? ContentState.Draft : ContentState.Published;
-            }
-
-            return ContentState.Unpublished;
+            return ContentState.New;
         }
+
+        if (content.Published.HasValue)
+        {
+            return isDraft ? ContentState.Draft : ContentState.Published;
+        }
+
+        return ContentState.Unpublished;
     }
 }

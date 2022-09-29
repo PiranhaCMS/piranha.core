@@ -12,147 +12,146 @@ using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.Formats;
 using SixLabors.ImageSharp.Processing;
 
-namespace Piranha.ImageSharp
+namespace Piranha.ImageSharp;
+
+public class ImageSharpProcessor : IImageProcessor
 {
-    public class ImageSharpProcessor : IImageProcessor
+    /// <summary>
+    /// Gets an image from the provided stream and returns its size.
+    /// </summary>
+    /// <param name="stream">The image data stream</param>
+    /// <param name="width">The returned width</param>
+    /// <param name="height">The returned height</param>
+    public void GetSize(Stream stream, out int width, out int height)
     {
-        /// <summary>
-        /// Gets an image from the provided stream and returns its size.
-        /// </summary>
-        /// <param name="stream">The image data stream</param>
-        /// <param name="width">The returned width</param>
-        /// <param name="height">The returned height</param>
-        public void GetSize(Stream stream, out int width, out int height)
-        {
-            var imageInfo = Image.Identify(stream);
-            width = imageInfo.Width;
-            height = imageInfo.Height;
+        var imageInfo = Image.Identify(stream);
+        width = imageInfo.Width;
+        height = imageInfo.Height;
 
-            stream.Position = 0;
-        }
+        stream.Position = 0;
+    }
 
-        /// <summary>
-        /// Gets an image from the provided bytes and returns its size.
-        /// </summary>
-        /// <param name="bytes">The image data</param>
-        /// <param name="width">The returned width</param>
-        /// <param name="height">The returned height</param>
-        public void GetSize(byte[] bytes, out int width, out int height)
-        {
-            var imageInfo = Image.Identify(bytes);
-            width = imageInfo.Width;
-            height = imageInfo.Height;
-        }
+    /// <summary>
+    /// Gets an image from the provided bytes and returns its size.
+    /// </summary>
+    /// <param name="bytes">The image data</param>
+    /// <param name="width">The returned width</param>
+    /// <param name="height">The returned height</param>
+    public void GetSize(byte[] bytes, out int width, out int height)
+    {
+        var imageInfo = Image.Identify(bytes);
+        width = imageInfo.Width;
+        height = imageInfo.Height;
+    }
 
-        /// <summary>
-        /// Gets an image from the provided stream, crops it according
-        /// to the given size and writes out a new jpeg image on the
-        /// destination stream.
-        /// </summary>
-        /// <param name="source">The image data stream</param>
-        /// <param name="dest">The destination stream</param>
-        /// <param name="width">The requested width</param>
-        /// <param name="height">The requested height</param>
-        public void Crop(Stream source, Stream dest, int width, int height)
+    /// <summary>
+    /// Gets an image from the provided stream, crops it according
+    /// to the given size and writes out a new jpeg image on the
+    /// destination stream.
+    /// </summary>
+    /// <param name="source">The image data stream</param>
+    /// <param name="dest">The destination stream</param>
+    /// <param name="width">The requested width</param>
+    /// <param name="height">The requested height</param>
+    public void Crop(Stream source, Stream dest, int width, int height)
+    {
+        using (var image = Image.Load(source, out IImageFormat format))
         {
-            using (var image = Image.Load(source, out IImageFormat format))
+            image.Mutate(x => x.Crop(new Rectangle
             {
-                image.Mutate(x => x.Crop(new Rectangle
-                {
-                    Width = width,
-                    Height = height,
-                    X = width < image.Width ? (image.Width - width) / 2 : 0,
-                    Y = height < image.Height ? (image.Height - height) / 2 : 0
-                }));
+                Width = width,
+                Height = height,
+                X = width < image.Width ? (image.Width - width) / 2 : 0,
+                Y = height < image.Height ? (image.Height - height) / 2 : 0
+            }));
 
-                image.Save(dest, format);
-            }
+            image.Save(dest, format);
         }
+    }
 
-        /// <summary>
-        /// Gets an image from the provided stream, scales it according
-        /// to the given width and writes out a new jpeg image on the
-        /// destination stream.
-        /// </summary>
-        /// <param name="source">The image data stream</param>
-        /// <param name="dest">The destination stream</param>
-        /// <param name="width">The requested width</param>
-        public void Scale(Stream source, Stream dest, int width)
+    /// <summary>
+    /// Gets an image from the provided stream, scales it according
+    /// to the given width and writes out a new jpeg image on the
+    /// destination stream.
+    /// </summary>
+    /// <param name="source">The image data stream</param>
+    /// <param name="dest">The destination stream</param>
+    /// <param name="width">The requested width</param>
+    public void Scale(Stream source, Stream dest, int width)
+    {
+        using (var image = Image.Load(source, out IImageFormat format))
         {
-            using (var image = Image.Load(source, out IImageFormat format))
+            int height = (int)Math.Round(width * ((float)image.Height / image.Width));
+
+            image.Mutate(x => x.Resize(new ResizeOptions
             {
-                int height = (int)Math.Round(width * ((float)image.Height / image.Width));
+                Size = new Size(width, height),
+                Mode = ResizeMode.Crop
+            }));
 
-                image.Mutate(x => x.Resize(new ResizeOptions
-                {
-                    Size = new Size(width, height),
-                    Mode = ResizeMode.Crop
-                }));
-
-                image.Save(dest, format);
-            }
+            image.Save(dest, format);
         }
+    }
 
-        /// <summary>
-        /// Gets an image from the provided stream, crops and scales it
-        /// according to the given size and writes out a new jpeg image
-        /// on the destination stream.
-        /// </summary>
-        /// <param name="source">The image data stream</param>
-        /// <param name="dest">The destination stream</param>
-        /// <param name="width">The requested width</param>
-        /// <param name="height">The requested height</param>
-        public void CropScale(Stream source, Stream dest, int width, int height)
+    /// <summary>
+    /// Gets an image from the provided stream, crops and scales it
+    /// according to the given size and writes out a new jpeg image
+    /// on the destination stream.
+    /// </summary>
+    /// <param name="source">The image data stream</param>
+    /// <param name="dest">The destination stream</param>
+    /// <param name="width">The requested width</param>
+    /// <param name="height">The requested height</param>
+    public void CropScale(Stream source, Stream dest, int width, int height)
+    {
+        using (var image = Image.Load(source, out IImageFormat format))
         {
-            using (var image = Image.Load(source, out IImageFormat format))
+            var oldRatio = (float)image.Height / image.Width;
+            var newRatio = (float)height / width;
+            var cropWidth = image.Width;
+            var cropHeight = image.Height;
+
+            if (newRatio < oldRatio)
             {
-                var oldRatio = (float)image.Height / image.Width;
-                var newRatio = (float)height / width;
-                var cropWidth = image.Width;
-                var cropHeight = image.Height;
-
-                if (newRatio < oldRatio)
-                {
-                    // We making the image lower
-                    cropHeight = (int)Math.Round(image.Width * newRatio);
-                }
-                else
-                {
-                    // We're making the image thinner
-                    cropWidth = (int)Math.Round(image.Height / newRatio);
-                }
-
-                image.Mutate(x => x.Crop(new Rectangle
-                {
-                    Width = cropWidth,
-                    Height = cropHeight,
-                    X = cropWidth < image.Width ? (image.Width - cropWidth) / 2 : 0,
-                    Y = cropHeight < image.Height ? (image.Height - cropHeight) / 2 : 0
-                }));
-                image.Mutate(x => x.Resize(new ResizeOptions
-                {
-                    Size = new Size(width, height),
-                    Mode = ResizeMode.Crop
-                }));
-
-                image.Save(dest, format);
+                // We making the image lower
+                cropHeight = (int)Math.Round(image.Width * newRatio);
             }
+            else
+            {
+                // We're making the image thinner
+                cropWidth = (int)Math.Round(image.Height / newRatio);
+            }
+
+            image.Mutate(x => x.Crop(new Rectangle
+            {
+                Width = cropWidth,
+                Height = cropHeight,
+                X = cropWidth < image.Width ? (image.Width - cropWidth) / 2 : 0,
+                Y = cropHeight < image.Height ? (image.Height - cropHeight) / 2 : 0
+            }));
+            image.Mutate(x => x.Resize(new ResizeOptions
+            {
+                Size = new Size(width, height),
+                Mode = ResizeMode.Crop
+            }));
+
+            image.Save(dest, format);
         }
+    }
 
-        /// <summary>
-        /// Auto orients the image according to exif information.
-        /// </summary>
-        /// <param name="source">The image data stream</param>
-        /// <param name="dest">The destination stream</param>
-        public void AutoOrient(Stream source, Stream dest)
+    /// <summary>
+    /// Auto orients the image according to exif information.
+    /// </summary>
+    /// <param name="source">The image data stream</param>
+    /// <param name="dest">The destination stream</param>
+    public void AutoOrient(Stream source, Stream dest)
+    {
+        using (var image = Image.Load(source, out IImageFormat format))
         {
-            using (var image = Image.Load(source, out IImageFormat format))
-            {
-                image.Mutate(x => x.AutoOrient());
-                image.Save(dest, format);
+            image.Mutate(x => x.AutoOrient());
+            image.Save(dest, format);
 
-                dest.Position = 0;
-            }
+            dest.Position = 0;
         }
     }
 }

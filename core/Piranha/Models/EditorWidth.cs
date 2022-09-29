@@ -8,11 +8,10 @@
  *
  */
 
-namespace Piranha.Models
+namespace Piranha.Models;
+
+public enum EditorWidth
 {
-    public enum EditorWidth
-    {
-        Centered,
-        Full
-    }
+    Centered,
+    Full
 }

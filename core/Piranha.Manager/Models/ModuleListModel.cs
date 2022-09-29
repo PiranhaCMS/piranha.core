@@ -8,29 +8,28 @@
  *
  */
 
-namespace Piranha.Manager.Models
+namespace Piranha.Manager.Models;
+
+/// <summary>
+/// Modules model.
+/// </summary>
+public class ModuleListModel
 {
     /// <summary>
-    /// Modules model.
+    /// A list item in the module model.
     /// </summary>
-    public class ModuleListModel
+    public class ModuleItem
     {
-        /// <summary>
-        /// A list item in the module model.
-        /// </summary>
-        public class ModuleItem
-        {
-            public string Author { get; set; }
-            public string Name { get; set; }
-            public string Version { get; set; }
-            public string Description { get; set; }
-            public string PackageUrl { get; set; }
-            public string IconUrl { get; set; }
-        }
-
-        /// <summary>
-        /// Gets/set the available items.
-        /// </summary>
-        public IList<ModuleItem> Items { get; set; } = new List<ModuleItem>();
+        public string Author { get; set; }
+        public string Name { get; set; }
+        public string Version { get; set; }
+        public string Description { get; set; }
+        public string PackageUrl { get; set; }
+        public string IconUrl { get; set; }
     }
+
+    /// <summary>
+    /// Gets/set the available items.
+    /// </summary>
+    public IList<ModuleItem> Items { get; set; } = new List<ModuleItem>();
 }

@@ -13,246 +13,245 @@ using Microsoft.Extensions.Caching.Distributed;
 using Xunit;
 using Piranha.Models;
 
-namespace Piranha.Tests.Services
+namespace Piranha.Tests.Services;
+
+[Collection("Integration tests")]
+public class SiteTypeTestsMemoryCache : SiteTypeTests
 {
-    [Collection("Integration tests")]
-    public class SiteTypeTestsMemoryCache : SiteTypeTests
+    public override Task InitializeAsync()
     {
-        public override Task InitializeAsync()
+        _cache = new Cache.MemoryCache((IMemoryCache)_services.GetService(typeof(IMemoryCache)));
+        return base.InitializeAsync();
+    }
+}
+
+[Collection("Integration tests")]
+public class SiteTypeTestsDistributedCache : SiteTypeTests
+{
+    public override Task InitializeAsync()
+    {
+        _cache = new Cache.DistributedCache((IDistributedCache)_services.GetService(typeof(IDistributedCache)));
+        return base.InitializeAsync();
+    }
+}
+
+[Collection("Integration tests")]
+public class SiteTypeTests : BaseTestsAsync
+{
+    private readonly List<SiteType> siteTypes = new List<SiteType>
+    {
+        new SiteType
         {
-            _cache = new Cache.MemoryCache((IMemoryCache)_services.GetService(typeof(IMemoryCache)));
-            return base.InitializeAsync();
+            Id = "MyFirstType",
+            Regions = new List<ContentTypeRegion>
+            {
+                new ContentTypeRegion
+                {
+                    Id = "Body",
+                    Fields = new List<ContentTypeField>
+                    {
+                        new ContentTypeField {
+                            Id = "Default",
+                            Type = "Html"
+                        }
+                    }
+                }
+            }
+        },
+        new SiteType
+        {
+            Id = "MySecondType",
+            Regions = new List<ContentTypeRegion>
+            {
+                new ContentTypeRegion
+                {
+                    Id = "Body",
+                    Fields = new List<ContentTypeField>
+                    {
+                        new ContentTypeField
+                        {
+                            Id = "Default",
+                            Type = "Text"
+                        }
+                    }
+                }
+            }
+        },
+        new SiteType
+        {
+            Id = "MyThirdType",
+            Regions = new List<ContentTypeRegion>
+            {
+                new ContentTypeRegion
+                {
+                    Id = "Body",
+                    Fields = new List<ContentTypeField>
+                    {
+                        new ContentTypeField
+                        {
+                            Id = "Default",
+                            Type = "Image"
+                        }
+                    }
+                }
+            }
+        },
+        new SiteType
+        {
+            Id = "MyFourthType",
+            Regions = new List<ContentTypeRegion>
+            {
+                new ContentTypeRegion
+                {
+                    Id = "Body",
+                    Fields = new List<ContentTypeField>
+                    {
+                        new ContentTypeField
+                        {
+                            Id = "Default",
+                            Type = "String"
+                        }
+                    }
+                }
+            }
+        },
+        new SiteType
+        {
+            Id = "MyFifthType",
+            Regions = new List<ContentTypeRegion>
+            {
+                new ContentTypeRegion
+                {
+                    Id = "Body",
+                    Fields = new List<ContentTypeField>
+                    {
+                        new ContentTypeField
+                        {
+                            Id = "Default",
+                            Type = "Text"
+                        }
+                    }
+                }
+            }
+        }
+    };
+
+    public override async Task InitializeAsync()
+    {
+        using (var api = CreateApi())
+        {
+            await api.SiteTypes.SaveAsync(siteTypes[0]);
+            await api.SiteTypes.SaveAsync(siteTypes[3]);
+            await api.SiteTypes.SaveAsync(siteTypes[4]);
         }
     }
 
-    [Collection("Integration tests")]
-    public class SiteTypeTestsDistributedCache : SiteTypeTests
+    public override async Task DisposeAsync()
     {
-        public override Task InitializeAsync()
+        using (var api = CreateApi())
         {
-            _cache = new Cache.DistributedCache((IDistributedCache)_services.GetService(typeof(IDistributedCache)));
-            return base.InitializeAsync();
+            var siteTypes = await api.SiteTypes.GetAllAsync();
+
+            foreach (var p in siteTypes)
+            {
+                await api.SiteTypes.DeleteAsync(p);
+            }
         }
     }
 
-    [Collection("Integration tests")]
-    public class SiteTypeTests : BaseTestsAsync
+    [Fact]
+    public void IsCached()
     {
-        private readonly List<SiteType> siteTypes = new List<SiteType>
+        using (var api = CreateApi())
         {
-            new SiteType
-            {
-                Id = "MyFirstType",
-                Regions = new List<ContentTypeRegion>
-                {
-                    new ContentTypeRegion
-                    {
-                        Id = "Body",
-                        Fields = new List<ContentTypeField>
-                        {
-                            new ContentTypeField {
-                                Id = "Default",
-                                Type = "Html"
-                            }
-                        }
-                    }
-                }
-            },
-            new SiteType
-            {
-                Id = "MySecondType",
-                Regions = new List<ContentTypeRegion>
-                {
-                    new ContentTypeRegion
-                    {
-                        Id = "Body",
-                        Fields = new List<ContentTypeField>
-                        {
-                            new ContentTypeField
-                            {
-                                Id = "Default",
-                                Type = "Text"
-                            }
-                        }
-                    }
-                }
-            },
-            new SiteType
-            {
-                Id = "MyThirdType",
-                Regions = new List<ContentTypeRegion>
-                {
-                    new ContentTypeRegion
-                    {
-                        Id = "Body",
-                        Fields = new List<ContentTypeField>
-                        {
-                            new ContentTypeField
-                            {
-                                Id = "Default",
-                                Type = "Image"
-                            }
-                        }
-                    }
-                }
-            },
-            new SiteType
-            {
-                Id = "MyFourthType",
-                Regions = new List<ContentTypeRegion>
-                {
-                    new ContentTypeRegion
-                    {
-                        Id = "Body",
-                        Fields = new List<ContentTypeField>
-                        {
-                            new ContentTypeField
-                            {
-                                Id = "Default",
-                                Type = "String"
-                            }
-                        }
-                    }
-                }
-            },
-            new SiteType
-            {
-                Id = "MyFifthType",
-                Regions = new List<ContentTypeRegion>
-                {
-                    new ContentTypeRegion
-                    {
-                        Id = "Body",
-                        Fields = new List<ContentTypeField>
-                        {
-                            new ContentTypeField
-                            {
-                                Id = "Default",
-                                Type = "Text"
-                            }
-                        }
-                    }
-                }
-            }
-        };
-
-        public override async Task InitializeAsync()
-        {
-            using (var api = CreateApi())
-            {
-                await api.SiteTypes.SaveAsync(siteTypes[0]);
-                await api.SiteTypes.SaveAsync(siteTypes[3]);
-                await api.SiteTypes.SaveAsync(siteTypes[4]);
-            }
+            Assert.Equal(((Api)api).IsCached,
+                this.GetType() == typeof(SiteTypeTestsMemoryCache) ||
+                this.GetType() == typeof(SiteTypeTestsDistributedCache));
         }
+    }
 
-        public override async Task DisposeAsync()
+    [Fact]
+    public async Task Add()
+    {
+        using (var api = CreateApi())
         {
-            using (var api = CreateApi())
-            {
-                var siteTypes = await api.SiteTypes.GetAllAsync();
-
-                foreach (var p in siteTypes)
-                {
-                    await api.SiteTypes.DeleteAsync(p);
-                }
-            }
+            await api.SiteTypes.SaveAsync(siteTypes[1]);
         }
+    }
 
-        [Fact]
-        public void IsCached()
+    [Fact]
+    public async Task GetAll()
+    {
+        using (var api = CreateApi())
         {
-            using (var api = CreateApi())
-            {
-                Assert.Equal(((Api)api).IsCached,
-                    this.GetType() == typeof(SiteTypeTestsMemoryCache) ||
-                    this.GetType() == typeof(SiteTypeTestsDistributedCache));
-            }
+            var models = await api.SiteTypes.GetAllAsync();
+
+            Assert.NotNull(models);
+            Assert.NotEmpty(models);
         }
+    }
 
-        [Fact]
-        public async Task Add()
+    [Fact]
+    public async Task GetNoneById()
+    {
+        using (var api = CreateApi())
         {
-            using (var api = CreateApi())
-            {
-                await api.SiteTypes.SaveAsync(siteTypes[1]);
-            }
+            var none = await api.SiteTypes.GetByIdAsync("none-existing-type");
+
+            Assert.Null(none);
         }
+    }
 
-        [Fact]
-        public async Task GetAll()
+    [Fact]
+    public async Task GetById()
+    {
+        using (var api = CreateApi())
         {
-            using (var api = CreateApi())
-            {
-                var models = await api.SiteTypes.GetAllAsync();
+            var model = await api.SiteTypes.GetByIdAsync(siteTypes[0].Id);
 
-                Assert.NotNull(models);
-                Assert.NotEmpty(models);
-            }
+            Assert.NotNull(model);
+            Assert.Equal(siteTypes[0].Regions[0].Fields[0].Id, model.Regions[0].Fields[0].Id);
         }
+    }
 
-        [Fact]
-        public async Task GetNoneById()
+    [Fact]
+    public async Task Update()
+    {
+        using (var api = CreateApi())
         {
-            using (var api = CreateApi())
-            {
-                var none = await api.SiteTypes.GetByIdAsync("none-existing-type");
+            var model = await api.SiteTypes.GetByIdAsync(siteTypes[0].Id);
 
-                Assert.Null(none);
-            }
+            Assert.Null(model.Title);
+
+            model.Title = "Updated";
+
+            await api.SiteTypes.SaveAsync(model);
         }
+    }
 
-        [Fact]
-        public async Task GetById()
+    [Fact]
+    public async Task Delete()
+    {
+        using (var api = CreateApi())
         {
-            using (var api = CreateApi())
-            {
-                var model = await api.SiteTypes.GetByIdAsync(siteTypes[0].Id);
+            var model = await api.SiteTypes.GetByIdAsync(siteTypes[3].Id);
 
-                Assert.NotNull(model);
-                Assert.Equal(siteTypes[0].Regions[0].Fields[0].Id, model.Regions[0].Fields[0].Id);
-            }
+            Assert.NotNull(model);
+
+            await api.SiteTypes.DeleteAsync(model);
         }
+    }
 
-        [Fact]
-        public async Task Update()
+    [Fact]
+    public async Task DeleteById()
+    {
+        using (var api = CreateApi())
         {
-            using (var api = CreateApi())
-            {
-                var model = await api.SiteTypes.GetByIdAsync(siteTypes[0].Id);
+            var model = await api.SiteTypes.GetByIdAsync(siteTypes[4].Id);
 
-                Assert.Null(model.Title);
+            Assert.NotNull(model);
 
-                model.Title = "Updated";
-
-                await api.SiteTypes.SaveAsync(model);
-            }
-        }
-
-        [Fact]
-        public async Task Delete()
-        {
-            using (var api = CreateApi())
-            {
-                var model = await api.SiteTypes.GetByIdAsync(siteTypes[3].Id);
-
-                Assert.NotNull(model);
-
-                await api.SiteTypes.DeleteAsync(model);
-            }
-        }
-
-        [Fact]
-        public async Task DeleteById()
-        {
-            using (var api = CreateApi())
-            {
-                var model = await api.SiteTypes.GetByIdAsync(siteTypes[4].Id);
-
-                Assert.NotNull(model);
-
-                await api.SiteTypes.DeleteAsync(model.Id);
-            }
+            await api.SiteTypes.DeleteAsync(model.Id);
         }
     }
 }

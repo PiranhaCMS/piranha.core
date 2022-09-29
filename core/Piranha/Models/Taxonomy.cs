@@ -10,43 +10,42 @@
 
 using System.ComponentModel.DataAnnotations;
 
-namespace Piranha.Models
+namespace Piranha.Models;
+
+[Serializable]
+public class Taxonomy
 {
-    [Serializable]
-    public class Taxonomy
+    /// <summary>
+    /// Gets/sets the unique id.
+    /// </summary>
+    public Guid Id { get; set; }
+
+    /// <summary>
+    /// Gets/sets the title.
+    /// </summary>
+    [StringLength(128)]
+    public string Title { get; set; }
+
+    /// <summary>
+    /// Gets/sets the slug.
+    /// </summary>
+    [StringLength(128)]
+    public string Slug { get; set; }
+
+    /// <summary>
+    /// Gets/sets the type.
+    /// </summary>
+    public TaxonomyType Type { get; set; } = TaxonomyType.NotSet;
+
+    /// <summary>
+    /// Operator for type casting a string to a taxonomy.
+    /// </summary>
+    /// <param name="str">The string</param>
+    public static implicit operator Taxonomy(string str)
     {
-        /// <summary>
-        /// Gets/sets the unique id.
-        /// </summary>
-        public Guid Id { get; set; }
-
-        /// <summary>
-        /// Gets/sets the title.
-        /// </summary>
-        [StringLength(128)]
-        public string Title { get; set; }
-
-        /// <summary>
-        /// Gets/sets the slug.
-        /// </summary>
-        [StringLength(128)]
-        public string Slug { get; set; }
-
-        /// <summary>
-        /// Gets/sets the type.
-        /// </summary>
-        public TaxonomyType Type { get; set; } = TaxonomyType.NotSet;
-
-        /// <summary>
-        /// Operator for type casting a string to a taxonomy.
-        /// </summary>
-        /// <param name="str">The string</param>
-        public static implicit operator Taxonomy(string str)
+        return new Taxonomy
         {
-            return new Taxonomy
-            {
-                Title = str
-            };
-        }
+            Title = str
+        };
     }
 }

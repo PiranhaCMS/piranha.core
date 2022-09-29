@@ -10,26 +10,25 @@
 
 using Microsoft.AspNetCore.Builder;
 
-namespace Piranha.AspNetCore
+namespace Piranha.AspNetCore;
+
+/// <summary>
+/// Application builder for ASP.NET minimal hosting model
+/// </summary>
+public class PiranhaApplication : PiranhaApplicationBuilder
 {
     /// <summary>
-    /// Application builder for ASP.NET minimal hosting model
+    /// Gets/sets the current Piranha Api.
     /// </summary>
-    public class PiranhaApplication : PiranhaApplicationBuilder
-    {
-        /// <summary>
-        /// Gets/sets the current Piranha Api.
-        /// </summary>
-        public IApi Api { get; }
+    public IApi Api { get; }
 
-        /// <summary>
-        /// Default constructor.
-        /// </summary>
-        /// <param name="app">The web application</param>
-        /// <param name="api">The current api</param>
-        public PiranhaApplication(WebApplication app, IApi api) : base(app)
-        {
-            Api = api;
-        }
+    /// <summary>
+    /// Default constructor.
+    /// </summary>
+    /// <param name="app">The web application</param>
+    /// <param name="api">The current api</param>
+    public PiranhaApplication(WebApplication app, IApi api) : base(app)
+    {
+        Api = api;
     }
 }

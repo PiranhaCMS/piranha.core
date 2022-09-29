@@ -10,23 +10,22 @@
 
 using Piranha.Models;
 
-namespace Piranha.Extend
-{
-    [AttributeUsage(AttributeTargets.Class)]
-    public class BlockGroupTypeAttribute : BlockTypeAttribute
-    {
-        /// <summary>
-        /// Default constructor
-        /// </summary>
-        public BlockGroupTypeAttribute()
-        {
-            _component = null;
-        }
+namespace Piranha.Extend;
 
-        /// <summary>
-        /// Gets/sets how the blocks inside the group should be
-        /// displayed in the manager interface.
-        /// </summary>
-        public BlockDisplayMode Display { get; set; } = BlockDisplayMode.MasterDetail;
+[AttributeUsage(AttributeTargets.Class)]
+public class BlockGroupTypeAttribute : BlockTypeAttribute
+{
+    /// <summary>
+    /// Default constructor
+    /// </summary>
+    public BlockGroupTypeAttribute()
+    {
+        _component = null;
     }
+
+    /// <summary>
+    /// Gets/sets how the blocks inside the group should be
+    /// displayed in the manager interface.
+    /// </summary>
+    public BlockDisplayMode Display { get; set; } = BlockDisplayMode.MasterDetail;
 }

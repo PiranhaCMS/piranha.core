@@ -8,14 +8,13 @@
  *
  */
 
-namespace Piranha.Extend.Fields
+namespace Piranha.Extend.Fields;
+
+[FieldType(Name = "Date", Shorthand = "Date", Component = "date-field")]
+public class DateField : SimpleField<DateTime?>
 {
-    [FieldType(Name = "Date", Shorthand = "Date", Component = "date-field")]
-    public class DateField : SimpleField<DateTime?>
+    public static implicit operator DateField(DateTime date)
     {
-        public static implicit operator DateField(DateTime date)
-        {
-            return new DateField { Value = date };
-        }
+        return new DateField { Value = date };
     }
 }

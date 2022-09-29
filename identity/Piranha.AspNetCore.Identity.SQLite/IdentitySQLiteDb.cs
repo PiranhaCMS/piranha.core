@@ -10,14 +10,13 @@
 
 using Microsoft.EntityFrameworkCore;
 
-namespace Piranha.AspNetCore.Identity.SQLite
+namespace Piranha.AspNetCore.Identity.SQLite;
+
+public class IdentitySQLiteDb : Db<IdentitySQLiteDb>
 {
-    public class IdentitySQLiteDb : Db<IdentitySQLiteDb>
-    {
-        /// <summary>
-        /// Default constructor.
-        /// </summary>
-        /// <param name="options">Configuration options</param>
-        public IdentitySQLiteDb(DbContextOptions<IdentitySQLiteDb> options) : base(options) { }
-    }
+    /// <summary>
+    /// Default constructor.
+    /// </summary>
+    /// <param name="options">Configuration options</param>
+    public IdentitySQLiteDb(DbContextOptions<IdentitySQLiteDb> options) : base(options) { }
 }

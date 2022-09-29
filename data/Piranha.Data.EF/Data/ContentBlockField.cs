@@ -10,55 +10,54 @@
 
 using Newtonsoft.Json;
 
-namespace Piranha.Data
+namespace Piranha.Data;
+
+/// <summary>
+/// Content field for a block.
+/// </summary>
+[Serializable]
+public class ContentBlockField : BlockFieldBase, ITranslatable
 {
     /// <summary>
-    /// Content field for a block.
+    /// Gets/sets the block containing the field.
     /// </summary>
-    [Serializable]
-    public class ContentBlockField : BlockFieldBase, ITranslatable
+    [JsonIgnore]
+    public ContentBlock Block { get; set; }
+
+    /// <summary>
+    /// Gets/sets the available translations.
+    /// </summary>
+    public IList<ContentBlockFieldTranslation> Translations { get; set; } = new List<ContentBlockFieldTranslation>();
+
+    /// <summary>
+    /// Sets the translation for the specified language.
+    /// </summary>
+    /// <param name="parentId">The parent id</param>
+    /// <param name="languageId">The language id</param>
+    /// <param name="model">The model</param>
+    public void SetTranslation(Guid parentId, Guid languageId, object model)
     {
-        /// <summary>
-        /// Gets/sets the block containing the field.
-        /// </summary>
-        [JsonIgnore]
-        public ContentBlock Block { get; set; }
+        var translation = Translations.FirstOrDefault(t => t.LanguageId == languageId);
 
-        /// <summary>
-        /// Gets/sets the available translations.
-        /// </summary>
-        public IList<ContentBlockFieldTranslation> Translations { get; set; } = new List<ContentBlockFieldTranslation>();
-
-        /// <summary>
-        /// Sets the translation for the specified language.
-        /// </summary>
-        /// <param name="parentId">The parent id</param>
-        /// <param name="languageId">The language id</param>
-        /// <param name="model">The model</param>
-        public void SetTranslation(Guid parentId, Guid languageId, object model)
+        if (translation == null)
         {
-            var translation = Translations.FirstOrDefault(t => t.LanguageId == languageId);
-
-            if (translation == null)
+            translation = new ContentBlockFieldTranslation
             {
-                translation = new ContentBlockFieldTranslation
-                {
-                    FieldId = parentId,
-                    LanguageId = languageId
-                };
-                Translations.Add(translation);
-            }
-            translation.Value = App.SerializeObject(model, model.GetType());
+                FieldId = parentId,
+                LanguageId = languageId
+            };
+            Translations.Add(translation);
         }
+        translation.Value = App.SerializeObject(model, model.GetType());
+    }
 
-        /// <summary>
-        /// Gets the translation for the specified language.
-        /// </summary>
-        /// <param name="languageId">The language id</param>
-        /// <returns>The translation</returns>
-        public object GetTranslation(Guid languageId)
-        {
-            return Translations.FirstOrDefault(t => t.LanguageId == languageId)?.Value;
-        }
+    /// <summary>
+    /// Gets the translation for the specified language.
+    /// </summary>
+    /// <param name="languageId">The language id</param>
+    /// <returns>The translation</returns>
+    public object GetTranslation(Guid languageId)
+    {
+        return Translations.FirstOrDefault(t => t.LanguageId == languageId)?.Value;
     }
 }

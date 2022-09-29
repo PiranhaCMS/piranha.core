@@ -8,57 +8,56 @@
  *
  */
 
-namespace Piranha.AspNetCore.Identity.Models
+namespace Piranha.AspNetCore.Identity.Models;
+
+public class UserListModel
 {
-    public class UserListModel
+    public IList<ListItem> Users { get; set; } = new List<ListItem>();
+
+    public static UserListModel Get(IDb db)
     {
-        public IList<ListItem> Users { get; set; } = new List<ListItem>();
-
-        public static UserListModel Get(IDb db)
+        var model = new UserListModel
         {
-            var model = new UserListModel
-            {
-                Users = db.Users
-                    .OrderBy(u => u.UserName)
-                    .Select(u => new ListItem
-                    {
-                        Id = u.Id,
-                        UserName = u.UserName,
-                        Email = u.Email,
-                        GravatarUrl = !string.IsNullOrWhiteSpace(u.Email) ? Utils.GetGravatarUrl(u.Email, 25) : null
-                    }).ToList()
-            };
+            Users = db.Users
+                .OrderBy(u => u.UserName)
+                .Select(u => new ListItem
+                {
+                    Id = u.Id,
+                    UserName = u.UserName,
+                    Email = u.Email,
+                    GravatarUrl = !string.IsNullOrWhiteSpace(u.Email) ? Utils.GetGravatarUrl(u.Email, 25) : null
+                }).ToList()
+        };
 
-            var roles = db.Roles
+        var roles = db.Roles
+            .ToList();
+
+        foreach (var user in model.Users)
+        {
+            var userRoles = db.UserRoles
+                .Where(r => r.UserId == user.Id)
                 .ToList();
 
-            foreach (var user in model.Users)
+            foreach (var userRole in userRoles)
             {
-                var userRoles = db.UserRoles
-                    .Where(r => r.UserId == user.Id)
-                    .ToList();
-
-                foreach (var userRole in userRoles)
+                var role = roles.FirstOrDefault(r => r.Id == userRole.RoleId);
+                if (role != null)
                 {
-                    var role = roles.FirstOrDefault(r => r.Id == userRole.RoleId);
-                    if (role != null)
-                    {
-                        user.Roles.Add(role.Name);
-                    }
+                    user.Roles.Add(role.Name);
                 }
             }
-
-            return model;
         }
 
-        public class ListItem
-        {
-            public Guid Id { get; set; }
-            public string UserName { get; set; }
-            public string Email { get; set; }
-            public IList<string> Roles { get; set; } = new List<string>();
+        return model;
+    }
 
-            public string GravatarUrl { get; set; }
-        }
+    public class ListItem
+    {
+        public Guid Id { get; set; }
+        public string UserName { get; set; }
+        public string Email { get; set; }
+        public IList<string> Roles { get; set; } = new List<string>();
+
+        public string GravatarUrl { get; set; }
     }
 }

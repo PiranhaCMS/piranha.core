@@ -13,46 +13,45 @@ using Microsoft.Extensions.Options;
 using Piranha.AspNetCore.Security;
 using Piranha.AspNetCore.Services;
 
-namespace Piranha.AspNetCore.Http
+namespace Piranha.AspNetCore.Http;
+
+/// <summary>
+/// The security middleware responsible for handling and
+/// redirecting unauthorized content requests.
+/// </summary>
+public class SecurityMiddleware
 {
+    private readonly RequestDelegate _next;
+    private readonly SecurityOptions _options;
+
     /// <summary>
-    /// The security middleware responsible for handling and
-    /// redirecting unauthorized content requests.
+    /// Default constructor.
     /// </summary>
-    public class SecurityMiddleware
+    /// <param name="next">The next middleware component in the pipeline</param>
+    /// <param name="options">The current routing options</param>
+    public SecurityMiddleware(RequestDelegate next, IOptions<SecurityOptions> options)
     {
-        private readonly RequestDelegate _next;
-        private readonly SecurityOptions _options;
+        _next = next;
+        _options = options.Value;
+    }
 
-        /// <summary>
-        /// Default constructor.
-        /// </summary>
-        /// <param name="next">The next middleware component in the pipeline</param>
-        /// <param name="options">The current routing options</param>
-        public SecurityMiddleware(RequestDelegate next, IOptions<SecurityOptions> options)
+    /// <summary>
+    /// Invokes the middleware.
+    /// </summary>
+    /// <param name="ctx">The current http context</param>
+    /// <param name="service">The piranha application service</param>
+    /// <returns>An awaitable task</returns>
+    public async Task InvokeAsync(HttpContext ctx, IApplicationService service)
+    {
+        // Execute the rest of the pipeline first
+        await _next(ctx);
+
+        // Check if we got back an unauthorized result
+        // from the application
+        if (ctx.Response.StatusCode == 401)
         {
-            _next = next;
-            _options = options.Value;
-        }
-
-        /// <summary>
-        /// Invokes the middleware.
-        /// </summary>
-        /// <param name="ctx">The current http context</param>
-        /// <param name="service">The piranha application service</param>
-        /// <returns>An awaitable task</returns>
-        public async Task InvokeAsync(HttpContext ctx, IApplicationService service)
-        {
-            // Execute the rest of the pipeline first
-            await _next(ctx);
-
-            // Check if we got back an unauthorized result
-            // from the application
-            if (ctx.Response.StatusCode == 401)
-            {
-                // Redirect to the configured login url
-                ctx.Response.Redirect($"{ _options.LoginUrl }?returnUrl={ service.Request.Url }");
-            }
+            // Redirect to the configured login url
+            ctx.Response.Redirect($"{ _options.LoginUrl }?returnUrl={ service.Request.Url }");
         }
     }
 }

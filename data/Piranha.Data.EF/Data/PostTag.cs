@@ -10,30 +10,29 @@
 
 using Newtonsoft.Json;
 
-namespace Piranha.Data
+namespace Piranha.Data;
+
+[Serializable]
+public sealed class PostTag
 {
-    [Serializable]
-    public sealed class PostTag
-    {
-        /// <summary>
-        /// Gets/sets the post id.
-        /// </summary>
-        public Guid PostId { get; set; }
+    /// <summary>
+    /// Gets/sets the post id.
+    /// </summary>
+    public Guid PostId { get; set; }
 
-        /// <summary>
-        /// Gets/sets the tag id.
-        /// </summary>
-        public Guid TagId { get; set; }
+    /// <summary>
+    /// Gets/sets the tag id.
+    /// </summary>
+    public Guid TagId { get; set; }
 
-        /// <summary>
-        /// Gets/sets the post.
-        /// </summary>
-        [JsonIgnore]
-        public Post Post { get; set; }
+    /// <summary>
+    /// Gets/sets the post.
+    /// </summary>
+    [JsonIgnore]
+    public Post Post { get; set; }
 
-        /// <summary>
-        /// Gets/sets the tag.
-        /// </summary>
-        public Tag Tag { get; set; }
-    }
+    /// <summary>
+    /// Gets/sets the tag.
+    /// </summary>
+    public Tag Tag { get; set; }
 }

@@ -13,91 +13,90 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Http;
 using Piranha.Manager.LocalAuth;
 
-namespace Piranha.AspNetCore
+namespace Piranha.AspNetCore;
+
+public class SimpleSecurity : ISecurity
 {
-    public class SimpleSecurity : ISecurity
+    /// <summary>
+    /// Gets/sets the available users.
+    /// </summary>
+    private List<SimpleUser> Users { get; set; }
+
+    /// <summary>
+    /// Default constructor.
+    /// </summary>
+    public SimpleSecurity()
     {
-        /// <summary>
-        /// Gets/sets the available users.
-        /// </summary>
-        private List<SimpleUser> Users { get; set; }
+        Users = new List<SimpleUser>();
+    }
 
-        /// <summary>
-        /// Default constructor.
-        /// </summary>
-        public SimpleSecurity()
-        {
-            Users = new List<SimpleUser>();
-        }
+    /// <summary>
+    /// Creates a new security object for the given users.
+    /// </summary>
+    /// <param name="users">The users</param>
+    public SimpleSecurity(params SimpleUser[] users) : this()
+    {
+        Users.AddRange(users);
+    }
 
-        /// <summary>
-        /// Creates a new security object for the given users.
-        /// </summary>
-        /// <param name="users">The users</param>
-        public SimpleSecurity(params SimpleUser[] users) : this()
-        {
-            Users.AddRange(users);
-        }
+    /// <summary>
+    /// Authenticates the given credentials without
+    /// signing in the user.
+    /// </summary>
+    /// <param name="username">The username</param>
+    /// <param name="password">The password</param>
+    /// <returns>If the given credentials were correct</returns>
+    public bool Authenticate(string username, string password)
+    {
+        return Users.Count(u => u.UserName == username && u.Password == password) == 1;
+    }
 
-        /// <summary>
-        /// Authenticates the given credentials without
-        /// signing in the user.
-        /// </summary>
-        /// <param name="username">The username</param>
-        /// <param name="password">The password</param>
-        /// <returns>If the given credentials were correct</returns>
-        public bool Authenticate(string username, string password)
+    /// <summary>
+    /// Authenticates and signs in the user with the
+    /// given credentials.
+    /// </summary>
+    /// <param name="context">The current application context</param>
+    /// <param name="username">The username</param>
+    /// <param name="password">The password</param>
+    /// <returns>If the user was signed in</returns>
+    public async Task<bool> SignIn(object context, string username, string password)
+    {
+        if (context is HttpContext)
         {
-            return Users.Count(u => u.UserName == username && u.Password == password) == 1;
-        }
-
-        /// <summary>
-        /// Authenticates and signs in the user with the
-        /// given credentials.
-        /// </summary>
-        /// <param name="context">The current application context</param>
-        /// <param name="username">The username</param>
-        /// <param name="password">The password</param>
-        /// <returns>If the user was signed in</returns>
-        public async Task<bool> SignIn(object context, string username, string password)
-        {
-            if (context is HttpContext)
+            if (Authenticate(username, password))
             {
-                if (Authenticate(username, password))
+                var user = Users.Single(u => u.UserName == username && u.Password == password);
+
+                var claims = new List<Claim>();
+                foreach (var claim in user.Claims)
                 {
-                    var user = Users.Single(u => u.UserName == username && u.Password == password);
-
-                    var claims = new List<Claim>();
-                    foreach (var claim in user.Claims)
-                    {
-                        claims.Add(new Claim(claim, claim));
-                    }
-                    claims.Add(new Claim(ClaimTypes.Name, user.UserName));
-                    claims.Add(new Claim(ClaimTypes.Sid, user.Id));
-
-                    var identity = new ClaimsIdentity(claims, user.Password);
-                    var principle = new ClaimsPrincipal(identity);
-
-                    await ((HttpContext)context).SignInAsync("Piranha.SimpleSecurity", principle);
-
-                    return true;
+                    claims.Add(new Claim(claim, claim));
                 }
-                return false;
-            }
-            throw new ArgumentException("SimpleSecurity only works with a HttpContext");
-        }
+                claims.Add(new Claim(ClaimTypes.Name, user.UserName));
+                claims.Add(new Claim(ClaimTypes.Sid, user.Id));
 
-        /// <summary>
-        /// Signs out the current user.
-        /// </summary>
-        /// <param name="context">The current application context</param>
-        public Task SignOut(object context)
-        {
-            if (context is HttpContext)
-            {
-                return ((HttpContext)context).SignOutAsync("Piranha.SimpleSecurity");
+                var identity = new ClaimsIdentity(claims, user.Password);
+                var principle = new ClaimsPrincipal(identity);
+
+                await ((HttpContext)context).SignInAsync("Piranha.SimpleSecurity", principle);
+
+                return true;
             }
-            throw new ArgumentException("SimpleSecurity only works with a HttpContext");
+            return false;
         }
+        throw new ArgumentException("SimpleSecurity only works with a HttpContext");
+    }
+
+    /// <summary>
+    /// Signs out the current user.
+    /// </summary>
+    /// <param name="context">The current application context</param>
+    public Task SignOut(object context)
+    {
+        if (context is HttpContext)
+        {
+            return ((HttpContext)context).SignOutAsync("Piranha.SimpleSecurity");
+        }
+        throw new ArgumentException("SimpleSecurity only works with a HttpContext");
     }
 }

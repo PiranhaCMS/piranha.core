@@ -8,27 +8,26 @@
  *
  */
 
-namespace Piranha.Manager.LocalAuth
+namespace Piranha.Manager.LocalAuth;
+
+/// <summary>
+/// Interface for services implementing local authorization.
+/// </summary>
+public interface ISecurity
 {
     /// <summary>
-    /// Interface for services implementing local authorization.
+    /// Authenticates and signs in the user with the
+    /// given credentials.
     /// </summary>
-    public interface ISecurity
-    {
-        /// <summary>
-        /// Authenticates and signs in the user with the
-        /// given credentials.
-        /// </summary>
-        /// <param name="context">The current application context</param>
-        /// <param name="username">The username</param>
-        /// <param name="password">The password</param>
-        /// <returns>If the user was signed in</returns>
-        Task<bool> SignIn(object context, string username, string password);
+    /// <param name="context">The current application context</param>
+    /// <param name="username">The username</param>
+    /// <param name="password">The password</param>
+    /// <returns>If the user was signed in</returns>
+    Task<bool> SignIn(object context, string username, string password);
 
-        /// <summary>
-        /// Signs out the current user.
-        /// </summary>
-        /// <param name="context">The current application context</param>
-        Task SignOut(object context);
-    }
+    /// <summary>
+    /// Signs out the current user.
+    /// </summary>
+    /// <param name="context">The current application context</param>
+    Task SignOut(object context);
 }

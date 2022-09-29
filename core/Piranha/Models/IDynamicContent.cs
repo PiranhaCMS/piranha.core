@@ -8,13 +8,12 @@
  *
  */
 
-namespace Piranha.Models
+namespace Piranha.Models;
+
+public interface IDynamicContent
 {
-    public interface IDynamicContent
-    {
-        /// <summary>
-        /// Gets/sets the regions.
-        /// </summary>
-        dynamic Regions { get; set; }
-    }
+    /// <summary>
+    /// Gets/sets the regions.
+    /// </summary>
+    dynamic Regions { get; set; }
 }
