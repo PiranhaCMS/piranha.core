@@ -50,24 +50,8 @@ public sealed class Config : IDisposable
     /// Gets/sets the currently configured archive page size.
     /// </summary>
     public int ArchivePageSize {
-        get {
-            var param = _service.GetByKeyAsync(ARCHIVE_PAGE_SIZE).GetAwaiter().GetResult();
-            if (param != null)
-                return Convert.ToInt32(param.Value);
-            return 0;
-        }
-        set {
-            var param = _service.GetByKeyAsync(ARCHIVE_PAGE_SIZE).GetAwaiter().GetResult();
-            if (param == null)
-            {
-                param = new Param
-                {
-                    Key = ARCHIVE_PAGE_SIZE
-                };
-            }
-            param.Value = value.ToString();
-            _service.SaveAsync(param).GetAwaiter().GetResult();
-        }
+        get => GetParam<int>(ARCHIVE_PAGE_SIZE, 0);
+        set =>  SetParam(ARCHIVE_PAGE_SIZE, value);
     }
 
     /// <summary>
@@ -75,24 +59,8 @@ public sealed class Config : IDisposable
     /// in minutes for pages.
     /// </summary>
     public int CacheExpiresPages {
-        get {
-            var param = _service.GetByKeyAsync(CACHE_EXPIRES_PAGES).GetAwaiter().GetResult();
-            if (param != null)
-                return Convert.ToInt32(param.Value);
-            return 0;
-        }
-        set {
-            var param = _service.GetByKeyAsync(CACHE_EXPIRES_PAGES).GetAwaiter().GetResult();
-            if (param == null)
-            {
-                param = new Param
-                {
-                    Key = CACHE_EXPIRES_PAGES
-                };
-            }
-            param.Value = value.ToString();
-            _service.SaveAsync(param).GetAwaiter().GetResult();
-        }
+        get => GetParam<int>(CACHE_EXPIRES_PAGES, 0);
+        set => SetParam(CACHE_EXPIRES_PAGES, value);
     }
 
     /// <summary>
@@ -100,48 +68,16 @@ public sealed class Config : IDisposable
     /// in minutes for posts.
     /// </summary>
     public int CacheExpiresPosts {
-        get {
-            var param = _service.GetByKeyAsync(CACHE_EXPIRES_POSTS).GetAwaiter().GetResult();
-            if (param != null)
-                return Convert.ToInt32(param.Value);
-            return 0;
-        }
-        set {
-            var param = _service.GetByKeyAsync(CACHE_EXPIRES_POSTS).GetAwaiter().GetResult();
-            if (param == null)
-            {
-                param = new Param
-                {
-                    Key = CACHE_EXPIRES_POSTS
-                };
-            }
-            param.Value = value.ToString();
-            _service.SaveAsync(param).GetAwaiter().GetResult();
-        }
+        get =>  GetParam<int>(CACHE_EXPIRES_POSTS, 0);
+        set => SetParam(CACHE_EXPIRES_POSTS, value);
     }
 
     /// <summary>
     /// Gets/sets if comments should be approved by default.
     /// </summary>
     public bool CommentsApprove {
-        get {
-            var param = _service.GetByKeyAsync(COMMENTS_APPROVE).GetAwaiter().GetResult();
-            if (param != null)
-                return Convert.ToBoolean(param.Value);
-            return true;
-        }
-        set {
-            var param = _service.GetByKeyAsync(COMMENTS_APPROVE).GetAwaiter().GetResult();
-            if (param == null)
-            {
-                param = new Param
-                {
-                    Key = COMMENTS_APPROVE
-                };
-            }
-            param.Value = value.ToString();
-            _service.SaveAsync(param).GetAwaiter().GetResult();
-        }
+        get => GetParam<bool>(COMMENTS_APPROVE, true);
+        set => SetParam(COMMENTS_APPROVE, value);
     }
 
     /// <summary>
@@ -149,24 +85,8 @@ public sealed class Config : IDisposable
     /// date. A value of 0 means forever.
     /// </summary>
     public int CommentsCloseAfterDays {
-        get {
-            var param = _service.GetByKeyAsync(COMMENTS_CLOSE_AFTER_DAYS).GetAwaiter().GetResult();
-            if (param != null)
-                return Convert.ToInt32(param.Value);
-            return 0;
-        }
-        set {
-            var param = _service.GetByKeyAsync(COMMENTS_CLOSE_AFTER_DAYS).GetAwaiter().GetResult();
-            if (param == null)
-            {
-                param = new Param
-                {
-                    Key = COMMENTS_CLOSE_AFTER_DAYS
-                };
-            }
-            param.Value = value.ToString();
-            _service.SaveAsync(param).GetAwaiter().GetResult();
-        }
+        get => GetParam<int>(COMMENTS_CLOSE_AFTER_DAYS, 0);
+        set => SetParam(COMMENTS_CLOSE_AFTER_DAYS, value);
     }
 
     /// <summary>
@@ -174,24 +94,8 @@ public sealed class Config : IDisposable
     /// default value is true.
     /// </summary>
     public bool CommentsEnabledForPosts {
-        get {
-            var param = _service.GetByKeyAsync(COMMENTS_POSTS_ENABLED).GetAwaiter().GetResult();
-            if (param != null)
-                return Convert.ToBoolean(param.Value);
-            return true;
-        }
-        set {
-            var param = _service.GetByKeyAsync(COMMENTS_POSTS_ENABLED).GetAwaiter().GetResult();
-            if (param == null)
-            {
-                param = new Param
-                {
-                    Key = COMMENTS_POSTS_ENABLED
-                };
-            }
-            param.Value = value.ToString();
-            _service.SaveAsync(param).GetAwaiter().GetResult();
-        }
+        get => GetParam<bool>(COMMENTS_POSTS_ENABLED, true);
+        set => SetParam(COMMENTS_POSTS_ENABLED, value);
     }
 
     /// <summary>
@@ -199,48 +103,16 @@ public sealed class Config : IDisposable
     /// default value is true.
     /// </summary>
     public bool CommentsEnabledForPages {
-        get {
-            var param = _service.GetByKeyAsync(COMMENTS_PAGES_ENABLED).GetAwaiter().GetResult();
-            if (param != null)
-                return Convert.ToBoolean(param.Value);
-            return false;
-        }
-        set {
-            var param = _service.GetByKeyAsync(COMMENTS_PAGES_ENABLED).GetAwaiter().GetResult();
-            if (param == null)
-            {
-                param = new Param
-                {
-                    Key = COMMENTS_PAGES_ENABLED
-                };
-            }
-            param.Value = value.ToString();
-            _service.SaveAsync(param).GetAwaiter().GetResult();
-        }
+        get => GetParam<bool>(COMMENTS_PAGES_ENABLED, false);
+        set => SetParam(COMMENTS_PAGES_ENABLED, value);
     }
 
     /// <summary>
     /// Gets/sets the currently configured page size for comments.
     /// </summary>
     public int CommentsPageSize {
-        get {
-            var param = _service.GetByKeyAsync(COMMENTS_PAGE_SIZE).GetAwaiter().GetResult();
-            if (param != null)
-                return Convert.ToInt32(param.Value);
-            return 0;
-        }
-        set {
-            var param = _service.GetByKeyAsync(COMMENTS_PAGE_SIZE).GetAwaiter().GetResult();
-            if (param == null)
-            {
-                param = new Param
-                {
-                    Key = COMMENTS_PAGE_SIZE
-                };
-            }
-            param.Value = value.ToString();
-            _service.SaveAsync(param).GetAwaiter().GetResult();
-        }
+        get => GetParam<int>(COMMENTS_PAGE_SIZE, 0);
+        set => SetParam(COMMENTS_PAGE_SIZE, value);
     }
 
     /// <summary>
@@ -248,24 +120,8 @@ public sealed class Config : IDisposable
     /// format by default.
     /// </summary>
     public bool HtmlExcerpt {
-        get {
-            var param = _service.GetByKeyAsync(HTML_EXCERPT).GetAwaiter().GetResult();
-            if (param != null)
-                return Convert.ToBoolean(param.Value);
-            return false;
-        }
-        set {
-            var param = _service.GetByKeyAsync(HTML_EXCERPT).GetAwaiter().GetResult();
-            if (param == null)
-            {
-                param = new Param
-                {
-                    Key = HTML_EXCERPT
-                };
-            }
-            param.Value = value.ToString();
-            _service.SaveAsync(param).GetAwaiter().GetResult();
-        }
+        get => GetParam<bool>(HTML_EXCERPT, false);
+        set => SetParam(HTML_EXCERPT, value);
     }
 
     /// <summary>
@@ -273,24 +129,8 @@ public sealed class Config : IDisposable
     /// creating new pages.
     /// </summary>
     public bool HierarchicalPageSlugs {
-        get {
-            var param = _service.GetByKeyAsync(PAGES_HIERARCHICAL_SLUGS).GetAwaiter().GetResult();
-            if (param != null)
-                return Convert.ToBoolean(param.Value);
-            return true;
-        }
-        set {
-            var param = _service.GetByKeyAsync(PAGES_HIERARCHICAL_SLUGS).GetAwaiter().GetResult();
-            if (param == null)
-            {
-                param = new Param
-                {
-                    Key = PAGES_HIERARCHICAL_SLUGS
-                };
-            }
-            param.Value = value.ToString();
-            _service.SaveAsync(param).GetAwaiter().GetResult();
-        }
+        get => GetParam<bool>(PAGES_HIERARCHICAL_SLUGS, true);
+        set => SetParam(PAGES_HIERARCHICAL_SLUGS, value);
     }
 
     /// <summary>
@@ -298,48 +138,16 @@ public sealed class Config : IDisposable
     /// in the manager interface.
     /// </summary>
     public int ManagerExpandedSitemapLevels {
-        get {
-            var param = _service.GetByKeyAsync(MANAGER_EXPANDED_SITEMAP_LEVELS).GetAwaiter().GetResult();
-            if (param != null)
-                return Convert.ToInt32(param.Value);
-            return 0;
-        }
-        set {
-            var param = _service.GetByKeyAsync(MANAGER_EXPANDED_SITEMAP_LEVELS).GetAwaiter().GetResult();
-            if (param == null)
-            {
-                param = new Param
-                {
-                    Key = MANAGER_EXPANDED_SITEMAP_LEVELS
-                };
-            }
-            param.Value = value.ToString();
-            _service.SaveAsync(param).GetAwaiter().GetResult();
-        }
+        get => GetParam<int>(MANAGER_EXPANDED_SITEMAP_LEVELS, 0);
+        set => SetParam(MANAGER_EXPANDED_SITEMAP_LEVELS, value);
     }
 
     /// <summary>
     /// Gets/sets the page size that should be used for paged lists in the manager.
     /// </summary>
     public int ManagerPageSize {
-        get {
-            var param = _service.GetByKeyAsync(MANAGER_PAGE_SIZE).GetAwaiter().GetResult();
-            if (param != null)
-                return Convert.ToInt32(param.Value);
-            return 15;
-        }
-        set {
-            var param = _service.GetByKeyAsync(MANAGER_PAGE_SIZE).GetAwaiter().GetResult();
-            if (param == null)
-            {
-                param = new Param
-                {
-                    Key = MANAGER_PAGE_SIZE
-                };
-            }
-            param.Value = value.ToString();
-            _service.SaveAsync(param).GetAwaiter().GetResult();
-        }
+        get => GetParam<int>(MANAGER_PAGE_SIZE, 15);
+        set => SetParam(MANAGER_PAGE_SIZE, value);
     }
 
     /// <summary>
@@ -347,24 +155,8 @@ public sealed class Config : IDisposable
     /// manager interface. Default value is false.
     /// </summary>
     public bool ManagerDefaultCollapsedBlocks {
-        get {
-            var param = _service.GetByKeyAsync(MANAGER_DEFAULT_COLLAPSED_BLOCKS).GetAwaiter().GetResult();
-            if (param != null)
-                return Convert.ToBoolean(param.Value);
-            return false;
-        }
-        set {
-            var param = _service.GetByKeyAsync(MANAGER_DEFAULT_COLLAPSED_BLOCKS).GetAwaiter().GetResult();
-            if (param == null)
-            {
-                param = new Param
-                {
-                    Key = MANAGER_DEFAULT_COLLAPSED_BLOCKS
-                };
-            }
-            param.Value = value.ToString();
-            _service.SaveAsync(param).GetAwaiter().GetResult();
-        }
+        get => GetParam<bool>(MANAGER_DEFAULT_COLLAPSED_BLOCKS, false);
+        set => SetParam(MANAGER_DEFAULT_COLLAPSED_BLOCKS, value);
     }
 
     /// <summary>
@@ -372,24 +164,8 @@ public sealed class Config : IDisposable
     /// manager interface. Default value is false.
     /// </summary>
     public bool ManagerDefaultCollapsedBlockGroupHeaders {
-        get {
-            var param = _service.GetByKeyAsync(MANAGER_DEFAULT_COLLAPSED_BLOCKGROUPHEADERS).GetAwaiter().GetResult();
-            if (param != null)
-                return Convert.ToBoolean(param.Value);
-            return false;
-        }
-        set {
-            var param = _service.GetByKeyAsync(MANAGER_DEFAULT_COLLAPSED_BLOCKGROUPHEADERS).GetAwaiter().GetResult();
-            if (param == null)
-            {
-                param = new Param
-                {
-                    Key = MANAGER_DEFAULT_COLLAPSED_BLOCKGROUPHEADERS
-                };
-            }
-            param.Value = value.ToString();
-            _service.SaveAsync(param).GetAwaiter().GetResult();
-        }
+        get => GetParam<bool>(MANAGER_DEFAULT_COLLAPSED_BLOCKGROUPHEADERS, false);
+        set => SetParam(MANAGER_DEFAULT_COLLAPSED_BLOCKGROUPHEADERS, value);
     }
 
     /// <summary>
@@ -399,24 +175,8 @@ public sealed class Config : IDisposable
     /// <value></value>
     public bool ManagerOutlined
     {
-        get {
-            var param = _service.GetByKeyAsync(MANAGER_OUTLINED).GetAwaiter().GetResult();
-            if (param != null)
-                return Convert.ToBoolean(param.Value);
-            return false;
-        }
-        set {
-            var param = _service.GetByKeyAsync(MANAGER_OUTLINED).GetAwaiter().GetResult();
-            if (param == null)
-            {
-                param = new Param
-                {
-                    Key = MANAGER_OUTLINED
-                };
-            }
-            param.Value = value.ToString();
-            _service.SaveAsync(param).GetAwaiter().GetResult();
-        }
+        get => GetParam<bool>(MANAGER_OUTLINED, false);
+        set => SetParam(MANAGER_OUTLINED, value);
     }
 
     /// <summary>
@@ -424,24 +184,8 @@ public sealed class Config : IDisposable
     /// example used when uploading binary files to the manager. The default value is 30.
     /// </summary>
     public int ManagerXhrTimeout {
-        get {
-            var param = _service.GetByKeyAsync(MANAGER_XHR_TIMEOUT).GetAwaiter().GetResult();
-            if (param != null)
-                return Convert.ToInt32(param.Value);
-            return 30;
-        }
-        set {
-            var param = _service.GetByKeyAsync(MANAGER_XHR_TIMEOUT).GetAwaiter().GetResult();
-            if (param == null)
-            {
-                param = new Param
-                {
-                    Key = MANAGER_XHR_TIMEOUT
-                };
-            }
-            param.Value = value.ToString();
-            _service.SaveAsync(param).GetAwaiter().GetResult();
-        }
+        get => GetParam<int>(MANAGER_XHR_TIMEOUT, 30);
+        set => SetParam(MANAGER_XHR_TIMEOUT, value);
     }
 
     /// <summary>
@@ -449,77 +193,24 @@ public sealed class Config : IDisposable
     /// null it will be used when generating the PublicUrl for media.
     /// </summary>
     public string MediaCDN {
-        get {
-            var param = _service.GetByKeyAsync(MEDIA_CDN_URL).GetAwaiter().GetResult();
-            if (param != null)
-                return param.Value;
-            return null;
-        }
-        set {
-            var param = _service.GetByKeyAsync(MEDIA_CDN_URL).GetAwaiter().GetResult();
-            if (param == null)
-            {
-                param = new Param
-                {
-                    Key = MEDIA_CDN_URL
-                };
-            }
-
-            // Ensure trailing slash
-            if (!string.IsNullOrWhiteSpace(value) && !value.EndsWith("/"))
-                value = value + "/";
-
-            param.Value = value;
-            _service.SaveAsync(param).GetAwaiter().GetResult();
-        }
+        get => GetParam<string>(MEDIA_CDN_URL, null);
+        set => SetParam(MEDIA_CDN_URL, value + (!string.IsNullOrWhiteSpace(value) && !value.EndsWith("/") ? "/" : ""));
     }
 
     /// <summary>
     /// Gets/sets the currently configured page revisions that should be saved.
     /// </summary>
     public int PageRevisions {
-        get {
-            var param = _service.GetByKeyAsync(PAGE_REVISIONS).GetAwaiter().GetResult();
-            if (param != null)
-                return Convert.ToInt32(param.Value);
-            return 10;
-        }
-        set {
-            var param = _service.GetByKeyAsync(PAGE_REVISIONS).GetAwaiter().GetResult();
-            if (param == null)
-            {
-                param = new Param
-                {
-                    Key = PAGE_REVISIONS
-                };
-            }
-            param.Value = value.ToString();
-            _service.SaveAsync(param).GetAwaiter().GetResult();
-        }
+        get => GetParam<int>(PAGE_REVISIONS, 10);
+        set => SetParam(PAGE_REVISIONS, value);
     }
 
     /// <summary>
     /// Gets/sets the currently configured post revisions that should be saved.
     /// </summary>
     public int PostRevisions {
-        get {
-            var param = _service.GetByKeyAsync(POST_REVISIONS).GetAwaiter().GetResult();
-            if (param != null)
-                return Convert.ToInt32(param.Value);
-            return 10;
-        }
-        set {
-            var param = _service.GetByKeyAsync(POST_REVISIONS).GetAwaiter().GetResult();
-            if (param == null)
-            {
-                param = new Param
-                {
-                    Key = POST_REVISIONS
-                };
-            }
-            param.Value = value.ToString();
-            _service.SaveAsync(param).GetAwaiter().GetResult();
-        }
+        get => GetParam<int>(POST_REVISIONS, 10);
+        set => SetParam(POST_REVISIONS, value);
     }
 
     /// <summary>
@@ -538,6 +229,28 @@ public sealed class Config : IDisposable
     public Config(IApi api)
     {
         _service = api.Params;
+    }
+
+    private T GetParam<T>(string key, T defaultValue)
+    {
+        var param = _service.GetByKeyAsync(key).GetAwaiter().GetResult();
+        if (param != null)
+            return (T)Convert.ChangeType(param.Value, typeof(T));
+        return defaultValue;
+    }
+
+    private void SetParam<T>(string key, T value)
+    {
+        var param = _service.GetByKeyAsync(key).GetAwaiter().GetResult();
+        if (param == null)
+        {
+            param = new Param
+            {
+                Key = key
+            };
+        }
+        param.Value = value.ToString();
+        _service.SaveAsync(param).GetAwaiter().GetResult();
     }
 
     /// <summary>
