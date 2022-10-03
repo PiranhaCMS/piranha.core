@@ -95,7 +95,7 @@ namespace Piranha.Manager.LocalAuth.Areas.Manager.Pages
         {
             await _service.SignOut(HttpContext);
 
-            if (!ModelState.IsValid || !await _service.SignIn(HttpContext, Input.Username, Input.Password))
+            if (!ModelState.IsValid || (await _service.SignIn(HttpContext, Input.Username, Input.Password)) != LoginResult.Succeeded)
             {
                 ModelState.Clear();
                 ModelState.AddModelError(string.Empty, _localizer.General["Username and/or password are incorrect."].Value);

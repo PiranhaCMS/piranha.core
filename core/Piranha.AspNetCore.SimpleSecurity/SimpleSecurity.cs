@@ -59,7 +59,7 @@ public class SimpleSecurity : ISecurity
     /// <param name="username">The username</param>
     /// <param name="password">The password</param>
     /// <returns>If the user was signed in</returns>
-    public async Task<bool> SignIn(object context, string username, string password)
+    public async Task<LoginResult> SignIn(object context, string username, string password)
     {
         if (context is HttpContext)
         {
@@ -80,9 +80,9 @@ public class SimpleSecurity : ISecurity
 
                 await ((HttpContext)context).SignInAsync("Piranha.SimpleSecurity", principle);
 
-                return true;
+                return LoginResult.Succeeded;
             }
-            return false;
+            return LoginResult.Failed;
         }
         throw new ArgumentException("SimpleSecurity only works with a HttpContext");
     }

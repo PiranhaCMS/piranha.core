@@ -9,6 +9,7 @@
  */
 
 using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Options;
 using Piranha.AspNetCore.Identity.Data;
 using Piranha.Manager.LocalAuth;
 
@@ -27,11 +28,17 @@ public class IdentitySecurity : ISecurity
     private readonly SignInManager<User> _signInManager;
 
     /// <summary>
-    ///     Default constructor.
+    /// The identity options.
     /// </summary>
-    public IdentitySecurity(SignInManager<User> signInManager, IIdentitySeed seed = null)
+    private readonly IdentityOptions _options;
+
+    /// <summary>
+    /// Default constructor.
+    /// </summary>
+    public IdentitySecurity(SignInManager<User> signInManager, IOptions<IdentityOptions> identityOptions, IIdentitySeed seed = null)
     {
         _signInManager = signInManager;
+        _options = identityOptions.Value;
         _seed = seed;
     }
 
@@ -43,15 +50,24 @@ public class IdentitySecurity : ISecurity
     /// <param name="username">The username</param>
     /// <param name="password">The password</param>
     /// <returns>If the user was signed in</returns>
-    public async Task<bool> SignIn(object context, string username, string password)
+    public async Task<LoginResult> SignIn(object context, string username, string password)
     {
         if (_seed != null)
         {
             await _seed.CreateAsync();
         }
+        var result = await _signInManager.PasswordSignInAsync(username, password, false,
+            _options.Lockout.MaxFailedAccessAttempts > 0 ? true : false);
 
-        var result = await _signInManager.PasswordSignInAsync(username, password, false, false);
-        return result.Succeeded;
+        if (result.Succeeded)
+        {
+            return LoginResult.Succeeded;
+        }
+        else if (result.IsLockedOut)
+        {
+            return LoginResult.Locked;
+        }
+        return LoginResult.Failed;
     }
 
     /// <summary>
