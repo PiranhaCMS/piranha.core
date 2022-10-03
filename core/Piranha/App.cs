@@ -364,11 +364,6 @@ public sealed class App
                         module.Instance.Init();
                     }
 
-                    if (api.Media is IInitializable initializableMediaService)
-                    {
-                        initializableMediaService.Init();
-                    }
-
                     _isInitialized = true;
                 }
             }

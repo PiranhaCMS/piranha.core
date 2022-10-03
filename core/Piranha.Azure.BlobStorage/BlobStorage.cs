@@ -15,7 +15,7 @@ using Piranha.Models;
 
 namespace Piranha.Azure;
 
-public class BlobStorage : IStorage, IStorageSession, IInitializable
+public class BlobStorage : IStorage, IStorageSession
 {
     /// <summary>
     /// The private storage account.
@@ -44,6 +44,9 @@ public class BlobStorage : IStorage, IStorageSession, IInitializable
     {
         _blobContainerClient = new BlobContainerClient(blobContainerUri, tokenCredential);
         _naming = naming;
+
+        // Ensure that blob container exists
+        _blobContainerClient.CreateIfNotExists(PublicAccessType.Blob);
     }
 
     /// <summary>
@@ -159,14 +162,6 @@ public class BlobStorage : IStorage, IStorageSession, IInitializable
         var blob = _blobContainerClient.GetBlobClient(GetResourceName(media, filename));
 
         return await blob.DeleteIfExistsAsync();
-    }
-
-    /// <summary>
-    /// Initialize the Blob Storage service by ensuring that the Blob Container exists.
-    /// </summary>
-    public void Init()
-    {
-        _blobContainerClient.CreateIfNotExists(PublicAccessType.Blob);
     }
 
     /// <summary>
