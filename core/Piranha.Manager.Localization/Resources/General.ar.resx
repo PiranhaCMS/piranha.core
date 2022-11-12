@@ -58,7 +58,7 @@
     <value>Dimensions</value>
   </data>
   <data name="Download" xml:space="preserve">
-    <value>Download</value>
+    <value>تنزيل</value>
   </data>
   <data name="Draft" xml:space="preserve">
     <value>Draft</value>
@@ -67,31 +67,31 @@
     <value>Drafts</value>
   </data>
   <data name="Email address" xml:space="preserve">
-    <value>Email address</value>
+    <value>البريد الإلكتروني</value>
   </data>
   <data name="Email address is mandatory." xml:space="preserve">
-    <value>Email address is mandatory.</value>
+    <value>عنوان البريد الإلكتروني إلزامي.</value>
   </data>
   <data name="Filename" xml:space="preserve">
-    <value>Filename</value>
+    <value>اسم الملف</value>
   </data>
   <data name="Height" xml:space="preserve">
-    <value>Height</value>
+    <value>الارتفاع</value>
   </data>
   <data name="Edit" xml:space="preserve">
-    <value>Edit</value>
+    <value>تحرير</value>
   </data>
   <data name="Empty" xml:space="preserve">
-    <value>Empty</value>
+    <value>فارغ</value>
   </data>
   <data name="General" xml:space="preserve">
-    <value>General</value>
+    <value>عام</value>
   </data>
   <data name="General information" xml:space="preserve">
-    <value>General information</value>
+    <value>معلومات عامة</value>
   </data>
   <data name="History" xml:space="preserve">
-    <value>History</value>
+    <value>السجل</value>
   </data>
   <data name="Internal id" xml:space="preserve">
     <value>Internal id</value>
@@ -100,19 +100,19 @@
     <value>Is default</value>
   </data>
   <data name="Language" xml:space="preserve">
-    <value>Language</value>
+    <value>اللغة</value>
   </data>
   <data name="Languages" xml:space="preserve">
-    <value>Languages</value>
+    <value>اللغات</value>
   </data>
   <data name="Login" xml:space="preserve">
-    <value>Login</value>
+    <value>تسجيل الدخول</value>
   </data>
   <data name="Logout" xml:space="preserve">
-    <value>Logout</value>
+    <value>تسجيل الخروج</value>
   </data>
   <data name="Looks like there's no items here. Click on the button above to get started!" xml:space="preserve">
-    <value>Looks like there's no items here. Click on the button above to get started!</value>
+    <value>يبدو أنه لا توجد عناصر هنا. انقر على الزر أعلاه للبدء!</value>
   </data>
   <data name="Looks like there's no items here. Click on the button below to get started!" xml:space="preserve">
     <value>Looks like there's no items here. Click on the button below to get started!</value>
