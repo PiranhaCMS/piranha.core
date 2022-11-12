@@ -13,10 +13,10 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="ChangeDefaultConfirm" xml:space="preserve">
-    <value>Changing the default language will affect how the application behaves and should be configured during initial setup.</value>
+    <value>تغيير اللغة الافتراضية سيؤثر على كيفية عرض التطبيق ويجب أن يتم تكوينه خلال الإعداد الأولي.</value>
   </data>
   <data name="RemoveLanguageConfirm" xml:space="preserve">
-    <value>This action &lt;strong>cannot&lt;/strong> be undone. This will permanently delete the language {{ currentDelete.title }} and all of its &lt;strong>translations&lt;/strong>. Any sites that have selected {{ currentDelete.title }} as their language will be assigned the default language.</value>
+    <value>لا يمكن التراجع عن هذا الإجراء &lt;strong>&lt;/strong>. سيؤدي هذا إلى حذف اللغة بشكل دائم {{ currentDelete.title }} وجميع ترجماتها &lt;strong>&lt;/strong>. سيتم تعيين أي مواقع اخترت {{ currentDelete.title }} كلغة إلى اللغة الافتراضية.</value>
   </data>
   <data name="The language was successfully saved" xml:space="preserve">
     <value>تم حفظ اللغة بنجاح</value>
