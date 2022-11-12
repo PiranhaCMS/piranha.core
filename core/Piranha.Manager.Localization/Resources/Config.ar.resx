@@ -31,7 +31,7 @@
     <value>Caching</value>
   </data>
   <data name="Page cache expiration (minutes)" xml:space="preserve">
-    <value>Page cache expiration (minutes)</value>
+    <value>انتهاء صَلاحِيَة ذاكرة التخزين المؤقت للصفحة (دقائق)</value>
   </data>
   <data name="Page revisions" xml:space="preserve">
     <value>Page revisions</value>
@@ -43,7 +43,7 @@
     <value>Post revisions</value>
   </data>
   <data name="Media CDN" xml:space="preserve">
-    <value>Media CDN</value>
+    <value>روابط CDN</value>
   </data>
 
   <data name="If page slugs should take their parent slug into account when being generated. This is prefered for larger sitemaps." xml:space="preserve">
@@ -72,10 +72,10 @@
   </data>
 
   <data name="Approve comments" xml:space="preserve">
-    <value>Approve comments</value>
+    <value>الموافقة على التعليقات</value>
   </data>
   <data name="Close comments after" xml:space="preserve">
-    <value>Close comments after</value>
+    <value>إغلاق التعليقات بعد</value>
   </data>
   <data name="Collapse block headers" xml:space="preserve">
     <value>Collapse block headers</value>
@@ -84,13 +84,13 @@
     <value>Collapse blocks</value>
   </data>
   <data name="Comments page size" xml:space="preserve">
-    <value>Comments page size</value>
+    <value>حجم صفحة التعليقات</value>
   </data>
   <data name="Enable page comments" xml:space="preserve">
-    <value>Enable page comments</value>
+    <value>تمكين التعليقات في الصفحة</value>
   </data>
   <data name="Enable post comments" xml:space="preserve">
-    <value>Enable post comments</value>
+    <value>تمكين نشر التعليقات</value>
   </data>
   <data name="Manager list size" xml:space="preserve">
     <value>Manager list size</value>
