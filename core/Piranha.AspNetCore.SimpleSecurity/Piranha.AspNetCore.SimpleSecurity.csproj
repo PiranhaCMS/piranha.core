@@ -1,7 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net6.0</TargetFramework>
     <RootNamespace>Piranha.AspNetCore</RootNamespace>
     <NoWarn>$(NoWarn);1591</NoWarn>
     <Description>Piranha CMS simple security provider for AspNetCore</Description>

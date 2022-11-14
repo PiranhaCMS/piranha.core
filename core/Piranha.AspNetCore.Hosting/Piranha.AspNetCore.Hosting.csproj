@@ -1,7 +1,6 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net6.0</TargetFramework>
     <Description>Basic tools for hosting Piranha CMS in an AspNetCore application</Description>
   </PropertyGroup>
 

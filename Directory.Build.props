@@ -1,4 +1,8 @@
 <Project>
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+  </PropertyGroup>
+
   <PropertyGroup Label="Package information">
     <Version>10.2.0</Version>
     <Authors>Piranha CMS</Authors>
