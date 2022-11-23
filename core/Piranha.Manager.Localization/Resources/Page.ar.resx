@@ -58,13 +58,13 @@
     <value>Og title</value>
   </data>
   <data name="Og image" xml:space="preserve">
-    <value>Og image</value>
+    <value>صورة</value>
   </data>
   <data name="Og description" xml:space="preserve">
-    <value>Og description</value>
+    <value>الوصف</value>
   </data>
   <data name="Navigation title" xml:space="preserve">
-    <value>Navigation title</value>
+    <value>عنوان القائمة الجانبية</value>
   </data>
   <data name="Are you sure you want to delete this page?" xml:space="preserve">
     <value>هل أنت متأكد من أنك تريد حذف هذه الصفحة؟</value>
