@@ -487,11 +487,11 @@ public class ContentTypeBuilder
         var attrs = type.GetTypeInfo().GetCustomAttributes(typeof(ContentTypeRouteAttribute));
         foreach (ContentTypeRouteAttribute attr in attrs)
         {
-            if (!string.IsNullOrWhiteSpace(attr.Title) && !string.IsNullOrWhiteSpace(attr.Route))
+            if (!string.IsNullOrWhiteSpace(attr.Route))
             {
                 var contentRoute = new ContentTypeRoute
                 {
-                    Title = attr.Title,
+                    Title = attr.Title ?? attr.Route,
                     Route = attr.Route
                 };
 
