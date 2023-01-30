@@ -13,15 +13,15 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="ChangeDefaultConfirm" xml:space="preserve">
-    <value>Changing the default language will affect how the application behaves and should be configured during initial setup.</value>
+    <value>Thay đổi ngôn ngữ mặc định sẽ ảnh hưởng đến hành vi của chương trình và nên được cấu hình tại thiết lập ban đầu.</value>
   </data>
   <data name="RemoveLanguageConfirm" xml:space="preserve">
-    <value>This action &lt;strong>cannot&lt;/strong> be undone. This will permanently delete the language {{ currentDelete.title }} and all of its &lt;strong>translations&lt;/strong>. Any sites that have selected {{ currentDelete.title }} as their language will be assigned the default language.</value>
+    <value>Hành động này &lt;strong>không thể&lt;/strong> hoàn tác. Ngôn ngữ sẽ bị xóa vĩnh viễn {{ currentDelete.title }} bao gồm tất cả &lt;strong>các bản dịch&lt;/strong>. Bất cứ trang web nào chọn {{ currentDelete.title }} là ngôn ngữ của nó, sẽ được chỉ định ngôn ngữ mặc định.</value>
   </data>
   <data name="The language was successfully saved" xml:space="preserve">
-    <value>The language was successfully saved</value>
+    <value>Ngôn ngữ được lưu thành công</value>
   </data>
   <data name="The language was successfully deleted" xml:space="preserve">
-    <value>The language was successfully deleted</value>
+    <value>Ngôn ngữ được xóa thành công</value>
   </data>
 </root>
