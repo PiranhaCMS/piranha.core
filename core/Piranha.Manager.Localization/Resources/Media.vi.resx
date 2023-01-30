@@ -25,7 +25,7 @@
     <value>Tên thư mục</value>
   </data>
   <data name="Folder name is mandatory." xml:space="preserve">
-    <value>Folder name is mandatory.</value>
+    <value>Tên thư mục là bắt buộc.</value>
   </data>
   <data name="Gallery" xml:space="preserve">
     <value>Thư viện ảnh</value>
@@ -46,13 +46,13 @@
     <value>Trình duyệt của bạn không hỗ trợ thẻ video.</value>
   </data>
   <data name="List" xml:space="preserve">
-    <value>List</value>
+    <value>Danh sách</value>
   </data>
   <data name="Preferred aspect" xml:space="preserve">
-    <value>Preferred aspect</value>
+    <value>Khía cạnh ưa thích</value>
   </data>
   <data name="Original" xml:space="preserve">
-    <value>Original</value>
+    <value>Nguyên bản</value>
   </data>
   <data name="Landscape" xml:space="preserve">
     <value>Landscape</value>
