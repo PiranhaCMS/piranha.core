@@ -13,33 +13,33 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Excerpt" xml:space="preserve">
-    <value>Excerpt</value>
+    <value>Trích dẫn</value>
   </data>
   <data name="Meta index" xml:space="preserve">
-    <value>Meta index</value>
+    <value>Chỉ số Meta</value>
   </data>
   <data name="Meta follow" xml:space="preserve">
-    <value>Meta follow</value>
+    <value>Theo dõi Meta</value>
   </data>
   <data name="Meta priority" xml:space="preserve">
-    <value>Meta priority</value>
+    <value>Meta ưu tiên</value>
   </data>
   <data name="Primary image" xml:space="preserve">
-    <value>Primary image</value>
+    <value>Hình bìa</value>
   </data>
   <data name="Search engine priority, compared to other content in the same site." xml:space="preserve">
-    <value>Search engine priority, compared to other content in the same site.</value>
+    <value>Ưu tiên công cụ tìm kiếm, so với nội dung khác trong cùng một trang web.</value>
   </data>
   <data name="The content was successfully deleted" xml:space="preserve">
-    <value>The content was successfully deleted</value>
+    <value>Nội dung được xóa thành công</value>
   </data>
   <data name="An error occured while deleting the content" xml:space="preserve">
-    <value>An error occured while deleting the content</value>
+    <value>Đã xảy ra lỗi khi xóa nội dung</value>
   </data>
   <data name="The content was successfully saved" xml:space="preserve">
-    <value>The content was successfully saved</value>
+    <value>Nội dung được lưu thành công</value>
   </data>
   <data name="An error occured while saving the content" xml:space="preserve">
-    <value>An error occured while saving the content</value>
+    <value>Đã xảy ra lỗi khi lưu nội dung</value>
   </data>
 </root>
