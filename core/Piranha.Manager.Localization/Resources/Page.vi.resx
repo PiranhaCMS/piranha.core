@@ -19,10 +19,10 @@
     <value>Có 1 lỗi đã xãy ra trong khi xóa trang</value>
   </data>
   <data name="An error occured while saving the page" xml:space="preserve">
-    <value>An error occured while saving the page</value>
+    <value>Xảy ra lỗi khi lưu trang</value>
   </data>
   <data name="Archive" xml:space="preserve">
-    <value>Archive</value>
+    <value>Lưu trữ</value>
   </data>
   <data name="Detach page" xml:space="preserve">
     <value>Tách trang ra</value>
@@ -40,13 +40,13 @@
     <value>Chọn nếu muốn trang được ẩn trên bản đồ trang</value>
   </data>
   <data name="If the page should be indexed by search engines." xml:space="preserve">
-    <value>If the page should be indexed by search engines.</value>
+    <value>Trang sẽ được đánh chỉ mục bởi công cụ tìm kiếm.</value>
   </data>
   <data name="If links from this page should be indexed." xml:space="preserve">
-    <value>If links from this page should be indexed.</value>
+    <value>Các đường link từ trang này sẽ được đánh chỉ mục.</value>
   </data>
   <data name="Meta title" xml:space="preserve">
-    <value>Meta title</value>
+    <value>Tiêu đề Meta</value>
   </data>
   <data name="Meta keywords" xml:space="preserve">
     <value>Từ khóa Meta</value>
@@ -55,19 +55,19 @@
     <value>Mô tả Meta</value>
   </data>
   <data name="Og title" xml:space="preserve">
-    <value>Og title</value>
+    <value>Tiêu đề Og</value>
   </data>
   <data name="Og image" xml:space="preserve">
-    <value>Og image</value>
+    <value>Hình ảnh Og</value>
   </data>
   <data name="Og description" xml:space="preserve">
-    <value>Og description</value>
+    <value>Mô tả Og</value>
   </data>
   <data name="Navigation title" xml:space="preserve">
     <value>Tiêu đề điều hướng</value>
   </data>
   <data name="Are you sure you want to delete this page?" xml:space="preserve">
-    <value>Are you sure you want to delete this page?</value>
+    <value>Bạn có chắc muốn xóa trang này không?</value>
   </data>
   <data name="Pages" xml:space="preserve">
     <value>Các trang</value>
@@ -100,6 +100,6 @@
     <value>Tiêu đề trang của bạn</value>
   </data>
   <data name="If comments should be enabled for this page" xml:space="preserve">
-    <value>If comments should be enabled for this page</value>
+    <value>Bình luận sẽ được kích hoạt cho trang này</value>
   </data>
 </root>
