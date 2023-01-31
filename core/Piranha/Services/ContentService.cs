@@ -123,7 +123,7 @@ public class ContentService : IContentService
     /// <returns>The content model</returns>
     public async Task<T> GetByIdAsync<T>(Guid id, Guid? languageId = null) where T : GenericContent
     {
-        T model = null;
+        GenericContent model = null;
 
         // Make sure we have a language id
         if (languageId == null)
@@ -132,13 +132,9 @@ public class ContentService : IContentService
         }
 
         // First, try to get the model from cache
-        if (typeof(IDynamicContent).IsAssignableFrom(typeof(T)))
+        if (!typeof(DynamicContent).IsAssignableFrom(typeof(T)))
         {
-            model = null; // TODO: _cache?.Get<T>($"DynamicContent_{ id.ToString() }");
-        }
-        else
-        {
-            model = null; // TODO: _cache?.Get<T>(id.ToString());
+            model = _cache?.Get<GenericContent>($"{ languageId }_{ id }");
         }
 
         // If we have a model, let's initialize it
@@ -159,14 +155,14 @@ public class ContentService : IContentService
         {
             model = await _repo.GetById<T>(id, languageId.Value).ConfigureAwait(false);
 
-            await OnLoadAsync(model).ConfigureAwait(false);
+            await OnLoadAsync(model, languageId.Value).ConfigureAwait(false);
         }
 
         // Check that we got back the requested type from the
         // repository
         if (model != null && model is T)
         {
-            return model;
+            return (T)model;
         }
         return null;
     }
@@ -261,7 +257,7 @@ public class ContentService : IContentService
         App.Hooks.OnAfterSave<GenericContent>(model);
 
         // Remove from cache
-        await RemoveFromCacheAsync(model).ConfigureAwait(false);
+        await RemoveFromCacheAsync(model, languageId.Value).ConfigureAwait(false);
     }
 
     /// <summary>
@@ -279,7 +275,7 @@ public class ContentService : IContentService
     }
 
     /// <summary>
-    /// Deletes the given content model.
+    /// Deletes the given content model together with all of its translations.
     /// </summary>
     /// <param name="model">The content model</param>
     public async Task DeleteAsync<T>(T model) where T : GenericContent
@@ -296,8 +292,12 @@ public class ContentService : IContentService
             // await _search.DeletePageAsync(model);
         }
 
-        // Remove from cache
-        await RemoveFromCacheAsync(model).ConfigureAwait(false);
+        var languages = await _langService.GetAllAsync();
+        foreach (var language in languages)
+        {
+            // Remove from cache
+            await RemoveFromCacheAsync(model, language.Id).ConfigureAwait(false);
+        }
     }
 
     /// <summary>
@@ -305,7 +305,8 @@ public class ContentService : IContentService
     /// the repository.
     /// </summary>
     /// <param name="model">The content model</param>
-    private async Task OnLoadAsync(GenericContent model)
+    /// <param name="languageId">The language of the current model</param>
+    private async Task OnLoadAsync(GenericContent model, Guid languageId)
     {
         // Make sure we have a model
         if (model == null) return;
@@ -338,13 +339,9 @@ public class ContentService : IContentService
         if (_cache != null)
         {
             // Store the model
-            if (model is IDynamicContent)
+            if (model is not IDynamicContent)
             {
-                _cache.Set($"DynamicContent_{ model.Id.ToString() }", model);
-            }
-            else
-            {
-                _cache.Set(model.Id.ToString(), model);
+                _cache.Set($"{ languageId }_{ model.Id }", model);
             }
         }
     }
@@ -353,14 +350,14 @@ public class ContentService : IContentService
     /// Removes the given model from the cache.
     /// </summary>
     /// <param name="model">The model</param>
-    private Task RemoveFromCacheAsync(GenericContent model)
+    /// <param name="languageId">The language of the current model</param>
+    private Task RemoveFromCacheAsync(GenericContent model, Guid languageId)
     {
         return Task.Run(() =>
         {
             if (_cache != null)
             {
-                _cache.Remove(model.Id.ToString());
-                _cache.Remove($"DynamicContent_{ model.Id.ToString() }");
+                _cache.Remove($"{ languageId }_{ model.Id }");
             }
         });
     }
