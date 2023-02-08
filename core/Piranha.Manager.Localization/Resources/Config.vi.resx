@@ -19,7 +19,7 @@
     <value>Hierarchical page slugs</value>
   </data>
   <data name="If page slugs should include the parent slug." xml:space="preserve">
-    <value>If page slugs should include the parent slug.</value>
+    <value>Page slug sẽ bao gồm parent slug.</value>
   </data>
   <data name="Expanded levels in the sitemap" xml:space="preserve">
     <value>Mở rộng các cấp trong bản đồ trang</value>
@@ -47,38 +47,38 @@
   </data>
 
   <data name="If page slugs should take their parent slug into account when being generated. This is prefered for larger sitemaps." xml:space="preserve">
-    <value>If page slugs should take their parent slug into account when being generated. This is prefered for larger sitemaps.</value>
+    <value>Page slug sẽ gồm parent slug khi được tạo. Khuyên dùng cho sitemap lớn.</value>
   </data>
   <data name="The default number of levels that should be expanded in the page sitemap. This is useful for smaller sitemaps." xml:space="preserve">
-    <value>The default number of levels that should be expanded in the page sitemap. This is useful for smaller sitemaps.</value>
+    <value>Số cấp mặc định sẽ được mở rộng trong sơ đồ trang web. Hữu ích cho sitemap nhỏ.</value>
   </data>
   <data name="The default page size for archive pages. Please note that this this can be overridden for specific archives." xml:space="preserve">
-    <value>The default page size for archive pages. Please note that this this can be overridden for specific archives.</value>
+    <value>Kích thước trang mặc định cho trang lưu trữ. Mỗi lưu trữ có thể có cài đặt khác nhau.</value>
   </data>
   <data name="The maximum number of page revisions that should be stored for each page. A value of 0 means no limitation." xml:space="preserve">
-    <value>The maximum number of page revisions that should be stored for each page. A value of 0 means no limitation.</value>
+    <value>Số lượng sửa đổi trang tối đa sẽ được lưu trữ cho mỗi trang. Giá trị 0 có nghĩa là không có giới hạn.</value>
   </data>
   <data name="The maximum number of post revisions that should be stored for each post. A value of 0 means no limitation." xml:space="preserve">
     <value>Số lần lưu duyệt lại tối đa cho mỗi bài viết. 0 = không giới hạn </value>
   </data>
   <data name="The time in minutes that web browsers can use pages before asking the server for new updates." xml:space="preserve">
-    <value>The time in minutes that web browsers can use pages before asking the server for new updates.</value>
+    <value>Thời gian tính bằng phút mà trình duyệt web cho phép sử dụng trang trước khi yêu cầu cập nhật mới từ máy chủ.</value>
   </data>
   <data name="The time in minutes that web browsers can use posts before asking the server for new updates." xml:space="preserve">
-    <value>The time in minutes that web browsers can use posts before asking the server for new updates.</value>
+    <value>Thời gian tính bằng phút mà trình duyệt web cho phép sửu dụng bài viết trước khi yêu cầu cập nhật mới từ máy chủ.</value>
   </data>
   <data name="The full URL (including any folder name) to the CDN used to serve uploaded media. Leave blank to use default storage URL." xml:space="preserve">
-    <value>The full URL (including any folder name) to the CDN used to serve uploaded media. Leave blank to use default storage URL.</value>
+    <value>Đường dẫn đầy đủ (bao gồm tên thư mục) đến CDN dùng cho mục đích upload media. Để trống nếu sử dụng URL lưu trữ mặc định.</value>
   </data>
 
   <data name="Approve comments" xml:space="preserve">
-    <value>Approve comments</value>
+    <value>Phê duyệt bình luận</value>
   </data>
   <data name="Close comments after" xml:space="preserve">
-    <value>Close comments after</value>
+    <value>Đóng bình luận sau</value>
   </data>
   <data name="Collapse block headers" xml:space="preserve">
-    <value>Collapse block headers</value>
+    <value>Thu gọn block header</value>
   </data>
   <data name="Collapse blocks" xml:space="preserve">
     <value>Thu gọn Blocks</value>
@@ -87,36 +87,36 @@
     <value>Comments page size</value>
   </data>
   <data name="Enable page comments" xml:space="preserve">
-    <value>Enable page comments</value>
+    <value>Bật nhận xét trang</value>
   </data>
   <data name="Enable post comments" xml:space="preserve">
-    <value>Enable post comments</value>
+    <value>Bật nhận xét bài viết</value>
   </data>
   <data name="Manager list size" xml:space="preserve">
     <value>Manager list size</value>
   </data>
   <data name="If block group headers should be collapsed by default when opening a page or post in the manager." xml:space="preserve">
-    <value>If block group headers should be collapsed by default when opening a page or post in the manager.</value>
+    <value>Block group headers được mặc định thu gọn khi mở 1 trang hoặc bài viết trong quản lý.</value>
   </data>
   <data name="If blocks should be collapsed by default when opening a page or post in the manager." xml:space="preserve">
-    <value>If blocks should be collapsed by default when opening a page or post in the manager.</value>
+    <value>Block được mặc định thu gọn khi mở 1 trang hoặc bài viết trong quản lý.</value>
   </data>
   <data name="If comments should be approved by default. Please note that this can be overridden by third party moderation services." xml:space="preserve">
-    <value>If comments should be approved by default. Please note that this can be overridden by third party moderation services.</value>
+    <value>Bình luận được mặc định duyệt. Bên kiểm duyệt thứ ba có thể thay đổi cài đặt này.</value>
   </data>
   <data name="If comments should be enabled for pages by default. Please note that this this can be overridden for specific pages." xml:space="preserve">
-    <value>If comments should be enabled for pages by default. Please note that this this can be overridden for specific pages.</value>
+    <value>Bình luận được mặc định kích hoạt cho trang. Mỗi trang có thể có cài đặt riêng.</value>
   </data>
   <data name="If comments should be enabled for posts by default. Please note that this this can be overridden for specific posts." xml:space="preserve">
-    <value>If comments should be enabled for posts by default. Please note that this this can be overridden for specific posts.</value>
+    <value>Bình luận được mặc định kích hoạt cho bài viết. Mỗi bài đăng có thể có cài đặt riêng.</value>
   </data>
   <data name="The default page size when loading comments. Please note that this this can be overridden for specific pages." xml:space="preserve">
-    <value>The default page size when loading comments. Please note that this this can be overridden for specific pages.</value>
+    <value>Kích thước trang mặc định khi tải bình luận. Mỗi trang cụ thể có thể có cài đặt riêng.</value>
   </data>
   <data name="The number of days commenting should be open after publish date. A value of 0 means forever." xml:space="preserve">
     <value>Số ngày các bình luận được hiển thị kể từ ngày xuất bản. 0 = Vĩnh viễn.</value>
   </data>
   <data name="The page size for lists within the manager interface." xml:space="preserve">
-    <value>The page size for lists within the manager interface.</value>
+    <value>Kích thước trang cho danh sách trong giao diện quản lí.</value>
   </data>
 </root>
