@@ -157,19 +157,19 @@
     <value>Ngày Công Bố</value>
   </data>
   <data name="Redirect" xml:space="preserve">
-    <value>Redirect</value>
+    <value>Chuyển hướng</value>
   </data>
   <data name="Redirect Type" xml:space="preserve">
-    <value>Redirect Type</value>
+    <value>Loại chuyển hướng</value>
   </data>
   <data name="Revert" xml:space="preserve">
     <value>Phục hồi</value>
   </data>
   <data name="Roles" xml:space="preserve">
-    <value>Roles</value>
+    <value>Quyền</value>
   </data>
   <data name="Route" xml:space="preserve">
-    <value>Route</value>
+    <value>Đường dẫn</value>
   </data>
   <data name="Save" xml:space="preserve">
     <value>Lưu</value>
@@ -190,7 +190,7 @@
     <value>SEO</value>
   </data>
   <data name="Sharing" xml:space="preserve">
-    <value>Sharing</value>
+    <value>Chia sẻ</value>
   </data>
   <data name="Size" xml:space="preserve">
     <value>Kích thước</value>
@@ -202,7 +202,7 @@
     <value>Hệ thống</value>
   </data>
   <data name="Temporary" xml:space="preserve">
-    <value>Temporary</value>
+    <value>Tạm thời</value>
   </data>
   <data name="Title" xml:space="preserve">
     <value>Tiêu đề</value>
@@ -211,16 +211,16 @@
     <value>Cập nhật</value>
   </data>
   <data name="Update password" xml:space="preserve">
-    <value>Update password</value>
+    <value>Cập nhật mật khẩu</value>
   </data>
   <data name="Username" xml:space="preserve">
-    <value>Username</value>
+    <value>Tên người dùng</value>
   </data>
   <data name="Username is mandatory." xml:space="preserve">
-    <value>Username is mandatory.</value>
+    <value>Tên người dùng là bắt buộc.</value>
   </data>
   <data name="Title is mandatory." xml:space="preserve">
-    <value>Title is mandatory.</value>
+    <value>Tiêu đề là bắt buộc.</value>
   </data>
   <data name="Type" xml:space="preserve">
     <value>Loại</value>
@@ -232,7 +232,7 @@
     <value>Ngừng xuất bản</value>
   </data>
   <data name="Users" xml:space="preserve">
-    <value>Users</value>
+    <value>Người dùng</value>
   </data>
   <data name="Version" xml:space="preserve">
     <value>Phiên bản</value>
@@ -241,18 +241,18 @@
     <value>Chiều rộng</value>
   </data>
   <data name="Archives and Comments" xml:space="preserve">
-    <value>Archives and Comments</value>
+    <value>Lưu trữ và bình luận</value>
   </data>
   <data name="Author" xml:space="preserve">
-    <value>Author</value>
+    <value>Người tạo</value>
   </data>
   <data name="Comments" xml:space="preserve">
-    <value>Comments</value>
+    <value>Bình luận</value>
   </data>
   <data name="Created" xml:space="preserve">
-    <value>Created</value>
+    <value>Đã tạo</value>
   </data>
   <data name="Username and/or password are incorrect." xml:space="preserve">
-    <value>Username and/or password are incorrect.</value>
+    <value>Tên người dùng và/hoặc mật khẩu không đúng.</value>
   </data>
 </root>

@@ -16,7 +16,7 @@
     <value>Tạo trang web</value>
   </data>
   <data name="Are you really sure?" xml:space="preserve">
-    <value>Are you really sure?</value>
+    <value>Bạn có chắc chắn không?</value>
   </data>
   <data name="Edit site" xml:space="preserve">
     <value>Chỉnh sửa trang web</value>
@@ -31,9 +31,9 @@
     <value>Chọn nếu muốn là trang mặc định khi cài đặt.</value>
   </data>
   <data name="Please type in the name of the site to confirm." xml:space="preserve">
-    <value>Please type in the name of the site to confirm.</value>
+    <value>Hãy gõ vào tên của trang web để xác nhận.</value>
   </data>
   <data name="ConfirmDelete" xml:space="preserve">
-    <value>This action &lt;strong>cannot&lt;/strong> be undone. This will permanently delete the site {{ title }} and all of its &lt;strong>pages&lt;/strong>, &lt;strong>archives&lt;/strong> and &lt;strong>posts&lt;/strong>.</value>
+    <value>Hành động này &lt;strong>không thể&lt;/strong> hoàn tác. Trang web sẽ bị xóa vĩnh viễn{{ title }} bao gồm tất cả &lt;strong>trang&lt;/strong>, &lt;strong>lưu trữ&lt;/strong> và&lt;strong>bài viết&lt;/strong>.</value>
   </data>
 </root>
