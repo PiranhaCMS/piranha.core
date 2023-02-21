@@ -11,7 +11,7 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="7.0.3" />
-    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0" PrivateAssets="all" />
+    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.1.1" PrivateAssets="all" />
     <ProjectReference Include="..\Piranha.Data.EF\Piranha.Data.EF.csproj" />
     <ProjectReference Include="..\..\core\Piranha\Piranha.csproj" />
   </ItemGroup>
