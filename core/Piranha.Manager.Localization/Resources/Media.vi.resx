@@ -25,7 +25,7 @@
     <value>Tên thư mục</value>
   </data>
   <data name="Folder name is mandatory." xml:space="preserve">
-    <value>Folder name is mandatory.</value>
+    <value>Tên thư mục là bắt buộc.</value>
   </data>
   <data name="Gallery" xml:space="preserve">
     <value>Thư viện ảnh</value>
@@ -46,45 +46,45 @@
     <value>Trình duyệt của bạn không hỗ trợ thẻ video.</value>
   </data>
   <data name="List" xml:space="preserve">
-    <value>List</value>
+    <value>Danh sách</value>
   </data>
   <data name="Preferred aspect" xml:space="preserve">
-    <value>Preferred aspect</value>
+    <value>Tỉ lệ ưa thích</value>
   </data>
   <data name="Original" xml:space="preserve">
-    <value>Original</value>
+    <value>Nguyên bản</value>
   </data>
   <data name="Landscape" xml:space="preserve">
-    <value>Landscape</value>
+    <value>Phong cảnh</value>
   </data>
   <data name="Portrait" xml:space="preserve">
-    <value>Portrait</value>
+    <value>Chân dung</value>
   </data>
   <data name="Widescreen" xml:space="preserve">
-    <value>Widescreen</value>
+    <value>Toàn màn hình</value>
   </data>
   <data name="Square" xml:space="preserve">
-    <value>Square</value>
+    <value>Vuông</value>
   </data>
   <data name="Are you sure you want to delete selected media?" xml:space="preserve">
-    <value>Are you sure you want to delete selected media?</value>
+    <value>Bạn có chắc muốn xóa phương tiện này không?</value>
   </data>
   <data name="Delete selected items" xml:space="preserve">
-    <value>Delete selected items</value>
+    <value>Xóa các mục đã chọn</value>
   </data>
   <data name="Media file was successfully moved." xml:space="preserve">
-    <value>Media file was successfully moved.</value>
+    <value>Tệp phương tiện được di chuyển thành công.</value>
   </data>
   <data name="Media files was successfully moved." xml:space="preserve">
-    <value>Media files was successfully moved.</value>
+    <value>Tệp phương tiện được di chuyển thành công.</value>
   </data>
   <data name="The media file was not found." xml:space="preserve">
-    <value>The media file was not found.</value>
+    <value>Không tìm thấy tệp phương tiện.</value>
   </data>
   <data name="The media file was successfully deleted" xml:space="preserve">
-    <value>The media file was successfully deleted</value>
+    <value>Tệp phương tiện được xóa thành công</value>
   </data>
   <data name="The media files was successfully deleted" xml:space="preserve">
-    <value>The media files was successfully deleted</value>
+    <value>Tệp phương tiện được xóa thành công</value>
   </data>
 </root>
