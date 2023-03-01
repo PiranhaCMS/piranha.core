@@ -150,6 +150,7 @@ var js = [
             "assets/src/js/piranha.eventbus.js",
             "assets/src/js/piranha.accessibility.js",
             "assets/src/js/piranha.alert.js",
+            "assets/src/js/piranha.archivepicker.js",
             "assets/src/js/piranha.dropzone.js",
             "assets/src/js/piranha.permissions.js",
             "assets/src/js/piranha.utils.js",
@@ -221,6 +222,7 @@ var js = [
             "assets/src/js/components/blocks/text-block.vue",
             "assets/src/js/components/blocks/video-block.vue",
 
+            "assets/src/js/components/fields/archivepage-field.vue",
             "assets/src/js/components/fields/audio-field.vue",
             "assets/src/js/components/fields/checkbox-field.vue",
             "assets/src/js/components/fields/color-field.vue",

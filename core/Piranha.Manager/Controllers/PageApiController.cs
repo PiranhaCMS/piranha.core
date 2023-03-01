@@ -67,11 +67,26 @@ public class PageApiController : Controller
     [HttpGet]
     public async Task<SiteListModel> Sitemap(Guid? siteId = null)
     {
-        if (!siteId.HasValue)
+        if (!siteId.HasValue || siteId == Guid.Empty)
         {
             siteId = (await _api.Sites.GetDefaultAsync()).Id;
         }
         return await _service.GetSiteList(siteId.Value);
+    }
+
+    /// <summary>
+    /// Gets the archive model.
+    /// </summary>
+    /// <returns>The list model</returns>
+    [Route("archives/{siteId?}")]
+    [HttpGet]
+    public async Task<SiteListModel> Archives(Guid? siteId = null)
+    {
+        if (!siteId.HasValue || siteId == Guid.Empty)
+        {
+            siteId = (await _api.Sites.GetDefaultAsync()).Id;
+        }
+        return await _service.GetArchiveList(siteId.Value);
     }
 
     /// <summary>

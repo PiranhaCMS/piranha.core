@@ -78,7 +78,7 @@ public class PageService
     /// </summary>
     /// <param name="siteId">The site id</param>
     /// <returns>The structure</returns>
-    public async Task<List<PageListModel.PageItem>> GetPageStructure(Guid siteId)
+    private async Task<List<PageListModel.PageItem>> GetPageStructure(Guid siteId)
     {
         var pages = new List<PageListModel.PageItem>();
 
@@ -97,6 +97,29 @@ public class PageService
             pages.Add(MapRecursive(siteId, item, 0, expandedLevels, drafts));
         }
         return pages;
+    }
+
+    private async Task<List<PageListModel.PageItem>> GetArchivePages(Guid siteId)
+    {
+        var archives = new List<PageListModel.PageItem>();
+
+        // Get all archive page types
+        var archiveTypes = (await _api.PageTypes.GetAllAsync())
+            .Where(t => t.IsArchive).Select(t => t.Id);
+        var drafts = await _api.Pages.GetAllDraftsAsync(siteId);
+
+        // Get all pages for the site
+        return (await _api.Pages.GetAllAsync(siteId))
+            .Where(p => archiveTypes.Contains(p.TypeId))
+            .OrderBy(p => p.Title)
+            .Select(p => new PageListModel.PageItem
+            {
+                Id = p.Id,
+                Permalink = p.Permalink,
+                Status = drafts.Contains(p.Id) ? _localizer.General[PageListModel.PageItem.Draft] :
+                    !p.Published.HasValue ? _localizer.General[PageListModel.PageItem.Unpublished] : "",
+                Title = p.Title
+            }).ToList();
     }
 
     /// <summary>
@@ -123,6 +146,34 @@ public class PageService
                 EditUrl = "manager/site/edit/"
             }).ToList(),
             Items = await GetPageStructure(siteId)
+        };
+        return model;
+    }
+
+    /// <summary>
+    /// Gets the list of archive pages for the selected site for
+    /// the archive picker.
+    /// </summary>
+    /// <param name="siteId">The current site</param>
+    /// <returns>The model</returns>
+    public async Task<SiteListModel> GetArchiveList(Guid siteId)
+    {
+        var site = await _api.Sites.GetByIdAsync(siteId);
+
+        var model = new SiteListModel
+        {
+            SiteId = siteId,
+            SiteTitle = site.Title,
+            Sites = (await _api.Sites.GetAllAsync())
+                .OrderByDescending(s => s.IsDefault)
+                .Select(s => new PageListModel.PageSite
+            {
+                Id = s.Id,
+                Title = s.Title,
+                Slug = "/",
+                EditUrl = "manager/site/edit/"
+            }).ToList(),
+            Items = await GetArchivePages(siteId)
         };
         return model;
     }

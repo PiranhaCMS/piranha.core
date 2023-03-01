@@ -209,6 +209,7 @@ public sealed class App
         Instance._mediaTypes.Audio.Add(".wav", "audio/wav");
 
         // Compose field types
+        Instance._fields.Register<Extend.Fields.ArchivePageField>();
         Instance._fields.Register<Extend.Fields.AudioField>();
         Instance._fields.Register<Extend.Fields.CheckBoxField>();
         Instance._fields.Register<Extend.Fields.ColorField>();

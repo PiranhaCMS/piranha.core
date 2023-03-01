@@ -1,0 +1,50 @@
+@inject ManagerLocalizer Localizer
+
+<div class="modal modal-panel fade" id="archivepicker">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+
+            <!-- Modal Header -->
+            <div class="modal-header border-bottom-0">
+                <h5 class="modal-title"><i class="fas fa-copy"></i> @Localizer.General["Select archive page"]</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+
+            <!-- Modal Body -->
+            <div class="modal-body bg-light">
+                <div class="form-group d-flex justify-content-center">
+                    <div class="dropdown" v-if="sites.length > 1">
+                        <button class="btn btn-primary btn-labeled dropdown-toggle" type="button" data-toggle="dropdown">
+                            <span class="btn-label">
+                                <i class="fas fa-globe"></i>
+                            </span>
+                            {{ currentSiteTitle }}
+                        </button>
+                        <div class="dropdown-menu">
+                            <a class="dropdown-item" href="#" li v-for="site in sites" v-on:click.prevent="load(site.id)">{{ site.title }}</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group mt-3">
+                     <input id="archivepickerSearch" class="form-control" v-model="search" v-on:keyup.enter="onEnter" placeholder="@Localizer.General["Search..."]"/>
+                </div>
+
+                <table class="table table-borderless table-media">
+                    <tbody>
+                        <tr v-for="item in filteredItems">
+                            <td>
+                                <a href="#" v-on:click.prevent="select(item)">{{ item.title }}<span v-if="item.status" class="badge badge-info">{{ item.status }}</span>
+                                    <div class="small text-muted">{{ item.permalink }}</div>
+                                </a>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+
+            </div>
+        </div>
+    </div>
+</div>

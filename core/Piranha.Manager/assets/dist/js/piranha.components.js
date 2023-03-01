@@ -970,6 +970,52 @@ Vue.component("video-block", {
   },
   template: "\n<div class=\"block-body has-media-picker\" :class=\"{ empty: isEmpty }\">\n    <video class=\"w-100 mx-100\" :src=\"mediaUrl\" controls></video>\n    <div class=\"media-picker\">\n        <div class=\"btn-group float-right\">\n            <button v-on:click.prevent=\"select\" class=\"btn btn-primary text-center\">\n                <i class=\"fas fa-plus\"></i>\n            </button>\n            <button v-on:click.prevent=\"remove\" class=\"btn btn-danger text-center\">\n                <i class=\"fas fa-times\"></i>\n            </button>\n        </div>\n        <div class=\"card text-left\">\n            <div class=\"card-body\" v-if=\"isEmpty\">\n                &nbsp;\n            </div>\n            <div class=\"card-body\" v-else>\n                {{ model.body.media.filename }}\n            </div>\n        </div>\n    </div>\n</div>\n"
 });
+Vue.component("archivepage-field", {
+  props: ["uid", "model", "meta"],
+  methods: {
+    select: function () {
+      var siteId = null;
+
+      if (this.model.page) {
+        siteId = this.model.page.siteId;
+      } else if (piranha.pageedit) {
+        siteId = piranha.pageedit.siteId;
+      }
+
+      piranha.archivepicker.open(this.update, siteId);
+    },
+    remove: function () {
+      this.model.id = null;
+      this.model.page = null;
+    },
+    update: function (page) {
+      this.model.id = page.id;
+      this.model.page = page; // Tell parent that title has been updated
+
+      if (this.meta.notifyChange) {
+        this.$emit('update-title', {
+          uid: this.uid,
+          title: this.model.page.title
+        });
+      }
+    }
+  },
+  computed: {
+    isEmpty: function () {
+      return this.model.page == null;
+    }
+  },
+  mounted: function () {
+    this.model.getTitle = function () {
+      if (this.model.page != null) {
+        return this.model.page.title;
+      } else {
+        return "No page selected";
+      }
+    };
+  },
+  template: "\n<div class=\"media-field\" :class=\"{ empty: isEmpty }\">\n    <div class=\"media-picker\">\n        <div class=\"btn-group float-right\">\n            <button v-on:click.prevent=\"select\" class=\"btn btn-primary text-center\">\n                <i class=\"fas fa-plus\"></i>\n            </button>\n            <button v-on:click.prevent=\"remove\" class=\"btn btn-danger text-center\">\n                <i class=\"fas fa-times\"></i>\n            </button>\n        </div>\n        <div class=\"card text-left\">\n            <div class=\"card-body\" v-if=\"isEmpty\">\n                <span v-if=\"meta.placeholder != null\" class=\"text-secondary\">{{ meta.placeholder }}</span>\n                <span v-if=\"meta.placeholder == null\" class=\"text-secondary\">&nbsp;</span>\n            </div>\n            <div class=\"card-body\" v-else>\n                <a :href=\"piranha.baseUrl + 'manager/page/edit/' + model.page.id\" target=\"_blank\">{{ model.page.title }}</a>\n            </div>\n        </div>\n    </div>\n</div>\n"
+});
 Vue.component("audio-field", {
   props: ["uid", "model", "meta"],
   methods: {
