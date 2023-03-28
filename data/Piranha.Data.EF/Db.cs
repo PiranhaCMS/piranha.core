@@ -12,6 +12,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Piranha;
 
+/// <inheritdoc />
 public abstract class Db<T> : DbContext, IDb where T : Db<T>
 {
     /// <summary>

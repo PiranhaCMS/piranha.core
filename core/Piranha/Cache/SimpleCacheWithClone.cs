@@ -8,12 +8,14 @@
  *
  */
 
+using System.Diagnostics.CodeAnalysis;
+
 namespace Piranha.Cache;
 
 /// <summary>
 /// Simple in memory cache.
 /// </summary>
-[NoCoverage]
+[ExcludeFromCodeCoverage]
 public class SimpleCacheWithClone : SimpleCache
 {
     /// <summary>

@@ -16,6 +16,7 @@ using Piranha.Models;
 
 namespace Piranha.Services;
 
+/// <inheritdoc />
 public class ContentService<TContent, TField, TModelBase> : IContentService<TContent, TField, TModelBase>
     where TContent : ContentBase<TField>
     where TField : ContentFieldBase
@@ -37,15 +38,7 @@ public class ContentService<TContent, TField, TModelBase> : IContentService<TCon
         _mapper = mapper;
     }
 
-    /// <summary>
-    /// Loads the given data into a new model.
-    /// </summary>
-    /// <typeparam name="T">The model type</typeparam>
-    /// <param name="content">The content entity</param>
-    /// <param name="type">The content type</param>
-    /// <param name="process">Optional func that should be called after transformation</param>
-    /// <param name="languageId">The optional language id</param>
-    /// <returns>The page model</returns>
+    /// <inheritdoc />
     public async Task<T> TransformAsync<T>(TContent content, Models.ContentTypeBase type, Func<TContent, T, Task> process = null, Guid? languageId = null)
         where T : Models.ContentBase, TModelBase
     {
@@ -170,14 +163,7 @@ public class ContentService<TContent, TField, TModelBase> : IContentService<TCon
         return null;
     }
 
-    /// <summary>
-    /// Transforms the given model into content data.
-    /// </summary>
-    /// <param name="model">The model</param>
-    /// <param name="type">The conten type</param>
-    /// <param name="dest">The optional dest object</param>
-    /// <param name="languageId">The optional language id</param>
-    /// <returns>The content data</returns>
+    /// <inheritdoc />
     public TContent Transform<T>(T model, Models.ContentTypeBase type, TContent dest = null, Guid? languageId = null)
         where T : Models.ContentBase, TModelBase
     {
@@ -273,11 +259,7 @@ public class ContentService<TContent, TField, TModelBase> : IContentService<TCon
         return content;
     }
 
-    /// <summary>
-    /// Transforms the given block data into block models.
-    /// </summary>
-    /// <param name="blocks">The data</param>
-    /// <returns>The transformed blocks</returns>
+    /// <inheritdoc />
     public IList<Extend.Block> TransformBlocks(IEnumerable<Block> blocks)
     {
         var models = new List<Extend.Block>();
@@ -334,12 +316,7 @@ public class ContentService<TContent, TField, TModelBase> : IContentService<TCon
         return models;
     }
 
-    /// <summary>
-    /// Transforms the given block data into block models.
-    /// </summary>
-    /// <param name="blocks">The data</param>
-    /// <param name="languageId">The language id</param>
-    /// <returns>The transformed blocks</returns>
+    /// <inheritdoc />
     public IList<Extend.Block> TransformBlocks(IEnumerable<ContentBlock> blocks, Guid? languageId)
     {
         var models = new List<Extend.Block>();
@@ -393,11 +370,7 @@ public class ContentService<TContent, TField, TModelBase> : IContentService<TCon
         return models;
     }
 
-    /// <summary>
-    /// Transforms the given blocks to the internal data model.
-    /// </summary>
-    /// <param name="models">The blocks</param>
-    /// <returns>The data model</returns>
+    /// <inheritdoc />
     public IList<Block> TransformBlocks(IList<Extend.Block> models)
     {
         var blocks = new List<Block>();
@@ -456,12 +429,7 @@ public class ContentService<TContent, TField, TModelBase> : IContentService<TCon
         return blocks;
     }
 
-    /// <summary>
-    /// Transforms the given blocks to the internal data model.
-    /// </summary>
-    /// <param name="models">The blocks</param>
-    /// <param name="languageId">The language id</param>
-    /// <returns>The data model</returns>
+    /// <inheritdoc />
     public IList<ContentBlock> TransformContentBlocks(IList<Extend.Block> models, Guid languageId)
     {
         var blocks = new List<ContentBlock>();

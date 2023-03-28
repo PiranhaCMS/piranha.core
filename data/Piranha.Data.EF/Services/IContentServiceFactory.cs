@@ -12,6 +12,9 @@ using AutoMapper;
 
 namespace Piranha.Services;
 
+/// <summary>
+/// Factory for creating content transformation services.
+/// </summary>
 public interface IContentServiceFactory
 {
     /// <summary>

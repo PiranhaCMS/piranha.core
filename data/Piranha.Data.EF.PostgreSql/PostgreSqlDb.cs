@@ -8,11 +8,12 @@
  *
  */
 
+using System.Diagnostics.CodeAnalysis;
 using Microsoft.EntityFrameworkCore;
 
 namespace Piranha.Data.EF.PostgreSql;
 
-[NoCoverage]
+[ExcludeFromCodeCoverage]
 public sealed class PostgreSqlDb : Db<PostgreSqlDb>
 {
     /// <summary>

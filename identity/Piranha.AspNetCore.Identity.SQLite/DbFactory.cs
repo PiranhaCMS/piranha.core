@@ -9,6 +9,7 @@
  *
  */
 
+using System.Diagnostics.CodeAnalysis;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
 
@@ -18,7 +19,7 @@ namespace Piranha.AspNetCore.Identity.SQLite;
 /// Factory for creating a db context. Only used in dev mode
 /// when creating migrations.
 /// </summary>
-[NoCoverage]
+[ExcludeFromCodeCoverage]
 public class DbFactory : IDesignTimeDbContextFactory<IdentitySQLiteDb>
 {
     /// <summary>

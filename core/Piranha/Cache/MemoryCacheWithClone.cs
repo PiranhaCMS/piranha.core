@@ -8,6 +8,7 @@
  *
  */
 
+using System.Diagnostics.CodeAnalysis;
 using Microsoft.Extensions.Caching.Memory;
 
 namespace Piranha.Cache;
@@ -15,7 +16,7 @@ namespace Piranha.Cache;
 /// <summary>
 /// Simple in memory cache.
 /// </summary>
-[NoCoverage]
+[ExcludeFromCodeCoverage]
 public class MemoryCacheWithClone : MemoryCache
 {
     /// <summary>

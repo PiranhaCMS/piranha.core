@@ -1,10 +1,11 @@
 ﻿using Microsoft.EntityFrameworkCore.Migrations;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Piranha.Data.EF.SQLServer.Migrations
 {
-    [NoCoverage]
+    [ExcludeFromCodeCoverage]
     public partial class AddBlocks : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)

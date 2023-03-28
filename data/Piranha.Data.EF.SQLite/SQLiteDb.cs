@@ -8,11 +8,12 @@
  *
  */
 
+using System.Diagnostics.CodeAnalysis;
 using Microsoft.EntityFrameworkCore;
 
 namespace Piranha.Data.EF.SQLite;
 
-[NoCoverage]
+[ExcludeFromCodeCoverage]
 public sealed class SQLiteDb : Db<SQLiteDb>
 {
     /// <summary>

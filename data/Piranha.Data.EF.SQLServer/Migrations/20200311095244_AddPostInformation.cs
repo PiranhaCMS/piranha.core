@@ -1,9 +1,10 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Piranha.Data.EF.SQLServer.Migrations
 {
-    [NoCoverage]
+    [ExcludeFromCodeCoverage]
     public partial class AddPostInformation : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)

@@ -7,10 +7,11 @@ using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.EntityFrameworkCore.Storage.Internal;
 using Piranha.AspNetCore.Identity.SQLite;
 using System;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Piranha.AspNetCore.Identity.SQLite.Migrations
 {
-    [NoCoverage]
+    [ExcludeFromCodeCoverage]
     [DbContext(typeof(IdentitySQLiteDb))]
     partial class IdentitySQLiteDbModelSnapshot : ModelSnapshot
     {

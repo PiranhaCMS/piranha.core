@@ -1,8 +1,9 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
+﻿using System.Diagnostics.CodeAnalysis;
+using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Piranha.Data.EF.SQLServer.Migrations
 {
-    [NoCoverage]
+    [ExcludeFromCodeCoverage]
     public partial class AddSiteCulture : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)

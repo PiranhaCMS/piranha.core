@@ -8,11 +8,12 @@
  *
  */
 
+using System.Diagnostics.CodeAnalysis;
 using Microsoft.EntityFrameworkCore;
 
 namespace Piranha.Data.EF.MySql;
 
-[NoCoverage]
+[ExcludeFromCodeCoverage]
 public sealed class MySqlDb : Db<MySqlDb>
 {
     /// <summary>

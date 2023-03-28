@@ -12,19 +12,14 @@ jobs:
     runs-on: windows-latest
 
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
     - name: Setup .NET
-      uses: actions/setup-dotnet@v1
+      uses: actions/setup-dotnet@v3
       with:
         dotnet-version: '6.0.x'
-    - name: Install tools
-      run: |
-        nuget install -Verbosity quiet opencover -Version 4.6.519 -OutputDirectory tools
-        nuget install -Verbosity quiet coveralls.net -Version 0.7.0 -OutputDirectory tools
     - name: Restore dependencies
       run: dotnet restore
     - name: Build
       run: dotnet build --no-restore
     - name: Test
-      run: | 
-        dotnet test /p:CollectCoverage=true /p:CoverletOutputFormat=opencover /p:ExcludeByAttribute="NoCoverage" --no-build --verbosity normal
+      run: dotnet test

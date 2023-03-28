@@ -8,10 +8,11 @@ using Microsoft.EntityFrameworkCore.Storage.Internal;
 using Piranha;
 using Piranha.Models;
 using System;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Piranha.Data.EF.PostgreSql.Migrations
 {
-    [NoCoverage]
+    [ExcludeFromCodeCoverage]
     [DbContext(typeof(PostgreSqlDb))]
     [Migration("20180430082044_AddOriginalPageIdToPage")]
     partial class AddOriginalPageIdToPage

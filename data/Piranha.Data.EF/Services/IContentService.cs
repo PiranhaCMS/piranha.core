@@ -10,6 +10,13 @@
 
 namespace Piranha.Services;
 
+/// <summary>
+/// Service for transforming between data entities and
+/// content models.
+/// </summary>
+/// <typeparam name="TContent">The content type</typeparam>
+/// <typeparam name="TField">The field type</typeparam>
+/// <typeparam name="TModelBase">The content base type</typeparam>
 public interface IContentService<TContent, TField, TModelBase>
     where TContent : Data.ContentBase<TField>
     where TField : Data.ContentFieldBase

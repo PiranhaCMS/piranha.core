@@ -8,11 +8,12 @@
  *
  */
 
+using System.Diagnostics.CodeAnalysis;
 using Microsoft.EntityFrameworkCore;
 
 namespace Piranha.Data.EF.SQLServer;
 
-[NoCoverage]
+[ExcludeFromCodeCoverage]
 public sealed class SQLServerDb : Db<SQLServerDb>
 {
     /// <summary>

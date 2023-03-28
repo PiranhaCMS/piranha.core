@@ -1,10 +1,11 @@
 ﻿using Microsoft.EntityFrameworkCore.Migrations;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Piranha.Data.EF.MySql.Migrations
 {
-    [NoCoverage]
+    [ExcludeFromCodeCoverage]
     public partial class AddAliases : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)

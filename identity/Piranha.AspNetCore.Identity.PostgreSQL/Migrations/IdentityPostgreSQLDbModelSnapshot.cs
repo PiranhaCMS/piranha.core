@@ -8,10 +8,11 @@ using Microsoft.EntityFrameworkCore.Storage.Internal;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Piranha.AspNetCore.Identity.PostgreSQL;
 using System;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Piranha.AspNetCore.Identity.PostgreSQL.Migrations
 {
-    [NoCoverage]
+    [ExcludeFromCodeCoverage]
     [DbContext(typeof(IdentityPostgreSQLDb))]
     partial class IdentityPostgreSQLDbModelSnapshot : ModelSnapshot
     {

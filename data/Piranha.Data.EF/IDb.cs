@@ -13,7 +13,7 @@ using Microsoft.EntityFrameworkCore;
 namespace Piranha;
 
 /// <summary>
-/// Interface for the Piranha Db Context.
+/// The main db context.
 /// </summary>
 public interface IDb : IDisposable
 {
