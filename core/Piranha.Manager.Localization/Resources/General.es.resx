@@ -16,7 +16,7 @@
     <value>Añadir</value>
   </data>
   <data name="Advanced" xml:space="preserve">
-    <value>Advanced</value>
+    <value>Avanzado</value>
   </data>
   <data name="All" xml:space="preserve">
     <value>Todos</value>
@@ -43,7 +43,7 @@
     <value>Cultura</value>
   </data>
   <data name="Default" xml:space="preserve">
-    <value>Default</value>
+    <value>Predeterminado</value>
   </data>
   <data name="Delete" xml:space="preserve">
     <value>Eliminar</value>
@@ -100,10 +100,10 @@
     <value>Es por defecto</value>
   </data>
   <data name="Language" xml:space="preserve">
-    <value>Language</value>
+    <value>Idioma</value>
   </data>
   <data name="Languages" xml:space="preserve">
-    <value>Languages</value>
+    <value>Idiomas</value>
   </data>
   <data name="Login" xml:space="preserve">
     <value>Iniciar sesión</value>
@@ -190,7 +190,7 @@
     <value>SEO</value>
   </data>
   <data name="Sharing" xml:space="preserve">
-    <value>Sharing</value>
+    <value>Compartiendo</value>
   </data>
   <data name="Size" xml:space="preserve">
     <value>Tamaño</value>
@@ -241,18 +241,18 @@
     <value>Ancho</value>
   </data>
   <data name="Archives and Comments" xml:space="preserve">
-    <value>Archives and Comments</value>
+    <value>Archivos y comentarios</value>
   </data>
   <data name="Author" xml:space="preserve">
-    <value>Author</value>
+    <value>Autor</value>
   </data>
   <data name="Comments" xml:space="preserve">
-    <value>Comments</value>
+    <value>Comentarios</value>
   </data>
   <data name="Created" xml:space="preserve">
-    <value>Created</value>
+    <value>Creado</value>
   </data>
   <data name="Username and/or password are incorrect." xml:space="preserve">
-    <value>Username and/or password are incorrect.</value>
+    <value>Nombre de usuario y/o contraseña son incorrectos.</value>
   </data>
 </root>
