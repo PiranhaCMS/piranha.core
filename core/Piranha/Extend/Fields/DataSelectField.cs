@@ -98,7 +98,7 @@ public class DataSelectField<T> : DataSelectFieldBase where T : class
         {
             return Value.ToString();
         }
-        return "Not item selected";
+        return "No item selected";
     }
 }
 
