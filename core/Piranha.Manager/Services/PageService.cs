@@ -241,6 +241,10 @@ public class PageService
 
             page.SiteId = siteId;
             page.SortOrder = (await _api.Sites.GetSitemapAsync(page.SiteId, false)).Count;
+            if (original.SiteId != siteId)
+            {
+                page.ParentId = null;
+            }
 
             // Perform manager init
             await _factory.InitDynamicManagerAsync(page,
