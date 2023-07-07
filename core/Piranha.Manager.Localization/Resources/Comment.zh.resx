@@ -14,42 +14,42 @@
   </resheader>
 
   <data name="Approved" xml:space="preserve">
-    <value>审核通过</value>
+    <value>批准</value>
   </data>
   <data name="ApprovedSingle" xml:space="preserve">
-    <value>审核通过</value>
+    <value>批准</value>
   </data>
   <data name="Pending" xml:space="preserve">
-    <value>待审核</value>
+    <value>擱置</value>
   </data>
   <data name="Comment" xml:space="preserve">
-    <value>评论</value>
+    <value>評論</value>
   </data>
   <data name="Response to" xml:space="preserve">
-    <value>回复</value>
+    <value>回覆到</value>
   </data>
   <data name="The comment was successfully approved" xml:space="preserve">
-    <value>该评论已审核</value>
+    <value>本評論已成功通過</value>
   </data>
   <data name="The comment was successfully unapproved" xml:space="preserve">
-    <value>该评论已驳回</value>
+    <value>本評論已成功取消</value>
   </data>
   <data name="The comment was successfully deleted" xml:space="preserve">
-    <value>该评论已删除</value>
+    <value>本評論已成功刪除</value>
   </data>
   <data name="Days allowed for commenting" xml:space="preserve">
-    <value>允许评论的时间</value>
+    <value>允許評論</value>
   </data>
   <data name="Comments are not allowed." xml:space="preserve">
-    <value>不允许评论</value>
+    <value>評論功能已關閉。</value>
   </data>
   <data name="Comments are not allowed for unpublished content." xml:space="preserve">
-    <value>不允许评论未发布内容。</value>
+    <value>未發佈的內容不允許評論。</value>
   </data>
   <data name="Comments are currently open." xml:space="preserve">
-    <value>评论已开启。</value>
+    <value>評論功能已開啟。</value>
   </data>
   <data name="Comments were closed" xml:space="preserve">
-    <value>评论已关闭</value>
+    <value>評論功能已關閉</value>
   </data>
 </root>
