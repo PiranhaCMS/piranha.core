@@ -13,36 +13,36 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Aliases" xml:space="preserve">
-    <value>别名</value>
+    <value>別名</value>
   </data>
   <data name="Add new alias" xml:space="preserve">
-    <value>添加新别名</value>
+    <value>新增別名</value>
   </data>
   <data name="Alias URL" xml:space="preserve">
-    <value>别名网址</value>
+    <value>別名網址</value>
   </data>
   <data name="Alias URL is mandatory." xml:space="preserve">
-    <value>别名网址必填。</value>
+    <value>別名網址是必填項。</value>
   </data>
   <data name="Redirect URL" xml:space="preserve">
-    <value>重定向网址</value>
+    <value>導向網址</value>
   </data>
   <data name="Redirect URL is mandatory." xml:space="preserve">
-    <value>重定向网址必填。</value>
+    <value>導向網址是必填項。</value>
   </data>
   <data name="Permanent" xml:space="preserve">
     <value>永久</value>
   </data>
   <data name="Are you sure you want to delete this alias?" xml:space="preserve">
-    <value>是否确定删除此别名？</value>
+    <value>是否確定要刪除此別名？</value>
   </data>
   <data name="If the redirect should be permanent" xml:space="preserve">
-    <value>重定向是否永久</value>
+    <value>這個導向網址應該是永久的</value>
   </data>
   <data name="The alias was successfully added to the list" xml:space="preserve">
-    <value>该别名已成功加入列表</value>
+    <value>該別名已加入列表中</value>
   </data>
   <data name="The alias was successfully deleted" xml:space="preserve">
-    <value>该别名已成功删除</value>
+    <value>該別名已成功刪除</value>
   </data>
 </root>
