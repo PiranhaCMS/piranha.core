@@ -11,16 +11,26 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\core\Piranha\Piranha.csproj" />
+    <ProjectReference Include="..\..\core\Piranha.Manager\Piranha.Manager.csproj" />
+    <ProjectReference Include="..\..\core\Piranha.Manager.LocalAuth\Piranha.Manager.LocalAuth.csproj" />
+    <ProjectReference Include="..\..\core\Piranha.Manager.Localization\Piranha.Manager.Localization.csproj" />
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(TargetFramework)' == 'net6.0'">
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="6.0.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="6.0.0">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0" PrivateAssets="all" />
-    <ProjectReference Include="..\..\core\Piranha\Piranha.csproj" />
-    <ProjectReference Include="..\..\core\Piranha.Manager\Piranha.Manager.csproj" />
-    <ProjectReference Include="..\..\core\Piranha.Manager.LocalAuth\Piranha.Manager.LocalAuth.csproj" />
-    <ProjectReference Include="..\..\core\Piranha.Manager.Localization\Piranha.Manager.Localization.csproj" />
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(TargetFramework)' == 'net7.0'">
+    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="7.0.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="7.0.0">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
+    </PackageReference>
   </ItemGroup>
 
   <ItemGroup>
