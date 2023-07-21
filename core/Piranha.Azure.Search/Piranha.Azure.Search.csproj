@@ -6,7 +6,7 @@
 
   <ItemGroup>
     <PackageReference Include="Azure.Search.Documents" Version="11.3.0" />
-    <PackageReference Include="Microsoft.Rest.ClientRuntime" Version="2.3.22" />
+    <PackageReference Include="Microsoft.Rest.ClientRuntime" Version="2.3.24" />
   </ItemGroup>
 
   <ItemGroup>
