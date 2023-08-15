@@ -934,11 +934,12 @@ piranha.pagepicker = new Vue({
         filteredItems: function () {
             let self = this;
             
-            if (self.search.length < 1)
-                return this.items;
+            if (self.search && self.search.length < 1) {
+                return this.items;   
+            }
             
             let items = Object.assign([], this.items);
-            let searchTerm = self.search ? self.search.toLowerCase() : '';
+            let searchTerm = self.search ? self.search.toLowerCase() : "";
             
             let filterRecursive = function(arr) {
                 return arr.reduce(function(acc, item){
