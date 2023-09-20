@@ -25,14 +25,11 @@ Vue.component("region", {
     },
     updateTitle: function (e) {
       var self = this;
-
       if (self.model.meta.isCollection) {
         for (var n = 0; n < self.model.items.length; n++) {
           var item = self.model.items[n];
-
           for (var m = 0; m < item.fields.length; m++) {
             var field = item.fields[m];
-
             if (field.meta.uid === e.uid) {
               self.model.items[n].title = e.title;
               break;
@@ -57,11 +54,9 @@ Vue.component("region", {
     if (this.model.meta.isCollection && this.itemAdded) {
       sortable("#" + this.model.meta.uid, "disable");
       sortable("#" + this.model.meta.uid, "enable");
-
       if (!this.model.meta.expanded) {
         $("#" + this.model.meta.uid + " .card:last-child .card-header > a").click();
       }
-
       this.itemAdded = false;
     }
   },
@@ -84,11 +79,9 @@ Vue.component("post-archive", {
   methods: {
     load: function (index) {
       var self = this;
-
       if (!index) {
         index = 0;
       }
-
       fetch(piranha.baseUrl + "manager/api/post/list/" + self.id + "/" + index).then(function (response) {
         return response.json();
       }).then(function (result) {
@@ -156,16 +149,16 @@ Vue.component("post-archive", {
       // Check category
       if (this.category !== piranha.resources.texts.allCategories && item.category !== this.category) {
         return false;
-      } // Check status
+      }
 
-
+      // Check status
       if (this.status === "draft") {
         return item.status === "draft" || item.status === "unpublished";
       } else if (this.status === 'scheduled') {
         return item.isScheduled;
-      } // Selected
+      }
 
-
+      // Selected
       return true;
     },
     selectStatus: function (status) {
@@ -211,7 +204,6 @@ Vue.component("block-group", {
       var itemActive = item.isActive;
       var itemIndex = this.model.items.indexOf(item);
       this.model.items.splice(itemIndex, 1);
-
       if (itemActive) {
         this.selectItem(this.model.items[Math.min(itemIndex, this.model.items.length - 1)]);
       }
@@ -362,7 +354,8 @@ Vue.component("generic-block", {
 Vue.component("audio-block", {
   props: ["uid", "model"],
   methods: {
-    clear: function () {// clear media from block
+    clear: function () {
+      // clear media from block
     },
     select: function () {
       if (this.model.body.media != null) {
@@ -385,8 +378,9 @@ Vue.component("audio-block", {
           filename: media.filename,
           contentType: media.contentType,
           publicUrl: media.publicUrl
-        }; // Tell parent that title has been updated
+        };
 
+        // Tell parent that title has been updated
         this.$emit('update-title', {
           uid: this.uid,
           title: this.model.body.media.filename
@@ -434,8 +428,9 @@ Vue.component("content-block", {
           return response.json();
         }).then(function (result) {
           self.model.body.id = result.id;
-          self.model.body.content = result; // Tell parent that title has been updated
+          self.model.body.content = result;
 
+          // Tell parent that title has been updated
           self.$emit('update-title', {
             uid: self.uid,
             title: self.model.body.content.title
@@ -466,7 +461,6 @@ Vue.component("content-block", {
       if (this.hasContentTitle) {
         return this.model.body.content.title;
       }
-
       return "Lorem Ipsum";
     },
     hasContentTitle: function () {
@@ -476,7 +470,6 @@ Vue.component("content-block", {
       if (this.hasContentExcerpt) {
         return this.model.body.content.excerpt;
       }
-
       return "Donec id elit non mi porta gravida at eget metus. Cras mattis consectetur purus sit amet fermentum. Integer posuere erat a ante venenatis dapibus posuere velit aliquet.";
     },
     hasContentExcerpt: function () {
@@ -567,7 +560,8 @@ Vue.component("html-column-block", {
 Vue.component("image-block", {
   props: ["uid", "model"],
   methods: {
-    clear: function () {// clear media from block
+    clear: function () {
+      // clear media from block
     },
     select: function () {
       if (this.model.body.media != null) {
@@ -590,8 +584,9 @@ Vue.component("image-block", {
           filename: media.filename,
           contentType: media.contentType,
           publicUrl: media.publicUrl
-        }; // Tell parent that title has been updated
+        };
 
+        // Tell parent that title has been updated
         this.$emit('update-title', {
           uid: this.uid,
           title: this.model.body.media.filename
@@ -603,11 +598,9 @@ Vue.component("image-block", {
     selectAspect: function (val) {
       this.model.aspect.value = val;
     },
-
     isAspectSelected(val) {
       return this.model.aspect.value === val;
     }
-
   },
   computed: {
     isEmpty: function () {
@@ -630,7 +623,6 @@ Vue.component("image-block", {
           return piranha.utils.formatUrl("~/manager/assets/img/icons/img-square.svg");
         }
       }
-
       return null;
     }
   },
@@ -651,11 +643,9 @@ Vue.component("markdown-block", {
     onBlur: function (e) {
       // Tell parent that title has been updated
       var title = this.model.body.value.replace(/(<([^>]+)>)/ig, "");
-
       if (title.length > 40) {
         title = title.substring(0, 40) + "...";
       }
-
       this.$emit('update-title', {
         uid: this.uid,
         title: title
@@ -690,8 +680,9 @@ Vue.component("page-block", {
           return response.json();
         }).then(function (result) {
           self.model.body.id = result.id;
-          self.model.body.page = result; // Tell parent that title has been updated
+          self.model.body.page = result;
 
+          // Tell parent that title has been updated
           self.$emit('update-title', {
             uid: self.uid,
             title: self.model.body.page.title
@@ -710,7 +701,8 @@ Vue.component("page-block", {
     },
     pageImage: function () {
       if (this.hasPageImage) {
-        return piranha.baseUrl + "manager/api/media/url/" + this.model.body.page.primaryImage.id + "/446/220"; //return piranha.utils.formatUrl(this.model.body.page.primaryImage.media.publicUrl);
+        return piranha.baseUrl + "manager/api/media/url/" + this.model.body.page.primaryImage.id + "/446/220";
+        //return piranha.utils.formatUrl(this.model.body.page.primaryImage.media.publicUrl);
       } else {
         return piranha.utils.formatUrl("~/manager/assets/img/empty-image.png");
       }
@@ -722,7 +714,6 @@ Vue.component("page-block", {
       if (this.hasPageTitle) {
         return this.model.body.page.title;
       }
-
       return "Lorem Ipsum";
     },
     hasPageTitle: function () {
@@ -732,7 +723,6 @@ Vue.component("page-block", {
       if (this.hasPageExcerpt) {
         return this.model.body.page.excerpt;
       }
-
       return "Donec id elit non mi porta gravida at eget metus. Cras mattis consectetur purus sit amet fermentum. Integer posuere erat a ante venenatis dapibus posuere velit aliquet.";
     },
     hasPageExcerpt: function () {
@@ -767,8 +757,9 @@ Vue.component("post-block", {
           return response.json();
         }).then(function (result) {
           self.model.body.id = result.id;
-          self.model.body.post = result; // Tell parent that title has been updated
+          self.model.body.post = result;
 
+          // Tell parent that title has been updated
           self.$emit('update-title', {
             uid: self.uid,
             title: self.model.body.post.title
@@ -799,7 +790,6 @@ Vue.component("post-block", {
       if (this.hasPostTitle) {
         return this.model.body.post.title;
       }
-
       return "Lorem Ipsum";
     },
     hasPostTitle: function () {
@@ -809,7 +799,6 @@ Vue.component("post-block", {
       if (this.hasPostExcerpt) {
         return this.model.body.post.excerpt;
       }
-
       return "Donec id elit non mi porta gravida at eget metus. Cras mattis consectetur purus sit amet fermentum. Integer posuere erat a ante venenatis dapibus posuere velit aliquet.";
     },
     hasPostExcerpt: function () {
@@ -842,14 +831,13 @@ Vue.component("quote-block", {
       this.model.author.value = e.target.innerText;
     },
     onBodyBlur: function (e) {
-      this.model.body.value = e.target.innerText; // Tell parent that title has been updated
+      this.model.body.value = e.target.innerText;
 
+      // Tell parent that title has been updated
       var title = this.model.body.value.replace(/(<([^>]+)>)/ig, "");
-
       if (title.length > 40) {
         title = title.substring(0, 40) + "...";
       }
-
       this.$emit('update-title', {
         uid: this.uid,
         title: title
@@ -892,13 +880,12 @@ Vue.component("text-block", {
   methods: {
     onBlur: function (e) {
       // this.model.body.value = e.target.innerHTML;
+
       // Tell parent that title has been updated
       var title = this.model.body.value.replace(/(<([^>]+)>)/ig, "");
-
       if (title.length > 40) {
         title = title.substring(0, 40) + "...";
       }
-
       this.$emit('update-title', {
         uid: this.uid,
         title: title
@@ -915,7 +902,8 @@ Vue.component("text-block", {
 Vue.component("video-block", {
   props: ["uid", "model"],
   methods: {
-    clear: function () {// clear media from block
+    clear: function () {
+      // clear media from block
     },
     select: function () {
       if (this.model.body.media != null) {
@@ -938,8 +926,9 @@ Vue.component("video-block", {
           filename: media.filename,
           contentType: media.contentType,
           publicUrl: media.publicUrl
-        }; // Tell parent that title has been updated
+        };
 
+        // Tell parent that title has been updated
         this.$emit('update-title', {
           uid: this.uid,
           title: this.model.body.media.filename
@@ -975,13 +964,11 @@ Vue.component("archivepage-field", {
   methods: {
     select: function () {
       var siteId = null;
-
       if (this.model.page) {
         siteId = this.model.page.siteId;
       } else if (piranha.pageedit) {
         siteId = piranha.pageedit.siteId;
       }
-
       piranha.archivepicker.open(this.update, siteId);
     },
     remove: function () {
@@ -990,8 +977,9 @@ Vue.component("archivepage-field", {
     },
     update: function (page) {
       this.model.id = page.id;
-      this.model.page = page; // Tell parent that title has been updated
+      this.model.page = page;
 
+      // Tell parent that title has been updated
       if (this.meta.notifyChange) {
         this.$emit('update-title', {
           uid: this.uid,
@@ -1041,8 +1029,9 @@ Vue.component("audio-field", {
           title: media.title,
           contentType: media.contentType,
           publicUrl: media.publicUrl
-        }; // Tell parent that title has been updated
+        };
 
+        // Tell parent that title has been updated
         if (this.meta.notifyChange) {
           this.$emit('update-title', {
             uid: this.uid,
@@ -1104,8 +1093,9 @@ Vue.component("content-field", {
     },
     update: function (content) {
       this.model.id = content.id;
-      this.model.content = content; // Tell parent that title has been updated
+      this.model.content = content;
 
+      // Tell parent that title has been updated
       if (this.meta.notifyChange) {
         this.$emit('update-title', {
           uid: this.uid,
@@ -1154,8 +1144,9 @@ Vue.component("date-field", {
     onClosed: function () {
       var d = this.model.value;
       var str = d.getFullYear() + "-" + (d.getMonth() < 9 ? "0" : "") + (d.getMonth() + 1) + "-" + (d.getDate() < 10 ? "0" : "") + d.getDate();
-      this.model.value = str; // Tell parent that title has been updated
+      this.model.value = str;
 
+      // Tell parent that title has been updated
       if (this.meta.notifyChange) {
         this.$emit('update-title', {
           uid: this.uid,
@@ -1199,8 +1190,9 @@ Vue.component("document-field", {
           title: media.title,
           contentType: media.contentType,
           publicUrl: media.publicUrl
-        }; // Tell parent that title has been updated
+        };
 
+        // Tell parent that title has been updated
         if (this.meta.notifyChange) {
           this.$emit('update-title', {
             uid: this.uid,
@@ -1237,15 +1229,14 @@ Vue.component("html-field", {
   },
   methods: {
     onBlur: function (e) {
-      this.model.value = tinyMCE.activeEditor.getContent(); // Tell parent that title has been updated
+      this.model.value = tinyMCE.activeEditor.getContent();
 
+      // Tell parent that title has been updated
       if (this.meta.notifyChange) {
         var title = this.model.value.replace(/(<([^>]+)>)/ig, "");
-
         if (title.length > 40) {
           title = title.substring(0, 40) + "...";
         }
-
         this.$emit('update-title', {
           uid: this.uid,
           title: title
@@ -1253,15 +1244,14 @@ Vue.component("html-field", {
       }
     },
     onChange: function (data) {
-      this.model.value = data; // Tell parent that title has been updated
+      this.model.value = data;
 
+      // Tell parent that title has been updated
       if (this.meta.notifyChange) {
         var title = this.model.value.replace(/(<([^>]+)>)/ig, "");
-
         if (title.length > 40) {
           title = title.substring(0, 40) + "...";
         }
-
         if (this.meta.notifyChange) {
           this.$emit('update-title', {
             uid: this.uid,
@@ -1309,8 +1299,9 @@ Vue.component("image-field", {
           title: media.title,
           contentType: media.contentType,
           publicUrl: media.publicUrl
-        }; // Tell parent that title has been updated
+        };
 
+        // Tell parent that title has been updated
         if (this.meta.notifyChange) {
           this.$emit('update-title', {
             uid: this.uid,
@@ -1347,15 +1338,14 @@ Vue.component("markdown-field", {
   },
   methods: {
     update: function (md) {
-      this.model.value = md; // Tell parent that title has been updated
+      this.model.value = md;
 
+      // Tell parent that title has been updated
       if (this.meta && this.meta.notifyChange) {
         var title = this.model.value;
-
         if (title.length > 40) {
           title = title.substring(0, 40) + "...";
         }
-
         this.$emit('update-title', {
           uid: this.uid,
           title: title
@@ -1401,8 +1391,9 @@ Vue.component("media-field", {
         title: media.title,
         contentType: media.contentType,
         publicUrl: media.publicUrl
-      }; // Tell parent that title has been updated
+      };
 
+      // Tell parent that title has been updated
       if (this.meta.notifyChange) {
         this.$emit('update-title', {
           uid: this.uid,
@@ -1440,13 +1431,11 @@ Vue.component("page-field", {
   methods: {
     select: function () {
       var siteId = null;
-
       if (this.model.page) {
         siteId = this.model.page.siteId;
       } else if (piranha.pageedit) {
         siteId = piranha.pageedit.siteId;
       }
-
       piranha.pagepicker.open(this.update, siteId);
     },
     remove: function () {
@@ -1455,8 +1444,9 @@ Vue.component("page-field", {
     },
     update: function (page) {
       this.model.id = page.id;
-      this.model.page = page; // Tell parent that title has been updated
+      this.model.page = page;
 
+      // Tell parent that title has been updated
       if (this.meta.notifyChange) {
         this.$emit('update-title', {
           uid: this.uid,
@@ -1493,8 +1483,9 @@ Vue.component("post-field", {
     },
     update: function (post) {
       this.model.id = post.id;
-      this.model.post = post; // Tell parent that title has been updated
+      this.model.post = post;
 
+      // Tell parent that title has been updated
       if (this.meta.notifyChange) {
         this.$emit('update-title', {
           uid: this.uid,
@@ -1554,7 +1545,8 @@ Vue.component("string-field", {
       return this.meta.settings.MaxLength != null && this.meta.settings.MaxLength > 0 ? this.meta.settings.MaxLength : null;
     },
     isRequired: function () {
-      return false; //return this.meta.settings.IsRequired != null && this.meta.settings.IsRequired;
+      return false;
+      //return this.meta.settings.IsRequired != null && this.meta.settings.IsRequired;
     }
   },
   template: "\n<div>\n    <div v-if=\"maxLength() > 0\" class=\"input-group\">\n        <input class=\"form-control\" type=\"text\" :maxlength=\"maxLength()\" :required=\"isRequired()\" :placeholder=\"meta.placeholder\" v-model=\"model.value\" v-on:change=\"update()\">\n        <div class=\"input-group-append\">\n            <div class=\"input-group-text text-muted\">\n                {{ piranha.utils.strLength(model.value) + \"/\" + maxLength() }}\n            </div>\n        </div>\n    </div>\n    <input v-else class=\"form-control\" type=\"text\" :maxlength=\"maxLength()\" :required=\"isRequired()\" :placeholder=\"meta.placeholder\" v-model=\"model.value\" v-on:change=\"update()\">\n</div>\n"
@@ -1566,11 +1558,9 @@ Vue.component("text-field", {
       // Tell parent that title has been updated
       if (this.meta.notifyChange) {
         var title = this.model.value;
-
         if (title.length > 40) {
           title = title.substring(0, 40) + "...";
         }
-
         this.$emit('update-title', {
           uid: this.uid,
           title: title
@@ -1581,7 +1571,8 @@ Vue.component("text-field", {
       return this.meta.settings.MaxLength != null && this.meta.settings.MaxLength > 0 ? this.meta.settings.MaxLength : null;
     },
     isRequired: function () {
-      return false; //return this.meta.settings.IsRequired != null && this.meta.settings.IsRequired;
+      return false;
+      //return this.meta.settings.IsRequired != null && this.meta.settings.IsRequired;
     }
   },
   template: "\n<div>\n    <div v-if=\"maxLength() > 0\" class=\"input-group\">\n        <textarea class=\"form-control\" rows=\"4\" :maxlength=\"maxLength()\" :required=\"isRequired()\" :placeholder=\"meta.placeholder\" v-model=\"model.value\" v-on:change=\"update()\"></textarea>\n        <div class=\"input-group-append\">\n            <div class=\"input-group-text text-muted\">\n                {{ piranha.utils.strLength(model.value) + \"/\" + maxLength() }}\n            </div>\n        </div>\n    </div>\n    <textarea v-else class=\"form-control\" rows=\"4\" :maxlength=\"maxLength()\" :required=\"isRequired()\" :placeholder=\"meta.placeholder\" v-model=\"model.value\" v-on:change=\"update()\"></textarea>\n</div>\n"
@@ -1589,7 +1580,8 @@ Vue.component("text-field", {
 Vue.component("video-field", {
   props: ["uid", "model", "meta"],
   methods: {
-    clear: function () {// clear media from block
+    clear: function () {
+      // clear media from block
     },
     select: function () {
       if (this.model.media != null) {
@@ -1613,8 +1605,9 @@ Vue.component("video-field", {
           title: media.title,
           contentType: media.contentType,
           publicUrl: media.publicUrl
-        }; // Tell parent that title has been updated
+        };
 
+        // Tell parent that title has been updated
         if (this.meta.notifyChange) {
           this.$emit('update-title', {
             uid: this.uid,

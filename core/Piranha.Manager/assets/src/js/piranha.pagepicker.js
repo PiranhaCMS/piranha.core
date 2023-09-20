@@ -15,14 +15,33 @@ piranha.pagepicker = new Vue({
     },
     computed: {
         filteredItems: function () {
-            var self = this;
-
-            return this.items.filter(function (item) {
-                if (self.search.length > 0) {
-                    return item.title.toLowerCase().indexOf(self.search.toLowerCase()) > -1
-                }
-                return true;
-            });
+            let self = this;
+            
+            if (self.search && self.search.length < 1) {
+                return this.items;   
+            }
+            
+            let items = Object.assign([], this.items);
+            let searchTerm = self.search ? self.search.toLowerCase() : "";
+            
+            let filterRecursive = function(arr) {
+                return arr.reduce(function(acc, item){
+                    let newItem = Object.assign({}, item);
+                    
+                    if (newItem.items) {
+                        newItem.items = filterRecursive(item.items);
+                        newItem.isExpanded = newItem.items.length > 0;
+                    }
+                    
+                    if (newItem.title && (newItem.title.toLowerCase().indexOf(searchTerm) > -1 || newItem.isExpanded)) {
+                        acc.push(newItem);
+                    }
+                    
+                    return acc;
+                }, []);
+            };
+            
+            return filterRecursive(items);
         }
     },
     methods: {
