@@ -92,7 +92,7 @@ function vueCompile() {
 
 // Gulp build script
 var gulp = require("gulp"),
-    sass = require('gulp-sass'),
+    sass = require('gulp-sass')(require('sass')),
     concat = require("gulp-concat"),
     cssmin = require("gulp-cssmin"),
     rename = require("gulp-rename"),
