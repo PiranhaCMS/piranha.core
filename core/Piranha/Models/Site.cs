@@ -68,13 +68,6 @@ public sealed class Site
     public bool IsDefault { get; set; }
 
     /// <summary>
-    /// Gets/sets the optional culture for the site.
-    /// </summary>
-    [StringLength(6)]
-    [Obsolete("Please refer to the culture of the selected language of the site", true)]
-    public string Culture { get; set; }
-
-    /// <summary>
     /// Gets/sets the global last modification date
     /// of the site's content.
     /// </summary>
