@@ -16,7 +16,7 @@ namespace Piranha.Cache;
 /// <summary>
 /// Simple in memory cache.
 /// </summary>
-public class DistributedCache : ICache
+internal sealed class DistributedCache : ICache
 {
     private readonly IDistributedCache _cache;
     private readonly JsonSerializerSettings _jsonSettings;

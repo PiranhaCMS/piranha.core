@@ -9,6 +9,7 @@
  */
 
 using System.ComponentModel.DataAnnotations;
+using Piranha.Cache;
 using Piranha.Models;
 using Piranha.Repositories;
 

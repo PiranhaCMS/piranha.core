@@ -10,6 +10,7 @@
 
 using System.ComponentModel.DataAnnotations;
 using System.Text;
+using Piranha.Cache;
 using Piranha.Models;
 using Piranha.Repositories;
 

@@ -15,7 +15,7 @@ namespace Piranha.Cache;
 /// <summary>
 /// Simple in memory cache.
 /// </summary>
-public sealed class MemoryCache : ICache
+internal sealed class MemoryCache : ICache
 {
     /// <summary>
     /// The private memory cache.

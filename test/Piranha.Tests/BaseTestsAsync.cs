@@ -26,7 +26,7 @@ public abstract class BaseTestsAsync : IAsyncLifetime
     protected IStorage _storage = new Local.FileStorage("uploads/", "~/uploads/");
     protected IImageProcessor _processor = new ImageSharpProcessor();
     protected IServiceProvider _services = CreateServiceCollection().BuildServiceProvider();
-    protected ICache _cache;
+    protected Cache.ICache _cache;
 
     public abstract Task InitializeAsync();
     public abstract Task DisposeAsync();

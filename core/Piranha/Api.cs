@@ -8,6 +8,7 @@
  *
  */
 
+using Piranha.Cache;
 using Piranha.Services;
 using Piranha.Repositories;
 

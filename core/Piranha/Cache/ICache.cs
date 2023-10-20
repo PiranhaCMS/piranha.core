@@ -8,7 +8,7 @@
  *
  */
 
-namespace Piranha;
+namespace Piranha.Cache;
 
 public interface ICache
 {
