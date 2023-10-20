@@ -22,19 +22,13 @@ public static class PiranhaMemoryCacheExtensions
     /// Adds the memory cache service to the service collection.
     /// </summary>
     /// <param name="services">The current service collection</param>
-    /// <param name="clone">If returned objects should be cloned</param>
     /// <returns>The updated service collection</returns>
-    public static IServiceCollection AddPiranhaMemoryCache(this IServiceCollection services, bool clone = false)
+    public static IServiceCollection AddPiranhaMemoryCache(this IServiceCollection services)
     {
         // Check dependent services
         if (!services.Any(s => s.ServiceType == typeof(IMemoryCache)))
         {
             throw new NotSupportedException("You need to register a IMemoryCache service in order to use Memory Cache in Piranha");
-        }
-
-        if (clone)
-        {
-            return services.AddSingleton<ICache, MemoryCacheWithClone>();
         }
         return services.AddSingleton<ICache, MemoryCache>();
     }
@@ -43,11 +37,10 @@ public static class PiranhaMemoryCacheExtensions
     /// Uses the memory cache service in the current application.
     /// </summary>
     /// <param name="serviceBuilder">The current service builder</param>
-    /// <param name="clone">If returned objects should be cloned</param>
     /// <returns>The updated service builder</returns>
-    public static PiranhaServiceBuilder UseMemoryCache(this PiranhaServiceBuilder serviceBuilder, bool clone = false)
+    public static PiranhaServiceBuilder UseMemoryCache(this PiranhaServiceBuilder serviceBuilder)
     {
-        serviceBuilder.Services.AddPiranhaMemoryCache(clone);
+        serviceBuilder.Services.AddPiranhaMemoryCache();
 
         return serviceBuilder;
     }

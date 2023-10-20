@@ -71,7 +71,7 @@ public abstract class BaseTestsAsync : IAsyncLifetime
             new ContentGroupRepository(db),
             new ContentTypeRepository(db),
             new LanguageRepository(db),
-            new Piranha.Repositories.MediaRepository(db),
+            new MediaRepository(db),
             new PageRepository(db, serviceFactory),
             new PageTypeRepository(db),
             new ParamRepository(db),

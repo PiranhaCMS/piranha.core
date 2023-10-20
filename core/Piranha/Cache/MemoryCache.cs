@@ -15,17 +15,12 @@ namespace Piranha.Cache;
 /// <summary>
 /// Simple in memory cache.
 /// </summary>
-public class MemoryCache : ICache
+public sealed class MemoryCache : ICache
 {
     /// <summary>
     /// The private memory cache.
     /// </summary>
     private readonly IMemoryCache _cache;
-
-    /// <summary>
-    /// If returned objects should be cloned.
-    /// </summary>
-    private readonly bool _clone;
 
     /// <summary>
     /// Default constructor.
@@ -34,17 +29,6 @@ public class MemoryCache : ICache
     public MemoryCache(IMemoryCache cache)
     {
         _cache = cache;
-    }
-
-    /// <summary>
-    /// Default constructor.
-    /// </summary>
-    /// <param name="cache">The currently configured cache</param>
-    /// <param name="clone">If returned objects should be cloned</param>
-    protected MemoryCache(IMemoryCache cache, bool clone)
-    {
-        _cache = cache;
-        _clone = clone;
     }
 
     /// <summary>
@@ -57,11 +41,7 @@ public class MemoryCache : ICache
     {
         if (_cache.TryGetValue<T>(key, out var obj))
         {
-            if (!_clone)
-            {
-                return obj;
-            }
-            return Utils.DeepClone(obj);
+            return obj;
         }
         return default(T);
     }
