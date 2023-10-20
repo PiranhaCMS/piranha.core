@@ -15,7 +15,7 @@ using Piranha.Repositories;
 
 namespace Piranha.Services;
 
-public class MediaService : IMediaService
+internal sealed class MediaService : IMediaService
 {
     private readonly IMediaRepository _repo;
     private readonly IParamService _paramService;

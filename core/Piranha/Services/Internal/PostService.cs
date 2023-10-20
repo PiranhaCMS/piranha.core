@@ -14,7 +14,7 @@ using Piranha.Repositories;
 
 namespace Piranha.Services;
 
-public class PostService : IPostService
+internal sealed class PostService : IPostService
 {
     private readonly IPostRepository _repo;
     private readonly IContentFactory _factory;

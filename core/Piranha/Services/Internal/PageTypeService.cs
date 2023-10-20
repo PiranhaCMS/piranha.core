@@ -14,7 +14,7 @@ using Piranha.Repositories;
 
 namespace Piranha.Services;
 
-public class PageTypeService : IPageTypeService
+internal sealed class PageTypeService : IPageTypeService
 {
     private readonly IPageTypeRepository _repo;
     private readonly ICache _cache;

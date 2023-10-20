@@ -14,7 +14,7 @@ using Piranha.Repositories;
 
 namespace Piranha.Services;
 
-public class PageService : IPageService
+internal sealed class PageService : IPageService
 {
     private readonly IPageRepository _repo;
     private readonly IContentFactory _factory;

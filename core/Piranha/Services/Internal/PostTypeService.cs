@@ -14,9 +14,9 @@ using Piranha.Repositories;
 
 namespace Piranha.Services;
 
-public class SiteTypeService : ISiteTypeService
+internal sealed class PostTypeService : IPostTypeService
 {
-    private readonly ISiteTypeRepository _repo;
+    private readonly IPostTypeRepository _repo;
     private readonly ICache _cache;
 
     /// <summary>
@@ -24,7 +24,7 @@ public class SiteTypeService : ISiteTypeService
     /// </summary>
     /// <param name="repo">The main repository</param>
     /// <param name="cache">The optional model cache</param>
-    public SiteTypeService(ISiteTypeRepository repo, ICache cache)
+    public PostTypeService(IPostTypeRepository repo, ICache cache)
     {
         _repo = repo;
 
@@ -38,7 +38,7 @@ public class SiteTypeService : ISiteTypeService
     /// Gets all available models.
     /// </summary>
     /// <returns>The available models</returns>
-    public Task<IEnumerable<SiteType>> GetAllAsync()
+    public Task<IEnumerable<PostType>> GetAllAsync()
     {
         return GetTypes();
     }
@@ -48,7 +48,7 @@ public class SiteTypeService : ISiteTypeService
     /// </summary>
     /// <param name="id">The unique i</param>
     /// <returns></returns>
-    public async Task<SiteType> GetByIdAsync(string id)
+    public async Task<PostType> GetByIdAsync(string id)
     {
         var types = await GetTypes().ConfigureAwait(false);
 
@@ -60,7 +60,7 @@ public class SiteTypeService : ISiteTypeService
     /// depending on its state.
     /// </summary>
     /// <param name="model">The model</param>
-    public async Task SaveAsync(SiteType model)
+    public async Task SaveAsync(PostType model)
     {
         // Validate model
         var context = new ValidationContext(model);
@@ -72,7 +72,7 @@ public class SiteTypeService : ISiteTypeService
         App.Hooks.OnAfterSave(model);
 
         // Clear cache
-        _cache?.Remove("Piranha_SiteTypes");
+        _cache?.Remove("Piranha_PostTypes");
     }
 
     /// <summary>
@@ -93,7 +93,7 @@ public class SiteTypeService : ISiteTypeService
     /// Deletes the given model.
     /// </summary>
     /// <param name="model">The model</param>
-    public async Task DeleteAsync(SiteType model)
+    public async Task DeleteAsync(PostType model)
     {
         // Call hooks & delete
         App.Hooks.OnBeforeDelete(model);
@@ -101,14 +101,14 @@ public class SiteTypeService : ISiteTypeService
         App.Hooks.OnAfterDelete(model);
 
         // Clear cache
-        _cache?.Remove("Piranha_SiteTypes");
+        _cache?.Remove("Piranha_PostTypes");
     }
 
     /// <summary>
     /// Deletes the given models.
     /// </summary>
     /// <param name="models">The models</param>
-    public async Task DeleteAsync(IEnumerable<SiteType> models)
+    public async Task DeleteAsync(IEnumerable<PostType> models)
     {
         if (models != null && models.Count() > 0)
         {
@@ -120,22 +120,22 @@ public class SiteTypeService : ISiteTypeService
                 App.Hooks.OnAfterDelete(model);
             }
             // Clear cache
-            _cache?.Remove("Piranha_SiteTypes");
+            _cache?.Remove("Piranha_PostTypes");
         }
     }
 
     /// <summary>
     /// Reloads the page types from the database.
     /// </summary>
-    private async Task<IEnumerable<SiteType>> GetTypes()
+    private async Task<IEnumerable<PostType>> GetTypes()
     {
-        var types = _cache?.Get<IEnumerable<SiteType>>("Piranha_SiteTypes");
+        var types = _cache?.Get<IEnumerable<PostType>>("Piranha_PostTypes");
 
         if (types == null)
         {
             types = await _repo.GetAll().ConfigureAwait(false);
 
-            _cache?.Set("Piranha_SiteTypes", types);
+            _cache?.Set("Piranha_PostTypes", types);
         }
         return types;
     }

@@ -13,7 +13,7 @@ using Piranha.Repositories;
 
 namespace Piranha.Services;
 
-public class ArchiveService : IArchiveService
+internal sealed class ArchiveService : IArchiveService
 {
     private readonly IArchiveRepository _repo;
     private readonly IParamService _paramService;

@@ -15,7 +15,7 @@ using Piranha.Repositories;
 
 namespace Piranha.Services;
 
-public class LanguageService : ILanguageService
+internal sealed class LanguageService : ILanguageService
 {
     private readonly ILanguageRepository _repo;
     private readonly ICache _cache;

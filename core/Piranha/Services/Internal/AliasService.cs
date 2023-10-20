@@ -14,7 +14,7 @@ using Piranha.Repositories;
 
 namespace Piranha.Services;
 
-public class AliasService : IAliasService
+internal sealed class AliasService : IAliasService
 {
     private readonly IAliasRepository _repo;
     private readonly ISiteService _siteService;

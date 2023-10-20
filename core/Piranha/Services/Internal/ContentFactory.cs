@@ -20,7 +20,7 @@ namespace Piranha.Services;
 /// The content factory is responsible for creating models and
 /// initializing them after they have been loaded.
 /// </summary>
-public class ContentFactory : IContentFactory
+internal sealed class ContentFactory : IContentFactory
 {
     private readonly IServiceProvider _services;
 

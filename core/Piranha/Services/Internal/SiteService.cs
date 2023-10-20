@@ -14,7 +14,7 @@ using Piranha.Repositories;
 
 namespace Piranha.Services;
 
-public class SiteService : ISiteService
+internal sealed class SiteService : ISiteService
 {
     [Serializable]
     public class SiteMapping

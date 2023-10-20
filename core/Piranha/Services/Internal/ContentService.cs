@@ -14,7 +14,7 @@ using Piranha.Repositories;
 
 namespace Piranha.Services;
 
-public class ContentService : IContentService
+internal sealed class ContentService : IContentService
 {
     private readonly IContentRepository _repo;
     private readonly IContentFactory _factory;

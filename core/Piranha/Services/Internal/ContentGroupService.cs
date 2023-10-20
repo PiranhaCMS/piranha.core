@@ -15,7 +15,7 @@ using Piranha.Repositories;
 
 namespace Piranha.Services;
 
-public class ContentGroupService : IContentGroupService
+internal sealed class ContentGroupService : IContentGroupService
 {
     private readonly IContentGroupRepository _repo;
     private readonly ICache _cache;
