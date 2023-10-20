@@ -24,6 +24,10 @@ public class DataSelectField<T> : DataSelectFieldBase where T : class
     /// </summary>
     public T Value { get; set; }
 
+    /// <summary>
+    /// Initializes the field for client use.
+    /// </summary>
+    /// <param name="services">The current service provider</param>
     public async Task Init(IServiceProvider services)
     {
         if (string.IsNullOrWhiteSpace(Id)) return;
@@ -35,10 +39,11 @@ public class DataSelectField<T> : DataSelectFieldBase where T : class
             // Now inject any other parameters
             using (var scope = services.CreateScope())
             {
-                var param = new List<object>();
-
-                // First add the current id to the params
-                param.Add(Id);
+                var param = new List<object>
+                {
+                    // First add the current id to the params
+                    Id
+                };
 
                 foreach (var p in get.GetParameters().Skip(1))
                 {
@@ -61,6 +66,10 @@ public class DataSelectField<T> : DataSelectFieldBase where T : class
         }
     }
 
+    /// <summary>
+    /// Initializes the field for manager use.
+    /// </summary>
+    /// <param name="services">The current service provider</param>
     public async Task InitManager(IServiceProvider services)
     {
         var get = typeof(T).GetMethod("GetList", BindingFlags.Public|BindingFlags.NonPublic|BindingFlags.Static);
@@ -92,6 +101,7 @@ public class DataSelectField<T> : DataSelectFieldBase where T : class
         }
     }
 
+    /// <inheritdoc />
     public override string GetTitle()
     {
         if (Value != null)
@@ -102,12 +112,25 @@ public class DataSelectField<T> : DataSelectFieldBase where T : class
     }
 }
 
+/// <summary>
+/// An item in the data secect list.
+/// </summary>
 public class DataSelectFieldItem
 {
+    /// <summary>
+    /// The unique id.
+    /// </summary>
     public string Id { get; set; }
+
+    /// <summary>
+    /// The display name.
+    /// </summary>
     public string Name { get; set; }
 }
 
+/// <summary>
+/// Non generic base class for data select fields.
+/// </summary>
 public abstract class DataSelectFieldBase : IField
 {
     /// <summary>

@@ -12,6 +12,9 @@ using Piranha.Models;
 
 namespace Piranha.Extend;
 
+/// <summary>
+/// Attribute for marking a class as a block group type.
+/// </summary>
 [AttributeUsage(AttributeTargets.Class)]
 public class BlockGroupTypeAttribute : BlockTypeAttribute
 {

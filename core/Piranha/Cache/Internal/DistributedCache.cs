@@ -13,9 +13,7 @@ using Newtonsoft.Json;
 
 namespace Piranha.Cache;
 
-/// <summary>
-/// Simple in memory cache.
-/// </summary>
+/// <inheritdoc />
 internal sealed class DistributedCache : ICache
 {
     private readonly IDistributedCache _cache;
@@ -34,12 +32,7 @@ internal sealed class DistributedCache : ICache
         };
     }
 
-    /// <summary>
-    /// Gets the model with the specified key from cache.
-    /// </summary>
-    /// <typeparam name="T">The model type</typeparam>
-    /// <param name="key">The unique key</param>
-    /// <returns>The cached model, null it wasn't found</returns>
+    /// <inheritdoc />
     public T Get<T>(string key)
     {
         var json = _cache.GetString(key);
@@ -51,21 +44,13 @@ internal sealed class DistributedCache : ICache
         return default(T);
     }
 
-    /// <summary>
-    /// Sets the given model in the cache.
-    /// </summary>
-    /// <typeparam name="T">The model type</typeparam>
-    /// <param name="key">The unique key</param>
-    /// <param name="value">The model</param>
+    /// <inheritdoc />
     public void Set<T>(string key, T value)
     {
         _cache.SetString(key, JsonConvert.SerializeObject(value, _jsonSettings));
     }
 
-    /// <summary>
-    /// Removes the model with the specified key from cache.
-    /// </summary>
-    /// <param name="key">The unique key</param>
+    /// <inheritdoc />
     public void Remove(string key)
     {
         _cache.Remove(key);

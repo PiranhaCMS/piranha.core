@@ -23,6 +23,7 @@ public class VideoBlock : Block
     /// </summary>
     public VideoField Body { get; set; }
 
+    /// <inheritdoc />
     public override string GetTitle()
     {
         if (Body != null && Body.Media != null)

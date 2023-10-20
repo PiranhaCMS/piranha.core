@@ -13,7 +13,7 @@ using Piranha.Models;
 namespace Piranha;
 
 /// <summary>
-/// Interface for the main storage manager.
+/// Service for handling asset storage.
 /// </summary>
 public interface IStorage
 {

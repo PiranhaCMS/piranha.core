@@ -11,7 +11,7 @@
 namespace Piranha.Extend;
 
 /// <summary>
-/// Interface for converting markdown to Html.
+/// Service for converting markdown to HTML.
 /// </summary>
 public interface IMarkdown
 {

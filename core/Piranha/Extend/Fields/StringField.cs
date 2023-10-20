@@ -10,6 +10,9 @@
 
 namespace Piranha.Extend.Fields;
 
+/// <summary>
+/// Field for single line string values.
+/// </summary>
 [FieldType(Name = "String", Shorthand = "String", Component = "string-field")]
 public class StringField : SimpleField<string>, ISearchable, ITranslatable
 {
@@ -31,9 +34,7 @@ public class StringField : SimpleField<string>, ISearchable, ITranslatable
         return field.Value;
     }
 
-    /// <summary>
-    /// Gets the content that should be indexed for searching.
-    /// </summary>
+    /// <inheritdoc />
     public string GetIndexedContent()
     {
         return !string.IsNullOrEmpty(Value) ? Value : "";

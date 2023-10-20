@@ -12,11 +12,18 @@ using Piranha.Models;
 
 namespace Piranha.Extend;
 
+/// <summary>
+/// Attribute for marking a class as a block type.
+/// </summary>
 [AttributeUsage(AttributeTargets.Class)]
 public class BlockTypeAttribute : Attribute
 {
     private bool _isGenericManuallySet = false;
     private bool _isGeneric = true;
+
+    /// <summary>
+    /// The UI component that should handle the block.
+    /// </summary>
     protected string _component = "generic-block";
 
     /// <summary>

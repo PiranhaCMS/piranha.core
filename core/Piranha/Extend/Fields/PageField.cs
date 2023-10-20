@@ -10,6 +10,9 @@
 
 namespace Piranha.Extend.Fields;
 
+/// <summary>
+/// Field for referencing a page.
+/// </summary>
 [FieldType(Name = "Page", Shorthand = "Page", Component = "page-field")]
 public class PageField : IField, IEquatable<PageField>
 {
@@ -29,10 +32,7 @@ public class PageField : IField, IEquatable<PageField>
     /// </summary>
     public bool HasValue => Page != null;
 
-    /// <summary>
-    /// Gets the list item title if this field is used in
-    /// a collection regions.
-    /// </summary>
+    /// <inheritdoc />
     public virtual string GetTitle()
     {
         return Page?.Title;
@@ -91,19 +91,13 @@ public class PageField : IField, IEquatable<PageField>
         return new PageField { Id = page.Id };
     }
 
-    /// <summary>
-    /// Gets the hash code for the field.
-    /// </summary>
+    /// <inheritdoc />
     public override int GetHashCode()
     {
         return Id.HasValue ? Id.GetHashCode() : 0;
     }
 
-    /// <summary>
-    /// Checks if the given object is equal to the field.
-    /// </summary>
-    /// <param name="obj">The object</param>
-    /// <returns>True if the fields are equal</returns>
+    /// <inheritdoc />
     public override bool Equals(object obj)
     {
         if (obj is PageField field)

@@ -10,6 +10,9 @@
 
 namespace Piranha.Extend;
 
+/// <summary>
+/// Attribute for specifying an allowed block item type for a block group.
+/// </summary>
 [AttributeUsage(AttributeTargets.Class, AllowMultiple = true)]
 public class BlockItemTypeAttribute : Attribute
 {

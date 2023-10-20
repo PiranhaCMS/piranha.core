@@ -11,7 +11,7 @@
 namespace Piranha.Extend.Blocks;
 
 /// <summary>
-/// Image block.
+/// Image gallery block.
 /// </summary>
 [BlockGroupType(Name = "Gallery", Category = "Media", Icon = "fas fa-images")]
 [BlockItemType(Type = typeof(ImageBlock))]

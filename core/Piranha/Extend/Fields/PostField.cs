@@ -10,13 +10,15 @@
 
 namespace Piranha.Extend.Fields;
 
+/// <summary>
+/// Field for referencing a post.
+/// </summary>
 [FieldType(Name = "Post", Shorthand = "Post", Component = "post-field")]
 public class PostField : IField, IEquatable<PostField>
 {
     /// <summary>
     /// Gets/sets the media id.
     /// </summary>
-    /// <returns></returns>
     public Guid? Id { get; set; }
 
     /// <summary>
@@ -29,10 +31,7 @@ public class PostField : IField, IEquatable<PostField>
     /// </summary>
     public bool HasValue => Post != null;
 
-    /// <summary>
-    /// Gets the list item title if this field is used in
-    /// a collection regions.
-    /// </summary>
+    /// <inheritdoc />
     public virtual string GetTitle()
     {
         return Post?.Title;
@@ -97,19 +96,13 @@ public class PostField : IField, IEquatable<PostField>
         };
     }
 
-    /// <summary>
-    /// Gets the hash code for the field.
-    /// </summary>
+    /// <inheritdoc />
     public override int GetHashCode()
     {
         return Id.HasValue ? Id.GetHashCode() : 0;
     }
 
-    /// <summary>
-    /// Checks if the given object is equal to the field.
-    /// </summary>
-    /// <param name="obj">The object</param>
-    /// <returns>True if the fields are equal</returns>
+    /// <inheritdoc />
     public override bool Equals(object obj)
     {
         if (obj is PostField field)

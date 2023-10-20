@@ -12,13 +12,12 @@ using Piranha.Extend.Fields;
 
 namespace Piranha.Extend.Serializers;
 
+/// <summary>
+/// Serializer for date fields.
+/// </summary>
 public class DateFieldSerializer : ISerializer
 {
-    /// <summary>
-    /// Serializes the given object.
-    /// </summary>
-    /// <param name="obj">The object</param>
-    /// <returns>The serialized value</returns>
+    /// <inheritdoc />
     public string Serialize(object obj)
     {
         if (obj is DateField field)
@@ -32,11 +31,7 @@ public class DateFieldSerializer : ISerializer
         throw new ArgumentException("The given object doesn't match the serialization type");
     }
 
-    /// <summary>
-    /// Deserializes the given string.
-    /// </summary>
-    /// <param name="str">The serialized value</param>
-    /// <returns>The object</returns>
+    /// <inheritdoc />
     public object Deserialize(string str)
     {
         var field = new DateField();

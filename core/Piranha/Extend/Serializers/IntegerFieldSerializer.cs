@@ -10,13 +10,13 @@
 
 namespace Piranha.Extend.Serializers;
 
+/// <summary>
+/// Serializer for integer based fields.
+/// </summary>
+/// <typeparam name="T">The fields type</typeparam>
 public class IntegerFieldSerializer<T> : ISerializer where T : Fields.SimpleField<int?>
 {
-    /// <summary>
-    /// Serializes the given object.
-    /// </summary>
-    /// <param name="obj">The object</param>
-    /// <returns>The serialized value</returns>
+    /// <inheritdoc />
     public string Serialize(object obj)
     {
         if (obj is T field)
@@ -30,11 +30,7 @@ public class IntegerFieldSerializer<T> : ISerializer where T : Fields.SimpleFiel
         throw new ArgumentException("The given object doesn't match the serialization type");
     }
 
-    /// <summary>
-    /// Deserializes the given string.
-    /// </summary>
-    /// <param name="str">The serialized value</param>
-    /// <returns>The object</returns>
+    /// <inheritdoc />
     public object Deserialize(string str)
     {
         var field = Activator.CreateInstance<T>();

@@ -12,6 +12,9 @@ using System.Text.RegularExpressions;
 
 namespace Piranha.Extend.Fields;
 
+/// <summary>
+/// Field for HTML string values.
+/// </summary>
 [FieldType(Name = "Html", Shorthand = "Html", Component = "html-field")]
 public class HtmlField : SimpleField<string>, ISearchable, ITranslatable
 {
@@ -33,10 +36,7 @@ public class HtmlField : SimpleField<string>, ISearchable, ITranslatable
         return field.Value;
     }
 
-    /// <summary>
-    /// Gets the list item title if this field is used in
-    /// a collection regions.
-    /// </summary>
+    /// <inheritdoc />
     public override string GetTitle()
     {
         if (Value != null)
@@ -52,9 +52,7 @@ public class HtmlField : SimpleField<string>, ISearchable, ITranslatable
         return null;
     }
 
-    /// <summary>
-    /// Gets the content that should be indexed for searching.
-    /// </summary>
+    /// <inheritdoc />
     public string GetIndexedContent()
     {
         return !string.IsNullOrEmpty(Value) ? Value : "";

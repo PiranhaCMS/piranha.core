@@ -10,6 +10,9 @@
 
 namespace Piranha.Extend.Fields;
 
+/// <summary>
+/// Field for a boolean value.
+/// </summary>
 [FieldType(Name = "Checkbox", Shorthand = "Checkbox", Component = "checkbox-field")]
 public class CheckBoxField : SimpleField<bool>
 {

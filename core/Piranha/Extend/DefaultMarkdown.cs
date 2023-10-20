@@ -12,22 +12,15 @@ using Markdig;
 
 namespace Piranha.Extend;
 
-/// <summary>
-/// Interface for converting markdown to Html.
-/// </summary>
+/// <inheritdoc />
 public class DefaultMarkdown : IMarkdown
 {
     /// <summary>
-    /// Gets/sets the additional pipeline to use
-    /// for markdown transformation.
+    /// Gets/sets the additional pipeline to use for markdown transformation.
     /// </summary>
     public MarkdownPipeline _pipeline { get; set; }
 
-    /// <summary>
-    /// Transforms the given markdown string to html.
-    /// </summary>
-    /// <param name="md">The markdown</param>
-    /// <returns>The transformed html</returns>
+    /// <inheritdoc />
     public string Transform(string md)
     {
         if (!string.IsNullOrEmpty(md))

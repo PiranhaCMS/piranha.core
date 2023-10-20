@@ -10,6 +10,9 @@
 
 namespace Piranha.Extend.Fields;
 
+/// <summary>
+/// Field for Markdown string values.
+/// </summary>
 [FieldType(Name = "Markdown", Shorthand = "Markdown", Component = "markdown-field")]
 public class MarkdownField : SimpleField<string>, ISearchable, ITranslatable
 {
@@ -40,9 +43,7 @@ public class MarkdownField : SimpleField<string>, ISearchable, ITranslatable
         return App.Markdown.Transform(Value);
     }
 
-    /// <summary>
-    /// Gets the content that should be indexed for searching.
-    /// </summary>
+    /// <inheritdoc />
     public string GetIndexedContent()
     {
         return !string.IsNullOrEmpty(Value) ? ToHtml() : "";

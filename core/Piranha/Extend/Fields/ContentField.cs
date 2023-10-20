@@ -10,6 +10,9 @@
 
 namespace Piranha.Extend.Fields;
 
+/// <summary>
+/// Field for referencing a content model.
+/// </summary>
 [FieldType(Name = "Content", Shorthand = "Content", Component = "content-field")]
 public class ContentField : IField, IEquatable<ContentField>
 {
@@ -29,10 +32,7 @@ public class ContentField : IField, IEquatable<ContentField>
     /// </summary>
     public bool HasValue => Content != null;
 
-    /// <summary>
-    /// Gets the list item title if this field is used in
-    /// a collection regions.
-    /// </summary>
+    /// <inheritdoc />
     public virtual string GetTitle()
     {
         return Content?.Title;
@@ -77,19 +77,13 @@ public class ContentField : IField, IEquatable<ContentField>
         return new ContentField { Id = content.Id };
     }
 
-    /// <summary>
-    /// Gets the hash code for the field.
-    /// </summary>
+    /// <inheritdoc />
     public override int GetHashCode()
     {
         return Id.HasValue ? Id.GetHashCode() : 0;
     }
 
-    /// <summary>
-    /// Checks if the given object is equal to the field.
-    /// </summary>
-    /// <param name="obj">The object</param>
-    /// <returns>True if the fields are equal</returns>
+    /// <inheritdoc />
     public override bool Equals(object obj)
     {
         if (obj is ContentField field)

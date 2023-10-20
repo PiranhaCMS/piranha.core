@@ -11,7 +11,7 @@
 namespace Piranha.Extend;
 
 /// <summary>
-/// Base class for field settings.
+/// Base class for all field settings attributes.
 /// </summary>
 [AttributeUsage(AttributeTargets.Property)]
 public abstract class FieldSettingsAttribute : Attribute { }

@@ -10,6 +10,9 @@
 
 namespace Piranha.Extend.Fields;
 
+/// <summary>
+/// Field for a string value that can't be edited.
+/// </summary>
 [FieldType(Name = "Readonly", Shorthand = "Readonly", Component = "readonly-field")]
 public class ReadonlyField : SimpleField<string>
 {

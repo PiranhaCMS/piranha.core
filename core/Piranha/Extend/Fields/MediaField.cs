@@ -12,6 +12,9 @@ using Piranha.Models;
 
 namespace Piranha.Extend.Fields;
 
+/// <summary>
+/// Field for referencing a media asset regardless of media type.
+/// </summary>
 [FieldType(Name = "Media", Shorthand = "Media", Component = "media-field")]
 public class MediaField : MediaFieldBase<MediaField>
 {

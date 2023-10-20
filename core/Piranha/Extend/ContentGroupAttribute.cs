@@ -10,6 +10,9 @@
 
 namespace Piranha.Extend;
 
+/// <summary>
+/// Attribute for marking a class as a content group.
+/// </summary>
 [AttributeUsage(AttributeTargets.Class)]
 public sealed class ContentGroupAttribute : Attribute
 {

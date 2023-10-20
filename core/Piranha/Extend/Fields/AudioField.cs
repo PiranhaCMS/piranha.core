@@ -12,6 +12,9 @@ using Piranha.Models;
 
 namespace Piranha.Extend.Fields;
 
+/// <summary>
+/// Field for referencing an audio asset.
+/// </summary>
 [FieldType(Name = "Audio", Shorthand = "Audio", Component = "audio-field")]
 public class AudioField : MediaFieldBase<AudioField>
 {

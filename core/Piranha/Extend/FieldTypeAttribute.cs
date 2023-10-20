@@ -10,6 +10,9 @@
 
 namespace Piranha.Extend;
 
+/// <summary>
+/// Attribute for marking a class as a field type.
+/// </summary>
 [AttributeUsage(AttributeTargets.Class)]
 public class FieldTypeAttribute : Attribute
 {

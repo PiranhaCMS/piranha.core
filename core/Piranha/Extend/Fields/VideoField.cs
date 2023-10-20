@@ -12,6 +12,9 @@ using Piranha.Models;
 
 namespace Piranha.Extend.Fields;
 
+/// <summary>
+/// Field for referenncing a video asset.
+/// </summary>
 [FieldType(Name = "Video", Shorthand = "Video", Component = "video-field")]
 public class VideoField : MediaFieldBase<VideoField>
 {

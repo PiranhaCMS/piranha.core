@@ -10,6 +10,9 @@
 
 namespace Piranha.Extend.Fields;
 
+/// <summary>
+/// Field for an integer value.
+/// </summary>
 [FieldType(Name = "Number", Shorthand = "Number", Component = "number-field")]
 public class NumberField : SimpleField<int?>
 {

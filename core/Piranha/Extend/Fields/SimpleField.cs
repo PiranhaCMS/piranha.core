@@ -21,10 +21,7 @@ public abstract class SimpleField<T> : Field, IEquatable<SimpleField<T>>
     /// </summary>
     public T Value { get; set; }
 
-    /// <summary>
-    /// Gets the list item title if this field is used in
-    /// a collection regions.
-    /// </summary>
+    /// <inheritdoc />
     public override string GetTitle()
     {
         if (Value == null)
@@ -41,19 +38,13 @@ public abstract class SimpleField<T> : Field, IEquatable<SimpleField<T>>
         return title;
     }
 
-    /// <summary>
-    /// Gets the hash code for the field.
-    /// </summary>
+    /// <inheritdoc />
     public override int GetHashCode()
     {
         return Value.Equals(default(T)) ? 0 : Value.GetHashCode();
     }
 
-    /// <summary>
-    /// Checks if the given object is equal to the field.
-    /// </summary>
-    /// <param name="obj">The object</param>
-    /// <returns>True if the fields are equal</returns>
+    /// <inheritdoc />
     public override bool Equals(object obj)
     {
         if (obj is SimpleField<T> field)

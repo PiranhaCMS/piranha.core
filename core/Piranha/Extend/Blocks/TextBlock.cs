@@ -23,10 +23,7 @@ public class TextBlock : Block, ISearchable, ITranslatable
     /// </summary>
     public TextField Body { get; set; }
 
-    /// <summary>
-    /// Gets the title of the block when used in a block group.
-    /// </summary>
-    /// <returns>The title</returns>
+    /// <inheritdoc />
     public override string GetTitle()
     {
         if (Body?.Value != null)
@@ -36,9 +33,7 @@ public class TextBlock : Block, ISearchable, ITranslatable
         return "Empty";
     }
 
-    /// <summary>
-    /// Gets the content that should be indexed for searching.
-    /// </summary>
+    /// <inheritdoc />
     public string GetIndexedContent()
     {
         return !string.IsNullOrEmpty(Body.Value) ? Body.Value : "";

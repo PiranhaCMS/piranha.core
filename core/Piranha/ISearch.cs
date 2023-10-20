@@ -12,6 +12,9 @@ using Piranha.Models;
 
 namespace Piranha;
 
+/// <summary>
+/// Service for indexing content for searching.
+/// </summary>
 public interface ISearch
 {
     /// <summary>

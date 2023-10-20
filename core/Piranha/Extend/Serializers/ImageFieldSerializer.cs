@@ -12,13 +12,12 @@ using Piranha.Extend.Fields;
 
 namespace Piranha.Extend.Serializers;
 
+/// <summary>
+/// Serializer for image fields.
+/// </summary>
 public class ImageFieldSerializer : ISerializer
 {
-    /// <summary>
-    /// Serializes the given object.
-    /// </summary>
-    /// <param name="obj">The object</param>
-    /// <returns>The serialized value</returns>
+    /// <inheritdoc />
     public string Serialize(object obj)
     {
         if (obj is ImageField field)
@@ -28,11 +27,7 @@ public class ImageFieldSerializer : ISerializer
         throw new ArgumentException("The given object doesn't match the serialization type");
     }
 
-    /// <summary>
-    /// Deserializes the given string.
-    /// </summary>
-    /// <param name="str">The serialized value</param>
-    /// <returns>The object</returns>
+    /// <inheritdoc />
     public object Deserialize(string str)
     {
         return new ImageField

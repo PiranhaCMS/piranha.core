@@ -12,6 +12,9 @@ using Piranha.Models;
 
 namespace Piranha.Extend.Fields;
 
+/// <summary>
+/// Field for referencing an image asset.
+/// </summary>
 [FieldType(Name = "Image", Shorthand = "Image", Component = "image-field")]
 public class ImageField : MediaFieldBase<ImageField>
 {

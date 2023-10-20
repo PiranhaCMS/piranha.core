@@ -12,13 +12,13 @@ using Piranha.Extend.Fields;
 
 namespace Piranha.Extend.Serializers;
 
+/// <summary>
+/// Serializer for select fields.
+/// </summary>
+/// <typeparam name="T">The field type</typeparam>
 public class SelectFieldSerializer<T> : ISerializer where T : Fields.SelectFieldBase
 {
-    /// <summary>
-    /// Serializes the given object.
-    /// </summary>
-    /// <param name="obj">The object</param>
-    /// <returns>The serialized value</returns>
+    /// <inheritdoc />
     public string Serialize(object obj)
     {
         if (obj is SelectFieldBase field)
@@ -28,11 +28,7 @@ public class SelectFieldSerializer<T> : ISerializer where T : Fields.SelectField
         throw new ArgumentException("The given object doesn't match the serialization type");
     }
 
-    /// <summary>
-    /// Deserializes the given string.
-    /// </summary>
-    /// <param name="str">The serialized value</param>
-    /// <returns>The object</returns>
+    /// <inheritdoc />
     public object Deserialize(string str)
     {
         var field = Activator.CreateInstance<T>();

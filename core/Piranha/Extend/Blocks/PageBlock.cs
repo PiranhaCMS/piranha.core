@@ -23,10 +23,7 @@ public class PageBlock : Block
     /// </summary>
     public PageField Body { get; set; }
 
-    /// <summary>
-    /// Gets the title of the block when used in a block group.
-    /// </summary>
-    /// <returns>The title</returns>
+    /// <inheritdoc />
     public override string GetTitle()
     {
         if (Body != null && Body.Page != null)

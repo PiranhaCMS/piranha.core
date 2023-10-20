@@ -11,7 +11,7 @@
 namespace Piranha.Extend;
 
 /// <summary>
-/// Interface for defining a Piranha module.
+/// A dynamically loaded module in Piranha.
 /// </summary>
 public interface IModule
 {

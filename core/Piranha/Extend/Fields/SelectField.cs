@@ -69,37 +69,25 @@ public class SelectField<T> : SelectFieldBase, IEquatable<SelectField<T>> where 
         }
     }
 
-    /// <summary>
-    /// Gets the list item title if this field is used in
-    /// a collection regions.
-    /// </summary>
+    /// <inheritdoc />
     public override string GetTitle()
     {
         return GetEnumTitle((Enum)(object)Value);
     }
 
-    /// <summary>
-    /// Initializes the field for client use.
-    /// </summary>
-    /// <param name="api">The current api</param>
+    /// <inheritdoc />
     public override void Init(IApi api)
     {
         InitMetaData();
     }
 
-    /// <summary>
-    /// Gets the hash code for the field.
-    /// </summary>
+    /// <inheritdoc />
     public override int GetHashCode()
     {
         return Value.GetHashCode();
     }
 
-    /// <summary>
-    /// Checks if the given object is equal to the field.
-    /// </summary>
-    /// <param name="obj">The object</param>
-    /// <returns>True if the fields are equal</returns>
+    /// <inheritdoc />
     public override bool Equals(object obj)
     {
         if (obj is SelectField<T> field)

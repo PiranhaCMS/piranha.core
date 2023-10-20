@@ -36,10 +36,7 @@ public abstract class SelectFieldBase : IField
     [JsonIgnore]
     public abstract List<SelectFieldItem> Items { get; }
 
-    /// <summary>
-    /// Gets the list item title if this field is used in
-    /// a collection regions.
-    /// </summary>
+    /// <inheritdoc />
     public abstract string GetTitle();
 
     /// <summary>

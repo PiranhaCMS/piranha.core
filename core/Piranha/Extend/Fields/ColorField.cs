@@ -10,6 +10,9 @@
 
 namespace Piranha.Extend.Fields;
 
+/// <summary>
+/// Field for a color value.
+/// </summary>
 [FieldType(Name = "Color", Shorthand = "Color", Component = "color-field")]
 public class ColorField : SimpleField<string>
 {

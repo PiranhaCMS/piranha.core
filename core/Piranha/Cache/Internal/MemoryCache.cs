@@ -12,14 +12,9 @@ using Microsoft.Extensions.Caching.Memory;
 
 namespace Piranha.Cache;
 
-/// <summary>
-/// Simple in memory cache.
-/// </summary>
+/// <inheritdoc />
 internal sealed class MemoryCache : ICache
 {
-    /// <summary>
-    /// The private memory cache.
-    /// </summary>
     private readonly IMemoryCache _cache;
 
     /// <summary>
@@ -31,12 +26,7 @@ internal sealed class MemoryCache : ICache
         _cache = cache;
     }
 
-    /// <summary>
-    /// Gets the model with the specified key from cache.
-    /// </summary>
-    /// <typeparam name="T">The model type</typeparam>
-    /// <param name="key">The unique key</param>
-    /// <returns>The cached model, null it wasn't found</returns>
+    /// <inheritdoc />
     public T Get<T>(string key)
     {
         if (_cache.TryGetValue<T>(key, out var obj))
@@ -46,21 +36,13 @@ internal sealed class MemoryCache : ICache
         return default(T);
     }
 
-    /// <summary>
-    /// Sets the given model in the cache.
-    /// </summary>
-    /// <typeparam name="T">The model type</typeparam>
-    /// <param name="key">The unique key</param>
-    /// <param name="value">The model</param>
+    /// <inheritdoc />
     public void Set<T>(string key, T value)
     {
         _cache.Set(key, value);
     }
 
-    /// <summary>
-    /// Removes the model with the specified key from cache.
-    /// </summary>
-    /// <param name="key">The unique key</param>
+    /// <inheritdoc />
     public void Remove(string key)
     {
         _cache.Remove(key);

@@ -15,12 +15,20 @@ namespace Piranha.Cache;
 /// </summary>
 public enum CacheLevel
 {
-    // Nothing is stored cached
+    /// <summary>
+    /// Nothing is cached
+    /// </summary>
     None,
-    // Sites & Params are cached
+    /// <summary>
+    /// Sites and Params are cached
+    /// </summary>
     Minimal,
-    // Sites, Params, PageTypes & PostTypes are cached
+    /// <summary>
+    /// Sites, Params, ContentTypes, PageTypes and PostTypes are cached
+    /// </summary>
     Basic,
-    // Everything is cached
+    /// <summary>
+    /// Everything is cached
+    /// </summary>
     Full
 }

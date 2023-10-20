@@ -12,6 +12,9 @@ using Piranha.Models;
 
 namespace Piranha.Extend.Fields;
 
+/// <summary>
+/// Field for referencing a document asset.
+/// </summary>
 [FieldType(Name = "Document", Shorthand = "Document", Component = "document-field")]
 public class DocumentField : MediaFieldBase<DocumentField>
 {

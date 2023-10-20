@@ -10,12 +10,13 @@
 
 namespace Piranha.Extend.Fields;
 
+/// <summary>
+/// Base class for all asset reference fields.
+/// </summary>
+/// <typeparam name="T">The field type</typeparam>
 public class MediaFieldBase<T> : IField, IEquatable<T> where T : MediaFieldBase<T>
 {
-    /// <summary>
-    /// Gets the list item title if this field is used in
-    /// a collection regions.
-    /// </summary>
+    /// <inheritdoc />
     public virtual string GetTitle()
     {
         return Media != null ? (!string.IsNullOrWhiteSpace(Media.Title)? string.Format("{0} ({1})", Media.Title, Media.Filename) : Media.Filename) : null;
@@ -59,19 +60,13 @@ public class MediaFieldBase<T> : IField, IEquatable<T> where T : MediaFieldBase<
         }
     }
 
-    /// <summary>
-    /// Gets the hash code for the field.
-    /// </summary>
+    /// <inheritdoc />
     public override int GetHashCode()
     {
         return Id.HasValue ? Id.GetHashCode() : 0;
     }
 
-    /// <summary>
-    /// Checks if the given object is equal to the field.
-    /// </summary>
-    /// <param name="obj">The object</param>
-    /// <returns>True if the fields are equal</returns>
+    /// <inheritdoc />
     public override bool Equals(object obj)
     {
         if (obj is T field)

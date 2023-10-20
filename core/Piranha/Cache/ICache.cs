@@ -10,6 +10,9 @@
 
 namespace Piranha.Cache;
 
+/// <summary>
+/// Service for handling model caching.
+/// </summary>
 public interface ICache
 {
     /// <summary>
