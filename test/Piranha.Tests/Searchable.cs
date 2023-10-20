@@ -115,29 +115,6 @@ public class Searchable
     }
 
     [Fact]
-    public void SearchHtmlColumnBlock()
-    {
-        var block = new HtmlColumnBlock
-        {
-            Column1 = new HtmlField
-            {
-                Value = "<p>Lorem</p>"
-            },
-            Column2 = new HtmlField
-            {
-                Value = "<p>Ipsum</p>"
-            }
-        };
-        var sb = new StringBuilder();
-        sb.AppendLine(block.Column1.Value);
-        sb.AppendLine(block.Column2.Value);
-        var value = sb.ToString();
-        var search = block.GetIndexedContent();
-
-        Assert.Equal(value, search);
-    }
-
-    [Fact]
     public void SearchQuoteBlock()
     {
         var block = new QuoteBlock

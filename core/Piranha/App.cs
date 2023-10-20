@@ -236,7 +236,6 @@ public sealed class App
         Instance._blocks.Register<Extend.Blocks.ColumnBlock>();
         Instance._blocks.Register<Extend.Blocks.ContentBlock>();
         Instance._blocks.Register<Extend.Blocks.HtmlBlock>();
-        Instance._blocks.Register<Extend.Blocks.HtmlColumnBlock>();
         Instance._blocks.Register<Extend.Blocks.ImageBlock>();
         Instance._blocks.Register<Extend.Blocks.ImageGalleryBlock>();
         Instance._blocks.Register<Extend.Blocks.MarkdownBlock>();
