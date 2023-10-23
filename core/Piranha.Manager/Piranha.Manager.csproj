@@ -16,14 +16,9 @@
     <ProjectReference Include="..\Piranha.Manager.Localization\Piranha.Manager.Localization.csproj" />
   </ItemGroup>
 
-  <ItemGroup Condition="'$(TargetFramework)' == 'net6.0'">
-    <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="6.0.0" />
-    <PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" Version="6.0.0" />
-  </ItemGroup>
-
-  <ItemGroup Condition="'$(TargetFramework)' == 'net7.0'">
-    <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="7.0.0" />
-    <PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" Version="7.0.0" />
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="8.0.0-rc.2.23480.2" />
+    <PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" Version="8.0.0-rc.2.23480.2" />
   </ItemGroup>
 
   <ItemGroup>

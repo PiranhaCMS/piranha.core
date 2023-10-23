@@ -10,16 +10,12 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="AutoMapper" Version="12.0.0" />
+    <PackageReference Include="AutoMapper" Version="12.0.1" />
     <ProjectReference Include="..\..\core\Piranha\Piranha.csproj" />
   </ItemGroup>
 
-  <ItemGroup Condition="'$(TargetFramework)' == 'net6.0'">
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="6.0.0" PrivateAssets="all" />
-  </ItemGroup>
-
-  <ItemGroup Condition="'$(TargetFramework)' == 'net7.0'">
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="7.0.0" PrivateAssets="all" />
+  <ItemGroup>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.0-rc.2.23480.1" PrivateAssets="all" />
   </ItemGroup>
 
 </Project>

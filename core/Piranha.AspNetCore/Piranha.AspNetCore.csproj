@@ -13,20 +13,13 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="xsitemap" Version="2.0.7" />
     <ProjectReference Include="..\Piranha\Piranha.csproj" />
-  </ItemGroup>
-
-  <ItemGroup Condition="'$(TargetFramework)' == 'net6.0'">
-    <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="6.0.0" />
-  </ItemGroup>
-
-  <ItemGroup Condition="'$(TargetFramework)' == 'net7.0'">
-    <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="7.0.0" />
+    <ProjectReference Include="..\Piranha.AspNetCore.Hosting\Piranha.AspNetCore.Hosting.csproj" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Piranha.AspNetCore.Hosting\Piranha.AspNetCore.Hosting.csproj" />
+    <PackageReference Include="xsitemap" Version="2.0.7" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="8.0.0-rc.2.23480.2" />
   </ItemGroup>
 
 </Project>

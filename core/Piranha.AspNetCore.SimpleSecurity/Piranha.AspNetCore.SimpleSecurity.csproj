@@ -18,12 +18,8 @@
     <ProjectReference Include="..\Piranha.Manager.LocalAuth\Piranha.Manager.LocalAuth.csproj" />
   </ItemGroup>
 
-  <ItemGroup Condition="'$(TargetFramework)' == 'net6.0'">
-    <PackageReference Include="Microsoft.AspNetCore.Authorization" Version="6.0.0" />
-  </ItemGroup>
-
-  <ItemGroup Condition="'$(TargetFramework)' == 'net7.0'">
-    <PackageReference Include="Microsoft.AspNetCore.Authorization" Version="7.0.0" />
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Authorization" Version="8.0.0-rc.2.23480.2" />
   </ItemGroup>
 
 </Project>
