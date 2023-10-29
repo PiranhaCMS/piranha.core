@@ -19,28 +19,28 @@
     <value>Slugs pagina gerarchica</value>
   </data>
   <data name="If page slugs should include the parent slug." xml:space="preserve">
-    <value>If page slugs should include the parent slug.</value>
+    <value>Le sottopagine dovrebbero includere la pagina principale.</value>
   </data>
   <data name="Expanded levels in the sitemap" xml:space="preserve">
-    <value>Expanded levels in the sitemap</value>
+    <value>Livelli espandibili nella sitemap</value>
   </data>
   <data name="Archive page size" xml:space="preserve">
-    <value>Archive page size</value>
+    <value>Dimensione della pagina archiviata</value>
   </data>
   <data name="Caching" xml:space="preserve">
     <value>Caching</value>
   </data>
   <data name="Page cache expiration (minutes)" xml:space="preserve">
-    <value>Page cache expiration (minutes)</value>
+    <value>Scadenza cache della pagina (minuti)</value>
   </data>
   <data name="Page revisions" xml:space="preserve">
-    <value>Page revisions</value>
+    <value>Revisione pagina</value>
   </data>
   <data name="Post cache expiration (minutes)" xml:space="preserve">
-    <value>Post cache expiration (minutes)</value>
+    <value>Scadenza cache dei post</value>
   </data>
   <data name="Post revisions" xml:space="preserve">
-    <value>Post revisions</value>
+    <value>Revisione dei post</value>
   </data>
   <data name="Media CDN" xml:space="preserve">
     <value>Media CDN</value>
