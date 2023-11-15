@@ -69,7 +69,7 @@ public class RoutingMiddleware : MiddlewareBase
             //
             Site site = null;
 
-            var hostname = context.Request.Host.Host;
+            var hostname = context.Request.Host.Value;
 
             if (_options.UseSiteRouting)
             {
@@ -91,7 +91,7 @@ public class RoutingMiddleware : MiddlewareBase
                 // Try to get the requested site by hostname
                 if (site == null)
                 {
-                    site = await api.Sites.GetByHostnameAsync(context.Request.Host.Host)
+                    site = await api.Sites.GetByHostnameAsync(context.Request.Host.Value)
                         .ConfigureAwait(false);
                 }
             }
