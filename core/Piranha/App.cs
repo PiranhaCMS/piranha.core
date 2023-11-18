@@ -166,31 +166,26 @@ public sealed class App
     /// <summary>
     /// Gets the currently available content groups.
     /// </summary>
-    [Obsolete("Please use IContentGroupService instead", false)]
     public static CachedList<Models.ContentGroup> ContentGroups => Instance._contentGroups;
 
     /// <summary>
     /// Gets the currently available content types.
     /// </summary>
-    [Obsolete("Please use IContentTypeService instead", false)]
     public static CachedList<Models.ContentType> ContentTypes => Instance._contentTypes;
 
     /// <summary>
     /// Gets the currently available page types.
     /// </summary>
-    [Obsolete("Please use IPageTypeService instead", false)]
     public static CachedList<Models.PageType> PageTypes => Instance._pageTypes;
 
     /// <summary>
     /// Gets the currently available page types.
     /// </summary>
-    [Obsolete("Please use IPostTypeService instead", false)]
     public static CachedList<Models.PostType> PostTypes => Instance._postTypes;
 
     /// <summary>
     /// Gets the currently available page types.
     /// </summary>
-    [Obsolete("Please use ISiteTypeService instead", false)]
     public static CachedList<Models.SiteType> SiteTypes => Instance._siteTypes;
 
     /// <summary>
