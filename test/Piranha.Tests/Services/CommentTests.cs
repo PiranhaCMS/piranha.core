@@ -133,11 +133,7 @@ public class CommentTests : BaseTestsAsync
                 await api.Pages.DeleteAsync(p);
             }
 
-            var sites = await api.Sites.GetAllAsync();
-            foreach (var s in sites)
-            {
-                await api.Sites.DeleteAsync(s);
-            }
+            await api.Sites.DeleteAsync(SITE_ID);
         }
     }
 
