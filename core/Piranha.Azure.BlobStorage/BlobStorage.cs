@@ -37,16 +37,18 @@ public class BlobStorage : IStorage, IStorageSession
     /// </param>
     /// <param name="tokenCredential">The connection credentials</param>
     /// <param name="naming">How uploaded media files should be named</param>
+    /// <param name="blobPublicAccessType">Public container access type when creating container.</param>
     public BlobStorage(
         Uri blobContainerUri,
         TokenCredential tokenCredential,
-        BlobStorageNaming naming = BlobStorageNaming.UniqueFileNames)
+        BlobStorageNaming naming = BlobStorageNaming.UniqueFileNames,
+        PublicAccessType blobPublicAccessType = PublicAccessType.None)
     {
         _blobContainerClient = new BlobContainerClient(blobContainerUri, tokenCredential);
         _naming = naming;
 
         // Ensure that blob container exists
-        _blobContainerClient.CreateIfNotExists(PublicAccessType.Blob);
+        _blobContainerClient.CreateIfNotExists(blobPublicAccessType);
     }
 
     /// <summary>

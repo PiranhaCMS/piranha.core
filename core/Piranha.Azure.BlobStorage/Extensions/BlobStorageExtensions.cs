@@ -9,6 +9,7 @@
  */
 
 using Azure.Core;
+using Azure.Storage.Blobs.Models;
 using Microsoft.Extensions.DependencyInjection;
 using Piranha;
 using Piranha.Azure;
@@ -71,18 +72,20 @@ public static class BlobStorageExtensions
     /// </param>
     /// <param name="naming">How uploaded media files should be named</param>
     /// <param name="scope">The optional service scope. Default is singleton</param>
+    /// <param name="blobPublicAccessType">Public container access type when creating container.</param>
     /// <returns>The service collection</returns>
     public static IServiceCollection AddPiranhaBlobStorage(
         this IServiceCollection services,
         Uri blobContainerUri,
         TokenCredential credential,
         BlobStorageNaming naming = BlobStorageNaming.UniqueFileNames,
-        ServiceLifetime scope = ServiceLifetime.Singleton)
+        ServiceLifetime scope = ServiceLifetime.Singleton,
+        PublicAccessType blobPublicAccessType = PublicAccessType.None)
     {
         App.Modules.Register<BlobStorageModule>();
 
         services.Add(new ServiceDescriptor(typeof(IStorage), sp =>
-            new BlobStorage(blobContainerUri, credential, naming), scope));
+            new BlobStorage(blobContainerUri, credential, naming, blobPublicAccessType), scope));
 
         return services;
     }
