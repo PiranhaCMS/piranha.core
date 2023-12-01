@@ -41,7 +41,6 @@ public class CommentTestsDistributedCache : CommentTests
 public class CommentTests : BaseTestsAsync
 {
     private Guid SITE_ID = Guid.NewGuid();
-    private Guid PAGE_ID = Guid.NewGuid();
     private Guid BLOG_ID = Guid.NewGuid();
     private Guid NEWS_ID = Guid.NewGuid();
     private Guid BLOGPOST_ID = Guid.NewGuid();
@@ -70,7 +69,7 @@ public class CommentTests : BaseTestsAsync
             {
                 Id = SITE_ID,
                 Title = "Comment Site",
-                InternalId = "CommentSite",
+                InternalId = $"CommentSite_{ SITE_ID }",
                 IsDefault = true
             };
             await api.Sites.SaveAsync(site);
