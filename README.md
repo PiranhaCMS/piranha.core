@@ -16,22 +16,13 @@
 
 ## About
 
-This is a **complete rewrite** of Piranha CMS. The goal of this rewrite is to create
-a version capable of targeting multiple platforms & frameworks with minimal dependencies,
-but still provide a flexible & high performance CMS library.
-
-Piranha is currently built for `.NET 6` and uses in its simplest form the following awesome packages:
-
-* [AutoMapper](https://github.com/AutoMapper/AutoMapper)
-* [Markdig](https://github.com/xoofx/markdig)
-* [Microsoft.EntityFrameworkCore](https://github.com/dotnet/efcore)
-* [Newtonsoft.Json](https://github.com/JamesNK/Newtonsoft.Json)
+Piranha CMS is a decoupled, cross-platform CMS built for `.NET8` and `Entity Framework Core`. It has a modular and extensible architecture and supports a multitude of hosting and deployment scenarios.
 
 ## Getting started
 
 ### Prerequisites
 
-* [.NET 6.0 SDK](https://dotnet.microsoft.com/download/dotnet/6.0)
+* [.NET 8.0 SDK](https://dotnet.microsoft.com/en-us/download)
 * An IDE or Editor of your choice
 
 ### Create a new project from our templates
@@ -85,10 +76,6 @@ the [official documentation here](http://piranhacms.org/docs/architecture/authen
 > gulp min:js
 > gulp min:css
 ~~~
-
-### Visual Studio users
-
-For people running Visual Studio 2017 almost all of the above steps will be handled by the IDE. Just get the source code, open the `.sln` file and you're good to go.
 
 ## Backers
 
