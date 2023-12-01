@@ -651,7 +651,7 @@ public class PageTests : BaseTestsAsync
         {
             var page = await MyCollectionPage.CreateAsync(api);
 
-            Assert.Equal(0, page.Texts.Count);
+            Assert.Empty(page.Texts);
 
             page.SiteId = SITE_ID;
             page.Title = "Another collection page";
@@ -660,7 +660,7 @@ public class PageTests : BaseTestsAsync
 
             page = await api.Pages.GetBySlugAsync<MyCollectionPage>(Piranha.Utils.GenerateSlug(page.Title), SITE_ID);
 
-            Assert.Equal(0, page.Texts.Count);
+            Assert.Empty(page.Texts);
         }
     }
 
@@ -691,7 +691,7 @@ public class PageTests : BaseTestsAsync
         {
             var page = await MyCollectionPage.CreateAsync(api);
 
-            Assert.Equal(0, page.Teasers.Count);
+            Assert.Empty(page.Teasers);
 
             page.SiteId = SITE_ID;
             page.Title = "Fourth collection page";
@@ -700,7 +700,7 @@ public class PageTests : BaseTestsAsync
 
             page = await api.Pages.GetBySlugAsync<MyCollectionPage>(Piranha.Utils.GenerateSlug(page.Title), SITE_ID);
 
-            Assert.Equal(0, page.Teasers.Count);
+            Assert.Empty(page.Teasers);
         }
     }
 

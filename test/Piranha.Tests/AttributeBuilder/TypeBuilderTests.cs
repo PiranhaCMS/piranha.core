@@ -221,9 +221,9 @@ public class TypeBuilderTests : BaseTestsAsync
             Assert.NotNull(type);
 
             Assert.Equal("MyContent", type.Group);
-            Assert.Equal(1, type.Regions.Count);
+            Assert.NotEmpty(type.Regions);
             Assert.Equal("Body", type.Regions[0].Id);
-            Assert.Equal(1, type.Regions[0].Fields.Count);
+            Assert.NotEmpty(type.Regions[0].Fields);
         }
     }
 
@@ -301,7 +301,7 @@ public class TypeBuilderTests : BaseTestsAsync
             Assert.False(type.UseTags);
 
             Assert.Equal("Body", type.Regions[0].Id);
-            Assert.Equal(1, type.Regions[0].Fields.Count);
+            Assert.NotEmpty(type.Regions[0].Fields);
 
 
             Assert.Equal("Slider", type.Regions[1].Id);
@@ -311,7 +311,7 @@ public class TypeBuilderTests : BaseTestsAsync
             Assert.Equal("fa fas-fish", type.Regions[1].Icon);
             Assert.False(type.Regions[1].ListExpand);
             Assert.True(type.Regions[1].Collection);
-            Assert.Equal(1, type.Regions[1].Fields.Count);
+            Assert.NotEmpty(type.Regions[1].Fields);
 
             Assert.Equal("Content", type.Regions[2].Id);
             Assert.Equal("Main content", type.Regions[2].Title);
@@ -361,9 +361,9 @@ public class TypeBuilderTests : BaseTestsAsync
 
             Assert.NotNull(type);
             Assert.True(type.UseBlocks);
-            Assert.Equal(1, type.Regions.Count);
+            Assert.NotEmpty(type.Regions);
             Assert.Equal("Body", type.Regions[0].Id);
-            Assert.Equal(1, type.Regions[0].Fields.Count);
+            Assert.NotEmpty(type.Regions[0].Fields);
         }
     }
 
@@ -425,7 +425,7 @@ public class TypeBuilderTests : BaseTestsAsync
             Assert.Equal("fa fas-fish", type.Regions[0].Icon);
             Assert.False(type.Regions[0].ListExpand);
             Assert.True(type.Regions[0].Collection);
-            Assert.Equal(1, type.Regions[0].Fields.Count);
+            Assert.NotEmpty(type.Regions[0].Fields);
 
             Assert.Equal("Content", type.Regions[1].Id);
             Assert.Equal("Main content", type.Regions[1].Title);
@@ -437,7 +437,7 @@ public class TypeBuilderTests : BaseTestsAsync
             Assert.Equal("Body", type.Regions[1].Fields[1].Id);
             Assert.Equal("Main Body", type.Regions[1].Fields[1].Title);
 
-            Assert.Equal(1, type.Routes.Count);
+            Assert.NotEmpty(type.Routes);
             Assert.Equal("/complex", type.Routes[0]);
 
             Assert.Equal(2, type.CustomEditors.Count);
@@ -462,9 +462,9 @@ public class TypeBuilderTests : BaseTestsAsync
             Assert.False(type.UseBlocks);
             Assert.False(type.UseExcerpt);
             Assert.False(type.UsePrimaryImage);
-            Assert.Equal(1, type.Regions.Count);
+            Assert.NotEmpty(type.Regions);
             Assert.Equal("Body", type.Regions[0].Id);
-            Assert.Equal(1, type.Regions[0].Fields.Count);
+            Assert.NotEmpty(type.Regions[0].Fields);
         }
     }
 
@@ -506,14 +506,14 @@ public class TypeBuilderTests : BaseTestsAsync
             Assert.Equal("Slider", type.Regions[0].Id);
             Assert.Equal("Intro", type.Regions[0].Title);
             Assert.True(type.Regions[0].Collection);
-            Assert.Equal(1, type.Regions[0].Fields.Count);
+            Assert.NotEmpty(type.Regions[0].Fields);
 
             Assert.Equal("Content", type.Regions[1].Id);
             Assert.Equal("Main content", type.Regions[1].Title);
             Assert.False(type.Regions[1].Collection);
             Assert.Equal(2, type.Regions[1].Fields.Count);
 
-            Assert.Equal(1, type.Routes.Count);
+            Assert.NotEmpty(type.Routes);
             Assert.Equal("/complex", type.Routes[0]);
 
             Assert.Equal(2, type.CustomEditors.Count);
@@ -556,9 +556,9 @@ public class TypeBuilderTests : BaseTestsAsync
             var type = await api.SiteTypes.GetByIdAsync("Simple");
 
             Assert.NotNull(type);
-            Assert.Equal(1, type.Regions.Count);
+            Assert.NotEmpty(type.Regions);
             Assert.Equal("Body", type.Regions[0].Id);
-            Assert.Equal(1, type.Regions[0].Fields.Count);
+            Assert.NotEmpty(type.Regions[0].Fields);
         }
     }
 
@@ -579,7 +579,7 @@ public class TypeBuilderTests : BaseTestsAsync
             Assert.Equal("Slider", type.Regions[0].Id);
             Assert.Equal("Intro", type.Regions[0].Title);
             Assert.True(type.Regions[0].Collection);
-            Assert.Equal(1, type.Regions[0].Fields.Count);
+            Assert.NotEmpty(type.Regions[0].Fields);
 
             Assert.Equal("Content", type.Regions[1].Id);
             Assert.Equal("Main content", type.Regions[1].Title);

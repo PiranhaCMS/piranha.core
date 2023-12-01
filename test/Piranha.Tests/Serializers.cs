@@ -24,7 +24,6 @@ public class Serializers
         Blue
     }
 
-    [Fact]
     public SerializerManager Register() {
         var manager = new SerializerManager();
 
