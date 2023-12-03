@@ -13,7 +13,7 @@ using Piranha.Models;
 
 namespace Piranha.Repositories;
 
-public class ParamRepository : IParamRepository
+internal class ParamRepository : IParamRepository
 {
     private readonly IDb _db;
 

@@ -14,7 +14,7 @@ using Piranha.Data.EF;
 namespace Piranha.Services;
 
 /// <inheritdoc />
-public class ContentServiceFactory : IContentServiceFactory
+internal class ContentServiceFactory : IContentServiceFactory
 {
     private readonly IContentFactory _factory;
 

@@ -13,7 +13,7 @@ using Piranha.Models;
 
 namespace Piranha.Repositories;
 
-public class LanguageRepository : ILanguageRepository
+internal class LanguageRepository : ILanguageRepository
 {
     private readonly IDb _db;
 

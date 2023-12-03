@@ -15,7 +15,7 @@ using Piranha.Services;
 
 namespace Piranha.Repositories;
 
-public class PageRepository : IPageRepository
+internal class PageRepository : IPageRepository
 {
     private readonly IDb _db;
     private readonly IContentService<Page, PageField, Models.PageBase> _contentService;

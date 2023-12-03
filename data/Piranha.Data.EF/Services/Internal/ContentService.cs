@@ -17,7 +17,7 @@ using Piranha.Models;
 namespace Piranha.Services;
 
 /// <inheritdoc />
-public class ContentService<TContent, TField, TModelBase> : IContentService<TContent, TField, TModelBase>
+internal class ContentService<TContent, TField, TModelBase> : IContentService<TContent, TField, TModelBase>
     where TContent : ContentBase<TField>
     where TField : ContentFieldBase
     where TModelBase : ContentBase

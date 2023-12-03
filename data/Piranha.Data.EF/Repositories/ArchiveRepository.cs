@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Piranha.Repositories;
 
-public class ArchiveRepository : IArchiveRepository
+internal class ArchiveRepository : IArchiveRepository
 {
     /// <summary>
     /// The current db context.

@@ -14,7 +14,7 @@ using Piranha.Models;
 
 namespace Piranha.Repositories;
 
-public class PageTypeRepository : IPageTypeRepository
+internal class PageTypeRepository : IPageTypeRepository
 {
     private readonly IDb _db;
 

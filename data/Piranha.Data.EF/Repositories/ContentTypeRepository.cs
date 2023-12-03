@@ -14,7 +14,7 @@ using Piranha.Models;
 
 namespace Piranha.Repositories;
 
-public class ContentTypeRepository : IContentTypeRepository
+internal class ContentTypeRepository : IContentTypeRepository
 {
     private readonly IDb _db;
 

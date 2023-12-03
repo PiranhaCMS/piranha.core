@@ -14,7 +14,7 @@ using Piranha.Services;
 
 namespace Piranha.Repositories;
 
-public class ContentRepository : IContentRepository
+internal class ContentRepository : IContentRepository
 {
     private readonly IDb _db;
     private readonly IContentService<Content, ContentField, Models.GenericContent> _service;

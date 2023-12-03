@@ -16,7 +16,7 @@ using Piranha.Services;
 
 namespace Piranha.Repositories;
 
-public class SiteRepository : ISiteRepository
+internal class SiteRepository : ISiteRepository
 {
     private readonly IDb _db;
     private readonly IContentService<Site, SiteField, Models.SiteContentBase> _contentService;

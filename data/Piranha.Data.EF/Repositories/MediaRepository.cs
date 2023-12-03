@@ -14,7 +14,7 @@ using Piranha.Data.EF;
 
 namespace Piranha.Repositories;
 
-public class MediaRepository : IMediaRepository
+internal class MediaRepository : IMediaRepository
 {
     class FolderCount
     {
