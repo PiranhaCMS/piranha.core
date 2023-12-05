@@ -40,9 +40,10 @@ internal sealed class ContentTypeService : IContentTypeService
     /// Gets all available models.
     /// </summary>
     /// <returns>The available models</returns>
-    public Task<IEnumerable<ContentType>> GetAllAsync()
+    public async Task<IEnumerable<ContentType>> GetAllAsync()
     {
-        return GetTypes();
+        var types = await GetTypes().ConfigureAwait(false);
+        return types ?? await _repo.GetAll().ConfigureAwait(false);
     }
 
     /// <summary>
@@ -52,17 +53,13 @@ internal sealed class ContentTypeService : IContentTypeService
     /// <returns>The available models</returns>
     public async Task<IEnumerable<ContentType>> GetByGroupAsync(string group)
     {
-        // Check if we have cache enabled
-        if (_cache != null && App.CacheLevel != CacheLevel.None)
-        {
-            var types = await GetTypes().ConfigureAwait(false);
+        var types = await GetTypes().ConfigureAwait(false);
 
+        if (types != null)
+        {
             return types.Where(t => t.Group == group).ToList();
         }
-        else
-        {
-            return await _repo.GetByGroup(group).ConfigureAwait(false);
-        }
+        return await _repo.GetByGroup(group).ConfigureAwait(false);
     }
 
     /// <summary>
@@ -72,16 +69,13 @@ internal sealed class ContentTypeService : IContentTypeService
     /// <returns>The model</returns>
     public async Task<ContentType> GetByIdAsync(string id)
     {
-        if (_cache != null && App.CacheLevel != CacheLevel.None)
-        {
-            var types = await GetTypes().ConfigureAwait(false);
+        var types = await GetTypes().ConfigureAwait(false);
 
+        if (types != null)
+        {
             return types.FirstOrDefault(t => t.Id == id);
         }
-        else
-        {
-            return await _repo.GetById(id).ConfigureAwait(false);
-        }
+        return await _repo.GetById(id).ConfigureAwait(false);
     }
 
     /// <summary>
@@ -172,14 +166,18 @@ internal sealed class ContentTypeService : IContentTypeService
     /// </summary>
     private async Task<IEnumerable<ContentType>> GetTypes()
     {
-        var types = _cache?.Get<IEnumerable<ContentType>>(CacheKey);
-
-        if (types == null)
+        if (_cache != null)
         {
-            types = await _repo.GetAll().ConfigureAwait(false);
+            var types = _cache.Get<IEnumerable<ContentType>>(CacheKey);
 
-            _cache?.Set(CacheKey, types);
+            if (types == null)
+            {
+                types = await _repo.GetAll().ConfigureAwait(false);
+
+                _cache.Set(CacheKey, types);
+            }
+            return types;
         }
-        return types;
+        return null;
     }
 }

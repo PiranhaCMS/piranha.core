@@ -39,9 +39,10 @@ internal sealed class SiteTypeService : ISiteTypeService
     /// Gets all available models.
     /// </summary>
     /// <returns>The available models</returns>
-    public Task<IEnumerable<SiteType>> GetAllAsync()
+    public async Task<IEnumerable<SiteType>> GetAllAsync()
     {
-        return GetTypes();
+        var types = await GetTypes().ConfigureAwait(false);
+        return types ?? await _repo.GetAll().ConfigureAwait(false);
     }
 
     /// <summary>
@@ -53,7 +54,11 @@ internal sealed class SiteTypeService : ISiteTypeService
     {
         var types = await GetTypes().ConfigureAwait(false);
 
-        return types.FirstOrDefault(t => t.Id == id);
+        if (types != null)
+        {
+            return types.FirstOrDefault(t => t.Id == id);
+        }
+        return await _repo.GetById(id).ConfigureAwait(false);
     }
 
     /// <summary>
@@ -130,14 +135,18 @@ internal sealed class SiteTypeService : ISiteTypeService
     /// </summary>
     private async Task<IEnumerable<SiteType>> GetTypes()
     {
-        var types = _cache?.Get<IEnumerable<SiteType>>("Piranha_SiteTypes");
-
-        if (types == null)
+        if (_cache != null)
         {
-            types = await _repo.GetAll().ConfigureAwait(false);
+            var types = _cache.Get<IEnumerable<SiteType>>("Piranha_SiteTypes");
 
-            _cache?.Set("Piranha_SiteTypes", types);
+            if (types == null)
+            {
+                types = await _repo.GetAll().ConfigureAwait(false);
+
+                _cache.Set("Piranha_SiteTypes", types);
+            }
+            return types;
         }
-        return types;
+        return null;
     }
 }

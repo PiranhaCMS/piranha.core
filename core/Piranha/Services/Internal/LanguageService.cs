@@ -40,9 +40,10 @@ internal sealed class LanguageService : ILanguageService
     /// Gets all available models.
     /// </summary>
     /// <returns>The available models</returns>
-    public Task<IEnumerable<Language>> GetAllAsync()
+    public async Task<IEnumerable<Language>> GetAllAsync()
     {
-        return GetLanguages();
+        var languages = await GetLanguages().ConfigureAwait(false);
+        return languages ?? await _repo.GetAll().ConfigureAwait(false);
     }
 
     /// <summary>
@@ -52,16 +53,13 @@ internal sealed class LanguageService : ILanguageService
     /// <returns>The model</returns>
     public async Task<Language> GetByIdAsync(Guid id)
     {
-        if (_cache != null && App.CacheLevel != CacheLevel.None)
-        {
-            var languages = await GetLanguages().ConfigureAwait(false);
+        var languages = await GetLanguages().ConfigureAwait(false);
 
-            return languages.FirstOrDefault(l => l.Id == id);
-        }
-        else
+        if (languages != null)
         {
-            return await _repo.GetById(id).ConfigureAwait(false);
+            return languages.FirstOrDefault(t => t.Id == id);
         }
+        return await _repo.GetById(id).ConfigureAwait(false);
     }
 
     /// <summary>
@@ -70,16 +68,13 @@ internal sealed class LanguageService : ILanguageService
     /// <returns>The modell</returns>
     public async Task<Language> GetDefaultAsync()
     {
-        if (_cache != null && App.CacheLevel != CacheLevel.None)
-        {
-            var languages = await GetLanguages().ConfigureAwait(false);
+        var languages = await GetLanguages().ConfigureAwait(false);
 
+        if (languages != null)
+        {
             return languages.FirstOrDefault(l => l.IsDefault);
         }
-        else
-        {
-            return await _repo.GetDefault().ConfigureAwait(false);
-        }
+        return await _repo.GetDefault().ConfigureAwait(false);
     }
 
     /// <summary>
@@ -162,14 +157,18 @@ internal sealed class LanguageService : ILanguageService
     /// </summary>
     private async Task<IEnumerable<Language>> GetLanguages()
     {
-        var types = _cache?.Get<IEnumerable<Language>>(CacheKey);
-
-        if (types == null)
+        if (_cache != null)
         {
-            types = await _repo.GetAll().ConfigureAwait(false);
+            var types = _cache.Get<IEnumerable<Language>>(CacheKey);
 
-            _cache?.Set(CacheKey, types);
+            if (types == null)
+            {
+                types = await _repo.GetAll().ConfigureAwait(false);
+
+                _cache.Set(CacheKey, types);
+            }
+            return types;
         }
-        return types;
+        return null;
     }
 }

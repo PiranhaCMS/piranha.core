@@ -39,9 +39,10 @@ internal sealed class PageTypeService : IPageTypeService
     /// Gets all available models.
     /// </summary>
     /// <returns>The available models</returns>
-    public Task<IEnumerable<PageType>> GetAllAsync()
+    public async Task<IEnumerable<PageType>> GetAllAsync()
     {
-        return GetTypes();
+        var types = await GetTypes().ConfigureAwait(false);
+        return types ?? await _repo.GetAll().ConfigureAwait(false);
     }
 
     /// <summary>
@@ -53,7 +54,11 @@ internal sealed class PageTypeService : IPageTypeService
     {
         var types = await GetTypes().ConfigureAwait(false);
 
-        return types.FirstOrDefault(t => t.Id == id);
+        if (types != null)
+        {
+            return types.FirstOrDefault(t => t.Id == id);
+        }
+        return await _repo.GetById(id).ConfigureAwait(false);
     }
 
     /// <summary>
@@ -130,14 +135,18 @@ internal sealed class PageTypeService : IPageTypeService
     /// </summary>
     private async Task<IEnumerable<PageType>> GetTypes()
     {
-        var types = _cache?.Get<IEnumerable<PageType>>("Piranha_PageTypes");
-
-        if (types == null)
+        if (_cache != null)
         {
-            types = await _repo.GetAll().ConfigureAwait(false);
+            var types = _cache.Get<IEnumerable<PageType>>("Piranha_PageTypes");
 
-            _cache?.Set("Piranha_PageTypes", types);
+            if (types == null)
+            {
+                types = await _repo.GetAll().ConfigureAwait(false);
+
+                _cache.Set("Piranha_PageTypes", types);
+            }
+            return types;
         }
-        return types;
+        return null;
     }
 }

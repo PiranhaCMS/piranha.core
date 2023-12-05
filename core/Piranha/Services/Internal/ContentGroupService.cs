@@ -40,9 +40,10 @@ internal sealed class ContentGroupService : IContentGroupService
     /// Gets all available models.
     /// </summary>
     /// <returns>The available models</returns>
-    public Task<IEnumerable<ContentGroup>> GetAllAsync()
+    public async Task<IEnumerable<ContentGroup>> GetAllAsync()
     {
-        return GetGroups();
+        var groups = await GetGroups().ConfigureAwait(false);
+        return groups ?? await _repo.GetAllAsync().ConfigureAwait(false);
     }
 
     /// <summary>
@@ -52,16 +53,13 @@ internal sealed class ContentGroupService : IContentGroupService
     /// <returns>The model</returns>
     public async Task<ContentGroup> GetByIdAsync(string id)
     {
-        if (_cache != null && App.CacheLevel != CacheLevel.None)
-        {
-            var groups = await GetGroups().ConfigureAwait(false);
+        var groups = await GetGroups().ConfigureAwait(false);
 
+        if (groups != null)
+        {
             return groups.FirstOrDefault(t => t.Id == id);
         }
-        else
-        {
-            return await _repo.GetByIdAsync(id).ConfigureAwait(false);
-        }
+        return await _repo.GetByIdAsync(id).ConfigureAwait(false);
     }
 
     /// <summary>
@@ -118,14 +116,17 @@ internal sealed class ContentGroupService : IContentGroupService
     /// </summary>
     private async Task<IEnumerable<ContentGroup>> GetGroups()
     {
-        var groups = _cache?.Get<IEnumerable<ContentGroup>>(CacheKey);
+        if (_cache != null) {
+            var groups = _cache.Get<IEnumerable<ContentGroup>>(CacheKey);
 
-        if (groups == null)
-        {
-            groups = await _repo.GetAllAsync().ConfigureAwait(false);
+            if (groups == null)
+            {
+                groups = await _repo.GetAllAsync().ConfigureAwait(false);
 
-            _cache?.Set(CacheKey, groups);
+                _cache.Set(CacheKey, groups);
+            }
+            return groups;
         }
-        return groups;
+        return null;
     }
 }
