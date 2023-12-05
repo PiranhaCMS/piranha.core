@@ -26,7 +26,7 @@ internal sealed class ContentGroupService : IContentGroupService
     /// </summary>
     /// <param name="repo">The main repository</param>
     /// <param name="cache">The optional model cache</param>
-    public ContentGroupService(IContentGroupRepository repo, ICache cache)
+    public ContentGroupService(IContentGroupRepository repo, ICache cache = null)
     {
         _repo = repo;
 

@@ -81,27 +81,27 @@ public class MediaManager
     /// <summary>
     /// Gets/sets the currently accepted document extensions.
     /// </summary>
-    public MediaTypeList Documents { get; set; } = new MediaTypeList();
+    public MediaTypeList Documents { get; set; } = new();
 
     /// <summary>
     /// Gets/sets the currently accepted image extensions.
     /// </summary>
-    public MediaTypeList Images { get; set; } = new MediaTypeList(true);
+    public MediaTypeList Images { get; set; } = new(true);
 
     /// <summary>
     /// Gets/sets the currently accepted video extensions.
     /// </summary>
-    public MediaTypeList Videos { get; set; } = new MediaTypeList();
+    public MediaTypeList Videos { get; set; } = new();
 
     /// <summary>
     /// Gets/sets the currently accepted audio extensions.
     /// </summary>
-    public MediaTypeList Audio { get; set; } = new MediaTypeList();
+    public MediaTypeList Audio { get; set; } = new();
 
     /// <summary>
     /// Gets/sets the currently accepted resource extensions.
     /// </summary>
-    public MediaTypeList Resources { get; set; } = new MediaTypeList();
+    public MediaTypeList Resources { get; set; } = new();
 
     /// <summary>
     /// Gets/sets the currently registered meta properties for media.

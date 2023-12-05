@@ -25,7 +25,7 @@ internal sealed class SiteTypeService : ISiteTypeService
     /// </summary>
     /// <param name="repo">The main repository</param>
     /// <param name="cache">The optional model cache</param>
-    public SiteTypeService(ISiteTypeRepository repo, ICache cache)
+    public SiteTypeService(ISiteTypeRepository repo, ICache cache = null)
     {
         _repo = repo;
 

@@ -26,7 +26,7 @@ internal sealed class ContentTypeService : IContentTypeService
     /// </summary>
     /// <param name="repo">The main repository</param>
     /// <param name="cache">The optional model cache</param>
-    public ContentTypeService(IContentTypeRepository repo, ICache cache)
+    public ContentTypeService(IContentTypeRepository repo, ICache cache = null)
     {
         _repo = repo;
 

@@ -26,7 +26,7 @@ internal sealed class LanguageService : ILanguageService
     /// </summary>
     /// <param name="repo">The main repository</param>
     /// <param name="cache">The optional model cache</param>
-    public LanguageService(ILanguageRepository repo, ICache cache)
+    public LanguageService(ILanguageRepository repo, ICache cache = null)
     {
         _repo = repo;
 

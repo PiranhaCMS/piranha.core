@@ -25,7 +25,7 @@ internal sealed class PageTypeService : IPageTypeService
     /// </summary>
     /// <param name="repo">The main repository</param>
     /// <param name="cache">The optional model cache</param>
-    public PageTypeService(IPageTypeRepository repo, ICache cache)
+    public PageTypeService(IPageTypeRepository repo, ICache cache = null)
     {
         _repo = repo;
 
