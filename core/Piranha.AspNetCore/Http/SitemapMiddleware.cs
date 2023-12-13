@@ -13,6 +13,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Piranha.AspNetCore.Services;
 using X.Web.Sitemap;
+using X.Web.Sitemap.Extensions;
 
 namespace Piranha.AspNetCore.Http;
 
