@@ -17,6 +17,12 @@ namespace Piranha.Services;
 
 internal sealed class AliasService : IAliasService
 {
+    internal class AliasUrlCacheEntry
+    {
+        public Guid Id { get; set; }
+        public string AliasUrl { get; set; }
+    }
+
     private readonly IAliasRepository _repo;
     private readonly ISiteService _siteService;
     private readonly ICache _cache;
@@ -96,30 +102,25 @@ internal sealed class AliasService : IAliasService
             }
         }
 
-        var id = _cache?.Get<Guid?>($"AliasId_{siteId}_{url}");
-        Alias model = null;
-
-        if (id.HasValue)
+        if (siteId.HasValue)
         {
-            if (id.Value != Guid.Empty)
-            {
-                model = await GetByIdAsync(id.Value).ConfigureAwait(false);
-            }
-        }
-        else
-        {
-            model = await _repo.GetByAliasUrl(url, siteId.Value).ConfigureAwait(false);
+            var aliasUrls = await GetAliasUrls(siteId.Value).ConfigureAwait(false);
 
-            if (model != null)
+            if (aliasUrls != null)
             {
-                OnLoad(model);
+                var aliasUrl = aliasUrls.FirstOrDefault(x => x.AliasUrl == url);
+
+                if (aliasUrl != null)
+                {
+                    return await GetByIdAsync(aliasUrl.Id).ConfigureAwait(false);
+                }
             }
             else
             {
-                _cache?.Set($"AliasId_{siteId}_{url}", Guid.Empty);
+                return await _repo.GetByAliasUrl(url, siteId.Value);
             }
         }
-        return model;
+        return null;
     }
 
     /// <summary>
@@ -226,7 +227,6 @@ internal sealed class AliasService : IAliasService
             if (_cache != null)
             {
                 _cache.Set(model.Id.ToString(), model);
-                _cache.Set($"AliasId_{model.SiteId}_{model.AliasUrl}", model.Id);
             }
         }
     }
@@ -240,7 +240,33 @@ internal sealed class AliasService : IAliasService
         if (_cache != null)
         {
             _cache.Remove(model.Id.ToString());
-            _cache.Remove($"AliasId_{model.SiteId}_{model.AliasUrl}");
+            _cache.Remove($"Piranha_AliasUrls_{model.SiteId}");
         }
     }
+
+    /// <summary>
+    /// Gets the aliases for the specified site.
+    /// </summary>
+    private async Task<IEnumerable<AliasUrlCacheEntry>> GetAliasUrls(Guid siteId)
+    {
+        if (_cache != null)
+        {
+            var aliasUrls = _cache.Get<IEnumerable<AliasUrlCacheEntry>>($"Piranha_AliasUrls_{siteId}");
+
+            if (aliasUrls == null)
+            {
+                var aliases = await _repo.GetAll(siteId).ConfigureAwait(false);
+                aliasUrls = aliases.Select(x => new AliasUrlCacheEntry
+                {
+                    Id = x.Id,
+                    AliasUrl = x.AliasUrl
+                });
+
+                _cache.Set($"Piranha_AliasUrls_{siteId}", aliasUrls);
+            }
+            return aliasUrls;
+        }
+        return null;
+    }
+
 }
