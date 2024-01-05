@@ -89,7 +89,7 @@
                             <div id="excerpt-body" class="block-body html-block" contenteditable="true" v-html="excerpt" v-on:blur="onExcerptBlur">
                             </div>
                         </div>
-                        <textarea v-else v-model="excerpt" rows="5" maxlength="255" class="form-control"></textarea>
+                        <textarea v-else v-model="excerpt" rows="5" maxlength="1000" class="form-control"></textarea>
                     </div>
                 </div>
 
@@ -97,10 +97,10 @@
                     <div class="form-group">
                         <label>@Localizer.Page["Meta title"]</label>
                         <div class="input-group">
-                            <input v-model="metaTitle" type="text" maxlength="128" class="form-control" :placeholder="title">
+                            <input v-model="metaTitle" type="text" maxlength="255" class="form-control" :placeholder="title">
                             <div class="input-group-append">
                                 <div class="input-group-text text-muted">
-                                    {{ piranha.utils.strLength(metaTitle) + "/128" }}
+                                    {{ piranha.utils.strLength(metaTitle) + "/255" }}
                                 </div>
                             </div>
                         </div>
@@ -119,10 +119,10 @@
                     <div class="form-group">
                         <label>@Localizer.Page["Meta description"]</label>
                         <div class="input-group">
-                            <textarea v-model="metaDescription" rows="5" maxlength="255" class="form-control"></textarea>
+                            <textarea v-model="metaDescription" rows="5" maxlength="1000" class="form-control"></textarea>
                             <div class="input-group-append">
                                 <div class="input-group-text text-muted">
-                                    {{ piranha.utils.strLength(metaDescription) + "/255" }}
+                                    {{ piranha.utils.strLength(metaDescription) + "/1000" }}
                                 </div>
                             </div>
                         </div>
