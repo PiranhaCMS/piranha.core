@@ -13,7 +13,7 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Excerpt" xml:space="preserve">
-    <value>Excerpt</value>
+    <value>Resumo</value>
   </data>
   <data name="Meta index" xml:space="preserve">
     <value>Meta index</value>
@@ -25,21 +25,21 @@
     <value>Meta priority</value>
   </data>
   <data name="Primary image" xml:space="preserve">
-    <value>Primary image</value>
+    <value>Imagem principal</value>
   </data>
   <data name="Search engine priority, compared to other content in the same site." xml:space="preserve">
-    <value>Search engine priority, compared to other content in the same site.</value>
+    <value>Prioridade do motor de busca, em comparação com outros conteúdos do mesmo site.</value>
   </data>
   <data name="The content was successfully deleted" xml:space="preserve">
-    <value>The content was successfully deleted</value>
+    <value>O arquivo foi deletado com sucesso</value>
   </data>
   <data name="An error occured while deleting the content" xml:space="preserve">
-    <value>An error occured while deleting the content</value>
+    <value>Ocorreu um erro ao deletar a página</value>
   </data>
   <data name="The content was successfully saved" xml:space="preserve">
-    <value>The content was successfully saved</value>
+    <value>A página foi salva com sucesso</value>
   </data>
   <data name="An error occured while saving the content" xml:space="preserve">
-    <value>An error occured while saving the content</value>
+    <value>Um erro ocorreu enquanto tentava salvar o conteúdo</value>
   </data>
 </root>
