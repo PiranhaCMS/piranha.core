@@ -287,18 +287,18 @@ public sealed class App
     /// </summary>
     private App()
     {
-        _blocks = new AppBlockList();
-        _fields = new AppFieldList();
-        _modules = new AppModuleList();
-        _mediaTypes = new MediaManager();
-        _serializers = new SerializerManager();
-        _hooks = new HookManager();
-        _permissions = new PermissionManager();
-        _contentGroups = new CachedList<Models.ContentGroup>();
-        _contentTypes = new CachedList<Models.ContentType>();
-        _pageTypes = new CachedList<Models.PageType>();
-        _postTypes = new CachedList<Models.PostType>();
-        _siteTypes = new CachedList<Models.SiteType>();
+        _blocks = new();
+        _fields = new();
+        _modules = new();
+        _mediaTypes = new();
+        _serializers = new();
+        _hooks = new();
+        _permissions = new();
+        _contentGroups = [];
+        _contentTypes = [];
+        _pageTypes = [];
+        _postTypes = [];
+        _siteTypes = [];
     }
 
     /// <summary>
