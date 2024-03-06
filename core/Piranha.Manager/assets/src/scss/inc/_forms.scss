@@ -49,6 +49,19 @@
             }
         }
     }
+
+    &.below {
+        flex-direction: column;
+
+        .input-group-append {
+            margin-left: 0;
+
+            .input-group-text {
+                width: 100%;
+                border-top: 0 none;
+            }
+        }
+    }
 }
 
 .list-group {

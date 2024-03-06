@@ -110,7 +110,14 @@
                             <div class="content-blocker"></div>
                         </div>
                         <div v-else class="position-relative" :class="{ readonly: isCopy }">
-                            <textarea v-model="excerpt" rows="5" maxlength="255" class="form-control"></textarea>
+                            <div class="input-group below">
+                                <textarea v-model="excerpt" rows="5" maxlength="1000" class="form-control"></textarea>
+                                <div class="input-group-append">
+                                    <div class="input-group-text text-muted">
+                                        {{ piranha.utils.strLength(excerpt) + "/1000" }}
+                                    </div>
+                                </div>
+                            </div>
                             <div class="content-blocker"></div>
                         </div>
                     </div>
