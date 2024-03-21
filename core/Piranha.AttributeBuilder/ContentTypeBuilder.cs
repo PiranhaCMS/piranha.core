@@ -619,7 +619,8 @@ public class ContentTypeBuilder
                 regionType.Fields.Add(new ContentTypeField
                 {
                     Id = "Default",
-                    Type = appFieldType.TypeName
+                    Type = appFieldType.TypeName,
+                    Settings = Utils.GetFieldSettings(prop)
                 });
             }
             else
