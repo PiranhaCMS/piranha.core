@@ -267,7 +267,6 @@ public class ContentTypeService
             {
                 field.Model = (IField)regionModel;
                 field.Meta.NotifyChange = true;
-                field.Meta.Settings = fieldType.Settings;
             }
             regionItem.Fields.Add(field);
         }
