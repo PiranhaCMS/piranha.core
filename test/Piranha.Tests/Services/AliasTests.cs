@@ -318,6 +318,8 @@ public class AliasTests : BaseTestsAsync
 
             Assert.NotNull(model);
 
+            model = await api.Aliases.GetByAliasUrlAsync(ALIAS_4);
+
             await api.Aliases.DeleteAsync(model);
         }
     }

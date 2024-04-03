@@ -260,7 +260,7 @@ internal sealed class AliasService : IAliasService
                 {
                     Id = x.Id,
                     AliasUrl = x.AliasUrl
-                });
+                }).ToList();
 
                 _cache.Set($"Piranha_AliasUrls_{siteId}", aliasUrls);
             }
