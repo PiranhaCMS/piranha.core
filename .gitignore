@@ -22,6 +22,7 @@ examples/CoreWeb/assets/lib
 
 templates/**/wwwroot/uploads
 templates/**/*.db
+coverage
 
 # NPM lock files
 *-lock.json

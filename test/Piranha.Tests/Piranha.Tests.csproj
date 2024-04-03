@@ -6,13 +6,20 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="coverlet.msbuild" Version="6.0.0">
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.9.0" />
+    <PackageReference Include="xunit" Version="2.7.0" />
+    <PackageReference Include="xunit.runner.visualstudio" Version="2.5.7">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.8.0" />
-    <PackageReference Include="xunit" Version="2.6.2" />
-    <PackageReference Include="xunit.runner.visualstudio" Version="2.5.4" />
+    <PackageReference Include="coverlet.collector" Version="6.0.2">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+    <PackageReference Include="coverlet.msbuild" Version="6.0.2">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
     <ProjectReference Include="..\..\core\Piranha\Piranha.csproj" />
     <ProjectReference Include="..\..\core\Piranha.AttributeBuilder\Piranha.AttributeBuilder.csproj" />
     <ProjectReference Include="..\..\core\Piranha.ImageSharp\Piranha.ImageSharp.csproj" />
