@@ -141,9 +141,12 @@ public class ContentTests : BaseTestsAsync
         using (var api = CreateApi())
         {
             var content = await api.Content.GetByIdAsync<MyContent>(ID_1);
+            var contentInfo = await api.Content.GetByIdAsync<ContentInfo>(ID_1);
 
             Assert.NotNull(content);
+            Assert.NotNull(contentInfo);
             Assert.Equal("My first content", content.Title);
+            Assert.Equal(content.Title, contentInfo.Title);
         }
     }
 
@@ -153,9 +156,12 @@ public class ContentTests : BaseTestsAsync
         using (var api = CreateApi())
         {
             var content = await api.Content.GetByIdAsync<MyContent>(ID_1, ID_LANG);
+            var contentInfo = await api.Content.GetByIdAsync<ContentInfo>(ID_1, ID_LANG);
 
             Assert.NotNull(content);
+            Assert.NotNull(contentInfo);
             Assert.Equal("Mitt första innehåll", content.Title);
+            Assert.Equal(content.Title, contentInfo.Title);
         }
     }
 
