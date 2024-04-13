@@ -133,9 +133,13 @@ internal sealed class ContentService : IContentService
         }
 
         // First, try to get the model from cache
-        if (!typeof(DynamicContent).IsAssignableFrom(typeof(T)))
+        if (typeof(T) == typeof(ContentInfo))
         {
-            model = _cache?.Get<GenericContent>($"{ languageId }_{ id }");
+            model = _cache?.Get<GenericContent>($"ContentInfo_{ languageId }_{ id }");
+        }
+        else if (!typeof(DynamicContent).IsAssignableFrom(typeof(T)))
+        {
+            model = _cache?.Get<GenericContent>($"Content_{ languageId }_{ id }");
         }
 
         // If we have a model, let's initialize it
@@ -340,9 +344,13 @@ internal sealed class ContentService : IContentService
         if (_cache != null)
         {
             // Store the model
-            if (model is not IDynamicContent)
+            if (model is ContentInfo)
             {
-                _cache.Set($"{ languageId }_{ model.Id }", model);
+                _cache.Set($"ContentInfo_{ languageId }_{ model.Id }", model);
+            }
+            else if (model is not IDynamicContent)
+            {
+                _cache.Set($"Content_{ languageId }_{ model.Id }", model);
             }
         }
     }
@@ -358,7 +366,8 @@ internal sealed class ContentService : IContentService
         {
             if (_cache != null)
             {
-                _cache.Remove($"{ languageId }_{ model.Id }");
+                _cache.Remove($"ContentInfo_{ languageId }_{ model.Id }");
+                _cache.Remove($"Content_{ languageId }_{ model.Id }");
             }
         });
     }
