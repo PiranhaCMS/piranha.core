@@ -17,6 +17,7 @@ public class FileStorage : IStorage
     private readonly string _basePath = "wwwroot/uploads/";
     private readonly string _baseUrl = "~/uploads/";
     private readonly FileStorageNaming _naming;
+    private readonly bool _versionParam;
 
     /// <summary>
     /// Default constructor.
@@ -24,10 +25,12 @@ public class FileStorage : IStorage
     /// <param name="basePath">The optional base path</param>
     /// <param name="baseUrl">The optional base url</param>
     /// <param name="naming">How uploaded media files should be named</param>
+    /// <param name="generateVersionParam">If a version param should be appended to the public url</param>
     public FileStorage(
         string basePath = null,
         string baseUrl = null,
-        FileStorageNaming naming = FileStorageNaming.UniqueFileNames)
+        FileStorageNaming naming = FileStorageNaming.UniqueFileNames,
+        bool generateVersionParam = false)
     {
         if (!string.IsNullOrEmpty(basePath))
         {
@@ -44,6 +47,7 @@ public class FileStorage : IStorage
         }
 
         _naming = naming;
+        _versionParam = generateVersionParam;
     }
 
     /// <summary>
@@ -68,7 +72,21 @@ public class FileStorage : IStorage
     {
         if (media != null && !string.IsNullOrWhiteSpace(filename))
         {
-            return _baseUrl + GetResourceName(media, filename, true);
+            var publicUrl = _baseUrl + GetResourceName(media, filename, true);
+            if (_versionParam)
+            {
+                var versionHash = Math.Abs(media.LastModified.GetHashCode()).ToString();
+
+                if (!publicUrl.Contains("?"))
+                {
+                    publicUrl += $"?version={ versionHash }";
+                }
+                else
+                {
+                    publicUrl += $"&version={ versionHash }";
+                }
+            }
+            return publicUrl;
         }
         return null;
     }
