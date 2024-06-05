@@ -55,7 +55,7 @@ public class ImageSharpProcessor : IImageProcessor
     /// <param name="height">The requested height</param>
     public void Crop(Stream source, Stream dest, int width, int height)
     {
-        using (var image = Image.Load(source, out IImageFormat format))
+        using (var image = Image.Load(source))
         {
             image.Mutate(x => x.Crop(new Rectangle
             {
@@ -65,6 +65,7 @@ public class ImageSharpProcessor : IImageProcessor
                 Y = height < image.Height ? (image.Height - height) / 2 : 0
             }));
 
+            var format = GetImageFormat(source);
             image.Save(dest, format);
         }
     }
@@ -79,7 +80,7 @@ public class ImageSharpProcessor : IImageProcessor
     /// <param name="width">The requested width</param>
     public void Scale(Stream source, Stream dest, int width)
     {
-        using (var image = Image.Load(source, out IImageFormat format))
+        using (var image = Image.Load(source))
         {
             int height = (int)Math.Round(width * ((float)image.Height / image.Width));
 
@@ -89,6 +90,7 @@ public class ImageSharpProcessor : IImageProcessor
                 Mode = ResizeMode.Crop
             }));
 
+            var format = GetImageFormat(source);
             image.Save(dest, format);
         }
     }
@@ -104,7 +106,7 @@ public class ImageSharpProcessor : IImageProcessor
     /// <param name="height">The requested height</param>
     public void CropScale(Stream source, Stream dest, int width, int height)
     {
-        using (var image = Image.Load(source, out IImageFormat format))
+        using (var image = Image.Load(source))
         {
             var oldRatio = (float)image.Height / image.Width;
             var newRatio = (float)height / width;
@@ -135,6 +137,7 @@ public class ImageSharpProcessor : IImageProcessor
                 Mode = ResizeMode.Crop
             }));
 
+            var format = GetImageFormat(source);
             image.Save(dest, format);
         }
     }
@@ -146,12 +149,27 @@ public class ImageSharpProcessor : IImageProcessor
     /// <param name="dest">The destination stream</param>
     public void AutoOrient(Stream source, Stream dest)
     {
-        using (var image = Image.Load(source, out IImageFormat format))
+        using (var image = Image.Load(source))
         {
             image.Mutate(x => x.AutoOrient());
+
+            var format = GetImageFormat(source);
             image.Save(dest, format);
 
             dest.Position = 0;
         }
+    }
+
+    /// <summary>
+    /// Gets an image format from the provided stream.
+    /// </summary>
+    /// <param name="source">The image data stream</param>
+    /// <returns>The detected format of the image.</returns>
+    /// <exception cref="UnknownImageFormatException">Thrown if the image format cannot be detected from the provided stream.</exception>
+    private static IImageFormat GetImageFormat(Stream source)
+    {
+        // Reset the stream position to the beginning
+        source.Position = 0;
+        return Image.DetectFormat(source);
     }
 }
