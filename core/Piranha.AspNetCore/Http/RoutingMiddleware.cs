@@ -331,6 +331,9 @@ public class RoutingMiddleware : MiddlewareBase
                         bool foundTag = false;
                         bool foundPage = false;
 
+                        // only consider a 404 if there are segments to parse, otherwise it's the base archive page
+                        bool throw404 = segments.Length > pos;
+
                         for (var n = pos; n < segments.Length; n++)
                         {
                             if (segments[n] == "category" && !foundPage)
@@ -361,6 +364,7 @@ public class RoutingMiddleware : MiddlewareBase
                                     {
                                         query.Append("&category=");
                                         query.Append(categoryId);
+                                        throw404 = false;
                                     }
                                 }
                                 finally
@@ -379,6 +383,7 @@ public class RoutingMiddleware : MiddlewareBase
                                     {
                                         query.Append("&tag=");
                                         query.Append(tagId);
+                                        throw404 = false;
                                     }
                                 }
                                 finally
@@ -396,6 +401,7 @@ public class RoutingMiddleware : MiddlewareBase
                                     query.Append(pageNum);
                                     query.Append("&pagenum=");
                                     query.Append(pageNum);
+                                    throw404 = false;
                                 }
                                 catch
                                 {
@@ -418,6 +424,7 @@ public class RoutingMiddleware : MiddlewareBase
                                     }
                                     query.Append("&year=");
                                     query.Append(year);
+                                    throw404 = false;
                                 }
                                 catch
                                 {
@@ -432,6 +439,7 @@ public class RoutingMiddleware : MiddlewareBase
                                     var month = Math.Max(Math.Min(Convert.ToInt32(segments[n]), 12), 1);
                                     query.Append("&month=");
                                     query.Append(month);
+                                    throw404 = false;
                                 }
                                 catch
                                 {
@@ -439,6 +447,14 @@ public class RoutingMiddleware : MiddlewareBase
                                     // discard malformed input
                                 }
                             }
+                        }
+
+                        // if we got this far and nothing was found, there are segments that were never matched and therefore should be not found
+                        if (throw404)
+                        {
+                            context.Response.StatusCode = 404;
+                            await _next.Invoke(context);
+                            return;
                         }
                     }
                 }
