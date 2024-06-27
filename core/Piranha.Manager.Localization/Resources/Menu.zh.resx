@@ -16,39 +16,39 @@
     <value>内容</value>
   </data>
   <data name="Settings" xml:space="preserve">
-    <value>设置</value>
+    <value>設定</value>
   </data>
   <data name="System" xml:space="preserve">
-    <value>系统</value>
+    <value>系統</value>
   </data>
   <data name="Pages" xml:space="preserve">
-    <value>网页</value>
+    <value>頁面</value>
   </data>
   <data name="Media" xml:space="preserve">
-    <value>媒体</value>
+    <value>媒體</value>
   </data>
   <data name="Aliases" xml:space="preserve">
-    <value>别名</value>
+    <value>別名</value>
   </data>
   <data name="Sites" xml:space="preserve">
-    <value>站点</value>
+    <value>網站</value>
   </data>
   <data name="Config" xml:space="preserve">
-    <value>配置</value>
+    <value>設置</value>
   </data>
   <data name="Modules" xml:space="preserve">
-    <value>模块</value>
+    <value>模組</value>
   </data>
   <data name="Logout" xml:space="preserve">
-    <value>注销</value>
+    <value>登出</value>
   </data>
   <data name="Comments" xml:space="preserve">
-    <value>评论</value>
+    <value>評論</value>
   </data>
   <data name="Roles" xml:space="preserve">
     <value>角色</value>
   </data>
   <data name="Users" xml:space="preserve">
-    <value>用户</value>
+    <value>用戶</value>
   </data>
 </root>
