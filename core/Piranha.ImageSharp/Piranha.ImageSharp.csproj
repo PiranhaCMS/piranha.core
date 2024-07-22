@@ -10,7 +10,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="SixLabors.ImageSharp" Version="2.1.8" />
+    <PackageReference Include="SixLabors.ImageSharp" Version="2.1.9" />
     <ProjectReference Include="..\Piranha\Piranha.csproj" />
   </ItemGroup>
 
