@@ -70,26 +70,26 @@ public static class PiranhaHtmlExtensions
             // Generate open graph tags
             if (content is PageBase page && page.IsStartPage)
             {
-                sb.AppendLine($"<meta property=\"og:type\" content=\"website\">");
+                sb.AppendLine($"<meta property=\"og:type\" content=\"website\"/>");
             }
             else
             {
-                sb.AppendLine($"<meta property=\"og:type\" content=\"article\">");
+                sb.AppendLine($"<meta property=\"og:type\" content=\"article\"/>");
             }
-            sb.AppendLine($"<meta property=\"og:title\" content=\"{ OgTitle(content) }\">");
+            sb.AppendLine($"<meta property=\"og:title\" content=\"{ OgTitle(content) }\"/>");
             if (content.OgImage != null && content.OgImage.HasValue)
             {
-                sb.AppendLine($"<meta property=\"og:image\" content=\"{ app.AbsoluteContentUrl(content.OgImage) }\">");
+                sb.AppendLine($"<meta property=\"og:image\" content=\"{ app.AbsoluteContentUrl(content.OgImage) }\"/>");
             }
             else if (content is RoutedContentBase contentBase && contentBase.PrimaryImage != null && contentBase.PrimaryImage.HasValue)
             {
                 // If there's no OG image specified but we have a primary image,
                 // default to the primary image.
-                sb.AppendLine($"<meta property=\"og:image\" content=\"{ app.AbsoluteContentUrl(contentBase.PrimaryImage) }\">");
+                sb.AppendLine($"<meta property=\"og:image\" content=\"{ app.AbsoluteContentUrl(contentBase.PrimaryImage) }\"/>");
             }
             if (!string.IsNullOrWhiteSpace(OgDescription(content)))
             {
-                sb.AppendLine($"<meta property=\"og:description\" content=\"{ OgDescription(content) }\">");
+                sb.AppendLine($"<meta property=\"og:description\" content=\"{ OgDescription(content) }\"/>");
             }
         }
         return new HtmlString(sb.ToString());
