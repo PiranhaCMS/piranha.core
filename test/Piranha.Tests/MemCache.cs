@@ -29,7 +29,6 @@ public class MemCache : BaseTestsAsync
 
         await _cache.SetAsync(id1, val1);
         await _cache.SetAsync(id2, val2);
-
     }
 
     public override Task DisposeAsync()

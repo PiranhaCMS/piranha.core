@@ -1016,7 +1016,7 @@ internal sealed class PageService : IPageService
                 {
                     await _cache.SetAsync(model.Id.ToString(), model).ConfigureAwait(false);
                 }
-                await _cache.SetAsync($"PageId_{model.SiteId}_{model.Slug}", model.Id).ConfigureAwait(false); ;
+                await _cache.SetAsync($"PageId_{model.SiteId}_{model.Slug}", model.Id).ConfigureAwait(false);
                 if (!model.ParentId.HasValue && model.SortOrder == 0)
                 {
                     if (model is PageInfo)

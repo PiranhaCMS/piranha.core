@@ -140,13 +140,13 @@ internal sealed class SiteTypeService : ISiteTypeService
     {
         if (_cache != null)
         {
-            var types = await _cache.GetAsync<IEnumerable<SiteType>>("Piranha_SiteTypes").ConfigureAwait(false); ;
+            var types = await _cache.GetAsync<IEnumerable<SiteType>>("Piranha_SiteTypes").ConfigureAwait(false);
 
             if (types == null)
             {
                 types = await _repo.GetAll().ConfigureAwait(false);
 
-                await _cache.SetAsync("Piranha_SiteTypes", types).ConfigureAwait(false); ;
+                await _cache.SetAsync("Piranha_SiteTypes", types).ConfigureAwait(false);
             }
             return types;
         }
