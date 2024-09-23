@@ -120,7 +120,8 @@ internal sealed class LanguageService : ILanguageService
         App.Hooks.OnAfterSave(model);
 
         // Clear cache
-        _cache?.Remove(CacheKey);
+        if (_cache != null)
+            await _cache.RemoveAsync(CacheKey).ConfigureAwait(false); ;
     }
 
     /// <summary>
@@ -149,7 +150,8 @@ internal sealed class LanguageService : ILanguageService
         App.Hooks.OnAfterDelete(model);
 
         // Clear cache
-        _cache?.Remove(CacheKey);
+        if (_cache != null)
+            await _cache.RemoveAsync(CacheKey).ConfigureAwait(false);
     }
 
     /// <summary>
@@ -159,13 +161,13 @@ internal sealed class LanguageService : ILanguageService
     {
         if (_cache != null)
         {
-            var types = _cache.Get<IEnumerable<Language>>(CacheKey);
+            var types = await _cache.GetAsync<IEnumerable<Language>>(CacheKey).ConfigureAwait(false);
 
             if (types == null)
             {
                 types = await _repo.GetAll().ConfigureAwait(false);
 
-                _cache.Set(CacheKey, types);
+                await _cache.SetAsync(CacheKey, types).ConfigureAwait(false);
             }
             return types;
         }

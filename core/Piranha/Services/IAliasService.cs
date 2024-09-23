@@ -25,16 +25,18 @@ public interface IAliasService
     /// Gets the model with the specified id.
     /// </summary>
     /// <param name="id">The unique id</param>
+    /// <param name="cancellationToken"></param>
     /// <returns>The model, or null if it doesn't exist</returns>
-    Task<Alias> GetByIdAsync(Guid id);
+    Task<Alias> GetByIdAsync(Guid id, CancellationToken cancellationToken = default);
 
     /// <summary>
     /// Gets the model with the given alias url.
     /// </summary>
     /// <param name="url">The unique url</param>
     /// <param name="siteId">The optional site id</param>
+    /// <param name="cancellationToken"></param>
     /// <returns>The model</returns>
-    Task<Alias> GetByAliasUrlAsync(string url, Guid? siteId = null);
+    Task<Alias> GetByAliasUrlAsync(string url, Guid? siteId = null, CancellationToken cancellationToken = default);
 
     /// <summary>
     /// Gets the model with the given redirect url.
@@ -49,17 +51,20 @@ public interface IAliasService
     /// depending on its state.
     /// </summary>
     /// <param name="model">The model</param>
-    Task SaveAsync(Alias model);
+    /// <param name="cancellationToken"></param>
+    Task SaveAsync(Alias model, CancellationToken cancellationToken = default);
 
     /// <summary>
     /// Deletes the model with the specified id.
     /// </summary>
     /// <param name="id">The unique id</param>
-    Task DeleteAsync(Guid id);
+    /// <param name="cancellationToken"></param>
+    Task DeleteAsync(Guid id, CancellationToken cancellationToken = default);
 
     /// <summary>
     /// Deletes the given model.
     /// </summary>
     /// <param name="model">The model</param>
-    Task DeleteAsync(Alias model);
+    /// <param name="cancellationToken"></param>
+    Task DeleteAsync(Alias model, CancellationToken cancellationToken = default);
 }

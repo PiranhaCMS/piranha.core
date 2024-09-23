@@ -20,8 +20,9 @@ public interface ICache
     /// </summary>
     /// <typeparam name="T">The model type</typeparam>
     /// <param name="key">The unique key</param>
+    /// <param name="cancellationToken"></param>
     /// <returns>The cached model, null it wasn't found</returns>
-    T Get<T>(string key);
+    Task<T> GetAsync<T>(string key, CancellationToken cancellationToken = default);
 
     /// <summary>
     /// Sets the given model in the cache.
@@ -29,11 +30,13 @@ public interface ICache
     /// <typeparam name="T">The model type</typeparam>
     /// <param name="key">The unique key</param>
     /// <param name="value">The model</param>
-    void Set<T>(string key, T value);
+    /// <param name="cancellationToken"></param>
+    Task SetAsync<T>(string key, T value, CancellationToken cancellationToken = default);
 
     /// <summary>
     /// Removes the model with the specified key from cache.
     /// </summary>
     /// <param name="key">The unique key</param>
-    void Remove(string key);
+    /// <param name="cancellationToken"></param>
+    Task RemoveAsync(string key, CancellationToken cancellationToken = default);
 }

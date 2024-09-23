@@ -47,13 +47,21 @@ internal sealed class MediaService : IMediaService
     private async Task<IEnumerable<Media>> _getFast(IEnumerable<Guid> ids)
     {
         var guids = ids as Guid[] ?? ids.ToArray();
-        var partial = (_cache != null ? guids.Select(c => _cache.Get<Media>(c.ToString())) : Enumerable.Empty<Media>()).Where(c => c != null).ToArray();
+
+        var partial = _cache != null
+            ? (await Task.WhenAll(guids.Select(async c => await _cache.GetAsync<Media>(c.ToString())))).Where(c => c != null).ToArray()
+            : Array.Empty<Media>();
+
         var missingIds = guids.Except(partial.Select(c => c.Id)).ToArray();
-        var returns = partial.Concat((await _repo.GetById(missingIds)).Select(c =>
-        {
-            OnLoad(c);
-            return c;
-        })).OrderBy(m => m.Filename).ToArray();
+        var returns = partial
+            .Concat(await Task.WhenAll((await _repo.GetById(missingIds))
+            .Select(async c =>
+            {
+                await OnLoad(c).ConfigureAwait(false);
+                return c;
+            })))
+            .OrderBy(m => m.Filename)
+            .ToArray();
         return returns;
     }
 
@@ -100,13 +108,12 @@ internal sealed class MediaService : IMediaService
     /// <returns>The media</returns>
     public async Task<Media> GetByIdAsync(Guid id)
     {
-        var model = _cache?.Get<Media>(id.ToString());
+        var model = _cache == null ? null : await _cache.GetAsync<Media>(id.ToString());
 
         if (model == null)
         {
             model = await _repo.GetById(id).ConfigureAwait(false);
-
-            OnLoad(model);
+            await OnLoad(model).ConfigureAwait(false);
         }
         return model;
     }
@@ -128,13 +135,12 @@ internal sealed class MediaService : IMediaService
     /// <returns>The media folder</returns>
     public async Task<MediaFolder> GetFolderByIdAsync(Guid id)
     {
-        var model = _cache?.Get<MediaFolder>(id.ToString());
+        var model = _cache == null ? null : await _cache.GetAsync<MediaFolder>(id.ToString()).ConfigureAwait(false);
 
         if (model == null)
         {
             model = await _repo.GetFolderById(id).ConfigureAwait(false);
-
-            OnFolderLoad(model);
+            await OnFolderLoad(model).ConfigureAwait(false);
         }
         return model;
     }
@@ -145,15 +151,15 @@ internal sealed class MediaService : IMediaService
     /// <returns>The media structure</returns>
     public async Task<MediaStructure> GetStructureAsync()
     {
-        var structure = _cache?.Get<MediaStructure>(MEDIA_STRUCTURE);
+        var structure = _cache == null ? null : await _cache.GetAsync<MediaStructure>(MEDIA_STRUCTURE).ConfigureAwait(false);
 
         if (structure == null)
         {
             structure = await _repo.GetStructure().ConfigureAwait(false);
 
-            if (structure != null)
+            if (structure != null && _cache != null)
             {
-                _cache?.Set(MEDIA_STRUCTURE, structure);
+                await _cache.SetAsync(MEDIA_STRUCTURE, structure).ConfigureAwait(false);
             }
         }
         return structure;
@@ -179,8 +185,8 @@ internal sealed class MediaService : IMediaService
             await _repo.Save(model).ConfigureAwait(false);
             App.Hooks.OnAfterSave(model);
 
-            RemoveFromCache(model);
-            RemoveStructureFromCache();
+            await RemoveFromCache(model).ConfigureAwait(false);
+            await RemoveStructureFromCache().ConfigureAwait(false);
         }
         else
         {
@@ -281,8 +287,8 @@ internal sealed class MediaService : IMediaService
         await _repo.Save(model).ConfigureAwait(false);
         App.Hooks.OnAfterSave(model);
 
-        RemoveFromCache(model);
-        RemoveStructureFromCache();
+        await RemoveFromCache(model).ConfigureAwait(false);
+        await RemoveStructureFromCache().ConfigureAwait(false);
     }
 
     /// <summary>
@@ -307,8 +313,8 @@ internal sealed class MediaService : IMediaService
         await _repo.SaveFolder(model).ConfigureAwait(false);
         App.Hooks.OnAfterSave(model);
 
-        RemoveFromCache(model);
-        RemoveStructureFromCache();
+        await RemoveFromCache(model).ConfigureAwait(false);
+        await RemoveStructureFromCache().ConfigureAwait(false);
     }
 
     /// <summary>
@@ -319,8 +325,8 @@ internal sealed class MediaService : IMediaService
     public async Task MoveAsync(Media model, Guid? folderId)
     {
         await _repo.Move(model, folderId).ConfigureAwait(false);
-        RemoveFromCache(model);
-        RemoveStructureFromCache();
+        await RemoveFromCache(model).ConfigureAwait(false);
+        await RemoveStructureFromCache().ConfigureAwait(false);
     }
 
     /// <summary>
@@ -427,7 +433,7 @@ internal sealed class MediaService : IMediaService
                             media.Versions.Add(version);
 
                             _repo.Save(media).Wait();
-                            RemoveFromCache(media);
+                            RemoveFromCache(media).Wait();
 
                             upload = true;
                         }
@@ -479,8 +485,8 @@ internal sealed class MediaService : IMediaService
                 await session.DeleteAsync(media, media.Filename).ConfigureAwait(false);
                 App.Hooks.OnAfterDelete(media);
             }
-            RemoveFromCache(media);
-            RemoveStructureFromCache();
+            await RemoveFromCache(media).ConfigureAwait(false);
+            await RemoveStructureFromCache().ConfigureAwait(false);
         }
     }
 
@@ -517,7 +523,7 @@ internal sealed class MediaService : IMediaService
             await _repo.DeleteFolder(id).ConfigureAwait(false);
             App.Hooks.OnAfterDelete(folder);
 
-            RemoveFromCache(folder);
+            await RemoveFromCache(folder).ConfigureAwait(false);
             //}
         }
     }
@@ -535,7 +541,7 @@ internal sealed class MediaService : IMediaService
     /// Processes the model on load.
     /// </summary>
     /// <param name="model">The model</param>
-    private void OnLoad(Media model)
+    private async Task OnLoad(Media model)
     {
         if (model != null)
         {
@@ -553,7 +559,8 @@ internal sealed class MediaService : IMediaService
 
             App.Hooks.OnLoad(model);
 
-            _cache?.Set(model.Id.ToString(), model);
+            if (_cache != null)
+                await _cache.SetAsync(model.Id.ToString(), model).ConfigureAwait(false);
         }
     }
 
@@ -561,13 +568,14 @@ internal sealed class MediaService : IMediaService
     /// Processes the model on load.
     /// </summary>
     /// <param name="model">The model</param>
-    private void OnFolderLoad(MediaFolder model)
+    private async Task OnFolderLoad(MediaFolder model)
     {
         if (model != null)
         {
             App.Hooks.OnLoad(model);
 
-            _cache?.Set(model.Id.ToString(), model);
+            if (_cache != null)
+                await _cache.SetAsync(model.Id.ToString(), model).ConfigureAwait(false);
         }
     }
 
@@ -575,30 +583,32 @@ internal sealed class MediaService : IMediaService
     /// Removes the given model from cache.
     /// </summary>
     /// <param name="model">The model</param>
-    private void RemoveFromCache(Media model)
+    private async Task RemoveFromCache(Media model)
     {
-        _cache?.Remove(model.Id.ToString());
+        if (_cache != null)
+            await _cache.RemoveAsync(model.Id.ToString()).ConfigureAwait(false);
     }
 
     /// <summary>
     /// Removes the given model from cache.
     /// </summary>
     /// <param name="model">The model</param>
-    private void RemoveFromCache(MediaFolder model)
+    private async Task RemoveFromCache(MediaFolder model)
     {
         if (_cache != null)
         {
-            _cache.Remove(model.Id.ToString());
-            RemoveStructureFromCache();
+            await _cache.RemoveAsync(model.Id.ToString()).ConfigureAwait(false);
+            await RemoveStructureFromCache();
         }
     }
 
     /// <summary>
     /// Removes the media structure from cache.
     /// </summary>
-    private void RemoveStructureFromCache()
+    private async Task RemoveStructureFromCache()
     {
-        _cache?.Remove(MEDIA_STRUCTURE);
+        if (_cache != null)
+            await _cache.RemoveAsync(MEDIA_STRUCTURE).ConfigureAwait(false);
     }
 
     /// <summary>

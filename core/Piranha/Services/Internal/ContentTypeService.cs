@@ -109,7 +109,8 @@ internal sealed class ContentTypeService : IContentTypeService
         App.Hooks.OnAfterSave(model);
 
         // Clear cache
-        _cache?.Remove(CacheKey);
+        if (_cache != null)
+            await _cache.RemoveAsync(CacheKey).ConfigureAwait(false);
     }
 
     /// <summary>
@@ -138,7 +139,8 @@ internal sealed class ContentTypeService : IContentTypeService
         App.Hooks.OnAfterDelete(model);
 
         // Clear cache
-        _cache?.Remove(CacheKey);
+        if (_cache != null)
+            await _cache.RemoveAsync(CacheKey).ConfigureAwait(false);
     }
 
     /// <summary>
@@ -157,7 +159,8 @@ internal sealed class ContentTypeService : IContentTypeService
                 App.Hooks.OnAfterDelete(model);
             }
             // Clear cache
-            _cache?.Remove(CacheKey);
+            if (_cache != null)
+                await _cache.RemoveAsync(CacheKey).ConfigureAwait(false);
         }
     }
 
@@ -168,13 +171,13 @@ internal sealed class ContentTypeService : IContentTypeService
     {
         if (_cache != null)
         {
-            var types = _cache.Get<IEnumerable<ContentType>>(CacheKey);
+            var types = await _cache.GetAsync<IEnumerable<ContentType>>(CacheKey).ConfigureAwait(false);
 
             if (types == null)
             {
                 types = await _repo.GetAll().ConfigureAwait(false);
 
-                _cache.Set(CacheKey, types);
+                await _cache.SetAsync(CacheKey, types).ConfigureAwait(false);
             }
             return types;
         }

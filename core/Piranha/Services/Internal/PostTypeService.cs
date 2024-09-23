@@ -78,7 +78,8 @@ internal sealed class PostTypeService : IPostTypeService
         App.Hooks.OnAfterSave(model);
 
         // Clear cache
-        _cache?.Remove("Piranha_PostTypes");
+        if (_cache != null)
+            await _cache.RemoveAsync("Piranha_PostTypes").ConfigureAwait(false);
     }
 
     /// <summary>
@@ -107,7 +108,8 @@ internal sealed class PostTypeService : IPostTypeService
         App.Hooks.OnAfterDelete(model);
 
         // Clear cache
-        _cache?.Remove("Piranha_PostTypes");
+        if (_cache != null)
+            await _cache.RemoveAsync("Piranha_PostTypes").ConfigureAwait(false);
     }
 
     /// <summary>
@@ -126,7 +128,8 @@ internal sealed class PostTypeService : IPostTypeService
                 App.Hooks.OnAfterDelete(model);
             }
             // Clear cache
-            _cache?.Remove("Piranha_PostTypes");
+            if (_cache != null)
+                await _cache.RemoveAsync("Piranha_PostTypes").ConfigureAwait(false);
         }
     }
 
@@ -137,13 +140,13 @@ internal sealed class PostTypeService : IPostTypeService
     {
         if (_cache != null)
         {
-            var types = _cache.Get<IEnumerable<PostType>>("Piranha_PostTypes");
+            var types = await _cache.GetAsync<IEnumerable<PostType>>("Piranha_PostTypes").ConfigureAwait(false);
 
             if (types == null)
             {
                 types = await _repo.GetAll().ConfigureAwait(false);
 
-                _cache.Set("Piranha_PostTypes", types);
+                await _cache.SetAsync("Piranha_PostTypes", types).ConfigureAwait(false);
             }
             return types;
         }

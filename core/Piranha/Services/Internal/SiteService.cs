@@ -77,13 +77,13 @@ internal sealed class SiteService : ISiteService
     /// <returns>The model, or null if it doesn't exist</returns>
     public async Task<Site> GetByIdAsync(Guid id)
     {
-        var model = _cache?.Get<Site>(id.ToString());
+        var model = _cache == null ? null : await _cache.GetAsync<Site>(id.ToString()).ConfigureAwait(false);
 
         if (model == null)
         {
             model = await _repo.GetById(id).ConfigureAwait(false);
 
-            OnLoad(model);
+            await OnLoad(model).ConfigureAwait(false);
         }
 
         if (model != null && model.Logo != null && model.Logo.Id.HasValue)
@@ -100,7 +100,7 @@ internal sealed class SiteService : ISiteService
     /// <returns>The model</returns>
     public async Task<Site> GetByInternalIdAsync(string internalId)
     {
-        var id = _cache?.Get<Guid?>($"SiteId_{internalId}");
+        var id = _cache == null ? null : await _cache.GetAsync<Guid?>($"SiteId_{internalId}").ConfigureAwait(false);
         Site model = null;
 
         if (id != null)
@@ -111,10 +111,10 @@ internal sealed class SiteService : ISiteService
         {
             model = await _repo.GetByInternalId(internalId).ConfigureAwait(false);
 
-            OnLoad(model);
+            await OnLoad(model).ConfigureAwait(false);
         }
 
-        if (model != null &&model.Logo != null && model.Logo.Id.HasValue)
+        if (model != null && model.Logo != null && model.Logo.Id.HasValue)
         {
             await _factory.InitFieldAsync(model.Logo);
         }
@@ -132,7 +132,7 @@ internal sealed class SiteService : ISiteService
 
         if (_cache != null)
         {
-            mappings = _cache.Get<IList<SiteMapping>>(SITE_MAPPINGS);
+            mappings = await _cache.GetAsync<IList<SiteMapping>>(SITE_MAPPINGS).ConfigureAwait(false);
 
             if (mappings == null)
             {
@@ -145,7 +145,7 @@ internal sealed class SiteService : ISiteService
                         Hostnames = s.Hostnames
                     })
                     .ToList();
-                _cache.Set(SITE_MAPPINGS, mappings);
+                await _cache.SetAsync(SITE_MAPPINGS, mappings).ConfigureAwait(false);
             }
         }
         else
@@ -163,7 +163,7 @@ internal sealed class SiteService : ISiteService
 
         foreach (var mapping in mappings)
         {
-            foreach (var host in mapping.Hostnames.Split(new [] { ',' }))
+            foreach (var host in mapping.Hostnames.Split(new[] { ',' }))
             {
                 if (host.Trim().ToLower() == hostname)
                 {
@@ -180,13 +180,13 @@ internal sealed class SiteService : ISiteService
     /// <returns>The model, or NULL if it does not exist</returns>
     public async Task<Site> GetDefaultAsync()
     {
-        var model = _cache?.Get<Site>($"Site_{Guid.Empty}");
+        var model = _cache == null ? null : await _cache.GetAsync<Site>($"Site_{Guid.Empty}").ConfigureAwait(false);
 
         if (model == null)
         {
             model = await _repo.GetDefault().ConfigureAwait(false);
 
-            OnLoad(model);
+            await OnLoad(model).ConfigureAwait(false);
         }
 
         if (model != null && model.Logo != null && model.Logo.Id.HasValue)
@@ -218,7 +218,7 @@ internal sealed class SiteService : ISiteService
 
         if (!typeof(DynamicSiteContent).IsAssignableFrom(typeof(T)))
         {
-            model = _cache?.Get<SiteContentBase>($"SiteContent_{id}");
+            model = _cache == null ? null : await _cache.GetAsync<SiteContentBase>($"SiteContent_{id}").ConfigureAwait(false);
 
             if (model != null)
             {
@@ -260,7 +260,7 @@ internal sealed class SiteService : ISiteService
 
         if (id != null)
         {
-            var sitemap = onlyPublished ? _cache?.Get<Models.Sitemap>($"Sitemap_{id}") : null;
+            var sitemap = onlyPublished && _cache != null ? await _cache.GetAsync<Models.Sitemap>($"Sitemap_{id}").ConfigureAwait(false) : null;
 
             if (sitemap == null)
             {
@@ -270,7 +270,8 @@ internal sealed class SiteService : ISiteService
 
                 if (onlyPublished)
                 {
-                    _cache?.Set($"Sitemap_{id}", sitemap);
+                    if (_cache != null)
+                        await _cache.SetAsync($"Sitemap_{id}", sitemap).ConfigureAwait(false);
                 }
             }
             return sitemap;
@@ -326,14 +327,14 @@ internal sealed class SiteService : ISiteService
                 await _repo.Save(def).ConfigureAwait(false);
 
                 // Remove the old default site from cache
-                RemoveFromCache(def);
+                await RemoveFromCache(def).ConfigureAwait(false);
             }
         }
         else
         {
             // Make sure we have a default site
             var def = await _repo.GetDefault().ConfigureAwait(false);
-            if (def == null || def.Id == model.Id)
+            if (def == null || def.Id == model.Id)
                 model.IsDefault = true;
         }
         // Call hooks & save
@@ -342,7 +343,7 @@ internal sealed class SiteService : ISiteService
         App.Hooks.OnAfterSave(model);
 
         // Remove from cache
-        RemoveFromCache(model);
+        await RemoveFromCache(model).ConfigureAwait(false);
     }
 
     /// <summary>
@@ -374,7 +375,7 @@ internal sealed class SiteService : ISiteService
         App.Hooks.OnAfterSave<Models.SiteContentBase>(model);
 
         // Remove from cache
-        RemoveContentFromCache(model);
+        await RemoveContentFromCache(model).ConfigureAwait(false);
     }
 
     /// <summary>
@@ -415,12 +416,14 @@ internal sealed class SiteService : ISiteService
                 await SaveAsync(site).ConfigureAwait(false);
             }
         }
-        var sitemap = _cache?.Get<Sitemap>($"Sitemap_{id}");
+        var sitemap = _cache == null ? null : await _cache.GetAsync<Sitemap>($"Sitemap_{id}").ConfigureAwait(false);
         if (sitemap != null)
         {
             App.Hooks.OnBeforeDelete<Sitemap>(sitemap);
         }
-        _cache?.Remove($"Sitemap_{id}");
+
+        if (_cache != null)
+            await _cache.RemoveAsync($"Sitemap_{id}").ConfigureAwait(false);
     }
 
     /// <summary>
@@ -449,7 +452,7 @@ internal sealed class SiteService : ISiteService
         App.Hooks.OnAfterDelete(model);
 
         // Remove from cache
-        RemoveFromCache(model);
+        await RemoveFromCache(model).ConfigureAwait(false);
     }
 
     /// <summary>
@@ -464,7 +467,7 @@ internal sealed class SiteService : ISiteService
 
             if (site != null)
             {
-                _cache.Remove($"Sitemap_{id}");
+                await _cache.RemoveAsync($"Sitemap_{id}").ConfigureAwait(false);
             }
         }
     }
@@ -473,7 +476,7 @@ internal sealed class SiteService : ISiteService
     /// Processes the model on load.
     /// </summary>
     /// <param name="model">The model</param>
-    private void OnLoad(Site model)
+    private async Task OnLoad(Site model)
     {
         if (model != null)
         {
@@ -481,11 +484,11 @@ internal sealed class SiteService : ISiteService
 
             if (_cache != null)
             {
-                _cache.Set(model.Id.ToString(), model);
-                _cache.Set($"SiteId_{model.InternalId}", model.Id);
+                await _cache.SetAsync(model.Id.ToString(), model).ConfigureAwait(false);
+                await _cache.SetAsync($"SiteId_{model.InternalId}", model.Id).ConfigureAwait(false);
                 if (model.IsDefault)
                 {
-                    _cache.Set($"Site_{Guid.Empty}", model);
+                    await _cache.SetAsync($"Site_{Guid.Empty}", model).ConfigureAwait(false);
                 }
             }
         }
@@ -513,7 +516,7 @@ internal sealed class SiteService : ISiteService
 
             if (_cache != null && !(model is DynamicSiteContent))
             {
-                _cache.Set($"SiteContent_{model.Id}", model);
+                await _cache.SetAsync($"SiteContent_{model.Id}", model).ConfigureAwait(false);
             }
         }
     }
@@ -522,18 +525,18 @@ internal sealed class SiteService : ISiteService
     /// Removes the given model from cache.
     /// </summary>
     /// <param name="model">The model</param>
-    private void RemoveFromCache(Site model)
+    private async Task RemoveFromCache(Site model)
     {
         if (_cache != null)
         {
-            _cache.Remove(model.Id.ToString());
-            _cache.Remove($"SiteId_{model.InternalId}");
+            await _cache.RemoveAsync(model.Id.ToString()).ConfigureAwait(false);
+            await _cache.RemoveAsync($"SiteId_{model.InternalId}").ConfigureAwait(false);
 
             if (model.IsDefault)
             {
-                _cache.Remove($"Site_{Guid.Empty}");
+                await _cache.RemoveAsync($"Site_{Guid.Empty}").ConfigureAwait(false);
             }
-            _cache.Remove(SITE_MAPPINGS);
+            await _cache.RemoveAsync(SITE_MAPPINGS).ConfigureAwait(false);
         }
     }
 
@@ -541,8 +544,9 @@ internal sealed class SiteService : ISiteService
     /// Removes the given model from cache.
     /// </summary>
     /// <param name="model">The model</param>
-    private void RemoveContentFromCache<T>(T model) where T : Models.SiteContentBase
+    private async Task RemoveContentFromCache<T>(T model) where T : Models.SiteContentBase
     {
-        _cache?.Remove($"SiteContent_{model.Id}");
+        if (_cache != null)
+            await _cache.RemoveAsync($"SiteContent_{model.Id}").ConfigureAwait(false);
     }
 }
