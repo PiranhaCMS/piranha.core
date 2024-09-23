@@ -348,11 +348,11 @@ internal sealed class ContentService : IContentService
             // Store the model
             if (model is ContentInfo)
             {
-                await _cache.SetAsync($"ContentInfo_{languageId}_{model.Id}", model);
+                await _cache.SetAsync($"ContentInfo_{languageId}_{model.Id}", model).ConfigureAwait(false);
             }
             else if (model is not IDynamicContent)
             {
-                await _cache.SetAsync($"Content_{languageId}_{model.Id}", model);
+                await _cache.SetAsync($"Content_{languageId}_{model.Id}", model).ConfigureAwait(false);
             }
         }
     }
@@ -366,8 +366,8 @@ internal sealed class ContentService : IContentService
     {
         if (_cache != null)
         {
-            await _cache.RemoveAsync($"ContentInfo_{languageId}_{model.Id}");
-            await _cache.RemoveAsync($"Content_{languageId}_{model.Id}");
+            await _cache.RemoveAsync($"ContentInfo_{languageId}_{model.Id}").ConfigureAwait(false);
+            await _cache.RemoveAsync($"Content_{languageId}_{model.Id}").ConfigureAwait(false);
         }
     }
 }

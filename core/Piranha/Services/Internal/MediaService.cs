@@ -108,7 +108,7 @@ internal sealed class MediaService : IMediaService
     /// <returns>The media</returns>
     public async Task<Media> GetByIdAsync(Guid id)
     {
-        var model = _cache == null ? null : await _cache.GetAsync<Media>(id.ToString());
+        var model = _cache == null ? null : await _cache.GetAsync<Media>(id.ToString()).ConfigureAwait(false);
 
         if (model == null)
         {
@@ -598,7 +598,7 @@ internal sealed class MediaService : IMediaService
         if (_cache != null)
         {
             await _cache.RemoveAsync(model.Id.ToString()).ConfigureAwait(false);
-            await RemoveStructureFromCache();
+            await RemoveStructureFromCache().ConfigureAwait(false);
         }
     }
 

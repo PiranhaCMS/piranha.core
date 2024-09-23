@@ -185,7 +185,7 @@ internal sealed class AliasService : IAliasService
         App.Hooks.OnAfterSave(model);
 
         // Remove from cache
-        await RemoveFromCache(model, cancellationToken);
+        await RemoveFromCache(model, cancellationToken).ConfigureAwait(false);
     }
 
     /// <summary>

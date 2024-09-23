@@ -122,7 +122,7 @@ internal sealed class ContentGroupService : IContentGroupService
     {
         if (_cache != null)
         {
-            var groups = await _cache.GetAsync<IEnumerable<ContentGroup>>(CacheKey, cancellationToken);
+            var groups = await _cache.GetAsync<IEnumerable<ContentGroup>>(CacheKey, cancellationToken).ConfigureAwait(false);
 
             if (groups == null)
             {
