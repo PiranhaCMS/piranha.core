@@ -468,6 +468,10 @@ public class RoutingMiddleware : MiddlewareBase
                     context.Request.QueryString =
                         new QueryString("?" + strQuery);
                 }
+            } else {
+                _logger?.LogDebug("No route found");
+                // No route found. Reset the path to raw path because site routing might have changed it. 
+                context.Request.Path = new PathString(service.Request.Url);
             }
         }
         await _next.Invoke(context);
