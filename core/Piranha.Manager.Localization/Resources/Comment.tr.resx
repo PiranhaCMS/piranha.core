@@ -44,7 +44,7 @@
     <value>Yorumlara izin yok.</value>
   </data>
   <data name="Comments are not allowed for unpublished content." xml:space="preserve">
-    <value>Yayınlanmamış muhteva için yorumlara izin verilmez.</value>
+    <value>Yayımlanmamış içerikler için yorumlara izin verilmez.</value>
   </data>
   <data name="Comments are currently open." xml:space="preserve">
     <value>Yorumlara şu an için açık.</value>
