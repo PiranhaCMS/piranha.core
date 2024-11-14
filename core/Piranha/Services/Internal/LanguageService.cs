@@ -121,7 +121,9 @@ internal sealed class LanguageService : ILanguageService
 
         // Clear cache
         if (_cache != null)
+        {
             await _cache.RemoveAsync(CacheKey).ConfigureAwait(false);
+        }
     }
 
     /// <summary>
@@ -151,7 +153,9 @@ internal sealed class LanguageService : ILanguageService
 
         // Clear cache
         if (_cache != null)
+        {
             await _cache.RemoveAsync(CacheKey).ConfigureAwait(false);
+        }
     }
 
     /// <summary>

@@ -258,12 +258,16 @@ internal sealed class PageService : IPageService
         if (typeof(T) == typeof(Models.PageInfo))
         {
             if (_cache != null)
+            {
                 model = await _cache.GetAsync<PageInfo>($"PageInfo_{siteId.Value}").ConfigureAwait(false);
+            }
         }
         else if (!typeof(DynamicPage).IsAssignableFrom(typeof(T)))
         {
             if (_cache != null)
+            {
                 model = await _cache.GetAsync<PageBase>($"Page_{siteId.Value}").ConfigureAwait(false);
+            }
 
             if (model != null)
             {
@@ -323,12 +327,16 @@ internal sealed class PageService : IPageService
             if (typeof(T) == typeof(Models.PageInfo))
             {
                 if (_cache != null)
+                {
                     model = await _cache.GetAsync<PageInfo>($"PageInfo_{id.ToString()}").ConfigureAwait(false);
+                }
             }
             else if (!typeof(DynamicPage).IsAssignableFrom(typeof(T)))
             {
                 if (_cache != null)
+                {
                     model = await _cache.GetAsync<PageBase>(id.ToString()).ConfigureAwait(false);
+                }
 
                 if (model != null)
                 {
@@ -405,12 +413,16 @@ internal sealed class PageService : IPageService
             if (typeof(T) == typeof(Models.PageInfo))
             {
                 if (_cache != null)
+                {
                     model = await _cache.GetAsync<PageInfo>($"PageInfo_{pageId.ToString()}").ConfigureAwait(false);
+                }
             }
             else if (!typeof(DynamicPage).IsAssignableFrom(typeof(T)))
             {
                 if (_cache != null)
+                {
                     model = await _cache.GetAsync<PageBase>(pageId.ToString()).ConfigureAwait(false);
+                }
 
                 if (model != null)
                 {

@@ -343,12 +343,16 @@ internal sealed class PostService : IPostService
             if (typeof(T) == typeof(PostInfo))
             {
                 if (_cache != null)
+                {
                     model = await _cache.GetAsync<PostInfo>($"PostInfo_{postId.ToString()}").ConfigureAwait(false);
+                }
             }
             else if (!typeof(DynamicPost).IsAssignableFrom(typeof(T)))
             {
                 if (_cache != null)
+                {
                     model = await _cache.GetAsync<PostBase>(postId.ToString()).ConfigureAwait(false);
+                }
             }
         }
 

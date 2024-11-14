@@ -271,7 +271,9 @@ internal sealed class SiteService : ISiteService
                 if (onlyPublished)
                 {
                     if (_cache != null)
+                    {
                         await _cache.SetAsync($"Sitemap_{id}", sitemap).ConfigureAwait(false);
+                    }
                 }
             }
             return sitemap;
@@ -335,7 +337,9 @@ internal sealed class SiteService : ISiteService
             // Make sure we have a default site
             var def = await _repo.GetDefault().ConfigureAwait(false);
             if (def == null || def.Id == model.Id)
+            {
                 model.IsDefault = true;
+            }
         }
         // Call hooks & save
         App.Hooks.OnBeforeSave(model);
@@ -423,7 +427,9 @@ internal sealed class SiteService : ISiteService
         }
 
         if (_cache != null)
+        {
             await _cache.RemoveAsync($"Sitemap_{id}").ConfigureAwait(false);
+        }
     }
 
     /// <summary>
@@ -547,6 +553,8 @@ internal sealed class SiteService : ISiteService
     private async Task RemoveContentFromCache<T>(T model) where T : Models.SiteContentBase
     {
         if (_cache != null)
+        {
             await _cache.RemoveAsync($"SiteContent_{model.Id}").ConfigureAwait(false);
+        }
     }
 }

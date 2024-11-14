@@ -79,7 +79,9 @@ internal sealed class SiteTypeService : ISiteTypeService
 
         // Clear cache
         if (_cache != null)
+        {
             await _cache.RemoveAsync("Piranha_SiteTypes").ConfigureAwait(false);
+        }
     }
 
     /// <summary>
@@ -109,7 +111,9 @@ internal sealed class SiteTypeService : ISiteTypeService
 
         // Clear cache
         if (_cache != null)
+        {
             await _cache.RemoveAsync("Piranha_SiteTypes").ConfigureAwait(false);
+        }
     }
 
     /// <summary>
@@ -129,7 +133,9 @@ internal sealed class SiteTypeService : ISiteTypeService
             }
             // Clear cache
             if (_cache != null)
+            {
                 await _cache.RemoveAsync("Piranha_SiteTypes").ConfigureAwait(false);
+            }
         }
     }
 

@@ -81,7 +81,9 @@ internal sealed class ContentGroupService : IContentGroupService
 
         // Clear cache
         if (_cache != null)
+        {
             await _cache.RemoveAsync(CacheKey, cancellationToken).ConfigureAwait(false);
+        }
     }
 
     /// <summary>
@@ -112,7 +114,9 @@ internal sealed class ContentGroupService : IContentGroupService
 
         // Clear cache
         if (_cache != null)
+        {
             await _cache.RemoveAsync(CacheKey, cancellationToken).ConfigureAwait(false);
+        }
     }
 
     /// <summary>

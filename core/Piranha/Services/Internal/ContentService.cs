@@ -136,12 +136,16 @@ internal sealed class ContentService : IContentService
         if (typeof(T) == typeof(ContentInfo))
         {
             if (_cache != null)
+            {
                 model = await _cache.GetAsync<GenericContent>($"ContentInfo_{languageId}_{id}").ConfigureAwait(false);
+            }
         }
         else if (!typeof(DynamicContent).IsAssignableFrom(typeof(T)))
         {
             if (_cache != null)
+            {
                 model = await _cache.GetAsync<GenericContent>($"Content_{languageId}_{id}").ConfigureAwait(false);
+            }
         }
 
         // If we have a model, let's initialize it

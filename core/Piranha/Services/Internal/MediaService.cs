@@ -560,7 +560,9 @@ internal sealed class MediaService : IMediaService
             App.Hooks.OnLoad(model);
 
             if (_cache != null)
+            {
                 await _cache.SetAsync(model.Id.ToString(), model).ConfigureAwait(false);
+            }
         }
     }
 
@@ -575,7 +577,9 @@ internal sealed class MediaService : IMediaService
             App.Hooks.OnLoad(model);
 
             if (_cache != null)
+            {
                 await _cache.SetAsync(model.Id.ToString(), model).ConfigureAwait(false);
+            }
         }
     }
 
@@ -586,7 +590,9 @@ internal sealed class MediaService : IMediaService
     private async Task RemoveFromCache(Media model)
     {
         if (_cache != null)
+        {
             await _cache.RemoveAsync(model.Id.ToString()).ConfigureAwait(false);
+        }
     }
 
     /// <summary>
@@ -608,7 +614,9 @@ internal sealed class MediaService : IMediaService
     private async Task RemoveStructureFromCache()
     {
         if (_cache != null)
+        {
             await _cache.RemoveAsync(MEDIA_STRUCTURE).ConfigureAwait(false);
+        }
     }
 
     /// <summary>

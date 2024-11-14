@@ -110,7 +110,9 @@ internal sealed class ContentTypeService : IContentTypeService
 
         // Clear cache
         if (_cache != null)
+        {
             await _cache.RemoveAsync(CacheKey).ConfigureAwait(false);
+        }
     }
 
     /// <summary>
@@ -140,7 +142,9 @@ internal sealed class ContentTypeService : IContentTypeService
 
         // Clear cache
         if (_cache != null)
+        {
             await _cache.RemoveAsync(CacheKey).ConfigureAwait(false);
+        }
     }
 
     /// <summary>
@@ -160,7 +164,9 @@ internal sealed class ContentTypeService : IContentTypeService
             }
             // Clear cache
             if (_cache != null)
+            {
                 await _cache.RemoveAsync(CacheKey).ConfigureAwait(false);
+            }
         }
     }
 
