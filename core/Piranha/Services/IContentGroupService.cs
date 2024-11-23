@@ -44,6 +44,5 @@ public interface IContentGroupService
     /// Deletes the given model.
     /// </summary>
     /// <param name="model">The model</param>
-    /// <param name="cancellationToken"></param>
     Task DeleteAsync(ContentGroup model);
 }
