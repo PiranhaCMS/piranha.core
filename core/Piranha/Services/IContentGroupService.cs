@@ -32,7 +32,7 @@ public interface IContentGroupService
     /// depending on its state.
     /// </summary>
     /// <param name="model">The model</param>
-    Task SaveAsync(ContentGroup model, CancellationToken cancellationToken = default);
+    Task SaveAsync(ContentGroup model);
 
     /// <summary>
     /// Deletes the model with the specified id.
@@ -45,5 +45,5 @@ public interface IContentGroupService
     /// </summary>
     /// <param name="model">The model</param>
     /// <param name="cancellationToken"></param>
-    Task DeleteAsync(ContentGroup model, CancellationToken cancellationToken = default);
+    Task DeleteAsync(ContentGroup model);
 }

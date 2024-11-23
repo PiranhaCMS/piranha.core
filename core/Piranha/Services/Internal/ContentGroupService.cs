@@ -67,8 +67,7 @@ internal sealed class ContentGroupService : IContentGroupService
     /// depending on its state.
     /// </summary>
     /// <param name="model">The model</param>
-    /// <param name="cancellationToken"></param>
-    public async Task SaveAsync(ContentGroup model, CancellationToken cancellationToken = default)
+    public async Task SaveAsync(ContentGroup model)
     {
         // Validate model
         var context = new ValidationContext(model);
@@ -82,7 +81,7 @@ internal sealed class ContentGroupService : IContentGroupService
         // Clear cache
         if (_cache != null)
         {
-            await _cache.RemoveAsync(CacheKey, cancellationToken).ConfigureAwait(false);
+            await _cache.RemoveAsync(CacheKey).ConfigureAwait(false);
         }
     }
 
@@ -104,8 +103,7 @@ internal sealed class ContentGroupService : IContentGroupService
     /// Deletes the given model.
     /// </summary>
     /// <param name="model">The model</param>
-    /// <param name="cancellationToken"></param>
-    public async Task DeleteAsync(ContentGroup model, CancellationToken cancellationToken = default)
+    public async Task DeleteAsync(ContentGroup model)
     {
         // Call hooks & delete
         App.Hooks.OnBeforeDelete(model);
@@ -115,24 +113,24 @@ internal sealed class ContentGroupService : IContentGroupService
         // Clear cache
         if (_cache != null)
         {
-            await _cache.RemoveAsync(CacheKey, cancellationToken).ConfigureAwait(false);
+            await _cache.RemoveAsync(CacheKey).ConfigureAwait(false);
         }
     }
 
     /// <summary>
     /// Gets the content types from the database.
     /// </summary>
-    private async Task<IEnumerable<ContentGroup>> GetGroups(CancellationToken cancellationToken = default)
+    private async Task<IEnumerable<ContentGroup>> GetGroups()
     {
         if (_cache != null)
         {
-            var groups = await _cache.GetAsync<IEnumerable<ContentGroup>>(CacheKey, cancellationToken).ConfigureAwait(false);
+            var groups = await _cache.GetAsync<IEnumerable<ContentGroup>>(CacheKey).ConfigureAwait(false);
 
             if (groups == null)
             {
                 groups = await _repo.GetAllAsync().ConfigureAwait(false);
 
-                await _cache.SetAsync(CacheKey, groups, cancellationToken).ConfigureAwait(false);
+                await _cache.SetAsync(CacheKey, groups).ConfigureAwait(false);
             }
             return groups;
         }

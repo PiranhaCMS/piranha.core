@@ -71,17 +71,16 @@ internal sealed class AliasService : IAliasService
     /// Gets the model with the specified id.
     /// </summary>
     /// <param name="id">The unique id</param>
-    /// <param name="cancellationToken"></param>
     /// <returns>The model, or null if it doesn't exist</returns>
-    public async Task<Alias> GetByIdAsync(Guid id, CancellationToken cancellationToken = default)
+    public async Task<Alias> GetByIdAsync(Guid id)
     {
-        var model = _cache == null ? null : await _cache.GetAsync<Alias>(id.ToString(), cancellationToken).ConfigureAwait(false);
+        var model = _cache == null ? null : await _cache.GetAsync<Alias>(id.ToString()).ConfigureAwait(false);
 
         if (model == null)
         {
             model = await _repo.GetById(id).ConfigureAwait(false);
 
-            await OnLoad(model, cancellationToken).ConfigureAwait(false);
+            await OnLoad(model).ConfigureAwait(false);
         }
         return model;
     }
@@ -91,9 +90,8 @@ internal sealed class AliasService : IAliasService
     /// </summary>
     /// <param name="url">The unique url</param>
     /// <param name="siteId">The optional site id</param>
-    /// <param name="cancellationToken"></param>
     /// <returns>The model</returns>
-    public async Task<Alias> GetByAliasUrlAsync(string url, Guid? siteId = null, CancellationToken cancellationToken = default)
+    public async Task<Alias> GetByAliasUrlAsync(string url, Guid? siteId = null)
     {
         if (!siteId.HasValue)
         {
@@ -106,7 +104,7 @@ internal sealed class AliasService : IAliasService
 
         if (siteId.HasValue)
         {
-            var aliasUrls = await GetAliasUrls(siteId.Value, cancellationToken).ConfigureAwait(false);
+            var aliasUrls = await GetAliasUrls(siteId.Value).ConfigureAwait(false);
 
             if (aliasUrls != null)
             {
@@ -149,8 +147,7 @@ internal sealed class AliasService : IAliasService
     /// depending on its state.
     /// </summary>
     /// <param name="model">The model</param>
-    /// <param name="cancellationToken"></param>
-    public async Task SaveAsync(Alias model, CancellationToken cancellationToken)
+    public async Task SaveAsync(Alias model)
     {
         // Ensure id
         if (model.Id == Guid.Empty)
@@ -185,21 +182,20 @@ internal sealed class AliasService : IAliasService
         App.Hooks.OnAfterSave(model);
 
         // Remove from cache
-        await RemoveFromCache(model, cancellationToken).ConfigureAwait(false);
+        await RemoveFromCache(model).ConfigureAwait(false);
     }
 
     /// <summary>
     /// Deletes the model with the specified id.
     /// </summary>
     /// <param name="id">The unique id</param>
-    /// <param name="cancellationToken"></param>
-    public async Task DeleteAsync(Guid id, CancellationToken cancellationToken = default)
+    public async Task DeleteAsync(Guid id)
     {
         var model = await GetByIdAsync(id).ConfigureAwait(false);
 
         if (model != null)
         {
-            await DeleteAsync(model, cancellationToken).ConfigureAwait(false);
+            await DeleteAsync(model).ConfigureAwait(false);
         }
     }
 
@@ -207,8 +203,7 @@ internal sealed class AliasService : IAliasService
     /// Deletes the given model.
     /// </summary>
     /// <param name="model">The model</param>
-    /// <param name="cancellationToken"></param>
-    public async Task DeleteAsync(Alias model, CancellationToken cancellationToken = default)
+    public async Task DeleteAsync(Alias model)
     {
         // Call hooks & delete
         App.Hooks.OnBeforeDelete(model);
@@ -216,15 +211,14 @@ internal sealed class AliasService : IAliasService
         App.Hooks.OnAfterDelete(model);
 
         // Remove from cache
-        await RemoveFromCache(model, cancellationToken).ConfigureAwait(false);
+        await RemoveFromCache(model).ConfigureAwait(false);
     }
 
     /// <summary>
     /// Processes the model on load.
     /// </summary>
     /// <param name="model">The model</param>
-    /// <param name="cancellationToken"></param>
-    private Task OnLoad(Alias model, CancellationToken cancellationToken)
+    private Task OnLoad(Alias model)
     {
         if (model != null)
         {
@@ -232,7 +226,7 @@ internal sealed class AliasService : IAliasService
 
             if (_cache != null)
             {
-                return _cache.SetAsync(model.Id.ToString(), model, cancellationToken);
+                return _cache.SetAsync(model.Id.ToString(), model);
             }
         }
 
@@ -243,24 +237,23 @@ internal sealed class AliasService : IAliasService
     /// Removes the given model from cache.
     /// </summary>
     /// <param name="model">The model</param>
-    /// <param name="cancellationToken"></param>
-    private async Task RemoveFromCache(Alias model, CancellationToken cancellationToken)
+    private async Task RemoveFromCache(Alias model)
     {
         if (_cache != null)
         {
-            await _cache.RemoveAsync(model.Id.ToString(), cancellationToken).ConfigureAwait(false);
-            await _cache.RemoveAsync($"Piranha_AliasUrls_{model.SiteId}", cancellationToken).ConfigureAwait(false);
+            await _cache.RemoveAsync(model.Id.ToString()).ConfigureAwait(false);
+            await _cache.RemoveAsync($"Piranha_AliasUrls_{model.SiteId}").ConfigureAwait(false);
         }
     }
 
     /// <summary>
     /// Gets the aliases for the specified site.
     /// </summary>
-    private async Task<IEnumerable<AliasUrlCacheEntry>> GetAliasUrls(Guid siteId, CancellationToken cancellationToken)
+    private async Task<IEnumerable<AliasUrlCacheEntry>> GetAliasUrls(Guid siteId)
     {
         if (_cache != null)
         {
-            var aliasUrls = await _cache.GetAsync<IEnumerable<AliasUrlCacheEntry>>($"Piranha_AliasUrls_{siteId}", cancellationToken).ConfigureAwait(false);
+            var aliasUrls = await _cache.GetAsync<IEnumerable<AliasUrlCacheEntry>>($"Piranha_AliasUrls_{siteId}").ConfigureAwait(false);
 
             if (aliasUrls == null)
             {
@@ -271,7 +264,7 @@ internal sealed class AliasService : IAliasService
                     AliasUrl = x.AliasUrl
                 }).ToList();
 
-                await _cache.SetAsync($"Piranha_AliasUrls_{siteId}", aliasUrls, cancellationToken).ConfigureAwait(false);
+                await _cache.SetAsync($"Piranha_AliasUrls_{siteId}", aliasUrls).ConfigureAwait(false);
             }
             return aliasUrls;
         }
