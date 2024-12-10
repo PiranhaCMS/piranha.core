@@ -135,11 +135,17 @@ internal sealed class ContentService : IContentService
         // First, try to get the model from cache
         if (typeof(T) == typeof(ContentInfo))
         {
-            model = _cache?.Get<GenericContent>($"ContentInfo_{ languageId }_{ id }");
+            if (_cache != null)
+            {
+                model = await _cache.GetAsync<GenericContent>($"ContentInfo_{languageId}_{id}").ConfigureAwait(false);
+            }
         }
         else if (!typeof(DynamicContent).IsAssignableFrom(typeof(T)))
         {
-            model = _cache?.Get<GenericContent>($"Content_{ languageId }_{ id }");
+            if (_cache != null)
+            {
+                model = await _cache.GetAsync<GenericContent>($"Content_{languageId}_{id}").ConfigureAwait(false);
+            }
         }
 
         // If we have a model, let's initialize it
@@ -327,7 +333,7 @@ internal sealed class ContentService : IContentService
         }
 
         // Initialize primary image
-            if (model.PrimaryImage == null)
+        if (model.PrimaryImage == null)
         {
             model.PrimaryImage = new Extend.Fields.ImageField();
         }
@@ -346,11 +352,11 @@ internal sealed class ContentService : IContentService
             // Store the model
             if (model is ContentInfo)
             {
-                _cache.Set($"ContentInfo_{ languageId }_{ model.Id }", model);
+                await _cache.SetAsync($"ContentInfo_{languageId}_{model.Id}", model).ConfigureAwait(false);
             }
             else if (model is not IDynamicContent)
             {
-                _cache.Set($"Content_{ languageId }_{ model.Id }", model);
+                await _cache.SetAsync($"Content_{languageId}_{model.Id}", model).ConfigureAwait(false);
             }
         }
     }
@@ -360,15 +366,12 @@ internal sealed class ContentService : IContentService
     /// </summary>
     /// <param name="model">The model</param>
     /// <param name="languageId">The language of the current model</param>
-    private Task RemoveFromCacheAsync(GenericContent model, Guid languageId)
+    private async Task RemoveFromCacheAsync(GenericContent model, Guid languageId)
     {
-        return Task.Run(() =>
+        if (_cache != null)
         {
-            if (_cache != null)
-            {
-                _cache.Remove($"ContentInfo_{ languageId }_{ model.Id }");
-                _cache.Remove($"Content_{ languageId }_{ model.Id }");
-            }
-        });
+            await _cache.RemoveAsync($"ContentInfo_{languageId}_{model.Id}").ConfigureAwait(false);
+            await _cache.RemoveAsync($"Content_{languageId}_{model.Id}").ConfigureAwait(false);
+        }
     }
 }

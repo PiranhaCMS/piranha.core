@@ -51,13 +51,13 @@ internal sealed class ParamService : IParamService
     /// <returns>The model, or null if it doesn't exist</returns>
     public async Task<Param> GetByIdAsync(Guid id)
     {
-        var model = _cache?.Get<Param>(id.ToString());
+        var model = _cache == null ? null : await _cache.GetAsync<Param>(id.ToString()).ConfigureAwait(false);
 
         if (model == null)
         {
             model = await _repo.GetById(id).ConfigureAwait(false);
 
-            OnLoad(model);
+            await OnLoad(model).ConfigureAwait(false);
         }
         return model;
     }
@@ -67,8 +67,9 @@ internal sealed class ParamService : IParamService
     /// </summary>
     /// <param name="key">The unique key</param>
     /// <returns>The model</returns>
-    public async Task<Param> GetByKeyAsync(string key) {
-        var id = _cache?.Get<Guid?>($"ParamKey_{key}");
+    public async Task<Param> GetByKeyAsync(string key)
+    {
+        var id = _cache == null ? null : await _cache.GetAsync<Guid?>($"ParamKey_{key}").ConfigureAwait(false);
         Param model = null;
 
         if (id.HasValue)
@@ -79,7 +80,7 @@ internal sealed class ParamService : IParamService
         {
             model = await _repo.GetByKey(key).ConfigureAwait(false);
 
-            OnLoad(model);
+            await OnLoad(model).ConfigureAwait(false);
         }
         return model;
     }
@@ -114,7 +115,7 @@ internal sealed class ParamService : IParamService
         App.Hooks.OnAfterSave(model);
 
         // Remove from cache
-        RemoveFromCache(model);
+        await RemoveFromCache(model).ConfigureAwait(false);
     }
 
     /// <summary>
@@ -143,14 +144,14 @@ internal sealed class ParamService : IParamService
         App.Hooks.OnAfterDelete(model);
 
         // Remove from cache
-        RemoveFromCache(model);
+        await RemoveFromCache(model).ConfigureAwait(false);
     }
 
     /// <summary>
     /// Processes the model on load.
     /// </summary>
     /// <param name="model">The model</param>
-    private void OnLoad(Param model)
+    private async Task OnLoad(Param model)
     {
         if (model != null)
         {
@@ -158,8 +159,8 @@ internal sealed class ParamService : IParamService
 
             if (_cache != null)
             {
-                _cache.Set(model.Id.ToString(), model);
-                _cache.Set($"ParamKey_{model.Key}", model.Id);
+                await _cache.SetAsync(model.Id.ToString(), model).ConfigureAwait(false);
+                await _cache.SetAsync($"ParamKey_{model.Key}", model.Id).ConfigureAwait(false);
             }
         }
     }
@@ -168,11 +169,12 @@ internal sealed class ParamService : IParamService
     /// Removes the given model from cache.
     /// </summary>
     /// <param name="model">The model</param>
-    private void RemoveFromCache(Param model) {
+    private async Task RemoveFromCache(Param model)
+    {
         if (_cache != null)
         {
-            _cache.Remove(model.Id.ToString());
-            _cache.Remove($"ParamKey_{model.Key}");
+            await _cache.RemoveAsync(model.Id.ToString()).ConfigureAwait(false);
+            await _cache.RemoveAsync($"ParamKey_{model.Key}").ConfigureAwait(false);
         }
     }
 }

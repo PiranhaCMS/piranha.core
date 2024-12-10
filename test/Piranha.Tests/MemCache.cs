@@ -23,52 +23,51 @@ public class MemCache : BaseTestsAsync
     private readonly string val3 = "My third value";
     private readonly string val4 = "My fourth value";
 
-    public override Task InitializeAsync()
+    public override async Task InitializeAsync()
     {
-        return Task.Run(() => {
-            _cache = new Cache.MemoryCache((IMemoryCache)_services.GetService(typeof(IMemoryCache)));
+        _cache = new Cache.MemoryCache((IMemoryCache)_services.GetService(typeof(IMemoryCache)));
 
-            _cache.Set(id1, val1);
-            _cache.Set(id2, val2);
-        });
+        await _cache.SetAsync(id1, val1);
+        await _cache.SetAsync(id2, val2);
     }
 
     public override Task DisposeAsync()
     {
-        return Task.Run(() => {});
+        return Task.Run(() => { });
     }
 
     [Fact]
-    public void AddEntry()
+    public async Task AddEntry()
     {
-        _cache.Set(id3, val3);
+        await _cache.SetAsync(id3, val3);
     }
 
     [Fact]
-    public void GetEntry()
+    public async Task GetEntry()
     {
-        var val = _cache.Get<string>(id2);
+        var val = await _cache.GetAsync<string>(id2);
 
         Assert.NotNull(val);
         Assert.Equal(val2, val);
     }
 
     [Fact]
-    public void UpdateEntry() {
-        _cache.Set(id2, val4);
+    public async Task UpdateEntry()
+    {
+        await _cache.SetAsync(id2, val4);
 
-        var val = _cache.Get<string>(id2);
+        var val = await _cache.GetAsync<string>(id2);
 
         Assert.NotNull(val);
         Assert.Equal(val4, val);
     }
 
     [Fact]
-    public void RemoveEntry()
+    public async Task RemoveEntry()
     {
-        _cache.Remove(id1);
+        await _cache.RemoveAsync(id1);
 
-        var val = _cache.Get<string>(id1);
+        var val = await _cache.GetAsync<string>(id1);
 
         Assert.Null(val);
     }

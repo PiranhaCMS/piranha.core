@@ -79,7 +79,10 @@ internal sealed class ContentGroupService : IContentGroupService
         App.Hooks.OnAfterSave(model);
 
         // Clear cache
-        _cache?.Remove(CacheKey);
+        if (_cache != null)
+        {
+            await _cache.RemoveAsync(CacheKey).ConfigureAwait(false);
+        }
     }
 
     /// <summary>
@@ -108,7 +111,10 @@ internal sealed class ContentGroupService : IContentGroupService
         App.Hooks.OnAfterDelete(model);
 
         // Clear cache
-        _cache?.Remove(CacheKey);
+        if (_cache != null)
+        {
+            await _cache.RemoveAsync(CacheKey).ConfigureAwait(false);
+        }
     }
 
     /// <summary>
@@ -116,14 +122,15 @@ internal sealed class ContentGroupService : IContentGroupService
     /// </summary>
     private async Task<IEnumerable<ContentGroup>> GetGroups()
     {
-        if (_cache != null) {
-            var groups = _cache.Get<IEnumerable<ContentGroup>>(CacheKey);
+        if (_cache != null)
+        {
+            var groups = await _cache.GetAsync<IEnumerable<ContentGroup>>(CacheKey).ConfigureAwait(false);
 
             if (groups == null)
             {
                 groups = await _repo.GetAllAsync().ConfigureAwait(false);
 
-                _cache.Set(CacheKey, groups);
+                await _cache.SetAsync(CacheKey, groups).ConfigureAwait(false);
             }
             return groups;
         }

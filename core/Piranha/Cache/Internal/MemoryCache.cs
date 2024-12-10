@@ -27,24 +27,26 @@ internal sealed class MemoryCache : ICache
     }
 
     /// <inheritdoc />
-    public T Get<T>(string key)
+    public Task<T> GetAsync<T>(string key, CancellationToken cancellationToken)
     {
         if (_cache.TryGetValue<T>(key, out var obj))
         {
-            return obj;
+            return Task.FromResult(obj);
         }
-        return default(T);
+        return Task.FromResult(default(T));
     }
 
     /// <inheritdoc />
-    public void Set<T>(string key, T value)
+    public Task SetAsync<T>(string key, T value, CancellationToken cancellationToken)
     {
         _cache.Set(key, value);
+        return Task.CompletedTask;
     }
 
     /// <inheritdoc />
-    public void Remove(string key)
+    public Task RemoveAsync(string key, CancellationToken cancellationToken)
     {
         _cache.Remove(key);
+        return Task.CompletedTask;
     }
 }

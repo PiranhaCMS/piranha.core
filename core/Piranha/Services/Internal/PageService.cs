@@ -89,7 +89,7 @@ internal sealed class PageService : IPageService
 
         model.Id = Guid.NewGuid();
         model.OriginalPageId = originalPage.Id;
-        model.Title = $"Copy of { model.Title }";
+        model.Title = $"Copy of {model.Title}";
         model.NavigationTitle = null;
         model.Slug = null;
         model.Created = model.LastModified = DateTime.MinValue;
@@ -257,11 +257,17 @@ internal sealed class PageService : IPageService
 
         if (typeof(T) == typeof(Models.PageInfo))
         {
-            model = _cache?.Get<PageInfo>($"PageInfo_{siteId.Value}");
+            if (_cache != null)
+            {
+                model = await _cache.GetAsync<PageInfo>($"PageInfo_{siteId.Value}").ConfigureAwait(false);
+            }
         }
         else if (!typeof(DynamicPage).IsAssignableFrom(typeof(T)))
         {
-            model = _cache?.Get<PageBase>($"Page_{siteId.Value}");
+            if (_cache != null)
+            {
+                model = await _cache.GetAsync<PageBase>($"Page_{siteId.Value}").ConfigureAwait(false);
+            }
 
             if (model != null)
             {
@@ -320,11 +326,17 @@ internal sealed class PageService : IPageService
 
             if (typeof(T) == typeof(Models.PageInfo))
             {
-                model = _cache?.Get<PageInfo>($"PageInfo_{id.ToString()}");
+                if (_cache != null)
+                {
+                    model = await _cache.GetAsync<PageInfo>($"PageInfo_{id.ToString()}").ConfigureAwait(false);
+                }
             }
             else if (!typeof(DynamicPage).IsAssignableFrom(typeof(T)))
             {
-                model = _cache?.Get<PageBase>(id.ToString());
+                if (_cache != null)
+                {
+                    model = await _cache.GetAsync<PageBase>(id.ToString()).ConfigureAwait(false);
+                }
 
                 if (model != null)
                 {
@@ -394,17 +406,23 @@ internal sealed class PageService : IPageService
         PageBase model = null;
 
         // Lets see if we can resolve the slug from cache
-        var pageId = _cache?.Get<Guid?>($"PageId_{siteId}_{slug}");
+        var pageId = _cache == null ? null : await _cache.GetAsync<Guid?>($"PageId_{siteId}_{slug}").ConfigureAwait(false);
 
         if (pageId.HasValue)
         {
             if (typeof(T) == typeof(Models.PageInfo))
             {
-                model = _cache?.Get<PageInfo>($"PageInfo_{pageId.ToString()}");
+                if (_cache != null)
+                {
+                    model = await _cache.GetAsync<PageInfo>($"PageInfo_{pageId.ToString()}").ConfigureAwait(false);
+                }
             }
             else if (!typeof(DynamicPage).IsAssignableFrom(typeof(T)))
             {
-                model = _cache?.Get<PageBase>(pageId.ToString());
+                if (_cache != null)
+                {
+                    model = await _cache.GetAsync<PageBase>(pageId.ToString()).ConfigureAwait(false);
+                }
 
                 if (model != null)
                 {
@@ -438,7 +456,7 @@ internal sealed class PageService : IPageService
         siteId = await EnsureSiteIdAsync(siteId).ConfigureAwait(false);
 
         // Lets see if we can resolve the slug from cache
-        var pageId = _cache?.Get<Guid?>($"PageId_{siteId}_{slug}");
+        var pageId = _cache == null ? null : await _cache.GetAsync<Guid?>($"PageId_{siteId}_{slug}").ConfigureAwait(false);
 
         if (!pageId.HasValue)
         {
@@ -664,7 +682,7 @@ internal sealed class PageService : IPageService
         App.Hooks.OnBeforeSave<PageBase>(model);
 
         // Handle revisions and save
-        if ((IsPublished(current) || IsScheduled(current) ) && isDraft)
+        if ((IsPublished(current) || IsScheduled(current)) && isDraft)
         {
             // We're saving a draft since we have a previously
             // published version of the page
@@ -801,7 +819,7 @@ internal sealed class PageService : IPageService
         }
         else
         {
-            throw new ArgumentException($"Could not find page with id { pageId.ToString() }");
+            throw new ArgumentException($"Could not find page with id {pageId.ToString()}");
         }
     }
 
@@ -876,7 +894,7 @@ internal sealed class PageService : IPageService
         }
         else
         {
-            throw new ArgumentException($"Could not find page with id { model.ContentId.ToString() }");
+            throw new ArgumentException($"Could not find page with id {model.ContentId.ToString()}");
         }
     }
 
@@ -1004,22 +1022,22 @@ internal sealed class PageService : IPageService
             {
                 if (model is PageInfo)
                 {
-                    _cache.Set($"PageInfo_{model.Id.ToString()}", model);
+                    await _cache.SetAsync($"PageInfo_{model.Id.ToString()}", model).ConfigureAwait(false);
                 }
                 else
                 {
-                    _cache.Set(model.Id.ToString(), model);
+                    await _cache.SetAsync(model.Id.ToString(), model).ConfigureAwait(false);
                 }
-                _cache.Set($"PageId_{model.SiteId}_{model.Slug}", model.Id);
+                await _cache.SetAsync($"PageId_{model.SiteId}_{model.Slug}", model.Id).ConfigureAwait(false);
                 if (!model.ParentId.HasValue && model.SortOrder == 0)
                 {
                     if (model is PageInfo)
                     {
-                        _cache.Set($"PageInfo_{model.SiteId}", model);
+                        await _cache.SetAsync($"PageInfo_{model.SiteId}", model).ConfigureAwait(false);
                     }
                     else
                     {
-                        _cache.Set($"Page_{model.SiteId}", model);
+                        await _cache.SetAsync($"Page_{model.SiteId}", model).ConfigureAwait(false);
                     }
                 }
             }
@@ -1034,13 +1052,14 @@ internal sealed class PageService : IPageService
     {
         if (_cache != null)
         {
-            _cache.Remove(model.Id.ToString());
-            _cache.Remove($"PageInfo_{model.Id.ToString()}");
-            _cache.Remove($"PageId_{model.SiteId}_{model.Slug}");
+            await _cache.RemoveAsync(model.Id.ToString()).ConfigureAwait(false);
+            await _cache.RemoveAsync($"PageInfo_{model.Id.ToString()}").ConfigureAwait(false);
+            await _cache.RemoveAsync($"PageId_{model.SiteId}_{model.Slug}").ConfigureAwait(false);
+
             if (!model.ParentId.HasValue && model.SortOrder == 0)
             {
-                _cache.Remove($"Page_{model.SiteId}");
-                _cache.Remove($"PageInfo_{model.SiteId}");
+                await _cache.RemoveAsync($"Page_{model.SiteId}").ConfigureAwait(false);
+                await _cache.RemoveAsync($"PageInfo_{model.SiteId}").ConfigureAwait(false);
             }
 
             // Remove the site & clear the sitemap from cache

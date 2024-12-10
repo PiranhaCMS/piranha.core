@@ -78,7 +78,10 @@ internal sealed class SiteTypeService : ISiteTypeService
         App.Hooks.OnAfterSave(model);
 
         // Clear cache
-        _cache?.Remove("Piranha_SiteTypes");
+        if (_cache != null)
+        {
+            await _cache.RemoveAsync("Piranha_SiteTypes").ConfigureAwait(false);
+        }
     }
 
     /// <summary>
@@ -107,7 +110,10 @@ internal sealed class SiteTypeService : ISiteTypeService
         App.Hooks.OnAfterDelete(model);
 
         // Clear cache
-        _cache?.Remove("Piranha_SiteTypes");
+        if (_cache != null)
+        {
+            await _cache.RemoveAsync("Piranha_SiteTypes").ConfigureAwait(false);
+        }
     }
 
     /// <summary>
@@ -126,7 +132,10 @@ internal sealed class SiteTypeService : ISiteTypeService
                 App.Hooks.OnAfterDelete(model);
             }
             // Clear cache
-            _cache?.Remove("Piranha_SiteTypes");
+            if (_cache != null)
+            {
+                await _cache.RemoveAsync("Piranha_SiteTypes").ConfigureAwait(false);
+            }
         }
     }
 
@@ -137,13 +146,13 @@ internal sealed class SiteTypeService : ISiteTypeService
     {
         if (_cache != null)
         {
-            var types = _cache.Get<IEnumerable<SiteType>>("Piranha_SiteTypes");
+            var types = await _cache.GetAsync<IEnumerable<SiteType>>("Piranha_SiteTypes").ConfigureAwait(false);
 
             if (types == null)
             {
                 types = await _repo.GetAll().ConfigureAwait(false);
 
-                _cache.Set("Piranha_SiteTypes", types);
+                await _cache.SetAsync("Piranha_SiteTypes", types).ConfigureAwait(false);
             }
             return types;
         }

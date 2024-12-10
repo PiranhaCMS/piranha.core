@@ -78,7 +78,10 @@ internal sealed class PageTypeService : IPageTypeService
         App.Hooks.OnAfterSave(model);
 
         // Clear cache
-        _cache?.Remove("Piranha_PageTypes");
+        if (_cache != null)
+        {
+            await _cache.RemoveAsync("Piranha_PageTypes").ConfigureAwait(false);
+        }
     }
 
     /// <summary>
@@ -107,7 +110,10 @@ internal sealed class PageTypeService : IPageTypeService
         App.Hooks.OnAfterDelete(model);
 
         // Clear cache
-        _cache?.Remove("Piranha_PageTypes");
+        if (_cache != null)
+        {
+            await _cache.RemoveAsync("Piranha_PageTypes").ConfigureAwait(false);
+        }
     }
 
     /// <summary>
@@ -126,7 +132,10 @@ internal sealed class PageTypeService : IPageTypeService
                 App.Hooks.OnAfterDelete(model);
             }
             // Clear cache
-            _cache?.Remove("Piranha_PageTypes");
+            if (_cache != null)
+            {
+                await _cache.RemoveAsync("Piranha_PageTypes").ConfigureAwait(false);
+            }
         }
     }
 
@@ -137,13 +146,13 @@ internal sealed class PageTypeService : IPageTypeService
     {
         if (_cache != null)
         {
-            var types = _cache.Get<IEnumerable<PageType>>("Piranha_PageTypes");
+            var types = await _cache.GetAsync<IEnumerable<PageType>>("Piranha_PageTypes").ConfigureAwait(false);
 
             if (types == null)
             {
                 types = await _repo.GetAll().ConfigureAwait(false);
 
-                _cache.Set("Piranha_PageTypes", types);
+                await _cache.SetAsync("Piranha_PageTypes", types).ConfigureAwait(false);
             }
             return types;
         }

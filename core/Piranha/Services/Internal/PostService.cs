@@ -336,17 +336,23 @@ internal sealed class PostService : IPostService
         PostBase model = null;
 
         // Lets see if we can resolve the slug from cache
-        var postId = _cache?.Get<Guid?>($"PostId_{blogId}_{slug}");
+        var postId = _cache == null ? null : await _cache.GetAsync<Guid?>($"PostId_{blogId}_{slug}").ConfigureAwait(false);
 
         if (postId.HasValue)
         {
             if (typeof(T) == typeof(PostInfo))
             {
-                model = _cache?.Get<PostInfo>($"PostInfo_{postId.ToString()}");
+                if (_cache != null)
+                {
+                    model = await _cache.GetAsync<PostInfo>($"PostInfo_{postId.ToString()}").ConfigureAwait(false);
+                }
             }
             else if (!typeof(DynamicPost).IsAssignableFrom(typeof(T)))
             {
-                model = _cache?.Get<PostBase>(postId.ToString());
+                if (_cache != null)
+                {
+                    model = await _cache.GetAsync<PostBase>(postId.ToString()).ConfigureAwait(false);
+                }
             }
         }
 
@@ -406,12 +412,12 @@ internal sealed class PostService : IPostService
     /// <returns>The model</returns>
     public async Task<Taxonomy> GetCategoryBySlugAsync(Guid blogId, string slug)
     {
-        var id = _cache?.Get<Guid?>($"Category_{blogId}_{slug}");
+        var id = _cache == null ? null : await _cache.GetAsync<Guid?>($"Category_{blogId}_{slug}").ConfigureAwait(false);
         Taxonomy model = null;
 
         if (id.HasValue)
         {
-            model = _cache.Get<Taxonomy>(id.Value.ToString());
+            model = await _cache.GetAsync<Taxonomy>(id.Value.ToString()).ConfigureAwait(false);
         }
 
         if (model == null)
@@ -420,8 +426,8 @@ internal sealed class PostService : IPostService
 
             if (model != null && _cache != null)
             {
-                _cache.Set(model.Id.ToString(), model);
-                _cache.Set($"Category_{blogId}_{slug}", model.Id);
+                await _cache.SetAsync(model.Id.ToString(), model).ConfigureAwait(false);
+                await _cache.SetAsync($"Category_{blogId}_{slug}", model.Id).ConfigureAwait(false);
             }
         }
         return model;
@@ -434,7 +440,7 @@ internal sealed class PostService : IPostService
     /// <returns>The model</returns>
     public async Task<Taxonomy> GetCategoryByIdAsync(Guid id)
     {
-        Taxonomy model = _cache?.Get<Taxonomy>(id.ToString());
+        Taxonomy model = _cache == null ? null : await _cache.GetAsync<Taxonomy>(id.ToString()).ConfigureAwait(false);
 
         if (model == null)
         {
@@ -442,7 +448,7 @@ internal sealed class PostService : IPostService
 
             if (model != null && _cache != null)
             {
-                _cache.Set(model.Id.ToString(), model);
+                await _cache.SetAsync(model.Id.ToString(), model).ConfigureAwait(false);
             }
         }
         return model;
@@ -456,12 +462,12 @@ internal sealed class PostService : IPostService
     /// <returns>The model</returns>
     public async Task<Taxonomy> GetTagBySlugAsync(Guid blogId, string slug)
     {
-        var id = _cache?.Get<Guid?>($"Tag_{blogId}_{slug}");
+        var id = _cache == null ? null : await _cache.GetAsync<Guid?>($"Tag_{blogId}_{slug}").ConfigureAwait(false);
         Taxonomy model = null;
 
         if (id.HasValue)
         {
-            model = _cache.Get<Taxonomy>(id.Value.ToString());
+            model = await _cache.GetAsync<Taxonomy>(id.Value.ToString()).ConfigureAwait(false);
         }
 
         if (model == null)
@@ -470,8 +476,8 @@ internal sealed class PostService : IPostService
 
             if (model != null && _cache != null)
             {
-                _cache.Set(model.Id.ToString(), model);
-                _cache.Set($"Tag_{blogId}_{slug}", model.Id);
+                await _cache.SetAsync(model.Id.ToString(), model).ConfigureAwait(false);
+                await _cache.SetAsync($"Tag_{blogId}_{slug}", model.Id).ConfigureAwait(false);
             }
         }
         return model;
@@ -484,7 +490,7 @@ internal sealed class PostService : IPostService
     /// <returns>The model</returns>
     public async Task<Taxonomy> GetTagByIdAsync(Guid id)
     {
-        Taxonomy model = _cache?.Get<Taxonomy>(id.ToString());
+        Taxonomy model = _cache == null ? null : await _cache.GetAsync<Taxonomy>(id.ToString()).ConfigureAwait(false);
 
         if (model == null)
         {
@@ -492,7 +498,7 @@ internal sealed class PostService : IPostService
 
             if (model != null && _cache != null)
             {
-                _cache.Set(model.Id.ToString(), model);
+                await _cache.SetAsync(model.Id.ToString(), model).ConfigureAwait(false);
             }
         }
         return model;
@@ -644,11 +650,11 @@ internal sealed class PostService : IPostService
             App.Hooks.OnAfterSave<Comment>(model);
 
             // Invalidate parent post from cache
-            RemoveFromCache(post);
+            await RemoveFromCache(post).ConfigureAwait(false);
         }
         else
         {
-            throw new ArgumentException($"Could not find post with id { postId.ToString() }");
+            throw new ArgumentException($"Could not find post with id {postId.ToString()}");
         }
     }
 
@@ -758,7 +764,7 @@ internal sealed class PostService : IPostService
         }
 
         // Remove the post from cache
-        RemoveFromCache(model);
+        await RemoveFromCache(model).ConfigureAwait(false);
 
         if (!isDraft && _cache != null)
         {
@@ -767,8 +773,8 @@ internal sealed class PostService : IPostService
             var categories = await _repo.GetAllCategories(model.BlogId).ConfigureAwait(false);
             foreach (var category in categories)
             {
-                _cache.Remove(category.Id.ToString());
-                _cache.Remove($"Category_{model.BlogId}_{category.Slug}");
+                await _cache.RemoveAsync(category.Id.ToString()).ConfigureAwait(false);
+                await _cache.RemoveAsync($"Category_{model.BlogId}_{category.Slug}").ConfigureAwait(false);
             }
 
             // Clear all tags from cache in case some
@@ -776,8 +782,8 @@ internal sealed class PostService : IPostService
             var tags = await _repo.GetAllTags(model.BlogId).ConfigureAwait(false);
             foreach (var tag in tags)
             {
-                _cache.Remove(tag.Id.ToString());
-                _cache.Remove($"Tag_{model.BlogId}_{tag.Slug}");
+                await _cache.RemoveAsync(tag.Id.ToString()).ConfigureAwait(false);
+                await _cache.RemoveAsync($"Tag_{model.BlogId}_{tag.Slug}").ConfigureAwait(false);
             }
         }
     }
@@ -814,7 +820,7 @@ internal sealed class PostService : IPostService
         }
 
         // Remove from cache & invalidate sitemap
-        RemoveFromCache(model);
+        await RemoveFromCache(model).ConfigureAwait(false);
     }
 
     /// <summary>
@@ -847,11 +853,11 @@ internal sealed class PostService : IPostService
             App.Hooks.OnAfterDelete<Comment>(model);
 
             // Remove parent post from cache
-            RemoveFromCache(post);
+            await RemoveFromCache(post).ConfigureAwait(false);
         }
         else
         {
-            throw new ArgumentException($"Could not find post with id { model.ContentId.ToString() }");
+            throw new ArgumentException($"Could not find post with id {model.ContentId.ToString()}");
         }
     }
 
@@ -868,11 +874,11 @@ internal sealed class PostService : IPostService
 
         if (typeof(T) == typeof(PostInfo))
         {
-            model = _cache?.Get<PostInfo>($"PostInfo_{id.ToString()}");
+            model = _cache == null ? null : await _cache.GetAsync<PostInfo>($"PostInfo_{id.ToString()}").ConfigureAwait(false);
         }
         else if (!typeof(DynamicPost).IsAssignableFrom(typeof(T)))
         {
-            model = _cache?.Get<PostBase>(id.ToString());
+            model = _cache == null ? null : await _cache.GetAsync<PostBase>(id.ToString()).ConfigureAwait(false);
 
             if (model != null)
             {
@@ -977,13 +983,13 @@ internal sealed class PostService : IPostService
             {
                 if (model is PostInfo)
                 {
-                    _cache.Set($"PostInfo_{model.Id.ToString()}", model);
+                    await _cache.SetAsync($"PostInfo_{model.Id.ToString()}", model).ConfigureAwait(false);
                 }
                 else
                 {
-                    _cache.Set(model.Id.ToString(), model);
+                    await _cache.SetAsync(model.Id.ToString(), model).ConfigureAwait(false);
                 }
-                _cache.Set($"PostId_{model.BlogId}_{model.Slug}", model.Id);
+                await _cache.SetAsync($"PostId_{model.BlogId}_{model.Slug}", model.Id).ConfigureAwait(false);
             }
         }
     }
@@ -992,13 +998,13 @@ internal sealed class PostService : IPostService
     /// Removes the given model from cache.
     /// </summary>
     /// <param name="post">The post</param>
-    private void RemoveFromCache(PostBase post)
+    private async Task RemoveFromCache(PostBase post)
     {
         if (_cache != null)
         {
-            _cache.Remove(post.Id.ToString());
-            _cache.Remove($"PostId_{post.BlogId}_{post.Slug}");
-            _cache.Remove($"PostInfo_{post.Id.ToString()}");
+            await _cache.RemoveAsync(post.Id.ToString()).ConfigureAwait(false);
+            await _cache.RemoveAsync($"PostId_{post.BlogId}_{post.Slug}").ConfigureAwait(false);
+            await _cache.RemoveAsync($"PostInfo_{post.Id.ToString()}").ConfigureAwait(false);
         }
     }
 
@@ -1007,7 +1013,7 @@ internal sealed class PostService : IPostService
     /// </summary>
     /// <param name="model">The posts model</param>
     /// <returns>If the post is published</returns>
-    private bool IsPublished (PostBase model)
+    private bool IsPublished(PostBase model)
     {
         return model != null && model.Published.HasValue && model.Published.Value <= DateTime.Now;
     }

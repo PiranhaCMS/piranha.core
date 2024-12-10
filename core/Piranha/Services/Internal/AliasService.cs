@@ -74,13 +74,13 @@ internal sealed class AliasService : IAliasService
     /// <returns>The model, or null if it doesn't exist</returns>
     public async Task<Alias> GetByIdAsync(Guid id)
     {
-        var model = _cache?.Get<Alias>(id.ToString());
+        var model = _cache == null ? null : await _cache.GetAsync<Alias>(id.ToString()).ConfigureAwait(false);
 
         if (model == null)
         {
             model = await _repo.GetById(id).ConfigureAwait(false);
 
-            OnLoad(model);
+            await OnLoad(model).ConfigureAwait(false);
         }
         return model;
     }
@@ -182,7 +182,7 @@ internal sealed class AliasService : IAliasService
         App.Hooks.OnAfterSave(model);
 
         // Remove from cache
-        RemoveFromCache(model);
+        await RemoveFromCache(model).ConfigureAwait(false);
     }
 
     /// <summary>
@@ -211,14 +211,14 @@ internal sealed class AliasService : IAliasService
         App.Hooks.OnAfterDelete(model);
 
         // Remove from cache
-        RemoveFromCache(model);
+        await RemoveFromCache(model).ConfigureAwait(false);
     }
 
     /// <summary>
     /// Processes the model on load.
     /// </summary>
     /// <param name="model">The model</param>
-    private void OnLoad(Alias model)
+    private Task OnLoad(Alias model)
     {
         if (model != null)
         {
@@ -226,21 +226,23 @@ internal sealed class AliasService : IAliasService
 
             if (_cache != null)
             {
-                _cache.Set(model.Id.ToString(), model);
+                return _cache.SetAsync(model.Id.ToString(), model);
             }
         }
+
+        return Task.CompletedTask;
     }
 
     /// <summary>
     /// Removes the given model from cache.
     /// </summary>
     /// <param name="model">The model</param>
-    private void RemoveFromCache(Alias model)
+    private async Task RemoveFromCache(Alias model)
     {
         if (_cache != null)
         {
-            _cache.Remove(model.Id.ToString());
-            _cache.Remove($"Piranha_AliasUrls_{model.SiteId}");
+            await _cache.RemoveAsync(model.Id.ToString()).ConfigureAwait(false);
+            await _cache.RemoveAsync($"Piranha_AliasUrls_{model.SiteId}").ConfigureAwait(false);
         }
     }
 
@@ -251,7 +253,7 @@ internal sealed class AliasService : IAliasService
     {
         if (_cache != null)
         {
-            var aliasUrls = _cache.Get<IEnumerable<AliasUrlCacheEntry>>($"Piranha_AliasUrls_{siteId}");
+            var aliasUrls = await _cache.GetAsync<IEnumerable<AliasUrlCacheEntry>>($"Piranha_AliasUrls_{siteId}").ConfigureAwait(false);
 
             if (aliasUrls == null)
             {
@@ -262,7 +264,7 @@ internal sealed class AliasService : IAliasService
                     AliasUrl = x.AliasUrl
                 }).ToList();
 
-                _cache.Set($"Piranha_AliasUrls_{siteId}", aliasUrls);
+                await _cache.SetAsync($"Piranha_AliasUrls_{siteId}", aliasUrls).ConfigureAwait(false);
             }
             return aliasUrls;
         }

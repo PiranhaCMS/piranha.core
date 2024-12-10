@@ -33,26 +33,26 @@ internal sealed class DistributedCache : ICache
     }
 
     /// <inheritdoc />
-    public T Get<T>(string key)
+    public async Task<T> GetAsync<T>(string key, CancellationToken cancellationToken = default)
     {
-        var json = _cache.GetString(key);
+        var json = await _cache.GetStringAsync(key, cancellationToken).ConfigureAwait(false);
 
         if (!string.IsNullOrEmpty(json))
         {
             return JsonConvert.DeserializeObject<T>(json, _jsonSettings);
         }
-        return default(T);
+        return default;
     }
 
     /// <inheritdoc />
-    public void Set<T>(string key, T value)
+    public async Task SetAsync<T>(string key, T value, CancellationToken cancellationToken = default)
     {
-        _cache.SetString(key, JsonConvert.SerializeObject(value, _jsonSettings));
+        await _cache.SetStringAsync(key, JsonConvert.SerializeObject(value, _jsonSettings), cancellationToken).ConfigureAwait(false);
     }
 
     /// <inheritdoc />
-    public void Remove(string key)
+    public async Task RemoveAsync(string key, CancellationToken cancellationToken = default)
     {
-        _cache.Remove(key);
+        await _cache.RemoveAsync(key, cancellationToken).ConfigureAwait(false);
     }
 }
