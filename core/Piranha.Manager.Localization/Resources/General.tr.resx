@@ -220,7 +220,7 @@
     <value>Username is mandatory.</value>
   </data>
   <data name="Title is mandatory." xml:space="preserve">
-    <value>Title is mandatory.</value>
+    <value>Başlık Gerekli.</value>
   </data>
   <data name="Type" xml:space="preserve">
     <value>Type</value>
