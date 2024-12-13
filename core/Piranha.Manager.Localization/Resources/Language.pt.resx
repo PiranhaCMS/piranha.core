@@ -13,15 +13,15 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="ChangeDefaultConfirm" xml:space="preserve">
-    <value>Alterar o idioma padrão irá afetar como o aplicativo se comporta e deve ser configurado durante a configuração inicial.</value>
+    <value>Changing the default language will affect how the application behaves and should be configured during initial setup.</value>
   </data>
   <data name="RemoveLanguageConfirm" xml:space="preserve">
-    <value>Esta ação &lt;strong>não pode ser&lt;/strong> desfeita. Isto irá excluir permanentemente o idioma {{ currentDelete.title }} e todas as suas &lt;strong>traduções&lt;/strong>. Qualquer site que tenha selecionado {{ currentDelete.title }} como seu idioma será atribuído ao idioma padrão.</value>
+    <value>This action &lt;strong>cannot&lt;/strong> be undone. This will permanently delete the language {{ currentDelete.title }} and all of its &lt;strong>translations&lt;/strong>. Any sites that have selected {{ currentDelete.title }} as their language will be assigned the default language.</value>
   </data>
   <data name="The language was successfully saved" xml:space="preserve">
-    <value>O idioma foi salvo com sucesso</value>
+    <value>The language was successfully saved</value>
   </data>
   <data name="The language was successfully deleted" xml:space="preserve">
-    <value>O idioma foi removido com sucesso</value>
+    <value>The language was successfully deleted</value>
   </data>
 </root>
