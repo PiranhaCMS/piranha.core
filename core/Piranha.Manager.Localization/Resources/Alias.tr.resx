@@ -13,7 +13,7 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Aliases" xml:space="preserve">
-    <value>Takma ad</value>
+    <value>Takma adlar</value>
   </data>
   <data name="Add new alias" xml:space="preserve">
     <value>Yeni takma ad ekle</value>
@@ -25,10 +25,10 @@
     <value>Takma ad URL'u zaruridir.</value>
   </data>
   <data name="Redirect URL" xml:space="preserve">
-    <value>URL'u yönlendir</value>
+    <value>Yönlendirme URL'si</value>
   </data>
   <data name="Redirect URL is mandatory." xml:space="preserve">
-    <value>URL yönlendirme zaruridir.</value>
+    <value>Yönlendirme URL'si zorunludur.</value>
   </data>
   <data name="Permanent" xml:space="preserve">
     <value>Kalıcı</value>
