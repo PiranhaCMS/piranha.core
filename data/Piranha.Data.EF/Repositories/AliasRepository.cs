@@ -85,7 +85,7 @@ internal class AliasRepository : IAliasRepository
     {
         return _db.Aliases
             .AsNoTracking()
-            .Where(a => a.SiteId == siteId && a.AliasUrl == url)
+            .Where(a => a.SiteId == siteId && a.AliasUrl.ToLower() == url.ToLower())
             .Select(a => new Alias
             {
                 Id = a.Id,
@@ -109,7 +109,7 @@ internal class AliasRepository : IAliasRepository
     {
         return await _db.Aliases
             .AsNoTracking()
-            .Where(a => a.SiteId == siteId && a.RedirectUrl == url)
+            .Where(a => a.SiteId == siteId && a.RedirectUrl.ToLower() == url.ToLower())
             .Select(a => new Alias
             {
                 Id = a.Id,

@@ -211,11 +211,35 @@ public class AliasTests : BaseTestsAsync
     }
 
     [Fact]
+    public async Task GetByAliasUrlWithDifferentCase()
+    {
+        using (var api = CreateApi())
+        {
+            var model = await api.Aliases.GetByAliasUrlAsync("/Old-URL");
+
+            Assert.NotNull(model);
+            Assert.Equal(ALIAS_1, model.AliasUrl);
+        }
+    }
+
+    [Fact]
     public async Task GetByRedirectUrl()
     {
         using (var api = CreateApi())
         {
             var models = await api.Aliases.GetByRedirectUrlAsync("/redirect-1");
+
+            Assert.Single(models);
+            Assert.Equal(ALIAS_1, models.First().AliasUrl);
+        }
+    }
+
+    [Fact]
+    public async Task GetByRedirectUrlWithDifferentCase()
+    {
+        using (var api = CreateApi())
+        {
+            var models = await api.Aliases.GetByRedirectUrlAsync("/ReDiRect-1");
 
             Assert.Single(models);
             Assert.Equal(ALIAS_1, models.First().AliasUrl);

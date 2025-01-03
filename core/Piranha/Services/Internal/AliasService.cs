@@ -108,7 +108,7 @@ internal sealed class AliasService : IAliasService
 
             if (aliasUrls != null)
             {
-                var aliasUrl = aliasUrls.FirstOrDefault(x => x.AliasUrl == url);
+                var aliasUrl = aliasUrls.FirstOrDefault(x => x.AliasUrl.Equals(url, StringComparison.InvariantCultureIgnoreCase));
 
                 if (aliasUrl != null)
                 {
