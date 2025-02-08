@@ -30,7 +30,7 @@ Piranha CMS is a decoupled, cross-platform CMS built for `.NET8` and `Entity Fra
 To use our project templates you first need to download and install them from NuGet. This can be done with:
 
 ~~~ bash
-dotnet new -i Piranha.Templates
+dotnet new install Piranha.Templates
 ~~~
 
 When creating a new project with `dotnet new` you should first create a new empty folder. The default behaviour is that the new project is **named after its containing folder**.
