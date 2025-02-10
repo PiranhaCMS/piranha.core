@@ -40,6 +40,6 @@
     <value>The content was successfully saved</value>
   </data>
   <data name="An error occured while saving the content" xml:space="preserve">
-    <value>An error occured while saving the content</value>
+    <value>İçerik kaydedilirken bir hata oluştu</value>
   </data>
 </root>

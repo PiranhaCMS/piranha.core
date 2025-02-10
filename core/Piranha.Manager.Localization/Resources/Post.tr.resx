@@ -73,6 +73,6 @@
     <value>The post was successfully saved</value>
   </data>
   <data name="The post was successfully reverted to its previous state" xml:space="preserve">
-    <value>The post was successfully reverted to its previous state</value>
+    <value>Gönderi başarıyla önceki haline döndürüldü</value>
   </data>
 </root>

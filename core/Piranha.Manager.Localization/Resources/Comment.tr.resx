@@ -14,10 +14,10 @@
   </resheader>
 
   <data name="Approved" xml:space="preserve">
-    <value>Tasdik edildi</value>
+    <value>Onaylandı</value>
   </data>
   <data name="ApprovedSingle" xml:space="preserve">
-    <value>Tasdik edildi</value>
+    <value>Onaylandı</value>
   </data>
   <data name="Pending" xml:space="preserve">
     <value>Beklemede</value>
@@ -29,10 +29,10 @@
     <value>Cevap</value>
   </data>
   <data name="The comment was successfully approved" xml:space="preserve">
-    <value>Yorum başarıyla tasdik edildi</value>
+    <value>Yorum onaylandı</value>
   </data>
   <data name="The comment was successfully unapproved" xml:space="preserve">
-    <value>Yorum başarıyla tasdiksiz</value>
+    <value>Yorum onayı kaldırıldı</value>
   </data>
   <data name="The comment was successfully deleted" xml:space="preserve">
     <value>Yorum başarıyla silindi</value>
@@ -44,12 +44,12 @@
     <value>Yorumlara izin yok.</value>
   </data>
   <data name="Comments are not allowed for unpublished content." xml:space="preserve">
-    <value>Yayınlanmamış muhteva için yorumlara izin verilmez.</value>
+    <value>Yayımlanmamış içerikler için yorumlara izin verilmez.</value>
   </data>
   <data name="Comments are currently open." xml:space="preserve">
     <value>Yorumlara şu an için açık.</value>
   </data>
   <data name="Comments were closed" xml:space="preserve">
-    <value>Yorumlara kapatıldı</value>
+    <value>Yorumlar kapatıldı</value>
   </data>
 </root>

@@ -13,31 +13,31 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Config" xml:space="preserve">
-    <value>Yapı</value>
+    <value>Yapılandırma</value>
   </data>
   <data name="Hierarchical page slugs" xml:space="preserve">
-    <value>Aşamalı sayfa başlıkları</value>
+    <value>Hiyerarşik sayfa slug'ları (Url bileşenleri)</value>
   </data>
   <data name="If page slugs should include the parent slug." xml:space="preserve">
     <value>Eğer sayfa başlığı bir üst başlığı tazammun etmeli ise.</value>
   </data>
   <data name="Expanded levels in the sitemap" xml:space="preserve">
-    <value>Site haritasındaki sahaları genişlet</value>
+    <value>Site haritasındaki genişletilmiş seviyeler</value>
   </data>
   <data name="Archive page size" xml:space="preserve">
-    <value>Belgelik sayfa büyüklüğü</value>
+    <value>Arşiv sayfa boyutu</value>
   </data>
   <data name="Caching" xml:space="preserve">
-    <value>Önbelleğe alma</value>
+    <value>Önbellekleme</value>
   </data>
   <data name="Page cache expiration (minutes)" xml:space="preserve">
-    <value>Sayfanın önbellek müddeti (dakika)</value>
+    <value>Sayfa önbellek süresi (dakika)</value>
   </data>
   <data name="Page revisions" xml:space="preserve">
-    <value>Sayfa tashihleri</value>
+    <value>Sayfa revizyonları</value>
   </data>
   <data name="Post cache expiration (minutes)" xml:space="preserve">
-    <value>Makalenin önbellek müddeti (dakika)</value>
+    <value>Gönderi önbellek süresi (dakika)</value>
   </data>
   <data name="Post revisions" xml:space="preserve">
     <value>Makale tashihleri</value>
@@ -47,19 +47,19 @@
   </data>
 
   <data name="If page slugs should take their parent slug into account when being generated. This is prefered for larger sitemaps." xml:space="preserve">
-    <value>Sayfa başlığı teşekkül ederken üst unsurunu dikkate alsın mı? Bu daha büyük sayfa haritaları için tercih edilir.</value>
+    <value>Sayfa slug'ları oluşturulurken üst slug'larını hesaba katmalı mı? Bu, daha büyük site haritaları için tercih edilir.</value>
   </data>
   <data name="The default number of levels that should be expanded in the page sitemap. This is useful for smaller sitemaps." xml:space="preserve">
-    <value>Sayfa haritasında genişletilecek olan, tabii saha sayısı. Bu daha küçük sayfa haritaları için kullanışlıdır.</value>
+    <value>Sayfa site haritasında genişletilmesi gereken varsayılan düzey sayısı. Bu, daha küçük site haritaları için yararlıdır.</value>
   </data>
   <data name="The default page size for archive pages. Please note that this this can be overridden for specific archives." xml:space="preserve">
-    <value>Belgelik sayfalar için tabii sayfa boyutu. Lütfen dikkat, bu belli belgelikleri geçersiz kılabilir.</value>
+    <value>Arşiv sayfaları için varsayılan sayfa boyutu. Lütfen bunun belirli arşivler için geçersiz kılınabileceğini unutmayın.</value>
   </data>
   <data name="The maximum number of page revisions that should be stored for each page. A value of 0 means no limitation." xml:space="preserve">
-    <value>Her sayfa için depolanması gereken azami tashih sayısı. 0 değeri tahdit yok demektir.</value>
+    <value>Her sayfa için saklanması gereken maksimum sayfa revizyon sayısı. 0 değeri, sınırlama olmadığı anlamına gelir.</value>
   </data>
   <data name="The maximum number of post revisions that should be stored for each post. A value of 0 means no limitation." xml:space="preserve">
-    <value>Her makale için depolanması gereken azami tashih sayısı. 0 değeri tahdit yok demektir.</value>
+    <value>Her gönderi için saklanması gereken maksimum gönderi revizyon sayısı. 0 değeri, sınırlama olmadığı anlamına gelir.</value>
   </data>
   <data name="The time in minutes that web browsers can use pages before asking the server for new updates." xml:space="preserve">
     <value>Ağ tarayıcılarının, sunucudan yeni güncellemeler talebi öncesinde, sayfaları kullanabileceği dakika zaman dilimi.</value>
@@ -102,21 +102,21 @@
     <value>Eğer öbekler bir sayfa veya makale açarken, farazi olarak idarecide daraltılmalıysa.</value>
   </data>
   <data name="If comments should be approved by default. Please note that this can be overridden by third party moderation services." xml:space="preserve">
-    <value>If comments should be approved by default. Please note that this can be overridden by third party moderation services.</value>
+    <value>Yorumların varsayılan olarak onaylanması gerekiyorsa, lütfen bunun üçüncü taraf moderasyon hizmetleri tarafından geçersiz kılınabileceğini unutmayın.</value>
   </data>
   <data name="If comments should be enabled for pages by default. Please note that this this can be overridden for specific pages." xml:space="preserve">
-    <value>If comments should be enabled for pages by default. Please note that this this can be overridden for specific pages.</value>
+    <value>Yorumların sayfalar için varsayılan olarak etkinleştirilmesi gerekiyorsa, lütfen bunun belirli sayfalar için geçersiz kılınabileceğini unutmayın.</value>
   </data>
   <data name="If comments should be enabled for posts by default. Please note that this this can be overridden for specific posts." xml:space="preserve">
-    <value>If comments should be enabled for posts by default. Please note that this this can be overridden for specific posts.</value>
+    <value>Yorumların gönderiler için varsayılan olarak etkinleştirilmesi gerekiyorsa, lütfen bunun belirli gönderiler için geçersiz kılınabileceğini unutmayın.</value>
   </data>
   <data name="The default page size when loading comments. Please note that this this can be overridden for specific pages." xml:space="preserve">
-    <value>The default page size when loading comments. Please note that this this can be overridden for specific pages.</value>
+    <value>Yorumları yüklerken varsayılan sayfa boyutu. Lütfen bunun belirli sayfalar için geçersiz kılınabileceğini unutmayın.</value>
   </data>
   <data name="The number of days commenting should be open after publish date. A value of 0 means forever." xml:space="preserve">
-    <value>The number of days commenting should be open after publish date. A value of 0 means forever.</value>
+    <value>Yayın tarihinden sonra yorumların açık kalması gereken gün sayısı. 0 değeri sonsuz anlamına gelir.</value>
   </data>
   <data name="The page size for lists within the manager interface." xml:space="preserve">
-    <value>The page size for lists within the manager interface.</value>
+    <value>Yönetici arayüzündeki listeler için sayfa boyutu.</value>
   </data>
 </root>

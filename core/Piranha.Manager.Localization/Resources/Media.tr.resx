@@ -61,19 +61,19 @@
     <value>Portrait</value>
   </data>
   <data name="Widescreen" xml:space="preserve">
-    <value>Widescreen</value>
+    <value>Geniş Ekran</value>
   </data>
   <data name="Square" xml:space="preserve">
     <value>Square</value>
   </data>
   <data name="Are you sure you want to delete selected media?" xml:space="preserve">
-    <value>Are you sure you want to delete selected media?</value>
+    <value>Seçilen Medyayı Silmek İstediğine Emin misin?</value>
   </data>
   <data name="Delete selected items" xml:space="preserve">
     <value>Delete selected items</value>
   </data>
   <data name="Media file was successfully moved." xml:space="preserve">
-    <value>Media file was successfully moved.</value>
+    <value>.</value>
   </data>
   <data name="Media files was successfully moved." xml:space="preserve">
     <value>Media files was successfully moved.</value>
@@ -85,6 +85,6 @@
     <value>The media file was successfully deleted</value>
   </data>
   <data name="The media files was successfully deleted" xml:space="preserve">
-    <value>The media files was successfully deleted</value>
+    <value>Medya dosyaları başarıyla silindi</value>
   </data>
 </root>
