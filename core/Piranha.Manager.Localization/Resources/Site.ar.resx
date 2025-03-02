@@ -22,7 +22,7 @@
     <value>تحرير الموقع</value>
   </data>
   <data name="Hostnames" xml:space="preserve">
-    <value>Hostname</value>
+    <value>عنوان الموقع</value>
   </data>
   <data name="Logo" xml:space="preserve">
     <value>الشعار</value>
