@@ -220,7 +220,7 @@
     <value>Username is mandatory.</value>
   </data>
   <data name="Title is mandatory." xml:space="preserve">
-    <value>Title is mandatory.</value>
+    <value>Başlık Gerekli.</value>
   </data>
   <data name="Type" xml:space="preserve">
     <value>Type</value>
@@ -253,6 +253,6 @@
     <value>Created</value>
   </data>
   <data name="Username and/or password are incorrect." xml:space="preserve">
-    <value>Username and/or password are incorrect.</value>
+    <value>Kullanıcı adı ve/veya şifre yanlış.</value>
   </data>
 </root>

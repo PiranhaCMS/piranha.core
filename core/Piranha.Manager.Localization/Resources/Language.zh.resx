@@ -19,9 +19,9 @@
     <value>這個功能 &lt;strong>不能&lt;/strong> 回復，將永久刪除 {{ currentDelete.title }} 及所有的 &lt;strong>轉換&lt;/strong> 字串。所有的網站的 {{ currentDelete.title }} 將會變成預設語系的內容。</value>
   </data>
   <data name="The language was successfully saved" xml:space="preserve">
-    <value>The language was successfully saved</value>
+    <value>本語言已儲存成功</value>
   </data>
   <data name="The language was successfully deleted" xml:space="preserve">
-    <value>The language was successfully deleted</value>
+    <value>本語言已刪除成功</value>
   </data>
 </root>

@@ -34,6 +34,6 @@
     <value>Lütfen onay için sayfanın adını yazın.</value>
   </data>
   <data name="ConfirmDelete" xml:space="preserve">
-    <value>Bu hareket &lt;strong>geri alınamaz&lt;/strong>. Bu yol, {{ title }} sayfasını ve onun tüm &lt;strong>metin sayfalarını&lt;/strong>, &lt;strong>belgeliklerini&lt;/strong> ve &lt;strong>makalelerini&lt;/strong> kalıcı olarak siler.</value>
+    <value>Bu işlem &lt;strong>geri alınamaz&lt;/strong>. Bu işlem, {{ title }} sitesini ve içindeki tüm &lt;strong>sayfaları&lt;/strong>, &lt;strong>medyaları&lt;/strong> ve &lt;strong>içerikleri&lt;/strong> kalıcı olarak silecektir.</value>
   </data>
 </root>

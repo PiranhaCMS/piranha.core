@@ -13,13 +13,13 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Add or select existing category" xml:space="preserve">
-    <value>新增或選擇已有的型錄</value>
+    <value>新增或選擇現有的分類</value>
   </data>
   <data name="Add or select existing tags (optional)" xml:space="preserve">
     <value>新增或選擇已有的標籤（選項）</value>
   </data>
   <data name="All categories" xml:space="preserve">
-    <value>所有型錄</value>
+    <value>所有分類</value>
   </data>
   <data name="An error occured while deleting the post" xml:space="preserve">
     <value>刪除文章時發生錯誤</value>
@@ -28,10 +28,10 @@
     <value>儲存文章時發生錯誤</value>
   </data>
   <data name="Categories" xml:space="preserve">
-    <value>型錄</value>
+    <value>分類</value>
   </data>
   <data name="Category" xml:space="preserve">
-    <value>型錄</value>
+    <value>分類</value>
   </data>
   <data name="Edit post" xml:space="preserve">
 	  <value>編輯文章</value>
