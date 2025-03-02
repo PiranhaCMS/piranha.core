@@ -20,11 +20,11 @@
 
             <!-- Tabs -->
             <ul class="nav nav-tabs">
-                <li class="nav-item">
+                <li v-if="media.contentType !== 'application/pdf'" class="nav-item">
                     <a class="nav-link active" data-toggle="pill" href="#pills-preview"><i class="far fa-eye"></i> @Localizer.General["Preview"]</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" data-toggle="pill" href="#pills-details"><i class="fas fa-info-circle"></i> @Localizer.General["Details"]</a>
+                    <a class="nav-link" :class="{ 'active': media.contentType === 'application/pdf' }" data-toggle="pill" href="#pills-details"><i class="fas fa-info-circle"></i> @Localizer.General["Details"]</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" data-toggle="pill" href="#pills-meta"><i class="fas fa-th-list"></i> @Localizer.General["Meta"]</a>
@@ -46,7 +46,7 @@
             <!-- Modal Body -->
             <div class="modal-body bg-light">
                 <div class="tab-content" id="pills-tabContent">
-                    <div class="tab-pane fade show active " id="pills-preview">
+                    <div v-if="media.contentType !== 'application/pdf'" class="tab-pane fade show active " id="pills-preview">
                         <template v-if="media.type === 'Image'">
                             <img class="d-block mx-auto mw-100" :src="media.publicUrl" />
                         </template>
@@ -70,7 +70,7 @@
                         </template>
                     </div>
 
-                    <div class="tab-pane fade" id="pills-details">
+                    <div class="tab-pane fade" id="pills-details" :class="{ 'active show': media.contentType === 'application/pdf' }">
                         <table class="table table-borderless m-0">
                             <tbody>
                                 <tr>
