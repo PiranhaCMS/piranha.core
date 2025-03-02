@@ -16,13 +16,13 @@ jobs:
     - name: Setup .NET
       uses: actions/setup-dotnet@v3
       with:
-        dotnet-version: '8.0.x'
+        dotnet-version: '9.0.x'
     - name: Restore dependencies
       run: dotnet restore
     - name: Build
       run: dotnet build --no-restore
     - name: Test
-      run: dotnet test -s build/tests.runsettings --no-build --verbosity normal /p:CollectCoverage=true /p:CoverletOutputFormat=\"json,lcov\" /p:MergeWith=../../coverage/lcov.json /p:CoverletOutput=../../coverage/lcov
+      run: dotnet test --no-build -s build/tests.runsettings --no-build --verbosity normal /p:CollectCoverage=true /p:CoverletOutputFormat=\"json,lcov\" /p:MergeWith=../../coverage/lcov.json /p:CoverletOutput=../../coverage/lcov
     - name: Coveralls
       uses: coverallsapp/github-action@master
       with:
