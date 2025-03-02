@@ -96,12 +96,9 @@ var gulp = require("gulp"),
     concat = require("gulp-concat"),
     cssmin = require("gulp-cssmin"),
     rename = require("gulp-rename"),
-    uglifyes = require('uglify-es'),
-    composer = require('gulp-uglify/composer'),
-    uglify = composer(uglifyes, console);
+    uglify = require('gulp-uglify-es').default;
 
 var output = "assets/dist/";
-//var output = "wwwroot/assets/";
 
 var css = [
     "assets/src/scss/slim.scss",
@@ -126,7 +123,8 @@ var js = [
             "node_modules/dropzone/dist/dropzone.js",
             "node_modules/select2/dist/js/select2.js",
             "node_modules/vuejs-datepicker/dist/vuejs-datepicker.min.js",
-            "node_modules/simplemde/dist/simplemde.min.js"
+            "node_modules/simplemde/dist/simplemde.min.js",
+            "node_modules/dompurify/dist/purify.min.js"
         ]
     },
     {
@@ -141,7 +139,8 @@ var js = [
             "node_modules/dropzone/dist/dropzone.js",
             "node_modules/select2/dist/js/select2.js",
             "node_modules/vuejs-datepicker/dist/vuejs-datepicker.min.js",
-            "node_modules/simplemde/dist/simplemde.min.js"
+            "node_modules/simplemde/dist/simplemde.min.js",
+            "node_modules/dompurify/dist/purify.min.js"
         ]
     },
     {

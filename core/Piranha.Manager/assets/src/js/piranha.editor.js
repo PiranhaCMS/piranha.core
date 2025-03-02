@@ -52,11 +52,11 @@ piranha.editor = {
             }
         });
         simplemde.codemirror.on("change", function() {
-            preview.html(simplemde.markdown(simplemde.value()));
+            preview.html(DOMPurify.sanitize(simplemde.markdown(simplemde.value()) , {USE_PROFILES: {html: true}} ));
             update(simplemde.value());
         });
         setTimeout(function() {
-            preview.html(simplemde.markdown(simplemde.value()));
+            preview.html(DOMPurify.sanitize(simplemde.markdown(simplemde.value()) , {USE_PROFILES: {html: true}} ));
             simplemde.codemirror.refresh();
         }.bind(simplemde), 0);
 
