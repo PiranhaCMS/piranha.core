@@ -19,28 +19,28 @@
     <value>Yeni takma ad ekle</value>
   </data>
   <data name="Alias URL" xml:space="preserve">
-    <value>Takma ad URL</value>
+    <value>Takma ad URL'si</value>
   </data>
   <data name="Alias URL is mandatory." xml:space="preserve">
-    <value>Takma ad URL'u zaruridir.</value>
+    <value>Takma ad URL'si zorunludur.</value>
   </data>
   <data name="Redirect URL" xml:space="preserve">
-    <value>Yönlendirme URL'si</value>
+    <value>Yönlendirme URL</value>
   </data>
   <data name="Redirect URL is mandatory." xml:space="preserve">
-    <value>Yönlendirme URL'si zorunludur.</value>
+    <value>Yönlendirme URL zorunludur.</value>
   </data>
   <data name="Permanent" xml:space="preserve">
     <value>Kalıcı</value>
   </data>
   <data name="Are you sure you want to delete this alias?" xml:space="preserve">
-    <value>Bu takma adı silmek istediğinizden emin misiniz?</value>
+    <value>Bu takma adı silmek istediğinize emin misiniz?</value>
   </data>
   <data name="If the redirect should be permanent" xml:space="preserve">
-    <value>Eğer yönlendirme (redirect) kalıcı olacaksa</value>
+    <value>Yönlendirmenin kalıcı olması durumunda</value>
   </data>
   <data name="The alias was successfully added to the list" xml:space="preserve">
-    <value>Takma ad listeye başarıyla eklendi</value>
+    <value>Takma ad başarıyla listeye eklendi</value>
   </data>
   <data name="The alias was successfully deleted" xml:space="preserve">
     <value>Takma ad başarıyla silindi</value>

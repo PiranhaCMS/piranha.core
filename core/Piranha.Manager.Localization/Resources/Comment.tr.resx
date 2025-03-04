@@ -26,28 +26,28 @@
     <value>Yorum</value>
   </data>
   <data name="Response to" xml:space="preserve">
-    <value>Cevap</value>
+    <value>Yanıt</value>
   </data>
   <data name="The comment was successfully approved" xml:space="preserve">
     <value>Yorum onaylandı</value>
   </data>
   <data name="The comment was successfully unapproved" xml:space="preserve">
-    <value>Yorum onayı kaldırıldı</value>
+    <value>Yorum onayı başarıyla kaldırıldı</value>
   </data>
   <data name="The comment was successfully deleted" xml:space="preserve">
     <value>Yorum başarıyla silindi</value>
   </data>
   <data name="Days allowed for commenting" xml:space="preserve">
-    <value>Yorumlar için izin verilen günler</value>
+    <value>Yorum yapılabilecek gün sayısı</value>
   </data>
   <data name="Comments are not allowed." xml:space="preserve">
-    <value>Yorumlara izin yok.</value>
+    <value>Yorumlar kapalıdır.</value>
   </data>
   <data name="Comments are not allowed for unpublished content." xml:space="preserve">
-    <value>Yayımlanmamış içerikler için yorumlara izin verilmez.</value>
+    <value>Yayınlanmamış içerik için yorum yapılamaz.</value>
   </data>
   <data name="Comments are currently open." xml:space="preserve">
-    <value>Yorumlara şu an için açık.</value>
+    <value>Yorumlar şu anda açıktır.</value>
   </data>
   <data name="Comments were closed" xml:space="preserve">
     <value>Yorumlar kapatıldı</value>
