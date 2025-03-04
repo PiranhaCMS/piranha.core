@@ -13,25 +13,25 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Add site" xml:space="preserve">
-    <value>Sayfa ekle</value>
+    <value>Site ekle</value>
   </data>
   <data name="Are you really sure?" xml:space="preserve">
-    <value>Gerçekten emin misiniz?</value>
+    <value>Emin misiniz?</value>
   </data>
   <data name="Edit site" xml:space="preserve">
-    <value>Sayfa düzenleme</value>
+    <value>Site düzenle</value>
   </data>
   <data name="Hostnames" xml:space="preserve">
-    <value>Anasistem adları</value>
+    <value>Alan adları</value>
   </data>
   <data name="Logo" xml:space="preserve">
-    <value>İmlek</value>
+    <value>Logo</value>
   </data>
   <data name="If this should be the default site of the installation." xml:space="preserve">
-    <value>Bu, yüklemenin faraziye sayfası mı olsun.</value>
+    <value>Bu sitenin varsayılan site olmasını istiyorsanız.</value>
   </data>
   <data name="Please type in the name of the site to confirm." xml:space="preserve">
-    <value>Lütfen onay için sayfanın adını yazın.</value>
+    <value>Onaylamak için lütfen site adını yazın.</value>
   </data>
   <data name="ConfirmDelete" xml:space="preserve">
     <value>Bu işlem &lt;strong>geri alınamaz&lt;/strong>. Bu işlem, {{ title }} sitesini ve içindeki tüm &lt;strong>sayfaları&lt;/strong>, &lt;strong>medyaları&lt;/strong> ve &lt;strong>içerikleri&lt;/strong> kalıcı olarak silecektir.</value>
