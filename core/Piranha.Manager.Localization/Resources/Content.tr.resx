@@ -13,31 +13,31 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Excerpt" xml:space="preserve">
-    <value>İktibas</value>
+    <value>Özet</value>
   </data>
   <data name="Meta index" xml:space="preserve">
-    <value>Meta işaret</value>
+    <value>Meta dizin</value>
   </data>
   <data name="Meta follow" xml:space="preserve">
     <value>Meta takip</value>
   </data>
   <data name="Meta priority" xml:space="preserve">
-    <value>Meta tekaddümü</value>
+    <value>Meta öncelik</value>
   </data>
   <data name="Primary image" xml:space="preserve">
-    <value>Asli resim</value>
+    <value>Ana görsel</value>
   </data>
   <data name="Search engine priority, compared to other content in the same site." xml:space="preserve">
-    <value>Arama motoru tekaddümü, aynı genel ağ sayfasında bulunan diğer muhtevalara kıyasla.</value>
+    <value>Aynı sitedeki diğer içeriklere göre arama motoru önceliği.</value>
   </data>
   <data name="The content was successfully deleted" xml:space="preserve">
-    <value>The content was successfully deleted</value>
+    <value>İçerik başarıyla silindi</value>
   </data>
   <data name="An error occured while deleting the content" xml:space="preserve">
-    <value>An error occured while deleting the content</value>
+    <value>İçerik silinirken bir hata oluştu</value>
   </data>
   <data name="The content was successfully saved" xml:space="preserve">
-    <value>The content was successfully saved</value>
+    <value>İçerik başarıyla kaydedildi</value>
   </data>
   <data name="An error occured while saving the content" xml:space="preserve">
     <value>İçerik kaydedilirken bir hata oluştu</value>
