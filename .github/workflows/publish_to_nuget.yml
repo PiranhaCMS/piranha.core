@@ -27,13 +27,6 @@ jobs:
       with:
         node-version: 20
 
-    # Install NPM packages and run gulp
-    - name: NPM Install and Gulp
-      run: |
-        cd core/Piranha.Manager
-        npm install
-        gulp
-
     # Build and pack
     - name: Build solution and generate NuGet package
       run: ./pack.sh
