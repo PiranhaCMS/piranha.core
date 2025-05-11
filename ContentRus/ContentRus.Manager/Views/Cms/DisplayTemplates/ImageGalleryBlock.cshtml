@@ -1,0 +1,33 @@
+@model Piranha.Extend.Blocks.ImageGalleryBlock
+@using Piranha.Extend.Blocks
+@{
+    var unique = "gallery-" + Guid.NewGuid().ToString();
+    var images = Model.Items
+        .Where(i => i.GetType() == typeof(ImageBlock) && ((ImageBlock)i).Body.HasValue)
+        .ToList();
+}
+
+<div id="@unique" class="carousel slide gallery-block">
+    <div class="carousel-indicators">
+        @for (var n = 0; n < images.Count; n++)
+        {
+            <button type="button" data-bs-target="#@unique" data-bs-slide-to="@n" class="@(n == 0 ? "active" : "")" aria-current="true" aria-label="Slide @n"></button>
+        }
+    </div>
+    <div class="carousel-inner">
+        @foreach (var item in images)
+        {
+            <div class="carousel-item @(item == images.First() ? "active" : "")">
+                <img src="@Url.Content(WebApp.Media.ResizeImage(((ImageBlock)item).Body.Media, 1100, 450))" class="d-block w-100">
+            </div>
+        }
+    </div>
+    <button class="carousel-control-prev" type="button" data-bs-target="#@unique" data-bs-slide="prev">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Previous</span>
+    </button>
+    <button class="carousel-control-next" type="button" data-bs-target="#@unique" data-bs-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Next</span>
+    </button>
+</div>

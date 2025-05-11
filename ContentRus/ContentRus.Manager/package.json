@@ -1,0 +1,15 @@
+{
+  "name": "contentrus.manager",
+  "version": "11.2.0",
+  "description": "Piranha CMS Web Template For ASP.NET MVC",
+  "main": "index.js",
+  "author": "Piranha CMS",
+  "license": "MIT",
+  "devDependencies": {
+    "gulp": "^4.0.2",
+    "gulp-cssmin": "^0.2.0",
+    "gulp-rename": "^2.0.0",
+    "gulp-sass": "^5.1.0",
+    "sass": "^1.69.3"
+  }
+}

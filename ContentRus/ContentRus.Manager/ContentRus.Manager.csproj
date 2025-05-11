@@ -1,0 +1,21 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Piranha" Version="12.0.0" />
+    <PackageReference Include="Piranha.AspNetCore" Version="12.0.0" />
+    <PackageReference Include="Piranha.AspNetCore.Identity.MySql" Version="12.0.0" />
+    <PackageReference Include="Piranha.AttributeBuilder" Version="12.0.0" />
+    <PackageReference Include="Piranha.Data.EF.MySql" Version="12.0.0" />
+    <PackageReference Include="Piranha.ImageSharp" Version="12.0.0" />
+    <PackageReference Include="Piranha.Local.FileStorage" Version="12.0.0" />
+    <PackageReference Include="Piranha.Manager" Version="12.0.0" />
+    <PackageReference Include="Piranha.Manager.LocalAuth" Version="12.0.0" />
+    <PackageReference Include="Piranha.Manager.TinyMCE" Version="12.0.0" />
+  </ItemGroup>
+
+</Project>

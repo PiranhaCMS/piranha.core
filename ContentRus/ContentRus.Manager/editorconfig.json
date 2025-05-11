@@ -1,0 +1,12 @@
+{
+  "plugins": "autoresize autolink code hr paste lists piranhalink piranhaimage",
+  "toolbar": "bold italic | bullist numlist hr | alignleft aligncenter alignright | formatselect styleselect | piranhalink piranhaimage",
+  "blockformats": "Paragraph=p;Header 1=h1;Header 2=h2;Header 3=h3;Header 4=h4;Code=pre;Quote=blockquote",
+  "styleformats": [
+    { "title": "Small", "tag": "small", "type": "inline" },
+    { "title": "Code", "tag": "code", "type": "format" },
+    { "title": "Lead", "tag": "p", "type": "block", "classes": "lead" },
+    { "title": "Button Primary", "tag": "a", "type": "inline", "classes": "btn btn-primary" },
+    { "title": "Button Light", "tag": "a", "type": "inline", "classes": "btn btn-light" }
+  ]
+}
