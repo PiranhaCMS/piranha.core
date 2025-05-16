@@ -6,16 +6,16 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Piranha" Version="12.0.0" />
-    <PackageReference Include="Piranha.AspNetCore" Version="12.0.0" />
-    <PackageReference Include="Piranha.AspNetCore.Identity.MySql" Version="12.0.0" />
-    <PackageReference Include="Piranha.AttributeBuilder" Version="12.0.0" />
-    <PackageReference Include="Piranha.Data.EF.MySql" Version="12.0.0" />
-    <PackageReference Include="Piranha.ImageSharp" Version="12.0.0" />
-    <PackageReference Include="Piranha.Local.FileStorage" Version="12.0.0" />
-    <PackageReference Include="Piranha.Manager" Version="12.0.0" />
-    <PackageReference Include="Piranha.Manager.LocalAuth" Version="12.0.0" />
-    <PackageReference Include="Piranha.Manager.TinyMCE" Version="12.0.0" />
+    <ProjectReference Include="..\..\core\Piranha\Piranha.csproj" />
+    <ProjectReference Include="..\..\core\Piranha.AspNetCore\Piranha.AspNetCore.csproj" />
+    <PackageReference Include="..\..\identity\Piranha.AspNetCore.Identity.MySql"/>
+    <ProjectReference Include="..\..\core\Piranha.AttributeBuilder\Piranha.AttributeBuilder.csproj" />
+    <PackageReference Include="..\..\data\Piranha.Data.EF.MySql"/>
+    <ProjectReference Include="..\..\core\Piranha.ImageSharp\Piranha.ImageSharp.csproj" />
+    <ProjectReference Include="..\..\core\Piranha.Local.FileStorage\Piranha.Local.FileStorage.csproj" />
+    <ProjectReference Include="..\..\core\Piranha.Manager\Piranha.Manager.csproj" />
+    <ProjectReference Include="..\..\core\Piranha.Manager.LocalAuth\Piranha.Manager.LocalAuth.csproj" />
+    <ProjectReference Include="..\..\core\Piranha.Manager.TinyMCE\Piranha.Manager.TinyMCE.csproj" />
   </ItemGroup>
 
 </Project>
