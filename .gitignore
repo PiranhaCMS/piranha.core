@@ -265,3 +265,6 @@ _Pvt_Extensions
 
 # Rider generated files
 .idea
+
+# Vscode files
+.vscode/

@@ -1,0 +1,18 @@
+.page-link {
+    color: #f94c3b;
+    min-width: 2.5rem;
+    text-align: center;
+
+    &:hover {
+        color: darken(#f94c3b, 10%);
+    }
+}
+
+.page-item {
+    &.active {
+        .page-link {
+            background: #f94c3b;
+            border-color: #f94c3b;
+        }
+    }
+}

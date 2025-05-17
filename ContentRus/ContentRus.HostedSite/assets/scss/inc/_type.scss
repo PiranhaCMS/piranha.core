@@ -1,0 +1,24 @@
+body {
+    font-family: Lato,sans-serif;
+}
+h1, h2, h3, h4, h5, h6 {
+    font-family: Raleway,sans-serif;
+}
+blockquote {
+    color: #999;
+    font-size: 1.5rem;
+    font-weight: 300;
+    margin: 3rem auto;
+    width: 80%;
+}
+.navbar-brand {
+    small {
+        font-family: Lato,sans-serif;
+        font-size: 75%;
+        font-weight: 400;
+        margin-left: .5rem;
+    }
+}
+.lead {
+    font-size: 1.2rem;
+}
