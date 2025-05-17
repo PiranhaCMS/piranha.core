@@ -23,13 +23,9 @@ builder.AddPiranha(options =>
     options.AddRazorRuntimeCompilation = true;
 
     options.UseCms();
-    // options.UseManager();
-
-
 
     options.UseFileStorage(naming: Piranha.Local.FileStorageNaming.UniqueFolderNames);
     options.UseImageSharp();
-    options.UseTinyMCE();
     options.UseMemoryCache();
 
     var connectionString = builder.Configuration.GetConnectionString("piranha");
@@ -80,11 +76,6 @@ app.UsePiranha(options =>
         .Build()
         .DeleteOrphans();
 
-    // Configure Tiny MCE
-    EditorConfig.FromFile("editorconfig.json");
-
-    // options.UseManager();
-    options.UseTinyMCE();
     // options.UseIdentity();
 });
 

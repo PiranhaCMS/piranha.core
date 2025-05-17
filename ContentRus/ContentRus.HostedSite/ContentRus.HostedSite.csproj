@@ -13,9 +13,6 @@
     <ProjectReference Include="..\..\data\Piranha.Data.EF.MySql\Piranha.Data.EF.MySql.csproj"/>
     <ProjectReference Include="..\..\core\Piranha.ImageSharp\Piranha.ImageSharp.csproj" />
     <ProjectReference Include="..\..\core\Piranha.Local.FileStorage\Piranha.Local.FileStorage.csproj" />
-    <ProjectReference Include="..\..\core\Piranha.Manager\Piranha.Manager.csproj" />
-    <ProjectReference Include="..\..\core\Piranha.Manager.LocalAuth\Piranha.Manager.LocalAuth.csproj" />
-    <ProjectReference Include="..\..\core\Piranha.Manager.TinyMCE\Piranha.Manager.TinyMCE.csproj" />
   </ItemGroup>
 
 </Project>
