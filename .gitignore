@@ -268,3 +268,5 @@ _Pvt_Extensions
 
 # Vscode files
 .vscode/
+
+.env
