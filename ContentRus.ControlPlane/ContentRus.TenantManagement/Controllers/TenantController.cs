@@ -15,17 +15,26 @@ public class TenantController : ControllerBase
         _tenantService = tenantService;
     }
 
+    /*
     [HttpPost]
     public IActionResult CreateTenant([FromBody] TenantDTO request)
     {
-        var tenant = _tenantService.CreateTenant(request.Name, request.Email, request.Tier);
+        var tenant = _tenantService.CreateTenant(request.Email);
         return CreatedAtAction(nameof(GetTenant), new { id = tenant.Id }, tenant);
     }
+    */
 
     [HttpPut("{id:guid}/state")]
     public IActionResult UpdateTenantState(Guid id, [FromBody] TenantState newState)
     {
         var updated = _tenantService.UpdateTenantState(id, newState);
+        return updated ? NoContent() : NotFound();
+    }
+
+    [HttpPut("{id:guid}/tier")]
+    public IActionResult UpdateTenantTier(Guid id, [FromBody] TenantTier newTier)
+    {
+        var updated = _tenantService.UpdateTenantTier(id, newTier);
         return updated ? NoContent() : NotFound();
     }
 

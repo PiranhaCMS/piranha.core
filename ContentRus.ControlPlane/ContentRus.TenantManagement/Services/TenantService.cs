@@ -9,14 +9,14 @@ namespace ContentRus.TenantManagement.Services
     {
         private readonly List<Tenant> _tenants = new();
 
-        public Tenant CreateTenant(string name, string email, TenantTier tier)
+        public Tenant CreateTenant(string email)
         {
             var tenant = new Tenant
             {
                 Id = Guid.NewGuid(),
-                Name = name,
+                Name = email,
                 Email = email,
-                Tier = tier,
+                Tier = TenantTier.Basic,
                 State = TenantState.Created,
                 CreatedAt = DateTime.UtcNow
             };
@@ -31,6 +31,15 @@ namespace ContentRus.TenantManagement.Services
             if (tenant == null) return false;
 
             tenant.State = newState;
+            return true;
+        }
+
+        public bool UpdateTenantTier(Guid id, TenantTier newTier)
+        {
+            var tenant = GetTenant(id);
+            if (tenant == null) return false;
+
+            tenant.Tier = newTier;
             return true;
         }
 
