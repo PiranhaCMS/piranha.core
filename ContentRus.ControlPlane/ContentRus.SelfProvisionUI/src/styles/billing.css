@@ -1,0 +1,105 @@
+.pricing-container {
+  display: flex;
+  justify-content: center;
+  padding: 2rem;
+}
+
+.pricing-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2rem;
+  max-width: 1200px;
+  width: 100%;
+}
+
+.pricing-card {
+  background: #fff;
+  color: #000;
+  border-radius: 1rem; /* ✅ Rounded corners */
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  padding: 2rem;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* ✅ Center horizontally */
+  justify-content: space-between;
+  transition: transform 0.2s ease;
+}
+
+.pricing-card:hover {
+  transform: translateY(-5px);
+}
+
+.features {
+  list-style: none;
+  padding: 0;
+  margin: 1.5rem 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* ✅ Center feature list */
+}
+
+.features li {
+  margin-bottom: 0.5rem;
+  text-align: center;
+}
+
+.price {
+  font-size: 2rem;
+  margin: 1rem 0;
+}
+
+.popular-badge {
+  background-color: #ff6f61;
+  color: white;
+  padding: 0.4rem 1rem;
+  border-radius: 999px;
+  font-size: 0.8rem;
+  font-weight: bold;
+  margin-bottom: 1rem;
+  display: inline-block;
+}
+
+.subscribe-button {
+  background-color: #4f46e5;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 0.75rem 1.5rem;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  margin-top: auto;
+}
+
+.subscribe-button:hover {
+  background-color: #4338ca;
+}
+
+@media (prefers-color-scheme: dark) {
+  .pricing-card {
+    background: #1f2937;
+    color: #f9fafb;
+  }
+
+  .subscribe-button {
+    background-color: #6366f1;
+    color: white;
+  }
+
+  .subscribe-button:hover {
+    background-color: #4f46e5;
+  }
+}
+
+@media screen and (max-width: 960px) {
+  .pricing-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media screen and (max-width: 600px) {
+  .pricing-grid {
+    grid-template-columns: 1fr;
+  }
+}
