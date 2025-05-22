@@ -40,6 +40,7 @@ export function Billing() {
     
     try {
       // Call your backend API to create a checkout session
+      //Change ngrok domain
       const response = await fetch('https://49d8-2001-8a0-c787-5f01-e2df-76e5-ea16-2fc9.ngrok-free.app/api/stripe/create-checkout-session', {
         method: 'POST',
         headers: {
