@@ -1,0 +1,16 @@
+version: '3.9'
+
+services:
+  mysql:
+    image: mysql:8
+    container_name: contentrus-mysql
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_DATABASE: ${DATABASE}
+      MYSQL_ROOT_PASSWORD: ${PASSWORD}
+    volumes:
+      - mysql_data:/var/lib/mysql
+
+volumes:
+  mysql_data:

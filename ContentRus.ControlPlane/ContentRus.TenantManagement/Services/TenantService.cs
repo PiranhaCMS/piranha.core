@@ -2,12 +2,18 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using ContentRus.TenantManagement.Models;
+using ContentRus.TenantManagement.Data;
 
 namespace ContentRus.TenantManagement.Services
 {
     public class TenantService
     {
-        private readonly List<Tenant> _tenants = new();
+        private readonly AppDbContext _context;
+
+        public TenantService(AppDbContext context)
+        {
+            _context = context;
+        }
 
         public Tenant CreateTenant(string email)
         {
@@ -21,7 +27,8 @@ namespace ContentRus.TenantManagement.Services
                 CreatedAt = DateTime.UtcNow
             };
 
-            _tenants.Add(tenant);
+            _context.Tenants.Add(tenant);
+            _context.SaveChanges();
             return tenant;
         }
 
@@ -31,6 +38,8 @@ namespace ContentRus.TenantManagement.Services
             if (tenant == null) return false;
 
             tenant.State = newState;
+            _context.Tenants.Update(tenant);
+            _context.SaveChanges();
             return true;
         }
 
@@ -40,18 +49,20 @@ namespace ContentRus.TenantManagement.Services
             if (tenant == null) return false;
 
             tenant.Tier = newTier;
+            _context.Tenants.Update(tenant);
+            _context.SaveChanges();
             return true;
         }
 
 
         public Tenant? GetTenant(Guid id)
         {
-            return _tenants.FirstOrDefault(t => t.Id == id);
+            return _context.Tenants.FirstOrDefault(t => t.Id == id);
         }
 
         public IEnumerable<Tenant> GetAllTenants()
         {
-            return _tenants;
+            return _context.Tenants;
         }
     }
 }

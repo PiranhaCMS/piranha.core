@@ -2,24 +2,31 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using ContentRus.TenantManagement.Models;
+using ContentRus.TenantManagement.Data;
 
 namespace ContentRus.TenantManagement.Services
 {
     public class UserService
     {
-        private readonly List<User> _users = new();
+        private readonly AppDbContext _context;
+
+        public UserService(AppDbContext context)
+        {
+            _context = context;
+        }
 
         public User CreateUser(string email, string password, Guid tenantId)
         {
             var user = new User
             {
-                Id = _users.Count + 1,
+                Id = _context.Users.Count() + 1,
                 Email = email,
                 Password = password,
                 TenantId = tenantId
             };
 
-            _users.Add(user);
+            _context.Users.Add(user);
+            _context.SaveChanges();
             return user;
         }
 
@@ -29,21 +36,23 @@ namespace ContentRus.TenantManagement.Services
             if (user == null) return false;
 
             user.Password = newPassword;
+            _context.Users.Update(user);
+            _context.SaveChanges();
             return true;
         }
 
         public User? GetUser(int id)
         {
-            return _users.FirstOrDefault(u => u.Id == id);
+            return _context.Users.FirstOrDefault(u => u.Id == id);
         }
         public IEnumerable<User> GetAllUsers()
         {
-            return _users;
+            return _context.Users;
         }
 
         public User? ValidateUserCredentials(string email, string password)
         {
-            var user = _users.FirstOrDefault(u => u.Email == email);
+            var user = _context.Users.FirstOrDefault(u => u.Email == email);
             if (user == null || user.Password != password)
             {
                 return null;

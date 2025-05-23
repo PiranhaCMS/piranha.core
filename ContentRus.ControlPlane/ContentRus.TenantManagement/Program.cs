@@ -5,6 +5,9 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.Extensions.Options;
 using System.Text;
 using DotNetEnv;
+using ContentRus.TenantManagement.Data;
+using Microsoft.EntityFrameworkCore;
+using Pomelo.EntityFrameworkCore.MySql.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
 Env.Load();
@@ -14,16 +17,31 @@ if (!string.IsNullOrEmpty(jwtKey))
     builder.Configuration["JwtSettings:SecretKey"] = jwtKey;
 }
 
+var connectionString = $"Server={Environment.GetEnvironmentVariable("HOST")};" +
+                       $"Port={Environment.GetEnvironmentVariable("PORT")};" +
+                       $"Database={Environment.GetEnvironmentVariable("DATABASE")};" +
+                       $"User={Environment.GetEnvironmentVariable("USER")};" +
+                       $"Password={Environment.GetEnvironmentVariable("PASSWORD")};";
+
+builder.Services.AddDbContext<AppDbContext>(options =>
+    options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString)));
+
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services.AddSingleton<TenantService>();
-builder.Services.AddSingleton<UserService>();
+builder.Services.AddScoped<UserService>();
+builder.Services.AddScoped<TenantService>();
 
 builder.Services.Configure<JwtSettings>(builder.Configuration.GetSection("JwtSettings"));
 
 var app = builder.Build();
+
+using (var scope = app.Services.CreateScope())
+{
+    var dbContext = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+    dbContext.Database.EnsureCreated();
+}
 
 if (app.Environment.IsDevelopment())
 {
