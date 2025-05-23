@@ -57,6 +57,13 @@ public class Module : IModule
     {
         var mapperConfig = new MapperConfiguration(cfg =>
         {
+            cfg.CreateMap<Piranha.Data.Workflow, Piranha.Models.Workflow>()
+                .ReverseMap();
+
+            cfg.CreateMap<Piranha.Data.WorkflowStep, Piranha.Models.WorkflowStep>()
+                .ReverseMap();
+
+
             cfg.CreateMap<Data.Alias, Data.Alias>()
                 .ForMember(a => a.Id, o => o.Ignore())
                 .ForMember(a => a.Created, o => o.Ignore());
