@@ -1,0 +1,32 @@
+@page
+@using Piranha.Manager.Localization
+@inject IAuthorizationService Auth
+@inject ManagerLocalizer Localizer
+
+@{
+    Layout = "_Layout";
+    ViewBag.MenuItem = "WorkflowsOthers";
+}
+
+<h1>Conteúdos dos Outros</h1>
+
+<table id="othersTable" class="table table-hover">
+    <thead>
+        <tr>
+            <th>Título</th>
+            <th>Tipo</th>
+            <th>Autor</th>
+            <th>Publicado Em</th>
+        </tr>
+    </thead>
+    <tbody></tbody>
+</table>
+
+@section Scripts {
+    <script src="~/manager/assets/js/piranha.workflow.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            piranha.workflow.initOthersPage();
+        });
+    </script>
+}

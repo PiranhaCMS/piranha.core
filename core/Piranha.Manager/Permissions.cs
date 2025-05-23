@@ -57,6 +57,8 @@ public static class Permission
     public const string SitesDelete = "PiranhaSitesDelete";
     public const string SitesEdit = "PiranhaSitesEdit";
     public const string SitesSave = "PiranhaSitesSave";
+    public const string ContentApproval = "PiranhaContentApproval";
+    public const string ContentApprovalAdmin = "PiranhaContentApprovalAdmin";
 
     public static readonly PermissionsStructure PermissionsStructure =
         // Admin Permission
@@ -72,10 +74,19 @@ public static class Permission
             new(Pages, new PermissionsStructure[] {new(PagesAdd), new(PagesDelete) , new(PagesEdit) , new(PagesPublish), new(PagesSave) }),
             new(Posts, new PermissionsStructure[] {new(PostsAdd), new(PostsDelete) , new(PostsEdit) , new(PostsPublish), new(PostsSave) }),
             new(Sites, new PermissionsStructure[] {new(SitesAdd), new(SitesDelete) , new(SitesEdit) , new(SitesSave) }),
+            new(Content, new PermissionsStructure[]
+                {
+                    new(ContentAdd),
+                    new(ContentEdit),
+                    new(ContentSave),
+                    new(ContentDelete),
+                    new(ContentApproval),
+                    new(ContentApprovalAdmin)
+                }),
         });
 
     public static string[] All() {
-        return new [] {
+        return new[] {
             Admin,
             Aliases,
             AliasesDelete,
@@ -117,7 +128,9 @@ public static class Permission
             SitesAdd,
             SitesDelete,
             SitesEdit,
-            SitesSave
+            SitesSave,
+            ContentApproval,
+            ContentApprovalAdmin
         };
     }
 }

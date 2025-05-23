@@ -1,0 +1,38 @@
+@page
+@using Piranha.Manager.Localization
+@inject IAuthorizationService Auth
+@inject ManagerLocalizer Localizer
+
+@{
+    Layout = "_Layout";
+    ViewBag.MenuItem = "WorkflowsMy";
+    var isAdmin = (await Auth.AuthorizeAsync(User, Permission.ContentApprovalAdmin)).Succeeded;
+    var title   = isAdmin ? "Conteúdos para Aprovação" : "Meus Conteúdos";
+}
+
+<h1>@title</h1>
+
+<table id="workflowTable" class="table table-striped">
+    <thead>
+        <tr>
+            <th>Título</th>
+            <th>Tipo</th>
+            @if (!isAdmin) { <th>Estado</th> }
+            @if (isAdmin)  { <th>Autor</th><th>Estado</th><th>Ações</th> }
+        </tr>
+    </thead>
+    <tbody></tbody>
+</table>
+
+@section Scripts {
+    <script src="~/manager/assets/js/piranha.workflow.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', async () => {
+            if (await piranha.workflow.isAdmin()) {
+                piranha.workflow.initAdminPage();
+            } else {
+                piranha.workflow.initUserPage();
+            }
+        });
+    </script>
+}

@@ -1,0 +1,68 @@
+@using Piranha.Manager
+@using Piranha.Manager.Localization
+@using ManagerMenu = Piranha.Manager.Menu   <!-- alias -->
+@inject ManagerLocalizer Localizer
+@inject IAuthorizationService Auth
+
+@{
+    var menu     = await ManagerMenu.Items.GetForUser(User, Auth);
+    var logout   = Piranha.App.Modules.Manager().LogoutUrl;
+    var isAdmin  = (await Auth.AuthorizeAsync(User, Permission.ContentApprovalAdmin)).Succeeded;
+}
+
+<nav class="navbar navbar-left fixed-top navbar-dark bg-dark">
+    <a class="navbar-brand" href="~/manager" tabindex="-1"></a>
+    <ul class="navbar-nav">
+        @foreach (var group in menu)
+        {
+            <li class="nav-item nav-header">
+                <span class="navbar-text">
+                    <i class="@group.Css"></i>@Localizer.Menu[group.Name]
+                </span>
+            </li>
+            @foreach (var item in group.Items)
+            {
+                <li class="nav-item@(ViewBag.MenuItem == item.InternalId ? " active" : "")">
+                    <a href="@Url.Content(item.Route)" class="nav-link" tabindex="-1">
+                        <i class="@item.Css"></i>@Localizer.Menu[item.Name]
+                    </a>
+                </li>
+            }
+            @if (group.InternalId == "Content")
+            {
+                foreach (var item in Piranha.App.ContentGroups.Where(g => !g.IsHidden))
+                {
+                    <li class="nav-item@(ViewBag.MenuItem == item.Id ? " active" : "")">
+                        <a href="@Url.Content($"~/manager/content/{item.Id}")" class="nav-link" tabindex="-1">
+                            <i class="@item.Icon"></i>@item.Title
+                        </a>
+                    </li>
+                }
+            }
+        }
+
+        @* --- ABA WORKFLOWS PERSONALIZADA --- *@
+        <li class="nav-item nav-header">
+            <span class="navbar-text">
+                <i class="fas fa-tasks"></i> @Localizer.Menu["Workflows"]
+            </span>
+        </li>
+        <li class="nav-item@(ViewBag.MenuItem == "WorkflowsMy" ? " active" : "")">
+            <a class="nav-link" asp-area="Manager" asp-page="/Workflows/My" tabindex="-1">
+                <i class="fas fa-file-alt"></i>
+                @(isAdmin ? "Conteúdos para Aprovação" : "Meus Conteúdos")
+            </a>
+        </li>
+        <li class="nav-item@(ViewBag.MenuItem == "WorkflowsOthers" ? " active" : "")">
+            <a class="nav-link" asp-area="Manager" asp-page="/Workflows/Others" tabindex="-1">
+                <i class="fas fa-globe"></i> Conteúdos dos Outros
+            </a>
+        </li>
+
+        <li class="nav-item nav-header">
+            <a class="navbar-text" href="@Url.Content(logout)">
+                <i class="fas fa-power-off"></i>@Localizer.Menu["Logout"]
+            </a>
+        </li>
+    </ul>
+</nav>

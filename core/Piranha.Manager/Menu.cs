@@ -54,6 +54,31 @@ public static class Menu
             }
         },
         new MenuItem
+            {
+                InternalId = "Workflows",
+                Name       = "Workflows",
+                Css        = "fas fa-tasks",
+                Items      = new MenuItemList
+                    {
+                       new MenuItem
+                        {
+                            InternalId = "WorkflowsMy",
+                            Name       = "My Workflows",
+                            Route      = "~/manager/workflows/my",
+                            Policy     = Permission.ContentApproval, 
+                            Css        = "fas fa-file-alt"
+                        },
+                        new MenuItem
+                        {
+                            InternalId = "WorkflowsOthers",
+                            Name       = "Other People's Workflows",
+                            Route      = "~/manager/workflows/others",
+                            Policy     = Permission.ContentApproval, 
+                            Css        = "fas fa-globe"
+                        }
+                    }
+            },
+        new MenuItem
         {
             InternalId = "Settings",
             Name = "Settings",
