@@ -6,6 +6,6 @@ namespace Piranha.Models
 
         public string Name { get; set; }
         public string Permission { get; set; }
-        public string? Reason { get; set; }
+        public string Reason { get; set; }
     }
 }

@@ -5,9 +5,9 @@ namespace Piranha.Models
 {
     public class Workflow{
         public Guid Id { get; set; }
-        public int CurrentStep { get; set; }
-        
-        public bool IsApproved { get; set; }
+        public int CurrentStep { get; set; } = 0;
+
+        public bool IsApproved { get; set; } = false;
         
         public List<WorkflowStep> Steps { get; set; } = new List<WorkflowStep>();
         

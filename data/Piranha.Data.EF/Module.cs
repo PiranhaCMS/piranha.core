@@ -136,7 +136,9 @@ public class Module : IModule
                 .ForMember(p => p.Permalink, o => o.Ignore())
                 .ForMember(p => p.Permissions, o => o.Ignore())
                 .ForMember(p => p.Blocks, o => o.Ignore())
-                .ForMember(p => p.CommentCount, o => o.Ignore());
+                .ForMember(p => p.CommentCount, o => o.Ignore())
+                .ForMember(p => p.Workflow, o => o.MapFrom(m => m.Workflow))
+                .ForMember(p => p.WorkflowId, o => o.MapFrom(m => m.WorkflowId));
             cfg.CreateMap<Data.PostTag, Models.Taxonomy>()
                 .ForMember(p => p.Id, o => o.MapFrom(m => m.TagId))
                 .ForMember(p => p.Title, o => o.MapFrom(m => m.Tag.Title))

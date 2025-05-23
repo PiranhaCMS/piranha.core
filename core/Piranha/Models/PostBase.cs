@@ -37,6 +37,4 @@ public abstract class PostBase : RoutedContentBase, ICategorizedContent, ITagged
 
     public Guid? WorkflowId { get; set; }
     public Workflow Workflow { get; set; }
-
-    public string authorId { get; set; }
 }
