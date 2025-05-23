@@ -13,13 +13,13 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="ChangeDefaultConfirm" xml:space="preserve">
-    <value>Tabii lisanın değiştirilmesi, uygulamanın davranışını etkiler ve ilk kurma esnasında yapılandırılmalıdır.</value>
+    <value>Varsayılan dilin değiştirilmesi, uygulamanın davranışını etkiler ve ilk kurulum sırasında yapılandırılmalıdır.</value>
   </data>
   <data name="RemoveLanguageConfirm" xml:space="preserve">
-    <value>Bu hareket &lt;strong>geri alınamaz&lt;/strong>. Bu yol, {{ currentDelete.title }} lisanı ve ona ait tüm &lt;strong>tercümeleri&lt;/strong> kalıcı olarak siler. Bu {{ currentDelete.title }} lisan olarak seçen tüm sayfalara, tabii olan lisan tahsis edilir.</value>
+    <value>Bu işlem &lt;strong>geri alınamaz&lt;/strong>. Bu işlem, {{ currentDelete.title }} dilini ve ona ait tüm &lt;strong>çevirileri&lt;/strong> kalıcı olarak silecektir. {{ currentDelete.title }} dilini kullanan tüm sayfalar varsayılan dile geçirilecektir.</value>
   </data>
   <data name="The language was successfully saved" xml:space="preserve">
-    <value>The language was successfully saved</value>
+    <value>Dil başarıyla kaydedildi</value>
   </data>
   <data name="The language was successfully deleted" xml:space="preserve">
     <value>Dil başarıyla silindi</value>

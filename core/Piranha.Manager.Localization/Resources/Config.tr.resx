@@ -16,13 +16,13 @@
     <value>Yapılandırma</value>
   </data>
   <data name="Hierarchical page slugs" xml:space="preserve">
-    <value>Hiyerarşik sayfa slug'ları (Url bileşenleri)</value>
+    <value>Hiyerarşik sayfa slug'ları</value>
   </data>
   <data name="If page slugs should include the parent slug." xml:space="preserve">
-    <value>Eğer sayfa başlığı bir üst başlığı tazammun etmeli ise.</value>
+    <value>Sayfa slug'ları ana slug'ı içermelidir.</value>
   </data>
   <data name="Expanded levels in the sitemap" xml:space="preserve">
-    <value>Site haritasındaki genişletilmiş seviyeler</value>
+    <value>Site haritasında genişletilmiş seviyeler</value>
   </data>
   <data name="Archive page size" xml:space="preserve">
     <value>Arşiv sayfa boyutu</value>
@@ -40,81 +40,81 @@
     <value>Gönderi önbellek süresi (dakika)</value>
   </data>
   <data name="Post revisions" xml:space="preserve">
-    <value>Makale tashihleri</value>
+    <value>Gönderi revizyonları</value>
   </data>
   <data name="Media CDN" xml:space="preserve">
-    <value>Vasıta CDN</value>
+    <value>Medya CDN</value>
   </data>
 
   <data name="If page slugs should take their parent slug into account when being generated. This is prefered for larger sitemaps." xml:space="preserve">
-    <value>Sayfa slug'ları oluşturulurken üst slug'larını hesaba katmalı mı? Bu, daha büyük site haritaları için tercih edilir.</value>
+    <value>Sayfa slug'ları oluşturulurken üst slug'lar dikkate alınmalı mı? Bu, büyük site haritaları için önerilir.</value>
   </data>
   <data name="The default number of levels that should be expanded in the page sitemap. This is useful for smaller sitemaps." xml:space="preserve">
-    <value>Sayfa site haritasında genişletilmesi gereken varsayılan düzey sayısı. Bu, daha küçük site haritaları için yararlıdır.</value>
+    <value>Sayfa haritasında varsayılan olarak genişletilecek seviye sayısı. Bu, küçük site haritaları için kullanışlıdır.</value>
   </data>
   <data name="The default page size for archive pages. Please note that this this can be overridden for specific archives." xml:space="preserve">
-    <value>Arşiv sayfaları için varsayılan sayfa boyutu. Lütfen bunun belirli arşivler için geçersiz kılınabileceğini unutmayın.</value>
+    <value>Arşiv sayfaları için varsayılan sayfa boyutu. Bu değer belirli arşivler için özelleştirilebilir.</value>
   </data>
   <data name="The maximum number of page revisions that should be stored for each page. A value of 0 means no limitation." xml:space="preserve">
-    <value>Her sayfa için saklanması gereken maksimum sayfa revizyon sayısı. 0 değeri, sınırlama olmadığı anlamına gelir.</value>
+    <value>Her sayfa için saklanacak maksimum revizyon sayısı. 0 değeri sınırsız demektir.</value>
   </data>
   <data name="The maximum number of post revisions that should be stored for each post. A value of 0 means no limitation." xml:space="preserve">
-    <value>Her gönderi için saklanması gereken maksimum gönderi revizyon sayısı. 0 değeri, sınırlama olmadığı anlamına gelir.</value>
+    <value>Her gönderi için saklanacak maksimum revizyon sayısı. 0 değeri sınırsız demektir.</value>
   </data>
   <data name="The time in minutes that web browsers can use pages before asking the server for new updates." xml:space="preserve">
-    <value>Ağ tarayıcılarının, sunucudan yeni güncellemeler talebi öncesinde, sayfaları kullanabileceği dakika zaman dilimi.</value>
+    <value>Web tarayıcılarının sunucudan yeni güncellemeleri istemeden önce sayfaları kullanabileceği süre (dakika).</value>
   </data>
   <data name="The time in minutes that web browsers can use posts before asking the server for new updates." xml:space="preserve">
-    <value>Ağ tarayıcılarının, sunucudan yeni güncellemeler talebi öncesinde, makaleleri kullanabileceği dakika zaman dilimi.</value>
+    <value>Web tarayıcılarının sunucudan yeni güncellemeleri istemeden önce gönderileri kullanabileceği süre (dakika).</value>
   </data>
   <data name="The full URL (including any folder name) to the CDN used to serve uploaded media. Leave blank to use default storage URL." xml:space="preserve">
-    <value>CDN'e tam URL (her dosya adı tazammun etmeli), yüklenen vasıtaları hizmete sunmak için kullanılır. Faraziye depolama URL'u kullanmak için boş bırakın.</value>
+    <value>Yüklenen medyaları sunmak için kullanılan CDN'in tam URL'si (klasör adı dahil). Varsayılan depolama URL'sini kullanmak için boş bırakın.</value>
   </data>
 
   <data name="Approve comments" xml:space="preserve">
-    <value>Yorumları tasdikle</value>
+    <value>Yorumları onayla</value>
   </data>
   <data name="Close comments after" xml:space="preserve">
-    <value>Müteakiben yorumları kapat</value>
+    <value>Yorumları şu süre sonra kapat</value>
   </data>
   <data name="Collapse block headers" xml:space="preserve">
-    <value>Öbek başlıklarını daralt</value>
+    <value>Blok başlıklarını daralt</value>
   </data>
   <data name="Collapse blocks" xml:space="preserve">
-    <value>Öbekleri daralt</value>
+    <value>Blokları daralt</value>
   </data>
   <data name="Comments page size" xml:space="preserve">
-    <value>Yorumların sayfa boyutu</value>
+    <value>Yorum sayfa boyutu</value>
   </data>
   <data name="Enable page comments" xml:space="preserve">
-    <value>Sayfa yorumları müessir</value>
+    <value>Sayfa yorumlarını etkinleştir</value>
   </data>
   <data name="Enable post comments" xml:space="preserve">
-    <value>Makale yorumları müessir</value>
+    <value>Gönderi yorumlarını etkinleştir</value>
   </data>
   <data name="Manager list size" xml:space="preserve">
-    <value>İdareci listesi boyutu</value>
+    <value>Yönetici liste boyutu</value>
   </data>
   <data name="If block group headers should be collapsed by default when opening a page or post in the manager." xml:space="preserve">
-    <value>Eğer öbek grubu başlıkları bir sayfa veya makale açarken, farazi olarak idarecide daraltılmalıysa.</value>
+    <value>Yöneticide bir sayfa veya gönderi açıldığında blok grup başlıkları varsayılan olarak daraltılsın mı?</value>
   </data>
   <data name="If blocks should be collapsed by default when opening a page or post in the manager." xml:space="preserve">
-    <value>Eğer öbekler bir sayfa veya makale açarken, farazi olarak idarecide daraltılmalıysa.</value>
+    <value>Yöneticide bir sayfa veya gönderi açıldığında bloklar varsayılan olarak daraltılsın mı?</value>
   </data>
   <data name="If comments should be approved by default. Please note that this can be overridden by third party moderation services." xml:space="preserve">
-    <value>Yorumların varsayılan olarak onaylanması gerekiyorsa, lütfen bunun üçüncü taraf moderasyon hizmetleri tarafından geçersiz kılınabileceğini unutmayın.</value>
+    <value>Yorumlar varsayılan olarak onaylansın mı? Bu ayar, üçüncü taraf moderasyon servisleri tarafından değiştirilebilir.</value>
   </data>
   <data name="If comments should be enabled for pages by default. Please note that this this can be overridden for specific pages." xml:space="preserve">
-    <value>Yorumların sayfalar için varsayılan olarak etkinleştirilmesi gerekiyorsa, lütfen bunun belirli sayfalar için geçersiz kılınabileceğini unutmayın.</value>
+    <value>Sayfalarda yorumlar varsayılan olarak etkin olsun mu? Bu ayar, belirli sayfalar için değiştirilebilir.</value>
   </data>
   <data name="If comments should be enabled for posts by default. Please note that this this can be overridden for specific posts." xml:space="preserve">
-    <value>Yorumların gönderiler için varsayılan olarak etkinleştirilmesi gerekiyorsa, lütfen bunun belirli gönderiler için geçersiz kılınabileceğini unutmayın.</value>
+    <value>Gönderilerde yorumlar varsayılan olarak etkin olsun mu? Bu ayar, belirli gönderiler için değiştirilebilir.</value>
   </data>
   <data name="The default page size when loading comments. Please note that this this can be overridden for specific pages." xml:space="preserve">
-    <value>Yorumları yüklerken varsayılan sayfa boyutu. Lütfen bunun belirli sayfalar için geçersiz kılınabileceğini unutmayın.</value>
+    <value>Yorumlar yüklenirken varsayılan sayfa boyutu. Bu değer, belirli sayfalar için değiştirilebilir.</value>
   </data>
   <data name="The number of days commenting should be open after publish date. A value of 0 means forever." xml:space="preserve">
-    <value>Yayın tarihinden sonra yorumların açık kalması gereken gün sayısı. 0 değeri sonsuz anlamına gelir.</value>
+    <value>Yayın tarihinden sonra yorumların açık kalacağı gün sayısı. 0 değeri süresiz anlamına gelir.</value>
   </data>
   <data name="The page size for lists within the manager interface." xml:space="preserve">
     <value>Yönetici arayüzündeki listeler için sayfa boyutu.</value>
