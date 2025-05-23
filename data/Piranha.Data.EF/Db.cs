@@ -9,6 +9,7 @@
  */
 
 using Microsoft.EntityFrameworkCore;
+using Piranha.Models;
 
 namespace Piranha;
 
@@ -394,6 +395,16 @@ public abstract class Db<T> : DbContext, IDb where T : Db<T>
         mb.Entity<Data.Post>().Property(p => p.EnableComments).HasDefaultValue(false);
         mb.Entity<Data.Post>().HasOne(p => p.Category).WithMany().IsRequired().OnDelete(DeleteBehavior.Restrict);
         mb.Entity<Data.Post>().HasIndex(p => new { p.BlogId, p.Slug }).IsUnique();
+
+        mb.Entity<PostBase>()
+            .HasOne(p => p.Workflow)
+            .WithOne()
+            .HasForeignKey<PostBase>(p => p.WorkflowId);
+
+        mb.Entity<Workflow>()
+            .HasMany(w => w.Steps)
+            .WithOne(s => s.Workflow)
+            .HasForeignKey(s => s.WorkflowId);
 
         mb.Entity<Data.PostBlock>().ToTable("Piranha_PostBlocks");
         mb.Entity<Data.PostBlock>().HasIndex(b => new { b.PostId, b.SortOrder }).IsUnique();
