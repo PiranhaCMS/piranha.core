@@ -19,6 +19,11 @@ public sealed class Module : IModule
     private readonly List<PermissionItem> _permissions = new List<PermissionItem>
     {
         new PermissionItem { Name = Permission.Admin, Title = "Admin" },
+
+        new PermissionItem { Name = Permission.LegalTeam, Title = "Legal Team" },
+        new PermissionItem { Name = Permission.LegalTeamReview, Title = "Review", Category = "Legal Team" },
+        new PermissionItem { Name = Permission.LegalTeamDeny, Title = "Deny", Category = "Legal Team" },
+
         new PermissionItem { Name = Permission.Aliases, Title = "List Aliases", Category = "Aliases" },
         new PermissionItem { Name = Permission.AliasesDelete, Title = "Delete Aliases", Category = "Aliases" },
         new PermissionItem { Name = Permission.AliasesEdit, Title = "Edit Aliases", Category = "Aliases" },
@@ -43,6 +48,11 @@ public sealed class Module : IModule
         new PermissionItem { Name = Permission.MediaDeleteFolder, Title = "Delete Media Folders", Category = "Media" },
         new PermissionItem { Name = Permission.MediaEdit, Title = "Edit Media", Category = "Media" },
         new PermissionItem { Name = Permission.Modules, Title = "List Modules", Category = "Modules" },
+
+        new PermissionItem { Name = Permission.Reviewer, Title = "Reviewer" },
+        new PermissionItem { Name = Permission.ReviewerStep1, Title = "Step 1", Category = "Reviewer" },
+        new PermissionItem { Name = Permission.ReviewerStep2, Title = "Step 2", Category = "Reviewer" },
+
         new PermissionItem { Name = Permission.Pages, Title = "List Pages", Category = "Pages" },
         new PermissionItem { Name = Permission.PagesAdd, Title = "Add Pages", Category = "Pages" },
         new PermissionItem { Name = Permission.PagesDelete, Title = "Delete Pages", Category = "Pages" },
