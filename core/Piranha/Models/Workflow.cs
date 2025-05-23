@@ -7,13 +7,15 @@ namespace Piranha.Models
         public Guid Id { get; set; }
         public int CurrentStep { get; set; }
         
-        public List<WorkflowStep> Steps { get; set; }=new List<WorkflowSteps>();
+        public bool IsApproved { get; set; }
+        
+        public List<WorkflowStep> Steps { get; set; } = new List<WorkflowStep>();
         
         /// <summary>
         /// Adds a step to the workflow.
         /// </summary>
-        /// <param name="step">The step to add</param>
-        public void AddStep(WorkflowSteps Step){
+        /// <param name="Step">The step to add</param>
+        public void AddStep(WorkflowStep Step){
             this.Steps.Add(Step);
         }
 
@@ -69,15 +71,15 @@ namespace Piranha.Models
         public void Deny(string Reason){
             this.CurrentStep=0;
             this.IsApproved=false;
-            this.getCurrentStep().Reason=Reason;
+            this.GetCurrentStep().Reason=Reason;
         }
 
         /// <summary>
         /// Gets the current permission required for the current step in the workflow
         /// </summary>
         /// <returns>The current permission</returns>
-        public string getCurrentPermission(){
-            return this.getCurrentStep().Permission;
+        public string GetCurrentPermission(){
+            return this.GetCurrentStep().Permission;
         }
     }
 }
