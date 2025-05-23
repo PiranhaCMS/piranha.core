@@ -1,0 +1,38 @@
+@using Piranha
+@using Piranha.Manager
+@using Piranha.Manager.Localization
+@inject ManagerLocalizer Localizer
+@inject Piranha.IApi Api
+
+@{
+    var version = Piranha.Utils.GetAssemblyVersionHash(typeof(Piranha.Manager.Module).Assembly);
+    Layout = null;
+    ViewBag.Title = ViewBag.Title ?? Localizer.Menu["Manager"];
+}
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  @* Escolhe CSS RTL ou não *@
+  @if (System.Globalization.CultureInfo.CurrentCulture.TextInfo.IsRightToLeft)
+  {
+    <link rel="stylesheet" href="~/manager/assets/css/full.rtl.min.css?v=@version" />
+  }
+  else
+  {
+    <link rel="stylesheet" href="~/manager/assets/css/full.min.css?v=@version" />
+  }
+  <link rel="stylesheet" href="~/manager/assets/css/piranha.manager.min.css?v=@version" />
+  <partial name="~/Areas/Manager/Views/Shared/_Menu.cshtml" />
+  <title>@ViewBag.Title</title>
+</head>
+<body>
+  @RenderBody()
+
+  <script src="~/manager/assets/js/piranha-deps.min.js?v=@version"></script>
+  <script src="~/manager/assets/js/piranha.manager.min.js?v=@version"></script>
+  @RenderSection("script", required: false)
+  @RenderSection("Scripts", required: false)
+</body>
+</html>

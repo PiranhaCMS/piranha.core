@@ -1,7 +1,10 @@
-@page
+@page "/manager/workflows/my"
+@model Piranha.Manager.Models.WorkflowsMyViewModel
+@attribute [Area("Manager")]
+
 @using Piranha.Manager.Localization
-@inject IAuthorizationService Auth
 @inject ManagerLocalizer Localizer
+@inject IAuthorizationService Auth
 
 @{
     Layout = "_Layout";
