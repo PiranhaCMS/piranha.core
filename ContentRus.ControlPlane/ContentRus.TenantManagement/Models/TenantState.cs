@@ -4,7 +4,6 @@ namespace ContentRus.TenantManagement.Models
     {
         Created = 1,            // INITIAL STATE - WAITING FOR PAYMENT
         Active = 2,             // ACTIVE AFTER PAYMENT
-        Suspended = 3,          // SUSPENDED FOR NON-PAYMENT
-        Cancelled = 4           // CANCELLED
+        Cancelled = 3           // CANCELLED
     }
 }

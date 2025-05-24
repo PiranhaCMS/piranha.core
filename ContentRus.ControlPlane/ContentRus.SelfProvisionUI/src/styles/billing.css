@@ -103,3 +103,23 @@
     grid-template-columns: 1fr;
   }
 }
+
+.warning {
+  color: #b4522d;
+  font-weight: 600;
+  margin-top: 0.5rem;
+}
+
+.warning.cancelled {
+  color: #d14343;
+}
+
+.pricing-card.active-plan {
+  border: 2px solid #4caf50;
+  box-shadow: 0 0 10px #4caf50;
+}
+
+.pricing-card.active-plan .subscribe-button {
+  background-color: #4caf50;
+  cursor: default;
+}
