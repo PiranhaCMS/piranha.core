@@ -1,0 +1,31 @@
+architecture: replication
+
+primary:
+  persistence:
+    enabled: true
+    size: 1Gi
+    storageClass: "local-path"
+  resources:
+    requests:
+      memory: 512Mi
+      cpu: 250m
+
+secondary:
+  replicaCount: 0
+  persistence:
+    enabled: true
+    size: 1Gi
+    storageClass: "local-path"
+  resources:
+    requests:
+      memory: 512Mi
+      cpu: 250m
+
+networkPolicy:
+  allowExternal: false
+
+auth:
+  replicationUser: my-replication-user
+  replicationPassword: my-replication-password
+
+# rest of auth data in shared-values/shared-values.yaml
