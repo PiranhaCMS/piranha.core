@@ -31,9 +31,12 @@ create-cluster:
 	@if ! k3d cluster list | grep -q $(CLUSTER_NAME); then \
 		k3d cluster create $(CLUSTER_NAME) \
 			--registry-use k3d-$(REGISTRY_NAME):$(REGISTRY_PORT) \
+			--k3s-arg "--disable=traefik@server:0" \
+			--k3s-arg "--disable=servicelb@server:0" --no-lb \
 			--k3s-arg '--flannel-backend=none@server:*' \
 			--k3s-arg '--disable-network-policy@server:*' \
-			--k3s-arg '--cluster-cidr=192.168.0.0/16@server:*'; \
+			--k3s-arg '--cluster-cidr=192.168.0.0/16@server:*' \
+			--wait; \
 		k3d kubeconfig merge $(CLUSTER_NAME) --kubeconfig-switch-context; \
 		docker pull docker.io/calico/csi:v3.29.0; \
 		docker pull docker.io/calico/node-driver-registrar:v3.29.0; \
@@ -52,6 +55,14 @@ create-cluster:
 		kubectl create -f https://raw.githubusercontent.com/projectcalico/calico/v3.29.0/manifests/tigera-operator.yaml; \
 		kubectl create -f https://raw.githubusercontent.com/projectcalico/calico/v3.29.0/manifests/custom-resources.yaml; \
 		kubectl patch installation default --type=merge --patch='{"spec":{"calicoNetwork":{"containerIPForwarding":"Enabled"}}}'; \
+		kubectl apply -f https://raw.githubusercontent.com/metallb/metallb/v0.14.9/config/manifests/metallb-native.yaml; \
+		kubectl -n metallb-system wait --for=condition=ready pod -l app=metallb --timeout=90s; \
+		bash infrastructure/3p-charts/metallb/metallb-config.sh; \
+		helm repo add istio https://istio-release.storage.googleapis.com/charts; \
+		helm repo update; \
+		helm install istio-base istio/base -n istio-system --set defaultRevision=default --create-namespace; \
+		helm install istiod istio/istiod -n istio-system --wait; \
+		helm install istio-ingress istio/gateway -n tcommon --create-namespace --wait; \
 	else \
 		echo "Cluster '$(CLUSTER_NAME)' already exists."; \
 	fi
@@ -66,7 +77,7 @@ clean-registry:
 	k3d registry delete $(REGISTRY_NAME) || true
 
 clean-cluster:
-	@echo "Deleting cluster '$(CLUSTER_NAME)'..."
+	@echo "Deleting cluster '$(CLUSTER_NAME)'..."; \
 	k3d cluster delete $(CLUSTER_NAME) || true
 
 clean-all:
