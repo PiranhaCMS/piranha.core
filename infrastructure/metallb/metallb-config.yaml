@@ -1,0 +1,18 @@
+# This file configures MetalLB with a specific IP address pool and L2 advertisement.
+apiVersion: metallb.io/v1beta1
+kind: IPAddressPool
+metadata:
+  namespace: metallb-system
+  name: my-ip-pool
+spec:
+  addresses:
+  - 192.168.1.240-192.168.1.250
+---
+apiVersion: metallb.io/v1beta1
+kind: L2Advertisement
+metadata:
+  namespace: metallb-system
+  name: l2-advertisement
+spec:
+  ipAddressPools:
+  - my-ip-pool

@@ -1,0 +1,65 @@
+apiVersion: networking.istio.io/v1
+kind: Gateway
+metadata:
+  name: manager-gateway
+  namespace: tcommon
+spec:
+  # The selector matches the ingress gateway pod labels.
+  # If you installed Istio using Helm following the standard documentation, this would be "istio=ingress"
+  selector:
+    istio: ingress
+  servers:
+  - port:
+      number: 80
+      name: http
+      protocol: HTTP
+    hosts:
+    - "www.contentrus.t1.com"
+    - "www.contentrus.t2.com"
+
+---
+
+apiVersion: networking.istio.io/v1
+kind: VirtualService
+metadata:
+  name: t1-virtual-svc
+  namespace: t1
+spec:
+  hosts:
+  - "www.contentrus.t1.com"
+  gateways:
+  - tcommon/manager-gateway
+  http:
+  - match:
+    - uri:
+        prefix: /
+    route:
+    - destination:
+        port:
+          number: 80
+        host: manager-service.t1.svc.cluster.local
+
+---
+
+apiVersion: networking.istio.io/v1
+kind: VirtualService
+metadata:
+  name: t2-virtual-svc
+  namespace: t2
+spec:
+  hosts:
+  - "www.contentrus.t2.com"
+  gateways:
+  - tcommon/manager-gateway
+  http:
+  - match:
+    - uri:
+        prefix: /
+    route:
+    - destination:
+        port:
+          number: 80
+        host: manager-service.t2.svc.cluster.local
+
+
+# https://istio.io/latest/docs/tasks/traffic-management/ingress/ingress-control/

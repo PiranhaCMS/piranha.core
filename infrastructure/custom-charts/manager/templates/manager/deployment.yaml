@@ -13,6 +13,7 @@ spec:
       labels:
         app: {{ .Values.manager.appName }}
         mysql-client: "true"
+        sidecar.istio.io/inject: "true"
     spec:
       containers:
         - name: {{ .Values.manager.appName }}
