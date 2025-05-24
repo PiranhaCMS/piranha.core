@@ -78,12 +78,10 @@ clean-registry:
 
 clean-cluster:
 	@echo "Deleting cluster '$(CLUSTER_NAME)'..."; \
-	helm ls -a --all-namespaces | awk 'NR > 1 { print  "-n "$2, $1}' | xargs -L1 helm delete
 	k3d cluster delete $(CLUSTER_NAME) || true
 
 clean-all:
 	@echo "Deleting cluster '$(CLUSTER_NAME)' and registry '$(REGISTRY_NAME)' (port $(REGISTRY_PORT))..."
-	helm ls -a --all-namespaces | awk 'NR > 1 { print  "-n "$2, $1}' | xargs -L1 helm delete
 	k3d cluster delete $(CLUSTER_NAME) || true
 	k3d registry delete $(REGISTRY_NAME) || true
 
