@@ -35,6 +35,19 @@ builder.Services.AddScoped<TenantService>();
 
 builder.Services.Configure<JwtSettings>(builder.Configuration.GetSection("JwtSettings"));
 
+// CORS
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowInterfaceRequests",
+        policy =>
+        {
+            policy.WithOrigins("http://localhost:5173")
+                  .AllowAnyHeader()
+                  .AllowAnyMethod();
+        });
+});
+
+
 var app = builder.Build();
 
 using (var scope = app.Services.CreateScope())
@@ -50,6 +63,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.UseCors("AllowInterfaceRequests");
 
 app.UseAuthentication();
 app.UseAuthorization();
