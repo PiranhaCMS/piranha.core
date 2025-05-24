@@ -57,14 +57,12 @@ create-cluster:
 		kubectl patch installation default --type=merge --patch='{"spec":{"calicoNetwork":{"containerIPForwarding":"Enabled"}}}'; \
 		kubectl apply -f https://raw.githubusercontent.com/metallb/metallb/v0.14.9/config/manifests/metallb-native.yaml; \
 		kubectl -n metallb-system wait --for=condition=ready pod -l app=metallb --timeout=90s; \
-		bash infrastructure/metallb/metallb-config.sh; \
-		# kubectl apply -f infrastructure/istio/nginx.yaml; \
+		bash infrastructure/3p-charts/metallb/metallb-config.sh; \
 		helm repo add istio https://istio-release.storage.googleapis.com/charts; \
 		helm repo update; \
 		helm install istio-base istio/base -n istio-system --set defaultRevision=default --create-namespace; \
 		helm install istiod istio/istiod -n istio-system --wait; \
 		helm install istio-ingress istio/gateway -n tcommon --create-namespace --wait; \
-		kubectl apply -f infrastructure/istio/virtualResource.yaml; \
 	else \
 		echo "Cluster '$(CLUSTER_NAME)' already exists."; \
 	fi
@@ -79,11 +77,13 @@ clean-registry:
 	k3d registry delete $(REGISTRY_NAME) || true
 
 clean-cluster:
-	@echo "Deleting cluster '$(CLUSTER_NAME)'..."
+	@echo "Deleting cluster '$(CLUSTER_NAME)'..."; \
+	helm ls -a --all-namespaces | awk 'NR > 1 { print  "-n "$2, $1}' | xargs -L1 helm delete
 	k3d cluster delete $(CLUSTER_NAME) || true
 
 clean-all:
 	@echo "Deleting cluster '$(CLUSTER_NAME)' and registry '$(REGISTRY_NAME)' (port $(REGISTRY_PORT))..."
+	helm ls -a --all-namespaces | awk 'NR > 1 { print  "-n "$2, $1}' | xargs -L1 helm delete
 	k3d cluster delete $(CLUSTER_NAME) || true
 	k3d registry delete $(REGISTRY_NAME) || true
 
