@@ -1,39 +1,28 @@
 import React, { useState } from 'react';
 import { loadStripe } from '@stripe/stripe-js';
+import { useQuery } from '@tanstack/react-query';
+import { API_URL } from '../components/ApiUrl';
 import './../styles/billing.css';
 
 const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY);
 
 export function Billing() {
   const [loading, setLoading] = useState(false);
+  const token = localStorage.getItem('token');
   
-  // Replace with your actual plans and price IDs
-  const plans = [
-    {
-      id: 'basic',
-      name: 'Basic Plan',
-      price: '$9.99',
-      interval: 'month',
-      features: ['Create Websites', 'Tenant Management'],
-      priceId: import.meta.env.VITE_PRICE_ID_BASIC
+  // Fetch plans from API
+  const { data: plans, isLoading: plansLoading, error: plansError } = useQuery({
+    queryKey: ['plans'],
+    queryFn: async () => {
+      const response = await fetch(`${API_URL}/tenant/tiers`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      
+      if (!response.ok) throw new Error('Failed to fetch plans');
+      return response.json();
     },
-    {
-      id: 'pro',
-      name: 'Pro Plan',
-      price: '$40.00',
-      interval: 'month',
-      features: ['Create Websites', 'Tenant Management', 'More storage space'],
-      priceId: import.meta.env.VITE_PRICE_ID_PRO
-    },
-    {
-      id: 'enterprise',
-      name: 'Enterprise Plan',
-      price: '$60.00',
-      interval: 'month',
-      features: ['Create Websites', 'Tenant Management', 'More storage space', 'Object storage in cloud', 'Many more...'],
-      priceId: import.meta.env.VITE_PRICE_ID_ENTERPRISE
-    }
-  ];
+    staleTime: 60 * 60 * 1000, // Cache for 1 hour
+  });
 
   const handleSubscribe = async (priceId) => {
     setLoading(true);
@@ -65,6 +54,36 @@ export function Billing() {
     }
   };
 
+  if (plansLoading) {
+    return (
+      <div className="App">
+        <header>
+          <h1>Choose Your Subscription Plan</h1>
+        </header>
+        <div className="loading-container">
+          <div className="loading-spinner"></div>
+          <p>Loading available plans...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (plansError) {
+    return (
+      <div className="App">
+        <header>
+          <h1>Choose Your Subscription Plan</h1>
+        </header>
+        <div className="error-container">
+          <p>There was an error loading the subscription plans. Please try again later.</p>
+          <button onClick={() => window.location.reload()} className="retry-button">
+            Retry
+          </button>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="App">
       <header>
@@ -73,12 +92,12 @@ export function Billing() {
       
       <div className="pricing-container">
         <div className="pricing-grid">
-          {plans.map((plan) => (
+          {plans && plans.map((plan) => (
             <div key={plan.id} className={`pricing-card`}>
               <h2>{plan.name}</h2>
               <div className="price">
-                <span className="amount">{plan.price}</span>
-                <span className="interval">/{plan.interval}</span>
+                <span className="amount">${plan.price}</span>
+                <span className="interval">/month</span>
               </div>
               <ul className="features">
                 {plan.features.map((feature, index) => (
@@ -90,7 +109,7 @@ export function Billing() {
                 onClick={() => handleSubscribe(plan.priceId)}
                 disabled={loading}
               >
-                {loading ? 'Processing...' : `Subscribe to ${plan.name}`}
+                {loading ? 'Processing...' : 'Subscribe'}
               </button>
             </div>
           ))}

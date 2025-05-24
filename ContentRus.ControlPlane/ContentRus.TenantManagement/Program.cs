@@ -1,3 +1,4 @@
+using ContentRus.TenantManagement.Models;
 using ContentRus.TenantManagement.Services;
 using ContentRus.TenantManagement.Configs;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -82,6 +83,57 @@ using (var scope = app.Services.CreateScope())
 {
     var dbContext = scope.ServiceProvider.GetRequiredService<AppDbContext>();
     dbContext.Database.EnsureCreated();
+
+    if (!dbContext.TenantPlans.Any())
+    {
+        var basicPriceId = Environment.GetEnvironmentVariable("PRICE_ID_BASIC");
+        var proPriceId = Environment.GetEnvironmentVariable("PRICE_ID_PRO");
+        var enterprisePriceId = Environment.GetEnvironmentVariable("PRICE_ID_ENTERPRISE");
+
+        dbContext.TenantPlans.AddRange(
+            new TenantPlan
+            {
+                Id = TenantTier.Basic,
+                Name = "Basic",
+                Price = 9.99,
+                PriceId = basicPriceId,
+                Features = new List<string>
+                {
+                    "Create Websites",
+                    "Tenant Management",
+                }
+            },
+            new TenantPlan
+            {
+                Id = TenantTier.Pro,
+                Name = "Pro",
+                Price = 40,
+                PriceId = proPriceId,
+                Features = new List<string>
+                {
+                    "Create Websites",
+                    "Tenant Management",
+                    "More storage space",
+                }
+            },
+            new TenantPlan
+            {
+                Id = TenantTier.Enterprise,
+                Name = "Enterprise",
+                Price = 60,
+                PriceId = enterprisePriceId,
+                Features = new List<string>
+                {
+                    "Create Websites",
+                    "Tenant Management",
+                    "More storage space",
+                    "Object storage in cloud",
+                }
+            }
+        );
+
+        dbContext.SaveChanges();
+    }
 }
 
 if (app.Environment.IsDevelopment())

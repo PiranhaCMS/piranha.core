@@ -72,6 +72,11 @@ namespace ContentRus.TenantManagement.Services
             return _context.Tenants.FirstOrDefault(t => t.Id == id);
         }
 
+        public IEnumerable<TenantPlan> GetAllTenantTiers()
+        {
+            return _context.TenantPlans;
+        }
+
         public IEnumerable<Tenant> GetAllTenants()
         {
             return _context.Tenants;

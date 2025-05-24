@@ -61,6 +61,13 @@ public class TenantController : ControllerBase
         return tenant is not null ? Ok(tenant) : NotFound();
     }
 
+    [HttpGet("tiers")]
+    public IActionResult GetAllTenantTiers()
+    {
+        var tenantTiers = _tenantService.GetAllTenantTiers();
+        return Ok(tenantTiers);
+    }
+
     // nao sei se este endpoint vai ser preciso na versao final
     [HttpGet("all")]
     public IActionResult GetAllTenants()
