@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using ContentRus.TenantManagement.Models;
 using ContentRus.TenantManagement.Services;
+using Microsoft.AspNetCore.Authorization;
 
 namespace ContentRus.TenantManagement.Controllers;
 
@@ -24,32 +25,47 @@ public class TenantController : ControllerBase
     }
     */
 
-    [HttpPut("{id:guid}/state")]
-    public IActionResult UpdateTenantState(Guid id, [FromBody] TenantState newState)
+    [HttpPut("state")]
+    public IActionResult UpdateTenantState([FromBody] TenantState newState)
     {
+        var id = GetTenantIdFromClaims();
         var updated = _tenantService.UpdateTenantState(id, newState);
         return updated ? NoContent() : NotFound();
     }
 
-    [HttpPut("{id:guid}/tier")]
-    public IActionResult UpdateTenantTier(Guid id, [FromBody] TenantTier newTier)
+    [HttpPut("tier")]
+    public IActionResult UpdateTenantTier([FromBody] TenantTier newTier)
     {
+        var id = GetTenantIdFromClaims();
         var updated = _tenantService.UpdateTenantTier(id, newTier);
         return updated ? NoContent() : NotFound();
     }
 
-    [HttpGet("{id:guid}")]
-    public IActionResult GetTenant(Guid id)
+    [Authorize]
+    [HttpGet("")]
+    public IActionResult GetTenant()
     {
-        var tenant = _tenantService.GetTenant(id);
+
+        var tenantId = GetTenantIdFromClaims();
+        var tenant = _tenantService.GetTenant(tenantId);
+
         return tenant is not null ? Ok(tenant) : NotFound();
     }
 
     // nao sei se este endpoint vai ser preciso na versao final
-    [HttpGet]
+    [HttpGet("all")]
     public IActionResult GetAllTenants()
     {
         var tenants = _tenantService.GetAllTenants();
         return Ok(tenants);
+    }
+
+    private Guid GetTenantIdFromClaims()
+    {
+        var tenantIdClaim = User.FindFirst("TenantId")?.Value;
+        if (tenantIdClaim == null)
+            throw new UnauthorizedAccessException("TenantId not found in token.");
+
+        return Guid.Parse(tenantIdClaim);
     }
 }

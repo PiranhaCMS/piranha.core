@@ -15,6 +15,13 @@ var jwtKey = Environment.GetEnvironmentVariable("JWT_SECRET_KEY");
 if (!string.IsNullOrEmpty(jwtKey))
 {
     builder.Configuration["JwtSettings:SecretKey"] = jwtKey;
+    builder.Services.Configure<JwtSettings>(
+        builder.Configuration.GetSection("JwtSettings")
+    );
+}
+else
+{
+    throw new Exception("JWT_SECRET_KEY is missing from .env");
 }
 
 var connectionString = $"Server={Environment.GetEnvironmentVariable("HOST")};" +
@@ -33,7 +40,28 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<UserService>();
 builder.Services.AddScoped<TenantService>();
 
-builder.Services.Configure<JwtSettings>(builder.Configuration.GetSection("JwtSettings"));
+
+// JWT Authentication
+var key = Encoding.ASCII.GetBytes(jwtKey);
+
+builder.Services.AddAuthentication(options =>
+{
+    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+})
+.AddJwtBearer(options =>
+{
+    options.TokenValidationParameters = new TokenValidationParameters
+    {
+        ValidateIssuer = false,
+        ValidateAudience = false,
+        ValidateIssuerSigningKey = true,
+        IssuerSigningKey = new SymmetricSecurityKey(key),
+        ValidateLifetime = true,
+        ClockSkew = TimeSpan.Zero
+    };
+});
+
 
 // CORS
 builder.Services.AddCors(options =>
