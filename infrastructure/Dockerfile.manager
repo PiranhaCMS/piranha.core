@@ -1,0 +1,33 @@
+
+FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build
+
+WORKDIR /app
+
+# Copy everything
+COPY . ./
+
+# Restore dependencies specifically targeting the manager project
+WORKDIR /app/ContentRus.ApplicationPlane/ContentRus.Manager
+
+RUN dotnet restore --interactive:false
+
+# Build the application
+RUN dotnet build -c Release --no-restore
+
+# Publish the application
+RUN dotnet publish -c Release --no-build -o /app/publish
+
+# Final image
+FROM mcr.microsoft.com/dotnet/aspnet:9.0 AS final
+WORKDIR /app
+COPY --from=build /app/publish .
+
+# Set environment variables
+ENV ASPNETCORE_URLS=http://+:80
+ENV ASPNETCORE_ENVIRONMENT=Production
+
+# Expose the port
+EXPOSE 80
+
+# Run the application
+ENTRYPOINT ["dotnet", "ContentRus.Manager.dll"]
