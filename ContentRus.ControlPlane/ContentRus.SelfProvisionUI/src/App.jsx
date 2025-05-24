@@ -8,6 +8,7 @@ import { Main } from './pages/Main';
 import { Billing } from './pages/Billing';
 import { Login } from './pages/Login';
 import { ProtectedRoute } from './components/ProtectedRoute';
+import { Profile } from './pages/Profile';
 
 function App() {
 
@@ -28,7 +29,8 @@ function App() {
                 <Routes>
                   <Route path="/" element={<Main />} />
                   <Route path="/test" element={<Test />} />
-                  <Route path="/bill" element={<Billing />} />
+                  <Route path="/billing" element={<Billing />} />
+                  <Route path="/profile" element={<Profile />} />
                 </Routes>
               </>
             </ProtectedRoute>
