@@ -65,7 +65,7 @@ public static class Menu
                             InternalId = "WorkflowsMy",
                             Name       = "My Workflows",
                             Route      = "~/manager/workflows/my",
-                            Policy     = Permission.ContentApproval, 
+                            Policy     = Permission.ContentApproval,
                             Css        = "fas fa-file-alt"
                         },
                         new MenuItem
@@ -73,8 +73,16 @@ public static class Menu
                             InternalId = "WorkflowsOthers",
                             Name       = "Other People's Workflows",
                             Route      = "~/manager/workflows/others",
-                            Policy     = Permission.ContentApproval, 
+                            Policy     = Permission.ContentApproval,
                             Css        = "fas fa-globe"
+                        },
+                        new MenuItem
+                        {
+                            InternalId = "WorkflowsReview",
+                            Name       = "Review",
+                            Route      = "~/manager/workflows/review",
+                            Policy     = Permission.ContentReview,
+                            Css        = "fas fa-clipboard-check"
                         }
                     }
             },

@@ -66,12 +66,11 @@ public sealed class Module : IModule
                 Title    = "My Workflows",
                 Category = "Workflows"
             },
-            new PermissionItem
-            {
-                Name     = Permission.ContentApprovalAdmin,
-                Title    = "Manage Workflows",
+            new PermissionItem {
+                Name     = Permission.ContentReview,
+                Title    = "Review Content",
                 Category = "Workflows"
-            }
+            },
     };
 
     /// <summary>

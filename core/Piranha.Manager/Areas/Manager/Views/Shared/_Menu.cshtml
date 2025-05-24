@@ -7,7 +7,7 @@
 @{
     var menu     = await ManagerMenu.Items.GetForUser(User, Auth);
     var logout   = Piranha.App.Modules.Manager().LogoutUrl;
-    var isAdmin  = (await Auth.AuthorizeAsync(User, Permission.ContentApprovalAdmin)).Succeeded;
+    var isReviewer  = (await Auth.AuthorizeAsync(User, Permission.ContentReview)).Succeeded;
 }
 
 <nav class="navbar navbar-left fixed-top navbar-dark bg-dark">
@@ -40,29 +40,5 @@
                 }
             }
         }
-
-        @* --- ABA WORKFLOWS PERSONALIZADA --- *@
-        <li class="nav-item nav-header">
-            <span class="navbar-text">
-                <i class="fas fa-tasks"></i> @Localizer.Menu["Workflows"]
-            </span>
-        </li>
-        <li class="nav-item@(ViewBag.MenuItem == "WorkflowsMy" ? " active" : "")">
-            <a class="nav-link" asp-area="Manager" asp-page="/Workflows/My" tabindex="-1">
-                <i class="fas fa-file-alt"></i>
-                @(isAdmin ? "Conteúdos para Aprovação" : "Meus Conteúdos")
-            </a>
-        </li>
-        <li class="nav-item@(ViewBag.MenuItem == "WorkflowsOthers" ? " active" : "")">
-            <a class="nav-link" asp-area="Manager" asp-page="/Workflows/Others" tabindex="-1">
-                <i class="fas fa-globe"></i> Conteúdos dos Outros
-            </a>
-        </li>
-
-        <li class="nav-item nav-header">
-            <a class="navbar-text" href="@Url.Content(logout)">
-                <i class="fas fa-power-off"></i>@Localizer.Menu["Logout"]
-            </a>
-        </li>
     </ul>
 </nav>

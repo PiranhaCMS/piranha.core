@@ -2,11 +2,16 @@ window.piranha = window.piranha || {};
 window.piranha.workflow = (function() {
   const apiBase = '/manager/api/workflow';
 
-  // Verifica se o usuário é admin
   async function isAdmin() {
     const res = await fetch(`${apiBase}/isadmin`);
     const json = await res.json();
     return json.isAdmin;
+  }
+
+    async function isReviewer() {
+    const res = await fetch(`${apiBase}/isreviewer`);
+    const json = await res.json();
+    return json.isReviewer;
   }
 
   // Badge de estado
@@ -20,7 +25,7 @@ window.piranha.workflow = (function() {
     }
   }
 
-  // Carrega conteúdo para admin (pendentes)
+  // Carrega conteúdo pendente para admin
   async function loadAdmin() {
     const res   = await fetch(`${apiBase}/pending`);
     const items = await res.json();
@@ -42,7 +47,7 @@ window.piranha.workflow = (function() {
     });
   }
 
-  // Carrega conteúdo para usuário normal (meus envios)
+  // Carrega os envios do próprio usuário
   async function loadUser() {
     const res   = await fetch(`${apiBase}/mine`);
     const items = await res.json();
@@ -76,6 +81,34 @@ window.piranha.workflow = (function() {
     });
   }
 
+  // Carrega conteúdos para revisão (Review page)
+  async function loadReview() {
+    // só executa se for admin OU reviewer
+    const [admin, reviewer] = await Promise.all([isAdmin(), isReviewer()]);
+    if (!admin && !reviewer) {
+      document.body.innerHTML = '<div class="alert alert-danger p-3">Access denied.</div>';
+      return;
+    }
+    const res   = await fetch(`${apiBase}/review`);
+    const items = await res.json();
+    const tbody = document.querySelector('#reviewTable tbody');
+    tbody.innerHTML = '';
+    items.forEach(item => {
+      const tr = document.createElement('tr');
+      tr.innerHTML = `
+        <td>${item.title}</td>
+        <td>${item.contentType}</td>
+        <td>${item.authorName || item.authorId}</td>
+        <td>${new Date(item.submitted).toLocaleString('pt-PT')}</td>
+        <td>
+          <button class="btn btn-sm btn-primary" onclick="piranha.workflow.openReview('${item.id}')">
+            Revisar
+          </button>
+        </td>`;
+      tbody.appendChild(tr);
+    });
+  }
+
   // Contador de pendentes no menu
   let lastCount = 0;
   async function updateCount() {
@@ -104,7 +137,12 @@ window.piranha.workflow = (function() {
     }
   }
 
-  // Inicializadores
+  // Redireciona para a página de detalhes de revisão
+  function openReview(id) {
+    window.location.href = `/manager/workflows/review/${id}`;
+  }
+
+  // Inicializadores públicos
   function initAdminPage() {
     loadAdmin();
     updateCount();
@@ -118,13 +156,21 @@ window.piranha.workflow = (function() {
 
   function initOthersPage() {
     loadOthers();
+    setInterval(loadOthers, 30000);
+  }
+
+  function initReviewPage() {
+    loadReview();
   }
 
   return {
     isAdmin,
+    isReviewer, 
     initAdminPage,
     initUserPage,
     initOthersPage,
-    action
+    initReviewPage,
+    action,
+    openReview
   };
 })();

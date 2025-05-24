@@ -1,0 +1,34 @@
+@page "~/manager/workflows/review"
+@model Piranha.Manager.Models.WorkflowsReviewViewModel
+@using Piranha.Manager.Localization
+@inject ManagerLocalizer Localizer
+
+@{
+    Layout        = "/Areas/Manager/Views/Shared/_Layout.cshtml";
+    ViewBag.MenuItem = "WorkflowsReview";
+    ViewBag.Title = Localizer.Menu["Review"] ?? "Review";
+}
+
+<h1>@ViewBag.Title</h1>
+
+<table id="reviewTable" class="table table-striped">
+    <thead>
+        <tr>
+            <th>Título</th>
+            <th>Tipo</th>
+            <th>Autor</th>
+            <th>Submetido Em</th>
+            <th>Ações</th>
+        </tr>
+    </thead>
+    <tbody></tbody>
+</table>
+
+@section Scripts {
+    <script src="~/manager/assets/js/piranha.workflow.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            piranha.workflow.initReviewPage();
+        });
+    </script>
+}

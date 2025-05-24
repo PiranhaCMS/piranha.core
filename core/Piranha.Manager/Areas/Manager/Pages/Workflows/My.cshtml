@@ -9,8 +9,7 @@
 @{
     Layout = "_Layout";
     ViewBag.MenuItem = "WorkflowsMy";
-    var isAdmin = (await Auth.AuthorizeAsync(User, Permission.ContentApprovalAdmin)).Succeeded;
-    var title   = isAdmin ? "Conteúdos para Aprovação" : "Meus Conteúdos";
+    var title = "My Work";
 }
 
 <h1>@title</h1>
@@ -20,8 +19,7 @@
         <tr>
             <th>Título</th>
             <th>Tipo</th>
-            @if (!isAdmin) { <th>Estado</th> }
-            @if (isAdmin)  { <th>Autor</th><th>Estado</th><th>Ações</th> }
+            <th>Estado</th>
         </tr>
     </thead>
     <tbody></tbody>
