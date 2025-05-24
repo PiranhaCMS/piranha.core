@@ -10,6 +10,7 @@ export function Login() {
 
     const handleSubmit = async () => {
         const endpoint = isRegister ? 'register' : 'login';
+        const navigate_url = isRegister ? '/profile' : '/';
 
         const response = await fetch(`${API_URL}/user/${endpoint}`, {
             method: 'POST',
@@ -20,7 +21,7 @@ export function Login() {
         if (response.ok) {
             const { token } = await response.json();
             localStorage.setItem('token', token);
-            navigate('/');
+            navigate(navigate_url);
         } else {
             const error = await response.json();
             alert(error.message);

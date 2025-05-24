@@ -41,6 +41,15 @@ public class TenantController : ControllerBase
         return updated ? NoContent() : NotFound();
     }
 
+    [HttpPut("info")]
+    public IActionResult UpdateTenantInfo([FromBody] TenantInfoDTO tenantInfo)
+    {
+        var id = GetTenantIdFromClaims();
+
+        var updated = _tenantService.UpdateTenantInfo(id, tenantInfo);
+        return updated ? NoContent() : NotFound();
+    }
+
     [Authorize]
     [HttpGet("")]
     public IActionResult GetTenant()
@@ -65,6 +74,7 @@ public class TenantController : ControllerBase
         var tenantIdClaim = User.FindFirst("TenantId")?.Value;
         if (tenantIdClaim == null)
             throw new UnauthorizedAccessException("TenantId not found in token.");
+        Console.WriteLine($"TenantId from claims: {tenantIdClaim}");
 
         return Guid.Parse(tenantIdClaim);
     }

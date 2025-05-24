@@ -15,13 +15,11 @@ namespace ContentRus.TenantManagement.Services
             _context = context;
         }
 
-        public Tenant CreateTenant(string email)
+        public Tenant CreateTenant()
         {
             var tenant = new Tenant
             {
                 Id = Guid.NewGuid(),
-                Name = email,
-                Email = email,
                 Tier = TenantTier.Basic,
                 State = TenantState.Created,
                 CreatedAt = DateTime.UtcNow
@@ -49,6 +47,20 @@ namespace ContentRus.TenantManagement.Services
             if (tenant == null) return false;
 
             tenant.Tier = newTier;
+            _context.Tenants.Update(tenant);
+            _context.SaveChanges();
+            return true;
+        }
+
+        public bool UpdateTenantInfo(Guid id, TenantInfoDTO tenantInfo)
+        {
+            var tenant = GetTenant(id);
+            if (tenant == null) return false;
+
+            tenant.Name = tenantInfo.Name;
+            tenant.Country = tenantInfo.Country;
+            tenant.Address = tenantInfo.Address;
+
             _context.Tenants.Update(tenant);
             _context.SaveChanges();
             return true;

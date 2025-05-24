@@ -50,7 +50,7 @@ public class UserController : ControllerBase
     [HttpPost("register")]
     public IActionResult RegisterUser([FromBody] AuthRequest authRequest)
     {
-        var tenant = _tenantService.CreateTenant(authRequest.Email);
+        var tenant = _tenantService.CreateTenant();
         var user = _userService.CreateUser(authRequest.Email, authRequest.Password, tenant.Id);
 
         var token = GenerateJwtToken(user);
