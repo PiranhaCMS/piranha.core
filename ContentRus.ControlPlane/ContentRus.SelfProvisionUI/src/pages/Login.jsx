@@ -23,8 +23,9 @@ export function Login() {
             });
 
             if (response.ok) {
-                const { token } = await response.json();
+                const { token, username } = await response.json();
                 localStorage.setItem('token', token);
+                localStorage.setItem('username', username);
                 navigate(navigate_url);
             } else {
                 if (isRegister) {

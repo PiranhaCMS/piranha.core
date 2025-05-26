@@ -77,6 +77,7 @@ export function Profile() {
         onSuccess: () => {
             queryClient.invalidateQueries(['tenant']);
             setEditMode(false);
+            localStorage.setItem('username', formData.name);
             
             if (isFirstEdit) {
                 navigate('/billing');

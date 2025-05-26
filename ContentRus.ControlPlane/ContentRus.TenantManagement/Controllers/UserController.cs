@@ -47,6 +47,19 @@ public class UserController : ControllerBase
         return tokenHandler.WriteToken(token);
     }
 
+    private string GetUsername(User user)
+    {
+        var tenant = _tenantService.GetTenant(user.TenantId);
+        if (tenant != null)
+        {
+            if (tenant.Name != null)
+            {
+                return tenant.Name;
+            }
+        }
+        return user.Email;
+    }
+
     [HttpPost("register")]
     public IActionResult RegisterUser([FromBody] AuthRequest authRequest)
     {
@@ -54,7 +67,7 @@ public class UserController : ControllerBase
         var user = _userService.CreateUser(authRequest.Email, authRequest.Password, tenant.Id);
 
         var token = GenerateJwtToken(user);
-        return Ok(new { token, user });
+        return Ok(new { token, username = GetUsername(user) });
     }
 
     [HttpPost("login")]
@@ -67,7 +80,7 @@ public class UserController : ControllerBase
         }
 
         var token = GenerateJwtToken(user);
-        return Ok(new { token, user });
+        return Ok(new { token, username = GetUsername(user) });
     }
 
     [HttpPut("{id:int}/password")]
