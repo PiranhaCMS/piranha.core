@@ -7,7 +7,7 @@ using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
-
+using Microsoft.AspNetCore.Authorization;
 
 namespace ContentRus.TenantManagement.Controllers;
 
@@ -90,5 +90,12 @@ public class UserController : ControllerBase
     {
         var users = _userService.GetAllUsers();
         return Ok(users);
+    }
+
+    [Authorize]
+    [HttpGet("validate")]
+    public IActionResult ValidateToken()
+    {
+        return Ok(new { valid = true });
     }
 }
