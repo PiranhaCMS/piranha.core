@@ -1,5 +1,3 @@
-# Add your credentials to k3d-registries.yaml to not get rate-limited when pulling images from Docker Hub.
-
 REGISTRY_NAME = registry
 REGISTRY_PORT = 5000
 CLUSTER_NAME = cluster
@@ -63,6 +61,11 @@ create-cluster:
 		helm install istio-base istio/base -n istio-system --set defaultRevision=default --create-namespace; \
 		helm install istiod istio/istiod -n istio-system --wait; \
 		helm install istio-ingress istio/gateway -n tcommon --create-namespace --wait; \
+		helm repo add argo https://argoproj.github.io/argo-helm; \
+		helm repo update; \
+		helm install argowf argo/argo-workflows -n argo -f infrastructure/argo/argo-workflows/setup/wf-values.yml --create-namespace; \
+		kubectl create rolebinding default-admin --clusterrole=admin --serviceaccount=argo:default -n argo; \
+		helm install argocd argo/argo-cd -n argo -f infrastructure/argo/argo-workflows/setup/cd-values.yml --create-namespace; \
 	else \
 		echo "Cluster '$(CLUSTER_NAME)' already exists."; \
 	fi

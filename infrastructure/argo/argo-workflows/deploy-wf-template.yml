@@ -1,0 +1,32 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Workflow
+metadata:
+  annotations:
+    workflows.argoproj.io/description: Deploy Argo Workflow!".
+    workflows.argoproj.io/maintainer: '@belchior'
+  generateName: deploy-wf
+spec:
+
+  # This is the entrypoint of the workflow. (the template that will be executed first)
+  entrypoint: steps-template
+
+  templates:
+  
+  # Template Invocators
+  - name: steps-template
+    steps:
+    - - name: get-azureblob-credentials
+        template: hello-script
+
+  # Template Definitions
+  - name: hello-script
+    script:
+      image: python:3.9
+      command: [python]
+      source: |
+        import time
+        print("Hello, Argo Workflows!")
+        print(time.time())
+  
+
+
