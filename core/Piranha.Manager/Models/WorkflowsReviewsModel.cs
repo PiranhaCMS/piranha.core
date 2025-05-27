@@ -1,11 +1,13 @@
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc.RazorPages;
+using System;
 
 namespace Piranha.Manager.Models
 {
-    [Authorize(Policy = Permission.ContentReview)]
-    public class WorkflowsReviewViewModel : PageModel
+    public class WorkflowReviewItem
     {
-        public void OnGet() { }
+        public Guid Id { get; set; }
+        public string Title { get; set; }
+        public string ContentType { get; set; }
+        public string AuthorName { get; set; }
+        public DateTime Submitted { get; set; }
     }
 }

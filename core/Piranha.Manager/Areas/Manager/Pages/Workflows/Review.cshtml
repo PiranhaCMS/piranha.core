@@ -4,31 +4,143 @@
 @inject ManagerLocalizer Localizer
 
 @{
-    Layout        = "/Areas/Manager/Views/Shared/_Layout.cshtml";
+    Layout = "_Layout";
     ViewBag.MenuItem = "WorkflowsReview";
-    ViewBag.Title = Localizer.Menu["Review"] ?? "Review";
+    ViewBag.Title = Localizer.Menu["Review"] ?? "Review Content";
 }
 
-<h1>@ViewBag.Title</h1>
+<div class="top">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">@Localizer.Menu["Content"]</li>
+            <li class="breadcrumb-item active" aria-current="page">@ViewBag.Title</li>
+        </ol>
+    </nav>
+    <div class="container-fluid">
+        <div class="top-nav">
+            @* Aqui você poderia colocar ações adicionais se houver *@
+        </div>
+    </div>
+</div>
 
-<table id="reviewTable" class="table table-striped">
-    <thead>
-        <tr>
-            <th>Título</th>
-            <th>Tipo</th>
-            <th>Autor</th>
-            <th>Submetido Em</th>
-            <th>Ações</th>
-        </tr>
-    </thead>
-    <tbody></tbody>
-</table>
+<div class="container-fluid app">
+    <div class="row">
+        <div class="col">
+            <table id="reviewTable" class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>@Localizer.Content["Title"]</th>
+                        <th>@Localizer.Content["Type"]</th>
+                        <th>@Localizer.Content["Author"]</th>
+                        <th>@Localizer.Content["Submission Date"]</th>
+                        <th>@Localizer.Content["Actions"]</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach(var item in Model.ReviewItems)
+                    {
+                        <tr data-id="@item.Id">
+                            <td>@item.Title</td>
+                            <td>@item.ContentType</td>
+                            <td>@item.AuthorName</td>
+                            <td>@item.Submitted.ToString("g")</td>
+                            <td>
+                                <button class="btn btn-sm btn-success btn-approve" title="Approve">
+                                    <i class="fas fa-check"></i>
+                                </button>
+                                <button class="btn btn-sm btn-danger btn-reject" title="Reject"
+                                        data-id="@item.Id"
+                                        data-title="@item.Title">
+                                    <i class="fas fa-times"></i>
+                                </button>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
 
-@section Scripts {
+<div class="modal fade" id="rejectModal" tabindex="-1" role="dialog" aria-labelledby="rejectModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="rejectModalLabel">@Localizer.Content["Reject Content"]</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p>@Localizer.Content["Please leave a comment before rejecting the content:"]</p>
+        <textarea id="rejectComment" class="form-control" rows="4"></textarea>
+        <input type="hidden" id="rejectItemId" />
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">
+          @Localizer.Content["Cancel"]
+        </button>
+        <button type="button" class="btn btn-danger" id="confirmReject">
+          @Localizer.Content["Confirm Reject"]
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+@section script {
     <script src="~/manager/assets/js/piranha.workflow.js"></script>
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            piranha.workflow.initReviewPage();
+    <script type="text/javascript">
+    document.addEventListener('DOMContentLoaded', () => {
+        // Inicializa a lista via seu script
+        piranha.workflow.initReviewPage();
+
+        // Tratador para botão Aprovar
+        document.querySelectorAll('.btn-approve').forEach(btn => {
+            btn.addEventListener('click', async () => {
+                const id = btn.closest('tr').dataset.id;
+                try {
+                    await piranha.workflow.approve(id);
+                    // Remove a linha ou atualiza o estado
+                    btn.closest('tr').remove();
+                    piranha.notifications.push({ body: "Content approved.", type: "success", hide: true });
+                } catch {
+                    piranha.notifications.push({ body: "Failed to approve.", type: "danger", hide: true });
+                }
+            });
         });
+
+        // Abrir modal de rejeição
+        document.querySelectorAll('.btn-reject').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const row = btn.closest('tr');
+                const id  = row.dataset.id;
+                const title = btn.dataset.title;
+                document.getElementById('rejectItemId').value = id;
+                // opcional: mostrar título no modal
+                document.getElementById('rejectModalLabel').textContent = `Reject: ${title}`;
+                $('#rejectModal').modal('show');
+            });
+        });
+
+        // Confirmar rejeição com comentário
+        document.getElementById('confirmReject').addEventListener('click', async () => {
+            const id = document.getElementById('rejectItemId').value;
+            const comment = document.getElementById('rejectComment').value.trim();
+            if (!comment) {
+                piranha.notifications.push({ body: "Please enter a comment.", type: "warning", hide: true });
+                return;
+            }
+            try {
+                await piranha.workflow.reject(id, comment);
+                // Fecha modal, remove linha e notifica
+                $('#rejectModal').modal('hide');
+                document.querySelector(`tr[data-id="${id}"]`).remove();
+                piranha.notifications.push({ body: "Content rejected.", type: "success", hide: true });
+            } catch {
+                piranha.notifications.push({ body: "Failed to reject.", type: "danger", hide: true });
+            }
+        });
+    });
     </script>
 }

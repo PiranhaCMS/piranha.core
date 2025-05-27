@@ -60,17 +60,7 @@ public sealed class Module : IModule
         new PermissionItem { Name = Permission.SitesDelete, Title = "Delete Sites", Category = "Sites" },
         new PermissionItem { Name = Permission.SitesEdit, Title = "Edit Sites", Category = "Sites" },
         new PermissionItem { Name = Permission.SitesSave, Title = "Save Sites", Category = "Sites" },
-        new PermissionItem
-            {
-                Name     = Permission.ContentApproval,
-                Title    = "My Workflows",
-                Category = "Workflows"
-            },
-            new PermissionItem {
-                Name     = Permission.ContentReview,
-                Title    = "Review Content",
-                Category = "Workflows"
-            },
+        new PermissionItem { Name = Permission.ContentReview, Title = "Review Content", Category = "Workflows"},
     };
 
     /// <summary>

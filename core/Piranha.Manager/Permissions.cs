@@ -57,7 +57,6 @@ public static class Permission
     public const string SitesDelete = "PiranhaSitesDelete";
     public const string SitesEdit = "PiranhaSitesEdit";
     public const string SitesSave = "PiranhaSitesSave";
-    public const string ContentApproval = "PiranhaContentApproval";
     public const string ContentReview = "PiranhaContentReview";
 
     public static readonly PermissionsStructure PermissionsStructure =
@@ -80,8 +79,7 @@ public static class Permission
                     new(ContentEdit),
                     new(ContentSave),
                     new(ContentDelete),
-                    new(ContentApproval),
-                    new(ContentReview)
+                    new(ContentReview),
                 }),
         });
 
@@ -129,8 +127,7 @@ public static class Permission
             SitesDelete,
             SitesEdit,
             SitesSave,
-            ContentApproval,
-            ContentReview
+            ContentReview,
         };
     }
 }

@@ -9,31 +9,74 @@
 @{
     Layout = "_Layout";
     ViewBag.MenuItem = "WorkflowsMy";
-    var title = "My Work";
+    ViewBag.Title = Localizer.Menu["My Contents"] ?? "My Contents";
 }
 
-<h1>@title</h1>
+<div class="top">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">@Localizer.Menu["Content"]</li>
+            <li class="breadcrumb-item active" aria-current="page">@ViewBag.Title</li>
+        </ol>
+    </nav>
 
-<table id="workflowTable" class="table table-striped">
-    <thead>
-        <tr>
-            <th>Título</th>
-            <th>Tipo</th>
-            <th>Estado</th>
-        </tr>
-    </thead>
-    <tbody></tbody>
-</table>
+    <div class="container-fluid">
+        <div class="top-nav">
+            @* Aqui você pode iterar ações configuradas, se existirem *@
+            @foreach (var action in Piranha.Manager.Actions.Toolbars.PageList)
+            {
+                <partial name="@action.ActionView" />
+            }
+            @* Botão customizado de "Add New Content" *@
+            <button id="btnAddNewContent"
+                    type="button"
+                    class="btn btn-sm btn-primary btn-labeled"
+                    onclick="piranha.workflow.openAddModal()">
+                <i class="fas fa-plus"></i>
+                @Localizer.Page["Add New Content"]
+            </button>
+        </div>
+    </div>
+</div>
 
-@section Scripts {
+<div class="container-fluid app" :class="{ ready: !loading }">
+    <div class="row">
+        <div class="col">
+            <table id="workflowTable" class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>@Localizer.Content["Title"]</th>
+                        <th>@Localizer.Content["Type"]</th>
+                        <th>@Localizer.Content["State"]</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+@* Modal de criação de conteúdo (padrão do Manager ou customizado) *@
+<partial name="~/Areas/Manager/Shared/Partial/_PageAddModal.cshtml" />
+
+@section script {
     <script src="~/manager/assets/js/piranha.workflow.js"></script>
-    <script>
+    <script type="text/javascript">
         document.addEventListener('DOMContentLoaded', async () => {
+            // Inicializa conforme perfil do usuário
             if (await piranha.workflow.isAdmin()) {
                 piranha.workflow.initAdminPage();
             } else {
                 piranha.workflow.initUserPage();
             }
         });
+
+        // Função chamada pelo botão "Add New Content"
+        piranha.workflow.openAddModal = function() {
+            // Exemplo: reusar o modal de criação de páginas/posts
+            piranha.pageedit.open(null, () => {
+                piranha.workflow.initUserPage();
+            });
+        };
     </script>
 }

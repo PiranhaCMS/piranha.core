@@ -63,23 +63,23 @@ public static class Menu
                        new MenuItem
                         {
                             InternalId = "WorkflowsMy",
-                            Name       = "My Workflows",
+                            Name       = "My Content",
                             Route      = "~/manager/workflows/my",
-                            Policy     = Permission.ContentApproval,
+                            Policy     = Permission.Content,
                             Css        = "fas fa-file-alt"
                         },
                         new MenuItem
                         {
                             InternalId = "WorkflowsOthers",
-                            Name       = "Other People's Workflows",
+                            Name       = "Published Content",
                             Route      = "~/manager/workflows/others",
-                            Policy     = Permission.ContentApproval,
+                            Policy     = Permission.Content,
                             Css        = "fas fa-globe"
                         },
                         new MenuItem
                         {
                             InternalId = "WorkflowsReview",
-                            Name       = "Review",
+                            Name       = "Review Content",
                             Route      = "~/manager/workflows/review",
                             Policy     = Permission.ContentReview,
                             Css        = "fas fa-clipboard-check"

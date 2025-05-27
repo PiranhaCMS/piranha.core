@@ -8,19 +8,13 @@ window.piranha.workflow = (function() {
     return json.isAdmin;
   }
 
-    async function isReviewer() {
-    const res = await fetch(`${apiBase}/isreviewer`);
-    const json = await res.json();
-    return json.isReviewer;
-  }
-
   // Badge de estado
   function stateBadge(state) {
     switch(state) {
-      case 'PendingReview': return '<span class="badge badge-warning">Pendente</span>';
-      case 'NeedsChanges':   return '<span class="badge badge-info">Precisa de alterações</span>';
-      case 'Accepted':       return '<span class="badge badge-success">Aceito</span>';
-      case 'Denied':         return '<span class="badge badge-danger">Rejeitado</span>';
+      case 'PendingReview': return '<span class="badge badge-warning">Pending</span>';
+      case 'NeedsChanges':   return '<span class="badge badge-info">Needs Changes</span>';
+      case 'Accepted':       return '<span class="badge badge-success">Approved</span>';
+      case 'Denied':         return '<span class="badge badge-danger">Rejected</span>';
       default:               return `<span class="badge badge-secondary">${state}</span>`;
     }
   }
@@ -164,8 +158,7 @@ window.piranha.workflow = (function() {
   }
 
   return {
-    isAdmin,
-    isReviewer, 
+    isAdmin, 
     initAdminPage,
     initUserPage,
     initOthersPage,
