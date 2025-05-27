@@ -16,6 +16,11 @@ namespace Piranha.Manager;
 public static class Permission
 {
     public const string Admin = "PiranhaAdmin";
+
+    public const string LegalTeam = "PiranhaLegalTeam";
+    public const string LegalTeamReview = "PiranhaLegalTeamReview";
+    public const string LegalTeamDeny = "PiranhaLegalTeamDeny";
+
     public const string Aliases = "PiranhaAliases";
     public const string AliasesDelete = "PiranhaAliasesDelete";
     public const string AliasesEdit = "PiranhaAliasesEdit";
@@ -40,6 +45,11 @@ public static class Permission
     public const string MediaAddFolder = "PiranhaMediaAddFolder";
     public const string MediaDeleteFolder = "PiranhaMediaDeleteFolder";
     public const string Modules = "PiranhaModules";
+
+    public const string Reviewer = "PiranhaReviewer";
+    public const string ReviewerStep1 = "PiranhaReviewerStep1";
+    public const string ReviewerStep2 = "PiranhaReviewerStep2";
+
     public const string Pages = "PiranhaPages";
     public const string PagesAdd = "PiranhaPagesAdd";
     public const string PagesDelete = "PiranhaPagesDelete";
@@ -83,9 +93,30 @@ public static class Permission
                 }),
         });
 
+    public static readonly PermissionsStructure LegalTeamPermissionsStructure =
+        // Legal Team Permission
+        new(LegalTeam, new PermissionsStructure[]
+        {
+            new(LegalTeamReview),
+            new(LegalTeamDeny)
+        });
+
+    public static readonly PermissionsStructure ReviewerPermissionsStructure =
+        // Reviewer Permission
+        new(Reviewer, new PermissionsStructure[]
+        {
+            new(ReviewerStep1),
+            new(ReviewerStep2)
+        });
+
     public static string[] All() {
         return new[] {
             Admin,
+
+            LegalTeam,
+            LegalTeamReview,
+            LegalTeamDeny,
+
             Aliases,
             AliasesDelete,
             AliasesEdit,
@@ -110,6 +141,11 @@ public static class Permission
             MediaAddFolder,
             MediaDeleteFolder,
             Modules,
+
+            Reviewer,
+            ReviewerStep1,
+            ReviewerStep2,
+
             Pages,
             PagesAdd,
             PagesDelete,
