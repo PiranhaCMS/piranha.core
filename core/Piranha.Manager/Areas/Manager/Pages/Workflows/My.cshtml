@@ -1,15 +1,13 @@
 @page "/manager/workflows/my"
-@model Piranha.Manager.Models.WorkflowsMyViewModel
 @attribute [Area("Manager")]
 
 @using Piranha.Manager.Localization
 @inject ManagerLocalizer Localizer
-@inject IAuthorizationService Auth
 
 @{
     Layout = "_Layout";
     ViewBag.MenuItem = "WorkflowsMy";
-    ViewBag.Title = Localizer.Menu["My Contents"] ?? "My Contents";
+    ViewBag.Title    = Localizer.Menu["My Contents"] ?? "My Contents";
 }
 
 <div class="top">
@@ -22,58 +20,55 @@
 
     <div class="container-fluid">
         <div class="top-nav">
-            @foreach (var action in Piranha.Manager.Actions.Toolbars.PageList)
-            {
-                <partial name="@action.ActionView" />
-            }
-            <button id="btnAddNewContent"
-                    type="button"
-                    class="btn btn-sm btn-primary btn-labeled"
-                    onclick="piranha.workflow.openAddModal()">
-                <i class="fas fa-plus"></i>
-                @Localizer.Page["Add New Content"]
+            <button class="btn btn-sm btn-primary btn-labeled">
+                <i class="fas fa-plus"></i> @Localizer.Page["Add New Content"]
             </button>
         </div>
     </div>
 </div>
 
-<div class="container-fluid app" :class="{ ready: !loading }">
-    <div class="row">
-        <div class="col">
-            <table id="workflowTable" class="table table-striped">
-                <thead>
+<div class="container-fluid app ready">
+    <!-- nav pills (All / Pending / Approved / Rejected) -->
+    <ul class="nav nav-pills mb-3" id="myTabs">
+        <li class="nav-item"><a class="nav-link active" data-toggle="pill" href="#my-all">All</a></li>
+        <li class="nav-item"><a class="nav-link" data-toggle="pill" href="#my-pending">Pending</a></li>
+        <li class="nav-item"><a class="nav-link" data-toggle="pill" href="#my-approved">Approved</a></li>
+        <li class="nav-item"><a class="nav-link" data-toggle="pill" href="#my-rejected">Rejected</a></li>
+    </ul>
+
+    <div class="tab-content">
+        <!-- ALL -->
+        <div class="tab-pane fade show active" id="my-all">
+            <table class="table table-striped" id="workflowTable">
+                <thead class="thead-light">
                     <tr>
                         <th>@Localizer.Content["Title"]</th>
                         <th>@Localizer.Content["Type"]</th>
                         <th>@Localizer.Content["State"]</th>
                     </tr>
                 </thead>
-                <tbody></tbody>
+                <tbody>
+                    <tr>
+                        <td><a class="text-dark" href="/manager/posts/edit/10">Draft: Summer Campaign</a></td>
+                        <td>BlogPost</td>
+                        <td><span class="badge bg-warning text-dark">Pending</span></td>
+                    </tr>
+                    <tr>
+                        <td><a class="text-dark" href="/manager/posts/edit/11">Product Launch</a></td>
+                        <td>Article</td>
+                        <td><span class="badge bg-success">Approved</span></td>
+                    </tr>
+                    <tr>
+                        <td><a class="text-dark" href="/manager/posts/edit/12">Internal Memo</a></td>
+                        <td>NewsItem</td>
+                        <td><span class="badge bg-danger">Rejected</span></td>
+                    </tr>
+                </tbody>
             </table>
         </div>
+
+        <div class="tab-pane fade" id="my-pending"><p class="text-muted">No pending items.</p></div>
+        <div class="tab-pane fade" id="my-approved"><p class="text-muted">No approved items.</p></div>
+        <div class="tab-pane fade" id="my-rejected"><p class="text-muted">No rejected items.</p></div>
     </div>
 </div>
-
-<partial name="~/Areas/Manager/Shared/Partial/_PageAddModal.cshtml" />
-
-@section script {
-    <script src="~/manager/assets/js/piranha.workflow.js"></script>
-    <script type="text/javascript">
-        document.addEventListener('DOMContentLoaded', async () => {
-            // Inicializa conforme perfil do usuário
-            if (await piranha.workflow.isAdmin()) {
-                piranha.workflow.initAdminPage();
-            } else {
-                piranha.workflow.initUserPage();
-            }
-        });
-
-        // Função chamada pelo botão "Add New Content"
-        piranha.workflow.openAddModal = function() {
-            // Exemplo: reusar o modal de criação de páginas/posts
-            piranha.pageedit.open(null, () => {
-                piranha.workflow.initUserPage();
-            });
-        };
-    </script>
-}

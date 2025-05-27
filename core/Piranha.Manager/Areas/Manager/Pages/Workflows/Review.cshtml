@@ -5,7 +5,7 @@
 @{
     Layout = "_Layout";
     ViewBag.MenuItem = "WorkflowsReview";
-    ViewBag.Title = Localizer.Menu["Review"] ?? "Review Content";
+    ViewBag.Title    = Localizer.Menu["Review"] ?? "Review Content";
 }
 
 <div class="top">
@@ -15,17 +15,28 @@
             <li class="breadcrumb-item active" aria-current="page">@ViewBag.Title</li>
         </ol>
     </nav>
-    <div class="container-fluid">
-        <div class="top-nav">
-        </div>
-    </div>
 </div>
 
-<div class="container-fluid app">
-    <div class="row">
-        <div class="col">
-            <table id="reviewTable" class="table table-striped">
-                <thead>
+<div class="container-fluid app ready">
+    <!-- Nav pills -->
+    <ul class="nav nav-pills mb-3" id="reviewTabs" role="tablist">
+        <li class="nav-item">
+            <a class="nav-link active" data-toggle="pill" href="#tab-pending" role="tab">Pending</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" data-toggle="pill" href="#tab-approved" role="tab">Approved</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" data-toggle="pill" href="#tab-rejected" role="tab">Rejected</a>
+        </li>
+    </ul>
+
+    <div class="tab-content">
+        <!-- Pending -->
+        <div class="tab-pane fade show active" id="tab-pending" role="tabpanel">
+            @* tabela idêntica à de Comments *@
+            <table class="table table-hover">
+                <thead class="thead-light">
                     <tr>
                         <th>@Localizer.Content["Title"]</th>
                         <th>@Localizer.Content["Type"]</th>
@@ -35,108 +46,46 @@
                     </tr>
                 </thead>
                 <tbody>
-                        <tr data-id="Id">
-                            <td>Title</td>
-                            <td>ContentType</td>
-                            <td>AuthorName</td>
-                            <td>Submitted.ToString("g")</td>
-                            <td>
-                                <button class="btn btn-sm btn-success btn-approve" title="Approve">
-                                    <i class="fas fa-check"></i>
-                                </button>
-                                <button class="btn btn-sm btn-danger btn-reject" title="Reject"
-                                        data-id="Id"
-                                        data-title="Title">
-                                    <i class="fas fa-times"></i>
-                                </button>
-                            </td>
-                        </tr>
-                    }
+                    <tr>
+                        <td><a class="text-dark" href="/manager/posts/edit/1">Lorem Ipsum Dolor</a></td>
+                        <td>BlogPost</td>
+                        <td>alice@example.com</td>
+                        <td>2025-05-27 10:15</td>
+                        <td>
+                            <button class="btn btn-sm btn-success"><i class="fas fa-check"></i></button>
+                            <button class="btn btn-sm btn-danger" data-toggle="modal" data-target="#rejectModal"><i class="fas fa-times"></i></button>
+                        </td>
+                    </tr>
+                    <!-- …outras linhas… -->
                 </tbody>
             </table>
+        </div>
+
+        <!-- Approved -->
+        <div class="tab-pane fade" id="tab-approved" role="tabpanel">
+            <p class="text-muted">No approved items (static demo).</p>
+        </div>
+
+        <!-- Rejected -->
+        <div class="tab-pane fade" id="tab-rejected" role="tabpanel">
+            <p class="text-muted">No rejected items (static demo).</p>
         </div>
     </div>
 </div>
 
-<div class="modal fade" id="rejectModal" tabindex="-1" role="dialog" aria-labelledby="rejectModalLabel" aria-hidden="true">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="rejectModalLabel">@Localizer.Content["Reject Content"]</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        <p>@Localizer.Content["Please leave a comment before rejecting the content:"]</p>
-        <textarea id="rejectComment" class="form-control" rows="4"></textarea>
-        <input type="hidden" id="rejectItemId" />
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">
-          @Localizer.Content["Cancel"]
-        </button>
-        <button type="button" class="btn btn-danger" id="confirmReject">
-          @Localizer.Content["Confirm Reject"]
-        </button>
-      </div>
+<!-- Modal rejeição simplificado -->
+<div class="modal fade" id="rejectModal" tabindex="-1">
+  <div class="modal-dialog"><div class="modal-content">
+    <div class="modal-header">
+        <h5 class="modal-title">Reject content</h5>
+        <button class="close" data-dismiss="modal"><span>&times;</span></button>
     </div>
-  </div>
+    <div class="modal-body">
+        <textarea class="form-control" rows="3" placeholder="Reason…"></textarea>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+        <button class="btn btn-danger">Reject</button>
+    </div>
+  </div></div>
 </div>
-
-@section script {
-    <script src="~/manager/assets/js/piranha.workflow.js"></script>
-    <script type="text/javascript">
-    document.addEventListener('DOMContentLoaded', () => {
-        // Inicializa a lista via seu script
-        piranha.workflow.initReviewPage();
-
-        // Tratador para botão Aprovar
-        document.querySelectorAll('.btn-approve').forEach(btn => {
-            btn.addEventListener('click', async () => {
-                const id = btn.closest('tr').dataset.id;
-                try {
-                    await piranha.workflow.approve(id);
-                    // Remove a linha ou atualiza o estado
-                    btn.closest('tr').remove();
-                    piranha.notifications.push({ body: "Content approved.", type: "success", hide: true });
-                } catch {
-                    piranha.notifications.push({ body: "Failed to approve.", type: "danger", hide: true });
-                }
-            });
-        });
-
-        // Abrir modal de rejeição
-        document.querySelectorAll('.btn-reject').forEach(btn => {
-            btn.addEventListener('click', () => {
-                const row = btn.closest('tr');
-                const id  = row.dataset.id;
-                const title = btn.dataset.title;
-                document.getElementById('rejectItemId').value = id;
-                // opcional: mostrar título no modal
-                document.getElementById('rejectModalLabel').textContent = `Reject: ${title}`;
-                $('#rejectModal').modal('show');
-            });
-        });
-
-        // Confirmar rejeição com comentário
-        document.getElementById('confirmReject').addEventListener('click', async () => {
-            const id = document.getElementById('rejectItemId').value;
-            const comment = document.getElementById('rejectComment').value.trim();
-            if (!comment) {
-                piranha.notifications.push({ body: "Please enter a comment.", type: "warning", hide: true });
-                return;
-            }
-            try {
-                await piranha.workflow.reject(id, comment);
-                // Fecha modal, remove linha e notifica
-                $('#rejectModal').modal('hide');
-                document.querySelector(`tr[data-id="${id}"]`).remove();
-                piranha.notifications.push({ body: "Content rejected.", type: "success", hide: true });
-            } catch {
-                piranha.notifications.push({ body: "Failed to reject.", type: "danger", hide: true });
-            }
-        });
-    });
-    </script>
-}

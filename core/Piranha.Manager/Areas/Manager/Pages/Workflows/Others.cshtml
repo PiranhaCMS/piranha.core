@@ -1,5 +1,4 @@
 @page "/manager/workflows/others"
-@model Piranha.Manager.Models.WorkflowsOthersViewModel
 @attribute [Area("Manager")]
 
 @using Piranha.Manager.Localization
@@ -8,7 +7,7 @@
 @{
     Layout = "_Layout";
     ViewBag.MenuItem = "WorkflowsOthers";
-    ViewBag.Title = Localizer.Menu["Published Content"] ?? "Published Content";
+    ViewBag.Title    = Localizer.Menu["Published Content"] ?? "Published Content";
 }
 
 <div class="top">
@@ -18,41 +17,37 @@
             <li class="breadcrumb-item active" aria-current="page">@ViewBag.Title</li>
         </ol>
     </nav>
-
-    <div class="container-fluid">
-        <div class="top-nav">
-
-            @foreach (var action in Piranha.Manager.Actions.Toolbars.PageList)
-            {
-                <partial name="@action.ActionView" />
-            }
-        </div>
-    </div>
 </div>
 
-<div class="container-fluid app">
-    <div class="row">
-        <div class="col">
-            <table id="othersTable" class="table table-hover">
-                <thead>
-                    <tr>
-                        <th>@Localizer.Content["Title"]</th>
-                        <th>@Localizer.Content["Type"]</th>
-                        <th>@Localizer.Content["Author"]</th>
-                        <th>@Localizer.Content["Publication Date"]</th>
-                    </tr>
-                </thead>
-                <tbody></tbody>
-            </table>
-        </div>
-    </div>
+<div class="container-fluid app ready">
+    <table class="table table-hover">
+        <thead class="thead-light">
+            <tr>
+                <th>@Localizer.Content["Title"]</th>
+                <th>@Localizer.Content["Type"]</th>
+                <th>@Localizer.Content["Author"]</th>
+                <th>@Localizer.Content["Publication Date"]</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><a class="text-dark" href="/blog/lorem-ipsum">Lorem Ipsum Dolor</a></td>
+                <td>BlogPost</td>
+                <td>alice@example.com</td>
+                <td>2025-05-27 13:20</td>
+            </tr>
+            <tr>
+                <td><a class="text-dark" href="/news/company-update">Company Update</a></td>
+                <td>NewsItem</td>
+                <td>bob@example.com</td>
+                <td>2025-05-26 08:45</td>
+            </tr>
+            <tr>
+                <td><a class="text-dark" href="/articles/tech-trends-2025">Tech Trends 2025</a></td>
+                <td>Article</td>
+                <td>carla@example.com</td>
+                <td>2025-05-24 18:10</td>
+            </tr>
+        </tbody>
+    </table>
 </div>
-
-@section script {
-    <script src="~/manager/assets/js/piranha.workflow.js"></script>
-    <script type="text/javascript">
-        document.addEventListener('DOMContentLoaded', () => {
-            piranha.workflow.initOthersPage();
-        });
-    </script>
-}
