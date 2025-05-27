@@ -6,25 +6,37 @@ export function Login() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [isRegister, setIsRegister] = useState(false);
+    const [errorMessage, setErrorMessage] = useState('');
     const navigate = useNavigate();
 
     const handleSubmit = async () => {
+        setErrorMessage('');
+
         const endpoint = isRegister ? 'register' : 'login';
         const navigate_url = isRegister ? '/profile' : '/';
 
-        const response = await fetch(`${API_URL}/user/${endpoint}`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ email, password })
-        });
+        try {
+            const response = await fetch(`${API_URL}/user/${endpoint}`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email, password })
+            });
 
-        if (response.ok) {
-            const { token } = await response.json();
-            localStorage.setItem('token', token);
-            navigate(navigate_url);
-        } else {
-            const error = await response.json();
-            alert(error.message);
+            if (response.ok) {
+                const { token, username } = await response.json();
+                localStorage.setItem('token', token);
+                localStorage.setItem('username', username);
+                navigate(navigate_url);
+            } else {
+                if (isRegister) {
+                    setErrorMessage('Registration failed. Please try again.');
+                } else {
+                    setErrorMessage('Invalid credentials. Please try again.');
+                }
+            }
+        } catch (err) {
+            setErrorMessage('An error occurred. Please try again later.');
+            console.error('Login error:', err);
         }
     };
 
@@ -34,6 +46,15 @@ export function Login() {
                 <h2 className="text-2xl font-semibold text-center mb-6 text-neutral-900 dark:text-neutral-100">
                     {isRegister ? 'Sign Up' : 'Login'}
                 </h2>
+
+                {errorMessage && (
+                    <div className="mb-4 p-3 bg-red-100 dark:bg-red-900/20 border border-red-300 dark:border-red-800 text-red-700 dark:text-red-400 rounded-lg flex items-center">
+                        <svg className="w-5 h-5 mr-2 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                            <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
+                        </svg>
+                        <span>{errorMessage}</span>
+                    </div>
+                )}
 
                 <input
                     type="email"

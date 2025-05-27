@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using ContentRus.TenantManagement.Models;
 using ContentRus.TenantManagement.Data;
+using Microsoft.AspNetCore.Identity;
 
 namespace ContentRus.TenantManagement.Services
 {
@@ -17,6 +18,8 @@ namespace ContentRus.TenantManagement.Services
 
         public User CreateUser(string email, string password, Guid tenantId)
         {
+            var hasher = new PasswordHasher<User>();
+
             var user = new User
             {
                 Id = _context.Users.Count() + 1,
@@ -24,6 +27,7 @@ namespace ContentRus.TenantManagement.Services
                 Password = password,
                 TenantId = tenantId
             };
+            user.Password = hasher.HashPassword(user, password);
 
             _context.Users.Add(user);
             _context.SaveChanges();
@@ -35,7 +39,9 @@ namespace ContentRus.TenantManagement.Services
             var user = GetUser(id);
             if (user == null) return false;
 
-            user.Password = newPassword;
+            var hasher = new PasswordHasher<User>();
+            user.Password = hasher.HashPassword(user, newPassword);
+
             _context.Users.Update(user);
             _context.SaveChanges();
             return true;
@@ -53,11 +59,12 @@ namespace ContentRus.TenantManagement.Services
         public User? ValidateUserCredentials(string email, string password)
         {
             var user = _context.Users.FirstOrDefault(u => u.Email == email);
-            if (user == null || user.Password != password)
-            {
-                return null;
-            }
-            return user;
+            if (user == null) return null;
+
+            var hasher = new PasswordHasher<User>();
+            var result = hasher.VerifyHashedPassword(user, user.Password, password);
+
+            return result == PasswordVerificationResult.Success ? user : null;
         }
     }
 }
