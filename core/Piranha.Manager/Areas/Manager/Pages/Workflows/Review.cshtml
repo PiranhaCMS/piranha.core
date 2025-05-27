@@ -1,5 +1,4 @@
 @page "~/manager/workflows/review"
-@model Piranha.Manager.Models.WorkflowsReviewViewModel
 @using Piranha.Manager.Localization
 @inject ManagerLocalizer Localizer
 
@@ -18,7 +17,6 @@
     </nav>
     <div class="container-fluid">
         <div class="top-nav">
-            @* Aqui você poderia colocar ações adicionais se houver *@
         </div>
     </div>
 </div>
@@ -37,20 +35,18 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach(var item in Model.ReviewItems)
-                    {
-                        <tr data-id="@item.Id">
-                            <td>@item.Title</td>
-                            <td>@item.ContentType</td>
-                            <td>@item.AuthorName</td>
-                            <td>@item.Submitted.ToString("g")</td>
+                        <tr data-id="Id">
+                            <td>Title</td>
+                            <td>ContentType</td>
+                            <td>AuthorName</td>
+                            <td>Submitted.ToString("g")</td>
                             <td>
                                 <button class="btn btn-sm btn-success btn-approve" title="Approve">
                                     <i class="fas fa-check"></i>
                                 </button>
                                 <button class="btn btn-sm btn-danger btn-reject" title="Reject"
-                                        data-id="@item.Id"
-                                        data-title="@item.Title">
+                                        data-id="Id"
+                                        data-title="Title">
                                     <i class="fas fa-times"></i>
                                 </button>
                             </td>

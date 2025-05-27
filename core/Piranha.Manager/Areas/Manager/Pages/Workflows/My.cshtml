@@ -22,12 +22,10 @@
 
     <div class="container-fluid">
         <div class="top-nav">
-            @* Aqui você pode iterar ações configuradas, se existirem *@
             @foreach (var action in Piranha.Manager.Actions.Toolbars.PageList)
             {
                 <partial name="@action.ActionView" />
             }
-            @* Botão customizado de "Add New Content" *@
             <button id="btnAddNewContent"
                     type="button"
                     class="btn btn-sm btn-primary btn-labeled"
@@ -56,7 +54,6 @@
     </div>
 </div>
 
-@* Modal de criação de conteúdo (padrão do Manager ou customizado) *@
 <partial name="~/Areas/Manager/Shared/Partial/_PageAddModal.cshtml" />
 
 @section script {

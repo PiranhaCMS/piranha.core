@@ -11,10 +11,10 @@ window.piranha.workflow = (function() {
   // Badge de estado
   function stateBadge(state) {
     switch(state) {
-      case 'PendingReview': return '<span class="badge badge-warning">Pending</span>';
+      case 'Unpublished': return '<span class="badge badge-warning">Pending</span>';
       case 'NeedsChanges':   return '<span class="badge badge-info">Needs Changes</span>';
-      case 'Accepted':       return '<span class="badge badge-success">Approved</span>';
-      case 'Denied':         return '<span class="badge badge-danger">Rejected</span>';
+      case 'Published':       return '<span class="badge badge-success">Approved</span>';
+      case 'Unpublished':         return '<span class="badge badge-danger">Rejected</span>';
       default:               return `<span class="badge badge-secondary">${state}</span>`;
     }
   }
@@ -41,7 +41,6 @@ window.piranha.workflow = (function() {
     });
   }
 
-  // Carrega os envios do próprio usuário
   async function loadUser() {
     const res   = await fetch(`${apiBase}/mine`);
     const items = await res.json();
@@ -58,7 +57,6 @@ window.piranha.workflow = (function() {
     });
   }
 
-  // Carrega conteúdos aprovados de outros
   async function loadOthers() {
     const res   = await fetch(`${apiBase}/approved`);
     const items = await res.json();
@@ -75,7 +73,6 @@ window.piranha.workflow = (function() {
     });
   }
 
-  // Carrega conteúdos para revisão (Review page)
   async function loadReview() {
     // só executa se for admin OU reviewer
     const [admin, reviewer] = await Promise.all([isAdmin(), isReviewer()]);

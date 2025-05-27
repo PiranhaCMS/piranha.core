@@ -21,7 +21,7 @@
 
     <div class="container-fluid">
         <div class="top-nav">
-            @* Reaproveita as ações da toolbar de páginas, se configuradas *@
+
             @foreach (var action in Piranha.Manager.Actions.Toolbars.PageList)
             {
                 <partial name="@action.ActionView" />
