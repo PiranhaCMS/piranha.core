@@ -24,6 +24,8 @@ public static class PiranhaStartupExtensions
 
         services.AddSingleton<IContentFactory, ContentFactory>();
 
+        services.AddSingleton<IWorkflowService, WorkflowService>();
+
         services.AddScoped<IApi, Api>();
         services.AddScoped<Config>();
 

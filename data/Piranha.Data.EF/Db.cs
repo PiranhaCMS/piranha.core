@@ -9,6 +9,7 @@
  */
 
 using Microsoft.EntityFrameworkCore;
+using Piranha.Data;
 
 namespace Piranha;
 
@@ -250,6 +251,18 @@ public abstract class Db<T> : DbContext, IDb where T : Db<T>
     /// <param name="mb">The current model builder</param>
     protected override void OnModelCreating(ModelBuilder mb)
     {
+        mb.Entity<WorkflowStep>().ToTable("Piranha_WorkflowSteps");
+        mb.Entity<WorkflowStep>().HasKey(ws => ws.Id);
+
+        mb.Entity<WorkflowStep>()
+            .HasOne(ws => ws.Workflow)
+            .WithMany(w => w.Steps)
+            .HasForeignKey(ws => ws.WorkflowId)
+            .IsRequired();
+
+        mb.Entity<Workflow>().ToTable("Piranha_Workflows");
+        mb.Entity<Workflow>().HasKey(w => w.Id);
+
         mb.Entity<Data.Alias>().ToTable("Piranha_Aliases");
         mb.Entity<Data.Alias>().Property(a => a.AliasUrl).IsRequired().HasMaxLength(256);
         mb.Entity<Data.Alias>().Property(a => a.RedirectUrl).IsRequired().HasMaxLength(256);
@@ -394,6 +407,16 @@ public abstract class Db<T> : DbContext, IDb where T : Db<T>
         mb.Entity<Data.Post>().Property(p => p.EnableComments).HasDefaultValue(false);
         mb.Entity<Data.Post>().HasOne(p => p.Category).WithMany().IsRequired().OnDelete(DeleteBehavior.Restrict);
         mb.Entity<Data.Post>().HasIndex(p => new { p.BlogId, p.Slug }).IsUnique();
+
+        mb.Entity<Post>()
+            .HasOne(p => p.Workflow)
+            .WithOne()
+            .HasForeignKey<Post>(p => p.WorkflowId);
+
+        mb.Entity<Workflow>()
+            .HasMany(w => w.Steps)
+            .WithOne(s => s.Workflow)
+            .HasForeignKey(s => s.WorkflowId);
 
         mb.Entity<Data.PostBlock>().ToTable("Piranha_PostBlocks");
         mb.Entity<Data.PostBlock>().HasIndex(b => new { b.PostId, b.SortOrder }).IsUnique();

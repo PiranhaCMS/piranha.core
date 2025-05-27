@@ -57,6 +57,13 @@ public class Module : IModule
     {
         var mapperConfig = new MapperConfiguration(cfg =>
         {
+            cfg.CreateMap<Piranha.Data.Workflow, Piranha.Models.Workflow>()
+                .ReverseMap();
+
+            cfg.CreateMap<Piranha.Data.WorkflowStep, Piranha.Models.WorkflowStep>()
+                .ReverseMap();
+
+
             cfg.CreateMap<Data.Alias, Data.Alias>()
                 .ForMember(a => a.Id, o => o.Ignore())
                 .ForMember(a => a.Created, o => o.Ignore());
@@ -136,7 +143,9 @@ public class Module : IModule
                 .ForMember(p => p.Permalink, o => o.Ignore())
                 .ForMember(p => p.Permissions, o => o.Ignore())
                 .ForMember(p => p.Blocks, o => o.Ignore())
-                .ForMember(p => p.CommentCount, o => o.Ignore());
+                .ForMember(p => p.CommentCount, o => o.Ignore())
+                .ForMember(p => p.Workflow, o => o.MapFrom(m => m.Workflow))
+                .ForMember(p => p.WorkflowId, o => o.MapFrom(m => m.WorkflowId));
             cfg.CreateMap<Data.PostTag, Models.Taxonomy>()
                 .ForMember(p => p.Id, o => o.MapFrom(m => m.TagId))
                 .ForMember(p => p.Title, o => o.MapFrom(m => m.Tag.Title))
