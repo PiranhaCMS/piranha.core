@@ -1,5 +1,5 @@
 apiVersion: v2
-name: Manager
+name: manager
 description: Piranha Manager with MySQL and .NET
 version: 0.1.0
 appVersion: "1.0"
