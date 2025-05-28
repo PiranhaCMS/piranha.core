@@ -1,13 +1,13 @@
 apiVersion: networking.istio.io/v1
 kind: VirtualService
 metadata:
-  name: "{{ .Values.manager.appName }}-{{ .Values.namespace }}-virtual-svc"
-  namespace: {{ .Values.namespace }}
+  name: "{{ .Values.manager.appName }}-{{ .Release.Namespace }}-virtual-svc"
+  namespace: {{ .Release.Namespace }}
 spec:
   hosts:
-  - "www.contentrus.{{ .Values.manager.appName }}.{{ .Values.namespace }}.com"
+  - "www.contentrus.{{ .Values.manager.appName }}.{{ .Release.Namespace }}.com"
   gateways:
-  - "{{ .Values.namespace }}/{{ .Values.manager.appName }}-gateway"
+  - "{{ .Release.Namespace }}/{{ .Values.manager.appName }}-gateway"
   http:
   - match:
     - uri:
@@ -16,4 +16,4 @@ spec:
     - destination:
         port:
           number: 80
-        host: "{{ .Values.manager.appName }}-service.{{ .Values.namespace }}.svc.cluster.local"
+        host: "{{ .Values.manager.appName }}-service.{{ .Release.Namespace }}.svc.cluster.local"

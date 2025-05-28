@@ -2,7 +2,7 @@ apiVersion: networking.istio.io/v1
 kind: Gateway
 metadata:
   name: "{{ .Values.hostedsite.appName }}-gateway"
-  namespace: {{ .Values.namespace }}
+  namespace: {{ .Release.Namespace }}
 spec:
   # The selector matches the ingress gateway pod labels.
   # If you installed Istio using Helm following the standard documentation, this would be "istio=ingress"
@@ -14,6 +14,6 @@ spec:
       name: http
       protocol: HTTP
     hosts:
-    - "www.contentrus.{{ .Values.hostedsite.appName }}.{{ .Values.namespace }}.com"
+    - "www.contentrus.{{ .Values.hostedsite.appName }}.{{ .Release.Namespace }}.com"
 
 # https://istio.io/latest/docs/tasks/traffic-management/ingress/ingress-control/
