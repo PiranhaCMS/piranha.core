@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.manager.appName }}
+  namespace: {{ .Values.Namespace }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: {{ .Values.manager.appName }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.manager.appName }}
+        mysql-client: "true"
+        sidecar.istio.io/inject: "true"
+    spec:
+      containers:
+        - name: {{ .Values.manager.appName }}
+          image: {{ .Values.manager.image }}
+          ports:
+            - containerPort: {{ .Values.manager.port }}
+          env:
+            - name: ConnectionStrings__piranha
+              valueFrom:
+                secretKeyRef:
+                  name: piranha
+                  key: connection-string
+

@@ -66,6 +66,7 @@ create-cluster:
 		helm install argowf argo/argo-workflows -n argo -f infrastructure/argo/argo-workflows/setup/wf-values.yml --create-namespace; \
 		kubectl create rolebinding default-admin --clusterrole=admin --serviceaccount=argo:default -n argo; \
 		helm install argocd argo/argo-cd -n argo -f infrastructure/argo/argo-workflows/setup/cd-values.yml --create-namespace; \
+		kubectl apply -f infrastructure/argo/project.yaml; \
 	else \
 		echo "Cluster '$(CLUSTER_NAME)' already exists."; \
 	fi

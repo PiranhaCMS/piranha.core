@@ -1,0 +1,6 @@
+hostedsite:
+  appName: hostedsite
+  image: k3d-registry:5000/contentrus-hostedsite
+  port: 80
+
+# rest in shared-values/shared-values.yaml
