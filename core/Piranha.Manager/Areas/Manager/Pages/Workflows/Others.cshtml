@@ -1,8 +1,8 @@
 @page "/manager/workflows/others"
 @attribute [Area("Manager")]
-
 @using Piranha.Manager.Localization
 @inject ManagerLocalizer Localizer
+@model Piranha.Manager.Pages.Workflows.PublishedPostModel
 
 @{
     Layout = "_Layout";
@@ -30,24 +30,28 @@
             </tr>
         </thead>
         <tbody>
-            <tr>
-                <td><a class="text-dark" href="/blog/lorem-ipsum">Lorem Ipsum Dolor</a></td>
-                <td>BlogPost</td>
-                <td>alice@example.com</td>
-                <td>2025-05-27 13:20</td>
-            </tr>
-            <tr>
-                <td><a class="text-dark" href="/news/company-update">Company Update</a></td>
-                <td>NewsItem</td>
-                <td>bob@example.com</td>
-                <td>2025-05-26 08:45</td>
-            </tr>
-            <tr>
-                <td><a class="text-dark" href="/articles/tech-trends-2025">Tech Trends 2025</a></td>
-                <td>Article</td>
-                <td>carla@example.com</td>
-                <td>2025-05-24 18:10</td>
-            </tr>
+            @if (Model.Posts != null && Model.Posts.Any())
+            {
+                foreach (var post in Model.Posts)
+                {
+                    <tr>
+                        <td>
+                            <a class="text-dark" href="/manager/post/preview/@post.Id" target="_blank">
+                                @post.Title
+                            </a>
+                        </td>
+                        <td>@post.TypeName</td>
+                        <td>@post.Author</td>
+                        <td>@post.PublishedAt.ToString("yyyy-MM-dd HH:mm")</td>
+                    </tr>
+                }
+            }
+            else
+            {
+                <tr>
+                    <td colspan="4" class="text-muted">No published posts available.</td>
+                </tr>
+            }
         </tbody>
     </table>
 </div>
