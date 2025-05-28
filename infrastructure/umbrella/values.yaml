@@ -4,4 +4,6 @@ mysql:
     username: my-user1
     password: my-password1
     database: piranha
+  commonAnnotations:
+    argocd.argoproj.io/sync-wave: "-1"
 
