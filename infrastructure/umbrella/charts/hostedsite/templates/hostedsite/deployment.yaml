@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ .Values.hostedsite.appName }}
+  name: {{ .Values.hostedsite.appName }}-{{ .Values.auth.database }}
   namespace: {{ .Values.Namespace }}
 spec:
   replicas: 1
