@@ -2,7 +2,7 @@ apiVersion: argoproj.io/v1alpha1
 kind: AppProject
 metadata:
   name: project-tenants-contentrus
-  namespace: argo
+  namespace: argocd
 spec:
   clusterResourceWhitelist:
   - group: '*'

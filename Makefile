@@ -60,13 +60,14 @@ create-cluster:
 		helm repo update; \
 		helm install istio-base istio/base -n istio-system --set defaultRevision=default --create-namespace; \
 		helm install istiod istio/istiod -n istio-system --wait; \
-		helm install istio-ingress istio/gateway -n tcommon --create-namespace --wait; \
+		helm install istio-ingress istio/gateway -n common --create-namespace --wait; \
 		helm repo add argo https://argoproj.github.io/argo-helm; \
 		helm repo update; \
-		helm install argowf argo/argo-workflows -n argo -f infrastructure/argo/argo-workflows/setup/wf-values.yml --create-namespace; \
-		kubectl create rolebinding default-admin --clusterrole=admin --serviceaccount=argo:default -n argo; \
-		helm install argocd argo/argo-cd -n argo -f infrastructure/argo/argo-workflows/setup/cd-values.yml --create-namespace; \
-		kubectl apply -f infrastructure/argo/project.yaml; \
+		helm install argowf argo/argo-workflows -n argowf -f infrastructure/argo/argowf/setup/wf-values.yml --create-namespace; \
+		kubectl create rolebinding default-admin --clusterrole=admin --serviceaccount=argo:default -n argowf; \
+		helm install argocd argo/argo-cd -n argocd -f infrastructure/argo/argowf/setup/cd-values.yml --create-namespace; \
+		kubectl apply -f infrastructure/argo/argocd/project.yaml; \
+		kubectl apply -f infrastructure/argo/argocd/tenants-application-set.yaml; \
 	else \
 		echo "Cluster '$(CLUSTER_NAME)' already exists."; \
 	fi

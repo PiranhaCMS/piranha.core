@@ -2,7 +2,7 @@ apiVersion: argoproj.io/v1alpha1
 kind: ApplicationSet
 metadata:
   name: tenant-applications
-  namespace: argo
+  namespace: argocd
 spec:
   generators:
   - git:
@@ -14,7 +14,7 @@ spec:
   template:
     metadata:
       name: '{{ path.basename }}'
-      namespace: argo
+      namespace: argocd
     spec:
       project: project-tenants-contentrus
   
@@ -35,7 +35,6 @@ spec:
         namespace: '{{ path.basename }}'
 
       syncPolicy:
-
         automated:
           prune: true
           selfHeal: true
