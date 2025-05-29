@@ -12,17 +12,22 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Piranha.AspNetCore.Identity.Data;
+using Piranha.Manager;
 
 namespace Piranha.AspNetCore.Identity;
 
-public abstract class Db<T> :
-    IdentityDbContext<User, Role, Guid,
+public abstract class Db<T>
+    : IdentityDbContext<
+        User,
+        Role,
+        Guid,
         IdentityUserClaim<Guid>,
         IdentityUserRole<Guid>,
         IdentityUserLogin<Guid>,
         IdentityRoleClaim<Guid>,
-        IdentityUserToken<Guid>>,
-    IDb
+        IdentityUserToken<Guid>
+    >,
+        IDb
     where T : Db<T>
 {
     /// <summary>
@@ -40,7 +45,8 @@ public abstract class Db<T> :
     ///     Default constructor.
     /// </summary>
     /// <param name="options">Configuration options</param>
-    protected Db(DbContextOptions<T> options) : base(options)
+    protected Db(DbContextOptions<T> options)
+        : base(options)
     {
         if (IsInitialized)
         {
@@ -88,32 +94,187 @@ public abstract class Db<T> :
         SaveChanges();
 
         // Make sure we have a SysAdmin role
-        var role = Roles.FirstOrDefault(r => r.NormalizedName == "SYSADMIN");
-        if (role == null)
+        var sysAdminRole = Roles.FirstOrDefault(r => r.NormalizedName == "SYSADMIN");
+        if (sysAdminRole == null)
         {
-            role = new Role
+            sysAdminRole = new Role
             {
                 Id = Guid.NewGuid(),
                 Name = "SysAdmin",
-                NormalizedName = "SYSADMIN"
+                NormalizedName = "SYSADMIN",
             };
-            Roles.Add(role);
+            Roles.Add(sysAdminRole);
         }
 
-        // Make sure our SysAdmin role has all of the available claims
-        //foreach (var claim in Piranha.Security.Permission.All())
+        // Make sure we have an Author role
+        var authorRole = Roles.FirstOrDefault(r => r.NormalizedName == "AUTHOR");
+        if (authorRole == null)
+        {
+            authorRole = new Role
+            {
+                Id = Guid.NewGuid(),
+                Name = "Author",
+                NormalizedName = "AUTHOR",
+            };
+            Roles.Add(authorRole);
+        }
+
+        // Make sure we have a Reviewer role
+        var reviewerRole = Roles.FirstOrDefault(r => r.NormalizedName == "REVIEWER");
+        if (reviewerRole == null)
+        {
+            reviewerRole = new Role
+            {
+                Id = Guid.NewGuid(),
+                Name = "Reviewer",
+                NormalizedName = "REVIEWER",
+            };
+            Roles.Add(reviewerRole);
+        }
+
+        // Make sure we have a LegalTeam role
+        var legalTeamRole = Roles.FirstOrDefault(r => r.NormalizedName == "LEGALTEAM");
+        if (legalTeamRole == null)
+        {
+            legalTeamRole = new Role
+            {
+                Id = Guid.NewGuid(),
+                Name = "LegalTeam",
+                NormalizedName = "LEGALTEAM",
+            };
+            Roles.Add(legalTeamRole);
+        }
+
+        // Assign permissions to SysAdmin role (all permissions)
         foreach (var permission in App.Permissions.GetPermissions())
         {
             var roleClaim = RoleClaims.FirstOrDefault(c =>
-                c.RoleId == role.Id && c.ClaimType == permission.Name && c.ClaimValue == permission.Name);
+                c.RoleId == sysAdminRole.Id
+                && c.ClaimType == permission.Name
+                && c.ClaimValue == permission.Name
+            );
             if (roleClaim == null)
             {
-                RoleClaims.Add(new IdentityRoleClaim<Guid>
-                {
-                    RoleId = role.Id,
-                    ClaimType = permission.Name,
-                    ClaimValue = permission.Name
-                });
+                RoleClaims.Add(
+                    new IdentityRoleClaim<Guid>
+                    {
+                        RoleId = sysAdminRole.Id,
+                        ClaimType = permission.Name,
+                        ClaimValue = permission.Name,
+                    }
+                );
+            }
+        }
+
+        // Assign permissions to Author role
+        var authorPermissions = new[]
+        {
+            "PiranhaContent",
+            "PiranhaContentAdd",
+            "PiranhaContentEdit",
+            "PiranhaContentSave",
+            "PiranhaPages",
+            "PiranhaPagesAdd",
+            "PiranhaPagesEdit",
+            "PiranhaPagesSave",
+            "PiranhaPosts",
+            "PiranhaPostsAdd",
+            "PiranhaPostsEdit",
+            "PiranhaPostsSave",
+            "PiranhaMedia",
+            "PiranhaMediaAdd",
+            "PiranhaMediaEdit",
+        };
+
+        foreach (var permissionName in authorPermissions)
+        {
+            var roleClaim = RoleClaims.FirstOrDefault(c =>
+                c.RoleId == authorRole.Id
+                && c.ClaimType == permissionName
+                && c.ClaimValue == permissionName
+            );
+            if (roleClaim == null)
+            {
+                RoleClaims.Add(
+                    new IdentityRoleClaim<Guid>
+                    {
+                        RoleId = authorRole.Id,
+                        ClaimType = permissionName,
+                        ClaimValue = permissionName,
+                    }
+                );
+            }
+        }
+
+        // Assign permissions to Reviewer role
+        var reviewerPermissions = new[]
+        {
+            "PiranhaReviewer",
+            "PiranhaContentReview",
+            "PiranhaContent",
+            "PiranhaContentEdit",
+            "PiranhaPages",
+            "PiranhaPagesEdit",
+            "PiranhaPagesPublish",
+            "PiranhaPosts",
+            "PiranhaPostsEdit",
+            "PiranhaPostsPublish",
+        };
+
+        foreach (var permissionName in reviewerPermissions)
+        {
+            var roleClaim = RoleClaims.FirstOrDefault(c =>
+                c.RoleId == reviewerRole.Id
+                && c.ClaimType == permissionName
+                && c.ClaimValue == permissionName
+            );
+            if (roleClaim == null)
+            {
+                RoleClaims.Add(
+                    new IdentityRoleClaim<Guid>
+                    {
+                        RoleId = reviewerRole.Id,
+                        ClaimType = permissionName,
+                        ClaimValue = permissionName,
+                    }
+                );
+            }
+        }
+
+        // Assign permissions to LegalTeam role
+        var legalTeamPermissions = new[]
+        {
+            "PiranhaLegalTeam",
+            "PiranhaLegalTeamReview",
+            "PiranhaLegalTeamDeny",
+            "PiranhaContentReview",
+            "PiranhaContent",
+            "PiranhaContentEdit",
+            "PiranhaPages",
+            "PiranhaPagesEdit",
+            "PiranhaPagesPublish",
+            "PiranhaPosts",
+            "PiranhaPostsEdit",
+            "PiranhaPostsPublish",
+        };
+
+        foreach (var permissionName in legalTeamPermissions)
+        {
+            var roleClaim = RoleClaims.FirstOrDefault(c =>
+                c.RoleId == legalTeamRole.Id
+                && c.ClaimType == permissionName
+                && c.ClaimValue == permissionName
+            );
+            if (roleClaim == null)
+            {
+                RoleClaims.Add(
+                    new IdentityRoleClaim<Guid>
+                    {
+                        RoleId = legalTeamRole.Id,
+                        ClaimType = permissionName,
+                        ClaimValue = permissionName,
+                    }
+                );
             }
         }
 
