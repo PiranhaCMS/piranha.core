@@ -169,6 +169,9 @@ public abstract class Db<T>
         // Assign permissions to Author role
         var authorPermissions = new[]
         {
+            "PiranhaAdmin",
+            "PiranhaPagePreview",
+            "PiranhaPostPreview",
             "PiranhaContent",
             "PiranhaContentAdd",
             "PiranhaContentEdit",
@@ -209,6 +212,9 @@ public abstract class Db<T>
         // Assign permissions to Reviewer role
         var reviewerPermissions = new[]
         {
+            "PiranhaAdmin",
+            "PiranhaPagePreview",
+            "PiranhaPostPreview",
             "PiranhaReviewer",
             "PiranhaContentReview",
             "PiranhaContent",
@@ -244,6 +250,9 @@ public abstract class Db<T>
         // Assign permissions to LegalTeam role
         var legalTeamPermissions = new[]
         {
+            "PiranhaAdmin",
+            "PiranhaPagePreview",
+            "PiranhaPostPreview",
             "PiranhaLegalTeam",
             "PiranhaLegalTeamReview",
             "PiranhaLegalTeamDeny",
