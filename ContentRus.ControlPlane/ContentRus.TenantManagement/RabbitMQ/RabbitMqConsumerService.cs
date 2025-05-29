@@ -50,9 +50,9 @@ public class RabbitMqConsumerService : BackgroundService, IDisposable
 
             var subscriptionEvent = JsonSerializer.Deserialize<PaymentConfirmedEvent>(message);
 
-            Console.WriteLine(subscriptionEvent.Plan);
+            //Console.WriteLine(subscriptionEvent.Plan);
 
-            Console.WriteLine(subscriptionEvent.TenantID);
+            //Console.WriteLine(subscriptionEvent.TenantID);
 
 
             Guid id = Guid.Parse(subscriptionEvent.TenantID);
