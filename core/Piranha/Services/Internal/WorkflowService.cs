@@ -4,9 +4,9 @@ namespace Piranha.Services;
 
 class WorkflowService : IWorkflowService
 {
-    private readonly Api _api;
+    private readonly IApi _api;
     
-    public WorkflowService(Api api)
+    public WorkflowService(IApi api)
     {
         _api = api;
         App.Hooks.Posts.RegisterOnBeforeSave(post =>
