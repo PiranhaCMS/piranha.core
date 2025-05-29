@@ -47,8 +47,6 @@ public static class Permission
     public const string Modules = "PiranhaModules";
 
     public const string Reviewer = "PiranhaReviewer";
-    public const string ReviewerStep1 = "PiranhaReviewerStep1";
-    public const string ReviewerStep2 = "PiranhaReviewerStep2";
 
     public const string Pages = "PiranhaPages";
     public const string PagesAdd = "PiranhaPagesAdd";
@@ -94,11 +92,8 @@ public static class Permission
 
     public static readonly PermissionsStructure ReviewerPermissionsStructure =
         // Reviewer Permission
-        new(Reviewer, new PermissionsStructure[]
-        {
-            new(ReviewerStep1),
-            new(ReviewerStep2)
-        });
+        new(Reviewer);
+
 
     public static string[] All() {
         return new [] {
@@ -134,8 +129,6 @@ public static class Permission
             Modules,
 
             Reviewer,
-            ReviewerStep1,
-            ReviewerStep2,
 
             Pages,
             PagesAdd,

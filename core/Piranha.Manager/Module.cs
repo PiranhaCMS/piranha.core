@@ -50,8 +50,6 @@ public sealed class Module : IModule
         new PermissionItem { Name = Permission.Modules, Title = "List Modules", Category = "Modules" },
 
         new PermissionItem { Name = Permission.Reviewer, Title = "Reviewer" },
-        new PermissionItem { Name = Permission.ReviewerStep1, Title = "Step 1", Category = "Reviewer" },
-        new PermissionItem { Name = Permission.ReviewerStep2, Title = "Step 2", Category = "Reviewer" },
 
         new PermissionItem { Name = Permission.Pages, Title = "List Pages", Category = "Pages" },
         new PermissionItem { Name = Permission.PagesAdd, Title = "Add Pages", Category = "Pages" },
