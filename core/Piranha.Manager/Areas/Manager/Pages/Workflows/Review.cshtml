@@ -36,7 +36,7 @@
     <div class="tab-content">
         <!-- Pending -->
         <div class="tab-pane fade show active" id="tab-pending" role="tabpanel">
-            @if (Model.Posts != null && Model.Posts.Any(p => p.Status == "Pending"))
+            @if (Model.Pages != null && Model.Pages.Any(p => p.Status == "Pending"))
             {
                 <table class="table table-hover">
                     <thead class="thead-light">
@@ -49,17 +49,19 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach (var post in Model.Posts.Where(p => p.Status == "Pending"))
+                        @foreach (var pages in Model.Pages.Where(p => p.Status == "Pending"))
                         {
                             <tr>
                                 <td>
-                                    <a class="text-dark" href="/manager/post/preview/@post.Id" target="_blank">
-                                        @post.Title
+                                    <a class="text-dark" href="/manager/post/preview/@pages.Id" target="_blank">
+                                        @pages.Title
                                     </a>
                                 </td>
-                                <td>@post.TypeName</td>
-                                <td>@post.Author</td>
-                                <td>@post.SubmittedAt.ToString("yyyy-MM-dd HH:mm")</td>
+                                <td>@pages.TypeName</td>
+                                @* <td>@pages.Author</td>
+                                <td>@pages.SubmittedAt.ToString("yyyy-MM-dd HH:mm")</td> *@
+                                <td>AUTHOR</td>
+                                <td>Submited</td>
                                 <td>
                                     <button class="btn btn-sm btn-success" title="Approve">
                                         <i class="fas fa-check"></i>
@@ -82,13 +84,13 @@
 
         <!-- Approved -->
         <div class="tab-pane fade" id="tab-approved" role="tabpanel">
-            @if (Model.Posts != null && Model.Posts.Any(p => p.Status == "Approved"))
+            @if (Model.Pages != null && Model.Pages.Any(p => p.Status == "Approved"))
             {
                 <ul class="list-group">
-                    @foreach (var post in Model.Posts.Where(p => p.Status == "Approved"))
+                    @foreach (var pages in Model.Pages.Where(p => p.Status == "Approved"))
                     {
                         <li class="list-group-item">
-                            <a href="/manager/post/preview/@post.Id" target="_blank">@post.Title</a>
+                            <a href="/manager/post/preview/@pages.Id" target="_blank">@pages.Title</a>
                         </li>
                     }
                 </ul>
@@ -101,13 +103,13 @@
 
         <!-- Rejected -->
         <div class="tab-pane fade" id="tab-rejected" role="tabpanel">
-            @if (Model.Posts != null && Model.Posts.Any(p => p.Status == "Rejected"))
+            @if (Model.Pages != null && Model.Pages.Any(p => p.Status == "Rejected"))
             {
                 <ul class="list-group">
-                    @foreach (var post in Model.Posts.Where(p => p.Status == "Rejected"))
+                    @foreach (var pages in Model.Pages.Where(p => p.Status == "Rejected"))
                     {
                         <li class="list-group-item">
-                            <a href="/manager/post/preview/@post.Id" target="_blank">@post.Title</a>
+                            <a href="/manager/post/preview/@pages.Id" target="_blank">@pages.Title</a>
                         </li>
                     }
                 </ul>

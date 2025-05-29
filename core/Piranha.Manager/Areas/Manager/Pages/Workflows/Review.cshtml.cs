@@ -1,51 +1,36 @@
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using System;
-using System.Collections.Generic;
+using Piranha.Manager.Models;
 
 namespace Piranha.Manager.Pages.Workflows
 {
     public class ReviewModel : PageModel
     {
-        public List<PostItem> Posts { get; set; } = new();
-
-        public class PostItem
-        {
-            public string Id { get; set; }
-            public string Title { get; set; }
-            public string TypeName { get; set; }
-            public string Author { get; set; }
-            public DateTime SubmittedAt { get; set; }
-            public string Status { get; set; } // "Pending", "Approved", "Rejected"
-        }
+        public List<PageListModel.PageItem> Pages { get; set; } = new();
 
         public void OnGet()
         {
-            // Simulação: substitui com dados reais se necessário
-            Posts = new List<PostItem>
+            Pages = new List<PageListModel.PageItem>
             {
-                new PostItem {
-                    Id = "1",
+                new PageListModel.PageItem {
+                    Id = Guid.Parse("5b1879e5-bd2d-47d5-a9e6-87c53ce6a8d3"),
                     Title = "Lorem Ipsum Dolor",
                     TypeName = "BlogPost",
-                    Author = "alice@example.com",
-                    SubmittedAt = DateTime.Parse("2025-05-27 10:15"),
-                    Status = "Pending"
+                    Status = "Pending",
+                    EditUrl = "/manager/page/edit/1"
                 },
-                new PostItem {
-                    Id = "2",
+                new PageListModel.PageItem {
+                    Id = Guid.Parse("64835a59-230c-46bc-b7c0-e2643d437eed"),
                     Title = "Company Update",
                     TypeName = "NewsItem",
-                    Author = "bob@example.com",
-                    SubmittedAt = DateTime.Parse("2025-05-26 09:00"),
-                    Status = "Approved"
+                    Status = "Approved",
+                    EditUrl = "/manager/page/edit/2"
                 },
-                new PostItem {
-                    Id = "3",
+                new PageListModel.PageItem {
+                    Id = Guid.Parse("b8984ac1-0c57-41b1-a68e-d0871a1878a5"),
                     Title = "Internal Memo",
                     TypeName = "Article",
-                    Author = "carla@example.com",
-                    SubmittedAt = DateTime.Parse("2025-05-25 15:40"),
-                    Status = "Rejected"
+                    Status = "Rejected",
+                    EditUrl = "/manager/page/edit/3"
                 }
             };
         }
