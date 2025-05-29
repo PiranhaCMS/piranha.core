@@ -32,7 +32,7 @@ public class RabbitMqPublisher : IAsyncDisposable
 
         await _channel.QueueDeclareAsync(
             queue: "event_queue",
-            durable: false,
+            durable: true,
             exclusive: false,
             autoDelete: false,
             arguments: null);

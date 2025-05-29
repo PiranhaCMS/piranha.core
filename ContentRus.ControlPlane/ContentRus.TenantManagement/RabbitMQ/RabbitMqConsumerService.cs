@@ -33,7 +33,7 @@ public class RabbitMqConsumerService : BackgroundService, IDisposable
 
         await _channel.QueueDeclareAsync(
             queue: "event_queue",
-            durable: false,
+            durable: true,
             exclusive: false,
             autoDelete: false,
             arguments: null,
