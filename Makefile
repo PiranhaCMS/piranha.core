@@ -64,7 +64,12 @@ create-cluster:
 		helm repo add argo https://argoproj.github.io/argo-helm; \
 		helm repo update; \
 		helm install argowf argo/argo-workflows -n argowf -f infrastructure/argo/argowf/setup/wf-values.yml --create-namespace; \
-		kubectl create rolebinding default-admin --clusterrole=admin --serviceaccount=argo:default -n argowf; \
+		kubectl create rolebinding default-admin --clusterrole=admin --serviceaccount=argowf:default -n argowf; \
+		kubectl create clusterrole secret-writer --verb=create --resource=secrets; \
+		kubectl create clusterrolebinding secret-writer-binding --clusterrole=secret-writer --serviceaccount=argowf:default; \
+		kubectl create clusterrole namespace-creator --verb=create --resource=namespaces; \
+		kubectl create clusterrolebinding namespace-creator-binding --clusterrole=namespace-creator --serviceaccount=argowf:default; \
+		kubectl create secret generic github-creds --from-file=ssh-private-key=.ssh/id_ed25519 -n argowf; \
 		helm install argocd argo/argo-cd -n argocd -f infrastructure/argo/argowf/setup/cd-values.yml --create-namespace; \
 		kubectl apply -f infrastructure/argo/argocd/project.yaml; \
 		kubectl apply -f infrastructure/argo/argocd/tenants-application-set.yaml; \

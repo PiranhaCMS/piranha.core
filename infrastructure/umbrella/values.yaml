@@ -1,8 +1,6 @@
 mysql:
   auth:
-    rootPassword: my-root-password1
-    username: my-user1
-    password: my-password1
+    existingSecret: mysql-secrets
     database: piranha
   commonAnnotations:
     argocd.argoproj.io/sync-wave: "-1"
