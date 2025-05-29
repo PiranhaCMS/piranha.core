@@ -8,7 +8,7 @@ spec:
   - group: '*'
     kind: '*'
   destinations:
-  - namespace: 't1'
+  - namespace: 't*'
     server: 'https://kubernetes.default.svc'
   sourceRepos:
   # contentrus multiTenancy repos
