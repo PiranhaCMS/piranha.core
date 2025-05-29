@@ -1,0 +1,21 @@
+@inject IAuthorizationService Auth
+@inject ManagerLocalizer Localizer
+
+@if ((await Auth.AuthorizeAsync(User, Permission.PagesSave)).Succeeded)
+{
+    <div class="btn-group d-none d-lg-inline-flex" role="group">
+        <button v-on:click.prevent="submitForReview" :class="{ 'btn-loading' : submitting }" type="button" class="btn btn-warning btn-labeled">
+            <i class="fas fa-paper-plane"></i>
+            @Localizer.General["Submit for Review"]
+        </button>
+    </div>
+
+    <div class="dropdown d-inline-block d-lg-none">
+        <button :class="{ 'btn-loading' : submitting }" class="btn btn-warning dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <i class="fas fa-paper-plane mr-1"></i>
+        </button>
+        <div class="dropdown-menu">
+            <a v-on:click.prevent="submitForReview" class="dropdown-item" href="#">@Localizer.General["Submit for Review"]</a>
+        </div>
+    </div>
+}

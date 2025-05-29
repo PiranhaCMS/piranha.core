@@ -128,6 +128,11 @@ public static class Actions
             {
                 InternalId = "Delete",
                 ActionView = "Partial/Actions/_PageDelete"
+            },
+            new ToolbarAction
+            {
+                InternalId = "Review",
+                ActionView = "Partial/Actions/_PageReview"
             }
         };
 
