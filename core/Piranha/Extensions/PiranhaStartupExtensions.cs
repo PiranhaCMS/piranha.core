@@ -29,7 +29,7 @@ public static class PiranhaStartupExtensions
         services.AddScoped<Config>();
 
         services.AddScoped<IWorkflowService, WorkflowService>();
-        
+
         return services;
     }
 }

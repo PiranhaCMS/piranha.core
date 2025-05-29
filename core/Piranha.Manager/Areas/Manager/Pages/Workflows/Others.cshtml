@@ -1,0 +1,57 @@
+@page "/manager/workflows/others"
+@attribute [Area("Manager")]
+@using Piranha.Manager.Localization
+@inject ManagerLocalizer Localizer
+@model Piranha.Manager.Pages.Workflows.PublishedPostModel
+
+@{
+    Layout = "_Layout";
+    ViewBag.MenuItem = "WorkflowsOthers";
+    ViewBag.Title    = Localizer.Menu["Published Content"] ?? "Published Content";
+}
+
+<div class="top">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">@Localizer.Menu["Content"]</li>
+            <li class="breadcrumb-item active" aria-current="page">@ViewBag.Title</li>
+        </ol>
+    </nav>
+</div>
+
+<div class="container-fluid app ready">
+    <table class="table table-hover">
+        <thead class="thead-light">
+            <tr>
+                <th>@Localizer.Content["Title"]</th>
+                <th>@Localizer.Content["Type"]</th>
+                <th>@Localizer.Content["Author"]</th>
+                <th>@Localizer.Content["Publication Date"]</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model.Posts != null && Model.Posts.Any())
+            {
+                foreach (var post in Model.Posts)
+                {
+                    <tr>
+                        <td>
+                            <a class="text-dark" href="/manager/post/preview/@post.Id" target="_blank">
+                                @post.Title
+                            </a>
+                        </td>
+                        <td>@post.TypeName</td>
+                        <td>@post.Author</td>
+                        <td>@post.PublishedAt.ToString("yyyy-MM-dd HH:mm")</td>
+                    </tr>
+                }
+            }
+            else
+            {
+                <tr>
+                    <td colspan="4" class="text-muted">No published posts available.</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

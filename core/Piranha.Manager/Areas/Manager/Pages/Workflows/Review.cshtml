@@ -1,0 +1,138 @@
+@page "/manager/workflows/review"
+@attribute [Area("Manager")]
+
+@using Piranha.Manager.Localization
+@inject ManagerLocalizer Localizer
+@model Piranha.Manager.Pages.Workflows.ReviewModel
+
+@{
+    Layout = "_Layout";
+    ViewBag.MenuItem = "WorkflowsReview";
+    ViewBag.Title = Localizer.Menu["Review"] ?? "Review Content";
+}
+
+<div class="top">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">@Localizer.Menu["Content"]</li>
+            <li class="breadcrumb-item active" aria-current="page">@ViewBag.Title</li>
+        </ol>
+    </nav>
+</div>
+
+<div class="container-fluid app ready">
+    <ul class="nav nav-pills mb-3" id="reviewTabs" role="tablist">
+        <li class="nav-item">
+            <a class="nav-link active" data-toggle="pill" href="#tab-pending" role="tab">Pending</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" data-toggle="pill" href="#tab-approved" role="tab">Approved</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" data-toggle="pill" href="#tab-rejected" role="tab">Rejected</a>
+        </li>
+    </ul>
+
+    <div class="tab-content">
+        <!-- Pending -->
+        <div class="tab-pane fade show active" id="tab-pending" role="tabpanel">
+            @if (Model.Posts != null && Model.Posts.Any(p => p.Status == "Pending"))
+            {
+                <table class="table table-hover">
+                    <thead class="thead-light">
+                        <tr>
+                            <th>@Localizer.Content["Title"]</th>
+                            <th>@Localizer.Content["Type"]</th>
+                            <th>@Localizer.Content["Author"]</th>
+                            <th>@Localizer.Content["Submission Date"]</th>
+                            <th>@Localizer.Content["Actions"]</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var post in Model.Posts.Where(p => p.Status == "Pending"))
+                        {
+                            <tr>
+                                <td>
+                                    <a class="text-dark" href="/manager/post/preview/@post.Id" target="_blank">
+                                        @post.Title
+                                    </a>
+                                </td>
+                                <td>@post.TypeName</td>
+                                <td>@post.Author</td>
+                                <td>@post.SubmittedAt.ToString("yyyy-MM-dd HH:mm")</td>
+                                <td>
+                                    <button class="btn btn-sm btn-success" title="Approve">
+                                        <i class="fas fa-check"></i>
+                                    </button>
+                                    <button class="btn btn-sm btn-danger" title="Reject"
+                                            data-toggle="modal" data-target="#rejectModal">
+                                        <i class="fas fa-times"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            }
+            else
+            {
+                <p class="text-muted">No pending items.</p>
+            }
+        </div>
+
+        <!-- Approved -->
+        <div class="tab-pane fade" id="tab-approved" role="tabpanel">
+            @if (Model.Posts != null && Model.Posts.Any(p => p.Status == "Approved"))
+            {
+                <ul class="list-group">
+                    @foreach (var post in Model.Posts.Where(p => p.Status == "Approved"))
+                    {
+                        <li class="list-group-item">
+                            <a href="/manager/post/preview/@post.Id" target="_blank">@post.Title</a>
+                        </li>
+                    }
+                </ul>
+            }
+            else
+            {
+                <p class="text-muted">No approved items.</p>
+            }
+        </div>
+
+        <!-- Rejected -->
+        <div class="tab-pane fade" id="tab-rejected" role="tabpanel">
+            @if (Model.Posts != null && Model.Posts.Any(p => p.Status == "Rejected"))
+            {
+                <ul class="list-group">
+                    @foreach (var post in Model.Posts.Where(p => p.Status == "Rejected"))
+                    {
+                        <li class="list-group-item">
+                            <a href="/manager/post/preview/@post.Id" target="_blank">@post.Title</a>
+                        </li>
+                    }
+                </ul>
+            }
+            else
+            {
+                <p class="text-muted">No rejected items.</p>
+            }
+        </div>
+    </div>
+</div>
+
+<!-- Modal para rejeição -->
+<div class="modal fade" id="rejectModal" tabindex="-1">
+  <div class="modal-dialog"><div class="modal-content">
+    <div class="modal-header">
+        <h5 class="modal-title">Reject content</h5>
+        <button class="close" data-dismiss="modal"><span>&times;</span></button>
+    </div>
+    <div class="modal-body">
+        <textarea class="form-control" rows="3" placeholder="Reason…"></textarea>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+        <button class="btn btn-danger">Reject</button>
+    </div>
+  </div></div>
+</div>
