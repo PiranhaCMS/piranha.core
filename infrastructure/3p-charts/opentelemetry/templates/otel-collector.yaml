@@ -1,0 +1,86 @@
+apiVersion: opentelemetry.io/v1alpha1
+kind: OpenTelemetryCollector
+metadata:
+  name: simplest
+  namespace: {{ .Values.namespace }}
+spec:
+  mode: deployment
+  serviceAccount: {{ .Values.otelCollector.serviceAccount }}
+  image: {{ .Values.otelCollector.image }}
+  config: |
+    receivers:
+      otlp:
+        protocols:
+          grpc:
+            endpoint: {{ .Values.otelCollector.config.receivers.otlp.protocols.grpc.endpoint | default "0.0.0.0:4317" }}
+          http:
+            endpoint: {{ .Values.otelCollector.config.receivers.otlp.protocols.http.endpoint | default "0.0.0.0:4318" }}
+
+    processors:
+      memory_limiter:
+        check_interval: 1s
+        limit_percentage: 75
+        spike_limit_percentage: 15
+      batch:
+        send_batch_size: 10000
+        timeout: 10s
+      k8sattributes:
+        auth_type: "serviceAccount"
+        passthrough: false
+        pod_association:
+          - sources:
+            - from: resource_attribute
+              name: k8s.pod.ip
+          - sources:
+            - from: connection
+          
+        extract:
+          metadata:
+            - k8s.pod.name
+            - k8s.pod.uid
+            - k8s.namespace.name
+            - k8s.deployment.name
+            - container.image.name
+            - container.image.tag
+            - k8s.container.name
+          labels:
+            - tag_name: $$1
+              key_regex: (.*)
+              from: pod
+          annotations:
+            - tag_name: $$1
+              key_regex: (.*)
+              from: pod
+      resource:
+        attributes:
+          - key: tenant
+            from_attribute: k8s.namespace.name
+            action: upsert
+
+    exporters:
+      debug:
+        verbosity: detailed
+      logging:
+        verbosity: detailed 
+      otlp:
+        endpoint: jaeger.tcommon.svc.cluster.local:4317
+        tls:
+          insecure: true
+      prometheus:
+        endpoint: "0.0.0.0:8889"
+        resource_to_telemetry_conversion:
+          enabled: true
+
+    service:
+      telemetry:
+        metrics:
+          address: "0.0.0.0:8890"
+      pipelines:
+        traces:
+          receivers: [otlp]
+          processors: [memory_limiter, k8sattributes, resource, batch]
+          exporters: [debug, logging, otlp]
+        metrics:
+          receivers: [otlp]
+          processors: [memory_limiter, k8sattributes, resource, batch]
+          exporters: [debug, logging, otlp, prometheus]
