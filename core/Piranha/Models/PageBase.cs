@@ -60,20 +60,32 @@ public abstract class PageBase : RoutedContentBase
     /// </summary>
     public Guid? WorkflowId { get; set; }
     public Workflow Workflow { get; set; }
+    
+    /// <summary>
+    /// Gets/sets the workflow status from database
+    /// </summary>
+    public int? WorkflowStatusValue { get; set; }
 
     public enum PageWorkflowStatus
     {
-        Draft,
-        PendingReview,
-        PendingLegal,
-        Approved,
-        Rejected,
+        Draft = 0,
+        PendingReview = 1,
+        PendingLegal = 2,
+        Approved = 3,
+        Rejected = 4,
     }
 
     public PageWorkflowStatus WorkflowStatus
     {
         get
         {
+            // Primeiro, tenta usar o valor da base de dados
+            if (WorkflowStatusValue.HasValue)
+            {
+                return (PageWorkflowStatus)WorkflowStatusValue.Value;
+            }
+
+            // Fallback para a lógica anterior se não houver valor na BD
             if (Workflow == null)
                 return PageWorkflowStatus.Draft;
 

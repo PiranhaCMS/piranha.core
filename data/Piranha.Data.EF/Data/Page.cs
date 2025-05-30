@@ -116,7 +116,19 @@ public sealed class Page : RoutedContentBase<PageField>
     /// </summary>
     public Guid? OriginalPageId { get; set; }
 
+    /// <summary>
+    /// Workflow properties.
+    /// </summary>
     public Guid? WorkflowId { get; set; }
     public Workflow Workflow { get; set; }
+
+    /// <summary>
+    /// Gets/sets the workflow status from database
+    /// </summary>
+    public int? WorkflowStatusValue { get; set; }
+
+    /// <summary>
+    /// Gets/sets the workflow status enum (for backward compatibility)
+    /// </summary>
     public Models.PageWorkflowStatus WorkflowStatus { get; set; } = Models.PageWorkflowStatus.Draft;
 }

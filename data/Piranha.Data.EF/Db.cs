@@ -262,6 +262,8 @@ public abstract class Db<T> : DbContext, IDb
     /// <param name="mb">The current model builder</param>
     protected override void OnModelCreating(ModelBuilder mb)
     {
+        base.OnModelCreating(mb);
+
         mb.Entity<WorkflowStep>().ToTable("Piranha_WorkflowSteps");
         mb.Entity<WorkflowStep>().HasKey(ws => ws.Id);
 
@@ -408,6 +410,10 @@ public abstract class Db<T> : DbContext, IDb
         mb.Entity<Data.Page>().Property(p => p.RedirectUrl).HasMaxLength(256);
         mb.Entity<Data.Page>().Property(p => p.EnableComments).HasDefaultValue(false);
         mb.Entity<Data.Page>().HasIndex(p => new { p.SiteId, p.Slug }).IsUnique();
+        mb.Entity<Data.Page>()
+            .Property(p => p.WorkflowStatusValue)
+            .HasColumnName("WorkflowStatusValue")
+            .IsRequired(false);
 
         mb.Entity<Data.PageBlock>().ToTable("Piranha_PageBlocks");
         mb.Entity<Data.PageBlock>().HasIndex(b => new { b.PageId, b.SortOrder }).IsUnique();
