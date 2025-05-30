@@ -61,12 +61,20 @@ public abstract class Db<T>
             }
 
             // Migrate database
-            Database.Migrate();
+            if (!IsDesignTime())
+            {
+                Database.Migrate();
+                Seed();
+            }
 
-            Seed();
 
             IsInitialized = true;
         }
+    }
+
+    private static bool IsDesignTime()
+    {
+        return AppDomain.CurrentDomain.FriendlyName.StartsWith("ef");
     }
 
     /// <summary>

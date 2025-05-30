@@ -62,7 +62,8 @@ piranha.pageedit = new Vue({
         },
         selectedSetting: "uid-settings",
         selectedRoute: null,
-        routes: []
+        routes: [],
+        submitting: false
     },
     computed: {
         contentRegions: function () {
@@ -460,7 +461,60 @@ piranha.pageedit = new Vue({
             } else {
                 this.excerpt = e.target.innerHTML;
             }
-        }
+        },
+        submitForReview: function() {
+            var self = this;
+    
+            if (self.submitting) return;
+    
+            self.submitting = true;
+    
+            fetch(piranha.baseUrl + "manager/api/workflow/submit/" + self.id, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    [piranha.antiForgery.headerName]: self.getAntiForgeryToken()
+                }
+            })
+            .then(function(response) {
+                return response.json();
+            })
+            .then(function(result) {
+                self.submitting = false;
+    
+                if (result.success) {
+                    piranha.notifications.push({
+                        body: "Page submitted for review successfully",
+                        type: "success",
+                        hide: true
+                    });
+    
+                    self.state = 'pending';
+    
+                    // Opcional: redirecionar
+                    // window.location.href = piranha.baseUrl + "manager/workflows/my";
+                } else {
+                    piranha.notifications.push({
+                        body: result.message || "Failed to submit page for review",
+                        type: "danger",
+                        hide: true
+                    });
+                }
+            })
+            .catch(function(error) {
+                self.submitting = false;
+                piranha.notifications.push({
+                    body: "An error occurred while submitting the page",
+                    type: "danger",
+                    hide: true
+                });
+            });
+        },
+    
+        getAntiForgeryToken: function() {
+            var token = document.querySelector('input[name="__RequestVerificationToken"]');
+            return token ? token.value : '';
+        },
     },
     created: function () {
     },

@@ -11,6 +11,9 @@
     ViewBag.Title = Localizer.Menu["Review"] ?? "Review Content";
 }
 
+@* CSRF Token para uso com fetch *@
+<form style="display:none">@Html.AntiForgeryToken()</form>
+
 <div class="top">
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
@@ -53,21 +56,16 @@
                         {
                             <tr>
                                 <td>
-                                    <a class="text-dark" href="/manager/post/preview/@pages.Id" target="_blank">
-                                        @pages.Title
-                                    </a>
+                                    <a class="text-dark" href="/manager/page/edit/@pages.Id" target="_blank">@pages.Title</a>
                                 </td>
                                 <td>@pages.TypeName</td>
-                                @* <td>@pages.Author</td>
-                                <td>@pages.SubmittedAt.ToString("yyyy-MM-dd HH:mm")</td> *@
                                 <td>AUTHOR</td>
-                                <td>Submited</td>
+                                <td>Submitted</td>
                                 <td>
-                                    <button class="btn btn-sm btn-success" title="Approve">
+                                    <button class="btn btn-sm btn-success btn-approve" data-page-id="@pages.Id" title="Approve">
                                         <i class="fas fa-check"></i>
                                     </button>
-                                    <button class="btn btn-sm btn-danger" title="Reject"
-                                            data-toggle="modal" data-target="#rejectModal">
+                                    <button class="btn btn-sm btn-danger btn-reject" data-page-id="@pages.Id" title="Reject">
                                         <i class="fas fa-times"></i>
                                     </button>
                                 </td>
@@ -90,7 +88,7 @@
                     @foreach (var pages in Model.Pages.Where(p => p.Status == "Approved"))
                     {
                         <li class="list-group-item">
-                            <a href="/manager/post/preview/@pages.Id" target="_blank">@pages.Title</a>
+                            <a href="/manager/page/edit/@pages.Id" target="_blank">@pages.Title</a>
                         </li>
                     }
                 </ul>
@@ -109,7 +107,7 @@
                     @foreach (var pages in Model.Pages.Where(p => p.Status == "Rejected"))
                     {
                         <li class="list-group-item">
-                            <a href="/manager/post/preview/@pages.Id" target="_blank">@pages.Title</a>
+                            <a href="/manager/page/edit/@pages.Id" target="_blank">@pages.Title</a>
                         </li>
                     }
                 </ul>
@@ -124,17 +122,127 @@
 
 <!-- Modal para rejeição -->
 <div class="modal fade" id="rejectModal" tabindex="-1">
-  <div class="modal-dialog"><div class="modal-content">
-    <div class="modal-header">
-        <h5 class="modal-title">Reject content</h5>
-        <button class="close" data-dismiss="modal"><span>&times;</span></button>
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Reject content</h5>
+                <button class="close" data-dismiss="modal"><span>&times;</span></button>
+            </div>
+            <div class="modal-body">
+                <textarea v-model="rejectReason" class="form-control" rows="3" placeholder="Reason for rejection..."></textarea>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                <button class="btn btn-danger" @@click="confirmReject()">Reject</button>
+            </div>
+        </div>
     </div>
-    <div class="modal-body">
-        <textarea class="form-control" rows="3" placeholder="Reason…"></textarea>
-    </div>
-    <div class="modal-footer">
-        <button class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-        <button class="btn btn-danger">Reject</button>
-    </div>
-  </div></div>
 </div>
+
+@section Script {
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    var app = new Vue({
+        el: '.container-fluid.app.ready',
+        data: {
+            processing: false,
+            selectedPageId: null,
+            rejectReason: ''
+        },
+        methods: {
+            approveContent: function(pageId) {
+                this.processWorkflowAction('approve', pageId);
+            },
+            rejectContent: function(pageId, reason) {
+                this.selectedPageId = pageId;
+                this.rejectReason = reason || '';
+                this.processWorkflowAction('deny', pageId, reason);
+            },
+            processWorkflowAction: function(action, pageId, reason) {
+                var self = this;
+                if (self.processing) return;
+                self.processing = true;
+
+                var payload = reason ? { reason: reason } : {};
+
+                fetch(piranha.baseUrl + "manager/api/workflow/" + action + "/" + pageId, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        [piranha.antiForgery.headerName]: self.getAntiForgeryToken()
+                    },
+                    body: JSON.stringify(payload)
+                })
+                .then(function(response) {
+                    return response.json();
+                })
+                .then(function(result) {
+                    self.processing = false;
+                    if (result.success) {
+                        piranha.notifications.push({
+                            body: result.message || "Action completed",
+                            type: "success",
+                            hide: true
+                        });
+                        setTimeout(function() {
+                            window.location.reload();
+                        }, 1000);
+                    } else {
+                        piranha.notifications.push({
+                            body: result.message || "Action failed",
+                            type: "danger",
+                            hide: true
+                        });
+                    }
+                })
+                .catch(function(error) {
+                    self.processing = false;
+                    piranha.notifications.push({
+                        body: "An error occurred",
+                        type: "danger",
+                        hide: true
+                    });
+                });
+            },
+            openRejectModal: function(pageId) {
+                this.selectedPageId = pageId;
+                this.rejectReason = '';
+                $('#rejectModal').modal('show');
+            },
+            confirmReject: function() {
+                if (this.selectedPageId && this.rejectReason.trim()) {
+                    this.rejectContent(this.selectedPageId, this.rejectReason);
+                    $('#rejectModal').modal('hide');
+                } else {
+                    piranha.notifications.push({
+                        body: "Please provide a reason for rejection",
+                        type: "warning",
+                        hide: true
+                    });
+                }
+            },
+            getAntiForgeryToken: function() {
+                var token = document.querySelector('input[name="__RequestVerificationToken"]');
+                return token ? token.value : '';
+            }
+        }
+    });
+
+    document.querySelectorAll('.btn-approve').forEach(function(btn) {
+        btn.addEventListener('click', function(e) {
+            e.preventDefault();
+            var pageId = this.getAttribute('data-page-id');
+            app.approveContent(pageId);
+        });
+    });
+
+    document.querySelectorAll('.btn-reject').forEach(function(btn) {
+        btn.addEventListener('click', function(e) {
+            e.preventDefault();
+            var pageId = this.getAttribute('data-page-id');
+            app.openRejectModal(pageId);
+        });
+    });
+});
+</script>
+}

@@ -14,7 +14,8 @@ using Piranha.Data;
 namespace Piranha;
 
 /// <inheritdoc />
-public abstract class Db<T> : DbContext, IDb where T : Db<T>
+public abstract class Db<T> : DbContext, IDb
+    where T : Db<T>
 {
     /// <summary>
     /// Gets/sets whether the db context as been initialized. This
@@ -226,7 +227,8 @@ public abstract class Db<T> : DbContext, IDb where T : Db<T>
     /// Default constructor.
     /// </summary>
     /// <param name="options">Configuration options</param>
-    public Db(DbContextOptions<T> options) : base(options)
+    public Db(DbContextOptions<T> options)
+        : base(options)
     {
         if (!IsInitialized)
         {
@@ -235,14 +237,23 @@ public abstract class Db<T> : DbContext, IDb where T : Db<T>
                 if (!IsInitialized)
                 {
                     // Migrate database
-                    Database.Migrate();
+                    if (!IsDesignTime())
+                    {
+                        Database.Migrate();
+                        Seed();
+                    }
+
                     // Seed
-                    Seed();
 
                     IsInitialized = true;
                 }
             }
         }
+    }
+
+    private static bool IsDesignTime()
+    {
+        return AppDomain.CurrentDomain.FriendlyName.StartsWith("ef");
     }
 
     /// <summary>
@@ -275,7 +286,14 @@ public abstract class Db<T> : DbContext, IDb where T : Db<T>
         mb.Entity<Data.BlockField>().ToTable("Piranha_BlockFields");
         mb.Entity<Data.BlockField>().Property(f => f.FieldId).IsRequired().HasMaxLength(64);
         mb.Entity<Data.BlockField>().Property(f => f.CLRType).IsRequired().HasMaxLength(256);
-        mb.Entity<Data.BlockField>().HasIndex(f => new { f.BlockId, f.FieldId, f.SortOrder }).IsUnique();
+        mb.Entity<Data.BlockField>()
+            .HasIndex(f => new
+            {
+                f.BlockId,
+                f.FieldId,
+                f.SortOrder,
+            })
+            .IsUnique();
 
         mb.Entity<Data.Category>().ToTable("Piranha_Categories");
         mb.Entity<Data.Category>().Property(c => c.Title).IsRequired().HasMaxLength(64);
@@ -292,16 +310,31 @@ public abstract class Db<T> : DbContext, IDb where T : Db<T>
         mb.Entity<Data.ContentBlockField>().ToTable("Piranha_ContentBlockFields");
         mb.Entity<Data.ContentBlockField>().Property(f => f.FieldId).IsRequired().HasMaxLength(64);
         mb.Entity<Data.ContentBlockField>().Property(f => f.CLRType).IsRequired().HasMaxLength(256);
-        mb.Entity<Data.ContentBlockField>().HasIndex(f => new { f.BlockId, f.FieldId, f.SortOrder }).IsUnique();
+        mb.Entity<Data.ContentBlockField>()
+            .HasIndex(f => new
+            {
+                f.BlockId,
+                f.FieldId,
+                f.SortOrder,
+            })
+            .IsUnique();
 
-        mb.Entity<Data.ContentBlockFieldTranslation>().ToTable("Piranha_ContentBlockFieldTranslations");
+        mb.Entity<Data.ContentBlockFieldTranslation>()
+            .ToTable("Piranha_ContentBlockFieldTranslations");
         mb.Entity<Data.ContentBlockFieldTranslation>().HasKey(t => new { t.FieldId, t.LanguageId });
 
         mb.Entity<Data.ContentField>().ToTable("Piranha_ContentFields");
         mb.Entity<Data.ContentField>().Property(f => f.RegionId).HasMaxLength(64).IsRequired();
         mb.Entity<Data.ContentField>().Property(f => f.FieldId).HasMaxLength(64).IsRequired();
         mb.Entity<Data.ContentField>().Property(f => f.CLRType).HasMaxLength(256).IsRequired();
-        mb.Entity<Data.ContentField>().HasIndex(f => new { f.ContentId, f.RegionId, f.FieldId, f.SortOrder });
+        mb.Entity<Data.ContentField>()
+            .HasIndex(f => new
+            {
+                f.ContentId,
+                f.RegionId,
+                f.FieldId,
+                f.SortOrder,
+            });
 
         mb.Entity<Data.ContentFieldTranslation>().ToTable("Piranha_ContentFieldTranslations");
         mb.Entity<Data.ContentFieldTranslation>().HasKey(t => new { t.FieldId, t.LanguageId });
@@ -313,7 +346,11 @@ public abstract class Db<T> : DbContext, IDb where T : Db<T>
 
         mb.Entity<Data.ContentTaxonomy>().ToTable("Piranha_ContentTaxonomies");
         mb.Entity<Data.ContentTaxonomy>().HasKey(t => new { t.ContentId, t.TaxonomyId });
-        mb.Entity<Data.ContentTaxonomy>().HasOne(t => t.Taxonomy).WithMany().IsRequired().OnDelete(DeleteBehavior.Restrict);
+        mb.Entity<Data.ContentTaxonomy>()
+            .HasOne(t => t.Taxonomy)
+            .WithMany()
+            .IsRequired()
+            .OnDelete(DeleteBehavior.Restrict);
 
         mb.Entity<Data.ContentTranslation>().ToTable("Piranha_ContentTranslations");
         mb.Entity<Data.ContentTranslation>().HasKey(t => new { t.ContentId, t.LanguageId });
@@ -340,11 +377,22 @@ public abstract class Db<T> : DbContext, IDb where T : Db<T>
 
         mb.Entity<Data.MediaVersion>().ToTable("Piranha_MediaVersions");
         mb.Entity<Data.MediaVersion>().Property(v => v.FileExtension).HasMaxLength(8);
-        mb.Entity<Data.MediaVersion>().HasIndex(v => new { v.MediaId, v.Width, v.Height }).IsUnique();
+        mb.Entity<Data.MediaVersion>()
+            .HasIndex(v => new
+            {
+                v.MediaId,
+                v.Width,
+                v.Height,
+            })
+            .IsUnique();
 
         mb.Entity<Data.Page>().ToTable("Piranha_Pages");
         mb.Entity<Data.Page>().Property(p => p.PageTypeId).HasMaxLength(64).IsRequired();
-        mb.Entity<Data.Page>().Property(p => p.ContentType).HasMaxLength(255).IsRequired().HasDefaultValue("Page");
+        mb.Entity<Data.Page>()
+            .Property(p => p.ContentType)
+            .HasMaxLength(255)
+            .IsRequired()
+            .HasDefaultValue("Page");
         mb.Entity<Data.Page>().Property(p => p.Title).HasMaxLength(128).IsRequired();
         mb.Entity<Data.Page>().Property(p => p.NavigationTitle).HasMaxLength(128);
         mb.Entity<Data.Page>().Property(p => p.Slug).HasMaxLength(128).IsRequired();
@@ -374,7 +422,14 @@ public abstract class Db<T> : DbContext, IDb where T : Db<T>
         mb.Entity<Data.PageField>().Property(f => f.RegionId).HasMaxLength(64).IsRequired();
         mb.Entity<Data.PageField>().Property(f => f.FieldId).HasMaxLength(64).IsRequired();
         mb.Entity<Data.PageField>().Property(f => f.CLRType).HasMaxLength(256).IsRequired();
-        mb.Entity<Data.PageField>().HasIndex(f => new { f.PageId, f.RegionId, f.FieldId, f.SortOrder });
+        mb.Entity<Data.PageField>()
+            .HasIndex(f => new
+            {
+                f.PageId,
+                f.RegionId,
+                f.FieldId,
+                f.SortOrder,
+            });
 
         mb.Entity<Data.PagePermission>().ToTable("Piranha_PagePermissions");
         mb.Entity<Data.PagePermission>().HasKey(p => new { p.PageId, p.Permission });
@@ -405,13 +460,14 @@ public abstract class Db<T> : DbContext, IDb where T : Db<T>
         mb.Entity<Data.Post>().Property(p => p.Route).HasMaxLength(256);
         mb.Entity<Data.Post>().Property(p => p.RedirectUrl).HasMaxLength(256);
         mb.Entity<Data.Post>().Property(p => p.EnableComments).HasDefaultValue(false);
-        mb.Entity<Data.Post>().HasOne(p => p.Category).WithMany().IsRequired().OnDelete(DeleteBehavior.Restrict);
+        mb.Entity<Data.Post>()
+            .HasOne(p => p.Category)
+            .WithMany()
+            .IsRequired()
+            .OnDelete(DeleteBehavior.Restrict);
         mb.Entity<Data.Post>().HasIndex(p => new { p.BlogId, p.Slug }).IsUnique();
 
-        mb.Entity<Page>()
-            .HasOne(p => p.Workflow)
-            .WithOne()
-            .HasForeignKey<Page>(p => p.WorkflowId);
+        mb.Entity<Page>().HasOne(p => p.Workflow).WithOne().HasForeignKey<Page>(p => p.WorkflowId);
 
         mb.Entity<Workflow>()
             .HasMany(w => w.Steps)
@@ -431,7 +487,14 @@ public abstract class Db<T> : DbContext, IDb where T : Db<T>
         mb.Entity<Data.PostField>().Property(f => f.RegionId).HasMaxLength(64).IsRequired();
         mb.Entity<Data.PostField>().Property(f => f.FieldId).HasMaxLength(64).IsRequired();
         mb.Entity<Data.PostField>().Property(f => f.CLRType).HasMaxLength(256).IsRequired();
-        mb.Entity<Data.PostField>().HasIndex(f => new { f.PostId, f.RegionId, f.FieldId, f.SortOrder });
+        mb.Entity<Data.PostField>()
+            .HasIndex(f => new
+            {
+                f.PostId,
+                f.RegionId,
+                f.FieldId,
+                f.SortOrder,
+            });
 
         mb.Entity<Data.PostPermission>().ToTable("Piranha_PostPermissions");
         mb.Entity<Data.PostPermission>().HasKey(p => new { p.PostId, p.Permission });
@@ -440,7 +503,11 @@ public abstract class Db<T> : DbContext, IDb where T : Db<T>
 
         mb.Entity<Data.PostTag>().ToTable("Piranha_PostTags");
         mb.Entity<Data.PostTag>().HasKey(t => new { t.PostId, t.TagId });
-        mb.Entity<Data.PostTag>().HasOne(t => t.Tag).WithMany().IsRequired().OnDelete(DeleteBehavior.Restrict);
+        mb.Entity<Data.PostTag>()
+            .HasOne(t => t.Tag)
+            .WithMany()
+            .IsRequired()
+            .OnDelete(DeleteBehavior.Restrict);
 
         mb.Entity<Data.PostType>().ToTable("Piranha_PostTypes");
         mb.Entity<Data.PostType>().Property(p => p.Id).HasMaxLength(64).IsRequired();
@@ -456,12 +523,18 @@ public abstract class Db<T> : DbContext, IDb where T : Db<T>
         mb.Entity<Data.Site>().HasOne(s => s.Language).WithMany().OnDelete(DeleteBehavior.Restrict);
         mb.Entity<Data.Site>().HasIndex(s => s.InternalId).IsUnique();
 
-
         mb.Entity<Data.SiteField>().ToTable("Piranha_SiteFields");
         mb.Entity<Data.SiteField>().Property(f => f.RegionId).HasMaxLength(64).IsRequired();
         mb.Entity<Data.SiteField>().Property(f => f.FieldId).HasMaxLength(64).IsRequired();
         mb.Entity<Data.SiteField>().Property(f => f.CLRType).HasMaxLength(256).IsRequired();
-        mb.Entity<Data.SiteField>().HasIndex(f => new { f.SiteId, f.RegionId, f.FieldId, f.SortOrder });
+        mb.Entity<Data.SiteField>()
+            .HasIndex(f => new
+            {
+                f.SiteId,
+                f.RegionId,
+                f.FieldId,
+                f.SortOrder,
+            });
 
         mb.Entity<Data.SiteType>().ToTable("Piranha_SiteTypes");
         mb.Entity<Data.SiteType>().Property(s => s.Id).HasMaxLength(64).IsRequired();
@@ -476,7 +549,14 @@ public abstract class Db<T> : DbContext, IDb where T : Db<T>
         mb.Entity<Data.Taxonomy>().Property(t => t.GroupId).IsRequired().HasMaxLength(64);
         mb.Entity<Data.Taxonomy>().Property(t => t.Title).IsRequired().HasMaxLength(64);
         mb.Entity<Data.Taxonomy>().Property(t => t.Slug).IsRequired().HasMaxLength(64);
-        mb.Entity<Data.Taxonomy>().HasIndex(t => new { t.GroupId, t.Type, t.Slug }).IsUnique();
+        mb.Entity<Data.Taxonomy>()
+            .HasIndex(t => new
+            {
+                t.GroupId,
+                t.Type,
+                t.Slug,
+            })
+            .IsUnique();
     }
 
     /// <summary>
@@ -493,13 +573,15 @@ public abstract class Db<T> : DbContext, IDb where T : Db<T>
 
         if (Languages.Count() == 0)
         {
-            Languages.Add(new Data.Language
-            {
-                Id = langId,
-                Title = "Default",
-                Culture = "en-US",
-                IsDefault = true
-            });
+            Languages.Add(
+                new Data.Language
+                {
+                    Id = langId,
+                    Title = "Default",
+                    Culture = "en-US",
+                    IsDefault = true,
+                }
+            );
         }
         else
         {
@@ -511,16 +593,18 @@ public abstract class Db<T> : DbContext, IDb where T : Db<T>
         //
         if (Sites.Count() == 0)
         {
-            Sites.Add(new Data.Site
-            {
-                Id = Guid.NewGuid(),
-                LanguageId = langId,
-                InternalId = "Default",
-                IsDefault = true,
-                Title = "Default Site",
-                Created = DateTime.Now,
-                LastModified = DateTime.Now
-            });
+            Sites.Add(
+                new Data.Site
+                {
+                    Id = Guid.NewGuid(),
+                    LanguageId = langId,
+                    InternalId = "Default",
+                    IsDefault = true,
+                    Title = "Default Site",
+                    Created = DateTime.Now,
+                    LastModified = DateTime.Now,
+                }
+            );
         }
         else
         {
@@ -535,32 +619,22 @@ public abstract class Db<T> : DbContext, IDb where T : Db<T>
         //
         // Make sure we don't have NULL values in Piranha_MediaVersions.FileExtension
         //
-        var versions = MediaVersions
-            .Where(m => m.FileExtension == null)
-            .ToList();
+        var versions = MediaVersions.Where(m => m.FileExtension == null).ToList();
         foreach (var version in versions)
             version.FileExtension = ".jpg";
 
-        var pageBlocks = PageBlocks
-            .Where(b => b.ParentId.HasValue)
-            .ToList();
+        var pageBlocks = PageBlocks.Where(b => b.ParentId.HasValue).ToList();
         var pageBlocksId = pageBlocks.Select(b => b.BlockId).ToList();
-        var blocks = Blocks
-            .Where(b => pageBlocksId.Contains(b.Id))
-            .ToList();
+        var blocks = Blocks.Where(b => pageBlocksId.Contains(b.Id)).ToList();
         foreach (var block in blocks)
         {
             var pageBlock = pageBlocks.Single(b => b.BlockId == block.Id);
             block.ParentId = pageBlock.ParentId;
             pageBlock.ParentId = null;
         }
-        var postBlocks = PostBlocks
-            .Where(b => b.ParentId.HasValue)
-            .ToList();
+        var postBlocks = PostBlocks.Where(b => b.ParentId.HasValue).ToList();
         var postBlocksId = postBlocks.Select(b => b.BlockId).ToList();
-        blocks = Blocks
-            .Where(b => postBlocksId.Contains(b.Id))
-            .ToList();
+        blocks = Blocks.Where(b => postBlocksId.Contains(b.Id)).ToList();
         foreach (var block in blocks)
         {
             var postBlock = postBlocks.Single(b => b.BlockId == block.Id);

@@ -8,6 +8,7 @@
  *
  */
 
+using System;
 using System.ComponentModel.DataAnnotations;
 
 namespace Piranha.Models;
@@ -54,6 +55,60 @@ public abstract class PageBase : RoutedContentBase
     /// </summary>
     public bool IsStartPage => !ParentId.HasValue && SortOrder == 0;
 
+    /// <summary>
+    /// Workflow properties.
+    /// </summary>
     public Guid? WorkflowId { get; set; }
     public Workflow Workflow { get; set; }
+
+    public enum PageWorkflowStatus
+    {
+        Draft,
+        PendingReview,
+        PendingLegal,
+        Approved,
+        Rejected,
+    }
+
+    public PageWorkflowStatus WorkflowStatus
+    {
+        get
+        {
+            if (Workflow == null)
+                return PageWorkflowStatus.Draft;
+
+            if (Workflow.IsApproved)
+                return PageWorkflowStatus.Approved;
+
+            if (
+                Workflow.CurrentStep == 0
+                && !string.IsNullOrEmpty(Workflow.GetCurrentStep()?.Reason)
+            )
+                return PageWorkflowStatus.Rejected;
+
+            if (Workflow.CurrentStep == 0)
+                return PageWorkflowStatus.PendingReview;
+
+            if (Workflow.CurrentStep == 1)
+                return PageWorkflowStatus.PendingLegal;
+
+            return PageWorkflowStatus.Draft;
+        }
+    }
+
+    public string WorkflowStatusDisplay
+    {
+        get
+        {
+            return WorkflowStatus switch
+            {
+                PageWorkflowStatus.Draft => "Draft",
+                PageWorkflowStatus.PendingReview => "Pending Review",
+                PageWorkflowStatus.PendingLegal => "Pending Legal",
+                PageWorkflowStatus.Approved => "Approved",
+                PageWorkflowStatus.Rejected => "Rejected",
+                _ => "Unknown",
+            };
+        }
+    }
 }

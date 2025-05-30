@@ -5,39 +5,66 @@ namespace Piranha.Services;
 class WorkflowService : IWorkflowService
 {
     private readonly IApi _api;
-    
+
     public WorkflowService(IApi api)
     {
         _api = api;
+        
+        // Hook simplificado - só despublica ao gravar, não cria workflow
         App.Hooks.Pages.RegisterOnBeforeSave(page =>
         {
-            page.Published = null; //unpublish
-
-            if (page.Workflow == null)
+            // Se a página tem workflow ativo e foi editada, volta ao primeiro step
+            if (page.Workflow != null && page.Workflow.Steps.Any())
             {
-                page.Workflow = new Workflow
-                {
-                    Steps = new List<WorkflowStep>() //since this is an MVP, I'll hard-code the steps (to start simply, we'll just have an initial reviewer and then the legal team)
-                    {
-                        new WorkflowStep {
-                            Permission ="Workflow.Reviewer",
-                            Name="Initial Review"
-                        },
-                        new WorkflowStep {
-                            Permission ="Workflow.LegalTeam",
-                            Name="Legal Team Review"
-                        }
-                    }
-                };
-            }
-            else
-            { //any changes requires going back to the first step
+                page.Published = null; // unpublish
                 page.Workflow.CurrentStep = 0;
                 page.Workflow.IsApproved = false;
             }
-
-
         });
+    }
+
+    /// <summary>
+    /// Cria um novo workflow para uma página e submete para revisão
+    /// </summary>
+    public async Task SubmitForReview(PageBase page)
+    {
+        // Cria o workflow se não existir
+        if (page.Workflow == null)
+        {
+            page.Workflow = CreateWorkflow();
+        }
+        else
+        {
+            // Reset workflow se já existir
+            page.Workflow.CurrentStep = 0;
+            page.Workflow.IsApproved = false;
+        }
+
+        // Despublica a página
+        page.Published = null;
+        
+        await _api.Pages.SaveAsync(page);
+    }
+
+    /// <summary>
+    /// Cria um novo workflow com os steps definidos
+    /// </summary>
+    private Workflow CreateWorkflow()
+    {
+        return new Workflow
+        {
+            Steps = new List<WorkflowStep>
+            {
+                new WorkflowStep {
+                    Permission = "Workflow.Reviewer",
+                    Name = "Initial Review"
+                },
+                new WorkflowStep {
+                    Permission = "Workflow.LegalTeam",
+                    Name = "Legal Team Review"
+                }
+            }
+        };
     }
 
     public async Task Approve(PageBase page, ClaimsPrincipal user, string reason = null)

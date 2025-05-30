@@ -118,4 +118,5 @@ public sealed class Page : RoutedContentBase<PageField>
 
     public Guid? WorkflowId { get; set; }
     public Workflow Workflow { get; set; }
+    public Models.PageWorkflowStatus WorkflowStatus { get; set; } = Models.PageWorkflowStatus.Draft;
 }
