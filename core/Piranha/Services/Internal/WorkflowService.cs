@@ -1,15 +1,17 @@
 using System.Security.Claims;
 using Piranha.Models;
+
 namespace Piranha.Services;
 
-class WorkflowService : IWorkflowService
+// MUDANÇA: de 'class' para 'public class'
+public class WorkflowService : IWorkflowService
 {
     private readonly IApi _api;
 
     public WorkflowService(IApi api)
     {
         _api = api;
-        
+
         // Hook simplificado - só despublica ao gravar, não cria workflow
         App.Hooks.Pages.RegisterOnBeforeSave(page =>
         {
@@ -42,7 +44,7 @@ class WorkflowService : IWorkflowService
 
         // Despublica a página
         page.Published = null;
-        
+
         await _api.Pages.SaveAsync(page);
     }
 
@@ -55,15 +57,9 @@ class WorkflowService : IWorkflowService
         {
             Steps = new List<WorkflowStep>
             {
-                new WorkflowStep {
-                    Permission = "Workflow.Reviewer",
-                    Name = "Initial Review"
-                },
-                new WorkflowStep {
-                    Permission = "Workflow.LegalTeam",
-                    Name = "Legal Team Review"
-                }
-            }
+                new WorkflowStep { Permission = "Workflow.Reviewer", Name = "Initial Review" },
+                new WorkflowStep { Permission = "Workflow.LegalTeam", Name = "Legal Team Review" },
+            },
         };
     }
 
@@ -85,7 +81,9 @@ class WorkflowService : IWorkflowService
         }
         else
         {
-            throw new UnauthorizedAccessException("User does not have the required permission to approve this content");
+            throw new UnauthorizedAccessException(
+                "User does not have the required permission to approve this content"
+            );
         }
     }
 
@@ -102,7 +100,9 @@ class WorkflowService : IWorkflowService
         }
         else
         {
-            throw new UnauthorizedAccessException("User does not have the required permission to deny this content");
+            throw new UnauthorizedAccessException(
+                "User does not have the required permission to deny this content"
+            );
         }
     }
 }

@@ -4,6 +4,7 @@ using Piranha.AspNetCore.Identity.SQLite;
 using Piranha.AttributeBuilder;
 using Piranha.Data.EF.SQLite;
 using Piranha.Manager.Editor;
+using Piranha.Services; // Adicionar para o IWorkflowService
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -33,11 +34,16 @@ builder.AddPiranha(options =>
      * Here you can configure the different permissions
      * that you want to use for securing content in the
      * application.
+     */
     options.UseSecurity(o =>
     {
+        // Permissões existentes
         o.UsePermission("WebUser", "Web User");
+
+        // Novas permissões para Workflow
+        o.UsePermission("Workflow.Reviewer", "Workflow Reviewer");
+        o.UsePermission("Workflow.LegalTeam", "Legal Team Reviewer");
     });
-     */
 
     /**
      * Here you can specify the login url for the front end
@@ -45,6 +51,41 @@ builder.AddPiranha(options =>
      * the manager interface.
     options.LoginUrl = "login";
      */
+});
+
+// Adicionar o serviço de Workflow
+builder.Services.AddScoped<IWorkflowService, WorkflowService>();
+
+// Configurar políticas de autorização
+builder.Services.AddAuthorization(options =>
+{
+    // Política principal do Manager (mais permissiva para teste)
+    options.AddPolicy(
+        "PiranhaManager",
+        policy =>
+        {
+            policy.RequireAuthenticatedUser();
+        }
+    );
+
+    // Políticas específicas para Workflow
+    options.AddPolicy(
+        "WorkflowReviewer",
+        policy =>
+        {
+            policy.RequireAuthenticatedUser();
+            policy.RequireClaim("Permission", "Workflow.Reviewer");
+        }
+    );
+
+    options.AddPolicy(
+        "WorkflowLegalTeam",
+        policy =>
+        {
+            policy.RequireAuthenticatedUser();
+            policy.RequireClaim("Permission", "Workflow.LegalTeam");
+        }
+    );
 });
 
 var app = builder.Build();

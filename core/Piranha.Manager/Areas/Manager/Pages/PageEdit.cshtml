@@ -14,6 +14,54 @@
     <script src="~/manager/assets/js/piranha.components.min.js?v=@Piranha.Utils.GetAssemblyVersionHash(typeof(Piranha.Manager.Module).Assembly)"></script>
     <script src="~/manager/assets/js/piranha.pageedit.min.js?v=@Piranha.Utils.GetAssemblyVersionHash(typeof(Piranha.Manager.Module).Assembly)"></script>
 
+    <script>
+        // Extend piranha.pageedit with workflow methods
+        piranha.pageedit.submitForReview = function() {
+            var self = this;
+            
+            if (self.submitting) return;
+            
+            self.submitting = true;
+            
+            fetch('/manager/api/workflow/submit/' + self.id, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'RequestVerificationToken': $('input[name="__RequestVerificationToken"]').val()
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    piranha.notifications.push({
+                        body: data.message,
+                        type: "success"
+                    });
+                    
+                    // Reload to show new workflow state
+                    setTimeout(() => {
+                        window.location.reload();
+                    }, 1000);
+                } else {
+                    piranha.notifications.push({
+                        body: data.message,
+                        type: "danger"
+                    });
+                }
+            })
+            .catch(error => {
+                console.error('Workflow Error:', error);
+                piranha.notifications.push({
+                    body: "An error occurred while submitting for review",
+                    type: "danger"
+                });
+            })
+            .finally(() => {
+                self.submitting = false;
+            });
+        };
+    </script>
+    
     @if (action == "edit")
     {
         <script>
