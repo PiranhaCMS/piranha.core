@@ -9,8 +9,8 @@ namespace Piranha.Services;
 /// </summary>
 public interface IWorkflowService
 {
-    public Task Approve(PostBase post, ClaimsPrincipal user, string reason = null);
-    public Task Deny(PostBase post, ClaimsPrincipal user, string reason = null);
+    public Task Approve(PageBase page, ClaimsPrincipal user, string reason = null);
+    public Task Deny(PageBase page, ClaimsPrincipal user, string reason = null);
 
 
 }

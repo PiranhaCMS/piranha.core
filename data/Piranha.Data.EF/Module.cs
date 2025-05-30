@@ -112,7 +112,9 @@ public class Module : IModule
                 .ForMember(p => p.Permalink, o => o.MapFrom(m => "/" + m.Slug))
                 .ForMember(p => p.Permissions, o => o.Ignore())
                 .ForMember(p => p.Blocks, o => o.Ignore())
-                .ForMember(p => p.CommentCount, o => o.Ignore());
+                .ForMember(p => p.CommentCount, o => o.Ignore())
+                .ForMember(p => p.Workflow, o => o.MapFrom(m => m.Workflow))
+                .ForMember(p => p.WorkflowId, o => o.MapFrom(m => m.WorkflowId));
             cfg.CreateMap<Models.PageBase, Data.Page>()
                 .ForMember(p => p.ContentType, o => o.Ignore())
                 .ForMember(p => p.PrimaryImageId, o => o.MapFrom(m => m.PrimaryImage != null ? m.PrimaryImage.Id : (Guid?)null ))
@@ -125,7 +127,9 @@ public class Module : IModule
                 .ForMember(p => p.Permissions, o => o.Ignore())
                 .ForMember(p => p.PageType, o => o.Ignore())
                 .ForMember(p => p.Site, o => o.Ignore())
-                .ForMember(p => p.Parent, o => o.Ignore());
+                .ForMember(p => p.Parent, o => o.Ignore())
+                .ForMember(p => p.Workflow, o => o.MapFrom(m => m.Workflow))
+                .ForMember(p => p.WorkflowId, o => o.MapFrom(m => m.WorkflowId));
             cfg.CreateMap<Data.Page, Models.SitemapItem>()
                 .ForMember(p => p.MenuTitle, o => o.Ignore())
                 .ForMember(p => p.Level, o => o.Ignore())
@@ -143,9 +147,7 @@ public class Module : IModule
                 .ForMember(p => p.Permalink, o => o.Ignore())
                 .ForMember(p => p.Permissions, o => o.Ignore())
                 .ForMember(p => p.Blocks, o => o.Ignore())
-                .ForMember(p => p.CommentCount, o => o.Ignore())
-                .ForMember(p => p.Workflow, o => o.MapFrom(m => m.Workflow))
-                .ForMember(p => p.WorkflowId, o => o.MapFrom(m => m.WorkflowId));
+                .ForMember(p => p.CommentCount, o => o.Ignore());
             cfg.CreateMap<Data.PostTag, Models.Taxonomy>()
                 .ForMember(p => p.Id, o => o.MapFrom(m => m.TagId))
                 .ForMember(p => p.Title, o => o.MapFrom(m => m.Tag.Title))

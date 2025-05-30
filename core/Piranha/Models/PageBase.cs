@@ -53,4 +53,7 @@ public abstract class PageBase : RoutedContentBase
     /// Gets if this is the startpage of the site.
     /// </summary>
     public bool IsStartPage => !ParentId.HasValue && SortOrder == 0;
+
+    public Guid? WorkflowId { get; set; }
+    public Workflow Workflow { get; set; }
 }

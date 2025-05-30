@@ -115,4 +115,7 @@ public sealed class Page : RoutedContentBase<PageField>
     /// Gets/sets the optional page this page is a copy of
     /// </summary>
     public Guid? OriginalPageId { get; set; }
+
+    public Guid? WorkflowId { get; set; }
+    public Workflow Workflow { get; set; }
 }

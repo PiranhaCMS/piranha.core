@@ -35,6 +35,5 @@ public abstract class PostBase : RoutedContentBase, ICategorizedContent, ITagged
     /// </summary>
     public IList<Taxonomy> Tags { get; set; } = new List<Taxonomy>();
 
-    public Guid? WorkflowId { get; set; }
-    public Workflow Workflow { get; set; }
+    
 }

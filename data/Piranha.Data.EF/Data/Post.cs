@@ -94,7 +94,4 @@ public sealed class Post : RoutedContentBase<PostField>
     /// Gets/sets the available permissions.
     /// </summary>
     public IList<PostPermission> Permissions { get; set; } = new List<PostPermission>();
-
-    public Guid? WorkflowId { get; set; }
-    public Workflow Workflow { get; set; }
 }

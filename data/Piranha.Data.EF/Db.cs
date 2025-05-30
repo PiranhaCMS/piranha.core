@@ -408,10 +408,10 @@ public abstract class Db<T> : DbContext, IDb where T : Db<T>
         mb.Entity<Data.Post>().HasOne(p => p.Category).WithMany().IsRequired().OnDelete(DeleteBehavior.Restrict);
         mb.Entity<Data.Post>().HasIndex(p => new { p.BlogId, p.Slug }).IsUnique();
 
-        mb.Entity<Post>()
+        mb.Entity<Page>()
             .HasOne(p => p.Workflow)
             .WithOne()
-            .HasForeignKey<Post>(p => p.WorkflowId);
+            .HasForeignKey<Page>(p => p.WorkflowId);
 
         mb.Entity<Workflow>()
             .HasMany(w => w.Steps)
