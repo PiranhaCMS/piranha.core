@@ -11,6 +11,14 @@ services:
       MYSQL_ROOT_PASSWORD: ${PASSWORD}
     volumes:
       - mysql_data:/var/lib/mysql
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: some-rabbit
+    hostname: my-rabbit
+    ports:
+      - "5672:5672"     # AMQP port
+      - "15672:15672"   # Management UI port
+    restart: unless-stopped
 
 volumes:
   mysql_data:

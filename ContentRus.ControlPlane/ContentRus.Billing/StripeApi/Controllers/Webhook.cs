@@ -24,17 +24,17 @@ namespace StripeApi.Controllers
         [HttpPost]
         public async Task<IActionResult> HandleWebhook()
         {
-            Console.WriteLine($"=== WEBHOOK RECEIVED AT {DateTime.UtcNow} ===");
-            Console.WriteLine($"Request Method: {Request.Method}");
-            Console.WriteLine($"Request Path: {Request.Path}");
-            Console.WriteLine($"Content-Type: {Request.ContentType}");
+            //Console.WriteLine($"=== WEBHOOK RECEIVED AT {DateTime.UtcNow} ===");
+            //Console.WriteLine($"Request Method: {Request.Method}");
+            //Console.WriteLine($"Request Path: {Request.Path}");
+            //Console.WriteLine($"Content-Type: {Request.ContentType}");
             
             var json = await new StreamReader(HttpContext.Request.Body).ReadToEndAsync();
-            Console.WriteLine($"Webhook payload length: {json.Length}");
-            Console.WriteLine($"Webhook payload preview: {json.Substring(0, Math.Min(200, json.Length))}...");
+            //Console.WriteLine($"Webhook payload length: {json.Length}");
+            //Console.WriteLine($"Webhook payload preview: {json.Substring(0, Math.Min(200, json.Length))}...");
             
             string webhookSecret = _stripeSettings.WebhookSecret;
-            Console.WriteLine($"Using webhook secret: {(!string.IsNullOrEmpty(webhookSecret) ? "SET" : "NOT SET")}");
+            //Console.WriteLine($"Using webhook secret: {(!string.IsNullOrEmpty(webhookSecret) ? "SET" : "NOT SET")}");
 
             try
             {
@@ -44,8 +44,8 @@ namespace StripeApi.Controllers
                     webhookSecret
                 );
 
-                Console.WriteLine($"✅ STRIPE EVENT VERIFIED: {stripeEvent.Type}");
-                Console.WriteLine($"Event ID: {stripeEvent.Id}");
+                //Console.WriteLine($"✅ STRIPE EVENT VERIFIED: {stripeEvent.Type}");
+                //Console.WriteLine($"Event ID: {stripeEvent.Id}");
 
                 switch (stripeEvent.Type)
                 {
@@ -53,7 +53,7 @@ namespace StripeApi.Controllers
                         var checkoutSession = stripeEvent.Data.Object as Session;
                         if (checkoutSession != null)
                         {
-                            Console.WriteLine($"🎉 CHECKOUT COMPLETED: {checkoutSession.Id}");
+                            //Console.WriteLine($"🎉 CHECKOUT COMPLETED: {checkoutSession.Id}");
                             await HandleCheckoutCompleted(checkoutSession);
                         }
                         break;
@@ -64,8 +64,7 @@ namespace StripeApi.Controllers
                         var tenantId = "lol";
                         if (subscriptionCreated != null)
                         {
-                            Console.WriteLine($"📋 SUBSCRIPTION CREATED: {subscriptionCreated.Id}");
-                            Console.WriteLine("lol, chego aqui");
+                            //Console.WriteLine($"📋 SUBSCRIPTION CREATED: {subscriptionCreated.Id}");
                             await HandleSubscriptionCreated(subscriptionCreated,tenantId);
                         }
                         break;
@@ -74,7 +73,7 @@ namespace StripeApi.Controllers
                         var invoice = stripeEvent.Data.Object as Invoice;
                         if (invoice != null)
                         {
-                            Console.WriteLine($"💰 PAYMENT SUCCEEDED: {invoice.Id}");
+                            //Console.WriteLine($"💰 PAYMENT SUCCEEDED: {invoice.Id}");
                             await HandleInvoicePaymentSucceeded(invoice);
                         }
                         break;
@@ -83,7 +82,7 @@ namespace StripeApi.Controllers
                         var subscriptionUpdated = stripeEvent.Data.Object as Subscription;
                         if (subscriptionUpdated != null)
                         {
-                            Console.WriteLine($"📝 SUBSCRIPTION UPDATED: {subscriptionUpdated.Id}");
+                            //Console.WriteLine($"📝 SUBSCRIPTION UPDATED: {subscriptionUpdated.Id}");
                             await HandleSubscriptionUpdated(subscriptionUpdated);
                         }
                         break;
@@ -92,7 +91,7 @@ namespace StripeApi.Controllers
                         var subscriptionDeleted = stripeEvent.Data.Object as Subscription;
                         if (subscriptionDeleted != null)
                         {
-                            Console.WriteLine($"❌ SUBSCRIPTION DELETED: {subscriptionDeleted.Id}");
+                            //Console.WriteLine($"❌ SUBSCRIPTION DELETED: {subscriptionDeleted.Id}");
                             await HandleSubscriptionCanceled(subscriptionDeleted);
                         }
                         break;
@@ -119,14 +118,14 @@ namespace StripeApi.Controllers
         private async Task HandleCheckoutCompleted(Session checkoutSession)
         {
             Console.WriteLine($"Checkout session completed: {checkoutSession.Id}");
-            Console.WriteLine($"Customer ID: {checkoutSession.CustomerId}");
-            Console.WriteLine($"Subscription ID: {checkoutSession.SubscriptionId}");
+            //Console.WriteLine($"Customer ID: {checkoutSession.CustomerId}");
+            //Console.WriteLine($"Subscription ID: {checkoutSession.SubscriptionId}");
         }
 
         private async Task HandleSubscriptionCreated(Subscription subscription,String tenantId)
         {
             Console.WriteLine($"Subscription created: {subscription.Id}");
-            Console.WriteLine("tenantID in webhooks",tenantId);
+            //Console.WriteLine("tenantID in webhooks",tenantId);
             
             try
             {
@@ -137,7 +136,7 @@ namespace StripeApi.Controllers
                 var productService = new ProductService();
                 var product = await productService.GetAsync(productId);
 
-                Console.WriteLine($"🔍 Subscription is for product: {product.Name}");
+                //Console.WriteLine($"🔍 Subscription is for product: {product.Name}");
                 var evt = new PaymentConfirmedEvent
                 {
                     Plan = product.Name,
@@ -164,8 +163,6 @@ namespace StripeApi.Controllers
         private Task HandleSubscriptionCanceled(Subscription subscription)
         {
             Console.WriteLine($"Subscription canceled: {subscription.Id}");
-            
-            // TODO: Publish cancellation event if needed
             
             return Task.CompletedTask;
         }
