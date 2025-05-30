@@ -70,7 +70,7 @@ class WorkflowService : IWorkflowService
 
         if (user.HasClaim("Permission", permission))
         {
-            workflow.Deny();
+            workflow.Deny(reason);
             await _api.Pages.SaveAsync(page);
         }
         else
