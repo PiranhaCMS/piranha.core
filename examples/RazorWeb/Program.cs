@@ -41,8 +41,8 @@ builder.AddPiranha(options =>
         o.UsePermission("WebUser", "Web User");
 
         // Novas permissões para Workflow
-        o.UsePermission("Workflow.Reviewer", "Workflow Reviewer");
-        o.UsePermission("Workflow.LegalTeam", "Legal Team Reviewer");
+        o.UsePermission("PiranhaReviewer", "Workflow Reviewer");
+        o.UsePermission("PiranhaLegalTeam", "Legal Team Reviewer");
     });
 
     /**
@@ -74,7 +74,7 @@ builder.Services.AddAuthorization(options =>
         policy =>
         {
             policy.RequireAuthenticatedUser();
-            policy.RequireClaim("Permission", "Workflow.Reviewer");
+            policy.RequireClaim("Permission", "PiranhaReviewer");
         }
     );
 
@@ -83,7 +83,7 @@ builder.Services.AddAuthorization(options =>
         policy =>
         {
             policy.RequireAuthenticatedUser();
-            policy.RequireClaim("Permission", "Workflow.LegalTeam");
+            policy.RequireClaim("Permission", "PiranhaLegalTeam");
         }
     );
 });
