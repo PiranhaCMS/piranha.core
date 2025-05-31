@@ -69,7 +69,8 @@ create-cluster:
 		kubectl create clusterrolebinding secret-writer-binding --clusterrole=secret-writer --serviceaccount=argowf:default; \
 		kubectl create clusterrole namespace-creator --verb=create --resource=namespaces; \
 		kubectl create clusterrolebinding namespace-creator-binding --clusterrole=namespace-creator --serviceaccount=argowf:default; \
-		kubectl create secret generic github-creds --from-file=ssh-private-key=.ssh/id_ed25519 -n argowf; \
+		kubectl create secret generic github-creds --from-file=ssh-private-key=credentials/id_ed25519 -n argowf; \
+		kubectl create secret generic azure-cred-secret --from-file=username=azure_username.txt --from-file=password=azure_password.txt -n argowf; \
 		helm install argocd argo/argo-cd -n argocd -f infrastructure/argo/argowf/setup/cd-values.yml --create-namespace; \
 		kubectl apply -f infrastructure/argo/argocd/project.yaml; \
 		kubectl apply -f infrastructure/argo/argocd/tenants-application-set.yaml; \
