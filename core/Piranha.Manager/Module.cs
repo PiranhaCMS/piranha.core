@@ -20,7 +20,7 @@ public sealed class Module : IModule
     {
         new PermissionItem { Name = Permission.Admin, Title = "Admin" },
 
-        new PermissionItem { Name = Permission.LegalTeam, Title = "Legal Team" },
+        new PermissionItem { Name = Permission.PiranhaLegalTeam, Title = "Piranha Legal Team" },
         new PermissionItem { Name = Permission.LegalTeamReview, Title = "Review", Category = "Legal Team" },
         new PermissionItem { Name = Permission.LegalTeamDeny, Title = "Deny", Category = "Legal Team" },
 
@@ -49,7 +49,7 @@ public sealed class Module : IModule
         new PermissionItem { Name = Permission.MediaEdit, Title = "Edit Media", Category = "Media" },
         new PermissionItem { Name = Permission.Modules, Title = "List Modules", Category = "Modules" },
 
-        new PermissionItem { Name = Permission.Reviewer, Title = "Reviewer" },
+        new PermissionItem { Name = Permission.PiranhaReviewer, Title = "PiranhaReviewer" },
 
         new PermissionItem { Name = Permission.Pages, Title = "List Pages", Category = "Pages" },
         new PermissionItem { Name = Permission.PagesAdd, Title = "Add Pages", Category = "Pages" },

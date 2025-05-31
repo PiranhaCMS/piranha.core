@@ -65,6 +65,7 @@ namespace Piranha.Manager.Controllers
             }
             catch (UnauthorizedAccessException)
             {
+                Console.WriteLine("UnauthorizedAccessException caught in Approve action");
                 return Forbid();
             }
             catch (Exception ex)
@@ -100,6 +101,27 @@ namespace Piranha.Manager.Controllers
                 return BadRequest(new { success = false, message = ex.Message });
             }
         }
+
+//         [HttpPost("fix")]
+// public async Task<IActionResult> FixWorkflows()
+// {
+//     var pages      = await _api.Pages.GetAllAsync();
+//     int fixedCount = 0;
+
+//     foreach (var p in pages)
+//     {
+//         // Se não tem workflow correcto, recria-o usando o serviço
+//         if (p.Workflow == null ||
+//             p.Workflow.Steps.Count < 2 ||
+//             p.Workflow.Steps[0].Permission != "PiranhaReviewer")
+//         {
+//             await _workflowService.SubmitForReview(p);  // ← isto chama CreateWorkflow lá dentro
+//             fixedCount++;
+//         }
+//     }
+
+//     return Ok(new { fixedCount });
+// }
     }
 
     public class ApprovalRequest

@@ -352,9 +352,10 @@ document.addEventListener('DOMContentLoaded', function() {
                 fetch(piranha.baseUrl + "manager/api/workflow/" + action + "/" + pageId, {
                     method: "POST",
                     headers: {
-                        "Content-Type": "application/json",
-                        [piranha.antiForgery.headerName]: self.getAntiForgeryToken()
-                    },
+                    "Content-Type": "application/json",
+                    "RequestVerificationToken": self.getAntiForgeryToken()
+                },
+                    credentials: 'include',
                     body: JSON.stringify(payload)
                 })
                 .then(function(response) {

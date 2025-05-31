@@ -17,7 +17,7 @@ public static class Permission
 {
     public const string Admin = "PiranhaAdmin";
 
-    public const string LegalTeam = "PiranhaLegalTeam";
+    public const string PiranhaLegalTeam = "PiranhaLegalTeam";
     public const string LegalTeamReview = "PiranhaLegalTeamReview";
     public const string LegalTeamDeny = "PiranhaLegalTeamDeny";
 
@@ -46,7 +46,7 @@ public static class Permission
     public const string MediaDeleteFolder = "PiranhaMediaDeleteFolder";
     public const string Modules = "PiranhaModules";
 
-    public const string Reviewer = "PiranhaReviewer";
+    public const string PiranhaReviewer = "PiranhaReviewer";
 
     public const string Pages = "PiranhaPages";
     public const string PagesAdd = "PiranhaPagesAdd";
@@ -93,7 +93,7 @@ public static class Permission
 
     public static readonly PermissionsStructure LegalTeamPermissionsStructure =
         // Legal Team Permission
-        new(LegalTeam, new PermissionsStructure[]
+        new(PiranhaLegalTeam, new PermissionsStructure[]
         {
             new(LegalTeamReview),
             new(LegalTeamDeny)
@@ -101,14 +101,14 @@ public static class Permission
 
     public static readonly PermissionsStructure ReviewerPermissionsStructure =
         // Reviewer Permission
-        new(Reviewer);
+        new(PiranhaReviewer);
 
 
     public static string[] All() {
         return new[] {
             Admin,
 
-            LegalTeam,
+            PiranhaLegalTeam,
             LegalTeamReview,
             LegalTeamDeny,
 
@@ -137,7 +137,7 @@ public static class Permission
             MediaDeleteFolder,
             Modules,
 
-            Reviewer,
+            PiranhaReviewer,
 
             Pages,
             PagesAdd,
