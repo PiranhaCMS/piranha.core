@@ -1,0 +1,15 @@
+apiVersion: v2
+name: umbrella-contentrus
+version: 0.1.0
+
+dependencies:
+  - name: hostedsite
+    version: 0.1.0
+    repository: "file://charts/hostedsite"
+  - name: manager
+    version: 0.1.0
+    repository: "file://charts/manager"
+  - name: mysql
+    version: 12.3.5
+    repository: https://charts.bitnami.com/bitnami
+

@@ -1,0 +1,5 @@
+server:
+  service:
+    type: NodePort
+    nodePortHttp: 32073
+    nodePortHttps: 32074

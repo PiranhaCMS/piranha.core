@@ -1,0 +1,43 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: tenant-applications
+  namespace: argocd
+spec:
+  generators:
+  - git:
+      repoURL: 'https://github.com/Migas77/contentrus.multiTenancy.argocdHelmCharts.git'
+      revision: HEAD
+      directories:
+      - path: tenants/*
+
+  template:
+    metadata:
+      name: '{{ path.basename }}'
+      namespace: argocd
+    spec:
+      project: project-tenants-contentrus
+  
+      sources:
+        - repoURL: https://github.com/Migas77/contentrus.multiTenancy.git
+          targetRevision: SCRUM-24-ArgoCD-Setup
+          path: infrastructure/umbrella
+          helm:
+            valueFiles:
+            - $values/{{ path }}/values.yaml
+        - repoURL: 'https://github.com/Migas77/contentrus.multiTenancy.argocdHelmCharts.git'
+          targetRevision: HEAD
+          ref: values
+
+      destination:
+        # server from argocd cluster list --grpc-web
+        server: https://kubernetes.default.svc
+        namespace: '{{ path.basename }}'
+
+      syncPolicy:
+        automated:
+          prune: true
+          selfHeal: true
+        syncOptions:
+        - CreateNamespace=true
+        - ApplyOutOfSyncOnly=true

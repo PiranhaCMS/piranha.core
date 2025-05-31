@@ -1,0 +1,7 @@
+mysql:
+  auth:
+    existingSecret: mysql-secrets
+    database: piranha
+  commonAnnotations:
+    argocd.argoproj.io/sync-wave: "-1"
+

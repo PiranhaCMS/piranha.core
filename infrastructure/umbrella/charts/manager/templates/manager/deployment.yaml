@@ -1,25 +1,25 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ .Values.hostedsite.appName }}
-  namespace: {{ .Values.Namespace }}
+  name: {{ .Values.manager.appName }}
+  namespace: {{ .Release.Namespace }}
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: {{ .Values.hostedsite.appName }}
+      app: {{ .Values.manager.appName }}
   template:
     metadata:
       labels:
-        app: {{ .Values.hostedsite.appName }}
+        app: {{ .Values.manager.appName }}
         mysql-client: "true"
         sidecar.istio.io/inject: "true"
     spec:
       containers:
-        - name: {{ .Values.hostedsite.appName }}
-          image: {{ .Values.hostedsite.image }}
+        - name: {{ .Values.manager.appName }}
+          image: {{ .Values.manager.image }}
           ports:
-            - containerPort: {{ .Values.hostedsite.port }}
+            - containerPort: {{ .Values.manager.port }}
           env:
             - name: ConnectionStrings__piranha
               valueFrom:
