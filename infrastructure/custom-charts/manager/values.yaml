@@ -1,6 +1,0 @@
-manager:
-  appName: manager
-  image: k3d-registry:5000/contentrus-manager
-  port: 80
-
-# rest in shared-values/shared-values.yaml
