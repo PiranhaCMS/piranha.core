@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: jaeger
+  namespace: {{ .Values.namespace }}
+spec:
+  replicas: {{ .Values.jaeger.replicas }}
+  selector:
+    matchLabels:
+      app: jaeger
+  template:
+    metadata:
+      labels:
+        app: jaeger
+    spec:
+      containers:
+      - name: jaeger-all-in-one
+        image: {{ .Values.jaeger.image }}
+        ports:
+        {{- range .Values.jaeger.ports }}
+        - containerPort: {{ . }}
+        {{- end }}
+

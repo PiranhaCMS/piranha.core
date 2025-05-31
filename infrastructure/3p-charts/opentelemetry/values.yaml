@@ -1,0 +1,26 @@
+namespace: tcommon
+
+jaeger:
+  replicas: 1
+  image: jaegertracing/all-in-one:latest
+  ports:
+    - 16686
+    - 14250
+
+otelCollector:
+  serviceAccount: otel-collector
+  image: otel/opentelemetry-collector-contrib:0.101.0
+  config:
+    receivers:
+      otlp:
+        protocols:
+          grpc:
+            endpoint: 0.0.0.0:4317
+          http:
+            endpoint: 0.0.0.0:4318
+    processors:
+      memoryLimiter:
+        checkInterval: 1s
+  service:
+    port: 8889
+    targetPort: 8889

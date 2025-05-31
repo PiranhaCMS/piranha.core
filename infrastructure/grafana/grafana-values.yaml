@@ -1,0 +1,22 @@
+grafana:
+  grafana.ini:
+    auth.anonymous:
+      enabled: true
+      org_role: Viewer
+
+# dashboards configuration
+  dashboards:
+    default:
+      # This will look for dashboard ConfigMaps with the specified label
+      dashboard-from-configmap:
+        enabled: true
+        label: grafana_dashboard
+        labelValue: "1"
+  
+  # Add sidecar configuration to load dashboards from ConfigMaps
+  sidecar:
+    dashboards:
+      enabled: true
+      label: grafana_dashboard
+      labelValue: "1"
+      searchNamespace: "tcommon"
