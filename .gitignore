@@ -271,4 +271,6 @@ _Pvt_Extensions
 
 .env
 
-.ssh
+# Credentials
+.ssh/
+credentials/
