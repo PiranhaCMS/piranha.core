@@ -1,7 +1,0 @@
-auth:
-  rootPassword: my-root-password1
-  username: my-user1
-  password: my-password1
-  database: piranha
-
-namespace: default

@@ -1,5 +1,3 @@
-# Add your credentials to k3d-registries.yaml to not get rate-limited when pulling images from Docker Hub.
-
 REGISTRY_NAME = registry
 REGISTRY_PORT = 5000
 CLUSTER_NAME = cluster
@@ -62,7 +60,20 @@ create-cluster:
 		helm repo update; \
 		helm install istio-base istio/base -n istio-system --set defaultRevision=default --create-namespace; \
 		helm install istiod istio/istiod -n istio-system --wait; \
-		helm install istio-ingress istio/gateway -n tcommon --create-namespace --wait; \
+		helm install istio-ingress istio/gateway -n common --create-namespace --wait; \
+		helm repo add argo https://argoproj.github.io/argo-helm; \
+		helm repo update; \
+		helm install argowf argo/argo-workflows -n argowf -f infrastructure/argo/argowf/setup/wf-values.yml --create-namespace; \
+		kubectl create rolebinding default-admin --clusterrole=admin --serviceaccount=argowf:default -n argowf; \
+		kubectl create clusterrole secret-writer --verb=create --resource=secrets; \
+		kubectl create clusterrolebinding secret-writer-binding --clusterrole=secret-writer --serviceaccount=argowf:default; \
+		kubectl create clusterrole namespace-creator --verb=create --resource=namespaces; \
+		kubectl create clusterrolebinding namespace-creator-binding --clusterrole=namespace-creator --serviceaccount=argowf:default; \
+		kubectl create secret generic github-creds --from-file=ssh-private-key=credentials/id_ed25519 -n argowf; \
+		kubectl create secret generic azure-cred-secret --from-file=username=azure_username.txt --from-file=password=azure_password.txt -n argowf; \
+		helm install argocd argo/argo-cd -n argocd -f infrastructure/argo/argowf/setup/cd-values.yml --create-namespace; \
+		kubectl apply -f infrastructure/argo/argocd/project.yaml; \
+		kubectl apply -f infrastructure/argo/argocd/tenants-application-set.yaml; \
 		kubectl apply -f https://github.com/cert-manager/cert-manager/releases/download/v1.17.2/cert-manager.yaml; \
 		kubectl -n cert-manager wait --for=condition=ready pod -l app.kubernetes.io/name=webhook --timeout=120s; \
 		kubectl -n cert-manager wait --for=condition=ready pod -l app.kubernetes.io/name=cainjector --timeout=60s; \

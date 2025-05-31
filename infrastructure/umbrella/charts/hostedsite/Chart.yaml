@@ -1,5 +1,5 @@
 apiVersion: v2
-name: HostedSite
+name: hostedsite
 description: Piranha HostedSite with MySQL and .NET
 version: 0.1.0
 appVersion: "1.0"

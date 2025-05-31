@@ -1,0 +1,25 @@
+apiVersion: argoproj.io/v1alpha1
+kind: AppProject
+metadata:
+  name: project-tenants-contentrus
+  namespace: argocd
+spec:
+  clusterResourceWhitelist:
+  - group: '*'
+    kind: '*'
+  destinations:
+  - namespace: 't*'
+    server: 'https://kubernetes.default.svc'
+  sourceRepos:
+  # contentrus multiTenancy repos
+  - 'https://github.com/Migas77/contentrus.multiTenancy.git'
+  - 'https://github.com/Migas77/contentrus.multiTenancy.argocdHelmCharts.git'
+  # mysql repo
+  - 'https://charts.bitnami.com/bitnami'
+  roles:
+    # Possible to generate tokens for this roles
+    - name: read-only
+      description: "This role can be used for reading applications."
+      policies:
+      - p, project-tenants-contentrus:role-tenant, applications, get, project-tenants-contentrus/*, allow
+
