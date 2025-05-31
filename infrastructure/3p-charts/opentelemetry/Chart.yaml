@@ -1,0 +1,5 @@
+apiVersion: v2
+name: opentelemetry
+description: OpenTelemetry configuration for ContentRus platform
+version: 0.1.0
+type: application
