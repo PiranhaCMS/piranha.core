@@ -63,6 +63,7 @@ builder.Services.AddAuthentication(options =>
     };
 });
 
+builder.Services.AddHostedService<RabbitMqConsumerService>();
 
 // CORS
 builder.Services.AddCors(options =>

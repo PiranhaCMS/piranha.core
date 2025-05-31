@@ -39,17 +39,20 @@ export function Billing() {
 
   const handleSubscribe = async (id, priceId) => {
     setLoading(true);
+    const token = localStorage.getItem('token');
     
     try {
       // Call your backend API to create a checkout session
       //Change ngrok domain
-      const response = await fetch('https://49d8-2001-8a0-c787-5f01-e2df-76e5-ea16-2fc9.ngrok-free.app/api/stripe/create-checkout-session', {
+      const response = await fetch('https://f004-193-137-169-167.ngrok-free.app/api/stripe/create-checkout-session', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
           priceId: priceId,
+          tenantId: token,
+          id: id.toString(),
         }),
       });
       
@@ -91,7 +94,7 @@ export function Billing() {
         console.error('Error updating tenant state:', stateError);
       }
 
-      window.location.reload();
+      //window.location.reload();
       setLoading(false);
     }
   };
