@@ -4,6 +4,8 @@ namespace Piranha.Data
     {
         public Guid Id { get; set; } 
 
+        public int Step { get; set; }
+
 
         public Guid WorkflowId { get; set; }
         public Workflow Workflow { get; set; }

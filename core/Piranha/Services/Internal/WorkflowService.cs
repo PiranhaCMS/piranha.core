@@ -49,8 +49,8 @@ public class WorkflowService : IWorkflowService
         {
             Steps = new List<WorkflowStep>
             {
-                new WorkflowStep { Permission = "PiranhaReviewer", Name = "Initial Review" },
-                new WorkflowStep { Permission = "PiranhaLegalTeam", Name = "Legal Team Review" },
+                new WorkflowStep { Step = 0, Permission = "PiranhaReviewer", Name = "Initial Review" },
+                new WorkflowStep { Step = 1, Permission = "PiranhaLegalTeam", Name = "Legal Team Review" },
             },
         };
     }

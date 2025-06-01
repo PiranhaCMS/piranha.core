@@ -187,6 +187,8 @@ internal class PageRepository : IPageRepository
                     .TransformAsync<T>(page, App.PageTypes.GetById(page.PageTypeId), ProcessAsync)
                     .ConfigureAwait(false)
             );
+
+            page.Workflow.Steps = page.Workflow.Steps.OrderBy(s => s.Step).ToList();
         }
         return ret;
     }
