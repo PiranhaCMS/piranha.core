@@ -3,7 +3,7 @@ namespace Piranha.Models
     public class WorkflowStep{
         public Guid WorkflowId { get; set; }
 
-        public int Step { get; set; }
+        public int? Step { get; set; }
         public Workflow Workflow { get; set; }
 
         public string Name { get; set; }

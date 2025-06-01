@@ -28,6 +28,7 @@ namespace Piranha.Manager.Controllers
             try
             {
                 var page = await _api.Pages.GetByIdAsync(id);
+                page.Workflow.Steps=page.Workflow.Steps.OrderBy(s => s.Step??int.MaxValue).ToList();
                 if (page == null)
                 {
                     return NotFound();
@@ -54,6 +55,7 @@ namespace Piranha.Manager.Controllers
             try
             {
                 var page = await _api.Pages.GetByIdAsync(id);
+                page.Workflow.Steps=page.Workflow.Steps.OrderBy(s => s.Step??int.MaxValue).ToList();
                 if (page == null)
                 {
                     return NotFound();
@@ -83,6 +85,7 @@ namespace Piranha.Manager.Controllers
             try
             {
                 var page = await _api.Pages.GetByIdAsync(id);
+                page.Workflow.Steps=page.Workflow.Steps.OrderBy(s => s.Step??int.MaxValue).ToList();
                 if (page == null)
                 {
                     return NotFound();

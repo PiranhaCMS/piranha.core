@@ -188,7 +188,6 @@ internal class PageRepository : IPageRepository
                     .ConfigureAwait(false)
             );
 
-            page.Workflow.Steps = page.Workflow.Steps.OrderBy(s => s.Step).ToList();
         }
         return ret;
     }
