@@ -19,11 +19,9 @@ public class WorkflowService : IWorkflowService
         App.Hooks.Pages.RegisterOnBeforeSave(page =>
         {
             // Se a página tem workflow ativo e foi editada, volta ao primeiro step
-            if (page.Workflow != null && page.Workflow.Steps.Any())
+            if (page.Workflow == null)
             {
                 page.Published = null; // unpublish
-                page.Workflow.CurrentStep = 0;
-                page.Workflow.IsApproved = false;
             }
         });
     }
@@ -130,32 +128,8 @@ public class WorkflowService : IWorkflowService
             }
 
             //since it seems that saveAsync resets the workflow, I'll simply copy it and update it myself
-
-            var workflowCopy = new Workflow
-            {
-                Id = page.Workflow.Id,
-                CurrentStep = page.Workflow.CurrentStep,
-                IsApproved = page.Workflow.IsApproved,
-                Steps = page.Workflow.Steps.Select(s => new WorkflowStep
-                {
-                    Id = s.Id,
-                    Name = s.Name,
-                    Step = s.Step,
-                    Permission = s.Permission,
-                    Reason = s.Reason
-                }).ToList()
-            };
-
-
-            Console.WriteLine($"[DEBUG] Step: {page.Workflow.CurrentStep}, IsApproved: {workflow.IsApproved}");
+            
             await _api.Pages.SaveAsync(page);
-
-
-            Console.WriteLine($"[DEBUG] Step: {page.Workflow.CurrentStep}, IsApproved: {workflow.IsApproved}");
-
-            await _pageRepository.SaveWorkflow(workflowCopy);
-            Console.WriteLine($"[DEBUG] Step: {page.Workflow.CurrentStep}, IsApproved: {workflow.IsApproved}");
-
         }
         else
         {
@@ -178,24 +152,8 @@ public class WorkflowService : IWorkflowService
             // Atualizar status na base de dados
             page.WorkflowStatusValue = (int)PageBase.PageWorkflowStatus.Rejected;
 
-            var workflowCopy = new Workflow
-            {
-                Id = page.Workflow.Id,
-                CurrentStep = page.Workflow.CurrentStep,
-                IsApproved = page.Workflow.IsApproved,
-                Steps = page.Workflow.Steps.Select(s => new WorkflowStep
-                {
-                    Id = s.Id,
-                    Name = s.Name,
-                    Step = s.Step,
-                    Permission = s.Permission,
-                    Reason = s.Reason
-                }).ToList()
-            };
-
             await _api.Pages.SaveAsync(page);
 
-            await _pageRepository.SaveWorkflow(workflowCopy);
         }
         else
         {
