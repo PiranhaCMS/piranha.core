@@ -10,6 +10,7 @@
 
 using System;
 using System.ComponentModel.DataAnnotations;
+using Piranha.Extend;
 
 namespace Piranha.Models;
 

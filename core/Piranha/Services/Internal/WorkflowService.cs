@@ -1,5 +1,6 @@
 using System.Security.Claims;
 using Piranha.Models;
+using Piranha.Repositories;
 
 namespace Piranha.Services;
 
@@ -7,10 +8,12 @@ namespace Piranha.Services;
 public class WorkflowService : IWorkflowService
 {
     private readonly IApi _api;
+    private readonly IPageRepository _pageRepository; //Injecting this because otherwise, it'd be waaay to complicated just for a single new method
 
-    public WorkflowService(IApi api)
+    public WorkflowService(IApi api, IPageRepository pageRepository)
     {
         _api = api;
+        _pageRepository = pageRepository;
 
         // Hook simplificado - só despublica ao gravar, não cria workflow
         App.Hooks.Pages.RegisterOnBeforeSave(page =>
@@ -62,7 +65,7 @@ public class WorkflowService : IWorkflowService
         for (int i = 0; i < page.Workflow.Steps.Count; i++)
         {
             var step = page.Workflow.Steps[i];
-            Console.WriteLine($" - Step {i}: {step.Name}, Permission = {step.Permission}, Reason = {step.Reason}");
+            Console.WriteLine($" - Step {step.Id}: {step.Name}, Order = {step.Step}, Permission = {step.Permission}, Reason = {step.Reason}");
         }
         if (page.Workflow == null || page.Workflow.Steps == null || !page.Workflow.Steps.Any())
         {
@@ -126,7 +129,33 @@ public class WorkflowService : IWorkflowService
                 }
             }
 
+            //since it seems that saveAsync resets the workflow, I'll simply copy it and update it myself
+
+            var workflowCopy = new Workflow
+            {
+                Id = page.Workflow.Id,
+                CurrentStep = page.Workflow.CurrentStep,
+                IsApproved = page.Workflow.IsApproved,
+                Steps = page.Workflow.Steps.Select(s => new WorkflowStep
+                {
+                    Id = s.Id,
+                    Name = s.Name,
+                    Step = s.Step,
+                    Permission = s.Permission,
+                    Reason = s.Reason
+                }).ToList()
+            };
+
+
+            Console.WriteLine($"[DEBUG] Step: {page.Workflow.CurrentStep}, IsApproved: {workflow.IsApproved}");
             await _api.Pages.SaveAsync(page);
+
+
+            Console.WriteLine($"[DEBUG] Step: {page.Workflow.CurrentStep}, IsApproved: {workflow.IsApproved}");
+
+            await _pageRepository.SaveWorkflow(workflowCopy);
+            Console.WriteLine($"[DEBUG] Step: {page.Workflow.CurrentStep}, IsApproved: {workflow.IsApproved}");
+
         }
         else
         {
@@ -149,7 +178,24 @@ public class WorkflowService : IWorkflowService
             // Atualizar status na base de dados
             page.WorkflowStatusValue = (int)PageBase.PageWorkflowStatus.Rejected;
 
+            var workflowCopy = new Workflow
+            {
+                Id = page.Workflow.Id,
+                CurrentStep = page.Workflow.CurrentStep,
+                IsApproved = page.Workflow.IsApproved,
+                Steps = page.Workflow.Steps.Select(s => new WorkflowStep
+                {
+                    Id = s.Id,
+                    Name = s.Name,
+                    Step = s.Step,
+                    Permission = s.Permission,
+                    Reason = s.Reason
+                }).ToList()
+            };
+
             await _api.Pages.SaveAsync(page);
+
+            await _pageRepository.SaveWorkflow(workflowCopy);
         }
         else
         {

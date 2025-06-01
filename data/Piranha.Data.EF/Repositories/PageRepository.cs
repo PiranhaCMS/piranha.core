@@ -368,6 +368,35 @@ internal class PageRepository : IPageRepository
         await _db.SaveChangesAsync();
     }
 
+    public async Task SaveWorkflow(Models.Workflow workflow)
+    {
+        // Load the workflow and steps from the database, tracked
+        var dbWorkflow = await _db.Workflows
+            .Include(w => w.Steps)
+            .FirstOrDefaultAsync(w => w.Id == workflow.Id);
+
+        if (dbWorkflow == null)
+            throw new InvalidOperationException("Workflow not found.");
+
+        // Update properties as needed
+        dbWorkflow.CurrentStep = workflow.CurrentStep;
+        dbWorkflow.IsApproved = workflow.IsApproved;
+        // ... update other properties or map steps as needed
+
+        // Optionally, update steps (if their state has changed)
+        foreach (var step in workflow.Steps)
+        {
+            var dbStep = dbWorkflow.Steps.FirstOrDefault(s => s.Id == step.Id);
+            if (dbStep != null)
+            {
+                dbStep.Reason = step.Reason;
+                // ...other properties
+            }
+        }
+
+        await _db.SaveChangesAsync();
+    }
+
     /// <summary>
     /// Creates a revision from the current version
     /// of the page with the given id.

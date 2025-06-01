@@ -28,7 +28,6 @@ namespace Piranha.Manager.Controllers
             try
             {
                 var page = await _api.Pages.GetByIdAsync(id);
-                page.Workflow.Steps=page.Workflow.Steps.OrderBy(s => s.Step??int.MaxValue).ToList();
                 if (page == null)
                 {
                     return NotFound();
@@ -55,7 +54,7 @@ namespace Piranha.Manager.Controllers
             try
             {
                 var page = await _api.Pages.GetByIdAsync(id);
-                page.Workflow.Steps=page.Workflow.Steps.OrderBy(s => s.Step??int.MaxValue).ToList();
+
                 if (page == null)
                 {
                     return NotFound();
@@ -85,7 +84,7 @@ namespace Piranha.Manager.Controllers
             try
             {
                 var page = await _api.Pages.GetByIdAsync(id);
-                page.Workflow.Steps=page.Workflow.Steps.OrderBy(s => s.Step??int.MaxValue).ToList();
+
                 if (page == null)
                 {
                     return NotFound();
@@ -105,26 +104,26 @@ namespace Piranha.Manager.Controllers
             }
         }
 
-//         [HttpPost("fix")]
-// public async Task<IActionResult> FixWorkflows()
-// {
-//     var pages      = await _api.Pages.GetAllAsync();
-//     int fixedCount = 0;
+        //         [HttpPost("fix")]
+        // public async Task<IActionResult> FixWorkflows()
+        // {
+        //     var pages      = await _api.Pages.GetAllAsync();
+        //     int fixedCount = 0;
 
-//     foreach (var p in pages)
-//     {
-//         // Se não tem workflow correcto, recria-o usando o serviço
-//         if (p.Workflow == null ||
-//             p.Workflow.Steps.Count < 2 ||
-//             p.Workflow.Steps[0].Permission != "PiranhaReviewer")
-//         {
-//             await _workflowService.SubmitForReview(p);  // ← isto chama CreateWorkflow lá dentro
-//             fixedCount++;
-//         }
-//     }
+        //     foreach (var p in pages)
+        //     {
+        //         // Se não tem workflow correcto, recria-o usando o serviço
+        //         if (p.Workflow == null ||
+        //             p.Workflow.Steps.Count < 2 ||
+        //             p.Workflow.Steps[0].Permission != "PiranhaReviewer")
+        //         {
+        //             await _workflowService.SubmitForReview(p);  // ← isto chama CreateWorkflow lá dentro
+        //             fixedCount++;
+        //         }
+        //     }
 
-//     return Ok(new { fixedCount });
-// }
+        //     return Ok(new { fixedCount });
+        // }
     }
 
     public class ApprovalRequest

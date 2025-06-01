@@ -163,4 +163,6 @@ public interface IPageRepository
     /// </summary>
     /// <param name="id">The unique id</param>
     Task DeleteComment(Guid id);
+
+    public Task SaveWorkflow(Workflow workflow);
 }

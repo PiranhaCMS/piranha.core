@@ -28,7 +28,7 @@ namespace Piranha.Models
         /// <returns>The current step</returns>
         public WorkflowStep GetCurrentStep()
         {
-            return this.Steps[this.CurrentStep];
+            return this.Steps.OrderBy(s=> s.Step??int.MaxValue).ToList()[this.CurrentStep];
         }
 
         /// <summary>
@@ -47,7 +47,7 @@ namespace Piranha.Models
             }
         }
 
-        public void Approve(string reason)
+        public void Approve(string reason)  
         {
             // Guarda a razão no passo atual antes de avançar
             if (Steps.Count > 0 && CurrentStep >= 0 && CurrentStep < Steps.Count)

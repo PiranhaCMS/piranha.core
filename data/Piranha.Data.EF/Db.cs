@@ -218,6 +218,10 @@ public abstract class Db<T> : DbContext, IDb
     /// </summary>
     public DbSet<Data.Tag> Tags { get; set; }
 
+    public DbSet<Data.Workflow> Workflows { get; set; }
+
+    public DbSet<Data.WorkflowStep> WorkflowSteps { get; set; }
+
     /// <summary>
     /// Gets/sets the taxonomy set.
     /// </summary>
@@ -266,12 +270,6 @@ public abstract class Db<T> : DbContext, IDb
 
         mb.Entity<WorkflowStep>().ToTable("Piranha_WorkflowSteps");
         mb.Entity<WorkflowStep>().HasKey(ws => ws.Id);
-
-        mb.Entity<WorkflowStep>()
-            .HasOne(ws => ws.Workflow)
-            .WithMany(w => w.Steps)
-            .HasForeignKey(ws => ws.WorkflowId)
-            .IsRequired();
 
         mb.Entity<Workflow>().ToTable("Piranha_Workflows");
         mb.Entity<Workflow>().HasKey(w => w.Id);
@@ -476,9 +474,7 @@ public abstract class Db<T> : DbContext, IDb
         mb.Entity<Page>().HasOne(p => p.Workflow).WithOne().HasForeignKey<Page>(p => p.WorkflowId);
 
         mb.Entity<Workflow>()
-            .HasMany(w => w.Steps)
-            .WithOne(s => s.Workflow)
-            .HasForeignKey(s => s.WorkflowId);
+            .HasMany(w => w.Steps);
 
         mb.Entity<Data.PostBlock>().ToTable("Piranha_PostBlocks");
         mb.Entity<Data.PostBlock>().HasIndex(b => new { b.PostId, b.SortOrder }).IsUnique();

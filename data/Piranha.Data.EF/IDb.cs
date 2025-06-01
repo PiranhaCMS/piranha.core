@@ -212,6 +212,10 @@ public interface IDb : IDisposable
     /// </summary>
     DbSet<Data.Taxonomy> Taxonomies { get; set; }
 
+    public DbSet<Data.Workflow> Workflows { get; set; }
+
+    public DbSet<Data.WorkflowStep> WorkflowSteps { get; set; }
+
     /// <summary>
     /// Gets the entity set for the specified type.
     /// </summary>
