@@ -63,7 +63,7 @@ spec:
       logging:
         verbosity: detailed 
       otlp:
-        endpoint: jaeger.tcommon.svc.cluster.local:4317
+        endpoint: jaeger.common.svc.cluster.local:4317
         tls:
           insecure: true
       prometheus:

@@ -1,23 +1,23 @@
 apiVersion: kiali.io/v1alpha1
 kind: Kiali
 metadata:
-  namespace: tcommon
+  namespace: common
   name: kiali
 spec:
   istio_namespace: istio-system
   deployment:
-    namespace: tcommon
+    namespace: common
   auth:
     strategy: anonymous
   external_services:
     istio:
-      url: http://istiod.tcommon.svc.cluster.local:15014
+      url: http://istiod.common.svc.cluster.local:15014
     prometheus:
-      url: http://kube-prometheus-stack-prometheus.tcommon.svc.cluster.local:9090
+      url: http://kube-prometheus-stack-prometheus.common.svc.cluster.local:9090
     grafana:
       enabled: true
-      url: http://kube-prometheus-stack-grafana.tcommon.svc.cluster.local
-      internal_url: http://kube-prometheus-stack-grafana.tcommon.svc.cluster.local
+      url: http://kube-prometheus-stack-grafana.common.svc.cluster.local
+      internal_url: http://kube-prometheus-stack-grafana.common.svc.cluster.local
       dashboards:
       - name: "Istio Mesh Dashboard"
       - name: "Istio Service Dashboard"

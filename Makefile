@@ -87,12 +87,11 @@ create-cluster:
 		helm repo add kiali https://kiali.org/helm-charts; \
 		helm repo update; \
 		kubectl apply -f infrastructure/argo/argowf/tenant-provisioning-with-credentials-template.yml -n argowf; \
-		kubectl create namespace tcommon; \
-		helm install --set cr.create=true --set cr.namespace=tcommon --set cr.spec.auth.strategy="anonymous" --namespace tcommon kiali-operator kiali/kiali-operator; \
+		helm install --set cr.create=true --set cr.namespace=common --set cr.spec.auth.strategy="anonymous" --namespace common kiali-operator kiali/kiali-operator; \
 		kubectl apply -f infrastructure/kiali/kiali.yaml; \
-		helm install kube-prometheus-stack --namespace tcommon prometheus-community/kube-prometheus-stack; \
-		helm install opentelemetry infrastructure/3p-charts/opentelemetry -n tcommon --wait; \
-		helm upgrade kube-prometheus-stack prometheus-community/kube-prometheus-stack   -n tcommon   -f infrastructure/grafana/grafana-values.yaml; \
+		helm install kube-prometheus-stack --namespace common prometheus-community/kube-prometheus-stack; \
+		helm install opentelemetry infrastructure/3p-charts/opentelemetry -n common --wait; \
+		helm upgrade kube-prometheus-stack prometheus-community/kube-prometheus-stack   -n common   -f infrastructure/grafana/grafana-values.yaml; \
 		$(MAKE) download-istio-dashboards; \
 		$(MAKE) load-grafana-dashboards; \
 	else \
@@ -107,11 +106,11 @@ load-grafana-dashboards:
 		echo "Creating ConfigMap for dashboard: $$dashboard_name"; \
 		kubectl create configmap "grafana-dashboard-$$configmap_name" \
 			--from-file="$$dashboard_name.json=$$file" \
-			-n tcommon \
+			-n common \
 			--dry-run=client -o yaml | \
 		kubectl apply -f -; \
 		kubectl label configmap "grafana-dashboard-$$configmap_name" \
-			grafana_dashboard=1 -n tcommon --overwrite; \
+			grafana_dashboard=1 -n common --overwrite; \
 	done
 
 download-istio-dashboards:
