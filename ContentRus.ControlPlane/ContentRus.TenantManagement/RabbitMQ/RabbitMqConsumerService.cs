@@ -12,6 +12,7 @@ using ContentRus.TenantManagement.Controllers;
 
 public class RabbitMqConsumerService : BackgroundService, IDisposable
 {
+    private const string tenant_status_queue_name = "tenant_status";
     private IConnection _connection;
     private IChannel _channel;
     private readonly IServiceProvider _serviceProvider;
@@ -32,7 +33,7 @@ public class RabbitMqConsumerService : BackgroundService, IDisposable
         _channel = await _connection.CreateChannelAsync();
 
         await _channel.QueueDeclareAsync(
-            queue: "event_queue",
+            queue: tenant_status_queue_name,
             durable: true,
             exclusive: false,
             autoDelete: false,
@@ -40,6 +41,7 @@ public class RabbitMqConsumerService : BackgroundService, IDisposable
             cancellationToken: stoppingToken);
 
         var consumer = new AsyncEventingBasicConsumer(_channel);
+        
         consumer.ReceivedAsync += async (sender, ea) =>
         {
             using var scope = _serviceProvider.CreateScope();
@@ -64,7 +66,6 @@ public class RabbitMqConsumerService : BackgroundService, IDisposable
             else if(subscriptionEvent.Plan=="Plano Básico"){
                 tenantService.UpdateTenantTier(id,TenantTier.Basic);
                 tenantService.UpdateTenantState(id,TenantState.Active);
-
             }
             else if(subscriptionEvent.Plan=="Plano Enterprise"){
                 tenantService.UpdateTenantTier(id,TenantTier.Enterprise);

@@ -33,7 +33,7 @@ builder.Services.AddOpenTelemetry()
         .AddHttpClientInstrumentation()
         .AddOtlpExporter(options => {
             options.Endpoint = new Uri(builder.Configuration["Telemetry:Endpoint"] ?? 
-                "http://simplest-collector.tcommon.svc.cluster.local:4317");
+                "http://simplest-collector.common.svc.cluster.local:4317");
             options.Protocol = OpenTelemetry.Exporter.OtlpExportProtocol.Grpc;
         })
         .AddConsoleExporter())
@@ -63,7 +63,7 @@ builder.Services.AddOpenTelemetry()
         })
         .AddOtlpExporter(options => {
             options.Endpoint = new Uri(builder.Configuration["Telemetry:Endpoint"] ?? 
-                "http://simplest-collector.tcommon.svc.cluster.local:4317");
+                "http://simplest-collector.common.svc.cluster.local:4317");
             options.Protocol = OpenTelemetry.Exporter.OtlpExportProtocol.Grpc;
         })
         .AddConsoleExporter());

@@ -4,14 +4,16 @@ using System.Text.Json;
 using System.Threading.Tasks;
 using System;
 
-public class RabbitMqPublisher : IAsyncDisposable
+public class RabbitMqProvisioningPublisher : IAsyncDisposable
 {
-    private const string tenant_status_queue_name = "tenant_status";
+    private readonly string _queueName;
     private readonly IConnection _connection;
     private readonly IChannel _channel;
 
-    public RabbitMqPublisher()
+    public RabbitMqProvisioningPublisher(string queueName)
     {
+        _queueName = queueName ?? throw new ArgumentNullException(nameof(queueName));
+
         var factory = new ConnectionFactory() { HostName = "localhost" };
 
         // Since constructors can't be async, use `.Result` for quick setup (or refactor if needed)
@@ -22,7 +24,6 @@ public class RabbitMqPublisher : IAsyncDisposable
     public async Task PublishAsync<T>(T message)
     {
         var body = Encoding.UTF8.GetBytes(JsonSerializer.Serialize(message));
-        Console.WriteLine("message",message);
 
         var properties = new BasicProperties
         {
