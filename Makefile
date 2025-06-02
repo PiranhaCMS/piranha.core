@@ -70,7 +70,7 @@ create-cluster:
 		kubectl create clusterrole namespace-creator --verb=create --resource=namespaces; \
 		kubectl create clusterrolebinding namespace-creator-binding --clusterrole=namespace-creator --serviceaccount=argowf:default; \
 		kubectl create secret generic github-creds --from-file=ssh-private-key=credentials/id_ed25519 -n argowf; \
-		kubectl create secret generic azure-cred-secret --from-file=username=azure_username.txt --from-file=password=azure_password.txt -n argowf; \
+		kubectl create secret generic azure-cred-secret --from-file=username=credentials/azure_username.txt --from-file=password=credentials/azure_password.txt -n argowf; \
 		helm install argocd argo/argo-cd -n argocd -f infrastructure/argo/argowf/setup/cd-values.yml --create-namespace; \
 		kubectl apply -f infrastructure/argo/argocd/project.yaml; \
 		kubectl apply -f infrastructure/argo/argocd/tenants-application-set.yaml; \
@@ -86,6 +86,8 @@ create-cluster:
 		helm repo add prometheus-community https://prometheus-community.github.io/helm-charts; \
 		helm repo add kiali https://kiali.org/helm-charts; \
 		helm repo update; \
+		kubectl apply -f infrastructure/argo/argowf/tenant-provisioning-with-credentials-template.yml -n argowf; \
+		kubectl create namespace tcommon; \
 		helm install --set cr.create=true --set cr.namespace=tcommon --set cr.spec.auth.strategy="anonymous" --namespace tcommon kiali-operator kiali/kiali-operator; \
 		kubectl apply -f infrastructure/kiali/kiali.yaml; \
 		helm install kube-prometheus-stack --namespace tcommon prometheus-community/kube-prometheus-stack; \

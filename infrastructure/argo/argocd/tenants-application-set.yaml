@@ -20,7 +20,7 @@ spec:
   
       sources:
         - repoURL: https://github.com/Migas77/contentrus.multiTenancy.git
-          targetRevision: SCRUM-24-ArgoCD-Setup
+          targetRevision: HEAD
           path: infrastructure/umbrella
           helm:
             valueFiles:
