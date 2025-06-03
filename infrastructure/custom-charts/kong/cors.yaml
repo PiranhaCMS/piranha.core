@@ -1,0 +1,24 @@
+apiVersion: configuration.konghq.com/v1
+kind: KongPlugin
+metadata:
+  name: cors-plugin
+  namespace: control
+config:
+  origins:
+    - "*"
+  methods:
+    - GET
+    - POST
+    - OPTIONS
+    - PUT
+    - DELETE
+  headers:
+    - Accept
+    - Authorization
+    - Content-Type
+  exposed_headers:
+    - Location
+    - Stripe-Session-Id
+  credentials: true
+  max_age: 3600
+plugin: cors

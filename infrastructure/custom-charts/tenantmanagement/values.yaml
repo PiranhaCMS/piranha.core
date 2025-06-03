@@ -1,0 +1,6 @@
+namespace: control
+
+tenantmanagement:
+  appName: tenantmanagement
+  image: k3d-registry:5000/contentrus-tenantmanagement
+  port: 8080

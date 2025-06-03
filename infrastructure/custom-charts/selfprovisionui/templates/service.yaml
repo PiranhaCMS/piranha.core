@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: "{{ .Values.selfprovisionui.appName }}-service"
+  namespace: {{ .Values.namespace }}
+spec:
+  selector:
+    app: {{ .Values.selfprovisionui.appName }}
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: {{ .Values.selfprovisionui.port }}
+  type: ClusterIP

@@ -23,7 +23,7 @@ namespace StripeApi.Controllers
         [HttpPost("create-checkout-session")]
         public async Task<IActionResult> CreateCheckoutSession([FromBody] CheckoutRequest request)
         {
-            Console.WriteLine("id do plan",request.Id);
+            Console.WriteLine("id do plan",request);
             var options = new SessionCreateOptions
             {
                 PaymentMethodTypes = new List<string> { "card" },
@@ -36,8 +36,8 @@ namespace StripeApi.Controllers
                     },
                 },
                 Mode = "subscription",
-                SuccessUrl = "http://localhost:5173/success?planId=" + request.Id,
-                CancelUrl = "http://localhost:5173/",
+                SuccessUrl = "http://selfprovision/success?planId=" + request.Id,
+                CancelUrl = "http://selfprovision/billing",
                 Metadata = new Dictionary<string, string>
                 {
                     { "tenantId", request.TenantId } // Associe o tenantId

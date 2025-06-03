@@ -1,0 +1,5 @@
+apiVersion: v2
+name: Billing
+description: Piranha Billing with MySQL and .NET
+version: 0.1.0
+appVersion: "1.0"

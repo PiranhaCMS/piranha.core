@@ -9,6 +9,7 @@ using DotNetEnv;
 using ContentRus.TenantManagement.Data;
 using Microsoft.EntityFrameworkCore;
 using Pomelo.EntityFrameworkCore.MySql.Infrastructure;
+using ContentRus.TenantManagement.RabbitMQ;
 
 var builder = WebApplication.CreateBuilder(args);
 Env.Load();
@@ -63,6 +64,16 @@ builder.Services.AddAuthentication(options =>
     };
 });
 
+builder.Services.Configure<RabbitMqSettings>(options =>
+{
+    options.HostName = Environment.GetEnvironmentVariable("RABBITMQ_HOST");
+    options.UserName = Environment.GetEnvironmentVariable("RABBITMQ_USER");
+    options.Password = Environment.GetEnvironmentVariable("RABBITMQ_PASSWORD");
+    options.QueueName = Environment.GetEnvironmentVariable("RABBITMQ_QUEUE") ?? "event_queue";
+});
+
+
+
 builder.Services.AddHostedService<RabbitMqConsumerService>();
 
 // CORS
@@ -71,7 +82,7 @@ builder.Services.AddCors(options =>
     options.AddPolicy("AllowInterfaceRequests",
         policy =>
         {
-            policy.WithOrigins("http://localhost:5173")
+            policy.WithOrigins("http://selfprovision")
                   .AllowAnyHeader()
                   .AllowAnyMethod();
         });

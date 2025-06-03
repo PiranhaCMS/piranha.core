@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.tenantmanagement.appName }}
+  namespace: {{ .Values.namespace }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: {{ .Values.tenantmanagement.appName }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.tenantmanagement.appName }}
+        mysql-client: "true"
+    spec:
+      containers:
+        - name: {{ .Values.tenantmanagement.appName }}
+          image: {{ .Values.tenantmanagement.image }}
+          env:
+          - name: DOTNET_USE_POLLING_FILE_WATCHER
+            value: "true"
+          - name: ASPNETCORE_HOSTINGSTARTUPASSEMBLIES
+            value: ""
+          ports:
+            - containerPort: {{ .Values.tenantmanagement.port }}
+          volumeMounts:
+            - name: tenantmanagement-env
+              mountPath: /app/.env
+              subPath: .env
+              readOnly: true
+      volumes:
+        - name: tenantmanagement-env
+          secret:
+            secretName: tenantmanagement-env-secret
+            items:
+              - key: .env
+                path: .env
