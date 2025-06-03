@@ -9,6 +9,7 @@ using System.Text.Json;
 using ContentRus.TenantManagement.Models;
 using ContentRus.TenantManagement.Services;
 using ContentRus.TenantManagement.Controllers;
+using ContentRus.TenantManagement.RabbitMQ;
 
 public class RabbitMqConsumerService : BackgroundService, IDisposable
 {
@@ -46,11 +47,26 @@ public class RabbitMqConsumerService : BackgroundService, IDisposable
         {
             using var scope = _serviceProvider.CreateScope();
             var tenantService = scope.ServiceProvider.GetRequiredService<TenantService>();
+            var onboardingPublisher = scope.ServiceProvider.GetRequiredService<RabbitMQOnboardingPublisher>();
+
             var body = ea.Body.ToArray();
             var message = Encoding.UTF8.GetString(body);
             Console.WriteLine($" [x] Received: {message}");
 
             var subscriptionEvent = JsonSerializer.Deserialize<PaymentConfirmedEvent>(message);
+
+            if (!Guid.TryParse(subscriptionEvent.TenantID, out Guid tenantGuid))
+            {
+                Console.WriteLine(" [!] Invalid tenant ID");
+                return;
+            }
+
+            if (subscriptionEvent.Status == "subscription created")
+            {
+                await onboardingPublisher.SendProvisioningRequestAsync(tenantGuid);
+                Console.WriteLine(" [>] Sent provisioning request to onboarding queue");
+            }
+
 
             //Console.WriteLine(subscriptionEvent.Plan);
 
@@ -77,7 +93,7 @@ public class RabbitMqConsumerService : BackgroundService, IDisposable
 
 
         await _channel.BasicConsumeAsync(
-            queue: "event_queue",
+            queue: tenant_status_queue_name,
             autoAck: true,
             consumer: consumer,
             cancellationToken: stoppingToken);

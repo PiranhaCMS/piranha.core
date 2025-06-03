@@ -6,13 +6,13 @@ using System;
 
 public class RabbitMqProvisioningPublisher : IAsyncDisposable
 {
-    private readonly string _queueName;
+    private readonly string tenant_status_queue_name;
     private readonly IConnection _connection;
     private readonly IChannel _channel;
 
     public RabbitMqProvisioningPublisher(string queueName)
     {
-        _queueName = queueName ?? throw new ArgumentNullException(nameof(queueName));
+        tenant_status_queue_name = queueName ?? throw new ArgumentNullException(nameof(queueName));
 
         var factory = new ConnectionFactory() { HostName = "localhost" };
 

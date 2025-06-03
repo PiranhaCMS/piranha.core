@@ -1,7 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { loadStripe } from '@stripe/stripe-js';
 import { useQuery } from '@tanstack/react-query';
 import { API_URL } from '../components/ApiUrl';
+import { jwtDecode } from 'jwt-decode'; // Fixed import - remove the * as
+
 import './../styles/billing.css';
 
 const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY);
@@ -9,6 +11,26 @@ const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY);
 export function Billing() {
   const [loading, setLoading] = useState(false);
   const token = localStorage.getItem('token');
+
+  const tenantId = useMemo(() => {
+    if (!token) return null;
+
+    try {
+      const decoded = jwtDecode(token);
+      console.log('Decoded JWT:', decoded); // Debug log to see the token structure
+      
+      // Try different possible claim names for tenant ID
+      return decoded.TenantId ?? 
+             decoded.tenantId ?? 
+             decoded.tid ?? 
+             decoded.sub ?? 
+             decoded.tenant_id ?? 
+             null;
+    } catch (err) {
+      console.error('Invalid JWT:', err);
+      return null;
+    }
+  }, [token]);
   
   // Fetch plans from API
   const { data: plans, isLoading: plansLoading, error: plansError } = useQuery({
@@ -23,7 +45,6 @@ export function Billing() {
     },
     staleTime: 60 * 60 * 1000, // Cache for 1 hour
   });
-
 
   // Fetch tenant info (tier and state)
   const { data: tenant, isLoading: tenantLoading, error: tenantError } = useQuery({
@@ -43,15 +64,14 @@ export function Billing() {
     
     try {
       // Call your backend API to create a checkout session
-      //Change ngrok domain
-      const response = await fetch('https://f004-193-137-169-167.ngrok-free.app/api/stripe/create-checkout-session', {
+      const response = await fetch('http://localhost:5098/api/stripe/create-checkout-session', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
           priceId: priceId,
-          tenantId: token,
+          tenantId: tenantId,
           id: id.toString(),
         }),
       });
@@ -66,15 +86,15 @@ export function Billing() {
     } catch (error) {
       console.error('Error:', error);
     } finally {
-
       try {
+        // Update tenant tier
         await fetch(`${API_URL}/tenant/tier`, {
           method: 'PUT',
           headers: {
             'Content-Type': 'application/json',
             'Authorization': `Bearer ${token}`
           },
-          body: id,
+          body: JSON.stringify(id), // Fixed: properly stringify the body
         });
       } catch (tierError) {
         console.error('Error updating tenant tier:', tierError);
@@ -88,16 +108,18 @@ export function Billing() {
             'Content-Type': 'application/json',
             'Authorization': `Bearer ${token}`
           },
-          body: 2,
+          body: JSON.stringify(2), // Fixed: properly stringify the body
         });
       } catch (stateError) {
         console.error('Error updating tenant state:', stateError);
       }
 
-      //window.location.reload();
       setLoading(false);
     }
   };
+
+  // Debug log to check tenantId
+  console.log('Current tenantId:', tenantId);
 
   if (plansLoading || tenantLoading) {
     return (
@@ -176,7 +198,6 @@ export function Billing() {
           })}
         </div>
       </div>
-
     </div>
   );
 }

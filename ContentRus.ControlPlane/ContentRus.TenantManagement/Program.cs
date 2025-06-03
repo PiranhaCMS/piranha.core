@@ -9,6 +9,7 @@ using DotNetEnv;
 using ContentRus.TenantManagement.Data;
 using Microsoft.EntityFrameworkCore;
 using Pomelo.EntityFrameworkCore.MySql.Infrastructure;
+using ContentRus.TenantManagement.RabbitMQ;
 
 var builder = WebApplication.CreateBuilder(args);
 Env.Load();
@@ -64,6 +65,8 @@ builder.Services.AddAuthentication(options =>
 });
 
 builder.Services.AddHostedService<RabbitMqConsumerService>();
+
+builder.Services.AddSingleton<RabbitMQOnboardingPublisher>();
 
 // CORS
 builder.Services.AddCors(options =>
