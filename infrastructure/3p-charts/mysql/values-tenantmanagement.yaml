@@ -1,10 +1,9 @@
 architecture: replication
 
 auth:
-  rootPassword: password
   database: piranha
-  username: my-user1
-  password: my-password1
+  existingSecret: tenantmanagement-mysql-env-secret
+  
   replicationUser: my-replication-user
   replicationPassword: my-replication-password
 
