@@ -1,8 +1,10 @@
 using Notifications.Services;
+using DotNetEnv;
+
+Env.Load();
 
 var builder = WebApplication.CreateBuilder(args);
 
-DotNetEnv.Env.Load();
 builder.Configuration.AddEnvironmentVariables();
 
 builder.Services.Configure<RabbitMqSettings>(options =>
