@@ -3,18 +3,27 @@ using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
 using System;
+using ContentRus.TenantManagement.RabbitMQ;
+using Microsoft.Extensions.Options;
 
-public class RabbitMqProvisioningPublisher : IAsyncDisposable
+public class RabbitMqPublisher : IAsyncDisposable
 {
     private readonly string tenant_status_queue_name;
     private readonly IConnection _connection;
     private readonly IChannel _channel;
 
-    public RabbitMqProvisioningPublisher(string queueName)
+    public RabbitMqPublisher(IOptions<RabbitMqSettings> settings, string queueName)
     {
+        var config = settings.Value;
+        
         tenant_status_queue_name = queueName ?? throw new ArgumentNullException(nameof(queueName));
 
-        var factory = new ConnectionFactory() { HostName = "localhost" };
+        var factory = new ConnectionFactory
+        {
+            HostName = config.HostName,
+            UserName = config.UserName,
+            Password = config.Password
+        };
 
         // Since constructors can't be async, use `.Result` for quick setup (or refactor if needed)
         _connection = factory.CreateConnectionAsync().Result;

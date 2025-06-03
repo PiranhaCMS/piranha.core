@@ -30,6 +30,7 @@ public class RabbitMqConsumerService : BackgroundService, IDisposable
 
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
+
         var factory = new ConnectionFactory
         {
             HostName = _settings.HostName,

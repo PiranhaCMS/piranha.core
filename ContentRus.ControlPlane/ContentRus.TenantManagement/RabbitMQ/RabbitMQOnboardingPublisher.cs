@@ -1,12 +1,13 @@
 using RabbitMQ.Client;
+using Microsoft.Extensions.Options;
 
 namespace ContentRus.TenantManagement.RabbitMQ
 {
-    public class RabbitMQOnboardingPublisher : RabbitMqProvisioningPublisher
+    public class RabbitMQOnboardingPublisher : RabbitMqPublisher
     {
         private const string TENANT_STATUS_QUEUE = "provisioning";
 
-        public RabbitMQOnboardingPublisher() : base(TENANT_STATUS_QUEUE)
+        public RabbitMQOnboardingPublisher(IOptions<RabbitMqSettings> settings) : base(settings, TENANT_STATUS_QUEUE)
         {
 
         }

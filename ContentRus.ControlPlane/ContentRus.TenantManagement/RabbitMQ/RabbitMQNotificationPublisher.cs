@@ -1,12 +1,13 @@
 using RabbitMQ.Client;
+using Microsoft.Extensions.Options;
 
 namespace ContentRus.TenantManagement.RabbitMQ
 {
-    public class RabbitMQNotificationPublisher : RabbitMqProvisioningPublisher
+    public class RabbitMQNotificationPublisher : RabbitMqPublisher
     {
         private const string NOTIFICATIONS_QUEUE = "notifications";
 
-        public RabbitMQNotificationPublisher() : base(NOTIFICATIONS_QUEUE)
+        public RabbitMQNotificationPublisher(IOptions<RabbitMqSettings> settings) : base(settings, NOTIFICATIONS_QUEUE)
         {
         }
     }
