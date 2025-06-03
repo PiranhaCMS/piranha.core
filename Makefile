@@ -72,8 +72,11 @@ create-cluster:
 		kubectl create secret generic github-creds --from-file=ssh-private-key=credentials/id_ed25519 -n argowf; \
 		kubectl create secret generic azure-cred-secret --from-file=username=credentials/azure_username.txt --from-file=password=credentials/azure_password.txt -n argowf; \
 		helm install argocd argo/argo-cd -n argocd -f infrastructure/argo/argowf/setup/cd-values.yml --create-namespace; \
+		kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/notifications_catalog/install.yaml; \
 		kubectl apply -f infrastructure/argo/argocd/project.yaml; \
 		kubectl apply -f infrastructure/argo/argocd/tenants-application-set.yaml; \
+		
+		kubectl apply -f infrastructure/argo/argowf/tenant-provisioning-with-credentials-template.yml -n argowf; \
 		kubectl apply -f https://github.com/cert-manager/cert-manager/releases/download/v1.17.2/cert-manager.yaml; \
 		kubectl -n cert-manager wait --for=condition=ready pod -l app.kubernetes.io/name=webhook --timeout=120s; \
 		kubectl -n cert-manager wait --for=condition=ready pod -l app.kubernetes.io/name=cainjector --timeout=60s; \
@@ -86,7 +89,6 @@ create-cluster:
 		helm repo add prometheus-community https://prometheus-community.github.io/helm-charts; \
 		helm repo add kiali https://kiali.org/helm-charts; \
 		helm repo update; \
-		kubectl apply -f infrastructure/argo/argowf/tenant-provisioning-with-credentials-template.yml -n argowf; \
 		helm install --set cr.create=true --set cr.namespace=common --set cr.spec.auth.strategy="anonymous" --namespace common kiali-operator kiali/kiali-operator; \
 		kubectl apply -f infrastructure/kiali/kiali.yaml; \
 		helm install kube-prometheus-stack --namespace common prometheus-community/kube-prometheus-stack; \

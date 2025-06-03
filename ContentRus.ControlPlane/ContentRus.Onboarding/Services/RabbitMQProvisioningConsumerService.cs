@@ -1,4 +1,3 @@
-namespace ContentRus.Onboarding;
 using k8s;
 using k8s.Models;
 using Microsoft.Extensions.Hosting;
@@ -13,19 +12,19 @@ using System.Text.Json;
 /// <summary>
 /// Background worker that listens to provisioning messages from RabbitMQ.
 /// </summary>
-public class Worker : BackgroundService
+public class RabbitMQProvisioningConsumer : BackgroundService, IDisposable
 {
     private const string provisioning_queue_name = "provisioning";
-    private readonly ILogger<Worker> _logger;
+    private readonly ILogger<RabbitMQProvisioningConsumer> _logger;
     private IConnection _connection;
     private IChannel _channel;
     private IKubernetes _kclient;
 
     /// <summary>
-    /// Initializes a new instance of the <see cref="Worker"/> class.
+    /// Initializes a new instance of the <see cref="RabbitMQProvisioningConsumer"/> class.
     /// </summary>
     /// <param name="logger">The logger instance to use.</param>
-    public Worker(ILogger<Worker> logger)
+    public RabbitMQProvisioningConsumer(ILogger<RabbitMQProvisioningConsumer> logger)
     {
         _logger = logger;
         // in cluster config

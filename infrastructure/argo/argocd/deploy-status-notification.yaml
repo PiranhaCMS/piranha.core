@@ -1,0 +1,25 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: argocd-deploymentstatus-notifications
+  namespace: argocd
+data:
+  triggers.yaml: |
+    - name: on-deployment-finished
+      condition: app.status.sync.status == 'Synced' and (app.status.health.status == 'Healthy' or app.status.health.status == 'Unhealthy')
+      send:
+        - webhook
+  templates.yaml: |
+    - name: webhook
+      webhook:
+        url: http://onboarding-service.control.svc.cluster.local/webhook/deployment-status
+        method: POST
+        body: |
+          {
+            "app": "{{ app.metadata.name }}",
+            "status": "{{ app.status.sync.status }}",
+            "health": "{{ app.status.health.status }}",
+            "tenantNamespace": "{{ app.spec.destination.namespace }}",
+            "timestamp": "{{ timestamp }}"
+          }
+

@@ -1,7 +1,14 @@
-using ContentRus.Onboarding;
+var builder = WebApplication.CreateBuilder(args);
 
-var builder = Host.CreateApplicationBuilder(args);
-builder.Services.AddHostedService<Worker>();
+// Add services to the container.
+// Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
+// builder.Services.AddOpenApi();
 
-var host = builder.Build();
-host.Run();
+builder.Services.AddHostedService<RabbitMQProvisioningConsumer>();
+
+var app = builder.Build();
+
+app.UseHttpsRedirection();
+
+
+app.Run();
