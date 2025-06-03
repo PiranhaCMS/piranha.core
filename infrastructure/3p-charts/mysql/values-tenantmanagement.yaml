@@ -1,0 +1,33 @@
+architecture: replication
+
+auth:
+  rootPassword: password
+  database: piranha
+  username: my-user1
+  password: my-password1
+  replicationUser: my-replication-user
+  replicationPassword: my-replication-password
+
+primary:
+  persistence:
+    enabled: true
+    size: 1Gi
+    storageClass: "local-path"
+  resources:
+    requests:
+      memory: 512Mi
+      cpu: 250m
+
+secondary:
+  replicaCount: 0
+  persistence:
+    enabled: true
+    size: 1Gi
+    storageClass: "local-path"
+  resources:
+    requests:
+      memory: 512Mi
+      cpu: 250m
+
+networkPolicy:
+  allowExternal: false

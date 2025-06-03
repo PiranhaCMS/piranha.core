@@ -1,0 +1,29 @@
+FROM node:18 AS build
+WORKDIR /app
+
+# Copy package.json and install dependencies
+COPY ContentRus.ControlPlane/ContentRus.SelfProvisionUI/package.json .
+
+# Use npm install instead of npm ci since package-lock.json doesn't exist
+RUN npm install
+
+# Copy the rest of the app and build
+COPY ContentRus.ControlPlane/ContentRus.SelfProvisionUI/. .
+RUN npm run build
+
+# Production environment
+FROM nginx:alpine
+COPY --from=build /app/dist /usr/share/nginx/html
+
+# Add a simple nginx configuration for SPA routing
+RUN echo 'server { \
+    listen 80; \
+    location / { \
+        root /usr/share/nginx/html; \
+        index index.html index.htm; \
+        try_files $uri $uri/ /index.html; \
+    } \
+}' > /etc/nginx/conf.d/default.conf
+
+EXPOSE 80
+CMD ["nginx", "-g", "daemon off;"]

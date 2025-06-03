@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.selfprovisionui.appName }}
+  namespace: {{ .Values.namespace }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: {{ .Values.selfprovisionui.appName }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.selfprovisionui.appName }}
+    spec:
+      containers:
+        - name: {{ .Values.selfprovisionui.appName }}
+          image: {{ .Values.selfprovisionui.image }}
+          ports:
+            - containerPort: {{ .Values.selfprovisionui.port }}
+          volumeMounts:
+            - name: frontend-env
+              mountPath: /app/.env
+              subPath: .env
+              readOnly: true
+      volumes:
+        - name: frontend-env
+          secret:
+            secretName: frontend-env-secret
+            items:
+              - key: .env
+                path: .env

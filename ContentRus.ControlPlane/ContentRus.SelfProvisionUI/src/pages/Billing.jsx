@@ -4,7 +4,7 @@ import { useQuery } from '@tanstack/react-query';
 import { API_URL } from '../components/ApiUrl';
 import './../styles/billing.css';
 
-const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY);
+const stripePromise = loadStripe("pk_test_51RQmwvDU2VGKpGD9rGhJKqYmBLaaoPkc5KvCLROi56j8ahrANvpiBm3hXuCITdiWl5H9roQ3wdyiYjrGsMjoaGg400RfisLjLm");
 
 export function Billing() {
   const [loading, setLoading] = useState(false);
@@ -44,7 +44,7 @@ export function Billing() {
     try {
       // Call your backend API to create a checkout session
       //Change ngrok domain
-      const response = await fetch('https://f004-193-137-169-167.ngrok-free.app/api/stripe/create-checkout-session', {
+      const response = await fetch('http://billing/api/stripe/create-checkout-session', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -65,38 +65,7 @@ export function Billing() {
       });
     } catch (error) {
       console.error('Error:', error);
-    } finally {
-
-      try {
-        await fetch(`${API_URL}/tenant/tier`, {
-          method: 'PUT',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`
-          },
-          body: id,
-        });
-      } catch (tierError) {
-        console.error('Error updating tenant tier:', tierError);
-      }
-
-      // Update tenant state to ACTIVE after successful subscription
-      try {
-        await fetch(`${API_URL}/tenant/state`, {
-          method: 'PUT',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`
-          },
-          body: 2,
-        });
-      } catch (stateError) {
-        console.error('Error updating tenant state:', stateError);
-      }
-
-      //window.location.reload();
-      setLoading(false);
-    }
+    } 
   };
 
   if (plansLoading || tenantLoading) {

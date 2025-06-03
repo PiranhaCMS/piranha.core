@@ -9,6 +9,9 @@ using System.Text.Json;
 using ContentRus.TenantManagement.Models;
 using ContentRus.TenantManagement.Services;
 using ContentRus.TenantManagement.Controllers;
+using ContentRus.TenantManagement.RabbitMQ;
+using Microsoft.Extensions.Options;
+
 
 public class RabbitMqConsumerService : BackgroundService, IDisposable
 {
@@ -16,23 +19,28 @@ public class RabbitMqConsumerService : BackgroundService, IDisposable
     private IChannel _channel;
     private readonly IServiceProvider _serviceProvider;
 
-    public RabbitMqConsumerService(IServiceProvider serviceProvider)
+    private readonly RabbitMqSettings _settings;
+
+    public RabbitMqConsumerService(IServiceProvider serviceProvider, IOptions<RabbitMqSettings> settings)
     {
         _serviceProvider = serviceProvider;
+        _settings = settings.Value;
     }
 
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
         var factory = new ConnectionFactory
         {
-            HostName = "localhost"
+            HostName = _settings.HostName,
+            UserName = _settings.UserName,
+            Password = _settings.Password,
         };
 
         _connection = await factory.CreateConnectionAsync();
         _channel = await _connection.CreateChannelAsync();
 
         await _channel.QueueDeclareAsync(
-            queue: "event_queue",
+            queue: _settings.QueueName,
             durable: true,
             exclusive: false,
             autoDelete: false,

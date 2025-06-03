@@ -1,0 +1,49 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: stripe-listener
+  namespace: control
+spec:
+  containers:
+    - name: stripe
+      image: stripe/stripe-cli:latest
+      env:
+        - name: STRIPE_API_KEY
+          valueFrom:
+            secretKeyRef:
+              name: stripe-env-secret
+              key: STRIPE_API_KEY
+      command: ["/bin/sh", "-c"]
+      args:
+        - |
+          sh /start/start-stripe.sh
+      volumeMounts:
+        - name: script-volume
+          mountPath: /start
+          readOnly: true
+        - name: shared
+          mountPath: /shared
+    - name: secret-writer
+      image: bitnami/kubectl:latest
+      command: ["/bin/sh", "-c"]
+      args:
+        - |
+          echo "Waiting for secret file..."
+          while [ ! -f /shared/secret.txt ]; do sleep 1; done
+          echo "Secret file found. Creating/updating Kubernetes secret..."
+          kubectl create secret generic stripe-webhook-secret \
+            --from-literal=Stripe__WebhookSecret=$(cat /shared/secret.txt) \
+            -n control \
+            --dry-run=client -o yaml | kubectl apply -f -
+          echo "Done. Tailing logs to stay alive..."
+          tail -f /dev/null
+      volumeMounts:
+        - name: shared
+          mountPath: /shared
+  restartPolicy: Never
+  volumes:
+    - name: script-volume
+      configMap:
+        name: stripe-listen-script
+    - name: shared
+      emptyDir: {}

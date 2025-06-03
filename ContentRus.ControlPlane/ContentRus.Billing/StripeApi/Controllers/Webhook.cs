@@ -6,6 +6,7 @@ using System;
 using System.IO;
 using System.Threading.Tasks;
 using StripeApi.Models;
+using StripeApi.RabbitMQ;
 
 namespace StripeApi.Controllers
 {
@@ -14,11 +15,13 @@ namespace StripeApi.Controllers
     public class WebhookController : ControllerBase
     {
         private readonly StripeSettings _stripeSettings;
+        private readonly RabbitMqPublisher _publisher;
         //private readonly Func<Task<RabbitMqPublisher>> _publisherFactory;
 
-        public WebhookController(IOptions<StripeSettings> stripeOptions)
+        public WebhookController(IOptions<StripeSettings> stripeOptions, RabbitMqPublisher publisher)
         {
             _stripeSettings = stripeOptions.Value;
+            _publisher = publisher;
         }
 
         [HttpPost]
@@ -144,8 +147,8 @@ namespace StripeApi.Controllers
                     TenantID = "lol"
                 };
 
-                await using var publisher = new RabbitMqPublisher();
-                await publisher.PublishAsync(evt);
+                await _publisher.PublishAsync(evt);
+
 
                 Console.WriteLine("✅ Checkout completion event published successfully");
             }
