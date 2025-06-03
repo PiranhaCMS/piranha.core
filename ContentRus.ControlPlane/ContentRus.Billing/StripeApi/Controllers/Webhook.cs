@@ -156,8 +156,7 @@ namespace StripeApi.Controllers
                         TenantID = tenantId ?? "unknown"
                     };
 
-                await using var publisher = new RabbitMqPublisher();
-                await publisher.PublishAsync(evt);
+                await _publisher.PublishAsync(evt);
 
                 Console.WriteLine("✅ Checkout completion event published successfully");
             }

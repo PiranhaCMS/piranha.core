@@ -11,7 +11,14 @@ builder.Configuration.AddEnvironmentVariables();
 
 builder.Services.Configure<StripeSettings>(builder.Configuration.GetSection("Stripe"));
 
-builder.Services.Configure<RabbitMqSettings>(builder.Configuration.GetSection("RabbitMqSettings"));
+builder.Services.Configure<RabbitMqSettings>(options =>
+{
+    options.HostName = Environment.GetEnvironmentVariable("RABBITMQ_HOST");
+    options.UserName = Environment.GetEnvironmentVariable("RABBITMQ_USER");
+    options.Password = Environment.GetEnvironmentVariable("RABBITMQ_PASSWORD");
+    options.QueueName = Environment.GetEnvironmentVariable("RABBITMQ_QUEUE") ?? "event_queue";
+});
+
 builder.Services.AddSingleton<RabbitMqPublisher>();
 
 

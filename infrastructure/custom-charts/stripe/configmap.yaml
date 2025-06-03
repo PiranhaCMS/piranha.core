@@ -10,7 +10,7 @@ data:
 
     echo "Starting stripe listen..."
 
-    stripe listen --api-key "$STRIPE_API_KEY" --forward-to http://billing/webhook > /shared/stripe-output.log 2>&1 &
+    stripe listen --api-key "$STRIPE_API_KEY" --forward-to http://billing-service.control.svc.cluster.local/webhook > /shared/stripe-output.log 2>&1 &
     STRIPE_PID=$!
 
     sleep 5

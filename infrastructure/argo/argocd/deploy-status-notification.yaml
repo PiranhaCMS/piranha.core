@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: argocd-deploymentstatus-notifications
+  name: argocd-notifications-cm
   namespace: argocd
 data:
   triggers.yaml: |

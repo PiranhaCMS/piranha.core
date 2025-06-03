@@ -8,4 +8,5 @@ kubectl create secret generic $SECRET_NAME\
   --from-literal=mysql-root-password="$mysql_root_password" \
   --from-literal=mysql-user="$mysql_user" \
   --from-literal=mysql-password="$mysql_password" \
+  --from-literal=mysql-replication-password="$mysql_replication_password" \
   -n $NAMESPACE

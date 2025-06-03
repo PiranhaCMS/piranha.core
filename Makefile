@@ -122,6 +122,7 @@ create-cluster:
 		kubectl create secret generic azure-cred-secret --from-file=username=credentials/azure_username.txt --from-file=password=credentials/azure_password.txt -n argowf; \
 		helm install argocd argo/argo-cd -n argocd -f infrastructure/argo/argowf/setup/cd-values.yml --create-namespace; \
 		kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/notifications_catalog/install.yaml; \
+		kubectl apply -f infrastructure/argo/argocd/deploy-status-notification.yaml -n argocd; \
 		kubectl apply -f infrastructure/argo/argocd/project.yaml; \
 		kubectl apply -f infrastructure/argo/argocd/tenants-application-set.yaml; \
 		kubectl apply -f infrastructure/argo/argowf/tenant-provisioning-with-credentials-template.yml -n argowf; \
@@ -146,6 +147,11 @@ create-cluster:
 		$(MAKE) download-istio-dashboards; \
 		$(MAKE) load-grafana-dashboards; \
 		kubectl create namespace control; \
+		sh infrastructure/secrets/tenantmanagement-mysql-env-secret-create.sh; \
+		sh infrastructure/secrets/tenantmanagement-env-secret-create.sh; \
+		sh infrastructure/secrets/stripe-env-secret-create.sh; \
+		sh infrastructure/secrets/frontend-env-secret-create.sh; \
+		sh infrastructure/secrets/billing-env-secret-create.sh; \
 		helm install mysql oci://registry-1.docker.io/bitnamicharts/mysql -f infrastructure/3p-charts/mysql/values-tenantmanagement.yaml -n control --set namespaceOverride=control; \
 		helm install rabbitmq bitnami/rabbitmq -n control --set auth.username=user --set auth.password=password; \
 		kubectl apply -f https://github.com/kubernetes-sigs/gateway-api/releases/download/v1.1.0/standard-install.yaml -n control; \
@@ -154,10 +160,6 @@ create-cluster:
 		kubectl apply -f infrastructure/custom-charts/kong/cors.yaml -n control; \
 		helm install kong kong/ingress -n control; \
 		kubectl apply -f infrastructure/custom-charts/ingress/ingress.yaml -n control; \
-		sh infrastructure/secrets/tenantmanagement-env-secret-create.sh; \
-		sh infrastructure/secrets/stripe-env-secret-create.sh; \
-		sh infrastructure/secrets/frontend-env-secret-create.sh; \
-		sh infrastructure/secrets/billing-env-secret-create.sh; \
 		kubectl apply -f infrastructure/custom-charts/stripe/role.yaml -n control; \
 		kubectl apply -f infrastructure/custom-charts/stripe/rolebinding.yaml -n control; \
 		kubectl apply -f infrastructure/custom-charts/stripe/configmap.yaml -n control; \
