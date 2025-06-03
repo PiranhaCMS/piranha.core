@@ -1,0 +1,20 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.notifications.appName }}
+  namespace: {{ .Values.namespace }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: {{ .Values.notifications.appName }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.notifications.appName }}
+    spec:
+      containers:
+        - name: {{ .Values.notifications.appName }}
+          image: {{ .Values.notifications.image }}
+          ports:
+            - containerPort: {{ .Values.notifications.port }}

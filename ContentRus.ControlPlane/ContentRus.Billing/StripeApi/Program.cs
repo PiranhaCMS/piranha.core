@@ -1,5 +1,6 @@
 using Stripe;
 using DotNetEnv;
+using StripeApi.RabbitMQ;
 
 
 Env.Load(); // procura automaticamente pelo .env na raiz
@@ -9,6 +10,10 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Configuration.AddEnvironmentVariables();
 
 builder.Services.Configure<StripeSettings>(builder.Configuration.GetSection("Stripe"));
+
+builder.Services.Configure<RabbitMqSettings>(builder.Configuration.GetSection("RabbitMqSettings"));
+builder.Services.AddSingleton<RabbitMqPublisher>();
+
 
 var stripeSettings = builder.Configuration.GetSection("Stripe").Get<StripeSettings>();
 StripeConfiguration.ApiKey = stripeSettings.SecretKey;
@@ -45,7 +50,7 @@ if (app.Environment.IsDevelopment())
 
 //app.UseHttpsRedirection();
 
-app.MapControllers(); 
+app.MapControllers();
 
 app.Run();
 

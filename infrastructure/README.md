@@ -37,3 +37,34 @@ docker build -f infrastructure/Dockerfile.manager -t k3d-registry:5000/contentru
 docker push k3d-registry:5000/contentrus-manager
 ```
 
+### Build & Push Tenant Management
+```bash
+docker build -f infrastructure/Dockerfile.tenantmanagement -t k3d-registry:5000/contentrus-tenantmanagement .
+```
+```bash
+docker push k3d-registry:5000/contentrus-tenantmanagement
+```
+
+### Build & Push Billing Service
+```bash
+docker build -f infrastructure/Dockerfile.billing -t k3d-registry:5000/contentrus-billing .
+```
+```bash
+docker push k3d-registry:5000/contentrus-billing
+```
+
+### Build & Push Self Provision UI
+```bash
+docker build -f infrastructure/Dockerfile.selfprovision -t k3d-registry:5000/contentrus-selfprovision .
+```
+```bash
+docker push k3d-registry:5000/contentrus-selfprovision
+```
+
+### Build and Push Notifications Service
+```bash
+docker build -f infrastructure/Dockerfile.notificationservice -t k3d-registry:5000/contentrus-notificationservice .
+```
+```bash
+docker push k3d-registry:5000/contentrus-notificationservice
+```

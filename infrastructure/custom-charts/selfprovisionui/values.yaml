@@ -1,0 +1,6 @@
+namespace: control
+
+selfprovisionui:
+  appName: selfprovisionui
+  image: k3d-registry:5000/contentrus-selfprovision
+  port: 80

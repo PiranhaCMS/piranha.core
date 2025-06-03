@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.billing.appName }}
+  namespace: {{ .Values.namespace }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: {{ .Values.billing.appName }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.billing.appName }}
+    spec:
+      containers:
+        - name: {{ .Values.billing.appName }}
+          image: {{ .Values.billing.image }}
+          env:
+          - name: DOTNET_USE_POLLING_FILE_WATCHER
+            value: "true"
+          - name: ASPNETCORE_HOSTINGSTARTUPASSEMBLIES
+            value: ""
+          ports:
+            - containerPort: {{ .Values.billing.port }}
+          volumeMounts:
+            - name: billing-env
+              mountPath: /app/.env
+              subPath: .env
+              readOnly: true
+          env:
+            - name: Stripe__WebhookSecret
+              valueFrom:
+                secretKeyRef:
+                  name: stripe-webhook-secret
+                  key: Stripe__WebhookSecret
+      volumes:
+        - name: billing-env
+          secret:
+            secretName: billing-env-secret
+            items:
+              - key: .env
+                path: .env

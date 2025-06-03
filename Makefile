@@ -1,8 +1,14 @@
 REGISTRY_NAME = registry
 REGISTRY_PORT = 5000
 CLUSTER_NAME = cluster
+REGISTRY_URL = k3d-$(REGISTRY_NAME):$(REGISTRY_PORT)
 
-.PHONY: all create-registry create-cluster kubeconfig set-as-default-kubeconfig clean-registry clean-cluster clean-all restart-docker
+# Image definitions
+IMAGES = contentrus-tenantmanagement contentrus-billing contentrus-selfprovision contentrus-notificationservice
+IMAGE_DOCKERFILES = infrastructure/Dockerfile.tenantmanagement infrastructure/Dockerfile.billing infrastructure/Dockerfile.selfprovision infrastructure/Dockerfile.notificationservice
+
+.PHONY: all create-registry create-cluster kubeconfig set-as-default-kubeconfig clean-registry clean-cluster clean-all restart-docker build-images check-images
+
 
 all: check-k3d docker-set-default
 
@@ -24,6 +30,48 @@ create-registry:
 		echo "Registry '$(REGISTRY_NAME)' already exists."; \
 	fi
 
+check-images:
+	@echo "Checking if images exist in registry..."
+	@missing_images=""; \
+	for image in $(IMAGES); do \
+		if ! docker pull $(REGISTRY_URL)/$$image:latest >/dev/null 2>&1; then \
+			echo "❌ Image $$image not found in registry"; \
+			missing_images="$$missing_images $$image"; \
+		else \
+			echo "✅ Image $$image found in registry"; \
+		fi; \
+	done; \
+	if [ -n "$$missing_images" ]; then \
+		echo "Building missing images..."; \
+		$(MAKE) build-images MISSING_IMAGES="$$missing_images"; \
+	else \
+		echo "✅ All images are available in registry"; \
+	fi
+
+build-images:
+	@echo "Building and pushing images..."
+	@if echo "$(MISSING_IMAGES)" | grep -q "contentrus-tenantmanagement" || [ -z "$(MISSING_IMAGES)" ]; then \
+		echo "Building Tenant Management..."; \
+		docker build -f infrastructure/Dockerfile.tenantmanagement -t $(REGISTRY_URL)/contentrus-tenantmanagement:latest .; \
+		docker push $(REGISTRY_URL)/contentrus-tenantmanagement:latest; \
+	fi
+	@if echo "$(MISSING_IMAGES)" | grep -q "contentrus-billing" || [ -z "$(MISSING_IMAGES)" ]; then \
+		echo "Building Billing Service..."; \
+		docker build -f infrastructure/Dockerfile.billing -t $(REGISTRY_URL)/contentrus-billing:latest .; \
+		docker push $(REGISTRY_URL)/contentrus-billing:latest; \
+	fi
+	@if echo "$(MISSING_IMAGES)" | grep -q "contentrus-selfprovision" || [ -z "$(MISSING_IMAGES)" ]; then \
+		echo "Building Self Provision UI..."; \
+		docker build -f infrastructure/Dockerfile.selfprovision -t $(REGISTRY_URL)/contentrus-selfprovision:latest .; \
+		docker push $(REGISTRY_URL)/contentrus-selfprovision:latest; \
+	fi
+	@if echo "$(MISSING_IMAGES)" | grep -q "contentrus-notificationservice" || [ -z "$(MISSING_IMAGES)" ]; then \
+		echo "Building Notifications Service..."; \
+		docker build -f infrastructure/Dockerfile.notificationservice -t $(REGISTRY_URL)/contentrus-notificationservice:latest .; \
+		docker push $(REGISTRY_URL)/contentrus-notificationservice:latest; \
+	fi
+	@echo "✅ All images built and pushed successfully"
+
 create-cluster:
 	@echo "Creating cluster '$(CLUSTER_NAME)'..."
 	@if ! k3d cluster list | grep -q $(CLUSTER_NAME); then \
@@ -36,6 +84,7 @@ create-cluster:
 			--k3s-arg '--cluster-cidr=192.168.0.0/16@server:*' \
 			--wait; \
 		k3d kubeconfig merge $(CLUSTER_NAME) --kubeconfig-switch-context; \
+		$(MAKE) check-images; \
 		docker pull docker.io/calico/csi:v3.29.0; \
 		docker pull docker.io/calico/node-driver-registrar:v3.29.0; \
 		docker pull docker.io/calico/pod2daemon-flexvol:v3.29.0; \
@@ -75,7 +124,6 @@ create-cluster:
 		kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/notifications_catalog/install.yaml; \
 		kubectl apply -f infrastructure/argo/argocd/project.yaml; \
 		kubectl apply -f infrastructure/argo/argocd/tenants-application-set.yaml; \
-		
 		kubectl apply -f infrastructure/argo/argowf/tenant-provisioning-with-credentials-template.yml -n argowf; \
 		kubectl apply -f https://github.com/cert-manager/cert-manager/releases/download/v1.17.2/cert-manager.yaml; \
 		kubectl -n cert-manager wait --for=condition=ready pod -l app.kubernetes.io/name=webhook --timeout=120s; \
@@ -88,6 +136,7 @@ create-cluster:
 		kubectl -n opentelemetry-operator-system wait --for=condition=ready pod -l app.kubernetes.io/name=opentelemetry-operator-webhook --timeout=120s; \
 		helm repo add prometheus-community https://prometheus-community.github.io/helm-charts; \
 		helm repo add kiali https://kiali.org/helm-charts; \
+		helm repo add kong https://charts.konghq.com; \
 		helm repo update; \
 		helm install --set cr.create=true --set cr.namespace=common --set cr.spec.auth.strategy="anonymous" --namespace common kiali-operator kiali/kiali-operator; \
 		kubectl apply -f infrastructure/kiali/kiali.yaml; \
@@ -96,6 +145,27 @@ create-cluster:
 		helm upgrade kube-prometheus-stack prometheus-community/kube-prometheus-stack   -n common   -f infrastructure/grafana/grafana-values.yaml; \
 		$(MAKE) download-istio-dashboards; \
 		$(MAKE) load-grafana-dashboards; \
+		kubectl create namespace control; \
+		helm install mysql oci://registry-1.docker.io/bitnamicharts/mysql -f infrastructure/3p-charts/mysql/values-tenantmanagement.yaml -n control --set namespaceOverride=control; \
+		helm install rabbitmq bitnami/rabbitmq -n control --set auth.username=user --set auth.password=password; \
+		kubectl apply -f https://github.com/kubernetes-sigs/gateway-api/releases/download/v1.1.0/standard-install.yaml -n control; \
+		kubectl apply -f infrastructure/custom-charts/kong/gatewayclass.yaml -n control; \
+		kubectl apply -f infrastructure/custom-charts/kong/gateway.yaml -n control; \
+		kubectl apply -f infrastructure/custom-charts/kong/cors.yaml -n control; \
+		helm install kong kong/ingress -n control; \
+		kubectl apply -f infrastructure/custom-charts/ingress/ingress.yaml -n control; \
+		sh infrastructure/secrets/tenantmanagement-env-secret-create.sh; \
+		sh infrastructure/secrets/stripe-env-secret-create.sh; \
+		sh infrastructure/secrets/frontend-env-secret-create.sh; \
+		sh infrastructure/secrets/billing-env-secret-create.sh; \
+		kubectl apply -f infrastructure/custom-charts/stripe/role.yaml -n control; \
+		kubectl apply -f infrastructure/custom-charts/stripe/rolebinding.yaml -n control; \
+		kubectl apply -f infrastructure/custom-charts/stripe/configmap.yaml -n control; \
+		kubectl apply -f infrastructure/custom-charts/stripe/stripe.yaml -n control; \
+		helm install tenantmanagement -n control infrastructure/custom-charts/tenantmanagement/; \
+		helm install billing -n control infrastructure/custom-charts/billing/; \
+		helm install selfprovisionui -n control infrastructure/custom-charts/selfprovisionui/; \
+		helm install notificationservice -n control infrastructure/custom-charts/notifications/; \
 	else \
 		echo "Cluster '$(CLUSTER_NAME)' already exists."; \
 	fi

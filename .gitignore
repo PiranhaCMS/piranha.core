@@ -270,6 +270,7 @@ _Pvt_Extensions
 .vscode/
 
 .env
+.env*
 
 # Credentials
 .ssh/
