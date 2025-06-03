@@ -3,6 +3,8 @@ using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
 using System;
+using Microsoft.Extensions.Options;
+using ContentRus.Onboarding.Services;
 
 /// <summary>
 /// RabbitMQTenantStatusPublisher is responsible for publishing tenant status messages to a RabbitMQ queue.
@@ -18,10 +20,18 @@ public class RabbitMQTenantStatusPublisher : IAsyncDisposable
     /// Default constructor for RabbitMQTenantStatusPublisher.
     /// </summary>
     /// <param name="logger">The logger instance to use.</param>
-    public RabbitMQTenantStatusPublisher(ILogger<RabbitMQTenantStatusPublisher> logger)
+    public RabbitMQTenantStatusPublisher(ILogger<RabbitMQTenantStatusPublisher> logger, IOptions<RabbitMqSettings> settings)
     {
         _logger = logger;
-        var factory = new ConnectionFactory() { HostName = "localhost" };
+
+        var config = settings.Value;
+        
+        var factory = new ConnectionFactory
+        {
+            HostName = config.HostName,
+            UserName = config.UserName,
+            Password = config.Password,
+        };
 
         // Since constructors can't be async, use `.Result` for quick setup (or refactor if needed)
         _connection = factory.CreateConnectionAsync().Result;

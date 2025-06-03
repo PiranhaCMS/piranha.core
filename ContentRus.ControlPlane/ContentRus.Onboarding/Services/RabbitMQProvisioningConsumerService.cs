@@ -8,6 +8,8 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Text.Json;
+using Microsoft.Extensions.Options;
+using ContentRus.Onboarding.Services;
 
 /// <summary>
 /// Background worker that listens to provisioning messages from RabbitMQ.
@@ -19,12 +21,13 @@ public class RabbitMQProvisioningConsumer : BackgroundService, IDisposable
     private IConnection _connection;
     private IChannel _channel;
     private IKubernetes _kclient;
+    private readonly RabbitMqSettings _settings;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="RabbitMQProvisioningConsumer"/> class.
     /// </summary>
     /// <param name="logger">The logger instance to use.</param>
-    public RabbitMQProvisioningConsumer(ILogger<RabbitMQProvisioningConsumer> logger)
+    public RabbitMQProvisioningConsumer(ILogger<RabbitMQProvisioningConsumer> logger, IOptions<RabbitMqSettings> settings)
     {
         _logger = logger;
         // in cluster config
@@ -32,6 +35,7 @@ public class RabbitMQProvisioningConsumer : BackgroundService, IDisposable
         // default kubeconfig in machine
         var config = KubernetesClientConfiguration.BuildConfigFromConfigFile();
         _kclient = new Kubernetes(config);
+        _settings = settings.Value;
     }
 
     /// <summary>
@@ -40,11 +44,11 @@ public class RabbitMQProvisioningConsumer : BackgroundService, IDisposable
     /// <param name="stoppingToken">Token to observe for cancellation requests.</param>
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
-        var factory = new ConnectionFactory()
+        var factory = new ConnectionFactory
         {
-            HostName = "localhost",
-            // UserName = "guest",
-            // Password = "guest"
+            HostName = _settings.HostName,
+            UserName = _settings.UserName,
+            Password = _settings.Password,
         };
 
         _connection = await factory.CreateConnectionAsync();

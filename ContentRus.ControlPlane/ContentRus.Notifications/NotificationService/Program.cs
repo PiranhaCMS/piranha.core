@@ -5,6 +5,16 @@ var builder = WebApplication.CreateBuilder(args);
 DotNetEnv.Env.Load();
 builder.Configuration.AddEnvironmentVariables();
 
+builder.Services.Configure<RabbitMqSettings>(options =>
+{
+    options.HostName = Environment.GetEnvironmentVariable("RABBITMQ_HOST");
+    options.UserName = Environment.GetEnvironmentVariable("RABBITMQ_USER");
+    options.Password = Environment.GetEnvironmentVariable("RABBITMQ_PASSWORD");
+    options.QueueName = Environment.GetEnvironmentVariable("RABBITMQ_QUEUE") ?? "event_queue";
+});
+
+builder.Services.AddHostedService<RabbitMQNotificationConsumerService>();
+
 // Add services to the container.
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 // builder.Services.AddOpenApi();
