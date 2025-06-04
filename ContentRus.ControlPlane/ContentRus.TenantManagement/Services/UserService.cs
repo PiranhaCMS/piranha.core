@@ -66,5 +66,10 @@ namespace ContentRus.TenantManagement.Services
 
             return result == PasswordVerificationResult.Success ? user : null;
         }
+
+        public User? GetUserByTenantId(Guid tenantId)
+        {
+            return _context.Users.FirstOrDefault(u => u.TenantId == tenantId);
+        }
     }
 }

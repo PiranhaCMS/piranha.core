@@ -151,6 +151,7 @@ namespace StripeApi.Controllers
 
                 var evt = new PaymentConfirmedEvent
                     {
+                        Type = "payment",
                         Plan = productName,
                         Status = "subscription created",
                         TenantID = tenantId ?? "unknown"
@@ -208,6 +209,7 @@ namespace StripeApi.Controllers
                 //Console.WriteLine($"🔍 Subscription is for product: {product.Name}");
                 var evt = new PaymentConfirmedEvent
                 {
+                    Type = "payment",
                     Plan = product.Name,
                     Status = "subscription created",
                     TenantID = "lol"

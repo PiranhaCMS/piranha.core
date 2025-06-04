@@ -8,6 +8,7 @@ using System;
 using System.Text.Json;
 using Microsoft.Extensions.Options;
 using Notifications.Services;
+using Notifications.Models;
 
 
 public class RabbitMQNotificationConsumerService : BackgroundService, IDisposable
@@ -55,9 +56,20 @@ public class RabbitMQNotificationConsumerService : BackgroundService, IDisposabl
             var message = Encoding.UTF8.GetString(body);
             Console.WriteLine($" [x] Received: {message}");
 
-            // var subscriptionEvent = JsonSerializer.Deserialize<PaymentConfirmedEvent>(message);
+            using var scope = _serviceProvider.CreateScope();
+            var emailService = scope.ServiceProvider.GetRequiredService<EmailService>();
 
-            // lacks sending email
+            var emailEvent = JsonSerializer.Deserialize<EmailEvent>(message);
+            
+            if (emailEvent != null)
+            {
+                await emailService.SendEmailAsync(emailEvent.To, emailEvent.Subject, emailEvent.Body);
+                Console.WriteLine($" [x] Email sent to: {emailEvent.To}");
+            }
+            else
+            {
+                Console.WriteLine(" [!] Failed to deserialize EmailEvent.");
+            }
 
             await Task.CompletedTask;
         };

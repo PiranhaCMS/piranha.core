@@ -1,4 +1,4 @@
-namespace ContentRus.TenantManagement.Models
+namespace ContentRus.Onboarding.Services
 {
     public abstract class BaseEvent
     {

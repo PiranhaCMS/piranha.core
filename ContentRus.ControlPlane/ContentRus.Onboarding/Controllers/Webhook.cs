@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using ContentRus.Onboarding.Services;
 
 [ApiController]
 [Route("webhook")]
@@ -26,7 +27,21 @@ public class WebhookController : ControllerBase
         if (deploymentMessage == null)
             return BadRequest("Invalid deployment message");
 
-        return Ok(new { message = "Deployment status updated successfully." });
+        var status = deploymentMessage.health.ToLower() == "healthy" 
+            ? "success" 
+            : "failed";
+
+        var deploymentStatus = new DeploymentStatusEvent
+        {
+            Type = "deployment",
+            Status = status,
+            TenantID = deploymentMessage.tenantNamespace.Substring(1), // Remove first character ('t' from 't1')
+        };
+
+        var serializedMessage = System.Text.Json.JsonSerializer.Serialize(deploymentStatus);
+        await TenantStatusPublisher.PublishAsync(serializedMessage);
+
+        return Ok(new { message = "Deployment status comunicated successfully." });
     }
 
     /// <summary>
