@@ -68,3 +68,11 @@ docker build -f infrastructure/Dockerfile.notificationservice -t k3d-registry:50
 ```bash
 docker push k3d-registry:5000/contentrus-notificationservice
 ```
+
+### Build and Push Onboarding Service
+```bash
+docker build -f infrastructure/Dockerfile.onboarding -t k3d-registry:5000/contentrus-onboarding .
+```
+```bash
+docker push k3d-registry:5000/contentrus-onboarding
+```

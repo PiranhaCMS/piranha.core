@@ -4,8 +4,8 @@ CLUSTER_NAME = cluster
 REGISTRY_URL = k3d-$(REGISTRY_NAME):$(REGISTRY_PORT)
 
 # Image definitions
-IMAGES = contentrus-tenantmanagement contentrus-billing contentrus-selfprovision contentrus-notificationservice
-IMAGE_DOCKERFILES = infrastructure/Dockerfile.tenantmanagement infrastructure/Dockerfile.billing infrastructure/Dockerfile.selfprovision infrastructure/Dockerfile.notificationservice
+IMAGES = contentrus-tenantmanagement contentrus-billing contentrus-selfprovision contentrus-notificationservice contentrus-onboarding
+IMAGE_DOCKERFILES = infrastructure/Dockerfile.tenantmanagement infrastructure/Dockerfile.billing infrastructure/Dockerfile.selfprovision infrastructure/Dockerfile.notificationservice infrastructure/Dockerfile.onboarding
 
 .PHONY: all create-registry create-cluster kubeconfig set-as-default-kubeconfig clean-registry clean-cluster clean-all restart-docker build-images check-images
 
@@ -69,6 +69,11 @@ build-images:
 		echo "Building Notifications Service..."; \
 		docker build -f infrastructure/Dockerfile.notificationservice -t $(REGISTRY_URL)/contentrus-notificationservice:latest .; \
 		docker push $(REGISTRY_URL)/contentrus-notificationservice:latest; \
+	fi
+	@if echo "$(MISSING_IMAGES)" | grep -q "contentrus-onboarding" || [ -z "$(MISSING_IMAGES)" ]; then \
+		echo "Building Onboarding Service..."; \
+		docker build -f infrastructure/Dockerfile.onboarding -t $(REGISTRY_URL)/contentrus-onboarding:latest .; \
+		docker push $(REGISTRY_URL)/contentrus-onboarding:latest; \
 	fi
 	@echo "✅ All images built and pushed successfully"
 
@@ -152,6 +157,8 @@ create-cluster:
 		sh infrastructure/secrets/stripe-env-secret-create.sh; \
 		sh infrastructure/secrets/frontend-env-secret-create.sh; \
 		sh infrastructure/secrets/billing-env-secret-create.sh; \
+		sh infrastructure/secrets/onboarding-env-secret-create.sh; \
+		sh infrastructure/secrets/notifications-env-secret-create.sh; \
 		helm install mysql oci://registry-1.docker.io/bitnamicharts/mysql -f infrastructure/3p-charts/mysql/values-tenantmanagement.yaml -n control --set namespaceOverride=control; \
 		helm install rabbitmq bitnami/rabbitmq -n control --set auth.username=user --set auth.password=password; \
 		kubectl apply -f https://github.com/kubernetes-sigs/gateway-api/releases/download/v1.1.0/standard-install.yaml -n control; \
@@ -166,6 +173,7 @@ create-cluster:
 		kubectl apply -f infrastructure/custom-charts/stripe/stripe.yaml -n control; \
 		helm install tenantmanagement -n control infrastructure/custom-charts/tenantmanagement/; \
 		helm install billing -n control infrastructure/custom-charts/billing/; \
+		helm install onboarding -n control infrastructure/custom-charts/onboarding/; \
 		helm install selfprovisionui -n control infrastructure/custom-charts/selfprovisionui/; \
 		helm install notificationservice -n control infrastructure/custom-charts/notifications/; \
 	else \

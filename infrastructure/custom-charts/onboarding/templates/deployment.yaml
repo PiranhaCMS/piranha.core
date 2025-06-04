@@ -1,32 +1,32 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ .Values.notifications.appName }}
+  name: {{ .Values.onboarding.appName }}
   namespace: {{ .Values.namespace }}
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: {{ .Values.notifications.appName }}
+      app: {{ .Values.onboarding.appName }}
   template:
     metadata:
       labels:
-        app: {{ .Values.notifications.appName }}
+        app: {{ .Values.onboarding.appName }}
     spec:
       containers:
-        - name: {{ .Values.notifications.appName }}
-          image: {{ .Values.notifications.image }}
+        - name: {{ .Values.onboarding.appName }}
+          image: {{ .Values.onboarding.image }}
           ports:
-            - containerPort: {{ .Values.notifications.port }}
+            - containerPort: {{ .Values.onboarding.port }}
           volumeMounts:
-            - name: notifications-env
+            - name: onboarding-env
               mountPath: /app/.env
               subPath: .env
               readOnly: true
       volumes:
-        - name: notifications-env
+        - name: onboarding-env
           secret:
-            secretName: notifications-env-secret
+            secretName: onboarding-env-secret
             items:
               - key: .env
                 path: .env
