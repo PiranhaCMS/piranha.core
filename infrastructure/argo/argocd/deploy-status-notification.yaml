@@ -12,7 +12,7 @@ data:
   templates.yaml: |
     - name: webhook
       webhook:
-        url: http://onboarding-service.control.svc.cluster.local/webhook/deployment-status
+        url: onboarding.control.svc.cluster.local/webhook/deployment-status
         method: POST
         body: |
           {

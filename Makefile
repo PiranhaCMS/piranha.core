@@ -4,8 +4,8 @@ CLUSTER_NAME = cluster
 REGISTRY_URL = k3d-$(REGISTRY_NAME):$(REGISTRY_PORT)
 
 # Image definitions
-IMAGES = contentrus-tenantmanagement contentrus-billing contentrus-selfprovision contentrus-notificationservice contentrus-onboarding
-IMAGE_DOCKERFILES = infrastructure/Dockerfile.tenantmanagement infrastructure/Dockerfile.billing infrastructure/Dockerfile.selfprovision infrastructure/Dockerfile.notificationservice infrastructure/Dockerfile.onboarding
+IMAGES = az-cli-kubectl contentrus-hostedsite contentrus-manager contentrus-tenantmanagement contentrus-billing contentrus-selfprovision contentrus-notificationservice contentrus-onboarding
+IMAGE_DOCKERFILES = infrastructure/Dockerfile.azclikubectl infrastructure/Dockerfile.hostedsite infrastructure/Dockerfile.manager infrastructure/Dockerfile.tenantmanagement infrastructure/Dockerfile.billing infrastructure/Dockerfile.selfprovision infrastructure/Dockerfile.notificationservice infrastructure/Dockerfile.onboarding
 
 .PHONY: all create-registry create-cluster kubeconfig set-as-default-kubeconfig clean-registry clean-cluster clean-all restart-docker build-images check-images
 
@@ -50,6 +50,21 @@ check-images:
 
 build-images:
 	@echo "Building and pushing images..."
+	@if echo "$(MISSING_IMAGES)" | grep -q "az-cli-kubectl" || [ -z "$(MISSING_IMAGES)" ]; then \
+		echo "Building az-cli-kubectl image..."; \
+		docker build -f infrastructure/Dockerfile.azclikubectl -t $(REGISTRY_URL)/az-cli-kubectl:latest .; \
+		docker push $(REGISTRY_URL)/az-cli-kubectl:latest; \
+	fi
+	if echo "$(MISSING_IMAGES)" | grep -q "contentrus-hostedsite" || [ -z "$(MISSING_IMAGES)" ]; then \
+		echo "Building Hosted Site..."; \
+		docker build -f infrastructure/Dockerfile.hostedsite -t $(REGISTRY_URL)/contentrus-hostedsite:latest .; \
+		docker push $(REGISTRY_URL)/contentrus-hostedsite:latest; \
+	fi
+	if echo "$(MISSING_IMAGES)" | grep -q "contentrus-manager" || [ -z "$(MISSING_IMAGES)" ]; then \
+		echo "Building Manager UI..."; \
+		docker build -f infrastructure/Dockerfile.manager -t $(REGISTRY_URL)/contentrus-manager:latest .; \
+		docker push $(REGISTRY_URL)/contentrus-manager:latest; \
+	fi
 	@if echo "$(MISSING_IMAGES)" | grep -q "contentrus-tenantmanagement" || [ -z "$(MISSING_IMAGES)" ]; then \
 		echo "Building Tenant Management..."; \
 		docker build -f infrastructure/Dockerfile.tenantmanagement -t $(REGISTRY_URL)/contentrus-tenantmanagement:latest .; \
@@ -123,6 +138,8 @@ create-cluster:
 		kubectl create clusterrolebinding secret-writer-binding --clusterrole=secret-writer --serviceaccount=argowf:default; \
 		kubectl create clusterrole namespace-creator --verb=create --resource=namespaces; \
 		kubectl create clusterrolebinding namespace-creator-binding --clusterrole=namespace-creator --serviceaccount=argowf:default; \
+		kubectl create clusterrole workflow-creater --verb=create --resource=workflows.argoproj.io; \
+		kubectl create clusterrolebinding workflow-creater-binding --clusterrole=workflow-creater --serviceaccount=control:default; \
 		kubectl create secret generic github-creds --from-file=ssh-private-key=credentials/id_ed25519 -n argowf; \
 		kubectl create secret generic azure-cred-secret --from-file=username=credentials/azure_username.txt --from-file=password=credentials/azure_password.txt -n argowf; \
 		helm install argocd argo/argo-cd -n argocd -f infrastructure/argo/argowf/setup/cd-values.yml --create-namespace; \

@@ -86,7 +86,7 @@ public class RabbitMQProvisioningConsumer : BackgroundService, IDisposable
                     return;
                 }
 
-                var tenantId = ((JsonElement)messageObj["data"]).GetProperty("tenantId").GetInt32();
+                var tenantId = ((JsonElement)messageObj["data"]).GetProperty("tenantId").GetString();
 
                 await TriggerArgoWorkflowAsync(tenantId, stoppingToken);
                 
@@ -110,7 +110,7 @@ public class RabbitMQProvisioningConsumer : BackgroundService, IDisposable
     /// <summary>
     /// Triggers the Argo workflow based on the WorkflowTemplate and tenantId.
     /// </summary>
-    private async Task TriggerArgoWorkflowAsync(int tenantId, CancellationToken ct)
+    private async Task TriggerArgoWorkflowAsync(string tenantId, CancellationToken ct)
     {
         try
         {

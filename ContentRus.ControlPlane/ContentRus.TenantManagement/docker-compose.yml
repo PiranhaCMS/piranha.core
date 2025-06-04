@@ -7,8 +7,8 @@ services:
     ports:
       - "3306:3306"
     environment:
-      MYSQL_DATABASE: ${DATABASE}
-      MYSQL_ROOT_PASSWORD: ${PASSWORD}
+      MYSQL_DATABASE: piranha
+      MYSQL_ROOT_PASSWORD: password
     volumes:
       - mysql_data:/var/lib/mysql
   rabbitmq:
