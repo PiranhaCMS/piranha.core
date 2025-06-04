@@ -81,7 +81,6 @@ builder.AddPiranha(options =>
     options.UseCms();
     options.UseManager();
 
-    options.UseFileStorage(naming: Piranha.Local.FileStorageNaming.UniqueFolderNames);
     options.UseImageSharp();
     options.UseTinyMCE();
     options.UseMemoryCache();
@@ -91,6 +90,15 @@ builder.AddPiranha(options =>
         db.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString)));
     options.UseIdentityWithSeed<IdentityMySQLDb>(db =>
         db.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString)));
+
+    var containerName = builder.Configuration.GetConnectionString("ContainerName");
+
+    var blobConnectionString = builder.Configuration.GetConnectionString("blobstorage");
+
+    options.UseBlobStorage(blobConnectionString, containerName);
+    options.UseImageSharp();
+    options.UseTinyMCE();
+    options.UseMemoryCache();
 
     /**
      * Here you can configure the different permissions

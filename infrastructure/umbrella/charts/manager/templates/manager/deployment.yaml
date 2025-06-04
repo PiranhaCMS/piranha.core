@@ -26,4 +26,13 @@ spec:
                 secretKeyRef:
                   name: piranha
                   key: connection-string
-
+            - name: ConnectionStrings__blobstorage
+              valueFrom:
+                secretKeyRef:
+                  name: azureblob-credentials
+                  key: connection-string
+            - name: ConnectionStrings__ContainerName
+              valueFrom:
+                secretKeyRef:
+                  name: azureblob-credentials
+                  key: ContainerName
