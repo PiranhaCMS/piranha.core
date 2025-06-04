@@ -54,6 +54,7 @@ public class RabbitMqConsumerService : BackgroundService, IDisposable
         consumer.ReceivedAsync += async (sender, ea) =>
         {
             using var scope = _serviceProvider.CreateScope();
+            var userService = scope.ServiceProvider.GetRequiredService<UserService>();
             var tenantService = scope.ServiceProvider.GetRequiredService<TenantService>();
             var onboardingPublisher = scope.ServiceProvider.GetRequiredService<RabbitMQOnboardingPublisher>();
             var notificationPublisher = scope.ServiceProvider.GetRequiredService<RabbitMQNotificationPublisher>();
@@ -62,13 +63,18 @@ public class RabbitMqConsumerService : BackgroundService, IDisposable
             var message = Encoding.UTF8.GetString(body);
             Console.WriteLine($" [x] Received: {message}");
 
-            var jsonOptions = new JsonSerializerOptions
-            {
-                PropertyNameCaseInsensitive = true
-            };
-            var baseEvent = JsonSerializer.Deserialize<BaseEvent>(message, jsonOptions);
+            using var jsonDoc = JsonDocument.Parse(message);
+            var root = jsonDoc.RootElement;
 
-            switch (baseEvent.Type.ToLower())
+            if (!root.TryGetProperty("Type", out var typeProperty))
+            {
+                Console.WriteLine(" [!] Missing 'Type' property in message.");
+                return;
+            }
+
+            var typeValue = typeProperty.GetString()?.ToLowerInvariant();
+
+            switch (typeValue)
             {
                 case "payment":
                     var subscriptionEvent = JsonSerializer.Deserialize<PaymentConfirmedEvent>(message);
@@ -93,56 +99,58 @@ public class RabbitMqConsumerService : BackgroundService, IDisposable
 
                     Guid id = Guid.Parse(subscriptionEvent.TenantID);
 
-                    if(subscriptionEvent.Plan=="Plano Grupo"){
-                        tenantService.UpdateTenantTier(id,TenantTier.Pro);
-                        tenantService.UpdateTenantState(id,TenantState.Active);
+                    if (subscriptionEvent.Plan == "Plano Grupo")
+                    {
+                        tenantService.UpdateTenantTier(id, TenantTier.Pro);
+                        tenantService.UpdateTenantState(id, TenantState.Active);
                     }
-                    else if(subscriptionEvent.Plan=="Plano Básico"){
-                        tenantService.UpdateTenantTier(id,TenantTier.Basic);
-                        tenantService.UpdateTenantState(id,TenantState.Active);
+                    else if (subscriptionEvent.Plan == "Plano Básico")
+                    {
+                        tenantService.UpdateTenantTier(id, TenantTier.Basic);
+                        tenantService.UpdateTenantState(id, TenantState.Active);
                     }
-                    else if(subscriptionEvent.Plan=="Plano Enterprise"){
-                        tenantService.UpdateTenantTier(id,TenantTier.Enterprise);
-                        tenantService.UpdateTenantState(id,TenantState.Active);
+                    else if (subscriptionEvent.Plan == "Plano Enterprise")
+                    {
+                        tenantService.UpdateTenantTier(id, TenantTier.Enterprise);
+                        tenantService.UpdateTenantState(id, TenantState.Active);
                     }
                     break;
                 case "deployment":
-                    
+
                     var deploymentEvent = JsonSerializer.Deserialize<DeploymentStatusEvent>(message);
-                    if (!Guid.TryParse(subscriptionEvent.TenantID, out Guid tenantGuid))
+                    if (!Guid.TryParse(deploymentEvent.TenantID, out Guid tenantGuid2))
                     {
                         Console.WriteLine(" [!] Invalid tenant ID");
                         return;
                     }
 
-                    Guid id = Guid.Parse(subscriptionEvent.TenantID);
-                    var tenantUser = tenantService.GetUserByTenantId(id);
+                    var tenantId = Guid.Parse(deploymentEvent.TenantID);
+                    var tenantUser = userService.GetUserByTenantId(tenantId);
                     if (tenantUser != null)
                     {
-                        var email = tenant.Email;
                         if (deploymentEvent.Status == "success")
                         {
-                            tenantService.UpdateTenantState(id, TenantState.DeploymentSuccess);
-                            Console.WriteLine(" [A] Deployment successful for tenant: " + id);
+                            tenantService.UpdateTenantState(tenantId, TenantState.DeploymentSuccess);
+                            Console.WriteLine(" [A] Deployment successful for tenant: " + tenantId);
                             await notificationPublisher.PublishAsync(new EmailEvent
                             {
                                 To = tenantUser.Email,
                                 Subject = "Deployment Successful",
-                                Body = $"Congratulations! Your deployment (tenant {id}) was successful and is now available."
+                                Body = $"Congratulations! Your deployment (tenant {tenantId}) was successful and is now available."
                             });
-                            Console.WriteLine(" [B] Email Deployment successful for tenant: " + id);
+                            Console.WriteLine(" [B] Email Deployment successful for tenant: " + tenantId);
                         }
                         else if (deploymentEvent.Status == "failed")
                         {
-                            tenantService.UpdateTenantState(id, TenantState.DeploymentFailed);
-                            Console.WriteLine(" [A] Deployment failed for tenant: " + id);
+                            tenantService.UpdateTenantState(tenantId, TenantState.DeploymentFailed);
+                            Console.WriteLine(" [A] Deployment failed for tenant: " + tenantId);
                             await notificationPublisher.PublishAsync(new EmailEvent
                             {
                                 To = tenantUser.Email,
                                 Subject = "Deployment Failed",
-                                Body = $"Unfortunately, your deployment (tenant {id}) has failed. Please check the logs for more details."
+                                Body = $"Unfortunately, your deployment (tenant {tenantId}) has failed. Please check the logs for more details."
                             });
-                            Console.WriteLine(" [B] Email Deployment failed for tenant: " + id);
+                            Console.WriteLine(" [B] Email Deployment failed for tenant: " + tenantId);
                         }
                         else
                         {
@@ -152,7 +160,7 @@ public class RabbitMqConsumerService : BackgroundService, IDisposable
 
                     break;
                 default:
-                    Console.WriteLine($" [!] Unknown event type: {baseEvent.Type}");
+                    Console.WriteLine($" [!] Unknown event type: {typeValue}");
                     break;
             }
 

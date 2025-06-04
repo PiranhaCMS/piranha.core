@@ -7,14 +7,17 @@ using ContentRus.Onboarding.Services;
 public class WebhookController : ControllerBase
 {
     private readonly IConfiguration _configuration;
+    private readonly RabbitMQTenantStatusPublisher _tenantStatusPublisher;
 
     /// <summary>
     /// Default constructor for Media Controller.
     /// </summary>
     /// <param name="configuration">The configuration settings for the application.</param>
-    public WebhookController(IConfiguration configuration)
+    /// <param name="tenantStatusPublisher">The RabbitMQ publisher for tenant status updates.</param>
+    public WebhookController(IConfiguration configuration, RabbitMQTenantStatusPublisher tenantStatusPublisher)
     {
         _configuration = configuration;
+        _tenantStatusPublisher = tenantStatusPublisher;
     }
 
     /// <summary>
@@ -39,7 +42,7 @@ public class WebhookController : ControllerBase
         };
 
         var serializedMessage = System.Text.Json.JsonSerializer.Serialize(deploymentStatus);
-        await TenantStatusPublisher.PublishAsync(serializedMessage);
+        await _tenantStatusPublisher.PublishAsync(serializedMessage);
 
         return Ok(new { message = "Deployment status comunicated successfully." });
     }

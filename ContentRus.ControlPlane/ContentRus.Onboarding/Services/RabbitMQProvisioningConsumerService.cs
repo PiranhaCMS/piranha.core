@@ -31,9 +31,9 @@ public class RabbitMQProvisioningConsumer : BackgroundService, IDisposable
     {
         _logger = logger;
         // in cluster config
-        // var config = KubernetesClientConfiguration.InClusterConfig();
+        var config = KubernetesClientConfiguration.InClusterConfig();
         // default kubeconfig in machine
-        var config = KubernetesClientConfiguration.BuildConfigFromConfigFile();
+        // var config = KubernetesClientConfiguration.BuildConfigFromConfigFile();
         _kclient = new Kubernetes(config);
         _settings = settings.Value;
     }
