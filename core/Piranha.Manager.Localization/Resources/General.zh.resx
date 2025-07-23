@@ -178,7 +178,7 @@
     <value>排程日期</value>
   </data>
   <data name="Search..." xml:space="preserve">
-    <value>搜尋 ...</value>
+    <value>搜尋……</value>
   </data>
   <data name="Select block" xml:space="preserve">
     <value>選擇區塊</value>
@@ -187,7 +187,7 @@
     <value>設定</value>
   </data>
   <data name="SEO" xml:space="preserve">
-    <value>搜尋引擎優化</value>
+    <value>SEO</value>
   </data>
   <data name="Sharing" xml:space="preserve">
     <value>分享</value>
@@ -214,10 +214,10 @@
     <value>更新密碼</value>
   </data>
   <data name="Username" xml:space="preserve">
-    <value>用戶名稱</value>
+    <value>使用者名稱</value>
   </data>
   <data name="Username is mandatory." xml:space="preserve">
-    <value>用戶名稱為必填項。</value>
+    <value>使用者名稱為必填項。</value>
   </data>
   <data name="Title is mandatory." xml:space="preserve">
     <value>標題為必填項。</value>
@@ -232,7 +232,7 @@
     <value>未發佈</value>
   </data>
   <data name="Users" xml:space="preserve">
-    <value>用戶</value>
+    <value>使用者</value>
   </data>
   <data name="Version" xml:space="preserve">
     <value>版本</value>
@@ -253,6 +253,6 @@
     <value>建立日期</value>
   </data>
   <data name="Username and/or password are incorrect." xml:space="preserve">
-    <value>用戶名稱或密碼不正確</value>
+    <value>使用者名稱或密碼不正確。</value>
   </data>
 </root>
