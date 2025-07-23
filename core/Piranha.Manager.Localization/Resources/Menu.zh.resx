@@ -13,7 +13,7 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Content" xml:space="preserve">
-    <value>内容</value>
+    <value>內容</value>
   </data>
   <data name="Settings" xml:space="preserve">
     <value>設定</value>
@@ -49,6 +49,6 @@
     <value>角色</value>
   </data>
   <data name="Users" xml:space="preserve">
-    <value>用戶</value>
+    <value>使用者</value>
   </data>
 </root>

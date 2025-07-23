@@ -25,7 +25,7 @@
     <value>主機名稱</value>
   </data>
   <data name="Logo" xml:space="preserve">
-    <value>商標</value>
+    <value>Logo</value>
   </data>
   <data name="If this should be the default site of the installation." xml:space="preserve">
     <value>設置為預設網站。</value>
