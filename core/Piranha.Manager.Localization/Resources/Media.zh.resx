@@ -43,7 +43,7 @@
     <value>選取媒體</value>
   </data>
   <data name="Your browser does not support the video tag." xml:space="preserve">
-    <value>您的瀏覽器不支援 HTML5 影片播放標籤。</value>
+    <value>您的瀏覽器不支援影片標籤。</value>
   </data>
   <data name="List" xml:space="preserve">
     <value>列表</value>

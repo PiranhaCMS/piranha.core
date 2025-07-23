@@ -16,7 +16,7 @@
     <value>新增或選擇現有的分類</value>
   </data>
   <data name="Add or select existing tags (optional)" xml:space="preserve">
-    <value>新增或選擇已有的標籤（選項）</value>
+    <value>新增或選擇已有的標籤 (選填)</value>
   </data>
   <data name="All categories" xml:space="preserve">
     <value>所有分類</value>
