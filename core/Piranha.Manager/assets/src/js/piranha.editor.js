@@ -13,7 +13,7 @@ piranha.editor = {
         var simplemde = new SimpleMDE({
             element: document.getElementById(id),
             status: false,
-            spellChecker: false,
+            spellChecker: true,
             hideIcons: ["preview", "guide"],
             initialValue: value,
             toolbar: [
@@ -52,11 +52,11 @@ piranha.editor = {
             }
         });
         simplemde.codemirror.on("change", function() {
-            preview.html(simplemde.markdown(simplemde.value()));
+            preview.html(DOMPurify.sanitize(simplemde.markdown(simplemde.value()) , {USE_PROFILES: {html: true}} ));
             update(simplemde.value());
         });
         setTimeout(function() {
-            preview.html(simplemde.markdown(simplemde.value()));
+            preview.html(DOMPurify.sanitize(simplemde.markdown(simplemde.value()) , {USE_PROFILES: {html: true}} ));
             simplemde.codemirror.refresh();
         }.bind(simplemde), 0);
 

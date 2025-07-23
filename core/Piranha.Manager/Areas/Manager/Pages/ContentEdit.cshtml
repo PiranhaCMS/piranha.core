@@ -1,0 +1,235 @@
+@page "~/manager/content/{routeAction}/{contentType}/{id?}/{langId?}"
+@model ContentListViewModel
+@inject ManagerLocalizer Localizer
+@inject Piranha.Config Config
+@{
+    ViewBag.Title = "Add/Edit";
+    ViewBag.MenuItem = "Add/Edit";
+    string action = ((string)RouteData.Values["routeAction"]).ToLower();
+
+    string contentId = RouteData.Values.ContainsKey("id") ? (string)RouteData.Values["id"] : null;
+    string languageId = RouteData.Values.ContainsKey("langId") ? (string)RouteData.Values["langId"] : null;
+}
+
+@section script
+{
+    <script src="@Url.Content(Piranha.Manager.Editor.EditorScripts.MainScriptUrl)"></script>
+    <script src="@Url.Content(Piranha.Manager.Editor.EditorScripts.EditorScriptUrl)"></script>
+    <script src="~/manager/assets/js/piranha.components.min.js?v=@Piranha.Utils.GetAssemblyVersionHash(typeof(Piranha.Manager.Module).Assembly)"></script>
+    <script src="~/manager/assets/js/piranha.contentedit.min.js?v=@Piranha.Utils.GetAssemblyVersionHash(typeof(Piranha.Manager.Module).Assembly)"></script>
+
+    @if (action == "edit")
+    {
+        <script>
+            piranha.permissions.load(function () {
+                @if (languageId != null)
+                {
+<text>                piranha.contentedit.load("@contentId", "@languageId");
+</text>
+                }
+                else
+                {
+<text>                piranha.contentedit.load("@contentId", null);
+</text>
+                }
+                $(".title input").focus();
+            });
+        </script>
+    }
+    else if (action == "add")
+    {
+        <script>
+            piranha.permissions.load(function () {
+                piranha.contentedit.create("@RouteData.Values["contentType"]");
+                $(".title input").focus();
+            });
+        </script>
+    }
+}
+
+@section partials
+{
+
+}
+
+<div id="contentedit">
+    <div class="top">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb app" :class="{ ready: !loading }">
+                <li class="breadcrumb-item">@Localizer.Menu["Content"]</li>
+                <li class="breadcrumb-item"><a :href="piranha.baseUrl + 'manager/content/' + groupId">{{ groupTitle }}</a></li>
+                <li class="breadcrumb-item">{{ typeTitle }}</li>
+                <li v-if="state !== 'new'" class="breadcrumb-item active" aria-current="page">@Localizer.General["Edit"]</li>
+            </ol>
+        </nav>
+
+        <div class="container-fluid app" :class="{ ready: !loading }">
+            <div class="top-nav">
+                @foreach (var menuAction in Piranha.Manager.Actions.Toolbars.ContentEdit)
+                {
+                    <partial name="@menuAction.ActionView" />
+                }
+            </div>
+        </div>
+    </div>
+
+    <div class="container-fluid app" :class="{ ready: !loading }">
+        <!-- Content navigation -->
+        <ul v-if="(useBlocks && (editors.length + contentRegions.length > 0)) || editors.length + contentRegions.length > 1" class="nav nav-pills nav-pills-card justify-content-center">
+            <li v-if="useBlocks" class="nav-item">
+                <a class="nav-link" v-on:click.prevent="selectRegion({ uid: 'uid-blocks' })" :class="{ active: selectedRegion.uid === 'uid-blocks' }" href="#">
+                    <i class="fas fa-pen-alt"></i>@Localizer.General["Main content"]
+                </a>
+            </li>
+            <li v-for="editor in editors" class="nav-item">
+                <a class="nav-link" v-on:click.prevent="selectRegion(editor)" :class="{ active: selectedRegion.uid == editor.uid }" href="#">
+                    <i :class="editor.icon"></i>{{ editor.name }}
+                </a>
+            </li>
+            <li v-for="region in contentRegions" class="nav-item">
+                <a class="nav-link" v-on:click.prevent="selectRegion(region.meta)" :class="{ active: selectedRegion.uid == region.meta.uid }" href="#">
+                    <i :class="region.meta.icon"></i>{{ region.meta.name }}
+                </a>
+            </li>
+        </ul>
+
+        <!-- Title -->
+        <div class="card">
+            <div class="card-body" :class="{ 'pb-0': regions.length > 0 }">
+                <div class="form-group title">
+                    <div class="row">
+                        <div class="col">
+                            <input v-model="title" type="text" class="form-control form-control-lg" placeholder="@Localizer.General["Title"]">
+                        </div>
+                    </div>
+                    <div v-if="useCategory || useTags" class="row mt-3">
+                        <div v-if="useCategory" class="col">
+                            <div class="form-group mb-0">
+                                <label style="display:none">@Localizer.Post["Category"]</label>
+                                <select id="selectedCategory" class="form-control select2" v-model="selectedCategory">
+                                    <option :value="item" v-for="item in categories">{{ item }}</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div v-if="useTags" class="col">
+                            <div class="form-group mb-0">
+                                <label style="display:none">@Localizer.Post["Tags"]</label>
+                                <select id="selectedTags" class="form-control select2" multiple="multiple" v-model="selectedTags">
+                                    <option :value="item" v-for="item in tags">{{ item }}</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="region-center content-center">
+                    <div v-if="(usePrimaryImage || useExcerpt) && !useBlocks && contentRegions.length === 0" class="row">
+                        <div v-if="usePrimaryImage && !useBlocks && contentRegions.length === 0" class="col">
+                            <div class="form-group">
+                                <label>@Localizer.Content["Primary image"]</label>
+                                <div class="block image-block primary-image primary-image-modal">
+                                    <div class="block-body has-media-picker rounded" :class="{ empty: primaryImage.id === null }">
+                                        <img class="rounded" :src="primaryImageUrl">
+                                        <div class="media-picker">
+                                            <div class="btn-group float-right">
+                                                <button v-on:click.prevent="selectPrimaryImage" class="btn btn-primary text-center">
+                                                    <i class="fas fa-plus"></i>
+                                                </button>
+                                                <button v-on:click.prevent="removePrimaryImage" class="btn btn-danger text-center">
+                                                    <i class="fas fa-times"></i>
+                                                </button>
+                                            </div>
+                                            <div class="card text-left">
+                                                <div class="card-body" v-if="primaryImage.id === null">
+                                                    &nbsp;
+                                                </div>
+                                                <div class="card-body" v-else>
+                                                    {{ primaryImage.media.filename }}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div v-if="useExcerpt && !useBlocks && contentRegions.length === 0" class="col">
+                            <div class="form-group">
+                                <label>@Localizer.Content["Excerpt"]</label>
+                                <div v-if="useHtmlExcerpt" class="block text-block ingress" :class="{ empty: isExcerptEmpty }">
+                                    <div id="excerpt-toolbar" class="component-toolbar"></div>
+                                    <div id="excerpt-body" class="block-body html-block" contenteditable="true" v-html="excerpt" v-on:blur="onExcerptBlur">
+                                    </div>
+                                </div>
+                                <textarea v-else v-model="excerpt" rows="9" maxlength="255" class="form-control" style="height:218px"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Blocks -->
+        <div class="card" :class="{ 'd-none': selectedRegion.uid != 'uid-blocks' }">
+            <div class="card-body">
+                <div id="content-blocks" class="blocks@(Config.ManagerOutlined ? " blocks-outline" : "")">
+                    <a href="#" class="block-add unsortable" v-on:click.prevent="piranha.blockpicker.open(piranha.contentedit.addBlock, 0)">
+                        <hr>
+                        <i class="fas fa-plus-circle"></i>
+                    </a>
+                    <div v-for="(block, index) in blocks" v-bind:key="block.meta.uid">
+                        <div :class="'block ' + block.meta.component + (block.meta.isCollapsed ? ' collapsed' : '') + (block.meta.width === 'full' ? ' block-full' : '')">
+                            <div :id="'tb-' + block.meta.uid" class="component-toolbar"></div>
+                            <div class="block-header">
+                                <div class="title">
+                                    <i :class="block.meta.icon"></i><strong>{{ block.meta.name }}</strong> <span v-if="!block.meta.isGroup && block.meta.isCollapsed">- {{ block.meta.title }}</span>
+                                </div>
+                                <div class="actions">
+                                    <span v-on:click.prevent="collapseBlock(block)" class="btn btn-sm">
+                                        <i v-if="block.meta.isCollapsed" class="fas fa-chevron-down"></i>
+                                        <i v-else class="fas fa-chevron-up"></i>
+                                    </span>
+                                    <span class="btn btn-sm handle">
+                                        <i class="fas fa-ellipsis-v"></i>
+                                    </span>
+                                    <button v-on:click.prevent="removeBlock(block)" class="btn btn-sm danger block-remove" tabindex="-1">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <component v-if="!block.meta.isGroup" v-bind:is="block.meta.component" v-bind:uid="block.meta.uid" v-bind:toolbar="'tb-' + block.meta.uid" v-bind:model="block.model" v-on:update-title='updateBlockTitle($event)'></component>
+                            <component v-if="block.meta.isGroup" v-bind:is="block.meta.component" v-bind:uid="block.meta.uid" v-bind:toolbar="'tb-' + block.meta.uid" v-bind:model="block"></component>
+                            <div class="content-blocker"></div>
+                        </div>
+                        <a href="#" class="block-add" v-on:click.prevent="piranha.blockpicker.open(piranha.contentedit.addBlock, index + 1)">
+                            <hr>
+                            <i class="fas fa-plus-circle"></i>
+                        </a>
+                    </div>
+                    <div v-if="blocks.length == 0" class="empty-info">
+                        <p>@Localizer.Page["Welcome to your new page. Click on the button above to add your first block of content!"]</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Custom Editors -->
+        <div class="card" :class="{ 'd-none': selectedRegion.uid != editor.uid }" v-for="editor in editors">
+            <div class="card-body pt-0">
+                <div class="region-center">
+                    <component v-bind:is="editor.component" v-bind:uid="editor.uid" v-bind:id="id"></component>
+                </div>
+            </div>
+        </div>
+
+        <!-- Content Regions -->
+        <div class="card" :class="{ 'd-none': selectedRegion.uid != region.meta.uid }" v-for="region in contentRegions">
+            <div class="card-body pt-0">
+                <div class="region region-center">
+                    <region v-bind:content="'content'" v-bind:type="typeId" v-bind:model="region"></region>
+                    <div class="content-blocker"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <partial name="Partial/_ContentSettings" />
+</div>

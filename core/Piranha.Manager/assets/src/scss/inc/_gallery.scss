@@ -87,6 +87,17 @@
         }
     }
 
+    &.selected {
+        > *:not(.btn) {
+            color: $thumbnail-selected-color;
+            border-color: $thumbnail-selected-bg;
+        }
+
+        .thumbnail-text {
+            background: $thumbnail-selected-bg;
+        }
+    }
+
     .thumbnail-icon {
         background: $thumbnail-bg;
         flex-grow: 1;

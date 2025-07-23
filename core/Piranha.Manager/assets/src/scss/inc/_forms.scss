@@ -36,9 +36,6 @@
 }
 
 .input-group {
-    .form-control {
-        border-right: 0;
-    }
     .input-group-text {
         background: #fff;
         font-size: 87.5%;
@@ -50,6 +47,27 @@
             .input-group-text {
                 align-items: end;
             }
+        }
+    }
+
+    &.below {
+        flex-direction: column;
+
+        .input-group-append {
+            margin-left: 0;
+
+            .input-group-text {
+                width: 100%;
+                border-top: 0 none;
+            }
+        }
+    }
+}
+
+.list-group {
+    .checkbox {
+        input[type="checkbox"] {
+            margin-right: .25rem;
         }
     }
 }

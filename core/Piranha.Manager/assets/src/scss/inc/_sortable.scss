@@ -18,7 +18,8 @@
 
 .blocks {
     .sortable-placeholder {
-        margin-bottom: 1rem;
+        max-width: $block-width;
+        margin: 0 auto 1rem;
     }
 }
 

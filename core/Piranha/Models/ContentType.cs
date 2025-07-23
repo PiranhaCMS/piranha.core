@@ -1,56 +1,85 @@
 ﻿/*
- * Copyright (c) 2016-2019 Håkan Edling
+ * Copyright (c) .NET Foundation and Contributors
  *
  * This software may be modified and distributed under the terms
- * of the MIT license.  See the LICENSE file for details.
+ * of the MIT license. See the LICENSE file for details.
  *
  * https://github.com/piranhacms/piranha.core
  *
  */
 
-using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
-namespace Piranha.Models
+namespace Piranha.Models;
+
+[Serializable]
+public sealed class ContentType : ContentTypeBase
 {
     /// <summary>
-    /// Base class for templated content types.
+    /// Gets/sets the group name of the content type.
     /// </summary>
-    [Serializable]
-    public abstract class ContentType
+    [Required]
+    [StringLength(64)]
+    public string Group { get; set; }
+
+    /// <summary>
+    /// Gets/sets if the page type should use the block editor
+    /// for its main content. The default value is True.
+    /// </summary>
+    public bool UseBlocks { get; set; }
+
+    /// <summary>
+    /// Gets/sets if the content type should be
+    /// categorized.
+    /// </summary>
+    public bool UseCategory { get; set; }
+
+    /// <summary>
+    /// Gets/sets if excerpt should be used for the
+    /// content type. The default value is true.
+    /// </summary>
+    public bool UseExcerpt { get; set; } = true;
+
+    /// <summary>
+    /// Gets/sets if primary image should be used for the
+    /// content type. The default value is true.
+    /// </summary>
+    public bool UsePrimaryImage { get; set; } = true;
+
+    /// <summary>
+    /// Gets/sets if tags should be used for the content type.
+    /// </summary>
+    public bool UseTags { get; set; }
+
+    /// <summary>
+    /// Validates that the content type is correctly defined.
+    /// </summary>
+    public void Ensure()
     {
-        /// <summary>
-        /// Gets/sets the unique id.
-        /// </summary>
-        [Required]
-        [StringLength(64)]
-        public string Id { get; set; }
+        if (string.IsNullOrEmpty(Group))
+        {
+            throw new InvalidOperationException($"No group specified for content type {Id}");
+        }
 
-        /// <summary>
-        /// Gets/sets the CLR type of the content model.
-        /// </summary>
-        [StringLength(255)]
-        public string CLRType { get; set; }
+        if (Regions.Select(r => r.Id).Distinct().Count() != Regions.Count)
+        {
+            throw new InvalidOperationException($"Region Id not unique for content type {Id}");
+        }
 
-        /// <summary>
-        /// Gets/sets the optional title.
-        /// </summary>
-        public string Title { get; set; }
+        foreach (var region in Regions)
+        {
+            region.Title = region.Title ?? region.Id;
 
-        /// <summary>
-        /// Gets/sets the available regions.
-        /// </summary>
-        public IList<RegionType> Regions { get; set; } = new List<RegionType>();
+            if (region.Fields.Select(f => f.Id).Distinct().Count() != region.Fields.Count)
+            {
+                throw new InvalidOperationException($"Field Id not unique for content type {Id}");
+            }
 
-        /// <summary>
-        /// Gets/sets the optional routes.
-        /// </summary>
-        public IList<ContentTypeRoute> Routes { get; set; } = new List<ContentTypeRoute>();
-
-        /// <summary>
-        /// Gets/sets the optional custom editors.
-        /// </summary>
-        public IList<ContentTypeEditor> CustomEditors { get; set; } = new List<ContentTypeEditor>();
+            foreach (var field in region.Fields)
+            {
+                field.Id = field.Id ?? "Default";
+                field.Title = field.Title ?? field.Id;
+            }
+        }
     }
 }

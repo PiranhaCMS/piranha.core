@@ -1,0 +1,81 @@
+@page "~/manager/content/{group}"
+@model ContentListViewModel
+@inject ManagerLocalizer Localizer
+@{
+    var contentGroup = (string)RouteData.Values["group"];
+
+    ViewBag.Title = contentGroup;
+    ViewBag.MenuItem = contentGroup;
+}
+
+@section script
+{
+    <script src="@Url.Content(Piranha.Manager.Editor.EditorScripts.MainScriptUrl)"></script>
+    <script src="@Url.Content(Piranha.Manager.Editor.EditorScripts.EditorScriptUrl)"></script>
+    <script src="~/manager/assets/js/piranha.contentlist.min.js?v=@Piranha.Utils.GetAssemblyVersionHash(typeof(Piranha.Manager.Module).Assembly)"></script>
+
+    <script type="text/javascript">
+        piranha.contentlist.load('@contentGroup');
+    </script>
+}
+
+@section partials
+{
+
+}
+
+<div id="contentlist">
+    <div class="top">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item">@Localizer.Menu["Content"]</li>
+                <li class="breadcrumb-item active" aria-current="@contentGroup">@contentGroup</li>
+            </ol>
+        </nav>
+
+        <div class="container-fluid app" :class="{ ready: !loading }">
+            <div class="top-nav">
+                <div class="btn-group" role="group">
+                    <button id="addContent" type="button" class="btn btn-primary btn-labeled dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <i class="fas fa-plus"></i>
+                        @Localizer.Page["Add"]
+                    </button>
+                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="addContent">
+                        <a class="dropdown-item" :href="piranha.baseUrl + 'manager/content/add/' + type.id" v-for="type in types">{{ type.title }}</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container-fluid app" :class="{ ready: !loading }">
+        <table class="table table-borderless">
+            <thead>
+            <tr>
+                <th>@Localizer.General["Title"]</th>
+                <th>@Localizer.General["Type"]</th>
+                <th>@Localizer.General["Modified"]</th>
+                <th class="actions one"></th>
+            </tr>
+            </thead>
+            <tbody>
+                <tr v-for="item in items">
+                    <td>
+                        <a :href="piranha.baseUrl + 'manager/content/edit/' + item.typeId +  '/' + item.id">{{ item.title }}</a>
+                    </td>
+                    <td>
+                        {{ item.type }}
+                    </td>
+                    <td>
+                        {{ item.modified }}
+                    </td>
+                    <td class="actions one">
+                        <a v-on:click.prevent="remove(item.id)" class="danger">
+                            <span class="fas fa-trash"></span>
+                         </a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

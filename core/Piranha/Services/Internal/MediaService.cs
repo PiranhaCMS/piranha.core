@@ -1,0 +1,692 @@
+/*
+ * Copyright (c) .NET Foundation and Contributors
+ *
+ * This software may be modified and distributed under the terms
+ * of the MIT license. See the LICENSE file for details.
+ *
+ * https://github.com/piranhacms/piranha.core
+ *
+ */
+
+using System.ComponentModel.DataAnnotations;
+using System.Text;
+using Piranha.Cache;
+using Piranha.Models;
+using Piranha.Repositories;
+
+namespace Piranha.Services;
+
+internal sealed class MediaService : IMediaService
+{
+    private readonly IMediaRepository _repo;
+    private readonly IParamService _paramService;
+    private readonly IStorage _storage;
+    private readonly IImageProcessor _processor;
+    private readonly ICache _cache;
+    private static readonly object ScaleMutex = new object();
+    private const string MEDIA_STRUCTURE = "MediaStructure";
+
+    /// <summary>
+    /// Default constructor.
+    /// </summary>
+    /// <param name="repo">The current repository</param>
+    /// <param name="paramService">The current param service</param>
+    /// <param name="storage">The current storage manager</param>
+    /// <param name="cache">The optional model cache</param>
+    /// <param name="processor">The optional image processor</param>
+    public MediaService(IMediaRepository repo, IParamService paramService, IStorage storage, IImageProcessor processor = null, ICache cache = null)
+    {
+        _repo = repo;
+        _paramService = paramService;
+        _storage = storage;
+        _processor = processor;
+        _cache = cache;
+    }
+
+    //Separated this into its own thing in case it needed to get reused elsewhere.
+    private async Task<IEnumerable<Media>> _getFast(IEnumerable<Guid> ids)
+    {
+        var guids = ids as Guid[] ?? ids.ToArray();
+
+        var partial = _cache != null
+            ? (await Task.WhenAll(guids.Select(async c => await _cache.GetAsync<Media>(c.ToString())))).Where(c => c != null).ToArray()
+            : Array.Empty<Media>();
+
+        var missingIds = guids.Except(partial.Select(c => c.Id)).ToArray();
+        var returns = partial
+            .Concat(await Task.WhenAll((await _repo.GetById(missingIds))
+            .Select(async c =>
+            {
+                await OnLoad(c).ConfigureAwait(false);
+                return c;
+            })))
+            .OrderBy(m => m.Filename)
+            .ToArray();
+        return returns;
+    }
+
+    /// <summary>
+    /// Gets all media available in the specified folder.
+    /// </summary>
+    /// <param name="folderId">The optional folder id</param>
+    /// <returns>The available media</returns>
+    public Task<IEnumerable<Media>> GetAllByFolderIdAsync(Guid? folderId = null)
+    {
+        return _repo.GetAll(folderId).ContinueWith(t => _getFast(t.Result.ToArray())).Unwrap();
+    }
+
+    /// <inheritdoc cref="IMediaService.CountFolderItemsAsync"/>
+    public Task<int> CountFolderItemsAsync(Guid? folderId = null) => _repo.CountAll(folderId);
+
+    /// <summary>
+    /// Gets all media folders available in the specified
+    /// folder.
+    /// </summary>
+    /// <param name="folderId">The optional folder id</param>
+    /// <returns>The available media folders</returns>
+    public async Task<IEnumerable<MediaFolder>> GetAllFoldersAsync(Guid? folderId = null)
+    {
+        var models = new List<MediaFolder>();
+        var items = await _repo.GetAllFolders(folderId).ConfigureAwait(false);
+
+        foreach (var item in items)
+        {
+            var folder = await GetFolderByIdAsync(item).ConfigureAwait(false);
+
+            if (folder != null)
+            {
+                models.Add(folder);
+            }
+        }
+        return models;
+    }
+
+    /// <summary>
+    /// Gets the media with the given id.
+    /// </summary>
+    /// <param name="id">The unique id</param>
+    /// <returns>The media</returns>
+    public async Task<Media> GetByIdAsync(Guid id)
+    {
+        var model = _cache == null ? null : await _cache.GetAsync<Media>(id.ToString()).ConfigureAwait(false);
+
+        if (model == null)
+        {
+            model = await _repo.GetById(id).ConfigureAwait(false);
+            await OnLoad(model).ConfigureAwait(false);
+        }
+        return model;
+    }
+
+    /// <summary>
+    /// Get all media matching the given IDs.
+    /// </summary>
+    /// <param name="ids"></param>
+    /// <returns></returns>
+    public Task<IEnumerable<Media>> GetByIdAsync(params Guid[] ids)
+    {
+        return _repo.GetById(ids);
+    }
+
+    /// <summary>
+    /// Gets the media folder with the given id.
+    /// </summary>
+    /// <param name="id">The unique id</param>
+    /// <returns>The media folder</returns>
+    public async Task<MediaFolder> GetFolderByIdAsync(Guid id)
+    {
+        var model = _cache == null ? null : await _cache.GetAsync<MediaFolder>(id.ToString()).ConfigureAwait(false);
+
+        if (model == null)
+        {
+            model = await _repo.GetFolderById(id).ConfigureAwait(false);
+            await OnFolderLoad(model).ConfigureAwait(false);
+        }
+        return model;
+    }
+
+    /// <summary>
+    /// Gets the hierarchical media structure.
+    /// </summary>
+    /// <returns>The media structure</returns>
+    public async Task<MediaStructure> GetStructureAsync()
+    {
+        var structure = _cache == null ? null : await _cache.GetAsync<MediaStructure>(MEDIA_STRUCTURE).ConfigureAwait(false);
+
+        if (structure == null)
+        {
+            structure = await _repo.GetStructure().ConfigureAwait(false);
+
+            if (structure != null && _cache != null)
+            {
+                await _cache.SetAsync(MEDIA_STRUCTURE, structure).ConfigureAwait(false);
+            }
+        }
+        return structure;
+    }
+
+    /// <summary>
+    /// Updates the meta data for the given media model.
+    /// </summary>
+    /// <param name="model">The model</param>
+    public async Task SaveAsync(Media model)
+    {
+        // Make sure we have an existing media model with this id.
+        var current = await GetByIdAsync(model.Id);
+
+        if (current != null)
+        {
+            // Validate model
+            var context = new ValidationContext(model);
+            Validator.ValidateObject(model, context, true);
+
+            // Call hooks & save
+            App.Hooks.OnBeforeSave(model);
+            await _repo.Save(model).ConfigureAwait(false);
+            App.Hooks.OnAfterSave(model);
+
+            await RemoveFromCache(model).ConfigureAwait(false);
+            await RemoveStructureFromCache().ConfigureAwait(false);
+        }
+        else
+        {
+            throw new FileNotFoundException("You can only update meta data for an existing media object");
+        }
+    }
+
+    /// <summary>
+    /// Adds or updates the given model in the database
+    /// depending on its state.
+    /// </summary>
+    /// <param name="content">The content to save</param>
+    public async Task SaveAsync(MediaContent content)
+    {
+        if (!App.MediaTypes.IsSupported(content.Filename))
+        {
+            throw new ValidationException("Filetype not supported.");
+        }
+
+        Media model = null;
+
+        if (content.Id.HasValue)
+        {
+            model = await GetByIdAsync(content.Id.Value).ConfigureAwait(false);
+        }
+
+        if (model == null)
+        {
+            model = new Media()
+            {
+                Id = model != null || content.Id.HasValue ? content.Id.Value : Guid.NewGuid(),
+                Created = DateTime.Now
+            };
+            content.Id = model.Id;
+        }
+        else
+        {
+            using (var session = await _storage.OpenAsync().ConfigureAwait(false))
+            {
+                // Delete all versions as we're updating the image
+                if (model.Versions.Count > 0)
+                {
+                    foreach (var version in model.Versions)
+                    {
+                        // Delete version from storage
+                        await session.DeleteAsync(model, GetResourceName(model, version.Width, version.Height, version.FileExtension)).ConfigureAwait(false);
+                    }
+                    model.Versions.Clear();
+                }
+
+                // Delete the old file because we might have a different filename
+                await session.DeleteAsync(model, GetResourceName(model)).ConfigureAwait(false);
+            }
+        }
+
+        var type = App.MediaTypes.GetItem(content.Filename);
+
+        model.Filename = content.Filename.Replace(" ", "_");
+        model.FolderId = content.FolderId;
+        model.Type = App.MediaTypes.GetMediaType(content.Filename);
+        model.ContentType = type.ContentType;
+        model.LastModified = DateTime.Now;
+
+        Stream stream = null;
+        if (content is BinaryMediaContent binaryContent)
+        {
+            stream = new MemoryStream(binaryContent.Data);
+        }
+        else if (content is StreamMediaContent streamContent)
+        {
+            stream = streamContent.Data;
+        }
+
+        // Pre-process if this is an image
+        if (_processor != null && type.AllowProcessing && model.Type == MediaType.Image)
+        {
+            // Make sure to apply auto orientation according to exif
+            var memStream = new MemoryStream();
+            _processor.AutoOrient(stream, memStream);
+
+            // Get the image size
+            _processor.GetSize(memStream, out var width, out var height);
+            model.Width = width;
+            model.Height = height;
+
+            stream = memStream;
+        }
+
+        // Upload to storage
+        using (var session = await _storage.OpenAsync().ConfigureAwait(false))
+        {
+            model.Size = stream.Length;
+            await session.PutAsync(model, model.Filename,
+                model.ContentType, stream).ConfigureAwait(false);
+        }
+
+        App.Hooks.OnBeforeSave(model);
+        await _repo.Save(model).ConfigureAwait(false);
+        App.Hooks.OnAfterSave(model);
+
+        await RemoveFromCache(model).ConfigureAwait(false);
+        await RemoveStructureFromCache().ConfigureAwait(false);
+    }
+
+    /// <summary>
+    /// Adds or updates the given model in the database
+    /// depending on its state.
+    /// </summary>
+    /// <param name="model">The model</param>
+    public async Task SaveFolderAsync(MediaFolder model)
+    {
+        // Ensure id
+        if (model.Id == Guid.Empty)
+        {
+            model.Id = Guid.NewGuid();
+        }
+
+        // Validate model
+        var context = new ValidationContext(model);
+        Validator.ValidateObject(model, context, true);
+
+        // Call hooks & save
+        App.Hooks.OnBeforeSave(model);
+        await _repo.SaveFolder(model).ConfigureAwait(false);
+        App.Hooks.OnAfterSave(model);
+
+        await RemoveFromCache(model).ConfigureAwait(false);
+        await RemoveStructureFromCache().ConfigureAwait(false);
+    }
+
+    /// <summary>
+    /// Moves the media to the folder with the specified id.
+    /// </summary>
+    /// <param name="model">The model</param>
+    /// <param name="folderId">The folder id</param>
+    public async Task MoveAsync(Media model, Guid? folderId)
+    {
+        await _repo.Move(model, folderId).ConfigureAwait(false);
+        await RemoveFromCache(model).ConfigureAwait(false);
+        await RemoveStructureFromCache().ConfigureAwait(false);
+    }
+
+    /// <summary>
+    /// Ensures that the image version with the given size exsists
+    /// and returns its public URL.
+    /// </summary>
+    /// <param name="id">The unique id</param>
+    /// <param name="width">The requested width</param>
+    /// <param name="height">The optionally requested height</param>
+    /// <returns>The public URL</returns>
+    public string EnsureVersion(Guid id, int width, int? height = null)
+    {
+        return EnsureVersionAsync(id, width, height).GetAwaiter().GetResult();
+    }
+
+    /// <summary>
+    /// Ensures that the image version with the given size exists
+    /// and returns its public URL.
+    /// </summary>
+    /// <param name="id">The unique id</param>
+    /// <param name="width">The requested width</param>
+    /// <param name="height">The optionally requested height</param>
+    /// <returns>The public URL</returns>
+    public async Task<string> EnsureVersionAsync(Guid id, int width, int? height = null)
+    {
+        var media = await GetByIdAsync(id).ConfigureAwait(false);
+
+        return media != null ? await EnsureVersionAsync(media, width, height).ConfigureAwait(false) : null;
+    }
+
+    public async Task<string> EnsureVersionAsync(Media media, int width, int? height = null)
+    {
+        // If no processor is registered, return the original url
+        if (_processor == null)
+            return GetPublicUrl(media);
+
+        // Get the media type
+        var type = App.MediaTypes.GetItem(media.Filename);
+
+        // If this type doesn't allow processing, return the original url
+        if (!type.AllowProcessing)
+            return GetPublicUrl(media);
+
+        // If the requested size is equal to the original size, return true
+        if (media.Width == width && (!height.HasValue || media.Height == height.Value))
+            return GetPublicUrl(media);
+
+        var query = media.Versions
+            .Where(v => v.Width == width);
+
+        query = height.HasValue ? query.Where(v => v.Height == height) : query.Where(v => !v.Height.HasValue);
+
+        var version = query.FirstOrDefault();
+
+        if (version != null)
+            return media.Width == width && (!height.HasValue || media.Height == height.Value)
+                ? GetPublicUrl(media)
+                : GetPublicUrl(media, width, height, version.FileExtension);
+
+        // Get the image file
+        using (var stream = new MemoryStream())
+        {
+            using (var session = await _storage.OpenAsync().ConfigureAwait(false))
+            {
+                if (!await session.GetAsync(media, media.Filename, stream).ConfigureAwait(false))
+                {
+                    return null;
+                }
+
+                // Reset strem position
+                stream.Position = 0;
+
+                using (var output = new MemoryStream())
+                {
+                    if (height.HasValue)
+                    {
+                        _processor.CropScale(stream, output, width, height.Value);
+                    }
+                    else
+                    {
+                        _processor.Scale(stream, output, width);
+                    }
+                    output.Position = 0;
+                    bool upload = false;
+
+                    lock (ScaleMutex)
+                    {
+                        // We have to make sure we don't scale multiple files
+                        // at the same time as it can create index violations.
+                        version = query.FirstOrDefault();
+
+                        if (version == null)
+                        {
+                            var info = new FileInfo(media.Filename);
+
+                            version = new MediaVersion
+                            {
+                                Id = Guid.NewGuid(),
+                                Size = output.Length,
+                                Width = width,
+                                Height = height,
+                                FileExtension = info.Extension
+                            };
+                            media.Versions.Add(version);
+
+                            _repo.Save(media).Wait();
+                            RemoveFromCache(media).Wait();
+
+                            upload = true;
+                        }
+                    }
+
+                    if (upload)
+                    {
+                        await session.PutAsync(media, GetResourceName(media, width, height), media.ContentType,
+                                output).ConfigureAwait(false);
+
+                        var info = new FileInfo(media.Filename);
+                        return GetPublicUrl(media, width, height, info.Extension);
+                    }
+                    //When moving this out of its parent method, realized that if the mutex failed, it would just fall back to the null instead of trying to return the issue.
+                    //Added this to ensure that queries didn't just give up if they weren't the first to the party.
+                    return GetPublicUrl(media, width, height, version.FileExtension);
+                }
+            }
+        }
+        // If the requested size is equal to the original size, return true
+    }
+
+    /// <summary>
+    /// Deletes the media with the given id.
+    /// </summary>
+    /// <param name="id">The unique id</param>
+    public async Task DeleteAsync(Guid id)
+    {
+        var media = await GetByIdAsync(id).ConfigureAwait(false);
+
+        if (media != null)
+        {
+            using (var session = await _storage.OpenAsync().ConfigureAwait(false))
+            {
+                // Delete all versions
+                if (media.Versions.Count > 0)
+                {
+                    foreach (var version in media.Versions)
+                    {
+                        // Delete version from storage
+                        await session.DeleteAsync(media, GetResourceName(media, version.Width, version.Height, version.FileExtension))
+                            .ConfigureAwait(false);
+                    }
+                }
+
+                // Call hooks & save
+                App.Hooks.OnBeforeDelete(media);
+                await _repo.Delete(id).ConfigureAwait(false);
+                await session.DeleteAsync(media, media.Filename).ConfigureAwait(false);
+                App.Hooks.OnAfterDelete(media);
+            }
+            await RemoveFromCache(media).ConfigureAwait(false);
+            await RemoveStructureFromCache().ConfigureAwait(false);
+        }
+    }
+
+    /// <summary>
+    /// Deletes the given model.
+    /// </summary>
+    /// <param name="model">The media</param>
+    public Task DeleteAsync(Media model)
+    {
+        return DeleteAsync(model.Id);
+    }
+
+    /// <summary>
+    /// Deletes the media folder with the given id.
+    /// </summary>
+    /// <param name="id">The unique id</param>
+    public async Task DeleteFolderAsync(Guid id)
+    {
+        var folder = await GetFolderByIdAsync(id).ConfigureAwait(false);
+
+        if (folder != null)
+        {
+            //
+            // TODO: Check empty
+            //
+            // var folderCount = _db.MediaFolders.Count(f => f.ParentId == id);
+            // var mediaCount = _db.Media.Count(m => m.FolderId == id);
+
+            // if (folderCount == 0 && mediaCount == 0)
+            // {
+
+            // Call hooks & delete
+            App.Hooks.OnBeforeDelete(folder);
+            await _repo.DeleteFolder(id).ConfigureAwait(false);
+            App.Hooks.OnAfterDelete(folder);
+
+            await RemoveFromCache(folder).ConfigureAwait(false);
+            //}
+        }
+    }
+
+    /// <summary>
+    /// Deletes the given model.
+    /// </summary>
+    /// <param name="model">The media</param>
+    public Task DeleteFolderAsync(MediaFolder model)
+    {
+        return DeleteFolderAsync(model.Id);
+    }
+
+    /// <summary>
+    /// Processes the model on load.
+    /// </summary>
+    /// <param name="model">The model</param>
+    private async Task OnLoad(Media model)
+    {
+        if (model != null)
+        {
+            // Get public url
+            model.PublicUrl = GetPublicUrl(model);
+
+            // Create missing properties
+            foreach (var key in App.MediaTypes.MetaProperties)
+            {
+                if (!model.Properties.Any(p => p.Key == key))
+                {
+                    model.Properties.Add(key, null);
+                }
+            }
+
+            App.Hooks.OnLoad(model);
+
+            if (_cache != null)
+            {
+                await _cache.SetAsync(model.Id.ToString(), model).ConfigureAwait(false);
+            }
+        }
+    }
+
+    /// <summary>
+    /// Processes the model on load.
+    /// </summary>
+    /// <param name="model">The model</param>
+    private async Task OnFolderLoad(MediaFolder model)
+    {
+        if (model != null)
+        {
+            App.Hooks.OnLoad(model);
+
+            if (_cache != null)
+            {
+                await _cache.SetAsync(model.Id.ToString(), model).ConfigureAwait(false);
+            }
+        }
+    }
+
+    /// <summary>
+    /// Removes the given model from cache.
+    /// </summary>
+    /// <param name="model">The model</param>
+    private async Task RemoveFromCache(Media model)
+    {
+        if (_cache != null)
+        {
+            await _cache.RemoveAsync(model.Id.ToString()).ConfigureAwait(false);
+        }
+    }
+
+    /// <summary>
+    /// Removes the given model from cache.
+    /// </summary>
+    /// <param name="model">The model</param>
+    private async Task RemoveFromCache(MediaFolder model)
+    {
+        if (_cache != null)
+        {
+            await _cache.RemoveAsync(model.Id.ToString()).ConfigureAwait(false);
+            await RemoveStructureFromCache().ConfigureAwait(false);
+        }
+    }
+
+    /// <summary>
+    /// Removes the media structure from cache.
+    /// </summary>
+    private async Task RemoveStructureFromCache()
+    {
+        if (_cache != null)
+        {
+            await _cache.RemoveAsync(MEDIA_STRUCTURE).ConfigureAwait(false);
+        }
+    }
+
+    /// <summary>
+    /// Gets the media resource name.
+    /// </summary>
+    /// <param name="media">The media object</param>
+    /// <param name="width">Optional requested width</param>
+    /// <param name="height">Optional requested height</param>
+    /// <param name="extension">Optional requested extension</param>
+    /// <returns>The name</returns>
+    private string GetResourceName(Media media, int? width = null, int? height = null, string extension = null)
+    {
+        var filename = new FileInfo(media.Filename);
+        var sb = new StringBuilder();
+
+        //
+        // This is now handled in the provider
+        //
+        // sb.Append(media.Id);
+        // sb.Append("-");
+        //
+
+        if (width.HasValue)
+        {
+            sb.Append(filename.Name.Replace(filename.Extension, "_"));
+            sb.Append(width);
+
+            if (height.HasValue)
+            {
+                sb.Append("x");
+                sb.Append(height.Value);
+            }
+        }
+        else
+        {
+            sb.Append(filename.Name.Replace(filename.Extension, ""));
+        }
+
+        if (string.IsNullOrEmpty(extension))
+        {
+            sb.Append(filename.Extension);
+        }
+        else
+        {
+            sb.Append(extension);
+        }
+        return sb.ToString();
+    }
+
+    /// <summary>
+    /// Gets the public url for the given media.
+    /// </summary>
+    /// <param name="media">The media object</param>
+    /// <param name="width">Optional requested width</param>
+    /// <param name="height">Optional requested height</param>
+    /// <param name="extension">Optional requested extension</param>
+    /// <returns>The name</returns>
+    private string GetPublicUrl(Media media, int? width = null, int? height = null, string extension = null)
+    {
+        var name = GetResourceName(media, width, height, extension);
+
+        using (var config = new Config(_paramService))
+        {
+            var cdn = config.MediaCDN;
+
+            if (!string.IsNullOrWhiteSpace(cdn))
+            {
+                return cdn + _storage.GetResourceName(media, name);
+            }
+            return _storage.GetPublicUrl(media, name);
+        }
+    }
+}

@@ -2,7 +2,7 @@
  * Copyright (c) .NET Foundation and Contributors
  *
  * This software may be modified and distributed under the terms
- * of the MIT license.  See the LICENSE file for details.
+ * of the MIT license. See the LICENSE file for details.
  *
  * https://github.com/piranhacms/piranha.core
  *
@@ -88,6 +88,7 @@ namespace Piranha.Manager
         public ManagerLocalizer(
             IStringLocalizer<Localization.Alias> alias,
             IStringLocalizer<Localization.Comment> comment,
+            IStringLocalizer<Localization.Content> content,
             IStringLocalizer<Localization.Config> config,
             IStringLocalizer<Localization.General> general,
             IStringLocalizer<Localization.Security> security,
@@ -101,6 +102,7 @@ namespace Piranha.Manager
         {
             Alias = alias;
             Comment = comment;
+            Content = content;
             Config = config;
             General = general;
             Security = security;

@@ -12,6 +12,15 @@
             }
         }
 
+        &.selected {
+            color: $table-selected-color;
+            background: $table-selected-bg;
+
+            a {
+                color: $table-selected-color;
+            }
+        }
+
         td, th {
             &.actions {
                 text-align: right;
@@ -19,6 +28,7 @@
                 &.one {
                     width: 3.5rem;
                 }
+
                 &.three {
                     width: 7.5rem;
                 }

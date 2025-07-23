@@ -1,24 +1,21 @@
 /*
- * Copyright (c) 2018-2019 Håkan Edling
+ * Copyright (c) .NET Foundation and Contributors
  *
  * This software may be modified and distributed under the terms
- * of the MIT license.  See the LICENSE file for details.
+ * of the MIT license. See the LICENSE file for details.
  *
- * http://github.com/piranhacms/piranha
+ * https://github.com/piranhacms/piranha.core
  *
  */
 
-using System;
+namespace Piranha.Data;
 
-namespace Piranha.Data
+[Serializable]
+public sealed class Alias : Models.Alias
 {
-    [Serializable]
-    public sealed class Alias : Models.Alias
-    {
-        /// <summary>
-        /// Gets/sets the site this alias is for.
-        /// </summary>
-        /// <returns></returns>
-        public Site Site { get; set; }
-    }
+    /// <summary>
+    /// Gets/sets the site this alias is for.
+    /// </summary>
+    /// <returns></returns>
+    public Site Site { get; set; }
 }

@@ -3,6 +3,9 @@
 */
 
 piranha.utils = {
+    getOrigin() {
+        return window.location.origin;
+    },
     formatUrl: function (str) {
         return str.replace("~/", piranha.baseUrl);
     },
@@ -14,7 +17,28 @@ piranha.utils = {
     },
     strLength: function (str) {
         return str != null ? str.length : 0;
-    }
+    },
+    antiForgery: function () {
+        const cookies = document.cookie.split(";");
+        for (let i = 0; i < cookies.length; i++) {
+            let c = cookies[i].trim().split("=");
+            if (c[0] === piranha.antiForgery.cookieName) {
+                return c[1];
+            }
+        }
+        return "";
+    },
+    antiForgeryHeaders: function (isJson) {
+        var headers = {};
+
+        if (isJson === undefined || isJson === true)
+        {
+            headers["Content-Type"] = "application/json";
+        }
+        headers[piranha.antiForgery.headerName] = piranha.utils.antiForgery();
+
+        return headers;
+    }    
 };
 
 Date.prototype.addDays = function(days) {
@@ -65,6 +89,11 @@ $(document).on('shown.bs.collapse', '.collapse', function () {
 
 $(document).on('hide.bs.collapse', '.collapse', function () {
 	$(this).parent().removeClass('active');
+});
+
+// Fix scroll prevention for multiple modals in bootstrap
+$(document).on('hidden.bs.modal', '.modal', function () {
+    $('.modal:visible').length && $(document.body).addClass('modal-open');
 });
 
 $(window).scroll(function () {

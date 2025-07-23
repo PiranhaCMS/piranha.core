@@ -8,7 +8,7 @@
 }
 @section script
 {
-    <script src="~/manager/assets/js/piranha.config.min.js"></script>
+    <script src="~/manager/assets/js/piranha.config.min.js?v=@Piranha.Utils.GetAssemblyVersionHash(typeof(Piranha.Manager.Module).Assembly)"></script>
 }
 
 <div id="config">
@@ -47,6 +47,19 @@
                             </div>
                             <div class="col-md-4">
                                 <input v-model="model.expandedSitemapLevels" class="form-control" type="number">
+                            </div>
+                        </div>
+                    </li>
+                    <li class="list-group-item">
+                        <div class="row align-items-end">
+                            <div class="col-md-8">
+                                <strong class="d-block">@Localizer.Config["Manager list size"]</strong>
+                                <span class="text-secondary">
+                                    @Localizer.Config["The page size for lists within the manager interface."]
+                                </span>
+                            </div>
+                            <div class="col-md-4">
+                                <input v-model="model.managerPageSize" class="form-control" type="number">
                             </div>
                         </div>
                     </li>

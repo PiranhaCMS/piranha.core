@@ -11,8 +11,19 @@ piranha.postedit = new Vue({
         typeId: null,
         title: null,
         slug: null,
+        metaTitle: null,
         metaKeywords: null,
         metaDescription: null,
+        metaIndex: null,
+        metaFollow: null,
+        metaPriority: null,
+        ogTitle: null,
+        ogDescription: null,
+        ogImage: {
+            id: null,
+            media: null
+        },
+        excerpt: null,
         published: null,
         redirectUrl: null,
         redirectType: null,
@@ -27,6 +38,16 @@ piranha.postedit = new Vue({
         regions: [],
         editors: [],
         useBlocks: true,
+        usePrimaryImage: true,
+        useExcerpt: true,
+        useHtmlExcerpt: true,
+        permissions: [],
+        primaryImage: {
+            id: null,
+            media: null
+        },
+        isScheduled: false,
+        selectedPermissions: [],
         saving: false,
         savingDraft: false,
         selectedRegion: {
@@ -51,6 +72,27 @@ piranha.postedit = new Vue({
                 return item.meta.display === "setting";
             });
         },
+        primaryImageUrl: function () {
+            if (this.primaryImage.media != null) {
+                return piranha.utils.formatUrl(this.primaryImage.media.publicUrl);
+            } else {
+                return piranha.utils.formatUrl("~/manager/assets/img/empty-image.png");
+            }
+        },
+        isExcerptEmpty: function () {
+            return piranha.utils.isEmptyText(this.excerpt);
+        },
+        metaPriorityDescription: function() {
+            var description = piranha.resources.texts.important;
+            if (this.metaPriority <= 0.3)
+                description = piranha.resources.texts.low;
+            else if (this.metaPriority <= 0.6)
+                description =  piranha.resources.texts.medium;
+            else if (this.metaPriority <= 0.9)
+                description =  piranha.resources.texts.high;
+
+            return description += " (" + this.metaPriority + ")";
+        }
     },
     mounted() {
         document.addEventListener("keydown", this.doHotKeys);
@@ -65,8 +107,16 @@ piranha.postedit = new Vue({
             this.typeId = model.typeId;
             this.title = model.title;
             this.slug = model.slug;
+            this.metaTitle = model.metaTitle;
             this.metaKeywords = model.metaKeywords;
             this.metaDescription = model.metaDescription;
+            this.metaIndex = model.metaIndex;
+            this.metaFollow = model.metaFollow;
+            this.metaPriority = model.metaPriority;
+            this.ogTitle = model.ogTitle;
+            this.ogDescription = model.ogDescription;
+            this.ogImage = model.ogImage;
+            this.excerpt = model.excerpt;
             this.published = model.published;
             this.redirectUrl = model.redirectUrl;
             this.redirectType = model.redirectType;
@@ -81,10 +131,17 @@ piranha.postedit = new Vue({
             this.categories = model.categories;
             this.tags = model.tags;
             this.useBlocks = model.useBlocks;
+            this.usePrimaryImage = model.usePrimaryImage;
+            this.useExcerpt = model.useExcerpt;
+            this.useHtmlExcerpt = model.useHtmlExcerpt;
             this.selectedCategory = model.selectedCategory;
             this.selectedTags = model.selectedTags;
             this.selectedRoute = model.selectedRoute;
             this.routes = model.routes;
+            this.permissions = model.permissions;
+            this.primaryImage = model.primaryImage;
+            this.isScheduled = model.isScheduled;
+            this.selectedPermissions = model.selectedPermissions;
 
             if (!this.useBlocks) {
                 // First choice, select the first custom editor
@@ -96,6 +153,12 @@ piranha.postedit = new Vue({
                 else if (this.contentRegions.length > 0) {
                     this.selectedRegion = this.contentRegions[0].meta;
                 }
+            } else {
+                this.selectedRegion = {
+                    uid: "uid-blocks",
+                    name: null,
+                    icon: null,
+                };
             }
         },
         load: function (id) {
@@ -151,10 +214,23 @@ piranha.postedit = new Vue({
                 id: self.id,
                 blogId: self.blogId,
                 typeId: self.typeId,
+                primaryImage: {
+                    id: self.primaryImage.id
+                },
                 title: self.title,
                 slug: self.slug,
+                metaTitle: self.metaTitle,
                 metaKeywords: self.metaKeywords,
                 metaDescription: self.metaDescription,
+                metaIndex: self.metaIndex,
+                metaFollow: self.metaFollow,
+                metaPriority: self.metaPriority,
+                ogTitle: self.ogTitle,
+                ogDescription: self.ogDescription,
+                ogImage: {
+                    id: self.ogImage.id
+                },
+                excerpt: self.excerpt,
                 published: self.published,
                 redirectUrl: self.redirectUrl,
                 redirectType: self.redirectType,
@@ -164,14 +240,13 @@ piranha.postedit = new Vue({
                 regions: JSON.parse(JSON.stringify(self.regions)),
                 selectedCategory: self.selectedCategory,
                 selectedTags: JSON.parse(JSON.stringify(self.selectedTags)),
-                selectedRoute: self.selectedRoute
+                selectedRoute: self.selectedRoute,
+                selectedPermissions: self.selectedPermissions
             };
 
             fetch(route, {
                 method: "post",
-                headers: {
-                    "Content-Type": "application/json",
-                },
+                headers: piranha.utils.antiForgeryHeaders(),
                 body: JSON.stringify(model)
             })
             .then(function (response) { return response.json(); })
@@ -191,6 +266,8 @@ piranha.postedit = new Vue({
 
                 self.saving = false;
                 self.savingDraft = false;
+
+                self.eventBus.$emit("onSaved", self.state)
             })
             .catch(function (error) {
                 console.log("error:", error);
@@ -199,27 +276,32 @@ piranha.postedit = new Vue({
         revert: function () {
             var self = this;
 
-            fetch(piranha.baseUrl + "manager/api/post/revert/" + self.id)
-                .then(function (response) { return response.json(); })
-                .then(function (result) {
-                    self.bind(result);
+            fetch(piranha.baseUrl + "manager/api/post/revert", {
+                method: "post",
+                headers: piranha.utils.antiForgeryHeaders(),
+                body: JSON.stringify(self.id)
+            })
+            .then(function (response) { return response.json(); })
+            .then(function (result) {
+                self.bind(result);
 
-                    Vue.nextTick(function () {
-                        $("#selectedCategory").select2({
-                            tags: true,
-                            selectOnClose: true,
-                            placeholder: piranha.resources.texts.addCategory
-                        });
-                        $("#selectedTags").select2({
-                            tags: true,
-                            selectOnClose: true,
-                            placeholder: piranha.resources.texts.addTags
-                        });
+                Vue.nextTick(function () {
+                    $("#selectedCategory").select2({
+                        tags: true,
+                        selectOnClose: true,
+                        placeholder: piranha.resources.texts.addCategory
                     });
+                    $("#selectedTags").select2({
+                        tags: true,
+                        selectOnClose: false,
+                        placeholder: piranha.resources.texts.addTags
+                    });
+                });
 
-                    piranha.notifications.push(result.status);
-                })
-                .catch(function (error) { console.log("error:", error );
+                piranha.notifications.push(result.status);
+            })
+            .catch(function (error) { 
+                console.log("error:", error );
             });
         },
         remove: function () {
@@ -232,7 +314,11 @@ piranha.postedit = new Vue({
                 confirmIcon: "fas fa-trash",
                 confirmText: piranha.resources.texts.delete,
                 onConfirm: function () {
-                    fetch(piranha.baseUrl + "manager/api/post/delete/" + self.id)
+                    fetch(piranha.baseUrl + "manager/api/post/delete", {
+                        method: "delete",
+                        headers: piranha.utils.antiForgeryHeaders(),
+                        body: JSON.stringify(self.id)
+                    })
                     .then(function (response) { return response.json(); })
                     .then(function (result) {
                         piranha.notifications.push(result);
@@ -292,6 +378,32 @@ piranha.postedit = new Vue({
             date = date.addDays(this.closeCommentsAfterDays);
 
             return date.toDateString();
+        },
+        selectPrimaryImage: function () {
+            if (this.primaryImage.media !== null) {
+                piranha.mediapicker.open(this.updatePrimaryImage, "Image", this.primaryImage.media.folderId);
+            } else {
+                piranha.mediapicker.openCurrentFolder(this.updatePrimaryImage, "Image");
+            }
+        },
+        removePrimaryImage: function () {
+            this.primaryImage.id = null;
+            this.primaryImage.media = null;
+        },
+        updatePrimaryImage: function (media) {
+            if (media.type === "Image") {
+                this.primaryImage.id = media.id;
+                this.primaryImage.media = media;
+            } else {
+                console.log("No image was selected");
+            }
+        },
+        onExcerptBlur: function (e) {
+            if (this.useHtmlExcerpt) {
+                this.excerpt = tinyMCE.activeEditor.getContent();
+            } else {
+                this.excerpt = e.target.innerHTML;
+            }
         }
     },
     created: function () {
@@ -301,7 +413,7 @@ piranha.postedit = new Vue({
 
         if (this.loading)
         {
-            sortable(".blocks", {
+            sortable("#content-blocks", {
                 handle: ".handle",
                 items: ":not(.unsortable)"
             })[0].addEventListener("sortupdate", function (e) {
@@ -318,7 +430,7 @@ piranha.postedit = new Vue({
             });
             $("#selectedTags").select2({
                 tags: true,
-                selectOnClose: true,
+                selectOnClose: false,
                 placeholder: piranha.resources.texts.addTags
             });
             $("#selectedTags").on("change", function() {
@@ -328,12 +440,12 @@ piranha.postedit = new Vue({
                     self.selectedTags.push(items[n].text);
                 }
             });
+            piranha.editor.addInline('excerpt-body', 'excerpt-toolbar');
         }
         else {
-            sortable(".blocks", "disable");
-            sortable(".blocks", "enable");
+            sortable("#content-blocks", "disable");
+            sortable("#content-blocks", "enable");
         }
-
         this.loading = false;
     },
     components: {

@@ -28,14 +28,18 @@
                         <table class="table">
                             <tbody>
                                 <tr v-for="(type) in pageTypes">
-                                    <td><a :href="piranha.baseUrl + 'manager/page/addrelative/' + addPageId + '/' + type.id + '/' + addAfter">{{ type.title }}</a></td>
+                                    <td>
+                                        <a v-if="addPageId !== null" :href="piranha.baseUrl + 'manager/page/addrelative/' + addPageId + '/' + type.id + '/' + addAfter">{{ type.title }}</a>
+                                        <a v-else :href="piranha.baseUrl + type.addUrl + addToSiteId + '/' + type.id">{{ type.title }}</a>
+                                        <span v-if="type.description !== null" class="d-block dimmed">{{ type.description }}</span>
+                                    </td>
                                 </tr>
                             </tbody>
                         </table>
                     </div>
                     <div id="pageAddCopy" class="tab-pane" role="tabpanel">
-                        <div class="form-group d-flex justify-content-center">
-                            <div class="dropdown" v-if="sites.length > 1">
+                        <div v-if="sites.length > 1" class="form-group d-flex justify-content-center">
+                            <div class="dropdown">
                                 <button class="btn btn-primary btn-labeled dropdown-toggle" type="button" data-toggle="dropdown">
                                     <span class="btn-label">
                                         <i class="fas fa-globe"></i>

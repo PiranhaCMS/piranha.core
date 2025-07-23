@@ -1,10 +1,16 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
+
   <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
-    <Version>8.0.0</Version>
-    <Company>Piranha CMS</Company>
+    <NoWarn>$(NoWarn);1591</NoWarn>
+    <Description>Package for storing uploaded media assets on disc</Description>
   </PropertyGroup>
+
+  <PropertyGroup Condition="'$(GITHUB_ACTIONS)' == 'true'">
+    <ContinuousIntegrationBuild>true</ContinuousIntegrationBuild>
+  </PropertyGroup>
+
   <ItemGroup>
     <ProjectReference Include="..\Piranha\Piranha.csproj" />
   </ItemGroup>
+
 </Project>

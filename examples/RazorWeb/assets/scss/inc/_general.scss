@@ -1,0 +1,17 @@
+body {
+    padding-top: 3.5rem;
+}
+main {
+    padding: 2rem 0;
+}
+img {
+    max-width: 100%;
+}
+a {
+    color: #f94c3b;
+    transition: all .2s ease-in-out;
+
+    &:hover {
+        color: darken(#f94c3b, 10%);
+    }
+}

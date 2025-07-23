@@ -1,40 +1,30 @@
 ﻿/*
- * Copyright (c) 2016-2019 Håkan Edling
+ * Copyright (c) .NET Foundation and Contributors
  *
  * This software may be modified and distributed under the terms
- * of the MIT license.  See the LICENSE file for details.
+ * of the MIT license. See the LICENSE file for details.
  *
  * https://github.com/piranhacms/piranha.core
  *
  */
 
-using System;
+namespace Piranha.Models;
 
-namespace Piranha.Models
+/// <summary>
+/// Generic page model.
+/// </summary>
+/// <typeparam name="T">The model type</typeparam>
+[Serializable]
+public class GenericPage<T> : PageBase where T : GenericPage<T>
 {
     /// <summary>
-    /// Generic page model.
+    /// Creates a new page model using the given page type id.
     /// </summary>
-    /// <typeparam name="T">The model type</typeparam>
-    [Serializable]
-    public class GenericPage<T> : PageBase where T : GenericPage<T>
+    /// <param name="api">The current api</param>
+    /// <param name="typeId">The unique page type id</param>
+    /// <returns>The new model</returns>
+    public static Task<T> CreateAsync(IApi api, string typeId = null)
     {
-        /// <summary>
-        /// Gets if this is the startpage of the site.
-        /// </summary>
-        public bool IsStartPage {
-            get { return !ParentId.HasValue && SortOrder == 0; }
-        }
-
-        /// <summary>
-        /// Creates a new page model using the given page type id.
-        /// </summary>
-        /// <param name="api">The current api</param>
-        /// <param name="typeId">The unique page type id</param>
-        /// <returns>The new model</returns>
-        public static T Create(IApi api, string typeId = null)
-        {
-            return api.Pages.Create<T>(typeId);
-        }
+        return api.Pages.CreateAsync<T>(typeId);
     }
 }

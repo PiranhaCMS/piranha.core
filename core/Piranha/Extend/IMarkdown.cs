@@ -1,25 +1,24 @@
 /*
- * Copyright (c) 2017 Håkan Edling
+ * Copyright (c) .NET Foundation and Contributors
  *
  * This software may be modified and distributed under the terms
- * of the MIT license.  See the LICENSE file for details.
- * 
+ * of the MIT license. See the LICENSE file for details.
+ *
  * https://github.com/piranhacms/piranha.core
- * 
+ *
  */
 
-namespace Piranha.Extend
+namespace Piranha.Extend;
+
+/// <summary>
+/// Service for converting markdown to HTML.
+/// </summary>
+public interface IMarkdown
 {
     /// <summary>
-    /// Interface for converting markdown to Html.
+    /// Transforms the given markdown string to html.
     /// </summary>
-    public interface IMarkdown
-    {
-        /// <summary>
-        /// Transforms the given markdown string to html.
-        /// </summary>
-        /// <param name="md">The markdown</param>
-        /// <returns>The transformed html</returns>
-        string Transform(string md);
-    }
+    /// <param name="md">The markdown</param>
+    /// <returns>The transformed html</returns>
+    string Transform(string md);
 }

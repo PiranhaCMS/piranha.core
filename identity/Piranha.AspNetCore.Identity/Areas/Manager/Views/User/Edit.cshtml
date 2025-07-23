@@ -1,0 +1,126 @@
+@model Guid
+@inject IAuthorizationService Auth
+@inject ManagerLocalizer Localizer
+@{
+    var userId = Model;
+    var isNewUser = userId == Guid.Empty;
+
+    if (isNewUser)
+    {
+        ViewBag.Title = "Add user";
+    }
+    else
+    {
+        ViewBag.Title = "Edit user";
+    }
+    ViewBag.MenuItem = "Users";
+}
+@section script {
+    <script src="~/manager/identity/piranha.useredit.js"></script>
+    <script type="text/javascript">
+        piranha.useredit.currentUserName = "@User.Identity.Name";
+        piranha.useredit.load("@userId", @(isNewUser ? 1 : 0));
+    </script>
+}
+<form id="usereditForm" class="form validate" novalidate>
+    <div id="useredit">
+        <div class="top">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item">@Localizer.General["Settings"]</li>
+                    <li class="breadcrumb-item" aria-current="page"><a href="@Url.Action("List")">@Localizer.General["Users"]</a></li>
+                    <li v-if="!loading" class="breadcrumb-item active" aria-current="page"><span v-if="isNew">@Localizer.General["Add"]</span><span v-else>@Localizer.General["Edit"]</span></li>
+                </ol>
+            </nav>
+
+            <div class="container-fluid app" :class="{ ready: !loading }">
+                <div class="top-nav">
+                    @if ((await Auth.AuthorizeAsync(User, Piranha.AspNetCore.Identity.Permissions.UsersSave)).Succeeded)
+                    {
+                        <button type="submit" class="btn btn-labeled btn-success pull-right" v-on:click.prevent="save()">
+                            <span class="btn-label">
+                                <i class="fas fa-check"></i>
+                            </span>
+                            <span v-if="isNew">@Localizer.General["Add"]</span><span v-else>@Localizer.General["Save"]</span>
+                        </button>
+                    }
+
+                    @if ((await Auth.AuthorizeAsync(User, Piranha.AspNetCore.Identity.Permissions.UsersDelete)).Succeeded)
+                    {
+                        <button v-if="!isNew && userModel && currentUserName != userModel.user.userName" title="@Localizer.General["Delete"]" class="btn btn-danger btn-icon" v-on:click.prevent="remove(userModel.user.id)"><i class="fas fa-trash"></i></button>
+                    }
+                </div>
+            </div>
+        </div>
+
+        <div v-if="userModel" class="container-fluid app" :class="{ ready: !loading }">
+            <div class="card">
+                <div class="card-header">
+                    <span class="title">@Localizer.General["General information"]</span>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label>@Localizer.General["Username"]</label>
+                                <input v-model="userModel.user.userName" class="form-control small" maxlength="128" required />
+                                <div class="invalid-feedback">
+                                    @Localizer.General["Username is mandatory."]
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label>@Localizer.General["Email address"]</label>
+                                <input type="email" v-model="userModel.user.email" class="form-control small" maxlength="128" required />
+                                <div class="invalid-feedback">
+                                    @Localizer.General["Email address is mandatory."]
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>@Localizer.General["Roles"]</label>
+                        <ul class="list-group">
+
+                            <li class="list-group-item" v-for="roleRow in getRoleRows()">
+                                <div class="row">
+                                    <div class="col-sm-4" v-for="role in roleRow">
+                                        <div class="checkbox">
+                                            <label class="mb-0">
+                                                <input type="checkbox" v-model="userModel.selectedRoles" :value="role.name"> {{ role.name }}
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <span class="title">@Localizer.General["Update password"]</span>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label>@Localizer.General["Password"]</label>
+                                <input type="password" v-model="userModel.password" class="form-control small" maxlength="128" placeholder="@Localizer.Security["New password"]" />
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label>&nbsp;</label>
+                                <input type="password" v-model="userModel.passwordConfirm" class="form-control small" maxlength="128" placeholder="@Localizer.Security["Confirm password"]" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>

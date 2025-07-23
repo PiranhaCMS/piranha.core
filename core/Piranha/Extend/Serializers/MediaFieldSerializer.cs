@@ -1,45 +1,38 @@
 /*
- * Copyright (c) 2018 Håkan Edling
+ * Copyright (c) .NET Foundation and Contributors
  *
  * This software may be modified and distributed under the terms
- * of the MIT license.  See the LICENSE file for details.
- * 
+ * of the MIT license. See the LICENSE file for details.
+ *
  * https://github.com/piranhacms/piranha.core
- * 
+ *
  */
 
-using System;
 using Piranha.Extend.Fields;
 
-namespace Piranha.Extend.Serializers
-{
-    public class MediaFieldSerializer : ISerializer
-    {
-        /// <summary>
-        /// Serializes the given object.
-        /// </summary>
-        /// <param name="obj">The object</param>
-        /// <returns>The serialized value</returns>
-        public string Serialize(object obj)
-        {
-            if (obj is MediaField field)
-            {
-                return field.Id.ToString();
-            }
-            throw new ArgumentException("The given object doesn't match the serialization type");
-        }
+namespace Piranha.Extend.Serializers;
 
-        /// <summary>
-        /// Deserializes the given string.
-        /// </summary>
-        /// <param name="str">The serialized value</param>
-        /// <returns>The object</returns>
-        public object Deserialize(string str)
+/// <summary>
+/// Serializer for media fields.
+/// </summary>
+public class MediaFieldSerializer : ISerializer
+{
+    /// <inheritdoc />
+    public string Serialize(object obj)
+    {
+        if (obj is MediaField field)
         {
-            return new MediaField
-            {
-                Id = !string.IsNullOrEmpty(str) ? new Guid(str) : (Guid?)null
-            };
+            return field.Id.ToString();
         }
+        throw new ArgumentException("The given object doesn't match the serialization type");
+    }
+
+    /// <inheritdoc />
+    public object Deserialize(string str)
+    {
+        return new MediaField
+        {
+            Id = !string.IsNullOrEmpty(str) ? new Guid(str) : (Guid?)null
+        };
     }
 }

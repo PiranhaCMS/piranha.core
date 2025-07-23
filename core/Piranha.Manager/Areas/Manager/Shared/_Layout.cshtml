@@ -1,12 +1,26 @@
-﻿@{
+﻿@inject Microsoft.Extensions.Options.IOptions<ManagerOptions> Options
+@inject Piranha.Config Config
+@{
     var module = Piranha.App.Modules.Get<Piranha.Manager.Module>();
+    var prerelease = Piranha.Utils.IsPreRelease(typeof(Piranha.Manager.Module).Assembly) ? "pre-release" : "";
+    var isRightToLeft =  @System.Globalization.CultureInfo.CurrentCulture.TextInfo.IsRightToLeft;
+    var version = Piranha.Utils.GetAssemblyVersionHash(typeof(Piranha.Manager.Module).Assembly);
 }
 <!doctype html>
 <html lang="en">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <link rel="stylesheet" href="~/manager/assets/css/full.min.css">
+    @if(isRightToLeft)
+    {
+        <link rel="stylesheet" href="~/manager/assets/css/full.rtl.min.css?v=@version">
+    }
+    else
+    {
+        <link rel="stylesheet" href="~/manager/assets/css/full.min.css?v=@version">
+    }
+    <link rel="icon" href="~/manager/assets/img/logo.png">
+
     @foreach (var style in module.Styles)
     {
     <link href="@Url.Content(style)" rel="stylesheet" type="text/css" />
@@ -14,16 +28,23 @@
 
     <title>@ViewBag.Title</title>
 </head>
-<body>
+<body class="@prerelease">
+    @if (!string.IsNullOrEmpty(prerelease))
+    {
+    <div class="pre-release">Pre-release</div>
+    }
     <partial name="~/Areas/Manager/Shared/Partial/_Menu.cshtml" />
 
     @RenderBody()
 
     <partial name="~/Areas/Manager/Shared/Partial/_BlockPickerModal.cshtml" />
     <partial name="~/Areas/Manager/Shared/Partial/_MediaPickerModal.cshtml" />
+    <partial name="~/Areas/Manager/Shared/Partial/_ContentPickerModal.cshtml" />
+    <partial name="~/Areas/Manager/Shared/Partial/_ArchivePickerModal.cshtml" />
     <partial name="~/Areas/Manager/Shared/Partial/_PagePickerModal.cshtml" />
     <partial name="~/Areas/Manager/Shared/Partial/_PostPickerModal.cshtml" />
     <partial name="~/Areas/Manager/Shared/Partial/_PreviewModal.cshtml" />
+    <partial name="~/Areas/Manager/Shared/Partial/_LanguageEditModal.cshtml" />
     <partial name="~/Areas/Manager/Shared/Partial/_Notifications.cshtml" />
     <partial name="~/Areas/Manager/Shared/Partial/_MediaUploadTemplate.cshtml" />
     <partial name="~/Areas/Manager/Shared/Partial/_AlertDialog.cshtml" />
@@ -36,6 +57,11 @@
         var piranha = {};
         window.piranha = piranha;
         piranha.baseUrl = "@Url.Content("~/")";
+        piranha.antiForgery = {
+            cookieName: "@Options.Value.XsrfCookieName",
+            headerName: "@Options.Value.XsrfHeaderName"
+        };
+        piranha.xhrTimeout = @Config.ManagerXhrTimeout;
     </script>
 
     <partial name="~/Areas/Manager/Shared/Partial/_EditorConfig.cshtml" />
@@ -43,10 +69,10 @@
     @RenderSection("partials", required: false)
 
 <environment include="Development">
-    <script type="text/javascript" src="~/manager/assets/js/piranha-deps-dev.js"></script>
+    <script type="text/javascript" src="~/manager/assets/js/piranha-deps-dev.js?v=@version"></script>
 </environment>
 <environment exclude="Development">
-    <script type="text/javascript" src="~/manager/assets/js/piranha-deps.min.js"></script>
+    <script type="text/javascript" src="~/manager/assets/js/piranha-deps.min.js?v=@version"></script>
 </environment>
     @foreach (var script in module.Scripts.Where(s => s.RenderBeforeCoreScripts))
     {
@@ -63,7 +89,7 @@
             <script type="@script.Type" src="@Url.Content(script.Src)" integrity="@script.Integrity" crossorigin="@script.GetCrossOriginValueStrValue()"></script>
         }
     }
-    <script type="text/javascript" src="~/manager/assets/js/piranha.min.js"></script>
+    <script type="text/javascript" src="~/manager/assets/js/piranha.min.js?v=@version"></script>
     <script type="text/javascript">
         Vue.prototype.piranha = window.piranha;
     </script>

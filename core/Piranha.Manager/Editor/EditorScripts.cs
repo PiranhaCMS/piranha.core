@@ -1,21 +1,20 @@
 /*
- * Copyright (c) 2019 Håkan Edling
+ * Copyright (c) .NET Foundation and Contributors
  *
  * This software may be modified and distributed under the terms
- * of the MIT license.  See the LICENSE file for details.
+ * of the MIT license. See the LICENSE file for details.
  *
  * https://github.com/piranhacms/piranha.core
  *
  */
 
-namespace Piranha.Manager.Editor
+namespace Piranha.Manager.Editor;
+
+/// <summary>
+/// Static class for configuring the HTML Editor scripts.
+/// </summary>
+public static class EditorScripts
 {
-    /// <summary>
-    /// Static class for configuring the HTML Editor scripts.
-    /// </summary>
-    public static class EditorScripts
-    {
-        public static string MainScriptUrl { get; set; }
-        public static string EditorScriptUrl { get; set; }
-    }
+    public static string MainScriptUrl { get; set; }
+    public static string EditorScriptUrl { get; set; }
 }

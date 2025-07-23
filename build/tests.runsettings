@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- For more information, see https://docs.microsoft.com/en-us/visualstudio/test/configure-unit-tests-by-using-a-dot-runsettings-file?view=vs-2019  -->
+
+<RunSettings>
+ <RunConfiguration>
+   <!-- 0 = As many processes as possible, limited by number of cores on machine, 1 = Sequential (1 process), 2-> Given number of processes up to limit by number of cores on machine-->
+   <MaxCpuCount>1</MaxCpuCount>
+   <!-- Disables in-assembly parallel execution, applies to both MSTest and NUnit -->
+   <DisableParallelization>true</DisableParallelization>
+ </RunConfiguration>
+</RunSettings>

@@ -44,43 +44,45 @@
             }
 
             fetch(piranha.baseUrl + "manager/api/alias/save", {
-                    method: "post",
-                    headers: {
-                        "Content-Type": "application/json",
-                    },
-                    body: JSON.stringify({
-                        id: piranha.alias.model.id,
-                        siteId: piranha.alias.siteId,
-                        aliasUrl: piranha.alias.model.aliasUrl,
-                        redirectUrl: piranha.alias.model.redirectUrl,
-                        isPermanent: piranha.alias.model.isPermanent != null ? piranha.alias.model.isPermanent : false
-                    })
+                method: "post",
+                headers: piranha.utils.antiForgeryHeaders(),
+                body: JSON.stringify({
+                    id: piranha.alias.model.id,
+                    siteId: piranha.alias.siteId,
+                    aliasUrl: piranha.alias.model.aliasUrl,
+                    redirectUrl: piranha.alias.model.redirectUrl,
+                    isPermanent: piranha.alias.model.isPermanent != null ? piranha.alias.model.isPermanent : false
                 })
-                .then(function (response) { return response.json(); })
-                .then(function (result) {
-                    if (result.status.type === "success")
-                    {
-                        // Remove validation class
-                        form.classList.remove("was-validated");
+            })
+            .then(function (response) { return response.json(); })
+            .then(function (result) {
+                if (result.status.type === "success") {
+                    // Remove validation class
+                    form.classList.remove("was-validated");
 
-                        // Close modal
-                        $("#aliasModal").modal("hide");
+                    // Close modal
+                    $("#aliasModal").modal("hide");
 
-                        // Clear modal
-                        piranha.alias.model.id = null;
-                        piranha.alias.model.aliasUrl = null;
-                        piranha.alias.model.redirectUrl = null;
-                        piranha.alias.model.isPermanent = true;
+                    // Clear modal
+                    piranha.alias.model.id = null;
+                    piranha.alias.model.aliasUrl = null;
+                    piranha.alias.model.redirectUrl = null;
+                    piranha.alias.model.isPermanent = true;
 
-                        piranha.alias.items = result.items;
-                    }
+                    piranha.alias.items = result.items;
+                }
 
+                if (result.status !== 400) {
                     // Push status to notification hub
                     piranha.notifications.push(result.status);
-                })
-                .catch(function (error) {
-                    console.log("error:", error);
-                });
+                } else {
+                    // Unauthorized request
+                    piranha.notifications.unauthorized();
+                }
+            })
+            .catch(function (error) {
+                console.log("error:", error);
+            });
         },
         remove: function (id) {
             var self = this;
@@ -92,13 +94,24 @@
                 confirmIcon: "fas fa-trash",
                 confirmText: piranha.resources.texts.delete,
                 onConfirm: function () {
-                    fetch(piranha.baseUrl + "manager/api/alias/delete/" + id)
+                    fetch(piranha.baseUrl + "manager/api/alias/delete", {
+                        method: "delete",
+                        headers: piranha.utils.antiForgeryHeaders(),
+                        body: JSON.stringify(id)
+                    })
                     .then(function (response) { return response.json(); })
                     .then(function (result) {
-                        self.items = result.items;
+                        if (result.status.type === "success") {
+                            self.items = result.items;
+                        }
 
-                        // Push status to notification hub
-                        piranha.notifications.push(result.status);
+                        if (result.status !== 400) {
+                            // Push status to notification hub
+                            piranha.notifications.push(result.status);
+                        } else {
+                            // Unauthorized request
+                            piranha.notifications.unauthorized();
+                        }
                     })
                     .catch(function (error) { console.log("error:", error ); });
                 }

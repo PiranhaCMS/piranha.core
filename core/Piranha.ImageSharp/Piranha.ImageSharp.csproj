@@ -1,13 +1,16 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
-    <Version>8.0.0</Version>
-    <Company>Piranha CMS</Company>
+    <NoWarn>$(NoWarn);1591</NoWarn>
+    <Description>Package for processing uploaded images using ImageSharp</Description>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(GITHUB_ACTIONS)' == 'true'">
+    <ContinuousIntegrationBuild>true</ContinuousIntegrationBuild>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="SixLabors.ImageSharp" Version="1.0.0-beta0007" />
+    <PackageReference Include="SixLabors.ImageSharp" Version="2.1.10" />
     <ProjectReference Include="..\Piranha\Piranha.csproj" />
   </ItemGroup>
 

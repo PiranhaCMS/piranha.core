@@ -1,0 +1,61 @@
+@inject ManagerLocalizer Localizer
+
+<div class="modal modal-panel fade" id="contentpicker">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+
+            <!-- Modal Header -->
+            <div class="modal-header border-bottom-0">
+                <h5 class="modal-title">
+                    <i v-if="currentGroupIcon !== null" :class="currentGroupIcon"></i>
+                    <i v-else class="fas fa-cube"></i>
+                    <span v-if="currentGroupId !== null"> {{ currentGroupTitle }}</span>
+                    <span v-else> @Localizer.General["Select content"]</span>
+                </h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+
+            <!-- Modal Body -->
+            <div class="modal-body bg-light">
+                <div class="form-group d-flex justify-content-center">
+                    <div class="dropdown" v-if="groups.length > 1">
+                        <button class="btn btn-primary btn-labeled dropdown-toggle" type="button" data-toggle="dropdown">
+                            <span class="btn-label">
+                                <i class="fas fa-globe"></i>
+                            </span>
+                            {{ currentGroupTitle }}
+                        </button>
+                        <div class="dropdown-menu">
+                            <a class="dropdown-item" href="#" li v-for="group in groups" v-on:click.prevent="load(group.id, true)">{{ group.title }}</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group mt-3">
+                     <input id="contentpickerSearch" class="form-control" v-model="search" v-on:keyup.enter="onEnter" placeholder="@Localizer.General["Search..."]"/>
+                </div>
+
+                <table class="table table-borderless">
+                    <thead>
+                    <tr>
+                        <th>@Localizer.General["Title"]</th>
+                        <th>@Localizer.General["Type"]</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                        <tr v-for="item in filteredItems">
+                            <td>
+                                <a href="#" v-on:click.prevent="select(item)">{{ item.title }}</a>
+                            </td>
+                            <td>
+                                {{ item.type }}
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

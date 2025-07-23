@@ -1,0 +1,135 @@
+@using Piranha
+@model Piranha.AspNetCore.Identity.Models.RoleEditModel
+@inject IAuthorizationService Auth
+@inject ManagerLocalizer Localizer
+@{
+    ViewBag.Title = "Edit role";
+    ViewBag.MenuItem = "Roles";
+}
+
+@using (var form = Html.BeginForm("Save", "Role", FormMethod.Post, new {@class = "form validate", role = "form", novalidate = ""}))
+{
+    @Html.HiddenFor(m => m.Role.Id)
+
+    <div class="top">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item">@Localizer.General["Settings"]</li>
+                <li class="breadcrumb-item" aria-current="page"><a href="@Url.Action("List")">@Localizer.General["Roles"]</a></li>
+                <li class="breadcrumb-item active" aria-current="page">@Localizer.General["Edit"]</li>
+            </ol>
+        </nav>
+
+        <div class="container-fluid">
+            <div class="top-nav">
+                @if ((await Auth.AuthorizeAsync(User, Piranha.AspNetCore.Identity.Permissions.RolesSave)).Succeeded)
+                {
+                    <button type="submit" class="btn btn-labeled btn-success pull-right">
+                        <span class="btn-label">
+                            <i class="fas fa-check"></i>
+                        </span>
+                        @Localizer.General["Save"]
+                    </button>
+                }
+            </div>
+        </div>
+    </div>
+
+    <div class="container-fluid">
+        <div class="card">
+            <div class="card-header">
+                <span class="title">@Localizer.General["General"]</span>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label>@Localizer.General["Name"]</label>
+                            @Html.TextBoxFor(m => m.Role.Name, new { @class = "form-control small", maxlength = 128, required = ""})
+                            <div class="invalid-feedback">
+                                @Localizer.General["Name is mandatory."]
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label>@Localizer.General["Normalized name"]</label>
+                            @if (Model.Role.NormalizedName == "SYSADMIN")
+                            {
+                                @Html.TextBoxFor(m => m.Role.NormalizedName, new { @class = "form-control small", maxlength = 128, disabled = true })
+                                @Html.HiddenFor(m => m.Role.NormalizedName)
+                            }
+                            else
+                            {
+                                @Html.TextBoxFor(m => m.Role.NormalizedName, new { @class = "form-control small", maxlength = 128 })
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        @foreach (var module in App.Permissions.GetModules())
+        {
+            var permissions = App.Permissions.GetPermissions(module);
+            var categories = permissions.Select(p => p.Category).Distinct().OrderBy(c => c);
+
+            <div class="card">
+                <div class="card-header">
+                    <span class="title">@module @Localizer.General["Permissions"]</span>
+                </div>
+                <div class="card-body">
+                    @foreach (var category in categories)
+                    {
+                        var categoryPermissions = permissions.Where(p => p.Category == category).OrderBy(p => p.Title).ToList();
+
+                        <div class="form-group">
+                            <ul class="list-group">
+                                @if (!string.IsNullOrWhiteSpace(category))
+                                {
+                                    <li class="list-group-item">
+                                        <strong>@category</strong>
+                                    </li>
+                                }
+                                @for (var n = 0; n < categoryPermissions.Count(); n += 3)
+                                {
+                                    <li class="list-group-item">
+                                        <div class="row">
+                                            <div class="col-sm-4">
+                                                <div class="checkbox">
+                                                    <label class="mb-0">
+                                                        <input type="checkbox" name="SelectedClaims[]" value="@categoryPermissions[n].Name" @(Model.SelectedClaims.Contains(categoryPermissions[n].Name) ? "checked=checked" : "")> @categoryPermissions[n].Title
+                                                    </label>
+                                                </div>
+                                            </div>
+                                            @if (n + 1 < categoryPermissions.Count())
+                                            {
+                                                <div class="col-sm-4">
+                                                    <div class="checkbox">
+                                                        <label class="mb-0">
+                                                            <input type="checkbox" name="SelectedClaims[]" value="@categoryPermissions[n + 1].Name" @(Model.SelectedClaims.Contains(categoryPermissions[n + 1].Name) ? "checked=checked" : "")> @categoryPermissions[n + 1].Title
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                            }
+                                            @if (n + 2 < categoryPermissions.Count())
+                                            {
+                                                <div class="col-sm-4">
+                                                    <div class="checkbox">
+                                                        <label class="mb-0">
+                                                            <input type="checkbox" name="SelectedClaims[]" value="@categoryPermissions[n + 2].Name" @(Model.SelectedClaims.Contains(categoryPermissions[n + 2].Name) ? "checked=checked" : "")> @categoryPermissions[n + 2].Title
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                            }
+                                        </div>
+                                    </li>
+                                }
+                            </ul>
+                        </div>
+                    }
+                </div>
+            </div>
+        }
+    </div>
+}

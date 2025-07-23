@@ -1,0 +1,36 @@
+.block {
+    padding: 0 0 1.5rem;
+
+    img {
+        border-radius: .25rem;
+    }
+
+    &.column-block {
+        .col-md:not(:last-child) {
+            margin-bottom: 1.5rem;
+        }
+
+        img {
+            height: 100%;
+            object-fit: cover;
+        }
+    }
+
+    &.image-gallery-block {
+        .carousel {
+            border-radius: .25rem;
+            overflow: hidden;
+        }
+    }
+}
+
+// Medium devices (tablets, 768px and up)
+@media (min-width: 768px) {
+    .block {
+        &.column-block {
+            .col-md:not(:last-child) {
+                margin-bottom: 0;
+            }
+        }
+    }
+}

@@ -1,20 +1,17 @@
 ﻿/*
- * Copyright (c) 2017-2019 Håkan Edling
+ * Copyright (c) .NET Foundation and Contributors
  *
  * This software may be modified and distributed under the terms
- * of the MIT license.  See the LICENSE file for details.
+ * of the MIT license. See the LICENSE file for details.
  *
- * http://github.com/piranhacms/piranha
+ * https://github.com/piranhacms/piranha.core
  *
  */
 
-using System;
+namespace Piranha.Data;
 
-namespace Piranha.Data
-{
-    /// <summary>
-    /// String parameter.
-    /// </summary>
-    [Serializable]
-    public sealed class Param : Models.Param { }
-}
+/// <summary>
+/// String parameter.
+/// </summary>
+[Serializable]
+public sealed class Param : Models.Param { }

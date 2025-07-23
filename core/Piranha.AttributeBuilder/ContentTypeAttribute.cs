@@ -1,30 +1,35 @@
 ﻿/*
- * Copyright (c) 2016-2018 Håkan Edling
+ * Copyright (c) .NET Foundation and Contributors
  *
  * This software may be modified and distributed under the terms
- * of the MIT license.  See the LICENSE file for details.
+ * of the MIT license. See the LICENSE file for details.
  *
  * https://github.com/piranhacms/piranha.core
  *
  */
 
-using System;
+namespace Piranha.AttributeBuilder;
 
-namespace Piranha.AttributeBuilder
+/// <summary>
+/// Attribute for marking a class as a content type.
+/// </summary>
+[AttributeUsage(AttributeTargets.Class)]
+public class ContentTypeAttribute : ContentTypeBaseAttribute
 {
     /// <summary>
-    /// Abstract class for building content types.
+    /// Gets/sets if excerpt should be used for the
+    /// content type. The default value is true.
     /// </summary>
-    public abstract class ContentTypeAttribute : Attribute
-    {
-        /// <summary>
-        /// Gets/sets the unique id.
-        /// </summary>
-        public string Id { get; set; }
+    public bool UseExcerpt { get; set; } = true;
 
-        /// <summary>
-        /// Gets/sets the optional title.
-        /// </summary>
-        public string Title { get; set; }
-    }
+    /// <summary>
+    /// Gets/sets if primary image should be used for the
+    /// content type. The default value is true.
+    /// </summary>
+    public bool UsePrimaryImage { get; set; } = true;
+
+    /// <summary>
+    /// Default constructor.
+    /// </summary>
+    public ContentTypeAttribute() : base() { }
 }

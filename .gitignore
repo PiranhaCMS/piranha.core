@@ -17,9 +17,12 @@ examples/CoreWeb/assets/lib
 # Runtime test files
 [Uu]ploads
 *.db
+*.db-shm
+*.db-wal
 
 templates/**/wwwroot/uploads
 templates/**/*.db
+coverage
 
 # NPM lock files
 *-lock.json
@@ -34,6 +37,9 @@ x86/
 bld/
 [Bb]in/
 [Oo]bj/
+
+# Test results
+*opencover.xml
 
 # Mac OSX temp files
 ._*
@@ -155,7 +161,7 @@ publish/
 # Publish Web Output
 *.[Pp]ublish.xml
 *.azurePubxml
-# TODO: Comment the next line if you want to checkin your web deploy settings 
+# TODO: Comment the next line if you want to checkin your web deploy settings
 # but database connection strings (with potential passwords) will be unencrypted
 *.pubxml
 *.publishproj

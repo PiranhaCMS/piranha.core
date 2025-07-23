@@ -1,62 +1,61 @@
 ﻿/*
- * Copyright (c) 2017 Håkan Edling
+ * Copyright (c) .NET Foundation and Contributors
  *
  * This software may be modified and distributed under the terms
- * of the MIT license.  See the LICENSE file for details.
- * 
- * http://github.com/piranhacms/piranha
- * 
+ * of the MIT license. See the LICENSE file for details.
+ *
+ * https://github.com/piranhacms/piranha.core
+ *
  */
 
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-using System;
+using Piranha.Data.EF.SQLite;
 
-namespace Piranha.Tests
+namespace Piranha.Tests;
+
+/// <summary>
+/// Base class for using the api.
+/// </summary>
+public abstract class BaseTests : IDisposable
 {
+    protected IStorage storage = new Local.FileStorage("uploads/", "~/uploads/");
+    protected IServiceProvider services = new ServiceCollection()
+        .BuildServiceProvider();
+
     /// <summary>
-    /// Base class for using the api.
+    /// Default constructor.
     /// </summary>
-    public abstract class BaseTests : IDisposable
-    {
-        protected IStorage storage = new Local.FileStorage("uploads/", "~/uploads/");
-        protected IServiceProvider services = new ServiceCollection()
-            .BuildServiceProvider();
+    public BaseTests() {
+        Init();
+    }
 
-        /// <summary>
-        /// Default constructor.
-        /// </summary>
-        public BaseTests() {
-            Init();
-        }
+    /// <summary>
+    /// Disposes the test class.
+    /// </summary>
+    public void Dispose() {
+        Cleanup();
+    }
 
-        /// <summary>
-        /// Disposes the test class.
-        /// </summary>
-        public void Dispose() {
-            Cleanup();
-        }
+    /// <summary>
+    /// Sets up & initializes the tests.
+    /// </summary>
+    protected abstract void Init();
 
-        /// <summary>
-        /// Sets up & initializes the tests.
-        /// </summary>
-        protected abstract void Init();
+    /// <summary>
+    /// Cleans up any possible data and resources
+    /// created by the test.
+    /// </summary>
+    protected abstract void Cleanup();
 
-        /// <summary>
-        /// Cleans up any possible data and resources
-        /// created by the test.
-        /// </summary>
-        protected abstract void Cleanup();
+    /// <summary>
+    /// Gets the test context.
+    /// </summary>
+    protected IDb GetDb() {
+        var builder = new DbContextOptionsBuilder<SQLiteDb>();
 
-        /// <summary>
-        /// Gets the test context.
-        /// </summary>
-        protected IDb GetDb() {
-            var builder = new DbContextOptionsBuilder<Db>();
+        builder.UseSqlite("Filename=./piranha.tests.db");
 
-            builder.UseSqlite("Filename=./piranha.tests.db");
-
-            return new Db(builder.Options);
-        }
+        return new SQLiteDb(builder.Options);
     }
 }

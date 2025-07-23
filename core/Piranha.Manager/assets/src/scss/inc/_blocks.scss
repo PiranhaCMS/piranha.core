@@ -2,9 +2,6 @@
 @import "variables";
 
 .blocks {
-    max-width: $block-width;
-    margin: 0 auto;
-
     .block-group, .block-group-horizontal {
         .empty-info {
             background: #fff;
@@ -15,12 +12,33 @@
     }
 
     >div >.block {
-        margin: -1rem 0;
+        margin-top: -1rem;
+        margin-bottom: -1rem;
+    }
+
+    &.blocks-outline {
+        .block {
+            border-color: $gray-400;
+
+            .block {
+                border-color: transparent;
+            }
+
+            &.danger {
+                border-color: $danger;
+            }
+
+            &.block-group:hover:not(.danger), &:focus-within {
+                border-color: $gray-400;
+            }
+        }
     }
 }
 
 .block {
     position: relative;
+    max-width: $block-width;
+    margin: 0 auto;
     padding: 2.75rem 1rem;
     border: solid 1px transparent;
     border-radius: $border-radius;
@@ -63,6 +81,10 @@
         > .block-body, > .block-group {
             display: none;
         }
+    }
+
+    &.block-full {
+        max-width: none;
     }
 
     .actions, .custom-actions {
@@ -125,7 +147,6 @@
     }
 
     .has-media-picker {
-
         .media-picker {
             background: rgba(0,0,0,.4);
             position: absolute;
@@ -202,32 +223,73 @@
     }
 }
 
+.markdown-block {
+    .markdown-field{
+        border: none;
+
+        .editor-toolbar:not(.fullscreen) {
+            border: solid 1px $gray-400;
+        }
+
+        .CodeMirror:not(.CodeMirror-fullscreen) {
+            padding-left: 0;
+            min-height: 150px;
+        }
+        .CodeMirror-scroll:not(.CodeMirror-fullscreen) {
+            min-height: 150px;
+        }
+    }
+}
+
+.text-block {
+    .block-body {
+        display: grid;
+
+        textarea {
+            color: $gray-900;
+            width: 100%;
+            height: 100%;
+            min-height: 1.3rem;
+            border: 0;
+            background: transparent;
+            font-family: SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace;
+            font-size: .875rem;
+            margin-bottom: 0;
+            overflow: hidden;
+            resize: none;
+            grid-area: 1 / 1 / 2 / 2;
+
+            &:focus, &:active {
+                outline: none;
+            }
+        }
+
+        pre {
+            white-space: pre-wrap;
+            grid-area: 1 / 1 / 2 / 2;
+        }
+    }
+}
+
 .quote-block {
-    .empty:not(:focus-within) {
-        background: $gray-100 url("../img/empty-text.png") no-repeat 50% 50%;
-        height: 8rem;
-    }
+    .blockquote {
+        *[contenteditable] {
+            cursor: text;
+            padding: .5rem;
+        }
 
-    p {
-        color: $gray-600;
-        height: 100%;
-        min-height: 2rem;
-        font-family: "Open Sans", serif;
-        font-size: 1.4rem;
-        margin-left: 4.5rem;
-    }
+        *[data-placeholder]:empty {
+            &:after {
+                content: attr(data-placeholder);
+                color: $gray-500;
+            }
+        }
 
-    .quote {
-        display: none;
-        color: $gray-500;
-        float: left;
-        font-size: 2rem;
-        padding: .25rem 1rem;
-    }
-
-    :not(.empty), :focus-within {
-        .quote {
-            display: inline;
+        .blockquote-body {
+            font-family: "Open Sans", serif;
+            font-size: 1.4rem;
+            margin-bottom: 0;
+            color: $gray-600;
         }
     }
 }
@@ -238,6 +300,98 @@
 
     .empty {
         background: $gray-100;
+    }
+
+    &.primary-image {
+        &:not(.primary-image-modal) {
+            padding: 1rem 0;
+            margin-bottom: 2rem !important;
+        }
+        &.primary-image-modal {
+            background: $white;
+            padding: .5rem;
+            margin-bottom: 0 !important;
+            border: 1px solid $gray-400;
+
+            &:hover {
+                border: 1px solid $gray-400;
+            }
+        }
+
+        &:hover, &:focus-within {
+            border-color: transparent;
+        }
+    }
+
+    .btn-aspect {
+        img {
+            width: 15px !important;
+            height: 15px !important;
+            float: left;
+            border: solid 1px #fff;
+            border-radius: .125rem;
+        }
+    }
+
+    .aspect-menu {
+        label {
+            font-weight: bold;
+            padding: .25rem 1.5rem;
+            white-space: nowrap;
+        }
+
+        img {
+            width: 18px !important;
+            height: 18px !important;
+            background: #666;
+            margin-right: .5rem;
+            border: solid 2px #666;
+            border-radius: .25rem;
+            float: left;
+            margin-top: .125rem;
+        }
+
+        .active {
+            img {
+                background: #007eaa;
+                border-color: #007eaa;
+            }
+        }
+    }
+}
+
+.page-block, .post-block, .content-block {
+    .page-image {
+        float: left;
+        background: $body-bg;
+        background-position: 50% 50%;
+        background-repeat: no-repeat;
+        max-width: 446px;
+        margin-bottom: 0;
+        margin-right: 1rem;
+        text-align: center;
+        border-radius: $border-radius;
+    }
+
+    img {
+        border-radius: $border-radius;
+    }
+
+    h3 {
+        font-family: Bitter,serif;
+    }
+
+}
+
+.block-group {
+    .col:not(:only-child) {
+        .page-block, .post-block, .content-block {
+            .page-image {
+                float: none;
+                margin-bottom: .5rem;
+                margin-right: 0;
+            }
+        }
     }
 }
 
@@ -262,6 +416,46 @@
         font-size: .875rem;
         margin-bottom: 0;
         white-space: normal;
+    }
+
+    p {
+        min-height: 1.3rem;
+        height: 100%;
+        padding: 0 1rem;
+    }
+}
+
+.ingress {
+    padding: 1rem 0;
+    margin-bottom: 1rem !important;
+
+    .component-toolbar {
+        margin-top: -1.5rem;
+    }
+
+    &.ingress-text {
+        font-family: "Open Sans", sans-serif;
+        font-size: 1.2rem;
+        font-weight: 300;
+
+        &.empty:not(:focus-within) {
+            p {
+                height: 100%;
+            }
+        }
+    }
+
+    &.empty:not(:focus-within) {
+        background: $gray-100 url("../img/empty-text.png") no-repeat 50% 50%;
+        height: 8rem;
+
+        .block-body {
+            height: 100%;
+        }
+    }
+
+    &:hover, &:focus-within {
+        border-color: transparent;
     }
 }
 

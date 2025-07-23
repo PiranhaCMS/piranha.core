@@ -25,6 +25,10 @@
     display: flex;
     margin-bottom: 2px;
 
+    &.dimmed {
+        opacity: .6;
+    }
+
     >div:not(.handle) {
         padding: .75rem 1rem;
     }
@@ -35,9 +39,11 @@
         padding: .75rem 0;
         text-align: center;
         border-right: solid 2px $gray-100;
+        flex-shrink: 0;
     }
     .actions {
         width: 7rem;
+        flex-shrink: 0;
 
         .expand {
             background: $primary;
@@ -55,10 +61,12 @@
         text-align: right;
         overflow: hidden;
         text-overflow: ellipsis;
-        white-space: nowrap
+        white-space: nowrap;
+        flex-shrink: 0;
     }
     .date {
-        width: 7rem;
+        width: 7.5rem;
+        flex-shrink: 0;
     }
 
     .badge {
@@ -73,6 +81,7 @@
     .link {
         display: flex;
         flex-grow: 1;
+        overflow: hidden;
 
         .actions {
             display: inline-block;
@@ -83,6 +92,20 @@
             font-family: "Open Sans", sans-serif;
             font-size: 1rem;
             flex-grow: 1;
+            max-width: 100%;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
         }
+    }
+}
+
+.icon-restricted {
+    i {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        margin-left: .5rem;
+        opacity: .5;
     }
 }

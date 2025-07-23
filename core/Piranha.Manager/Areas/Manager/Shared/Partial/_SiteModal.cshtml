@@ -1,7 +1,8 @@
+@inject IAuthorizationService Auth
 @inject ManagerLocalizer Localizer
 
-<div id="siteedit" class="modal fade" tabindex="-1" role="dialog">
-    <div class="modal-dialog modal-lg" role="document">
+<div id="siteedit" class="modal modal-panel" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-md" role="document">
         <div class="modal-content">
             <!-- Header -->
             <div class="modal-header border-bottom-0">
@@ -13,7 +14,7 @@
 
             <!-- Tabs -->
             <ul class="nav nav-tabs" role="tablist">
-                <li class="nav-item">
+                <li v-if="regions.length > 0" class="nav-item">
                     <a v-on:click.prevent="selectRegion({ uid: 'uid-settings' })" href="#" class="nav-link" :class="{ active: selectedRegion.uid === 'uid-settings' }">@Localizer.General["Settings"]</a>
                 </li>
                 <li v-for="(region) in regions" class="nav-item">
@@ -36,10 +37,47 @@
                                     </div>
                                 </div>
                             </div>
+                        </div>
+                        <div class="row">
                             <div class="col">
                                 <div class="form-group">
                                     <label>@Localizer.General["Internal id"]</label>
                                     <input v-model="internalId" type="text" class="form-control">
+                                </div>
+                            </div>
+                            <div class="col">
+                                <div class="form-group">
+                                    <label>@Localizer.General["Language"]</label>
+                                    <div class="input-group">
+                                        <select v-model="languageId" class="form-control">
+                                            <option :value="language.id" v-for="language in languages">{{ language.title }}</option>
+                                        </select>
+                                        @if ((await Auth.AuthorizeAsync(User, Permission.Language)).Succeeded)
+                                        {
+                                            <div class="input-group-append">
+                                                <button v-on:click.prevent="piranha.languageedit.open()" type="button" class="btn btn-icon btn-primary rounded ml-3" title="@Localizer.General["Configure languages"]">
+                                                    <i class="fas fa-cog"></i>
+                                                </button>
+                                            </div>
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div v-if="siteTypes.length > 0" class="col">
+                                <div class="form-group">
+                                    <label>@Localizer.General["Content type"]</label>
+                                    <select v-model="typeId" class="form-control">
+                                        <option></option>
+                                        <option :value="siteType.id" v-for="siteType in siteTypes">{{ siteType.title }}</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col">
+                                <div class="form-group">
+                                    <label>@Localizer.Site["Logo"]</label>
+                                    <image-field v-bind:uid="'site_logo_' + id" v-bind:meta="{ placeholder: null }" v-bind:model="logo"></image-field>
                                 </div>
                             </div>
                         </div>
@@ -49,13 +87,9 @@
                                     <label>@Localizer.Site["Hostnames"]</label>
                                     <input v-model="hostnames" type="text" class="form-control">
                                 </div>
-                            </div>
-                            <div class="col">
-                                <div class="form-group">
-                                    <label>@Localizer.General["Culture"]</label>
-                                    <input v-model="culture" type="text" class="form-control">
-                                </div>
-                            </div>
+                            </div>                            
+                        </div>
+                        <div class="row">
                         </div>
                         <div class="row">
                             <div class="col">
@@ -64,6 +98,8 @@
                                     <textarea v-model="description" class="form-control"></textarea>
                                 </div>
                             </div>
+                        </div>
+                        <div class="row">
                         </div>
                         <div class="row">
                             <div class="col">
@@ -75,15 +111,6 @@
                                     </div>
                                 </div>
                             </div>
-                            <div v-if="siteTypes.length > 0" class="col">
-                                <div class="form-group">
-                                    <label>@Localizer.General["Content type"]</label>
-                                    <select v-model="typeId" class="form-control">
-                                        <option></option>
-                                        <option :value="siteType.id" v-for="siteType in siteTypes">{{ siteType.title }}</option>
-                                    </select>
-                                </div>
-                            </div>
                         </div>
                     </div>
 
@@ -91,7 +118,7 @@
                     <div class="region" v-for="(region) in regions" v-if="selectedRegion.uid === region.meta.uid">
                         <region v-bind:content="'site'" v-bind:type="typeId" v-bind:model="region"></region>
                     </div>
-                </form>                
+                </form>
             </div>
 
             <!-- Footer -->

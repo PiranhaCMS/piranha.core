@@ -1,7 +1,11 @@
 @import "variables";
 
 .actions {
-    a {
+    white-space: nowrap;
+
+    a, button {
+        background-color: transparent;
+        border: none;
         display: inline-block;
         width: 1.5rem;
         height: 1.5rem;
@@ -20,6 +24,15 @@
 
             &:hover, &:focus {
                 background-color: $danger;
+                color: $white;
+            }
+        }
+
+        &.success {
+            color: $green;
+
+            &:hover, &:focus {
+                background-color: $green;
                 color: $white;
             }
         }

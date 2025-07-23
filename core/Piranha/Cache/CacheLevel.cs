@@ -1,27 +1,34 @@
 /*
- * Copyright (c) 2018 Håkan Edling
+ * Copyright (c) .NET Foundation and Contributors
  *
  * This software may be modified and distributed under the terms
- * of the MIT license.  See the LICENSE file for details.
- * 
- * http://github.com/piranhacms/piranha
- * 
+ * of the MIT license. See the LICENSE file for details.
+ *
+ * https://github.com/piranhacms/piranha.core
+ *
  */
 
-namespace Piranha.Cache
+namespace Piranha.Cache;
+
+/// <summary>
+/// The different cache levels available.
+/// </summary>
+public enum CacheLevel
 {
     /// <summary>
-    /// The different cache levels available.
+    /// Nothing is cached
     /// </summary>
-    public enum CacheLevel
-    {
-        // Nothing is stored cached
-        None,
-        // Sites & Params are cached
-        Minimal,
-        // Sites, Params, PageTypes & PostTypes are cached
-        Basic,
-        // Everything is cached
-        Full
-    }
+    None,
+    /// <summary>
+    /// Sites and Params are cached
+    /// </summary>
+    Minimal,
+    /// <summary>
+    /// Sites, Params, ContentTypes, PageTypes and PostTypes are cached
+    /// </summary>
+    Basic,
+    /// <summary>
+    /// Everything is cached
+    /// </summary>
+    Full
 }

@@ -1,0 +1,71 @@
+@model Piranha.AspNetCore.Identity.Models.RoleListModel
+@inject IAuthorizationService Auth
+@inject ManagerLocalizer Localizer
+@{
+    ViewBag.Title = "Roles";
+    ViewBag.MenuItem = "Roles";
+}
+
+<div class="top">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">@Localizer.General["Settings"]</li>
+            <li class="breadcrumb-item active" aria-current="page">Roles</li>
+        </ol>
+    </nav>
+
+    <div class="container-fluid">
+        <div class="top-nav">
+            @if ((await Auth.AuthorizeAsync(User, Piranha.AspNetCore.Identity.Permissions.RolesAdd)).Succeeded)
+            {
+                <a href="@Url.Action("Add")" class="btn btn-labeled btn-primary pull-right">
+                    <i class="fas fa-plus"></i>@Localizer.General["Add"]
+                </a>
+            }
+        </div>
+    </div>
+</div>
+
+<div class="container-fluid">
+    <table class="table table-borderless">
+        <thead>
+            <tr>
+                <th>@Localizer.General["Name"]</th>
+                <th class="text-center"># of Users</th>
+                <th class="actions one"></th>
+            </tr>
+        </thead>
+        <tbody>
+        @foreach (var role in Model.Roles)
+        {
+            <tr>
+                <td>
+                    @if ((await Auth.AuthorizeAsync(User, Piranha.AspNetCore.Identity.Permissions.RolesEdit)).Succeeded)
+                    {
+                        <a href="@Url.Action("Edit", new {id = role.Id})">@role.Name</a>
+                    }
+                    else
+                    {
+                        <span class="title">@role.Name</span>
+                    }
+                </td>
+                <td class="text-center">@role.UserCount</td>
+                <td class="actions one">
+                    @if (role.NormalizedName != "SYSADMIN")
+                    {
+                        @if ((await Auth.AuthorizeAsync(User, Piranha.AspNetCore.Identity.Permissions.RolesDelete)).Succeeded)
+                        {
+                            <form method="post" action="~/manager/role/delete">
+                                <input type="hidden" name="id" value="@role.Id">
+                                <button class="danger">
+                                    <span class="fas fa-trash"></span>
+                                </button>
+                            </form>
+                        }
+                    }
+                </td>
+            </tr>
+        }
+        </tbody>
+    </table>
+</div>

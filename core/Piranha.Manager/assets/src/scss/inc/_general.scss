@@ -2,6 +2,7 @@
 
 html {
     min-width: 768px;
+    direction: ltr;
 }
 
 body {
@@ -42,4 +43,18 @@ img {
     text-align: center;
     border: dashed 1px $gray-400;
     border-radius: .25rem;
+}
+
+div.pre-release {
+    background: $yellow;
+    padding: .5rem;
+    text-align: center;
+    color: #fff;
+    text-transform: uppercase;
+    font-weight: bold;
+    font-size: .8rem;
+}
+
+.dimmed {
+    opacity: .6;
 }

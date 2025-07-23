@@ -1,0 +1,76 @@
+@inject ManagerLocalizer Localizer
+
+<div id="contentSettings" class="modal modal-panel fade" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <!-- Header -->
+            <div class="modal-header border-bottom-0">
+                <h5 class="modal-title"><i class="fas fa-cog"></i> @Localizer.General["Settings"]</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+
+            <!-- Tabs -->
+            <ul class="nav nav-tabs" role="tablist">
+                <li v-if="(usePrimaryImage || useExcerpt) && (useBlocks || contentRegions.length > 0)" class="nav-item">
+                    <a href="#" class="nav-link" :class="{ active: selectedSetting === 'uid-settings' }" v-on:click.prevent="selectSetting('uid-settings')">@Localizer.General["General"]</a>
+                </li>
+                <li class="nav-item" v-for="region in settingRegions">
+                    <a href="#" class="nav-link" :class="{ active: selectedSetting === region.meta.uid }" v-on:click.prevent="selectSetting(region.meta.uid)">{{ region.meta.name }}</a>
+                </li>
+            </ul>
+
+            <!-- Body -->
+            <div class="modal-body bg-light">
+                <div v-if="(usePrimaryImage || useExcerpt) && (useBlocks || contentRegions.length > 0)" :class="{ 'd-none': selectedSetting != 'uid-settings' }">
+                    <div class="form-group" v-if="usePrimaryImage">
+                        <label>@Localizer.Content["Primary image"]</label>
+                        <div class="block image-block primary-image primary-image-modal">
+                            <div class="block-body has-media-picker rounded" :class="{ empty: primaryImage.id === null }">
+                                <img class="rounded" :src="primaryImageUrl">
+                                <div class="media-picker">
+                                    <div class="btn-group float-right">
+                                        <button v-on:click.prevent="selectPrimaryImage" class="btn btn-primary text-center">
+                                            <i class="fas fa-plus"></i>
+                                        </button>
+                                        <button v-on:click.prevent="removePrimaryImage" class="btn btn-danger text-center">
+                                            <i class="fas fa-times"></i>
+                                        </button>
+                                    </div>
+                                    <div class="card text-left">
+                                        <div class="card-body" v-if="primaryImage.id === null">
+                                            &nbsp;
+                                        </div>
+                                        <div class="card-body" v-else>
+                                            {{ primaryImage.media.filename }}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="content-blocker"></div>
+                        </div>
+                    </div>
+                    <div class="form-group" v-if="useExcerpt">
+                        <label>@Localizer.Content["Excerpt"]</label>
+                        <div v-if="useHtmlExcerpt" class="block text-block ingress" :class="{ empty: isExcerptEmpty }">
+                            <div id="excerpt-toolbar" class="component-toolbar"></div>
+                            <div id="excerpt-body" class="block-body html-block" contenteditable="true" v-html="excerpt" v-on:blur="onExcerptBlur">
+                            </div>
+                            <div class="content-blocker"></div>
+                        </div>
+                        <div v-else class="position-relative">
+                            <textarea v-model="excerpt" rows="5" maxlength="255" class="form-control"></textarea>
+                            <div class="content-blocker"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="region" :class="{ 'd-none': selectedSetting != region.meta.uid }" v-for="region in settingRegions">
+                    <region v-bind:content="'page'" v-bind:type="typeId" v-bind:model="region"></region>
+                    <div class="content-blocker"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

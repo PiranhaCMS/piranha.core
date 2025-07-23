@@ -1,34 +1,32 @@
 /*
- * Copyright (c) 2017-2018 Håkan Edling
+ * Copyright (c) .NET Foundation and Contributors
  *
  * This software may be modified and distributed under the terms
- * of the MIT license.  See the LICENSE file for details.
- * 
+ * of the MIT license. See the LICENSE file for details.
+ *
  * https://github.com/piranhacms/piranha.core
- * 
+ *
  */
 
 using Markdig;
 
-namespace Piranha.Extend
+namespace Piranha.Extend;
+
+/// <inheritdoc />
+public class DefaultMarkdown : IMarkdown
 {
     /// <summary>
-    /// Interface for converting markdown to Html.
+    /// Gets/sets the additional pipeline to use for markdown transformation.
     /// </summary>
-    public class DefaultMarkdown : IMarkdown
+    public MarkdownPipeline _pipeline { get; set; }
+
+    /// <inheritdoc />
+    public string Transform(string md)
     {
-        /// <summary>
-        /// Transforms the given markdown string to html.
-        /// </summary>
-        /// <param name="md">The markdown</param>
-        /// <returns>The transformed html</returns>
-        public string Transform(string md)
+        if (!string.IsNullOrEmpty(md))
         {
-            if (!string.IsNullOrEmpty(md))
-            {
-                return Markdown.ToHtml(md);
-            }
-            return md;
+            return Markdown.ToHtml(md, _pipeline);
         }
+        return md;
     }
 }

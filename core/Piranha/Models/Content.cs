@@ -1,51 +1,29 @@
-﻿/*
- * Copyright (c) 2016-2019 Håkan Edling
+/*
+ * Copyright (c) .NET Foundation and Contributors
  *
  * This software may be modified and distributed under the terms
- * of the MIT license.  See the LICENSE file for details.
+ * of the MIT license. See the LICENSE file for details.
  *
  * https://github.com/piranhacms/piranha.core
  *
  */
 
-using System;
-using System.ComponentModel.DataAnnotations;
+namespace Piranha.Models;
 
-namespace Piranha.Models
+/// <summary>
+/// Base class for generic content.
+/// </summary>
+/// <typeparam name="T">The content type</typeparam>
+public abstract class Content<T> : GenericContent where T : Content<T>
 {
     /// <summary>
-    /// Abstract base class for templated content.
+    /// Creates a new page model using the given page type id.
     /// </summary>
-    [Serializable]
-    public abstract class Content
+    /// <param name="api">The current api</param>
+    /// <param name="typeId">The unique page type id</param>
+    /// <returns>The new model</returns>
+    public static Task<T> CreateAsync(IApi api, string typeId = null)
     {
-        /// <summary>
-        /// Gets/sets the unique id.
-        /// </summary>
-        public Guid Id { get; set; }
-
-        /// <summary>
-        /// Gets/sets the content type id.
-        /// </summary>
-        //[Required]
-        [StringLength(64)]
-        public string TypeId { get; set; }
-
-        /// <summary>
-        /// Gets/sets the title.
-        /// </summary>
-        //[Required]
-        [StringLength(128)]
-        public string Title { get; set; }
-
-        /// <summary>
-        /// Gets/sets the created date.
-        /// </summary>
-        public DateTime Created { get; set; }
-
-        /// <summary>
-        /// Gets/sets the last modification date.
-        /// </summary>
-        public DateTime LastModified { get; set; }
+        return api.Content.CreateAsync<T>(typeId);
     }
 }

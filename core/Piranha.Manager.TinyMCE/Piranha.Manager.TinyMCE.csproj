@@ -1,10 +1,12 @@
 <Project Sdk="Microsoft.NET.Sdk.Razor">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
     <AddRazorSupportForMvc>true</AddRazorSupportForMvc>
-    <Version>8.0.0</Version>
-    <Company>Piranha CMS</Company>
+    <Description>TinyMCE WYSIWYG Editor for Piranha CMS</Description>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(GITHUB_ACTIONS)' == 'true'">
+    <ContinuousIntegrationBuild>true</ContinuousIntegrationBuild>
   </PropertyGroup>
 
   <ItemGroup>
@@ -17,6 +19,8 @@
 
   <ItemGroup>
     <Compile Remove="node_modules\**" />
+    <Content Remove="package.json" />
+    <Content Remove="package-lock.json" />
   </ItemGroup>
 
 </Project>

@@ -27,7 +27,18 @@ piranha.blockpicker = new Vue({
         open: function (callback, index, parentType) {
             var self = this;
 
-            fetch(piranha.baseUrl + "manager/api/content/blocktypes" + (parentType != null ? "/" + parentType : ""))
+            var url = piranha.baseUrl + "manager/api/content/blocktypes";
+
+            if (piranha.pageedit)
+            {
+                url += "/page/" + piranha.pageedit.typeId;
+            }
+            else if (piranha.postedit)
+            {
+                url += "/post/" + piranha.postedit.typeId;
+            }
+
+            fetch(url + (parentType != null ? "/" + parentType : ""))
                 .then(function (response) { return response.json(); })
                 .then(function (result) {
                     if (result.typeCount > 1) {

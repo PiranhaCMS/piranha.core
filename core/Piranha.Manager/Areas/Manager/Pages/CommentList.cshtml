@@ -8,7 +8,7 @@
 }
 @section script
 {
-    <script src="~/manager/assets/js/piranha.comment.min.js"></script>
+    <script src="~/manager/assets/js/piranha.comment.min.js?v=@Piranha.Utils.GetAssemblyVersionHash(typeof(Piranha.Manager.Module).Assembly)"></script>
     <script>
         piranha.permissions.load(function () {
             piranha.comment.load("@RouteData.Values["id"]");
@@ -41,17 +41,17 @@
                 <div class="col">
                     <div class="btn-group">
                         <button v-on:click.prevent="setStatus('all')" class="btn btn-sm" :class="{ 'btn-primary': state === 'all', 'btn-light': state !== 'all' }">@Localizer.General["All"]</button>
-                        <button v-on:click.prevent="setStatus('pending')" class="btn btn-sm" :class="{ 'btn-primary': state === 'pending', 'btn-light': state !== 'pending' }">Pending</button>
-                        <button v-on:click.prevent="setStatus('approved')" class="btn btn-sm" :class="{ 'btn-primary': state === 'approved', 'btn-light': state !== 'approved' }">Approved</button>
+                        <button v-on:click.prevent="setStatus('pending')" class="btn btn-sm" :class="{ 'btn-primary': state === 'pending', 'btn-light': state !== 'pending' }">@Localizer.Comment["Pending"]</button>
+                        <button v-on:click.prevent="setStatus('approved')" class="btn btn-sm" :class="{ 'btn-primary': state === 'approved', 'btn-light': state !== 'approved' }">@Localizer.Comment["Approved"]</button>
                     </div>
                     <table class="table table-borderless table-comments">
                         <thead>
                             <tr>
-                                <th class="w-20">Author</th>
-                                <th class="w-50">Comment</th>
-                                <th class="text-nowrap">Response To</th>
-                                <th class="text-center">Approved</th>
-                                <th>Created</th>
+                                <th class="w-20">@Localizer.General["Author"]</th>
+                                <th class="w-50">@Localizer.Comment["Comment"]</th>
+                                <th class="text-nowrap">@Localizer.Comment["Response to"]</th>
+                                <th class="text-center">@Localizer.Comment["Approved"]</th>
+                                <th>@Localizer.General["Created"]</th>
                                 <th class="actions one"></th>
                             </tr>
                         </thead>
@@ -70,7 +70,7 @@
                                 </td>
                                 <td class="align-middle">{{ comment.created }}</td>
                                 <td class="actions one align-middle">
-                                    <a v-on:click.prevent="remove(comment.id)" href="#" title="Delete" class="danger"><i class="fas fa-trash"></i></a>
+                                    <a v-if="piranha.permissions.comments.delete" v-on:click.prevent="remove(comment.id)" href="#" title="@Localizer.General["Delete"]" class="danger"><i class="fas fa-trash"></i></a>
                                 </td>
                             </tr>
                         </tbody>

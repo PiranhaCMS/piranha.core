@@ -1,38 +1,46 @@
 ﻿/*
- * Copyright (c) 2016-2017 Håkan Edling
+ * Copyright (c) .NET Foundation and Contributors
  *
  * This software may be modified and distributed under the terms
- * of the MIT license.  See the LICENSE file for details.
+ * of the MIT license. See the LICENSE file for details.
  *
  * https://github.com/piranhacms/piranha.core
  *
  */
 
 using Piranha.Models;
-using System;
 
-namespace Piranha.Extend
+namespace Piranha.Extend;
+
+/// <summary>
+/// Attribute for marking a property as a field.
+/// </summary>
+[AttributeUsage(AttributeTargets.Property)]
+public class FieldAttribute : Attribute
 {
     /// <summary>
-    /// Attribute for marking a property as a field.
+    /// Gets/sets the optional title.
     /// </summary>
-    [AttributeUsage(AttributeTargets.Property)]
-    public class FieldAttribute : Attribute
-    {
-        /// <summary>
-        /// Gets/sets the optional title.
-        /// </summary>
-        public string Title { get; set; }
+    public string Title { get; set; }
 
-        /// <summary>
-        /// Gets/sets the field options.
-        /// </summary>
-        public FieldOption Options { get; set; }
+    /// <summary>
+    /// Gets/sets the optional description.
+    /// </summary>
+    public string Description { get; set; }
 
-        /// <summary>
-        /// Gets/sets the optional placeholder for
-        /// text based fields.
-        /// </summary>
-        public string Placeholder { get; set; }
-    }
+    /// <summary>
+    /// Gets/sets the field options.
+    /// </summary>
+    public FieldOption Options { get; set; }
+
+    /// <summary>
+    /// Gets/sets the optional placeholder for
+    /// text based fields.
+    /// </summary>
+    public string Placeholder { get; set; }
+
+    /// <summary>
+    /// Gets/sets the optional sort order.
+    /// </summary>
+    public int SortOrder { get; set; } = Int32.MaxValue;
 }

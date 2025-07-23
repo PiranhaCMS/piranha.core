@@ -8,6 +8,7 @@
 piranha.editor.addInline = function (id, toolbarId) {
     tinymce.init({
         selector: "#" + id,
+        browser_spellcheck: true,
         fixed_toolbar_container: "#" + toolbarId,
         menubar: false,
         branding: false,
@@ -20,6 +21,7 @@ piranha.editor.addInline = function (id, toolbarId) {
         width: "100%",
         autoresize_min_height: 0,
         toolbar: piranha.editorconfig.toolbar,
+        extended_valid_elements: piranha.editorconfig.extended_valid_elements,
         block_formats: piranha.editorconfig.block_formats,
         style_formats: piranha.editorconfig.style_formats,
         file_picker_callback: function(callback, value, meta) {

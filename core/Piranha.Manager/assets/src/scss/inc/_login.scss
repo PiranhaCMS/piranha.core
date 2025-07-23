@@ -1,9 +1,68 @@
 @import "variables";
 
+@keyframes shake-box {
+    0% {
+        top: -21px;
+    }
+
+    10%, 90% {
+        transform: translate3d(-1px, 0, 0);
+    }
+
+    20%, 80% {
+        transform: translate3d(2px, 0, 0);
+    }
+
+    30%, 50%, 70% {
+        transform: translate3d(-4px, 0, 0);
+    }
+
+    40%, 60% {
+        transform: translate3d(4px, 0, 0);
+    }
+
+    100% {
+        top: 0;
+    }
+}
+
+@keyframes shake-message {
+    0% {
+        opacity: 0;
+        transform: scale(.7);
+    }
+
+    10%, 90% {
+        transform: translate3d(-2px, 0, 0);
+    }
+
+    20%, 80% {
+        transform: translate3d(4px, 0, 0);
+    }
+
+    30%, 50%, 70% {
+        transform: translate3d(-8px, 0, 0);
+    }
+
+    40%, 60% {
+        transform: translate3d(8px, 0, 0);
+    }
+
+    100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
 #login {
-    background: $primary url("../img/login.png");
+    background: #0C3C50 url("../img/login.png");
     background-size: cover;
-    margin-left: 0;
+    margin: 0;
+
+    .invalid-feedback {
+        color: $red-bright;
+        text-align: center;
+    }
 
     .container {
         max-width: 360px;
@@ -39,11 +98,43 @@
         }
 
         &.card-body-form {
+            position: relative;
+            background-color: transparent;
+
+            .col-form-label {
+                @include sr-only();
+            }
+
             .form-control {
-                //background: $gray-100;
-                border: 0;
                 font-weight: 300;
             }
+        }
+    }
+
+    .was-validated .form-control:invalid {
+        border-color: $red-bright;
+        box-shadow: 0 0 10px $red-bright;
+    }
+
+    .error-message {
+        margin: 0;
+        color: $red-bright;
+        text-align: center;
+        opacity: 0;
+        animation-delay: 0.5s;
+    }
+
+    .was-validated .error-message {
+        visibility: hidden;
+    }
+
+    .has-error {
+        .error-message {
+            animation: shake-message 0.75s cubic-bezier(.36,.07,.19,.97) both;
+        }
+
+        .card-body-form {
+            animation: shake-box 0.75s cubic-bezier(.36,.07,.19,.97) both;
         }
     }
 }

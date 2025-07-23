@@ -1,4 +1,4 @@
-﻿@page "~/manager/media/{folderId?}"
+@page "~/manager/media/{folderId?}"
 @model MediaListViewModel
 @inject IAuthorizationService Auth
 @inject ManagerLocalizer Localizer
@@ -8,7 +8,7 @@
 }
 @section script
 {
-    <script src="~/manager/assets/js/piranha.media.min.js"></script>
+    <script src="~/manager/assets/js/piranha.media.min.js?v=@Piranha.Utils.GetAssemblyVersionHash(typeof(Piranha.Manager.Module).Assembly)"></script>
 
     <script>
         piranha.permissions.load(function () {
@@ -16,9 +16,8 @@
         });
     </script>
 }
-
 <div id="media">
-    <div class="top mb-0">
+    <div class="top">
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb mb-0">
                 <li class="breadcrumb-item">@Localizer.Menu["Content"]</li>
@@ -38,43 +37,70 @@
 
     <div class="app" :class="{ ready: !loading }">
         <div class="container-fluid">
-            <nav class="my-3">
-                <ul class="nav nav-pills justify-content-center">
-                    <li class="nav-item ">
-                        <a href="#" v-on:click.prevent="showList" v-bind:class="{ active: listView }" class="nav-link" ><i class="fas fa-list"></i> @Localizer.Media["List"]</a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="#" v-on:click.prevent="showGallery" v-bind:class="{ active: !listView }" class="nav-link"><i class="fas fa-table"></i> @Localizer.Media["Gallery"]</a>
-                    </li>
-                </ul>
-            </nav>
-        </div>
-
-        @if ((await Auth.AuthorizeAsync(User, Permission.MediaAdd)).Succeeded)
-        {
-            <div class="container-fluid">
-                <div id="media-upload-container" class="dropzone-container">
-                    <form action="@Url.Action("Upload", "MediaApi")" class="dropzone needsclick dz-clickable" enctype="multipart/form-data">
-                        <input type="hidden" name="Model.ParentId" v-model="currentFolderId" />
-                        <div class="dz-message needsclick text-center">
-                            <span class="fas fa-cloud-upload-alt"></span>
-                            @Localizer.Media["Drop files here or click to upload."]
+            <div class="row">
+                <div class="col-lg-3 col-4">
+                    <div class="mb-3">
+                        <button class="btn btn-sm btn-primary" v-on:click="editAddFolder()">
+                            <i class="fas fa-plus"></i>
+                        </button>
+                        <button v-if="currentFolderId != null" v-on:click="editFolder()" class="btn btn-sm btn-primary">
+                            <i class="fas fa-pen"></i>
+                        </button>
+                        <button v-if="currentFolderId != null && canDelete" class="btn btn-sm btn-danger" v-on:click.prevent="removeFolder(currentFolderId)">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </div>
+                    <div class="dd folder-container">
+                        <ol class="folders dd-list">
+                            <li class="droppable" :class="{ active: currentFolderId === null }" v-on:dragover="dragover" v-on:dragleave="dragleave" v-on:drop="drop($event, null)">
+                                <a v-on:click.prevent="load()" href="#">
+                                    <i class="fas fa-hdd"></i>@Localizer.Media["Media"]
+                                    <span class="badge badge-light float-right">{{ rootCount }}</span>
+                                </a>
+                                <ol v-if="currentFolderId === null && isAdding" class="dd-list">
+                                    <form v-on:submit.prevent="addFolder()" class="d-inline-block">
+                                        <i class="fas fa-folder"></i><input id="add-folder" type="text" v-on:keyup.esc="isAdding = false" v-model="folder.name" class="form-control form-control-sm d-inline-block w-auto">
+                                    </form>
+                                </ol>
+                            </li>
+                            <ol class="dd-list">
+                                <folder-item v-for="item in structure" v-bind:key="item.id" v-bind:selected="currentFolderId" v-bind:item="item"></folder-item>
+                            </ol>
+                        </ol>
+                    </div>
+                </div>
+                <div class="col-lg-9 col-8">
+                    <div class="d-flex mb-3">
+                        <button v-on:click="showGallery()" class="btn btn-sm" :class="{ 'btn-light': !listView, 'btn-white': listView }">
+                            <i class="fas fa-table"></i>
+                        </button>
+                        <button v-on:click="showList()" class="btn btn-sm" :class="{ 'btn-light': listView, 'btn-white': !listView }">
+                            <i class="fas fa-list"></i>
+                        </button>
+                        <button class="btn btn-sm btn-danger ml-auto" v-show="hasSelection" v-on:click="removeSelection()">
+                            <i class="fas fa-trash"></i> @Localizer.Media["Delete selected media"]
+                        </button>
+                    </div>
+                    @if ((await Auth.AuthorizeAsync(User, Permission.MediaAdd)).Succeeded)
+                    {
+                        <div id="media-upload-container" class="dropzone-container mb-3">
+                            <form action="@Url.Action("Upload", "MediaApi")" class="dropzone needsclick dz-clickable" enctype="multipart/form-data">
+                                <input type="hidden" name="Model.ParentId" v-model="currentFolderId" />
+                                <div class="dz-message needsclick text-center">
+                                    <span class="fas fa-cloud-upload-alt"></span>
+                                    @Localizer.Media["Drop files here or click to upload."]
+                                </div>
+                                <div class="file-list"></div>
+                            </form>
+                            <ul class="media-list list-unstyled"></ul>
                         </div>
-                        <div class="file-list"></div>
-                    </form>
-                    <ul class="media-list list-unstyled"></ul>
+                    }
+
+                    <partial name="Partial/_MediaGallery" />
+                    <partial name="Partial/_MediaList" />
                 </div>
             </div>
-        }
-
-        <template v-if="listView">
-            <partial name="Partial/_MediaList" />
-        </template>
-
-        <template v-else>
-            <partial name="Partial/_MediaGallery" />
-        </template>
+        </div>
     </div>
-
     <partial name="Partial/_MediaFolderModal" />
 </div>

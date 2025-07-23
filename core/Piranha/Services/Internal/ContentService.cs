@@ -1,0 +1,377 @@
+/*
+ * Copyright (c) .NET Foundation and Contributors
+ *
+ * This software may be modified and distributed under the terms
+ * of the MIT license. See the LICENSE file for details.
+ *
+ * https://github.com/piranhacms/piranha.core
+ *
+ */
+
+using System.ComponentModel.DataAnnotations;
+using Piranha.Cache;
+using Piranha.Models;
+using Piranha.Repositories;
+
+namespace Piranha.Services;
+
+internal sealed class ContentService : IContentService
+{
+    private readonly IContentRepository _repo;
+    private readonly IContentFactory _factory;
+    private readonly ILanguageService _langService;
+    private readonly ICache _cache;
+    private readonly ISearch _search;
+
+    /// <summary>
+    /// Default constructor.
+    /// </summary>
+    /// <param name="repo">The page repository</param>
+    /// <param name="factory">The content factory</param>
+    /// <param name="langService">The language service</param>
+    /// <param name="cache">The optional cache service</param>
+    /// <param name="search">The optional search service</param>
+    public ContentService(IContentRepository repo, IContentFactory factory, ILanguageService langService, ICache cache = null, ISearch search = null)
+    {
+        _repo = repo;
+        _factory = factory;
+        _langService = langService;
+
+        if ((int)App.CacheLevel > 2)
+        {
+            _cache = cache;
+        }
+        _search = search;
+    }
+
+    /// <summary>
+    /// Creates and initializes a new content model.
+    /// </summary>
+    /// <param name="typeId">The content type id</param>
+    /// <returns>The created page</returns>
+    public async Task<T> CreateAsync<T>(string typeId) where T : GenericContent
+    {
+        if (string.IsNullOrEmpty(typeId))
+        {
+            typeId = typeof(T).Name;
+        }
+
+        var type = App.ContentTypes.GetById(typeId);
+
+        if (type != null)
+        {
+            var model = await _factory.CreateAsync<T>(type).ConfigureAwait(false);
+
+            return model;
+        }
+        return null;
+    }
+
+    /// <summary>
+    /// Gets all of the available content for the optional
+    /// group id.
+    /// </summary>
+    /// <param name="groupId">The optional group id</param>
+    /// <param name="languageId">The optional language id</param>
+    /// <returns>The available content</returns>
+    public Task<IEnumerable<DynamicContent>> GetAllAsync(string groupId = null, Guid? languageId = null)
+    {
+        return GetAllAsync<DynamicContent>(groupId, languageId);
+    }
+
+    /// <summary>
+    /// Gets all of the available content for the optional
+    /// group id.
+    /// </summary>
+    /// <typeparam name="T">The model type</typeparam>
+    /// <param name="groupId">The optional group id</param>
+    /// <param name="languageId">The optional language id</param>
+    /// <returns>The available content</returns>
+    public async Task<IEnumerable<T>> GetAllAsync<T>(string groupId = null, Guid? languageId = null) where T : GenericContent
+    {
+        var models = new List<T>();
+        var all = await _repo.GetAll(groupId).ConfigureAwait(false);
+
+        foreach (var contentId in all)
+        {
+            var content = await GetByIdAsync<T>(contentId, languageId).ConfigureAwait(false);
+
+            if (content != null)
+            {
+                models.Add(content);
+            }
+        }
+        return models;
+    }
+
+    /// <summary>
+    /// Gets the content model with the specified id.
+    /// </summary>
+    /// <param name="id">The unique id</param>
+    /// <param name="languageId">The optional language id</param>
+    /// <returns>The content model</returns>
+    public Task<DynamicContent> GetByIdAsync(Guid id, Guid? languageId = null)
+    {
+        return GetByIdAsync<DynamicContent>(id, languageId);
+    }
+
+    /// <summary>
+    /// Gets the content model with the specified id.
+    /// </summary>
+    /// <typeparam name="T">The model type</typeparam>
+    /// <param name="id">The unique id</param>
+    /// <param name="languageId">The optional language id</param>
+    /// <returns>The content model</returns>
+    public async Task<T> GetByIdAsync<T>(Guid id, Guid? languageId = null) where T : GenericContent
+    {
+        GenericContent model = null;
+
+        // Make sure we have a language id
+        if (languageId == null)
+        {
+            languageId = (await _langService.GetDefaultAsync())?.Id;
+        }
+
+        // First, try to get the model from cache
+        if (typeof(T) == typeof(ContentInfo))
+        {
+            if (_cache != null)
+            {
+                model = await _cache.GetAsync<GenericContent>($"ContentInfo_{languageId}_{id}").ConfigureAwait(false);
+            }
+        }
+        else if (!typeof(DynamicContent).IsAssignableFrom(typeof(T)))
+        {
+            if (_cache != null)
+            {
+                model = await _cache.GetAsync<GenericContent>($"Content_{languageId}_{id}").ConfigureAwait(false);
+            }
+        }
+
+        // If we have a model, let's initialize it
+        if (model != null)
+        {
+            if (model is IDynamicContent dynamicModel)
+            {
+                await _factory.InitDynamicAsync(dynamicModel, App.ContentTypes.GetById(model.TypeId)).ConfigureAwait(false);
+            }
+            else
+            {
+                await _factory.InitAsync(model, App.ContentTypes.GetById(model.TypeId)).ConfigureAwait(false);
+            }
+        }
+
+        // If we don't have a model, get it from the repository
+        if (model == null)
+        {
+            model = await _repo.GetById<T>(id, languageId.Value).ConfigureAwait(false);
+
+            await OnLoadAsync(model, languageId.Value).ConfigureAwait(false);
+        }
+
+        // Check that we got back the requested type from the
+        // repository
+        if (model != null && model is T)
+        {
+            return (T)model;
+        }
+        return null;
+    }
+
+    /// <summary>
+    /// Gets all available categories for the specified group.
+    /// </summary>
+    /// <param name="groupId">The group id</param>
+    /// <returns>The available categories</returns>
+    public Task<IEnumerable<Taxonomy>> GetAllCategoriesAsync(string groupId)
+    {
+        return _repo.GetAllCategories(groupId);
+    }
+
+    /// <summary>
+    /// Gets all available tags for the specified groupd.
+    /// </summary>
+    /// <param name="groupId">The group id</param>
+    /// <returns>The available tags</returns>
+    public Task<IEnumerable<Taxonomy>> GetAllTagsAsync(string groupId)
+    {
+        return _repo.GetAllTags(groupId);
+    }
+
+    /// <summary>
+    /// Gets the current translation status for the content model
+    /// with the given id.
+    /// </summary>
+    /// <param name="contentId">The unique content id</param>
+    /// <returns>The translation status</returns>
+    public Task<TranslationStatus> GetTranslationStatusByIdAsync(Guid contentId)
+    {
+        return _repo.GetTranslationStatusById(contentId);
+    }
+
+    /// <summary>
+    /// Gets the translation summary for the content group with
+    /// the given id.
+    /// </summary>
+    /// <param name="groupId">The group id</param>
+    /// <returns>The translation summary</returns>
+    public Task<TranslationSummary> GetTranslationStatusByGroupAsync(string groupId)
+    {
+        return _repo.GetTranslationStatusByGroup(groupId);
+    }
+
+    /// <summary>
+    /// Saves the given content model
+    /// </summary>
+    /// <param name="model">The content model</param>
+    /// <param name="languageId">The optional language id</param>
+    public async Task SaveAsync<T>(T model, Guid? languageId = null) where T : GenericContent
+    {
+        // Make sure we have valid content type
+        var type = App.ContentTypes.GetById(model.TypeId);
+        if (type == null)
+        {
+            throw new ValidationException("Content type is missing");
+        }
+
+        // Make sure we have an Id
+        if (model.Id == Guid.Empty)
+        {
+            model.Id = Guid.NewGuid();
+        }
+
+        // Make sure we have a language id
+        if (languageId == null)
+        {
+            languageId = (await _langService.GetDefaultAsync())?.Id;
+        }
+
+        // Validate model
+        var context = new ValidationContext(model);
+        Validator.ValidateObject(model, context, true);
+
+        // Ensure category
+        if (type.UseCategory)
+        {
+            if (model is ICategorizedContent categorizedModel)
+            {
+                if (categorizedModel.Category == null || (string.IsNullOrWhiteSpace(categorizedModel.Category.Title) && string.IsNullOrWhiteSpace(categorizedModel.Category.Slug)))
+                {
+                    throw new ValidationException("The Category field is required");
+                }
+            }
+        }
+
+        // Call hooks and save
+        App.Hooks.OnBeforeSave<GenericContent>(model);
+        await _repo.Save(model, languageId.Value);
+        App.Hooks.OnAfterSave<GenericContent>(model);
+
+        // Remove from cache
+        await RemoveFromCacheAsync(model, languageId.Value).ConfigureAwait(false);
+    }
+
+    /// <summary>
+    /// Deletes the content model with the specified id.
+    /// </summary>
+    /// <param name="id">The unique id</param>
+    public async Task DeleteAsync(Guid id)
+    {
+        var model = await GetByIdAsync<GenericContent>(id).ConfigureAwait(false);
+
+        if (model != null)
+        {
+            await DeleteAsync(model).ConfigureAwait(false);
+        }
+    }
+
+    /// <summary>
+    /// Deletes the given content model together with all of its translations.
+    /// </summary>
+    /// <param name="model">The content model</param>
+    public async Task DeleteAsync<T>(T model) where T : GenericContent
+    {
+        // Call hooks and delete
+        App.Hooks.OnBeforeDelete<GenericContent>(model);
+        await _repo.Delete(model.Id).ConfigureAwait(false);
+        App.Hooks.OnAfterDelete<GenericContent>(model);
+
+        // Delete search document
+        if (_search != null)
+        {
+            // TODO
+            // await _search.DeletePageAsync(model);
+        }
+
+        var languages = await _langService.GetAllAsync();
+        foreach (var language in languages)
+        {
+            // Remove from cache
+            await RemoveFromCacheAsync(model, language.Id).ConfigureAwait(false);
+        }
+    }
+
+    /// <summary>
+    /// Processes the model after it has been loaded from
+    /// the repository.
+    /// </summary>
+    /// <param name="model">The content model</param>
+    /// <param name="languageId">The language of the current model</param>
+    private async Task OnLoadAsync(GenericContent model, Guid languageId)
+    {
+        // Make sure we have a model
+        if (model == null) return;
+
+        // Initialize the model
+        if (model is IDynamicContent dynamicModel)
+        {
+            await _factory.InitDynamicAsync(dynamicModel, App.ContentTypes.GetById(model.TypeId)).ConfigureAwait(false);
+        }
+        else
+        {
+            await _factory.InitAsync(model, App.ContentTypes.GetById(model.TypeId)).ConfigureAwait(false);
+        }
+
+        // Initialize primary image
+        if (model.PrimaryImage == null)
+        {
+            model.PrimaryImage = new Extend.Fields.ImageField();
+        }
+
+        if (model.PrimaryImage.Id.HasValue)
+        {
+            await _factory.InitFieldAsync(model.PrimaryImage).ConfigureAwait(false);
+        }
+
+        // Execute on load hook
+        App.Hooks.OnLoad(model);
+
+        // Update the cache if available
+        if (_cache != null)
+        {
+            // Store the model
+            if (model is ContentInfo)
+            {
+                await _cache.SetAsync($"ContentInfo_{languageId}_{model.Id}", model).ConfigureAwait(false);
+            }
+            else if (model is not IDynamicContent)
+            {
+                await _cache.SetAsync($"Content_{languageId}_{model.Id}", model).ConfigureAwait(false);
+            }
+        }
+    }
+
+    /// <summary>
+    /// Removes the given model from the cache.
+    /// </summary>
+    /// <param name="model">The model</param>
+    /// <param name="languageId">The language of the current model</param>
+    private async Task RemoveFromCacheAsync(GenericContent model, Guid languageId)
+    {
+        if (_cache != null)
+        {
+            await _cache.RemoveAsync($"ContentInfo_{languageId}_{model.Id}").ConfigureAwait(false);
+            await _cache.RemoveAsync($"Content_{languageId}_{model.Id}").ConfigureAwait(false);
+        }
+    }
+}
