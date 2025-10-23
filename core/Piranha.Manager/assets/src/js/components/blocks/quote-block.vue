@@ -20,10 +20,10 @@ export default {
     },
     methods: {
         onAuthorBlur: function (e) {
-            this.model.author.value = e.target.innerText;
+            this.model.author.value = DOMPurify.sanitize(e.target.innerText, {USE_PROFILES: {html: true}} );
         },
         onBodyBlur: function (e) {
-            this.model.body.value = e.target.innerText;
+            this.model.body.value = DOMPurify.sanitize(e.target.innerText, {USE_PROFILES: {html: true}} );
 
             // Tell parent that title has been updated
             var title = this.model.body.value.replace(/(<([^>]+)>)/ig, "");

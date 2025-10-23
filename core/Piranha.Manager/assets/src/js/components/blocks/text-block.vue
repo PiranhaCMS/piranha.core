@@ -1,7 +1,7 @@
 <template>
     <div class="block-body" :class="{ empty: isEmpty }">
         <pre class="invisible" v-html="model.body.value"></pre>
-        <textarea v-model="model.body.value" v-on:blur="onBlur"></textarea>
+        <textarea v-text="model.body.value" v-on:change="onChange" v-on:blur="onBlur"></textarea>
     </div>
 </template>
 
@@ -9,6 +9,9 @@
 export default {
     props: ["uid", "model"],
     methods: {
+        onChange: function (e) {
+            this.model.body.value = DOMPurify.sanitize(e.target.value, {USE_PROFILES: {html: true}} );
+        },
         onBlur: function (e) {
             // this.model.body.value = e.target.innerHTML;
 
