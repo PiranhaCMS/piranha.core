@@ -6,6 +6,9 @@ jobs:
   build:
     runs-on: windows-latest
     name: Publish NuGet Packages
+    permissions:
+      id-token: write # Required for requesting the JWT
+
     steps:
 
     # Checkout
