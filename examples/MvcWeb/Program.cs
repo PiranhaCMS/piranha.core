@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using MvcWeb;
 using Piranha;
 using Piranha.AspNetCore.Identity.SQLite;
 using Piranha.AttributeBuilder;
@@ -54,23 +55,36 @@ if (app.Environment.IsDevelopment())
     app.UseDeveloperExceptionPage();
 }
 
-app.UsePiranha(options =>
+try
 {
-    // Initialize Piranha
-    App.Init(options.Api);
+    app.UsePiranha(options =>
+    {
+        // Initialize Piranha
+        App.Init(options.Api);
 
-    // Build content types
-    new ContentTypeBuilder(options.Api)
-        .AddAssembly(typeof(Program).Assembly)
-        .Build()
-        .DeleteOrphans();
+        // Build content types
+        new ContentTypeBuilder(options.Api)
+            .AddAssembly(typeof(Program).Assembly)
+            .Build()
+            .DeleteOrphans();
 
-    // Configure Tiny MCE
-    EditorConfig.FromFile("editorconfig.json");
+        // Configure Tiny MCE
+        EditorConfig.FromFile("editorconfig.json");
 
-    options.UseManager();
-    options.UseTinyMCE();
-    options.UseIdentity();
-});
+        options.UseManager();
+        options.UseTinyMCE();
+        options.UseIdentity();
 
-app.Run();
+        // Seed data
+
+        Seed.RunAsync(options.Api).GetAwaiter().GetResult();
+        
+    });
+    
+    app.Run();
+}
+catch (Exception ex)
+{
+    Console.WriteLine(ex);
+    throw;
+}

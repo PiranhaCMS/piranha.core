@@ -8,7 +8,8 @@
  *
  */
 
-using Newtonsoft.Json;
+using System.Text.Json;
+
 
 namespace Piranha.Data;
 
@@ -94,7 +95,7 @@ public sealed class Media : Models.MediaBase
 
         if (!string.IsNullOrWhiteSpace(str))
         {
-            foreach (var prop in JsonConvert.DeserializeObject<IEnumerable<Tuple<string, string>>>(str))
+            foreach (var prop in JsonSerializer.Deserialize<IEnumerable<Tuple<string, string>>>(str))
             {
                 if (!string.IsNullOrEmpty(prop.Item1))
                 {
@@ -113,6 +114,6 @@ public sealed class Media : Models.MediaBase
         {
             items.Add(new Tuple<string, string>(key, properties[key]));
         }
-        return JsonConvert.SerializeObject(items);
+        return JsonSerializer.Serialize(items);
     }
 }

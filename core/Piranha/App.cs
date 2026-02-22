@@ -9,7 +9,6 @@
  */
 
 using System.Reflection;
-using Newtonsoft.Json;
 using Piranha.Extend;
 using Piranha.Extend.Serializers;
 using Piranha.Runtime;
@@ -321,7 +320,7 @@ public sealed class App
 
         if (serializer != null)
             return serializer.Serialize(obj);
-        return JsonConvert.SerializeObject(obj);
+        return JsonSerializer.Serialize(obj);
     }
 
     /// <summary>
@@ -336,7 +335,7 @@ public sealed class App
 
         if (serializer != null)
             return serializer.Deserialize(value);
-        return JsonConvert.DeserializeObject(value, type);
+        return JsonSerializer.Deserialize(value, type);
     }
 
     /// <summary>

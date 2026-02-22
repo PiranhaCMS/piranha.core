@@ -8,8 +8,9 @@
  *
  */
 
+using System.Text.Json;
 using Microsoft.EntityFrameworkCore;
-using Newtonsoft.Json;
+
 using Piranha.Models;
 
 namespace Piranha.Repositories;
@@ -42,7 +43,7 @@ internal class PostTypeRepository : IPostTypeRepository
 
         foreach (var type in types)
         {
-            models.Add(JsonConvert.DeserializeObject<PostType>(type.Body));
+            models.Add(JsonSerializer.Deserialize<PostType>(type.Body));
         }
         return models;
     }
@@ -61,7 +62,7 @@ internal class PostTypeRepository : IPostTypeRepository
 
         if (type != null)
         {
-            return JsonConvert.DeserializeObject<PostType>(type.Body);
+            return JsonSerializer.Deserialize<PostType>(type.Body);
         }
         return null;
     }
@@ -86,7 +87,7 @@ internal class PostTypeRepository : IPostTypeRepository
             await _db.PostTypes.AddAsync(type).ConfigureAwait(false);
         }
         type.CLRType = model.CLRType;
-        type.Body = JsonConvert.SerializeObject(model);
+        type.Body = JsonSerializer.Serialize(model);
         type.LastModified = DateTime.Now;
 
         await _db.SaveChangesAsync().ConfigureAwait(false);

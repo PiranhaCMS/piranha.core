@@ -14,7 +14,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
-using Newtonsoft.Json;
+
 using Piranha.Manager;
 using Piranha.Manager.Hubs;
 using Piranha.Manager.Services;
@@ -148,7 +148,7 @@ public static class ManagerModuleExtensions
     }
 
     public static IMvcBuilder AddPiranhaManagerOptions(this IMvcBuilder builder,
-        Action<MvcNewtonsoftJsonOptions> jsonOptions = null)
+        Action<JsonOptions> jsonOptions = null)
     {
         return builder
             .AddRazorPagesOptions(options =>
@@ -157,14 +157,22 @@ public static class ManagerModuleExtensions
             })
             .AddViewLocalization()
             .AddDataAnnotationsLocalization()
-            .AddNewtonsoftJson(options =>
+            .AddJsonOptions(opts =>
             {
                 // Invoke custom json options
-                jsonOptions?.Invoke(options);
+                jsonOptions?.Invoke(opts);
 
                 // Set required options for Piranha
-                options.SerializerSettings.TypeNameHandling = TypeNameHandling.Auto;
+                
             });
+        // .AddNewtonsoftJson(options =>
+        // {
+        //     // Invoke custom json options
+        //     jsonOptions?.Invoke(options);
+        //
+        //     // Set required options for Piranha
+        //     options.SerializerSettings.TypeNameHandling = TypeNameHandling.Auto;
+        // });
     }
 
     /// <summary>

@@ -30,5 +30,5 @@ public sealed class ManagerOptions
     /// Gets/sets the optional JSON options for the Newtonsoft serializer.
     /// </summary>
     /// <value></value>
-    public Action<MvcNewtonsoftJsonOptions> JsonOptions { get; set; }
+    public Action<JsonOptions> JsonOptions { get; set; }
 }

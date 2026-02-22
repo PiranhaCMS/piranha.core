@@ -14,7 +14,6 @@ using System.Reflection;
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
-using Newtonsoft.Json;
 using Piranha.Extend;
 using Piranha.Runtime;
 
@@ -890,13 +889,13 @@ public static class Utils
             return obj;
         }
 
-        var settings = new JsonSerializerSettings
+        var settings = new JsonSerializerOptions()
         {
-            TypeNameHandling = TypeNameHandling.All
+            //TypeNameHandling = TypeNameHandling.All
         };
-        var json = JsonConvert.SerializeObject(obj, settings);
+        var json = JsonSerializer.Serialize(obj, settings);
 
-        return JsonConvert.DeserializeObject<T>(json, settings);
+        return JsonSerializer.Deserialize<T>(json, settings);
     }
 
     /// <summary>

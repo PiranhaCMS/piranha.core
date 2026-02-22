@@ -10,7 +10,6 @@
 
 using Piranha.Models;
 using Piranha.Manager.Models;
-using System.Data;
 
 namespace Piranha.Manager.Services;
 

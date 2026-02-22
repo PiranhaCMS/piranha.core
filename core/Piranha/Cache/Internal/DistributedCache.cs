@@ -9,7 +9,7 @@
  */
 
 using Microsoft.Extensions.Caching.Distributed;
-using Newtonsoft.Json;
+
 
 namespace Piranha.Cache;
 
@@ -17,7 +17,7 @@ namespace Piranha.Cache;
 internal sealed class DistributedCache : ICache
 {
     private readonly IDistributedCache _cache;
-    private readonly JsonSerializerSettings _jsonSettings;
+    private readonly JsonSerializerOptions _jsonSettings;
 
     /// <summary>
     /// Default constructor.
@@ -26,9 +26,9 @@ internal sealed class DistributedCache : ICache
     public DistributedCache(IDistributedCache cache)
     {
         _cache = cache;
-        _jsonSettings = new JsonSerializerSettings
+        _jsonSettings = new JsonSerializerOptions()
         {
-            TypeNameHandling = TypeNameHandling.All
+            //TypeNameHandling = TypeNameHandling.All
         };
     }
 
@@ -39,7 +39,7 @@ internal sealed class DistributedCache : ICache
 
         if (!string.IsNullOrEmpty(json))
         {
-            return JsonConvert.DeserializeObject<T>(json, _jsonSettings);
+            return JsonSerializer.Deserialize<T>(json, _jsonSettings);
         }
         return default;
     }
@@ -47,7 +47,7 @@ internal sealed class DistributedCache : ICache
     /// <inheritdoc />
     public async Task SetAsync<T>(string key, T value, CancellationToken cancellationToken = default)
     {
-        await _cache.SetStringAsync(key, JsonConvert.SerializeObject(value, _jsonSettings), cancellationToken).ConfigureAwait(false);
+        await _cache.SetStringAsync(key, JsonSerializer.Serialize(value, _jsonSettings), cancellationToken).ConfigureAwait(false);
     }
 
     /// <inheritdoc />

@@ -8,8 +8,9 @@
  *
  */
 
+using System.Text.Json;
 using Microsoft.EntityFrameworkCore;
-using Newtonsoft.Json;
+
 using Piranha.Data;
 using Piranha.Services;
 
@@ -231,7 +232,7 @@ internal class PostRepository : IPostRepository
             if (draft != null)
             {
                 // Transform data model
-                var post = JsonConvert.DeserializeObject<Post>(draft.Data);
+                var post = JsonSerializer.Deserialize<Post>(draft.Data);
 
                 return await _contentService.TransformAsync<T>(post, App.PostTypes.GetById(post.PostTypeId), ProcessAsync);
             }
@@ -411,7 +412,7 @@ internal class PostRepository : IPostRepository
             {
                 Id = Guid.NewGuid(),
                 PostId = id,
-                Data = JsonConvert.SerializeObject(post),
+                Data = JsonSerializer.Serialize(post),
                 Created = post.LastModified
             }).ConfigureAwait(false);
 
@@ -936,7 +937,7 @@ internal class PostRepository : IPostRepository
                         .ConfigureAwait(false);
                 }
 
-                draft.Data = JsonConvert.SerializeObject(post);
+                draft.Data = JsonSerializer.Serialize(post);
                 draft.Created = post.LastModified;
 
                 await _db.SaveChangesAsync().ConfigureAwait(false);
@@ -964,7 +965,7 @@ internal class PostRepository : IPostRepository
 
         foreach (var draft in drafts)
         {
-            var post = JsonConvert.DeserializeObject<Post>(draft.Data);
+            var post = JsonSerializer.Deserialize<Post>(draft.Data);
             used.Add(post.CategoryId);
         }
         used = used.Distinct().ToList();
@@ -1001,7 +1002,7 @@ internal class PostRepository : IPostRepository
 
         foreach (var draft in drafts)
         {
-            var post = JsonConvert.DeserializeObject<Post>(draft.Data);
+            var post = JsonSerializer.Deserialize<Post>(draft.Data);
 
             foreach (var tag in post.Tags)
             {

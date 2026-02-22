@@ -10,7 +10,6 @@
 
 using Microsoft.Extensions.DependencyInjection;
 using Piranha;
-using Piranha.Models;
 using Piranha.Services;
 
 public static class PiranhaStartupExtensions

@@ -10,6 +10,7 @@
 
 using Microsoft.Extensions.Localization;
 
+
 namespace Piranha.Manager
 {
     public class ManagerLocalizer

@@ -30,7 +30,7 @@ public static class PiranhaMemoryCacheExtensions
         {
             throw new NotSupportedException("You need to register a IMemoryCache service in order to use Memory Cache in Piranha");
         }
-        return services.AddSingleton<ICache, MemoryCache>();
+        return services.AddSingleton<ICache, Piranha.Cache.MemoryCache>();
     }
 
     /// <summary>

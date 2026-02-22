@@ -8,8 +8,9 @@
  *
  */
 
+using System.Text.Json;
 using Microsoft.EntityFrameworkCore;
-using Newtonsoft.Json;
+
 using Piranha.Data;
 using Piranha.Services;
 
@@ -212,7 +213,7 @@ internal class PageRepository : IPageRepository
             if (draft != null)
             {
                 // Transform data model
-                var page = JsonConvert.DeserializeObject<Page>(draft.Data);
+                var page = JsonSerializer.Deserialize<Page>(draft.Data);
 
                 return await _contentService.TransformAsync<T>(page, App.PageTypes.GetById(page.PageTypeId), ProcessAsync);
             }
@@ -343,7 +344,7 @@ internal class PageRepository : IPageRepository
             {
                 Id = Guid.NewGuid(),
                 PageId = id,
-                Data = JsonConvert.SerializeObject(page),
+                Data = JsonSerializer.Serialize(page),
                 Created = page.LastModified
             }).ConfigureAwait(false);
 
@@ -486,7 +487,7 @@ internal class PageRepository : IPageRepository
         bool onlyPending, int page, int pageSize)
     {
         // Create base query
-        IQueryable<PageComment> query = _db.PageComments
+        System.Linq.IQueryable<PageComment> query = _db.PageComments
             .AsNoTracking();
 
         // Check if only should include a comments for a certain post
@@ -546,7 +547,7 @@ internal class PageRepository : IPageRepository
 
         if (type != null)
         {
-            IQueryable<Page> pageQuery = _db.Pages;
+            System.Linq.IQueryable<Page> pageQuery = _db.Pages;
             if (isDraft)
             {
                 pageQuery = pageQuery.AsNoTracking();
@@ -672,7 +673,7 @@ internal class PageRepository : IPageRepository
                             .ConfigureAwait(false);
                     }
 
-                    draft.Data = JsonConvert.SerializeObject(page);
+                    draft.Data = JsonSerializer.Serialize(page);
                     draft.Created = page.LastModified;
 
                     await _db.SaveChangesAsync().ConfigureAwait(false);
@@ -785,7 +786,7 @@ internal class PageRepository : IPageRepository
                 // Now map the new block
                 for (var n = 0; n < blocks.Count; n++)
                 {
-                    IQueryable<Block> blockQuery = _db.Blocks;
+                    System.Linq.IQueryable<Block> blockQuery = _db.Blocks;
                     if (isDraft)
                     {
                         blockQuery = blockQuery.AsNoTracking();
@@ -882,7 +883,7 @@ internal class PageRepository : IPageRepository
                         .ConfigureAwait(false);
                 }
 
-                draft.Data = JsonConvert.SerializeObject(page);
+                draft.Data = JsonSerializer.Serialize(page);
                 draft.Created = page.LastModified;
 
                 await _db.SaveChangesAsync().ConfigureAwait(false);
@@ -896,11 +897,11 @@ internal class PageRepository : IPageRepository
     /// </summary>
     /// <typeparam name="T">The requested model type</typeparam>
     /// <returns>The queryable</returns>
-    private IQueryable<Page> GetQuery<T>()
+    private System.Linq.IQueryable<Page> GetQuery<T>()
     {
         var loadRelated = !typeof(Models.IContentInfo).IsAssignableFrom(typeof(T));
 
-        IQueryable<Page> query = _db.Pages
+        System.Linq.IQueryable<Page> query = _db.Pages
             .AsNoTracking()
             .Include(p => p.Permissions);
 

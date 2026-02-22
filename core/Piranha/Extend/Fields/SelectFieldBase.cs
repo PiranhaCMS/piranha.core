@@ -8,7 +8,8 @@
  *
  */
 
-using Newtonsoft.Json;
+using System.Text.Json.Serialization;
+
 
 namespace Piranha.Extend.Fields;
 

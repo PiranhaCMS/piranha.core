@@ -297,7 +297,7 @@ internal class ContentRepository : IContentRepository
                 .Include(c => c.Fields).ThenInclude(f => f.Translations)
                 .Include(c => c.Category)
                 .Include(c => c.Tags).ThenInclude(t => t.Taxonomy)
-                .AsSplitQuery()
+                                         .AsSplitQuery()
                 .FirstOrDefaultAsync(p => p.Id == model.Id)
                 .ConfigureAwait(false);
 

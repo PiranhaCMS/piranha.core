@@ -8,8 +8,9 @@
  *
  */
 
+using System.Text.Json;
 using Microsoft.EntityFrameworkCore;
-using Newtonsoft.Json;
+
 using Piranha.Models;
 
 namespace Piranha.Repositories;
@@ -42,7 +43,7 @@ internal class ContentTypeRepository : IContentTypeRepository
 
         foreach (var type in types)
         {
-            models.Add(JsonConvert.DeserializeObject<ContentType>(type.Body));
+            models.Add(JsonSerializer.Deserialize<ContentType>(type.Body));
         }
         return models;
     }
@@ -64,7 +65,7 @@ internal class ContentTypeRepository : IContentTypeRepository
 
         foreach (var type in types)
         {
-            models.Add(JsonConvert.DeserializeObject<ContentType>(type.Body));
+            models.Add(JsonSerializer.Deserialize<ContentType>(type.Body));
         }
         return models;
     }
@@ -83,7 +84,7 @@ internal class ContentTypeRepository : IContentTypeRepository
 
         if (type != null)
         {
-            return JsonConvert.DeserializeObject<ContentType>(type.Body);
+            return JsonSerializer.Deserialize<ContentType>(type.Body);
         }
         return null;
     }
@@ -108,7 +109,7 @@ internal class ContentTypeRepository : IContentTypeRepository
             };
             await _db.ContentTypes.AddAsync(type).ConfigureAwait(false);
         }
-        type.Body = JsonConvert.SerializeObject(model);
+        type.Body = JsonSerializer.Serialize(model);
         type.LastModified = DateTime.Now;
 
         await _db.SaveChangesAsync().ConfigureAwait(false);

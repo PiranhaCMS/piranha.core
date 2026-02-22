@@ -8,7 +8,8 @@
  *
  */
 
-using Newtonsoft.Json;
+using System.Text.Json;
+
 
 namespace Piranha.Data;
 
@@ -39,7 +40,7 @@ public abstract class ContentRevisionBase
     public T GetData<T>()
     {
         if (!string.IsNullOrEmpty(Data))
-            return JsonConvert.DeserializeObject<T>(Data);
+            return JsonSerializer.Deserialize<T>(Data);
         return default(T);
     }
 }

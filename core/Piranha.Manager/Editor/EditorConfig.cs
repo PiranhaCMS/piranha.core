@@ -8,8 +8,6 @@
  *
  */
 
-using Newtonsoft.Json;
-
 namespace Piranha.Manager.Editor;
 
 /// <summary>
@@ -61,7 +59,7 @@ public class EditorConfig
         if (File.Exists(path)) {
             using (var json = File.OpenRead(path)) {
                 using (var reader = new StreamReader(json)) {
-                    Current = JsonConvert.DeserializeObject<EditorConfig>(reader.ReadToEnd());
+                    Current = JsonSerializer.Deserialize<EditorConfig>(reader.ReadToEnd());
                 }
             }
         } else {

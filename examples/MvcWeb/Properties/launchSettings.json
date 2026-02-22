@@ -1,0 +1,20 @@
+{
+  "profiles": {
+    "MvcWeb2": {
+      "commandName": "Project",
+      "launchBrowser": true,
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      },
+      "applicationUrl": "https://localhost:64472;http://localhost:64473"
+    },
+    "MvcWeb": {
+      "commandName": "Project",
+      "launchBrowser": true,
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      },
+      "applicationUrl": "https://localhost:64472;http://localhost:64473"
+    }
+  }
+}

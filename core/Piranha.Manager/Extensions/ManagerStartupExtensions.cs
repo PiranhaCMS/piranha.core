@@ -26,7 +26,7 @@ public static class ManagerStartupExtensions
     /// <returns>The updated builder</returns>
     public static PiranhaServiceBuilder UseManager(this PiranhaServiceBuilder serviceBuilder,
         Action<ManagerOptions> options = null,
-        Action<MvcNewtonsoftJsonOptions> jsonOptions = null)
+        Action<JsonOptions> jsonOptions = null)
     {
         // Perform optional configuration
         var managerOptions = new ManagerOptions();

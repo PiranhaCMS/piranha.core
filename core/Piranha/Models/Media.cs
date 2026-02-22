@@ -8,8 +8,6 @@
  *
  */
 
-using System.ComponentModel.DataAnnotations;
-
 namespace Piranha.Models;
 
 [Serializable]

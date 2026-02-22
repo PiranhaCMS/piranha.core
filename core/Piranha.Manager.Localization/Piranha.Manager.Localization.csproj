@@ -9,12 +9,9 @@
     <ContinuousIntegrationBuild>true</ContinuousIntegrationBuild>
   </PropertyGroup>
 
-  <ItemGroup Condition="'$(TargetFramework)' == 'net8.0'">
-    <PackageReference Include="Microsoft.Extensions.Localization" Version="8.0.0" />
-  </ItemGroup>
+<ItemGroup>
+  <PackageReference Include="Microsoft.Extensions.Localization" Version="10.0.3" />
+</ItemGroup>
 
-  <ItemGroup Condition="'$(TargetFramework)' == 'net9.0'">
-    <PackageReference Include="Microsoft.Extensions.Localization" Version="9.0.2" />
-  </ItemGroup>
 
 </Project>
