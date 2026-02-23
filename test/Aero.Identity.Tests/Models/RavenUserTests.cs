@@ -24,10 +24,11 @@ public class RavenUserTests
         var user = new RavenUser();
         var passkey = new PasskeyCredential
         {
-            CredentialId = "id1",
-            PublicKey = new byte[] { 1, 2, 3 },
+            CredentialId = new byte[] { 1, 2, 3 },
+            PublicKey = new byte[] { 4, 5, 6 },
+            CreatedAt = DateTimeOffset.UtcNow,
             SignCount = 1,
-            UserHandle = "handle1"
+            Name = "pk1"
         };
 
         // Act
@@ -35,9 +36,9 @@ public class RavenUserTests
 
         // Assert
         Assert.Single(user.Passkeys);
-        Assert.Equal("id1", user.Passkeys[0].CredentialId);
-        Assert.Equal(new byte[] { 1, 2, 3 }, user.Passkeys[0].PublicKey);
-        Assert.Equal(1, user.Passkeys[0].SignCount);
-        Assert.Equal("handle1", user.Passkeys[0].UserHandle);
+        Assert.Equal(new byte[] { 1, 2, 3 }, user.Passkeys[0].CredentialId);
+        Assert.Equal(new byte[] { 4, 5, 6 }, user.Passkeys[0].PublicKey);
+        Assert.Equal(1u, user.Passkeys[0].SignCount);
+        Assert.Equal("pk1", user.Passkeys[0].Name);
     }
 }

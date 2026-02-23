@@ -15,7 +15,13 @@ public class RavenUserStore<TUser> :
     IUserSecurityStampStore<TUser>,
     IUserEmailStore<TUser>,
     IUserPhoneNumberStore<TUser>,
-    IUserRoleStore<TUser>
+    IUserRoleStore<TUser>,
+    IUserLoginStore<TUser>,
+    IUserClaimStore<TUser>,
+    IUserTwoFactorStore<TUser>,
+    IUserAuthenticatorKeyStore<TUser>,
+    IUserTwoFactorRecoveryCodeStore<TUser>,
+    IUserPasskeyStore<TUser>
     where TUser : RavenUser, new()
 {
     private readonly IAsyncDocumentSession _session;
@@ -296,6 +302,311 @@ public class RavenUserStore<TUser> :
         return await _session.Query<TUser>()
             .Where(u => u.Roles.Contains(roleName))
             .ToListAsync(cancellationToken);
+    }
+
+    /// <inheritdoc />
+    public Task AddLoginAsync(TUser user, UserLoginInfo login, CancellationToken cancellationToken)
+    {
+        cancellationToken.ThrowIfCancellationRequested();
+        if (user == null) throw new ArgumentNullException(nameof(user));
+        if (login == null) throw new ArgumentNullException(nameof(login));
+
+        if (!user.Logins.Any(l => l.LoginProvider == login.LoginProvider && l.ProviderKey == login.ProviderKey))
+        {
+            user.Logins.Add(new RavenUserLogin
+            {
+                LoginProvider = login.LoginProvider,
+                ProviderKey = login.ProviderKey,
+                ProviderDisplayName = login.ProviderDisplayName
+            });
+        }
+        return Task.CompletedTask;
+    }
+
+    /// <inheritdoc />
+    public Task RemoveLoginAsync(TUser user, string loginProvider, string providerKey, CancellationToken cancellationToken)
+    {
+        cancellationToken.ThrowIfCancellationRequested();
+        if (user == null) throw new ArgumentNullException(nameof(user));
+
+        var login = user.Logins.FirstOrDefault(l => l.LoginProvider == loginProvider && l.ProviderKey == providerKey);
+        if (login != null)
+        {
+            user.Logins.Remove(login);
+        }
+        return Task.CompletedTask;
+    }
+
+    /// <inheritdoc />
+    public Task<IList<UserLoginInfo>> GetLoginsAsync(TUser user, CancellationToken cancellationToken)
+    {
+        cancellationToken.ThrowIfCancellationRequested();
+        if (user == null) throw new ArgumentNullException(nameof(user));
+
+        return Task.FromResult<IList<UserLoginInfo>>(user.Logins.Select(l => new UserLoginInfo(l.LoginProvider, l.ProviderKey, l.ProviderDisplayName)).ToList());
+    }
+
+    /// <inheritdoc />
+    public async Task<TUser?> FindByLoginAsync(string loginProvider, string providerKey, CancellationToken cancellationToken)
+    {
+        cancellationToken.ThrowIfCancellationRequested();
+        return await _session.Advanced.AsyncDocumentQuery<TUser>()
+            .WhereEquals("Logins[].LoginProvider", loginProvider)
+            .AndAlso()
+            .WhereEquals("Logins[].ProviderKey", providerKey)
+            .FirstOrDefaultAsync(cancellationToken);
+    }
+
+    /// <inheritdoc />
+    public Task AddClaimsAsync(TUser user, IEnumerable<System.Security.Claims.Claim> claims, CancellationToken cancellationToken)
+    {
+        cancellationToken.ThrowIfCancellationRequested();
+        if (user == null) throw new ArgumentNullException(nameof(user));
+        if (claims == null) throw new ArgumentNullException(nameof(claims));
+
+        foreach (var claim in claims)
+        {
+            if (!user.Claims.Any(c => c.ClaimType == claim.Type && c.ClaimValue == claim.Value))
+            {
+                user.Claims.Add(new RavenUserClaim { ClaimType = claim.Type, ClaimValue = claim.Value });
+            }
+        }
+        return Task.CompletedTask;
+    }
+
+    /// <inheritdoc />
+    public Task ReplaceClaimAsync(TUser user, System.Security.Claims.Claim claim, System.Security.Claims.Claim newClaim, CancellationToken cancellationToken)
+    {
+        cancellationToken.ThrowIfCancellationRequested();
+        if (user == null) throw new ArgumentNullException(nameof(user));
+        if (claim == null) throw new ArgumentNullException(nameof(claim));
+        if (newClaim == null) throw new ArgumentNullException(nameof(newClaim));
+
+        var existingClaims = user.Claims.Where(c => c.ClaimType == claim.Type && c.ClaimValue == claim.Value).ToList();
+        foreach (var existingClaim in existingClaims)
+        {
+            existingClaim.ClaimType = newClaim.Type;
+            existingClaim.ClaimValue = newClaim.Value;
+        }
+        return Task.CompletedTask;
+    }
+
+    /// <inheritdoc />
+    public Task RemoveClaimsAsync(TUser user, IEnumerable<System.Security.Claims.Claim> claims, CancellationToken cancellationToken)
+    {
+        cancellationToken.ThrowIfCancellationRequested();
+        if (user == null) throw new ArgumentNullException(nameof(user));
+        if (claims == null) throw new ArgumentNullException(nameof(claims));
+
+        foreach (var claim in claims)
+        {
+            var existingClaim = user.Claims.FirstOrDefault(c => c.ClaimType == claim.Type && c.ClaimValue == claim.Value);
+            if (existingClaim != null)
+            {
+                user.Claims.Remove(existingClaim);
+            }
+        }
+        return Task.CompletedTask;
+    }
+
+    /// <inheritdoc />
+    public Task<IList<System.Security.Claims.Claim>> GetClaimsAsync(TUser user, CancellationToken cancellationToken)
+    {
+        cancellationToken.ThrowIfCancellationRequested();
+        if (user == null) throw new ArgumentNullException(nameof(user));
+
+        return Task.FromResult<IList<System.Security.Claims.Claim>>(user.Claims.Select(c => new System.Security.Claims.Claim(c.ClaimType, c.ClaimValue)).ToList());
+    }
+
+    /// <inheritdoc />
+    public async Task<IList<TUser>> GetUsersForClaimAsync(System.Security.Claims.Claim claim, CancellationToken cancellationToken)
+    {
+        cancellationToken.ThrowIfCancellationRequested();
+        if (claim == null) throw new ArgumentNullException(nameof(claim));
+
+        return await _session.Advanced.AsyncDocumentQuery<TUser>()
+            .WhereEquals("Claims[].ClaimType", claim.Type)
+            .AndAlso()
+            .WhereEquals("Claims[].ClaimValue", claim.Value)
+            .ToListAsync(cancellationToken);
+    }
+
+    /// <inheritdoc />
+    public Task SetTwoFactorEnabledAsync(TUser user, bool enabled, CancellationToken cancellationToken)
+    {
+        cancellationToken.ThrowIfCancellationRequested();
+        if (user == null) throw new ArgumentNullException(nameof(user));
+
+        user.TwoFactorEnabled = enabled;
+        return Task.CompletedTask;
+    }
+
+    /// <inheritdoc />
+    public Task<bool> GetTwoFactorEnabledAsync(TUser user, CancellationToken cancellationToken)
+    {
+        cancellationToken.ThrowIfCancellationRequested();
+        if (user == null) throw new ArgumentNullException(nameof(user));
+
+        return Task.FromResult(user.TwoFactorEnabled);
+    }
+
+    /// <inheritdoc />
+    public Task SetAuthenticatorKeyAsync(TUser user, string key, CancellationToken cancellationToken)
+    {
+        cancellationToken.ThrowIfCancellationRequested();
+        if (user == null) throw new ArgumentNullException(nameof(user));
+
+        user.AuthenticatorKey = key;
+        return Task.CompletedTask;
+    }
+
+    /// <inheritdoc />
+    public Task<string?> GetAuthenticatorKeyAsync(TUser user, CancellationToken cancellationToken)
+    {
+        cancellationToken.ThrowIfCancellationRequested();
+        if (user == null) throw new ArgumentNullException(nameof(user));
+
+        return Task.FromResult(user.AuthenticatorKey);
+    }
+
+    /// <inheritdoc />
+    public Task ReplaceCodesAsync(TUser user, IEnumerable<string> recoveryCodes, CancellationToken cancellationToken)
+    {
+        cancellationToken.ThrowIfCancellationRequested();
+        if (user == null) throw new ArgumentNullException(nameof(user));
+
+        user.RecoveryCodes = string.Join(";", recoveryCodes);
+        return Task.CompletedTask;
+    }
+
+    /// <inheritdoc />
+    public Task<bool> RedeemCodeAsync(TUser user, string code, CancellationToken cancellationToken)
+    {
+        cancellationToken.ThrowIfCancellationRequested();
+        if (user == null) throw new ArgumentNullException(nameof(user));
+
+        var codes = (user.RecoveryCodes ?? string.Empty).Split(';', StringSplitOptions.RemoveEmptyEntries).ToList();
+        if (codes.Remove(code))
+        {
+            user.RecoveryCodes = string.Join(";", codes);
+            return Task.FromResult(true);
+        }
+        return Task.FromResult(false);
+    }
+
+    /// <inheritdoc />
+    public Task<int> CountCodesAsync(TUser user, CancellationToken cancellationToken)
+    {
+        cancellationToken.ThrowIfCancellationRequested();
+        if (user == null) throw new ArgumentNullException(nameof(user));
+
+        var codes = (user.RecoveryCodes ?? string.Empty).Split(';', StringSplitOptions.RemoveEmptyEntries);
+        return Task.FromResult(codes.Length);
+    }
+
+    /// <inheritdoc />
+    public Task AddOrUpdatePasskeyAsync(TUser user, UserPasskeyInfo passkey, CancellationToken cancellationToken)
+    {
+        cancellationToken.ThrowIfCancellationRequested();
+        if (user == null) throw new ArgumentNullException(nameof(user));
+        if (passkey == null) throw new ArgumentNullException(nameof(passkey));
+
+        var existing = user.Passkeys.FirstOrDefault(p => p.CredentialId.SequenceEqual(passkey.CredentialId));
+        if (existing != null)
+        {
+            existing.PublicKey = passkey.PublicKey;
+            existing.SignCount = passkey.SignCount;
+            existing.CreatedAt = passkey.CreatedAt;
+            existing.Transports = passkey.Transports?.ToArray();
+            existing.IsBackupEligible = passkey.IsBackupEligible;
+            existing.IsBackedUp = passkey.IsBackedUp;
+            existing.IsUserVerified = passkey.IsUserVerified;
+            existing.ClientDataJson = passkey.ClientDataJson;
+            existing.AttestationObject = passkey.AttestationObject;
+            existing.Name = passkey.Name;
+        }
+        else
+        {
+            user.Passkeys.Add(new PasskeyCredential
+            {
+                CredentialId = passkey.CredentialId,
+                PublicKey = passkey.PublicKey,
+                CreatedAt = passkey.CreatedAt,
+                SignCount = passkey.SignCount,
+                Transports = passkey.Transports?.ToArray(),
+                IsBackupEligible = passkey.IsBackupEligible,
+                IsBackedUp = passkey.IsBackedUp,
+                IsUserVerified = passkey.IsUserVerified,
+                ClientDataJson = passkey.ClientDataJson,
+                AttestationObject = passkey.AttestationObject,
+                Name = passkey.Name
+            });
+        }
+        return Task.CompletedTask;
+    }
+
+    /// <inheritdoc />
+    public Task<IList<UserPasskeyInfo>> GetPasskeysAsync(TUser user, CancellationToken cancellationToken)
+    {
+        cancellationToken.ThrowIfCancellationRequested();
+        if (user == null) throw new ArgumentNullException(nameof(user));
+
+        return Task.FromResult<IList<UserPasskeyInfo>>(user.Passkeys.Select(p => new UserPasskeyInfo(
+            p.CredentialId,
+            p.PublicKey,
+            p.CreatedAt,
+            p.SignCount,
+            p.Transports,
+            p.IsBackupEligible,
+            p.IsBackedUp,
+            p.IsUserVerified,
+            p.ClientDataJson,
+            p.AttestationObject) { Name = p.Name }).ToList());
+    }
+
+    /// <inheritdoc />
+    public Task RemovePasskeyAsync(TUser user, byte[] credentialId, CancellationToken cancellationToken)
+    {
+        cancellationToken.ThrowIfCancellationRequested();
+        if (user == null) throw new ArgumentNullException(nameof(user));
+
+        var passkey = user.Passkeys.FirstOrDefault(p => p.CredentialId.SequenceEqual(credentialId));
+        if (passkey != null)
+        {
+            user.Passkeys.Remove(passkey);
+        }
+        return Task.CompletedTask;
+    }
+
+    /// <inheritdoc />
+    public async Task<TUser?> FindByPasskeyIdAsync(byte[] credentialId, CancellationToken cancellationToken)
+    {
+        cancellationToken.ThrowIfCancellationRequested();
+        return await _session.Advanced.AsyncDocumentQuery<TUser>()
+            .WhereEquals("Passkeys[].CredentialId", credentialId)
+            .FirstOrDefaultAsync(cancellationToken);
+    }
+
+    /// <inheritdoc />
+    public Task<UserPasskeyInfo?> FindPasskeyAsync(TUser user, byte[] credentialId, CancellationToken cancellationToken)
+    {
+        cancellationToken.ThrowIfCancellationRequested();
+        if (user == null) throw new ArgumentNullException(nameof(user));
+
+        var p = user.Passkeys.FirstOrDefault(p => p.CredentialId.SequenceEqual(credentialId));
+        if (p == null) return Task.FromResult<UserPasskeyInfo?>(null);
+
+        return Task.FromResult<UserPasskeyInfo?>(new UserPasskeyInfo(
+            p.CredentialId,
+            p.PublicKey,
+            p.CreatedAt,
+            p.SignCount,
+            p.Transports,
+            p.IsBackupEligible,
+            p.IsBackedUp,
+            p.IsUserVerified,
+            p.ClientDataJson,
+            p.AttestationObject) { Name = p.Name });
     }
 
     /// <inheritdoc />

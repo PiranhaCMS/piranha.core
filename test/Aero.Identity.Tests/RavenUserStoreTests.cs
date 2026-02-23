@@ -106,7 +106,18 @@ public class RavenUserStoreTests : RavenTestBase
     [Fact]
     public async Task CanSetSecurityStamp()
     {
-        // ... (previous content)
+        // Arrange
+        using var store = CreateStore();
+        using var session = store.OpenAsyncSession();
+        var userStore = new RavenUserStore<RavenUser>(session);
+        var user = new RavenUser();
+        var stamp = Guid.NewGuid().ToString();
+
+        // Act
+        await userStore.SetSecurityStampAsync(user, stamp, CancellationToken.None);
+
+        // Assert
+        Assert.Equal(stamp, user.SecurityStamp);
     }
 
     [Fact]
@@ -568,6 +579,394 @@ public class RavenUserStoreTests : RavenTestBase
         // Assert
         Assert.Single(result);
         Assert.Equal("user1", result[0].UserName);
+    }
+
+    [Fact]
+    public async Task CanAddLogin()
+    {
+        // Arrange
+        using var store = CreateStore();
+        using var session = store.OpenAsyncSession();
+        var userStore = new RavenUserStore<RavenUser>(session);
+        var user = new RavenUser { UserName = "test" };
+        var login = new UserLoginInfo("Google", "key1", "Google Display");
+
+        // Act
+        await userStore.AddLoginAsync(user, login, CancellationToken.None);
+
+        // Assert
+        Assert.Single(user.Logins);
+        Assert.Equal("Google", user.Logins[0].LoginProvider);
+        Assert.Equal("key1", user.Logins[0].ProviderKey);
+    }
+
+    [Fact]
+    public async Task CanRemoveLogin()
+    {
+        // Arrange
+        using var store = CreateStore();
+        using var session = store.OpenAsyncSession();
+        var userStore = new RavenUserStore<RavenUser>(session);
+        var user = new RavenUser { UserName = "test", Logins = new List<RavenUserLogin> { new RavenUserLogin { LoginProvider = "Google", ProviderKey = "key1" } } };
+
+        // Act
+        await userStore.RemoveLoginAsync(user, "Google", "key1", CancellationToken.None);
+
+        // Assert
+        Assert.Empty(user.Logins);
+    }
+
+    [Fact]
+    public async Task CanGetLogins()
+    {
+        // Arrange
+        using var store = CreateStore();
+        using var session = store.OpenAsyncSession();
+        var userStore = new RavenUserStore<RavenUser>(session);
+        var user = new RavenUser { UserName = "test", Logins = new List<RavenUserLogin> { new RavenUserLogin { LoginProvider = "Google", ProviderKey = "key1" } } };
+
+        // Act
+        var result = await userStore.GetLoginsAsync(user, CancellationToken.None);
+
+        // Assert
+        Assert.Single(result);
+        Assert.Equal("Google", result[0].LoginProvider);
+    }
+
+    [Fact]
+    public async Task CanFindByLogin()
+    {
+        // Arrange
+        using var store = CreateStore();
+        using var session = store.OpenAsyncSession();
+        var user = new RavenUser { UserName = "test", Logins = new List<RavenUserLogin> { new RavenUserLogin { LoginProvider = "Google", ProviderKey = "key1" } } };
+        await session.StoreAsync(user);
+        await session.SaveChangesAsync();
+
+        var userStore = new RavenUserStore<RavenUser>(session);
+
+        // Act
+        var dbUser = await userStore.FindByLoginAsync("Google", "key1", CancellationToken.None);
+
+        // Assert
+        Assert.NotNull(dbUser);
+        Assert.Equal(user.Id, dbUser.Id);
+    }
+
+    [Fact]
+    public async Task CanAddClaims()
+    {
+        // Arrange
+        using var store = CreateStore();
+        using var session = store.OpenAsyncSession();
+        var userStore = new RavenUserStore<RavenUser>(session);
+        var user = new RavenUser { UserName = "test" };
+        var claims = new List<System.Security.Claims.Claim> { new System.Security.Claims.Claim("type1", "value1") };
+
+        // Act
+        await userStore.AddClaimsAsync(user, claims, CancellationToken.None);
+
+        // Assert
+        Assert.Single(user.Claims);
+        Assert.Equal("type1", user.Claims[0].ClaimType);
+        Assert.Equal("value1", user.Claims[0].ClaimValue);
+    }
+
+    [Fact]
+    public async Task CanGetClaims()
+    {
+        // Arrange
+        using var store = CreateStore();
+        using var session = store.OpenAsyncSession();
+        var userStore = new RavenUserStore<RavenUser>(session);
+        var user = new RavenUser { UserName = "test", Claims = new List<RavenUserClaim> { new RavenUserClaim { ClaimType = "type1", ClaimValue = "value1" } } };
+
+        // Act
+        var result = await userStore.GetClaimsAsync(user, CancellationToken.None);
+
+        // Assert
+        Assert.Single(result);
+        Assert.Equal("type1", result[0].Type);
+        Assert.Equal("value1", result[0].Value);
+    }
+
+    [Fact]
+    public async Task CanRemoveClaims()
+    {
+        // Arrange
+        using var store = CreateStore();
+        using var session = store.OpenAsyncSession();
+        var userStore = new RavenUserStore<RavenUser>(session);
+        var user = new RavenUser { UserName = "test", Claims = new List<RavenUserClaim> { new RavenUserClaim { ClaimType = "type1", ClaimValue = "value1" }, new RavenUserClaim { ClaimType = "type2", ClaimValue = "value2" } } };
+        var claimsToRemove = new List<System.Security.Claims.Claim> { new System.Security.Claims.Claim("type1", "value1") };
+
+        // Act
+        await userStore.RemoveClaimsAsync(user, claimsToRemove, CancellationToken.None);
+
+        // Assert
+        Assert.Single(user.Claims);
+        Assert.Equal("type2", user.Claims[0].ClaimType);
+    }
+
+    [Fact]
+    public async Task ReplaceClaim_UpdatesClaim()
+    {
+        // Arrange
+        using var store = CreateStore();
+        using var session = store.OpenAsyncSession();
+        var userStore = new RavenUserStore<RavenUser>(session);
+        var user = new RavenUser { UserName = "test", Claims = new List<RavenUserClaim> { new RavenUserClaim { ClaimType = "type1", ClaimValue = "value1" } } };
+        var oldClaim = new System.Security.Claims.Claim("type1", "value1");
+        var newClaim = new System.Security.Claims.Claim("type1", "updated");
+
+        // Act
+        await userStore.ReplaceClaimAsync(user, oldClaim, newClaim, CancellationToken.None);
+
+        // Assert
+        Assert.Single(user.Claims);
+        Assert.Equal("updated", user.Claims[0].ClaimValue);
+    }
+
+    [Fact]
+    public async Task GetUsersForClaimAsync_ReturnsUsers()
+    {
+        // Arrange
+        using var store = CreateStore();
+        using var session = store.OpenAsyncSession();
+        var user1 = new RavenUser { UserName = "user1", Claims = new List<RavenUserClaim> { new RavenUserClaim { ClaimType = "type1", ClaimValue = "value1" } } };
+        var user2 = new RavenUser { UserName = "user2", Claims = new List<RavenUserClaim> { new RavenUserClaim { ClaimType = "type2", ClaimValue = "value2" } } };
+        await session.StoreAsync(user1);
+        await session.StoreAsync(user2);
+        await session.SaveChangesAsync();
+
+        var userStore = new RavenUserStore<RavenUser>(session);
+
+        // Act
+        var result = await userStore.GetUsersForClaimAsync(new System.Security.Claims.Claim("type1", "value1"), CancellationToken.None);
+
+        // Assert
+        Assert.Single(result);
+        Assert.Equal("user1", result[0].UserName);
+    }
+
+    [Fact]
+    public async Task CanSetTwoFactorEnabled()
+    {
+        // Arrange
+        using var store = CreateStore();
+        using var session = store.OpenAsyncSession();
+        var userStore = new RavenUserStore<RavenUser>(session);
+        var user = new RavenUser();
+
+        // Act
+        await userStore.SetTwoFactorEnabledAsync(user, true, CancellationToken.None);
+
+        // Assert
+        Assert.True(user.TwoFactorEnabled);
+    }
+
+    [Fact]
+    public async Task CanGetTwoFactorEnabled()
+    {
+        // Arrange
+        using var store = CreateStore();
+        using var session = store.OpenAsyncSession();
+        var userStore = new RavenUserStore<RavenUser>(session);
+        var user = new RavenUser { TwoFactorEnabled = true };
+
+        // Act
+        var result = await userStore.GetTwoFactorEnabledAsync(user, CancellationToken.None);
+
+        // Assert
+        Assert.True(result);
+    }
+
+    [Fact]
+    public async Task CanSetAuthenticatorKey()
+    {
+        // Arrange
+        using var store = CreateStore();
+        using var session = store.OpenAsyncSession();
+        var userStore = new RavenUserStore<RavenUser>(session);
+        var user = new RavenUser();
+        var key = "authkey";
+
+        // Act
+        await userStore.SetAuthenticatorKeyAsync(user, key, CancellationToken.None);
+
+        // Assert
+        Assert.Equal(key, user.AuthenticatorKey);
+    }
+
+    [Fact]
+    public async Task CanGetAuthenticatorKey()
+    {
+        // Arrange
+        using var store = CreateStore();
+        using var session = store.OpenAsyncSession();
+        var userStore = new RavenUserStore<RavenUser>(session);
+        var key = "authkey";
+        var user = new RavenUser { AuthenticatorKey = key };
+
+        // Act
+        var result = await userStore.GetAuthenticatorKeyAsync(user, CancellationToken.None);
+
+        // Assert
+        Assert.Equal(key, result);
+    }
+
+    [Fact]
+    public async Task CanReplaceCodes()
+    {
+        // Arrange
+        using var store = CreateStore();
+        using var session = store.OpenAsyncSession();
+        var userStore = new RavenUserStore<RavenUser>(session);
+        var user = new RavenUser();
+        var codes = new List<string> { "code1", "code2" };
+
+        // Act
+        await userStore.ReplaceCodesAsync(user, codes, CancellationToken.None);
+
+        // Assert
+        Assert.Equal("code1;code2", user.RecoveryCodes);
+    }
+
+    [Fact]
+    public async Task CanRedeemCode()
+    {
+        // Arrange
+        using var store = CreateStore();
+        using var session = store.OpenAsyncSession();
+        var userStore = new RavenUserStore<RavenUser>(session);
+        var user = new RavenUser { RecoveryCodes = "code1;code2" };
+
+        // Act
+        var result = await userStore.RedeemCodeAsync(user, "code1", CancellationToken.None);
+
+        // Assert
+        Assert.True(result);
+        Assert.Equal("code2", user.RecoveryCodes);
+    }
+
+    [Fact]
+    public async Task CanCountCodes()
+    {
+        // Arrange
+        using var store = CreateStore();
+        using var session = store.OpenAsyncSession();
+        var userStore = new RavenUserStore<RavenUser>(session);
+        var user = new RavenUser { RecoveryCodes = "code1;code2" };
+
+        // Act
+        var result = await userStore.CountCodesAsync(user, CancellationToken.None);
+
+        // Assert
+        Assert.Equal(2, result);
+    }
+
+    [Fact]
+    public async Task CanAddPasskey()
+    {
+        // Arrange
+        using var store = CreateStore();
+        using var session = store.OpenAsyncSession();
+        var userStore = new RavenUserStore<RavenUser>(session);
+        var user = new RavenUser();
+        var passkey = new UserPasskeyInfo(new byte[] { 1 }, new byte[] { 2 }, DateTimeOffset.UtcNow, 1, null, false, false, false, new byte[] { 3 }, new byte[] { 4 });
+
+        // Act
+        await userStore.AddOrUpdatePasskeyAsync(user, passkey, CancellationToken.None);
+
+        // Assert
+        Assert.Single(user.Passkeys);
+        Assert.Equal(new byte[] { 1 }, user.Passkeys[0].CredentialId);
+    }
+
+    [Fact]
+    public async Task CanGetPasskeys()
+    {
+        // Arrange
+        using var store = CreateStore();
+        using var session = store.OpenAsyncSession();
+        var userStore = new RavenUserStore<RavenUser>(session);
+        var user = new RavenUser { Passkeys = new List<PasskeyCredential> { new PasskeyCredential { CredentialId = new byte[] { 1 }, CreatedAt = DateTimeOffset.UtcNow, ClientDataJson = new byte[] { 3 }, AttestationObject = new byte[] { 4 } } } };
+
+        // Act
+        var result = await userStore.GetPasskeysAsync(user, CancellationToken.None);
+
+        // Assert
+        Assert.Single(result);
+        Assert.Equal(new byte[] { 1 }, result[0].CredentialId);
+    }
+
+    [Fact]
+    public async Task CanRemovePasskey()
+    {
+        // Arrange
+        using var store = CreateStore();
+        using var session = store.OpenAsyncSession();
+        var userStore = new RavenUserStore<RavenUser>(session);
+        var user = new RavenUser { Passkeys = new List<PasskeyCredential> { new PasskeyCredential { CredentialId = new byte[] { 1 } } } };
+
+        // Act
+        await userStore.RemovePasskeyAsync(user, new byte[] { 1 }, CancellationToken.None);
+
+        // Assert
+        Assert.Empty(user.Passkeys);
+    }
+
+    [Fact]
+    public async Task CanFindByPasskeyId()
+    {
+        // Arrange
+        using var store = CreateStore();
+        using var session = store.OpenAsyncSession();
+        var user = new RavenUser { UserName = "test", Passkeys = new List<PasskeyCredential> { new PasskeyCredential { CredentialId = new byte[] { 1 }, CreatedAt = DateTimeOffset.UtcNow, ClientDataJson = new byte[] { 3 }, AttestationObject = new byte[] { 4 } } } };
+        await session.StoreAsync(user);
+        await session.SaveChangesAsync();
+
+        var userStore = new RavenUserStore<RavenUser>(session);
+
+        // Act
+        var dbUser = await userStore.FindByPasskeyIdAsync(new byte[] { 1 }, CancellationToken.None);
+
+        // Assert
+        Assert.NotNull(dbUser);
+        Assert.Equal(user.Id, dbUser.Id);
+    }
+
+    [Fact]
+    public async Task CanFindPasskey()
+    {
+        // Arrange
+        using var store = CreateStore();
+        using var session = store.OpenAsyncSession();
+        var userStore = new RavenUserStore<RavenUser>(session);
+        var user = new RavenUser { Passkeys = new List<PasskeyCredential> { new PasskeyCredential { CredentialId = new byte[] { 1 }, CreatedAt = DateTimeOffset.UtcNow, ClientDataJson = new byte[] { 3 }, AttestationObject = new byte[] { 4 } } } };
+
+        // Act
+        var result = await userStore.FindPasskeyAsync(user, new byte[] { 1 }, CancellationToken.None);
+
+        // Assert
+        Assert.NotNull(result);
+        Assert.Equal(new byte[] { 1 }, result.CredentialId);
+    }
+
+    [Fact]
+    public async Task FindPasskey_ReturnsNullIfNotFound()
+    {
+        // Arrange
+        using var store = CreateStore();
+        using var session = store.OpenAsyncSession();
+        var userStore = new RavenUserStore<RavenUser>(session);
+        var user = new RavenUser();
+
+        // Act
+        var result = await userStore.FindPasskeyAsync(user, new byte[] { 1 }, CancellationToken.None);
+
+        // Assert
+        Assert.Null(result);
     }
 
     [Fact]
