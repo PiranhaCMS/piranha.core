@@ -19,7 +19,7 @@ public class IdentityIntegrationTests : RavenTestBase
         services.AddSingleton(store);
         services.AddScoped(s => s.GetRequiredService<IDocumentStore>().OpenAsyncSession());
         services.AddLogging(builder => builder.AddConsole());
-        
+
         services.AddIdentityCore<RavenUser>()
             .AddRavenDbStores();
 
@@ -44,7 +44,7 @@ public class IdentityIntegrationTests : RavenTestBase
 
         // Assert
         Assert.True(createResult.Succeeded);
-        
+
         var dbUser = await userManager.FindByNameAsync("integrated");
         Assert.NotNull(dbUser);
         Assert.Equal("integrated@example.com", dbUser.Email);
@@ -58,7 +58,7 @@ public class IdentityIntegrationTests : RavenTestBase
         var services = new ServiceCollection();
         services.AddSingleton(store);
         services.AddScoped(s => s.GetRequiredService<IDocumentStore>().OpenAsyncSession());
-        
+
         services.AddIdentityCore<RavenUser>()
             .AddRoles<RavenRole>()
             .AddRavenDbStores();
@@ -99,7 +99,7 @@ public class IdentityIntegrationTests : RavenTestBase
         // Assert
         var isInRole = await userManager.IsInRoleAsync(user, "Tester");
         Assert.True(isInRole);
-        
+
         var roles = await userManager.GetRolesAsync(user);
         Assert.Contains("TESTER", roles); // UserManager normalizes to uppercase
     }
@@ -112,7 +112,7 @@ public class IdentityIntegrationTests : RavenTestBase
         var services = new ServiceCollection();
         services.AddSingleton(store);
         services.AddScoped(s => s.GetRequiredService<IDocumentStore>().OpenAsyncSession());
-        
+
         services.AddIdentityCore<RavenUser>()
             .AddRoles<RavenRole>()
             .AddRavenDbStores();
@@ -127,17 +127,19 @@ public class IdentityIntegrationTests : RavenTestBase
         await roleManager.CreateAsync(new RavenRole { Name = "PowerUser" });
 
         // Bulk insert 1000 users
-        await using var bulk = store.BulkInsert();
-        for (int i = 0; i < 1000; i++)
+        await using (var bulk = store.BulkInsert())
         {
-            await bulk.StoreAsync(new RavenUser 
-            { 
-                UserName = $"user{i}", 
-                Email = $"user{i}@example.com",
-                NormalizedUserName = $"USER{i}",
-                NormalizedEmail = $"USER{i}@EXAMPLE.COM",
-                Roles = new List<string> { i % 10 == 0 ? "POWERUSER" : "USER" }
-            });
+            for (int i = 0; i < 1000; i++)
+            {
+                await bulk.StoreAsync(new RavenUser
+                {
+                    UserName = $"user{i}",
+                    Email = $"user{i}@example.com",
+                    NormalizedUserName = $"USER{i}",
+                    NormalizedEmail = $"USER{i}@EXAMPLE.COM",
+                    Roles = new List<string> { i % 10 == 0 ? "POWERUSER" : "USER" }
+                });
+            }
         }
 
         // Wait for indexing
@@ -156,6 +158,7 @@ public class IdentityIntegrationTests : RavenTestBase
             await userManager.CreateAsync(user, "Password123!");
             await userManager.AddToRoleAsync(user, "PowerUser");
         }
+
         await session.SaveChangesAsync();
 
         // Wait for indexing again
@@ -198,5 +201,78 @@ public class IdentityIntegrationTests : RavenTestBase
         var updatedUser = await userManager.FindByEmailAsync("updated500@example.com");
         Assert.NotNull(updatedUser);
         Assert.Equal("user500", updatedUser.UserName);
+    }
+
+    [Fact]
+    public async Task UserManager_CanFindUsersInMultipleRoles()
+    {
+        // Arrange
+        using var store = CreateStore();
+        var services = new ServiceCollection();
+        services.AddSingleton(store);
+        services.AddScoped(s => s.GetRequiredService<IDocumentStore>().OpenAsyncSession());
+
+        services.AddIdentityCore<RavenUser>()
+            .AddRoles<RavenRole>()
+            .AddRavenDbStores();
+
+        var serviceProvider = services.BuildServiceProvider();
+        using var scope = serviceProvider.CreateScope();
+        var userManager = scope.ServiceProvider.GetRequiredService<UserManager<RavenUser>>();
+        var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<RavenRole>>();
+        var session = scope.ServiceProvider.GetRequiredService<IAsyncDocumentSession>();
+
+        var roleNames = new[] { "RoleA", "RoleB", "RoleC" };
+        foreach (var roleName in roleNames)
+        {
+            await roleManager.CreateAsync(new RavenRole { Name = roleName });
+        }
+
+        // Create 25 users. 
+        // RoleA gets 15 users (0-14)
+        // RoleB gets 15 users (5-19)
+        // RoleC gets 15 users (10-24)
+        // Users 10-14 will be in all three roles.
+        var expectedUsersInAllRoles = new List<string>();
+
+        for (int i = 0; i < 25; i++)
+        {
+            var user = new RavenUser { UserName = $"intersection_user_{i}", Email = $"intersection{i}@example.com" };
+            await userManager.CreateAsync(user, "Password123!");
+
+            if (i >= 0 && i < 15) await userManager.AddToRoleAsync(user, "RoleA");
+            if (i >= 5 && i < 20) await userManager.AddToRoleAsync(user, "RoleB");
+            if (i >= 10 && i < 25) await userManager.AddToRoleAsync(user, "RoleC");
+
+            if (i >= 10 && i < 15)
+            {
+                expectedUsersInAllRoles.Add(user.UserName);
+            }
+        }
+
+        await session.SaveChangesAsync();
+
+        // Wait for indexing
+        using (var waitSession = store.OpenAsyncSession())
+        {
+            await waitSession.Query<RavenUser>()
+                .Customize(x => x.WaitForNonStaleResults())
+                .FirstOrDefaultAsync(u => u.UserName == "intersection_user_0");
+        }
+
+        // Act
+        // Find users who belong to all three roles
+        var query = session.Query<RavenUser>()
+            .Customize(x => x.WaitForNonStaleResults())
+            .Where(u => u.Roles.Contains("ROLEA") && u.Roles.Contains("ROLEB") && u.Roles.Contains("ROLEC"));
+
+        var usersInAllRoles = await query.ToListAsync();
+
+        // Assert
+        Assert.Equal(5, usersInAllRoles.Count);
+        foreach (var expectedUserName in expectedUsersInAllRoles)
+        {
+            Assert.Contains(usersInAllRoles, u => u.UserName == expectedUserName);
+        }
     }
 }
