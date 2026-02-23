@@ -28,12 +28,12 @@
     - [x] **Exhaustive Testing**: Achieve 100% coverage for 2FA, TOTP keys, recovery codes, and passkey management.
 - [x] Task: Conductor - User Manual Verification 'Phase 3: Advanced Identity Features' (Protocol in workflow.md) 6ac7d4d
 
-## Phase 4: Identity Service Integration
-- [ ] Task: Implement Identity Service Registration extensions
-    - [ ] Implement `.AddRavenDbIdentity<TUser, TRole>()` extension methods
-    - [ ] **Exhaustive Testing**: Achieve 100% coverage for DI registration and service configuration.
-- [ ] Task: Integrate with `SignInManager` and `UserManager`
-- [ ] Task: Conductor - User Manual Verification 'Phase 4: Identity Service Integration' (Protocol in workflow.md)
+## Phase 4: Identity Service Integration [checkpoint: 36b8229]
+- [x] Task: Implement Identity Service Registration extensions dcf02ec
+    - [x] Implement `.AddRavenDbIdentity<TUser, TRole>()` extension methods
+    - [x] **Exhaustive Testing**: Achieve 100% coverage for DI registration and service configuration.
+- [x] Task: Integrate with `SignInManager` and `UserManager` a787736
+- [x] Task: Conductor - User Manual Verification 'Phase 4: Identity Service Integration' (Protocol in workflow.md) 36b8229
 
 ## Phase 5: Piranha CMS Security Bridge
 - [ ] Task: Implement the security bridge for Piranha's built-in manager
