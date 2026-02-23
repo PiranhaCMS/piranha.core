@@ -21,7 +21,8 @@ public class RavenUserStore<TUser> :
     IUserTwoFactorStore<TUser>,
     IUserAuthenticatorKeyStore<TUser>,
     IUserTwoFactorRecoveryCodeStore<TUser>,
-    IUserPasskeyStore<TUser>
+    IUserPasskeyStore<TUser>,
+    IQueryableUserStore<TUser>
     where TUser : RavenUser, new()
 {
     private readonly IAsyncDocumentSession _session;
@@ -34,6 +35,9 @@ public class RavenUserStore<TUser> :
     {
         _session = session ?? throw new ArgumentNullException(nameof(session));
     }
+
+    /// <inheritdoc />
+    public IQueryable<TUser> Users => _session.Query<TUser>();
 
     /// <inheritdoc />
     public async Task<IdentityResult> CreateAsync(TUser user, CancellationToken cancellationToken)
@@ -67,6 +71,7 @@ public class RavenUserStore<TUser> :
     {
         cancellationToken.ThrowIfCancellationRequested();
         return await _session.Query<TUser>()
+            .Statistics(out var stats)
             .FirstOrDefaultAsync(u => u.NormalizedUserName == normalizedUserName, cancellationToken);
     }
 

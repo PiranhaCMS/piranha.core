@@ -10,7 +10,8 @@ namespace Aero.Identity;
 /// </summary>
 /// <typeparam name="TRole">The role type.</typeparam>
 public class RavenRoleStore<TRole> : 
-    IRoleStore<TRole>
+    IRoleStore<TRole>,
+    IQueryableRoleStore<TRole>
     where TRole : RavenRole, new()
 {
     private readonly IAsyncDocumentSession _session;
@@ -23,6 +24,9 @@ public class RavenRoleStore<TRole> :
     {
         _session = session ?? throw new ArgumentNullException(nameof(session));
     }
+
+    /// <inheritdoc />
+    public IQueryable<TRole> Roles => _session.Query<TRole>();
 
     /// <inheritdoc />
     public async Task<IdentityResult> CreateAsync(TRole role, CancellationToken cancellationToken)
