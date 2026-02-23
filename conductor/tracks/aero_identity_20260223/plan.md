@@ -18,15 +18,15 @@
     - [x] **Exhaustive Testing**: Achieve 100% coverage for role CRUD and validation logic.
 - [x] Task: Conductor - User Manual Verification 'Phase 2: RavenDB Stores (Core & Security)' (Protocol in workflow.md) 123ca89
 
-## Phase 3: Advanced Identity Features
-- [ ] Task: Implement `RavenUserStore` (Part 3: Logins & Claims)
-    - [ ] `IUserLoginStore`, `IUserClaimStore`
-    - [ ] **Exhaustive Testing**: Achieve 100% coverage for external logins and claims (including duplicate logins and claim filtering).
-- [ ] Task: Implement `RavenUserStore` (Part 4: 2FA & Passkeys)
-    - [ ] `IUserTwoFactorStore`, `IUserAuthenticatorKeyStore`, `IUserRecoveryCodeStore`
-    - [ ] `IUserPasskeyStore` (ASP.NET Core 10 FIDO2/WebAuthn)
-    - [ ] **Exhaustive Testing**: Achieve 100% coverage for 2FA, TOTP keys, recovery codes, and passkey management.
-- [ ] Task: Conductor - User Manual Verification 'Phase 3: Advanced Identity Features' (Protocol in workflow.md)
+## Phase 3: Advanced Identity Features [checkpoint: 6ac7d4d]
+- [x] Task: Implement `RavenUserStore` (Part 3: Logins & Claims) 09e2b53
+    - [x] `IUserLoginStore`, `IUserClaimStore`
+    - [x] **Exhaustive Testing**: Achieve 100% coverage for external logins and claims (including duplicate logins and claim filtering).
+- [x] Task: Implement `RavenUserStore` (Part 4: 2FA & Passkeys) 09e2b53
+    - [x] `IUserTwoFactorStore`, `IUserAuthenticatorKeyStore`, `IUserTwoFactorRecoveryCodeStore`
+    - [x] `IUserPasskeyStore` (ASP.NET Core 10 FIDO2/WebAuthn)
+    - [x] **Exhaustive Testing**: Achieve 100% coverage for 2FA, TOTP keys, recovery codes, and passkey management.
+- [x] Task: Conductor - User Manual Verification 'Phase 3: Advanced Identity Features' (Protocol in workflow.md) 6ac7d4d
 
 ## Phase 4: Identity Service Integration
 - [ ] Task: Implement Identity Service Registration extensions
