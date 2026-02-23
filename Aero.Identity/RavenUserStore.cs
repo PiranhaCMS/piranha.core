@@ -1,3 +1,4 @@
+using Aero.Identity.Models;
 using Microsoft.AspNetCore.Identity;
 using Raven.Client.Documents;
 using Raven.Client.Documents.Session;
@@ -11,8 +12,11 @@ namespace Aero.Identity;
 public class RavenUserStore<TUser> : 
     IUserStore<TUser>,
     IUserPasswordStore<TUser>,
-    IUserSecurityStampStore<TUser>
-    where TUser : IdentityUser, new()
+    IUserSecurityStampStore<TUser>,
+    IUserEmailStore<TUser>,
+    IUserPhoneNumberStore<TUser>,
+    IUserRoleStore<TUser>
+    where TUser : RavenUser, new()
 {
     private readonly IAsyncDocumentSession _session;
 
@@ -154,6 +158,144 @@ public class RavenUserStore<TUser> :
     {
         cancellationToken.ThrowIfCancellationRequested();
         return Task.FromResult(user.SecurityStamp);
+    }
+
+    /// <inheritdoc />
+    public Task SetEmailAsync(TUser user, string? email, CancellationToken cancellationToken)
+    {
+        cancellationToken.ThrowIfCancellationRequested();
+        user.Email = email;
+        return Task.CompletedTask;
+    }
+
+    /// <inheritdoc />
+    public Task<string?> GetEmailAsync(TUser user, CancellationToken cancellationToken)
+    {
+        cancellationToken.ThrowIfCancellationRequested();
+        return Task.FromResult(user.Email);
+    }
+
+    /// <inheritdoc />
+    public Task<bool> GetEmailConfirmedAsync(TUser user, CancellationToken cancellationToken)
+    {
+        cancellationToken.ThrowIfCancellationRequested();
+        return Task.FromResult(user.EmailConfirmed);
+    }
+
+    /// <inheritdoc />
+    public Task SetEmailConfirmedAsync(TUser user, bool confirmed, CancellationToken cancellationToken)
+    {
+        cancellationToken.ThrowIfCancellationRequested();
+        user.EmailConfirmed = confirmed;
+        return Task.CompletedTask;
+    }
+
+    /// <inheritdoc />
+    public async Task<TUser?> FindByEmailAsync(string normalizedEmail, CancellationToken cancellationToken)
+    {
+        cancellationToken.ThrowIfCancellationRequested();
+        return await _session.Query<TUser>()
+            .FirstOrDefaultAsync(u => u.NormalizedEmail == normalizedEmail, cancellationToken);
+    }
+
+    /// <inheritdoc />
+    public Task<string?> GetNormalizedEmailAsync(TUser user, CancellationToken cancellationToken)
+    {
+        cancellationToken.ThrowIfCancellationRequested();
+        return Task.FromResult(user.NormalizedEmail);
+    }
+
+    /// <inheritdoc />
+    public Task SetNormalizedEmailAsync(TUser user, string? normalizedEmail, CancellationToken cancellationToken)
+    {
+        cancellationToken.ThrowIfCancellationRequested();
+        user.NormalizedEmail = normalizedEmail;
+        return Task.CompletedTask;
+    }
+
+    /// <inheritdoc />
+    public Task SetPhoneNumberAsync(TUser user, string? phoneNumber, CancellationToken cancellationToken)
+    {
+        cancellationToken.ThrowIfCancellationRequested();
+        user.PhoneNumber = phoneNumber;
+        return Task.CompletedTask;
+    }
+
+    /// <inheritdoc />
+    public Task<string?> GetPhoneNumberAsync(TUser user, CancellationToken cancellationToken)
+    {
+        cancellationToken.ThrowIfCancellationRequested();
+        return Task.FromResult(user.PhoneNumber);
+    }
+
+    /// <inheritdoc />
+    public Task<bool> GetPhoneNumberConfirmedAsync(TUser user, CancellationToken cancellationToken)
+    {
+        cancellationToken.ThrowIfCancellationRequested();
+        return Task.FromResult(user.PhoneNumberConfirmed);
+    }
+
+    /// <inheritdoc />
+    public Task SetPhoneNumberConfirmedAsync(TUser user, bool confirmed, CancellationToken cancellationToken)
+    {
+        cancellationToken.ThrowIfCancellationRequested();
+        user.PhoneNumberConfirmed = confirmed;
+        return Task.CompletedTask;
+    }
+
+    /// <inheritdoc />
+    public Task AddToRoleAsync(TUser user, string roleName, CancellationToken cancellationToken)
+    {
+        cancellationToken.ThrowIfCancellationRequested();
+        if (user == null) throw new ArgumentNullException(nameof(user));
+        if (string.IsNullOrWhiteSpace(roleName)) throw new ArgumentNullException(nameof(roleName));
+
+        if (!user.Roles.Contains(roleName))
+        {
+            user.Roles.Add(roleName);
+        }
+        return Task.CompletedTask;
+    }
+
+    /// <inheritdoc />
+    public Task RemoveFromRoleAsync(TUser user, string roleName, CancellationToken cancellationToken)
+    {
+        cancellationToken.ThrowIfCancellationRequested();
+        if (user == null) throw new ArgumentNullException(nameof(user));
+        if (string.IsNullOrWhiteSpace(roleName)) throw new ArgumentNullException(nameof(roleName));
+
+        user.Roles.Remove(roleName);
+        return Task.CompletedTask;
+    }
+
+    /// <inheritdoc />
+    public Task<IList<string>> GetRolesAsync(TUser user, CancellationToken cancellationToken)
+    {
+        cancellationToken.ThrowIfCancellationRequested();
+        if (user == null) throw new ArgumentNullException(nameof(user));
+
+        return Task.FromResult<IList<string>>(user.Roles);
+    }
+
+    /// <inheritdoc />
+    public Task<bool> IsInRoleAsync(TUser user, string roleName, CancellationToken cancellationToken)
+    {
+        cancellationToken.ThrowIfCancellationRequested();
+        if (user == null) throw new ArgumentNullException(nameof(user));
+        if (string.IsNullOrWhiteSpace(roleName)) throw new ArgumentNullException(nameof(roleName));
+
+        return Task.FromResult(user.Roles.Contains(roleName));
+    }
+
+    /// <inheritdoc />
+    public async Task<IList<TUser>> GetUsersInRoleAsync(string roleName, CancellationToken cancellationToken)
+    {
+        cancellationToken.ThrowIfCancellationRequested();
+        if (string.IsNullOrWhiteSpace(roleName)) throw new ArgumentNullException(nameof(roleName));
+
+        return await _session.Query<TUser>()
+            .Where(u => u.Roles.Contains(roleName))
+            .ToListAsync(cancellationToken);
     }
 
     /// <inheritdoc />

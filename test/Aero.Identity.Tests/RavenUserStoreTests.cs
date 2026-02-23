@@ -328,6 +328,249 @@ public class RavenUserStoreTests : RavenTestBase
     }
 
     [Fact]
+    public async Task CanSetEmail()
+    {
+        // Arrange
+        using var store = CreateStore();
+        using var session = store.OpenAsyncSession();
+        var userStore = new RavenUserStore<RavenUser>(session);
+        var user = new RavenUser();
+        var email = "test@example.com";
+
+        // Act
+        await userStore.SetEmailAsync(user, email, CancellationToken.None);
+
+        // Assert
+        Assert.Equal(email, user.Email);
+    }
+
+    [Fact]
+    public async Task CanGetEmail()
+    {
+        // Arrange
+        using var store = CreateStore();
+        using var session = store.OpenAsyncSession();
+        var userStore = new RavenUserStore<RavenUser>(session);
+        var email = "test@example.com";
+        var user = new RavenUser { Email = email };
+
+        // Act
+        var result = await userStore.GetEmailAsync(user, CancellationToken.None);
+
+        // Assert
+        Assert.Equal(email, result);
+    }
+
+    [Fact]
+    public async Task CanSetEmailConfirmed()
+    {
+        // Arrange
+        using var store = CreateStore();
+        using var session = store.OpenAsyncSession();
+        var userStore = new RavenUserStore<RavenUser>(session);
+        var user = new RavenUser();
+
+        // Act
+        await userStore.SetEmailConfirmedAsync(user, true, CancellationToken.None);
+
+        // Assert
+        Assert.True(user.EmailConfirmed);
+    }
+
+    [Fact]
+    public async Task CanGetEmailConfirmed()
+    {
+        // Arrange
+        using var store = CreateStore();
+        using var session = store.OpenAsyncSession();
+        var userStore = new RavenUserStore<RavenUser>(session);
+        var user = new RavenUser { EmailConfirmed = true };
+
+        // Act
+        var result = await userStore.GetEmailConfirmedAsync(user, CancellationToken.None);
+
+        // Assert
+        Assert.True(result);
+    }
+
+    [Fact]
+    public async Task CanFindByEmail()
+    {
+        // Arrange
+        using var store = CreateStore();
+        using var session = store.OpenAsyncSession();
+        var user = new RavenUser { UserName = "test", Email = "test@example.com", NormalizedEmail = "TEST@EXAMPLE.COM" };
+        await session.StoreAsync(user);
+        await session.SaveChangesAsync();
+
+        var userStore = new RavenUserStore<RavenUser>(session);
+
+        // Act
+        var dbUser = await userStore.FindByEmailAsync("TEST@EXAMPLE.COM", CancellationToken.None);
+
+        // Assert
+        Assert.NotNull(dbUser);
+        Assert.Equal(user.Id, dbUser.Id);
+    }
+
+    [Fact]
+    public async Task CanSetPhoneNumber()
+    {
+        // Arrange
+        using var store = CreateStore();
+        using var session = store.OpenAsyncSession();
+        var userStore = new RavenUserStore<RavenUser>(session);
+        var user = new RavenUser();
+        var phone = "123456789";
+
+        // Act
+        await userStore.SetPhoneNumberAsync(user, phone, CancellationToken.None);
+
+        // Assert
+        Assert.Equal(phone, user.PhoneNumber);
+    }
+
+    [Fact]
+    public async Task CanGetPhoneNumber()
+    {
+        // Arrange
+        using var store = CreateStore();
+        using var session = store.OpenAsyncSession();
+        var userStore = new RavenUserStore<RavenUser>(session);
+        var phone = "123456789";
+        var user = new RavenUser { PhoneNumber = phone };
+
+        // Act
+        var result = await userStore.GetPhoneNumberAsync(user, CancellationToken.None);
+
+        // Assert
+        Assert.Equal(phone, result);
+    }
+
+    [Fact]
+    public async Task CanSetPhoneNumberConfirmed()
+    {
+        // Arrange
+        using var store = CreateStore();
+        using var session = store.OpenAsyncSession();
+        var userStore = new RavenUserStore<RavenUser>(session);
+        var user = new RavenUser();
+
+        // Act
+        await userStore.SetPhoneNumberConfirmedAsync(user, true, CancellationToken.None);
+
+        // Assert
+        Assert.True(user.PhoneNumberConfirmed);
+    }
+
+    [Fact]
+    public async Task CanGetPhoneNumberConfirmed()
+    {
+        // Arrange
+        using var store = CreateStore();
+        using var session = store.OpenAsyncSession();
+        var userStore = new RavenUserStore<RavenUser>(session);
+        var user = new RavenUser { PhoneNumberConfirmed = true };
+
+        // Act
+        var result = await userStore.GetPhoneNumberConfirmedAsync(user, CancellationToken.None);
+
+        // Assert
+        Assert.True(result);
+    }
+
+    [Fact]
+    public async Task CanAddToRole()
+    {
+        // Arrange
+        using var store = CreateStore();
+        using var session = store.OpenAsyncSession();
+        var userStore = new RavenUserStore<RavenUser>(session);
+        var user = new RavenUser { UserName = "test" };
+        await session.StoreAsync(user);
+        await session.SaveChangesAsync();
+
+        // Act
+        await userStore.AddToRoleAsync(user, "Admin", CancellationToken.None);
+
+        // Assert
+        Assert.Contains("Admin", user.Roles);
+    }
+
+    [Fact]
+    public async Task CanRemoveFromRole()
+    {
+        // Arrange
+        using var store = CreateStore();
+        using var session = store.OpenAsyncSession();
+        var userStore = new RavenUserStore<RavenUser>(session);
+        var user = new RavenUser { UserName = "test", Roles = new List<string> { "Admin" } };
+        await session.StoreAsync(user);
+        await session.SaveChangesAsync();
+
+        // Act
+        await userStore.RemoveFromRoleAsync(user, "Admin", CancellationToken.None);
+
+        // Assert
+        Assert.DoesNotContain("Admin", user.Roles);
+    }
+
+    [Fact]
+    public async Task CanGetRoles()
+    {
+        // Arrange
+        using var store = CreateStore();
+        using var session = store.OpenAsyncSession();
+        var userStore = new RavenUserStore<RavenUser>(session);
+        var roles = new List<string> { "Admin", "User" };
+        var user = new RavenUser { UserName = "test", Roles = roles };
+
+        // Act
+        var result = await userStore.GetRolesAsync(user, CancellationToken.None);
+
+        // Assert
+        Assert.Equal(roles, result);
+    }
+
+    [Fact]
+    public async Task IsInRole_ReturnsTrueIfInRole()
+    {
+        // Arrange
+        using var store = CreateStore();
+        using var session = store.OpenAsyncSession();
+        var userStore = new RavenUserStore<RavenUser>(session);
+        var user = new RavenUser { UserName = "test", Roles = new List<string> { "Admin" } };
+
+        // Act
+        var result = await userStore.IsInRoleAsync(user, "Admin", CancellationToken.None);
+
+        // Assert
+        Assert.True(result);
+    }
+
+    [Fact]
+    public async Task GetUsersInRoleAsync_ReturnsUsers()
+    {
+        // Arrange
+        using var store = CreateStore();
+        using var session = store.OpenAsyncSession();
+        var user1 = new RavenUser { UserName = "user1", Roles = new List<string> { "Admin" } };
+        var user2 = new RavenUser { UserName = "user2", Roles = new List<string> { "User" } };
+        await session.StoreAsync(user1);
+        await session.StoreAsync(user2);
+        await session.SaveChangesAsync();
+
+        var userStore = new RavenUserStore<RavenUser>(session);
+
+        // Act
+        var result = await userStore.GetUsersInRoleAsync("Admin", CancellationToken.None);
+
+        // Assert
+        Assert.Single(result);
+        Assert.Equal("user1", result[0].UserName);
+    }
+
+    [Fact]
     public async Task Concurrency_Update_Fails_When_ETag_Mismatch()
     {
         // Arrange
