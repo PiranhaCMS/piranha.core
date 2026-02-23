@@ -6,17 +6,17 @@
     - [x] Include `Passkeys` list in `RavenUser`
 - [x] Task: Conductor - User Manual Verification 'Phase 1: Scaffolding and Models' (Protocol in workflow.md) e9bb809
 
-## Phase 2: RavenDB Stores (Core & Security)
-- [ ] Task: Implement `RavenUserStore` (Part 1: Basic & Security)
-    - [ ] `IUserStore`, `IUserPasswordStore`, `IUserSecurityStampStore`
-    - [ ] **Exhaustive Testing**: Achieve 100% coverage for user CRUD and security stamps (including failure modes and concurrency).
-- [ ] Task: Implement `RavenUserStore` (Part 2: Communication & Roles)
-    - [ ] `IUserEmailStore`, `IUserPhoneNumberStore`, `IUserRoleStore`
-    - [ ] **Exhaustive Testing**: Achieve 100% coverage for email, phone, and role mapping (including unique constraints and normalization).
-- [ ] Task: Implement `RavenRoleStore`
-    - [ ] `IRoleStore` implementation
-    - [ ] **Exhaustive Testing**: Achieve 100% coverage for role CRUD and validation logic.
-- [ ] Task: Conductor - User Manual Verification 'Phase 2: RavenDB Stores (Core & Security)' (Protocol in workflow.md)
+## Phase 2: RavenDB Stores (Core & Security) [checkpoint: 123ca89]
+- [x] Task: Implement `RavenUserStore` (Part 1: Basic & Security) 09283df
+    - [x] `IUserStore`, `IUserPasswordStore`, `IUserSecurityStampStore`
+    - [x] **Exhaustive Testing**: Achieve 100% coverage for user CRUD and security stamps (including failure modes and concurrency).
+- [x] Task: Implement `RavenUserStore` (Part 2: Communication & Roles) 7530ce0
+    - [x] `IUserEmailStore`, `IUserPhoneNumberStore`, `IUserRoleStore`
+    - [x] **Exhaustive Testing**: Achieve 100% coverage for email, phone, and role mapping (including unique constraints and normalization).
+- [x] Task: Implement `RavenRoleStore` 7530ce0
+    - [x] `IRoleStore` implementation
+    - [x] **Exhaustive Testing**: Achieve 100% coverage for role CRUD and validation logic.
+- [x] Task: Conductor - User Manual Verification 'Phase 2: RavenDB Stores (Core & Security)' (Protocol in workflow.md) 123ca89
 
 ## Phase 3: Advanced Identity Features
 - [ ] Task: Implement `RavenUserStore` (Part 3: Logins & Claims)
