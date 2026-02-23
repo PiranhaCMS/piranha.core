@@ -4,5 +4,5 @@ This file tracks all major tracks for the project. Each track has its own detail
 
 ---
 
-- [~] **Track: Implement RavenDB Identity Provider (Aero.Identity)**
+- [x] **Track: Implement RavenDB Identity Provider (Aero.Identity)**
   *Link: [./tracks/aero_identity_20260223/](./tracks/aero_identity_20260223/)*
