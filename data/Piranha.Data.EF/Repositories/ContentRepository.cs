@@ -234,7 +234,8 @@ internal class ContentRepository : IContentRepository
                                 Created = DateTime.Now,
                                 LastModified = DateTime.Now
                             };
-                            await _db.Taxonomies.AddAsync(category).ConfigureAwait(false);
+                           //await _db.Taxonomies.AddAsync(category).ConfigureAwait(false);
+                           await _db.session.StoreAsync(category).ConfigureAwait(false);
                         }
                         categorized.Category.Id = category.Id;
                         categorized.Category.Title = category.Title;
@@ -281,7 +282,8 @@ internal class ContentRepository : IContentRepository
                                     Created = DateTime.Now,
                                     LastModified = DateTime.Now
                                 };
-                                await _db.Taxonomies.AddAsync(tag).ConfigureAwait(false);
+                                //await _db.Taxonomies.AddAsync(tag).ConfigureAwait(false);
+                                await _db.session.StoreAsync(tag).ConfigureAwait(false);
                             }
                             t.Id = tag.Id;
                         }
@@ -312,7 +314,8 @@ internal class ContentRepository : IContentRepository
                 };
                 model.Id = content.Id;
 
-                await _db.Content.AddAsync(content).ConfigureAwait(false);
+                //await _db.Content.AddAsync(content).ConfigureAwait(false);
+                await _db.session.StoreAsync(content).ConfigureAwait(false);
             }
             else
             {
@@ -327,7 +330,8 @@ internal class ContentRepository : IContentRepository
                 if (field.ContentId == Guid.Empty)
                 {
                     field.ContentId = content.Id;
-                    await _db.ContentFields.AddAsync(field).ConfigureAwait(false);
+                    //await _db.ContentFields.AddAsync(field).ConfigureAwait(false);
+                    await _db.session.StoreAsync(field).ConfigureAwait(false);
                 }
             }
 
@@ -383,8 +387,15 @@ internal class ContentRepository : IContentRepository
                         .Where(b => !current.Contains(b.Id) && b.ParentId != null) // && removed.Select(p => p.Id).ToList().Contains(b.ParentId.Value))
                         .ToList();
 
-                    _db.ContentBlocks.RemoveRange(removed);
-                    _db.ContentBlocks.RemoveRange(removedItems);
+                    // _db.ContentBlocks.RemoveRange(removed);
+                    // _db.ContentBlocks.RemoveRange(removedItems);
+                    foreach (var item in removed)
+                        _db.session.Delete(item);
+                    
+                    foreach (var item in removedItems)
+                        _db.session.Delete(item);
+                    
+
 
                     // Map the new block
                     for (var n = 0; n < blocks.Count; n++)
@@ -397,7 +408,8 @@ internal class ContentRepository : IContentRepository
                             {
                                 Id = blocks[n].Id != Guid.Empty ? blocks[n].Id : Guid.NewGuid()
                             };
-                            await _db.ContentBlocks.AddAsync(block).ConfigureAwait(false);
+                            //await _db.ContentBlocks.AddAsync(block).ConfigureAwait(false);
+                            await _db.session.StoreAsync(block).ConfigureAwait(false);
                         }
                         block.ParentId = blocks[n].ParentId;
                         block.SortOrder = n;
@@ -406,7 +418,10 @@ internal class ContentRepository : IContentRepository
                         var currentFields = blocks[n].Fields.Select(f => f.FieldId).Distinct();
                         var removedFields = block.Fields.Where(f => !currentFields.Contains(f.FieldId));
 
-                        _db.ContentBlockFields.RemoveRange(removedFields);
+                        //_db.ContentBlockFields.RemoveRange(removedFields);
+                        foreach (var item in removedFields)
+                            _db.session.Delete(item);
+
 
                         foreach (var newField in blocks[n].Fields)
                         {
@@ -419,7 +434,8 @@ internal class ContentRepository : IContentRepository
                                     BlockId = block.Id,
                                     FieldId = newField.FieldId
                                 };
-                                await _db.ContentBlockFields.AddAsync(field).ConfigureAwait(false);
+                                //await _db.ContentBlockFields.AddAsync(field).ConfigureAwait(false);
+                                await _db.session.StoreAsync(field).ConfigureAwait(false);
                                 block.Fields.Add(field);
                             }
                             field.SortOrder = newField.SortOrder;
@@ -436,7 +452,8 @@ internal class ContentRepository : IContentRepository
                                         FieldId = field.Id,
                                         LanguageId = languageId
                                     };
-                                    await _db.ContentBlockFieldTranslations.AddAsync(translation).ConfigureAwait(false);
+                                    //await _db.ContentBlockFieldTranslations.AddAsync(translation).ConfigureAwait(false);
+                                    await _db.session.StoreAsync(translation).ConfigureAwait(false);
                                     field.Translations.Add(translation);
                                 }
                                 translation.Value = newTranslation.Value;
@@ -473,7 +490,8 @@ internal class ContentRepository : IContentRepository
 
         if (model != null)
         {
-            _db.Content.Remove(model);
+            //_db.Content.Remove(model);
+            _db.session.Delete(model);
 
             await _db.SaveChangesAsync().ConfigureAwait(false);
 

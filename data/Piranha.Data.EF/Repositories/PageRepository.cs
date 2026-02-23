@@ -311,7 +311,8 @@ internal class PageRepository : IPageRepository
             {
                 Id = model.Id
             };
-            await _db.PageComments.AddAsync(comment);
+            //await _db.PageComments.AddAsync(comment);
+            await _db.session.StoreAsync(comment);
         }
 
         comment.UserId = model.UserId;
@@ -340,7 +341,8 @@ internal class PageRepository : IPageRepository
 
         if (page != null)
         {
-            await _db.PageRevisions.AddAsync(new PageRevision
+            //await _db.PageRevisions.AddAsync(new PageRevision
+            await _db.session.StoreAsync(new PageRevision
             {
                 Id = Guid.NewGuid(),
                 PageId = id,
@@ -371,7 +373,8 @@ internal class PageRepository : IPageRepository
 
                     if (removed.Count > 0)
                     {
-                        _db.PageRevisions.RemoveRange(removed);
+                        //_db.PageRevisions.RemoveRange(removed);
+                        _db.session.Delete(removed);
                         await _db.SaveChangesAsync().ConfigureAwait(false);
                     }
                 }
@@ -412,12 +415,15 @@ internal class PageRepository : IPageRepository
             {
                 if (!pageBlock.Block.IsReusable)
                 {
-                    _db.Blocks.Remove(pageBlock.Block);
+                    //_db.Blocks.Remove(pageBlock.Block);
+                    _db.session.Delete(pageBlock.Block);
                 }
             }
 
             // Remove the main page.
-            _db.Pages.Remove(model);
+            //_db.Pages.Remove(model);
+            _db.session.Delete(model);
+
 
             var siblings = await _db.Pages.Where(p => p.SiteId == model.SiteId && p.ParentId == model.ParentId).ToListAsync().ConfigureAwait(false);
 
@@ -449,7 +455,8 @@ internal class PageRepository : IPageRepository
 
             if (draft.Count > 0)
             {
-                _db.PageRevisions.RemoveRange(draft);
+                //_db.PageRevisions.RemoveRange(draft);
+                _db.session.Delete(draft);
 
                 await _db.SaveChangesAsync().ConfigureAwait(false);
             }
@@ -468,7 +475,9 @@ internal class PageRepository : IPageRepository
 
         if (comment != null)
         {
-            _db.PageComments.Remove(comment);
+            //_db.PageComments.Remove(comment);
+            _db.session.Delete(comment);
+
             await _db.SaveChangesAsync().ConfigureAwait(false);
         }
     }
@@ -598,7 +607,8 @@ internal class PageRepository : IPageRepository
 
                     if (!isDraft)
                     {
-                        await _db.Pages.AddAsync(page).ConfigureAwait(false);
+                        //await _db.Pages.AddAsync(page).ConfigureAwait(false);
+                        await _db.session.StoreAsync(page).ConfigureAwait(false);
 
                         // Make room for the new page
                         var dest = await _db.Pages.Where(p => p.SiteId == model.SiteId && p.ParentId == model.ParentId).ToListAsync().ConfigureAwait(false);
@@ -668,9 +678,10 @@ internal class PageRepository : IPageRepository
                             Id = Guid.NewGuid(),
                             PageId = page.Id
                         };
-                        await _db.PageRevisions
-                            .AddAsync(draft)
-                            .ConfigureAwait(false);
+                        // await _db.PageRevisions
+                        //     .AddAsync(draft)
+                        //     .ConfigureAwait(false);
+                        await _db.session.StoreAsync(draft).ConfigureAwait(false);
                     }
 
                     draft.Data = JsonSerializer.Serialize(page);
@@ -697,7 +708,8 @@ internal class PageRepository : IPageRepository
 
                 if (!isDraft)
                 {
-                    await _db.Pages.AddAsync(page).ConfigureAwait(false);
+                    //await _db.Pages.AddAsync(page).ConfigureAwait(false);
+                    await _db.session.StoreAsync(page).ConfigureAwait(false);
 
                     // Make room for the new page
                     var dest = await _db.Pages.Where(p => p.SiteId == model.SiteId && p.ParentId == model.ParentId).ToListAsync().ConfigureAwait(false);
@@ -753,7 +765,8 @@ internal class PageRepository : IPageRepository
                     if (field.PageId == Guid.Empty)
                     {
                         field.PageId = page.Id;
-                        await _db.PageFields.AddAsync(field).ConfigureAwait(false);
+                        //await _db.PageFields.AddAsync(field).ConfigureAwait(false);
+                        await _db.session.StoreAsync(field).ConfigureAwait(false);
                     }
                 }
             }
@@ -776,8 +789,12 @@ internal class PageRepository : IPageRepository
 
                 if (!isDraft)
                 {
-                    _db.Blocks.RemoveRange(removed);
-                    _db.Blocks.RemoveRange(removedItems);
+                    // _db.Blocks.RemoveRange(removed);
+                    // _db.Blocks.RemoveRange(removedItems);
+                    foreach (var item in removed)
+                        _db.session.Delete(item);
+                    foreach(var item in removedItems)
+                        _db.session.Delete(removedItems);
                 }
 
                 // Delete the old page blocks
@@ -806,7 +823,8 @@ internal class PageRepository : IPageRepository
                         };
                         if (!isDraft)
                         {
-                            await _db.Blocks.AddAsync(block).ConfigureAwait(false);
+                            //await _db.Blocks.AddAsync(block).ConfigureAwait(false);
+                            await _db.session.StoreAsync(block).ConfigureAwait(false);
                         }
                     }
                     block.ParentId = blocks[n].ParentId;
@@ -820,7 +838,9 @@ internal class PageRepository : IPageRepository
 
                     if (!isDraft)
                     {
-                        _db.BlockFields.RemoveRange(removedFields);
+                        //_db.BlockFields.RemoveRange(removedFields);
+                        foreach (var field in removedFields)
+                            _db.session.Delete(field);
                     }
 
                     foreach (var newField in blocks[n].Fields)
@@ -836,7 +856,8 @@ internal class PageRepository : IPageRepository
                             };
                             if (!isDraft)
                             {
-                                await _db.BlockFields.AddAsync(field).ConfigureAwait(false);
+                                //await _db.BlockFields.AddAsync(field).ConfigureAwait(false);
+                                await _db.session.StoreAsync(field).ConfigureAwait(false);
                             }
                             block.Fields.Add(field);
                         }
@@ -856,7 +877,8 @@ internal class PageRepository : IPageRepository
                     };
                     if (!isDraft)
                     {
-                        await _db.PageBlocks.AddAsync(pageBlock).ConfigureAwait(false);
+                        //await _db.PageBlocks.AddAsync(pageBlock).ConfigureAwait(false);
+                        await _db.session.StoreAsync(pageBlock).ConfigureAwait(false);
                     }
                     page.Blocks.Add(pageBlock);
                 }
@@ -878,9 +900,10 @@ internal class PageRepository : IPageRepository
                         Id = Guid.NewGuid(),
                         PageId = page.Id
                     };
-                    await _db.PageRevisions
-                        .AddAsync(draft)
-                        .ConfigureAwait(false);
+                    // await _db.PageRevisions
+                    //     .AddAsync(draft)
+                    //     .ConfigureAwait(false);
+                    await _db.session.StoreAsync(draft).ConfigureAwait(false);
                 }
 
                 draft.Data = JsonSerializer.Serialize(page);

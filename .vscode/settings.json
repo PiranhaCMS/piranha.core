@@ -1,0 +1,30 @@
+{
+  "dotrush.roslyn.projectOrSolutionFiles": [
+    "d:\\proj\\microbians\\piranha\\examples\\MvcWeb\\MvcWeb.csproj",
+    "d:\\proj\\microbians\\piranha\\core\\Piranha.AspNetCore\\Piranha.AspNetCore.csproj",
+    "d:\\proj\\microbians\\piranha\\core\\Piranha.AspNetCore.Hosting\\Piranha.AspNetCore.Hosting.csproj",
+    "d:\\proj\\microbians\\piranha\\identity\\Piranha.AspNetCore.Identity\\Piranha.AspNetCore.Identity.csproj",
+    "d:\\proj\\microbians\\piranha\\identity\\Piranha.AspNetCore.Identity.MySQL\\Piranha.AspNetCore.Identity.MySQL.csproj",
+    "d:\\proj\\microbians\\piranha\\identity\\Piranha.AspNetCore.Identity.PostgreSQL\\Piranha.AspNetCore.Identity.PostgreSQL.csproj",
+    "d:\\proj\\microbians\\piranha\\identity\\Piranha.AspNetCore.Identity.SQLite\\Piranha.AspNetCore.Identity.SQLite.csproj",
+    "d:\\proj\\microbians\\piranha\\identity\\Piranha.AspNetCore.Identity.SQLServer\\Piranha.AspNetCore.Identity.SQLServer.csproj",
+    "d:\\proj\\microbians\\piranha\\core\\Piranha.AttributeBuilder\\Piranha.AttributeBuilder.csproj",
+    "d:\\proj\\microbians\\piranha\\core\\Piranha.Azure.BlobStorage\\Piranha.Azure.BlobStorage.csproj",
+    "d:\\proj\\microbians\\piranha\\core\\Piranha\\Piranha.csproj",
+    "d:\\proj\\microbians\\piranha\\data\\Piranha.Data.EF\\Piranha.Data.EF.csproj",
+    "d:\\proj\\microbians\\piranha\\data\\Piranha.Data.EF.MySql\\Piranha.Data.EF.MySql.csproj",
+    "d:\\proj\\microbians\\piranha\\data\\Piranha.Data.EF.PostgreSql\\Piranha.Data.EF.PostgreSql.csproj",
+    "d:\\proj\\microbians\\piranha\\data\\Piranha.Data.EF.SQLite\\Piranha.Data.EF.SQLite.csproj",
+    "d:\\proj\\microbians\\piranha\\data\\Piranha.Data.EF.SQLServer\\Piranha.Data.EF.SQLServer.csproj",
+    "d:\\proj\\microbians\\piranha\\core\\Piranha.ImageSharp\\Piranha.ImageSharp.csproj",
+    "d:\\proj\\microbians\\piranha\\core\\Piranha.Local.FileStorage\\Piranha.Local.FileStorage.csproj",
+    "d:\\proj\\microbians\\piranha\\core\\Piranha.Manager\\Piranha.Manager.csproj",
+    "d:\\proj\\microbians\\piranha\\core\\Piranha.Manager.LocalAuth\\Piranha.Manager.LocalAuth.csproj",
+    "d:\\proj\\microbians\\piranha\\core\\Piranha.Manager.Localization\\Piranha.Manager.Localization.csproj",
+    "d:\\proj\\microbians\\piranha\\test\\Piranha.Manager.Tests\\Piranha.Manager.Tests.csproj",
+    "d:\\proj\\microbians\\piranha\\core\\Piranha.Manager.TinyMCE\\Piranha.Manager.TinyMCE.csproj",
+    "d:\\proj\\microbians\\piranha\\test\\Piranha.Tests\\Piranha.Tests.csproj",
+    "d:\\proj\\microbians\\piranha\\core\\Piranha.WebApi\\Piranha.WebApi.csproj",
+    "d:\\proj\\microbians\\piranha\\examples\\RazorWeb\\RazorWeb.csproj"
+  ]
+}

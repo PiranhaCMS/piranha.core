@@ -20,10 +20,6 @@
     <Project Path="core/Piranha/Piranha.csproj" />
   </Folder>
   <Folder Name="/data/">
-    <Project Path="data/Piranha.Data.EF.MySql/Piranha.Data.EF.MySql.csproj" />
-    <Project Path="data/Piranha.Data.EF.PostgreSql/Piranha.Data.EF.PostgreSql.csproj" />
-    <Project Path="data/Piranha.Data.EF.SQLite/Piranha.Data.EF.SQLite.csproj" />
-    <Project Path="data/Piranha.Data.EF.SQLServer/Piranha.Data.EF.SQLServer.csproj" />
     <Project Path="data/Piranha.Data.EF/Piranha.Data.EF.csproj" />
   </Folder>
   <Folder Name="/examples/">
@@ -31,14 +27,11 @@
     <Project Path="examples/RazorWeb/RazorWeb.csproj" />
   </Folder>
   <Folder Name="/identity/">
-    <Project Path="identity/Piranha.AspNetCore.Identity.MySQL/Piranha.AspNetCore.Identity.MySQL.csproj" />
-    <Project Path="identity/Piranha.AspNetCore.Identity.PostgreSQL/Piranha.AspNetCore.Identity.PostgreSQL.csproj" />
-    <Project Path="identity/Piranha.AspNetCore.Identity.SQLite/Piranha.AspNetCore.Identity.SQLite.csproj" />
-    <Project Path="identity/Piranha.AspNetCore.Identity.SQLServer/Piranha.AspNetCore.Identity.SQLServer.csproj" />
     <Project Path="identity/Piranha.AspNetCore.Identity/Piranha.AspNetCore.Identity.csproj" />
   </Folder>
   <Folder Name="/test/">
     <Project Path="test/Piranha.Manager.Tests/Piranha.Manager.Tests.csproj" />
     <Project Path="test/Piranha.Tests/Piranha.Tests.csproj" />
   </Folder>
+  <Project Path="Aero.Identity/Aero.Identity.csproj" />
 </Solution>

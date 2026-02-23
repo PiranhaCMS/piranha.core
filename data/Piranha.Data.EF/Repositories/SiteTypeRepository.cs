@@ -84,7 +84,8 @@ internal class SiteTypeRepository : ISiteTypeRepository
                 Id = model.Id,
                 Created = DateTime.Now
             };
-            await _db.SiteTypes.AddAsync(type).ConfigureAwait(false);
+            //await _db.SiteTypes.AddAsync(type).ConfigureAwait(false);
+            await _db.session.StoreAsync(type).ConfigureAwait(false);
         }
         type.CLRType = model.CLRType;
         type.Body = JsonSerializer.Serialize(model);
@@ -104,7 +105,8 @@ internal class SiteTypeRepository : ISiteTypeRepository
 
         if (type != null)
         {
-            _db.SiteTypes.Remove(type);
+            //_db.SiteTypes.Remove(type);
+            _db.session.Delete(type);
             await _db.SaveChangesAsync().ConfigureAwait(false);
         }
     }

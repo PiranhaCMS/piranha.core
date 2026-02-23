@@ -84,7 +84,8 @@ internal class PostTypeRepository : IPostTypeRepository
                 Id = model.Id,
                 Created = DateTime.Now
             };
-            await _db.PostTypes.AddAsync(type).ConfigureAwait(false);
+            //await _db.PostTypes.AddAsync(type).ConfigureAwait(false);
+            await _db.session.StoreAsync(type).ConfigureAwait(false);
         }
         type.CLRType = model.CLRType;
         type.Body = JsonSerializer.Serialize(model);
@@ -105,7 +106,9 @@ internal class PostTypeRepository : IPostTypeRepository
 
         if (type != null)
         {
-            _db.PostTypes.Remove(type);
+            //_db.PostTypes.Remove(type);
+            _db.session.Delete(type);
+
             await _db.SaveChangesAsync().ConfigureAwait(false);
         }
     }

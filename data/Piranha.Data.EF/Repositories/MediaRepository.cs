@@ -159,7 +159,8 @@ internal class MediaRepository : IMediaRepository
                 Id = model.Id,
                 Created = DateTime.Now
             };
-            await _db.Media.AddAsync(media).ConfigureAwait(false);
+            //await _db.Media.AddAsync(media).ConfigureAwait(false);
+            await _db.session.StoreAsync(media);
         }
 
         media.Filename = model.Filename;
@@ -181,7 +182,8 @@ internal class MediaRepository : IMediaRepository
 
         if (removed.Length > 0)
         {
-            _db.MediaVersions.RemoveRange(removed);
+            //_db.MediaVersions.RemoveRange(removed);
+            _db.session.Delete(removed);
         }
 
         // Add new versions
@@ -198,7 +200,9 @@ internal class MediaRepository : IMediaRepository
                     Height = version.Height,
                     FileExtension = version.FileExtension
                 };
-                _db.MediaVersions.Add(mediaVersion);
+                //_db.MediaVersions.Add(mediaVersion);
+                await _db.session.StoreAsync(mediaVersion);
+                //media.Versions.Add(mediaVersion);
                 media.Versions.Add(mediaVersion);
             }
         }
@@ -226,7 +230,8 @@ internal class MediaRepository : IMediaRepository
                 Created = DateTime.Now
             };
             model.Id = folder.Id;
-            await _db.MediaFolders.AddAsync(folder).ConfigureAwait(false);
+            //await _db.MediaFolders.AddAsync(folder).ConfigureAwait(false);
+            await _db.session.StoreAsync(folder).ConfigureAwait(false);
         }
         folder.ParentId = model.ParentId;
         folder.Name = model.Name;
@@ -265,7 +270,9 @@ internal class MediaRepository : IMediaRepository
 
         if (media != null)
         {
-            _db.Media.Remove(media);
+            //_db.Media.Remove(media);
+            _db.session.Delete(media);
+
             await _db.SaveChangesAsync().ConfigureAwait(false);
         }
     }
@@ -282,7 +289,9 @@ internal class MediaRepository : IMediaRepository
 
         if (folder != null)
         {
-            _db.MediaFolders.Remove(folder);
+            //_db.MediaFolders.Remove(folder);
+            _db.session.Delete(folder);
+
             await _db.SaveChangesAsync().ConfigureAwait(false);
         }
     }

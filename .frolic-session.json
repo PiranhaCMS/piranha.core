@@ -1,0 +1,527 @@
+{
+  "timestamp": "2026-02-23T08:57:33.944Z",
+  "sessionId": "a94397c2-8c31-424f-a25a-f060fc858ba0",
+  "eventCount": 8,
+  "events": [
+    {
+      "timestamp": "2026-02-23T01:28:13.118Z",
+      "sessionId": "aae7c8a7-8263-47e3-a2a3-e58d1f0f1540",
+      "eventType": "file_open",
+      "file": "d\\proj\\microbians\\piranha\\.vscode\\settings.json",
+      "relativePath": "d\\proj\\microbians\\piranha\\.vscode\\settings.json",
+      "language": "jsonc",
+      "lineCount": 1,
+      "isDirty": false,
+      "isUntitled": false,
+      "cursorPosition": null,
+      "selectionLength": 0,
+      "changes": []
+    },
+    {
+      "timestamp": "2026-02-23T01:28:13.129Z",
+      "sessionId": "aae7c8a7-8263-47e3-a2a3-e58d1f0f1540",
+      "eventType": "file_edit",
+      "file": "d\\proj\\microbians\\piranha\\.vscode\\settings.json",
+      "relativePath": "d\\proj\\microbians\\piranha\\.vscode\\settings.json",
+      "language": "jsonc",
+      "lineCount": 30,
+      "isDirty": false,
+      "isUntitled": false,
+      "cursorPosition": null,
+      "selectionLength": 0,
+      "changes": [
+        {
+          "textLength": 2768,
+          "rangeLength": 2,
+          "lineCountDelta": 29,
+          "likelyAI": false,
+          "changeText": "{\r\n    \"dotrush.roslyn.projectOrSolutionFiles\": [\r\n        \"d:\\\\proj\\\\microbians\\\\piranha\\\\examples\\\\MvcWeb\\\\MvcWeb.csproj\",\r\n        \"d:\\\\proj\\\\microbians\\\\piranha\\\\core\\\\Piranha.AspNetCore\\\\Piranha.AspNetCore.csproj\",\r\n        \"d:\\\\proj\\\\microbians\\\\piranha\\\\core\\\\Piranha.AspNetCore.Hosting\\\\Piranha.AspNetCore.Hosting.csproj\",\r\n        \"d:\\\\proj\\\\microbians\\\\piranha\\\\identity\\\\Piranha.AspNetCore.Identity\\\\Piranha.AspNetCore.Identity.csproj\",\r\n        \"d:\\\\proj\\\\microbians\\\\piranha\\\\identity\\\\Piranha.AspNetCore.Identity.MySQL\\\\Piranha.AspNetCore.Identity.MySQL.csproj\",\r\n        \"d:\\\\proj\\\\microbians\\\\piranha\\\\identity\\\\Piranha.AspNetCore.Identity.PostgreSQL\\\\Piranha.AspNetCore.Identity.PostgreSQL.csproj\",\r\n        \"d:\\\\proj\\\\microbians\\\\piranha\\\\identity\\\\Piranha.AspNetCore.Identity.SQLite\\\\Piranha.AspNetCore.Identity.SQLite.csproj\",\r\n        \"d:\\\\proj\\\\microbians\\\\piranha\\\\identity\\\\Piranha.AspNetCore.Identity.SQLServer\\\\Piranha.AspNetCore.Identity.SQLServer.csproj\",\r\n        \"d:\\\\proj\\\\microbians\\\\piranha\\\\core\\\\Piranha.AttributeBuilder\\\\Piranha.AttributeBuilder.csproj\",\r\n        \"d:\\\\proj\\\\microbians\\\\piranha\\\\core\\\\Piranha.Azure.BlobStorage\\\\Piranha.Azure.BlobStorage.csproj\",\r\n        \"d:\\\\proj\\\\microbians\\\\piranha\\\\core\\\\Piranha\\\\Piranha.csproj\",\r\n        \"d:\\\\proj\\\\microbians\\\\piranha\\\\data\\\\Piranha.Data.EF\\\\Piranha.Data.EF.csproj\",\r\n        \"d:\\\\proj\\\\microbians\\\\piranha\\\\data\\\\Piranha.Data.EF.MySql\\\\Piranha.Data.EF.MySql.csproj\",\r\n        \"d:\\\\proj\\\\microbians\\\\piranha\\\\data\\\\Piranha.Data.EF.PostgreSql\\\\Piranha.Data.EF.PostgreSql.csproj\",\r\n        \"d:\\\\proj\\\\microbians\\\\piranha\\\\data\\\\Piranha.Data.EF.SQLite\\\\Piranha.Data.EF.SQLite.csproj\",\r\n        \"d:\\\\proj\\\\microbians\\\\piranha\\\\data\\\\Piranha.Data.EF.SQLServer\\\\Piranha.Data.EF.SQLServer.csproj\",\r\n        \"d:\\\\proj\\\\microbians\\\\piranha\\\\core\\\\Piranha.ImageSharp\\\\Piranha.ImageSharp.csproj\",\r\n        \"d:\\\\proj\\\\microbians\\\\piranha\\\\core\\\\Piranha.Local.FileStorage\\\\Piranha.Local.FileStorage.csproj\",\r\n        \"...[TRUNCATED]",
+          "wasTruncated": true
+        }
+      ]
+    },
+    {
+      "timestamp": "2026-02-23T01:28:13.131Z",
+      "sessionId": "aae7c8a7-8263-47e3-a2a3-e58d1f0f1540",
+      "eventType": "file_edit",
+      "file": "d\\proj\\microbians\\piranha\\.vscode\\settings.json",
+      "relativePath": "d\\proj\\microbians\\piranha\\.vscode\\settings.json",
+      "language": "jsonc",
+      "lineCount": 30,
+      "isDirty": true,
+      "isUntitled": false,
+      "cursorPosition": null,
+      "selectionLength": 0,
+      "changes": []
+    },
+    {
+      "timestamp": "2026-02-23T01:28:13.254Z",
+      "sessionId": "aae7c8a7-8263-47e3-a2a3-e58d1f0f1540",
+      "eventType": "file_edit",
+      "file": "d\\proj\\microbians\\piranha\\.vscode\\settings.json",
+      "relativePath": "d\\proj\\microbians\\piranha\\.vscode\\settings.json",
+      "language": "jsonc",
+      "lineCount": 31,
+      "isDirty": true,
+      "isUntitled": false,
+      "cursorPosition": null,
+      "selectionLength": 0,
+      "changes": [
+        {
+          "textLength": 2,
+          "rangeLength": 0,
+          "lineCountDelta": 1,
+          "likelyAI": false,
+          "changeText": "\r\n",
+          "wasTruncated": false
+        },
+        {
+          "textLength": 0,
+          "rangeLength": 1,
+          "lineCountDelta": 0,
+          "likelyAI": false,
+          "changeText": "",
+          "wasTruncated": false
+        },
+        {
+          "textLength": 0,
+          "rangeLength": 1,
+          "lineCountDelta": 0,
+          "likelyAI": false,
+          "changeText": "",
+          "wasTruncated": false
+        },
+        {
+          "textLength": 0,
+          "rangeLength": 2,
+          "lineCountDelta": 0,
+          "likelyAI": false,
+          "changeText": "",
+          "wasTruncated": false
+        },
+        {
+          "textLength": 0,
+          "rangeLength": 2,
+          "lineCountDelta": 0,
+          "likelyAI": false,
+          "changeText": "",
+          "wasTruncated": false
+        },
+        {
+          "textLength": 0,
+          "rangeLength": 1,
+          "lineCountDelta": 0,
+          "likelyAI": false,
+          "changeText": "",
+          "wasTruncated": false
+        },
+        {
+          "textLength": 0,
+          "rangeLength": 3,
+          "lineCountDelta": 0,
+          "likelyAI": false,
+          "changeText": "",
+          "wasTruncated": false
+        },
+        {
+          "textLength": 0,
+          "rangeLength": 1,
+          "lineCountDelta": 0,
+          "likelyAI": false,
+          "changeText": "",
+          "wasTruncated": false
+        },
+        {
+          "textLength": 0,
+          "rangeLength": 3,
+          "lineCountDelta": 0,
+          "likelyAI": false,
+          "changeText": "",
+          "wasTruncated": false
+        },
+        {
+          "textLength": 0,
+          "rangeLength": 4,
+          "lineCountDelta": 0,
+          "likelyAI": false,
+          "changeText": "",
+          "wasTruncated": false
+        },
+        {
+          "textLength": 0,
+          "rangeLength": 4,
+          "lineCountDelta": 0,
+          "likelyAI": false,
+          "changeText": "",
+          "wasTruncated": false
+        },
+        {
+          "textLength": 0,
+          "rangeLength": 3,
+          "lineCountDelta": 0,
+          "likelyAI": false,
+          "changeText": "",
+          "wasTruncated": false
+        },
+        {
+          "textLength": 0,
+          "rangeLength": 1,
+          "lineCountDelta": 0,
+          "likelyAI": false,
+          "changeText": "",
+          "wasTruncated": false
+        },
+        {
+          "textLength": 0,
+          "rangeLength": 2,
+          "lineCountDelta": 0,
+          "likelyAI": false,
+          "changeText": "",
+          "wasTruncated": false
+        },
+        {
+          "textLength": 0,
+          "rangeLength": 2,
+          "lineCountDelta": 0,
+          "likelyAI": false,
+          "changeText": "",
+          "wasTruncated": false
+        },
+        {
+          "textLength": 0,
+          "rangeLength": 2,
+          "lineCountDelta": 0,
+          "likelyAI": false,
+          "changeText": "",
+          "wasTruncated": false
+        },
+        {
+          "textLength": 0,
+          "rangeLength": 2,
+          "lineCountDelta": 0,
+          "likelyAI": false,
+          "changeText": "",
+          "wasTruncated": false
+        },
+        {
+          "textLength": 0,
+          "rangeLength": 1,
+          "lineCountDelta": 0,
+          "likelyAI": false,
+          "changeText": "",
+          "wasTruncated": false
+        },
+        {
+          "textLength": 0,
+          "rangeLength": 3,
+          "lineCountDelta": 0,
+          "likelyAI": false,
+          "changeText": "",
+          "wasTruncated": false
+        },
+        {
+          "textLength": 0,
+          "rangeLength": 1,
+          "lineCountDelta": 0,
+          "likelyAI": false,
+          "changeText": "",
+          "wasTruncated": false
+        },
+        {
+          "textLength": 0,
+          "rangeLength": 3,
+          "lineCountDelta": 0,
+          "likelyAI": false,
+          "changeText": "",
+          "wasTruncated": false
+        },
+        {
+          "textLength": 0,
+          "rangeLength": 4,
+          "lineCountDelta": 0,
+          "likelyAI": false,
+          "changeText": "",
+          "wasTruncated": false
+        },
+        {
+          "textLength": 0,
+          "rangeLength": 4,
+          "lineCountDelta": 0,
+          "likelyAI": false,
+          "changeText": "",
+          "wasTruncated": false
+        },
+        {
+          "textLength": 0,
+          "rangeLength": 3,
+          "lineCountDelta": 0,
+          "likelyAI": false,
+          "changeText": "",
+          "wasTruncated": false
+        },
+        {
+          "textLength": 0,
+          "rangeLength": 1,
+          "lineCountDelta": 0,
+          "likelyAI": false,
+          "changeText": "",
+          "wasTruncated": false
+        },
+        {
+          "textLength": 0,
+          "rangeLength": 2,
+          "lineCountDelta": 0,
+          "likelyAI": false,
+          "changeText": "",
+          "wasTruncated": false
+        },
+        {
+          "textLength": 0,
+          "rangeLength": 2,
+          "lineCountDelta": 0,
+          "likelyAI": false,
+          "changeText": "",
+          "wasTruncated": false
+        },
+        {
+          "textLength": 0,
+          "rangeLength": 1,
+          "lineCountDelta": 0,
+          "likelyAI": false,
+          "changeText": "",
+          "wasTruncated": false
+        },
+        {
+          "textLength": 0,
+          "rangeLength": 3,
+          "lineCountDelta": 0,
+          "likelyAI": false,
+          "changeText": "",
+          "wasTruncated": false
+        },
+        {
+          "textLength": 0,
+          "rangeLength": 4,
+          "lineCountDelta": 0,
+          "likelyAI": false,
+          "changeText": "",
+          "wasTruncated": false
+        },
+        {
+          "textLength": 0,
+          "rangeLength": 4,
+          "lineCountDelta": 0,
+          "likelyAI": false,
+          "changeText": "",
+          "wasTruncated": false
+        },
+        {
+          "textLength": 0,
+          "rangeLength": 3,
+          "lineCountDelta": 0,
+          "likelyAI": false,
+          "changeText": "",
+          "wasTruncated": false
+        },
+        {
+          "textLength": 0,
+          "rangeLength": 1,
+          "lineCountDelta": 0,
+          "likelyAI": false,
+          "changeText": "",
+          "wasTruncated": false
+        },
+        {
+          "textLength": 0,
+          "rangeLength": 2,
+          "lineCountDelta": 0,
+          "likelyAI": false,
+          "changeText": "",
+          "wasTruncated": false
+        },
+        {
+          "textLength": 0,
+          "rangeLength": 2,
+          "lineCountDelta": 0,
+          "likelyAI": false,
+          "changeText": "",
+          "wasTruncated": false
+        },
+        {
+          "textLength": 0,
+          "rangeLength": 2,
+          "lineCountDelta": 0,
+          "likelyAI": false,
+          "changeText": "",
+          "wasTruncated": false
+        },
+        {
+          "textLength": 0,
+          "rangeLength": 2,
+          "lineCountDelta": 0,
+          "likelyAI": false,
+          "changeText": "",
+          "wasTruncated": false
+        },
+        {
+          "textLength": 0,
+          "rangeLength": 1,
+          "lineCountDelta": 0,
+          "likelyAI": false,
+          "changeText": "",
+          "wasTruncated": false
+        },
+        {
+          "textLength": 0,
+          "rangeLength": 3,
+          "lineCountDelta": 0,
+          "likelyAI": false,
+          "changeText": "",
+          "wasTruncated": false
+        },
+        {
+          "textLength": 0,
+          "rangeLength": 1,
+          "lineCountDelta": 0,
+          "likelyAI": false,
+          "changeText": "",
+          "wasTruncated": false
+        },
+        {
+          "textLength": 0,
+          "rangeLength": 3,
+          "lineCountDelta": 0,
+          "likelyAI": false,
+          "changeText": "",
+          "wasTruncated": false
+        },
+        {
+          "textLength": 0,
+          "rangeLength": 4,
+          "lineCountDelta": 0,
+          "likelyAI": false,
+          "changeText": "",
+          "wasTruncated": false
+        },
+        {
+          "textLength": 0,
+          "rangeLength": 4,
+          "lineCountDelta": 0,
+          "likelyAI": false,
+          "changeText": "",
+          "wasTruncated": false
+        },
+        {
+          "textLength": 0,
+          "rangeLength": 3,
+          "lineCountDelta": 0,
+          "likelyAI": false,
+          "changeText": "",
+          "wasTruncated": false
+        },
+        {
+          "textLength": 0,
+          "rangeLength": 1,
+          "lineCountDelta": 0,
+          "likelyAI": false,
+          "changeText": "",
+          "wasTruncated": false
+        },
+        {
+          "textLength": 0,
+          "rangeLength": 2,
+          "lineCountDelta": 0,
+          "likelyAI": false,
+          "changeText": "",
+          "wasTruncated": false
+        },
+        {
+          "textLength": 0,
+          "rangeLength": 2,
+          "lineCountDelta": 0,
+          "likelyAI": false,
+          "changeText": "",
+          "wasTruncated": false
+        },
+        {
+          "textLength": 0,
+          "rangeLength": 2,
+          "lineCountDelta": 0,
+          "likelyAI": false,
+          "changeText": "",
+          "wasTruncated": false
+        }
+      ]
+    },
+    {
+      "timestamp": "2026-02-23T01:28:13.264Z",
+      "sessionId": "aae7c8a7-8263-47e3-a2a3-e58d1f0f1540",
+      "eventType": "file_edit",
+      "file": "d\\proj\\microbians\\piranha\\.vscode\\settings.json",
+      "relativePath": "d\\proj\\microbians\\piranha\\.vscode\\settings.json",
+      "language": "jsonc",
+      "lineCount": 31,
+      "isDirty": false,
+      "isUntitled": false,
+      "cursorPosition": null,
+      "selectionLength": 0,
+      "changes": []
+    },
+    {
+      "timestamp": "2026-02-23T01:28:13.264Z",
+      "sessionId": "aae7c8a7-8263-47e3-a2a3-e58d1f0f1540",
+      "eventType": "file_edit",
+      "file": "d\\proj\\microbians\\piranha\\.vscode\\settings.json",
+      "relativePath": "d\\proj\\microbians\\piranha\\.vscode\\settings.json",
+      "language": "jsonc",
+      "lineCount": 31,
+      "isDirty": false,
+      "isUntitled": false,
+      "cursorPosition": null,
+      "selectionLength": 0,
+      "changes": []
+    },
+    {
+      "timestamp": "2026-02-23T01:28:13.266Z",
+      "sessionId": "aae7c8a7-8263-47e3-a2a3-e58d1f0f1540",
+      "eventType": "file_edit",
+      "file": "d\\proj\\microbians\\piranha\\.vscode\\settings.json",
+      "relativePath": "d\\proj\\microbians\\piranha\\.vscode\\settings.json",
+      "language": "jsonc",
+      "lineCount": 31,
+      "isDirty": false,
+      "isUntitled": false,
+      "cursorPosition": null,
+      "selectionLength": 0,
+      "changes": [
+        {
+          "textLength": 0,
+          "rangeLength": 0,
+          "lineCountDelta": 0,
+          "likelyAI": false,
+          "changeText": "",
+          "wasTruncated": false
+        }
+      ]
+    },
+    {
+      "timestamp": "2026-02-23T01:28:13.322Z",
+      "sessionId": "aae7c8a7-8263-47e3-a2a3-e58d1f0f1540",
+      "eventType": "diagnostic_change",
+      "file": "d\\proj\\microbians\\piranha\\.vscode\\settings.json",
+      "relativePath": "d\\proj\\microbians\\piranha\\.vscode\\settings.json",
+      "language": "unknown",
+      "lineCount": 0,
+      "isDirty": false,
+      "isUntitled": false,
+      "cursorPosition": null,
+      "selectionLength": 0,
+      "changes": []
+    }
+  ],
+  "metadata": {
+    "version": "1.3.0",
+    "trigger": "smart-backup",
+    "memoryUsage": 21174
+  }
+}

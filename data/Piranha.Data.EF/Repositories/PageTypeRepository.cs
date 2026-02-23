@@ -84,7 +84,8 @@ internal class PageTypeRepository : IPageTypeRepository
                 Id = model.Id,
                 Created = DateTime.Now
             };
-            await _db.PageTypes.AddAsync(type).ConfigureAwait(false);
+            //await _db.PageTypes.AddAsync(type).ConfigureAwait(false);
+            await _db.session.StoreAsync(type).ConfigureAwait(false);
         }
         type.CLRType = model.CLRType;
         type.Body = JsonSerializer.Serialize(model);
@@ -105,7 +106,9 @@ internal class PageTypeRepository : IPageTypeRepository
 
         if (type != null)
         {
-            _db.PageTypes.Remove(type);
+            //_db.PageTypes.Remove(type);
+            _db.session.Delete(type);
+
             await _db.SaveChangesAsync().ConfigureAwait(false);
         }
     }

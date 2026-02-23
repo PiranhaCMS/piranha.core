@@ -83,7 +83,9 @@ internal class ContentGroupRepository : IContentGroupRepository
                 Id = model.Id,
                 Created = DateTime.Now
             };
-            await _db.ContentGroups.AddAsync(group).ConfigureAwait(false);
+            
+            await _db.session.StoreAsync(group);
+            //await _db.ContentGroups.AddAsync(group).ConfigureAwait(false);
         }
         Module.Mapper.Map<ContentGroup, Data.ContentGroup>(model, group);
         group.LastModified = DateTime.Now;
@@ -103,7 +105,8 @@ internal class ContentGroupRepository : IContentGroupRepository
 
         if (group != null)
         {
-            _db.ContentGroups.Remove(group);
+            //_db.ContentGroups.Remove(group);
+            _db.session.Delete(group);
             await _db.SaveChangesAsync().ConfigureAwait(false);
         }
     }

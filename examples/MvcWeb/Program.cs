@@ -1,9 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using MvcWeb;
 using Piranha;
-using Piranha.AspNetCore.Identity.SQLite;
 using Piranha.AttributeBuilder;
-using Piranha.Data.EF.SQLite;
 using Piranha.Manager.Editor;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -27,8 +25,9 @@ builder.AddPiranha(options =>
     options.UseMemoryCache();
 
     var connectionString = builder.Configuration.GetConnectionString("piranha");
-    options.UseEF<SQLiteDb>(db => db.UseSqlite(connectionString));
-    options.UseIdentityWithSeed<IdentitySQLiteDb>(db => db.UseSqlite(connectionString));
+    // todo - stitch ravendb in here
+    // options.UseEF<SQLiteDb>(db => db.UseSqlite(connectionString));
+    // options.UseIdentityWithSeed<IdentitySQLiteDb>(db => db.UseSqlite(connectionString));
 
     /**
      * Here you can configure the different permissions
@@ -73,7 +72,9 @@ try
 
         options.UseManager();
         options.UseTinyMCE();
-        options.UseIdentity();
+        // todo - fix identity - ravendb refactor
+        //options.UseIdentity();
+        
 
         // Seed data
 

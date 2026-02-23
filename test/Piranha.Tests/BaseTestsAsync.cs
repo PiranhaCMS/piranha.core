@@ -11,7 +11,6 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Xunit;
-using Piranha.Data.EF.SQLite;
 using Piranha.ImageSharp;
 using Piranha.Repositories;
 using Piranha.Services;
@@ -34,7 +33,7 @@ public abstract class BaseTestsAsync : IAsyncLifetime
     protected static IServiceCollection CreateServiceCollection()
     {
         return new ServiceCollection()
-            .AddPiranhaEF<SQLiteDb>(db =>
+            .AddPiranhaStore<SQLiteDb>(db =>
                 db.UseSqlite("Filename=./piranha.tests.db"))
             .AddPiranha()
             .AddMemoryCache()

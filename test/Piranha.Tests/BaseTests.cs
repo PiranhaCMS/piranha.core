@@ -10,7 +10,6 @@
 
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-using Piranha.Data.EF.SQLite;
 
 namespace Piranha.Tests;
 
@@ -52,6 +51,7 @@ public abstract class BaseTests : IDisposable
     /// Gets the test context.
     /// </summary>
     protected IDb GetDb() {
+        // todo - stitch ravendb in here
         var builder = new DbContextOptionsBuilder<SQLiteDb>();
 
         builder.UseSqlite("Filename=./piranha.tests.db");

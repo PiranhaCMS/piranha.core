@@ -379,7 +379,8 @@ internal class PostRepository : IPostRepository
             {
                 Id = model.Id
             };
-            await _db.PostComments.AddAsync(comment);
+            //await _db.PostComments.AddAsync(comment);
+            await _db.session.StoreAsync(comment);
         }
 
         comment.UserId = model.UserId;
@@ -408,7 +409,8 @@ internal class PostRepository : IPostRepository
 
         if (post != null)
         {
-            await _db.PostRevisions.AddAsync(new PostRevision
+            //await _db.PostRevisions.AddAsync(new PostRevision
+            await _db.session.StoreAsync(new PostRevision()
             {
                 Id = Guid.NewGuid(),
                 PostId = id,
@@ -439,7 +441,11 @@ internal class PostRepository : IPostRepository
 
                     if (removed.Count > 0)
                     {
-                        _db.PostRevisions.RemoveRange(removed);
+                        //_db.PostRevisions.RemoveRange(removed);
+                        foreach (var rev in removed)
+                        {
+                            _db.session.Delete(rev);
+                        }
                         await _db.SaveChangesAsync().ConfigureAwait(false);
                     }
                 }
@@ -465,11 +471,14 @@ internal class PostRepository : IPostRepository
             {
                 if (!postBlock.Block.IsReusable)
                 {
-                    _db.Blocks.Remove(postBlock.Block);
+                    //_db.Blocks.Remove(postBlock.Block);
+                    _db.session.Delete(postBlock.Block);
                 }
             }
 
-            _db.Posts.Remove(model);
+            //_db.Posts.Remove(model);
+            _db.session.Delete(model);
+
 
             // If this is a published post, update last modified for the
             // blog page for caching purposes.
@@ -507,7 +516,11 @@ internal class PostRepository : IPostRepository
 
             if (draft.Count > 0)
             {
-                _db.PostRevisions.RemoveRange(draft);
+                //_db.PostRevisions.RemoveRange(draft);
+                foreach (var rev in draft)
+                {
+                    _db.session.Delete(rev);
+                }
 
                 await _db.SaveChangesAsync().ConfigureAwait(false);
             }
@@ -526,7 +539,9 @@ internal class PostRepository : IPostRepository
 
         if (comment != null)
         {
-            _db.PostComments.Remove(comment);
+            //_db.PostComments.Remove(comment);
+            _db.session.Delete(comment);
+
             await _db.SaveChangesAsync().ConfigureAwait(false);
         }
     }
@@ -634,7 +649,8 @@ internal class PostRepository : IPostRepository
                         Created = DateTime.Now,
                         LastModified = DateTime.Now
                     };
-                    await _db.Categories.AddAsync(category).ConfigureAwait(false);
+                    //await _db.Categories.AddAsync(category).ConfigureAwait(false);
+                    await _db.session.StoreAsync(category).ConfigureAwait(false);
                 }
                 model.Category.Id = category.Id;
                 model.Category.Title = category.Title;
@@ -674,7 +690,8 @@ internal class PostRepository : IPostRepository
                             Created = DateTime.Now,
                             LastModified = DateTime.Now
                         };
-                        await _db.Tags.AddAsync(tag).ConfigureAwait(false);
+                        //await _db.Tags.AddAsync(tag).ConfigureAwait(false);
+                        await _db.session.StoreAsync(tag).ConfigureAwait(false);
                     }
                     t.Id = tag.Id;
                 }
@@ -723,7 +740,8 @@ internal class PostRepository : IPostRepository
 
                 if (!isDraft)
                 {
-                    await _db.Posts.AddAsync(post).ConfigureAwait(false);
+                    //await _db.Posts.AddAsync(post).ConfigureAwait(false);
+                    await _db.session.StoreAsync(post).ConfigureAwait(false);
                 }
             }
             else
@@ -755,7 +773,8 @@ internal class PostRepository : IPostRepository
                     if (field.PostId == Guid.Empty)
                     {
                         field.PostId = post.Id;
-                        await _db.PostFields.AddAsync(field).ConfigureAwait(false);
+                        //await _db.PostFields.AddAsync(field).ConfigureAwait(false);
+                        await _db.session.StoreAsync(field).ConfigureAwait(false);
                     }
                 }
             }
@@ -789,8 +808,14 @@ internal class PostRepository : IPostRepository
 
                 if (!isDraft)
                 {
-                    _db.Blocks.RemoveRange(removed);
-                    _db.Blocks.RemoveRange(removedItems);
+                    // _db.Blocks.RemoveRange(removed);
+                    // _db.Blocks.RemoveRange(removedItems);
+                    foreach (var block in removed)
+                        _db.session.Delete(block);
+                    
+                    foreach (var block in removedItems)
+                        _db.session.Delete(block);
+                    
                 }
 
                 // Delete the old page blocks
@@ -818,7 +843,8 @@ internal class PostRepository : IPostRepository
                         };
                         if (!isDraft)
                         {
-                            await _db.Blocks.AddAsync(block).ConfigureAwait(false);
+                            //await _db.Blocks.AddAsync(block).ConfigureAwait(false);
+                            await _db.session.StoreAsync(block).ConfigureAwait(false);
                         }
                     }
                     block.ParentId = blocks[n].ParentId;
@@ -832,7 +858,10 @@ internal class PostRepository : IPostRepository
 
                     if (!isDraft)
                     {
-                        _db.BlockFields.RemoveRange(removedFields);
+                        //_db.BlockFields.RemoveRange(removedFields);
+                        foreach (var removedField in removedFields)
+                            _db.session.Delete(removedField);
+                        
                     }
 
                     foreach (var newField in blocks[n].Fields)
@@ -848,7 +877,8 @@ internal class PostRepository : IPostRepository
                             };
                             if (!isDraft)
                             {
-                                await _db.BlockFields.AddAsync(field).ConfigureAwait(false);
+                                //await _db.BlockFields.AddAsync(field).ConfigureAwait(false);
+                                await _db.session.StoreAsync(field).ConfigureAwait(false);
                             }
                             block.Fields.Add(field);
                         }
@@ -868,7 +898,8 @@ internal class PostRepository : IPostRepository
                     };
                     if (!isDraft)
                     {
-                        await _db.PostBlocks.AddAsync(postBlock).ConfigureAwait(false);
+                        //await _db.PostBlocks.AddAsync(postBlock).ConfigureAwait(false);
+                        await _db.session.StoreAsync(postBlock).ConfigureAwait(false);
                     }
                     post.Blocks.Add(postBlock);
                 }
@@ -932,9 +963,10 @@ internal class PostRepository : IPostRepository
                         Id = Guid.NewGuid(),
                         PostId = post.Id
                     };
-                    await _db.PostRevisions
-                        .AddAsync(draft)
-                        .ConfigureAwait(false);
+                    // await _db.PostRevisions
+                    //     .AddAsync(draft)
+                    //     .ConfigureAwait(false);
+                    await _db.session.StoreAsync(draft).ConfigureAwait(false);
                 }
 
                 draft.Data = JsonSerializer.Serialize(post);
@@ -977,7 +1009,9 @@ internal class PostRepository : IPostRepository
 
         if (unused.Count > 0)
         {
-            _db.Categories.RemoveRange(unused);
+            //_db.Categories.RemoveRange(unused);
+            foreach (var item in unused)
+                _db.session.Delete(item);
             await _db.SaveChangesAsync().ConfigureAwait(false);
         }
     }
@@ -1018,7 +1052,10 @@ internal class PostRepository : IPostRepository
 
         if (unused.Count > 0)
         {
-            _db.Tags.RemoveRange(unused);
+            //_db.Tags.RemoveRange(unused);
+            foreach (var tag in unused)
+                _db.session.Delete(tag);
+            
             await _db.SaveChangesAsync().ConfigureAwait(false);
         }
     }

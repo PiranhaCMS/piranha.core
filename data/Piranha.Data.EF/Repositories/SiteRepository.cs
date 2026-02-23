@@ -276,7 +276,8 @@ internal class SiteRepository : ISiteRepository
                 Id = model.Id != Guid.Empty ? model.Id : Guid.NewGuid(),
                 Created = DateTime.Now
             };
-            await _db.Sites.AddAsync(site).ConfigureAwait(false);
+            //await _db.Sites.AddAsync(site).ConfigureAwait(false);
+            await _db.session.StoreAsync(site).ConfigureAwait(false);
         }
         site.LanguageId = model.LanguageId;
         site.SiteTypeId = model.SiteTypeId;
@@ -331,7 +332,8 @@ internal class SiteRepository : ISiteRepository
                 if (field.SiteId == Guid.Empty)
                 {
                     field.SiteId = site.Id;
-                    await _db.SiteFields.AddAsync(field).ConfigureAwait(false);
+                    //await _db.SiteFields.AddAsync(field).ConfigureAwait(false);
+                    await _db.session.StoreAsync(field).ConfigureAwait(false);
                 }
             }
 
@@ -355,7 +357,8 @@ internal class SiteRepository : ISiteRepository
 
         if (site != null)
         {
-            _db.Sites.Remove(site);
+            //_db.Sites.Remove(site);
+            _db.session.Delete(site);
             await _db.SaveChangesAsync().ConfigureAwait(false);
         }
     }

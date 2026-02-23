@@ -107,7 +107,8 @@ internal class ContentTypeRepository : IContentTypeRepository
                 Group = model.Group,
                 Created = DateTime.Now
             };
-            await _db.ContentTypes.AddAsync(type).ConfigureAwait(false);
+            //await _db.ContentTypes.AddAsync(type).ConfigureAwait(false);
+            await _db.session.StoreAsync(type).ConfigureAwait(false);
         }
         type.Body = JsonSerializer.Serialize(model);
         type.LastModified = DateTime.Now;
@@ -127,7 +128,8 @@ internal class ContentTypeRepository : IContentTypeRepository
 
         if (type != null)
         {
-            _db.ContentTypes.Remove(type);
+            //_db.ContentTypes.Remove(type);
+            _db.session.Delete(type);
             await _db.SaveChangesAsync().ConfigureAwait(false);
         }
     }

@@ -142,7 +142,8 @@ internal class AliasRepository : IAliasRepository
                 Id = model.Id != Guid.Empty ? model.Id : Guid.NewGuid(),
                 Created = DateTime.Now
             };
-            await _db.Aliases.AddAsync(alias).ConfigureAwait(false);
+            // await _db.Aliases.AddAsync(alias).ConfigureAwait(false);
+            await _db.session.StoreAsync(alias);
         }
         alias.SiteId = model.SiteId;
         alias.AliasUrl = model.AliasUrl;
@@ -165,7 +166,8 @@ internal class AliasRepository : IAliasRepository
 
         if (alias != null)
         {
-            _db.Aliases.Remove(alias);
+            //_db.Aliases.Remove(alias);
+            _db.session.Delete(alias);
             await _db.SaveChangesAsync().ConfigureAwait(false);
         }
     }

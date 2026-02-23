@@ -108,7 +108,8 @@ internal class ParamRepository : IParamRepository
                 Id = model.Id != Guid.Empty ? model.Id : Guid.NewGuid(),
                 Created = DateTime.Now
             };
-            await _db.Params.AddAsync(param).ConfigureAwait(false);
+            //await _db.Params.AddAsync(param).ConfigureAwait(false);
+            await _db.session.StoreAsync(param).ConfigureAwait(false);
         }
         param.Key = model.Key;
         param.Description = model.Description;
@@ -130,7 +131,9 @@ internal class ParamRepository : IParamRepository
 
         if (param != null)
         {
-            _db.Params.Remove(param);
+            //_db.Params.Remove(param);
+            _db.session.Delete(param);
+
             await _db.SaveChangesAsync().ConfigureAwait(false);
         }
     }

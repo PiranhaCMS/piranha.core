@@ -25,6 +25,7 @@ internal class LanguageRepository : ILanguageRepository
     {
         _db = db;
     }
+    
 
     /// <summary>
     /// Gets all available models.
@@ -104,7 +105,8 @@ internal class LanguageRepository : ILanguageRepository
             {
                 Id = model.Id != Guid.Empty ? model.Id : Guid.NewGuid()
             };
-            await _db.Languages.AddAsync(language).ConfigureAwait(false);
+            //await _db.Languages.AddAsync(language).ConfigureAwait(false);
+            await _db.session.StoreAsync(language).ConfigureAwait(false);
         }
         language.Culture = model.Culture;
         language.IsDefault = model.IsDefault;
@@ -125,7 +127,9 @@ internal class LanguageRepository : ILanguageRepository
 
         if (language != null)
         {
-            _db.Languages.Remove(language);
+            //_db.Languages.Remove(language);
+            _db.session.Delete(language);
+
             await _db.SaveChangesAsync().ConfigureAwait(false);
         }
     }

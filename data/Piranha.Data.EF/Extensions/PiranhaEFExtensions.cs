@@ -30,7 +30,8 @@ public static class PiranhaEFExtensions
         Action<DbContextOptionsBuilder> dboptions, int poolSize = 128,
         ServiceLifetime scope = ServiceLifetime.Scoped) where T : DbContext, IDb
     {
-        serviceBuilder.Services.AddPiranhaEF<T>(dboptions, poolSize, scope);
+       // todo - stitch in ravendb here
+       // serviceBuilder.Services.AddPiranhaStore<T>(dboptions, poolSize, scope);
 
         return serviceBuilder;
     }
@@ -45,13 +46,11 @@ public static class PiranhaEFExtensions
     /// <param name="scope">The optional lifetime</param>
     /// <typeparam name="T">The DbContext type</typeparam>
     /// <returns>The updated service collection</returns>
-    public static IServiceCollection AddPiranhaEF<T>(this IServiceCollection services,
-        Action<DbContextOptionsBuilder> dboptions, int poolSize = 128,
-        ServiceLifetime scope = ServiceLifetime.Scoped) where T : DbContext, IDb
+    public static IServiceCollection AddPiranhaStore<T>(this IServiceCollection services, ServiceLifetime scope = ServiceLifetime.Scoped)
+        where T : IDb
     {
-        services.AddDbContextPool<T>(dboptions, poolSize);
-
-        return RegisterServices<T>(services, scope);
+        
+        return services;
     }
 
     /// <summary>

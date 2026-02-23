@@ -9,6 +9,9 @@
  */
 
 using Microsoft.EntityFrameworkCore;
+using Piranha.Data;
+using Raven.Client.Documents.Linq;
+using Raven.Client.Documents.Session;
 
 namespace Piranha;
 
@@ -17,210 +20,207 @@ namespace Piranha;
 /// </summary>
 public interface IDb : IDisposable
 {
-    /// <summary>
+    public IAsyncDocumentSession session { get; }
+
+/// <summary>
     /// Gets/sets the alias set.
     /// </summary>
-    DbSet<Data.Alias> Aliases { get; set; }
+    IRavenQueryable<Alias> Aliases { get => session.Query<Alias>(); }
 
     /// <summary>
     /// Gets/sets the block set.
     /// </summary>
-    DbSet<Data.Block> Blocks { get; set; }
+    IRavenQueryable<Block> Blocks { get => session.Query<Block>(); }
 
     /// <summary>
     /// Gets/sets the block field set.
     /// </summary>
-    DbSet<Data.BlockField> BlockFields { get; set; }
+    IRavenQueryable<BlockField> BlockFields { get => session.Query<BlockField>(); }
 
     /// <summary>
     /// Gets/sets the category set.
     /// </summary>
-    DbSet<Data.Category> Categories { get; set; }
+    IRavenQueryable<Category> Categories { get => session.Query<Category>(); }
 
     /// <summary>
     /// Gets/sets the content set.
     /// </summary>
-    DbSet<Data.Content> Content { get; set; }
+    IRavenQueryable<Content> Content { get => session.Query<Content>(); }
 
     /// <summary>
     /// Gets/sets the content block set.
     /// </summary>
-    DbSet<Data.ContentBlock> ContentBlocks { get; set; }
+    IRavenQueryable<ContentBlock> ContentBlocks { get => session.Query<ContentBlock>(); }
 
     /// <summary>
     /// Gets/sets the content block field set.
     /// </summary>
-    DbSet<Data.ContentBlockField> ContentBlockFields { get; set; }
+    IRavenQueryable<ContentBlockField> ContentBlockFields { get  => session.Query<ContentBlockField>(); }
 
     /// <summary>
     /// Gets/sets the content block field translation set.
     /// </summary>
-    DbSet<Data.ContentBlockFieldTranslation> ContentBlockFieldTranslations { get; set; }
+    IRavenQueryable<ContentBlockFieldTranslation> ContentBlockFieldTranslations { get => session.Query<ContentBlockFieldTranslation>(); }
 
     /// <summary>
     /// Gets/sets the content field set.
     /// </summary>
-    DbSet<Data.ContentField> ContentFields { get; set; }
+    IRavenQueryable<ContentField> ContentFields { get  => session.Query<ContentField>(); }
 
     /// <summary>
     /// Gets/sets the content field translation set.
     /// </summary>
-    DbSet<Data.ContentFieldTranslation> ContentFieldTranslations { get; set; }
+    IRavenQueryable<ContentFieldTranslation> ContentFieldTranslations { get  => session.Query<ContentFieldTranslation>(); }
 
     /// <summary>
     /// Gets/sets the content taxonomy set.
     /// </summary>
-    DbSet<Data.ContentTaxonomy> ContentTaxonomies { get; set; }
+    IRavenQueryable<ContentTaxonomy> ContentTaxonomies { get  => session.Query<ContentTaxonomy>(); }
 
     /// <summary>
     /// Gets/sets the content translation set.
     /// </summary>
-    DbSet<Data.ContentTranslation> ContentTranslations { get; set; }
+    IRavenQueryable<ContentTranslation> ContentTranslations { get  => session.Query<ContentTranslation>(); }
 
     /// <summary>
     /// Gets/sets the content group set.
     /// </summary>
-    DbSet<Data.ContentGroup> ContentGroups { get; set; }
+    IRavenQueryable<ContentGroup> ContentGroups { get  => session.Query<ContentGroup>(); }
 
     /// <summary>
     /// Gets/sets the content type set.
     /// </summary>
-    DbSet<Data.ContentType> ContentTypes { get; set; }
+    IRavenQueryable<ContentType> ContentTypes { get => session.Query<ContentType>(); }
 
     /// <summary>
     /// Gets/sets the language set.
     /// </summary>
-    DbSet<Data.Language> Languages { get; set; }
+    IRavenQueryable<Language> Languages { get => session.Query<Language>(); }
 
     /// <summary>
     /// Gets/sets the media set.
     /// </summary>
-    DbSet<Data.Media> Media { get; set; }
+    IRavenQueryable<Media> Media { get => session.Query<Media>(); }
 
     /// <summary>
     /// Gets/sets the media folder set.
     /// </summary>
-    DbSet<Data.MediaFolder> MediaFolders { get; set; }
+    IRavenQueryable<MediaFolder> MediaFolders { get => session.Query<MediaFolder>(); }
 
     /// <summary>
     /// Gets/sets the media version set.
     /// </summary>
-    DbSet<Data.MediaVersion> MediaVersions { get; set; }
+    IRavenQueryable<MediaVersion> MediaVersions { get => session.Query<MediaVersion>(); }
 
     /// <summary>
     /// Gets/sets the page set.
     /// </summary>
-    DbSet<Data.Page> Pages { get; set; }
+    IRavenQueryable<Page> Pages { get => session.Query<Page>(); }
 
     /// <summary>
     /// Gets/sets the page block set.
     /// </summary>
-    DbSet<Data.PageBlock> PageBlocks { get; set; }
+    IRavenQueryable<PageBlock> PageBlocks { get => session.Query<PageBlock>(); }
 
     /// <summary>
     /// Gets/sets the page comments.
     /// </summary>
-    DbSet<Data.PageComment> PageComments { get; set; }
+    IRavenQueryable<PageComment> PageComments { get => session.Query<PageComment>(); }
 
     /// <summary>
     /// Gets/sets the page field set.
     /// </summary>
-    DbSet<Data.PageField> PageFields { get; set; }
+    IRavenQueryable<PageField> PageFields { get => session.Query<PageField>(); }
 
     /// <summary>
     /// Gets/sets the page permission set.
     /// </summary>
-    DbSet<Data.PagePermission> PagePermissions { get; set; }
+    IRavenQueryable<PagePermission> PagePermissions { get => session.Query<PagePermission>(); }
 
     /// <summary>
     /// Gets/sets the page revision set.
     /// </summary>
-    DbSet<Data.PageRevision> PageRevisions { get; set; }
+    IRavenQueryable<PageRevision> PageRevisions { get => session.Query<PageRevision>(); }
 
     /// <summary>
     /// Gets/sets the page type set.
     /// </summary>
-    DbSet<Data.PageType> PageTypes { get; set; }
+    IRavenQueryable<PageType> PageTypes { get => session.Query<PageType>(); }
 
     /// <summary>
     /// Gets/sets the param set.
     /// </summary>
-    DbSet<Data.Param> Params { get; set; }
+    IRavenQueryable<Param> Params { get => session.Query<Param>(); }
 
     /// <summary>
     /// Gets/sets the post set.
     /// </summary>
-    DbSet<Data.Post> Posts { get; set; }
+    IRavenQueryable<Post> Posts { get => session.Query<Post>(); }
 
     /// <summary>
     /// Gets/sets the post block set.
     /// </summary>
-    DbSet<Data.PostBlock> PostBlocks { get; set; }
+    IRavenQueryable<PostBlock> PostBlocks { get => session.Query<PostBlock>(); }
 
     /// <summary>
     /// Gets/sets the post comments.
     /// </summary>
-    DbSet<Data.PostComment> PostComments { get; set; }
+    IRavenQueryable<PostComment> PostComments { get => session.Query<PostComment>(); }
 
     /// <summary>
     /// Gets/sets the post field set.
     /// </summary>
-    DbSet<Data.PostField> PostFields { get; set; }
+    IRavenQueryable<PostField> PostFields { get => session.Query<PostField>(); }
 
     /// <summary>
     /// Gets/sets the post permission set.
     /// </summary>
-    DbSet<Data.PostPermission> PostPermissions { get; set; }
+    IRavenQueryable<PostPermission> PostPermissions { get => session.Query<PostPermission>(); }
 
     /// <summary>
     /// Gets/sets the post revision set.
     /// </summary>
-    DbSet<Data.PostRevision> PostRevisions { get; set; }
+    IRavenQueryable<PostRevision> PostRevisions { get => session.Query<PostRevision>(); }
 
     /// <summary>
     /// Gets/sets the post tag set.
     /// </summary>
-    DbSet<Data.PostTag> PostTags { get; set; }
+    IRavenQueryable<PostTag> PostTags { get => session.Query<PostTag>(); }
 
     /// <summary>
     /// Gets/sets the post type set.
     /// </summary>
-    DbSet<Data.PostType> PostTypes { get; set; }
+    IRavenQueryable<PostType> PostTypes { get => session.Query<PostType>(); }
 
     /// <summary>
     /// Gets/sets the site set.
     /// </summary>
-    DbSet<Data.Site> Sites { get; set; }
+    IRavenQueryable<Site> Sites { get => session.Query<Site>(); }
 
     /// <summary>
     /// Gets/sets the site field set.
     /// </summary>
-    DbSet<Data.SiteField> SiteFields { get; set; }
+    IRavenQueryable<SiteField> SiteFields { get => session.Query<SiteField>(); }
 
     /// <summary>
     /// Gets/sets the site type set.
     /// </summary>
-    DbSet<Data.SiteType> SiteTypes { get; set; }
+    IRavenQueryable<SiteType> SiteTypes { get => session.Query<SiteType>(); }
 
     /// <summary>
     /// Gets/sets the tag set.
     /// </summary>
-    DbSet<Data.Tag> Tags { get; set; }
+    IRavenQueryable<Tag> Tags { get => session.Query<Tag>(); }
 
     /// <summary>
     /// Gets/sets the taxonomy set.
     /// </summary>
-    DbSet<Data.Taxonomy> Taxonomies { get; set; }
+    IRavenQueryable<Taxonomy> Taxonomies { get => session.Query<Taxonomy>(); }
 
     /// <summary>
     /// Gets the entity set for the specified type.
     /// </summary>
-    DbSet<T> Set<T>() where T : class;
-
-    /// <summary>
-    /// Saves the changes made to the context.
-    /// </summary>
-    int SaveChanges();
+    IRavenQueryable<T> Set<T>() where T : class;
 
     /// <summary>
     /// Saves the changes made to the context.

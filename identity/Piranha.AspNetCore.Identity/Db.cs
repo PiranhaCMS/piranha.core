@@ -63,22 +63,6 @@ public abstract class Db<T> :
         }
     }
 
-    /// <summary>
-    ///     Creates and configures the data model.
-    /// </summary>
-    /// <param name="mb">The current model builder</param>
-    protected override void OnModelCreating(ModelBuilder mb)
-    {
-        base.OnModelCreating(mb);
-
-        mb.Entity<User>().ToTable("Piranha_Users");
-        mb.Entity<Role>().ToTable("Piranha_Roles");
-        mb.Entity<IdentityUserClaim<Guid>>().ToTable("Piranha_UserClaims");
-        mb.Entity<IdentityUserRole<Guid>>().ToTable("Piranha_UserRoles");
-        mb.Entity<IdentityUserLogin<Guid>>().ToTable("Piranha_UserLogins");
-        mb.Entity<IdentityRoleClaim<Guid>>().ToTable("Piranha_RoleClaims");
-        mb.Entity<IdentityUserToken<Guid>>().ToTable("Piranha_UserTokens");
-    }
 
     /// <summary>
     /// Seeds the default data.
