@@ -30,6 +30,7 @@
     <Project Path="identity/Piranha.AspNetCore.Identity/Piranha.AspNetCore.Identity.csproj" />
   </Folder>
   <Folder Name="/test/">
+    <Project Path="test/Aero.Identity.Tests/Aero.Identity.Tests.csproj" />
     <Project Path="test/Piranha.Manager.Tests/Piranha.Manager.Tests.csproj" />
     <Project Path="test/Piranha.Tests/Piranha.Tests.csproj" />
   </Folder>
