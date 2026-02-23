@@ -1,10 +1,10 @@
 # Implementation Plan: Implement RavenDB Identity Provider (Aero.Identity)
 
-## Phase 1: Scaffolding and Models
-- [ ] Task: Set up `Aero.Identity` project structure and target .NET 10.0
-- [ ] Task: Define `RavenUser` and `RavenRole` document models for RavenDB
-    - [ ] Include `Passkeys` list in `RavenUser`
-- [ ] Task: Conductor - User Manual Verification 'Phase 1: Scaffolding and Models' (Protocol in workflow.md)
+## Phase 1: Scaffolding and Models [checkpoint: e9bb809]
+- [x] Task: Set up `Aero.Identity` project structure and target .NET 10.0 118c35d
+- [x] Task: Define `RavenUser` and `RavenRole` document models for RavenDB c4a8a87
+    - [x] Include `Passkeys` list in `RavenUser`
+- [x] Task: Conductor - User Manual Verification 'Phase 1: Scaffolding and Models' (Protocol in workflow.md) e9bb809
 
 ## Phase 2: RavenDB Stores (Core & Security)
 - [ ] Task: Implement `RavenUserStore` (Part 1: Basic & Security)
