@@ -10,17 +10,17 @@ public class RavenUser : IdentityUser
     /// <summary>
     /// Gets or sets the list of roles associated with the user.
     /// </summary>
-    public List<string> Roles { get; set; } = new();
+    public List<string> Roles { get; set; } = [];
 
     /// <summary>
     /// Gets or sets the list of external logins associated with the user.
     /// </summary>
-    public List<RavenUserLogin> Logins { get; set; } = new();
+    public List<RavenUserLogin> Logins { get; set; } = [];
 
     /// <summary>
     /// Gets or sets the list of claims associated with the user.
     /// </summary>
-    public List<RavenUserClaim> Claims { get; set; } = new();
+    public List<RavenUserClaim> Claims { get; set; } = [];
 
     /// <summary>
     /// Gets or sets the authenticator key for the user.
@@ -35,5 +35,5 @@ public class RavenUser : IdentityUser
     /// <summary>
     /// Gets or sets the list of passkey credentials associated with the user.
     /// </summary>
-    public List<PasskeyCredential> Passkeys { get; set; } = new();
+    public List<PasskeyCredential> Passkeys { get; set; } = [];
 }
