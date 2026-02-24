@@ -107,7 +107,8 @@ public class PostTests : BaseTestsAsync
 
     public override async Task InitializeAsync()
     {
-        _services = CreateServiceCollection()
+        await base.InitializeAsync();
+        _services = CreateServiceCollection(_session)
             .AddSingleton<IMyService, MyService>()
             .BuildServiceProvider();
 

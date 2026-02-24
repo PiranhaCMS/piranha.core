@@ -1,4 +1,4 @@
-﻿/*
+/*
  * Copyright (c) .NET Foundation and Contributors
  *
  * This software may be modified and distributed under the terms
@@ -14,27 +14,43 @@ using Xunit;
 using Piranha.ImageSharp;
 using Piranha.Repositories;
 using Piranha.Services;
+using Raven.Client.Documents;
+using Raven.Client.Documents.Session;
+using Raven.TestDriver;
 
 namespace Piranha.Tests;
 
 /// <summary>
 /// Base class for using the api.
 /// </summary>
-public abstract class BaseTestsAsync : IAsyncLifetime
+public abstract class BaseTestsAsync : RavenTestDriver, IAsyncLifetime
 {
     protected IStorage _storage = new Local.FileStorage("uploads/", "~/uploads/");
     protected IImageProcessor _processor = new ImageSharpProcessor();
-    protected IServiceProvider _services = CreateServiceCollection().BuildServiceProvider();
+    protected IServiceProvider _services;
     protected Cache.ICache _cache;
 
-    public abstract Task InitializeAsync();
-    public abstract Task DisposeAsync();
+    protected IDocumentStore _store;
+    protected IAsyncDocumentSession _session;
 
-    protected static IServiceCollection CreateServiceCollection()
+    public virtual async Task InitializeAsync()
+    {
+        _store = GetDocumentStore();
+        _session = _store.OpenAsyncSession();
+        _services = CreateServiceCollection(_session).BuildServiceProvider();
+    }
+
+    public virtual async Task DisposeAsync()
+    {
+        _session.Dispose();
+        _store.Dispose();
+    }
+
+    protected static IServiceCollection CreateServiceCollection(IAsyncDocumentSession session)
     {
         return new ServiceCollection()
-            .AddPiranhaStore<SQLiteDb>(db =>
-                db.UseSqlite("Filename=./piranha.tests.db"))
+            .AddScoped(_ => session)
+            .AddPiranhaStore<TestDb>()
             .AddPiranha()
             .AddMemoryCache()
             .AddDistributedMemoryCache()
@@ -45,11 +61,7 @@ public abstract class BaseTestsAsync : IAsyncLifetime
     /// Gets the test context.
     /// </summary>
     protected IDb GetDb() {
-        var builder = new DbContextOptionsBuilder<SQLiteDb>();
-
-        builder.UseSqlite("Filename=./piranha.tests.db");
-
-        return new SQLiteDb(builder.Options);
+        return new TestDb(_session);
     }
 
     /// <summary>

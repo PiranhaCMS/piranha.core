@@ -1,4 +1,4 @@
-﻿/*
+/*
  * Copyright (c) .NET Foundation and Contributors
  *
  * This software may be modified and distributed under the terms
@@ -10,29 +10,39 @@
 
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using Raven.Client.Documents;
+using Raven.Client.Documents.Session;
+using Raven.TestDriver;
 
 namespace Piranha.Tests;
 
 /// <summary>
 /// Base class for using the api.
 /// </summary>
-public abstract class BaseTests : IDisposable
+public abstract class BaseTests : RavenTestDriver, IDisposable
 {
     protected IStorage storage = new Local.FileStorage("uploads/", "~/uploads/");
     protected IServiceProvider services = new ServiceCollection()
         .BuildServiceProvider();
 
+    protected IDocumentStore _store;
+    protected IAsyncDocumentSession _session;
+
     /// <summary>
     /// Default constructor.
     /// </summary>
     public BaseTests() {
+        _store = GetDocumentStore();
+        _session = _store.OpenAsyncSession();
         Init();
     }
 
     /// <summary>
     /// Disposes the test class.
     /// </summary>
-    public void Dispose() {
+    public new void Dispose() {
+        _session.Dispose();
+        _store.Dispose();
         Cleanup();
     }
 
@@ -51,11 +61,6 @@ public abstract class BaseTests : IDisposable
     /// Gets the test context.
     /// </summary>
     protected IDb GetDb() {
-        // todo - stitch ravendb in here
-        var builder = new DbContextOptionsBuilder<SQLiteDb>();
-
-        builder.UseSqlite("Filename=./piranha.tests.db");
-
-        return new SQLiteDb(builder.Options);
+        return new TestDb(_session);
     }
 }
