@@ -1,10 +1,22 @@
+using Aero.Identity;
 using Microsoft.EntityFrameworkCore;
 using MvcWeb;
 using Piranha;
 using Piranha.AttributeBuilder;
 using Piranha.Manager.Editor;
+using Raven.Client.Documents;
 
 var builder = WebApplication.CreateBuilder(args);
+
+// Configure RavenDB
+var ravenStore = new DocumentStore
+{
+    Urls = new[] { builder.Configuration.GetValue<string>("RavenDb:Url") ?? "http://localhost:8080" },
+    Database = builder.Configuration.GetValue<string>("RavenDb:Database") ?? "piranha"
+}.Initialize();
+
+builder.Services.AddSingleton<IDocumentStore>(ravenStore);
+builder.Services.AddScoped(s => s.GetRequiredService<IDocumentStore>().OpenAsyncSession());
 
 builder.AddPiranha(options =>
 {
@@ -24,10 +36,8 @@ builder.AddPiranha(options =>
     options.UseTinyMCE();
     options.UseMemoryCache();
 
-    var connectionString = builder.Configuration.GetConnectionString("piranha");
-    // todo - stitch ravendb in here
-    // options.UseEF<SQLiteDb>(db => db.UseSqlite(connectionString));
-    // options.UseIdentityWithSeed<IdentitySQLiteDb>(db => db.UseSqlite(connectionString));
+    // Use RavenDB Identity
+    builder.Services.AddPiranhaRavenDbIdentity();
 
     /**
      * Here you can configure the different permissions
@@ -72,14 +82,9 @@ try
 
         options.UseManager();
         options.UseTinyMCE();
-        // todo - fix identity - ravendb refactor
-        //options.UseIdentity();
         
-
         // Seed data
-
         Seed.RunAsync(options.Api).GetAwaiter().GetResult();
-        
     });
     
     app.Run();
