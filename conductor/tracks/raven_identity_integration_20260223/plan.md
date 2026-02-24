@@ -11,18 +11,18 @@
     - [x] Implement module registration logic
 - [x] Task: Conductor - User Manual Verification 'Phase 1: Module and Extensions' (Protocol in workflow.md) 77786d8
 
-## Phase 2: TODO Resolution (Solution-Wide)
-- [ ] Task: Scan solution for RavenDB-related `// TODO` items
-- [ ] Task: Address Identity-related TODOs
-- [ ] Task: Address Repository/Core-related TODOs (where applicable for integration foundation)
-- [ ] Task: Conductor - User Manual Verification 'Phase 2: TODO Resolution' (Protocol in workflow.md)
+## Phase 2: TODO Resolution (Solution-Wide) [checkpoint: 7cec895]
+- [x] Task: Scan solution for RavenDB-related `// TODO` items 7cec895
+- [x] Task: Address Identity-related TODOs 7cec895
+- [x] Task: Address Repository/Core-related TODOs (where applicable for integration foundation) 7cec895
+- [x] Task: Conductor - User Manual Verification 'Phase 2: TODO Resolution' (Protocol in workflow.md) 7cec895
 
-## Phase 3: Startup Integration and Verification
-- [ ] Task: Integrate `AddPiranhaRavenDbIdentity` into a sample application (e.g., `MvcWeb`)
-- [ ] Task: Verify User/Role management in Piranha Manager
-- [ ] Task: Verify Login/Logout flows
-- [ ] Task: Conductor - User Manual Verification 'Phase 3: Startup Integration and Verification' (Protocol in workflow.md)
+## Phase 3: Startup Integration and Verification [checkpoint: 73d4c2e]
+- [x] Task: Integrate `AddPiranhaRavenDbIdentity` into a sample application (e.g., `MvcWeb`) 73d4c2e
+- [x] Task: Verify User/Role management in Piranha Manager 73d4c2e
+- [x] Task: Verify Login/Logout flows 73d4c2e
+- [x] Task: Conductor - User Manual Verification 'Phase 3: Startup Integration and Verification' (Protocol in workflow.md) 73d4c2e
 
 ## Quality Gate: Final Verification
-- [ ] Task: Run full integration test suite and confirm 100% coverage for new integration logic
-- [ ] Task: Verify no remaining RavenDB // TODOs exist in the codebase
+- [x] Task: Run full integration test suite and confirm 100% coverage for new integration logic 73d4c2e
+- [x] Task: Verify no remaining RavenDB // TODOs exist in the codebase 73d4c2e
