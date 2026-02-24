@@ -43,10 +43,10 @@ public class SiteApiController : Controller
     /// </summary>
     /// <param name="id">The unique id</param>
     /// <returns>The page edit model</returns>
-    [Route("{id:Guid}")]
+    [Route("{id}")]
     [HttpGet]
     [Authorize(Policy = Permission.SitesEdit)]
-    public async Task<SiteEditModel> Get(Guid id)
+    public async Task<SiteEditModel> Get(string id)
     {
         return await _service.GetById(id);
     }
@@ -56,10 +56,10 @@ public class SiteApiController : Controller
     /// </summary>
     /// <param name="id">The unique id</param>
     /// <returns>The page edit model</returns>
-    [Route("content/{id:Guid}")]
+    [Route("content/{id}")]
     [HttpGet]
     [Authorize(Policy = Permission.SitesEdit)]
-    public async Task<IActionResult> GetContent(Guid id)
+    public async Task<IActionResult> GetContent(string id)
     {
         var model = await _service.GetContentById(id);
 
@@ -168,7 +168,7 @@ public class SiteApiController : Controller
     [Route("delete")]
     [HttpDelete]
     [Authorize(Policy = Permission.SitesDelete)]
-    public async Task<StatusMessage> Delete([FromBody]Guid id)
+    public async Task<StatusMessage> Delete([FromBody]string id)
     {
         try
         {

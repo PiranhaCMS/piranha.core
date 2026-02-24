@@ -16,7 +16,7 @@ public sealed class SiteField : ContentFieldBase
     /// <summary>
     /// Gets/sets the site id.
     /// </summary>
-    public Guid SiteId { get; set; }
+    public string SiteId { get; set; }
 
     /// <summary>
     /// Gets/sets the site.

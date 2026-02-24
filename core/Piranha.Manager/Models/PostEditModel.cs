@@ -20,7 +20,7 @@ public class PostEditModel : Content.ContentEditModel
     /// <summary>
     /// Gets/sets the mandatory blog id.
     /// </summary>
-    public Guid BlogId { get; set; }
+    public string BlogId { get; set; }
 
     /// <summary>
     /// Gets/sets the optional primary image.

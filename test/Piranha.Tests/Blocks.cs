@@ -17,7 +17,7 @@ namespace Piranha.Tests;
 
 public class Blocks : BaseTestsAsync
 {
-    private Guid image1Id;
+    private string image1Id;
     private IContentService<Page, PageField, Models.PageBase> contentService;
 
     /// <summary>
@@ -25,6 +25,8 @@ public class Blocks : BaseTestsAsync
     /// </summary>
     public override async Task InitializeAsync()
     {
+        await base.InitializeAsync();
+
         using (var api = CreateApi())
         {
             Piranha.App.Init(api);
@@ -41,7 +43,7 @@ public class Blocks : BaseTestsAsync
                 };
                 await api.Media.SaveAsync(image1);
 
-                image1Id = image1.Id.Value;
+                image1Id = image1.Id;
             }
         }
     }
@@ -184,7 +186,7 @@ public class Blocks : BaseTestsAsync
                 Page = new Models.PageInfo
                 {
 
-                    Id = Guid.NewGuid(),
+                    Id = Snowflake.NewId(),
                     Title = "Lorem ipsum"
                 }
             }
@@ -213,7 +215,7 @@ public class Blocks : BaseTestsAsync
                 Post = new Models.PostInfo
                 {
 
-                    Id = Guid.NewGuid(),
+                    Id = Snowflake.NewId(),
                     Title = "Lorem ipsum"
                 }
             }

@@ -1,4 +1,4 @@
-﻿/*
+/*
  * Copyright (c) .NET Foundation and Contributors
  *
  * This software may be modified and distributed under the terms
@@ -22,17 +22,17 @@ public sealed class Post : RoutedContentBase<PostField>
     /// Gets/sets the id of the blog page this
     /// post belongs to.
     /// </summary>
-    public Guid BlogId { get; set; }
+    public string BlogId { get; set; }
 
     /// <summary>
     /// Gets/sets the category id.
     /// </summary>
-    public Guid CategoryId { get; set; }
+    public string CategoryId { get; set; }
 
     /// <summary>
     /// Gets/sets the optional primary image id.
     /// </summary>
-    public Guid? PrimaryImageId { get; set; }
+    public string PrimaryImageId { get; set; }
 
     /// <summary>
     /// Gets/sets the optional excerpt.

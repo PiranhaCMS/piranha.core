@@ -37,7 +37,8 @@ internal sealed class PostService : IPostService
     /// <param name="mediaService">The media service</param>
     /// <param name="cache">The optional model cache</param>
     /// <param name="search">The optional search service</param>
-    public PostService(IPostRepository repo, IContentFactory factory, ISiteService siteService, IPageService pageService,
+    public PostService(IPostRepository repo, IContentFactory factory, ISiteService siteService,
+        IPageService pageService,
         IParamService paramService, IMediaService mediaService, ICache cache = null, ISearch search = null)
     {
         _repo = repo;
@@ -76,8 +77,10 @@ internal sealed class PostService : IPostService
                 model.EnableComments = config.CommentsEnabledForPosts;
                 model.CloseCommentsAfterDays = config.CommentsCloseAfterDays;
             }
+
             return model;
         }
+
         return null;
     }
 
@@ -88,11 +91,13 @@ internal sealed class PostService : IPostService
     /// <param name="index">The optional page to fetch</param>
     /// <param name="pageSize">The optional page size</param>
     /// <returns>The posts</returns>
-    public Task<IEnumerable<DynamicPost>> GetAllAsync(Guid blogId, int? index = null, int? pageSize = null)
+    public async Task<IEnumerable<DynamicPost>> GetAllDynamicAsync(string blogId, int? index = null, int? pageSize = null)
     {
-        return GetAllAsync<DynamicPost>(blogId, index, pageSize);
+        return await GetAllAsync<DynamicPost>(blogId, index, pageSize);
     }
 
+    
+    // todo - rename this to GetAllByIdAsync
     /// <summary>
     /// Gets the available post items.
     /// </summary>
@@ -100,7 +105,8 @@ internal sealed class PostService : IPostService
     /// <param name="index">The optional page to fetch</param>
     /// <param name="pageSize">The optional page size</param>
     /// <returns>The posts</returns>
-    public async Task<IEnumerable<T>> GetAllAsync<T>(Guid blogId, int? index = null, int? pageSize = null) where T : PostBase
+    public async Task<IEnumerable<T>> GetAllAsync<T>(string blogId, int? index = null, int? pageSize = null)
+        where T : PostBase
     {
         if (index.HasValue && !pageSize.HasValue)
         {
@@ -124,6 +130,7 @@ internal sealed class PostService : IPostService
                 models.Add(post);
             }
         }
+
         return models;
     }
 
@@ -132,7 +139,7 @@ internal sealed class PostService : IPostService
     /// </summary>
     /// <param name="siteId">The optional site id</param>
     /// <returns>The posts</returns>
-    public Task<IEnumerable<DynamicPost>> GetAllBySiteIdAsync(Guid? siteId = null)
+    public Task<IEnumerable<DynamicPost>> GetAllBySiteIdAsync(string siteId = null)
     {
         return GetAllBySiteIdAsync<DynamicPost>(siteId);
     }
@@ -142,10 +149,10 @@ internal sealed class PostService : IPostService
     /// </summary>
     /// <param name="siteId">The optional site id</param>
     /// <returns>The posts</returns>
-    public async Task<IEnumerable<T>> GetAllBySiteIdAsync<T>(Guid? siteId = null) where T : PostBase
+    public async Task<IEnumerable<T>> GetAllBySiteIdAsync<T>(string siteId = null) where T : PostBase
     {
         var models = new List<T>();
-        var posts = await _repo.GetAllBySiteId((await EnsureSiteIdAsync(siteId).ConfigureAwait(false)).Value)
+        var posts = await _repo.GetAllBySiteId(await EnsureSiteIdAsync(siteId).ConfigureAwait(false))
             .ConfigureAwait(false);
         var pages = new List<PageInfo>();
 
@@ -158,6 +165,7 @@ internal sealed class PostService : IPostService
                 models.Add(post);
             }
         }
+
         return models;
     }
 
@@ -167,26 +175,28 @@ internal sealed class PostService : IPostService
     /// <param name="slug">The blog slug</param>
     /// <param name="siteId">The optional site id</param>
     /// <returns>The posts</returns>
-    public Task<IEnumerable<DynamicPost>> GetAllAsync(string slug, Guid? siteId = null)
+    public Task<IEnumerable<DynamicPost>> GetDynamicAllAsync(string slug, string siteId = null)
     {
         return GetAllAsync<DynamicPost>(slug, siteId);
     }
 
+    // todo - rename the method to GetAllBySlugAsync()
     /// <summary>
     /// Gets the available posts for the specified blog.
     /// </summary>
     /// <param name="slug">The blog slug</param>
     /// <param name="siteId">The optional site id</param>
     /// <returns>The posts</returns>
-    public async Task<IEnumerable<T>> GetAllAsync<T>(string slug, Guid? siteId = null) where T : PostBase
+    public async Task<IEnumerable<T>> GetAllAsync<T>(string slug, string siteId = null) where T : PostBase
     {
         siteId = await EnsureSiteIdAsync(siteId).ConfigureAwait(false);
         var blogId = await _pageService.GetIdBySlugAsync(slug, siteId).ConfigureAwait(false);
 
-        if (blogId.HasValue)
+        if (!string.IsNullOrEmpty(blogId))
         {
-            return await GetAllAsync<T>(blogId.Value).ConfigureAwait(false);
+            return await GetAllAsync<T>(blogId: blogId).ConfigureAwait(false);
         }
+
         return new List<T>();
     }
 
@@ -195,7 +205,7 @@ internal sealed class PostService : IPostService
     /// </summary>
     /// <param name="blogId">The blog id</param>
     /// <returns>The available categories</returns>
-    public Task<IEnumerable<Taxonomy>> GetAllCategoriesAsync(Guid blogId)
+    public Task<IEnumerable<Taxonomy>> GetAllCategoriesAsync(string blogId)
     {
         return _repo.GetAllCategories(blogId);
     }
@@ -205,7 +215,7 @@ internal sealed class PostService : IPostService
     /// </summary>
     /// <param name="blogId">The blog id</param>
     /// <returns>The available tags</returns>
-    public Task<IEnumerable<Taxonomy>> GetAllTagsAsync(Guid blogId)
+    public Task<IEnumerable<Taxonomy>> GetAllTagsAsync(string blogId)
     {
         return _repo.GetAllTags(blogId);
     }
@@ -216,7 +226,7 @@ internal sealed class PostService : IPostService
     /// </summary>
     /// <param name="blogId">The unique blog id</param>
     /// <returns>The posts that have a draft</returns>
-    public Task<IEnumerable<Guid>> GetAllDraftsAsync(Guid blogId)
+    public Task<IEnumerable<string>> GetAllDraftsAsync(string blogId)
     {
         return _repo.GetAllDrafts(blogId);
     }
@@ -229,7 +239,7 @@ internal sealed class PostService : IPostService
     /// <param name="page">The optional page number</param>
     /// <param name="pageSize">The optional page size</param>
     /// <returns>The available comments</returns>
-    public Task<IEnumerable<Comment>> GetAllCommentsAsync(Guid? postId = null, bool onlyApproved = true,
+    public Task<IEnumerable<Comment>> GetAllCommentsAsync(string postId = null, bool onlyApproved = true,
         int? page = null, int? pageSize = null)
     {
         return GetAllCommentsAsync(postId, onlyApproved, false, page, pageSize);
@@ -243,7 +253,7 @@ internal sealed class PostService : IPostService
     /// <param name="page">The optional page number</param>
     /// <param name="pageSize">The optional page size</param>
     /// <returns>The available comments</returns>
-    public Task<IEnumerable<Comment>> GetAllPendingCommentsAsync(Guid? postId = null,
+    public Task<IEnumerable<Comment>> GetAllPendingCommentsAsync(string postId = null,
         int? page = null, int? pageSize = null)
     {
         return GetAllCommentsAsync(postId, false, true, page, pageSize);
@@ -254,7 +264,7 @@ internal sealed class PostService : IPostService
     /// </summary>
     /// <param name="archiveId">The archive id</param>
     /// <returns>The number of posts</returns>
-    public Task<int> GetCountAsync(Guid archiveId)
+    public Task<int> GetCountAsync(string archiveId)
     {
         return _repo.GetCount(archiveId);
     }
@@ -264,7 +274,7 @@ internal sealed class PostService : IPostService
     /// </summary>
     /// <param name="id">The unique id</param>
     /// <returns>The post model</returns>
-    public Task<DynamicPost> GetByIdAsync(Guid id)
+    public Task<DynamicPost> GetByIdAsync(string id)
     {
         return GetByIdAsync<DynamicPost>(id);
     }
@@ -275,7 +285,7 @@ internal sealed class PostService : IPostService
     /// <typeparam name="T">The model type</typeparam>
     /// <param name="id">The unique id</param>
     /// <returns>The post model</returns>
-    public Task<T> GetByIdAsync<T>(Guid id) where T : PostBase
+    public Task<T> GetByIdAsync<T>(string id) where T : PostBase
     {
         return GetByIdAsync<T>(id, new List<PageInfo>());
     }
@@ -287,7 +297,7 @@ internal sealed class PostService : IPostService
     /// <param name="slug">The unique slug</param>
     /// <param name="siteId">The optional site id</param>
     /// <returns>The post model</returns>
-    public Task<DynamicPost> GetBySlugAsync(string blog, string slug, Guid? siteId = null)
+    public Task<DynamicPost> GetBySlugAsync(string blog, string slug, string siteId = null)
     {
         return GetBySlugAsync<DynamicPost>(blog, slug, siteId);
     }
@@ -300,16 +310,17 @@ internal sealed class PostService : IPostService
     /// <param name="slug">The unique slug</param>
     /// <param name="siteId">The optional site id</param>
     /// <returns>The post model</returns>
-    public async Task<T> GetBySlugAsync<T>(string blog, string slug, Guid? siteId = null) where T : PostBase
+    public async Task<T> GetBySlugAsync<T>(string blog, string slug, string siteId = null) where T : PostBase
     {
         siteId = await EnsureSiteIdAsync(siteId).ConfigureAwait(false);
 
         var blogId = await _pageService.GetIdBySlugAsync(blog, siteId).ConfigureAwait(false);
 
-        if (blogId.HasValue)
+        if (!string.IsNullOrEmpty(blogId))
         {
-            return await GetBySlugAsync<T>(blogId.Value, slug).ConfigureAwait(false);
+            return await GetBySlugAsync<T>(blogId, slug).ConfigureAwait(false);
         }
+
         return null;
     }
 
@@ -319,7 +330,7 @@ internal sealed class PostService : IPostService
     /// <param name="blogId">The unique blog slug</param>
     /// <param name="slug">The unique slug</param>
     /// <returns>The post model</returns>
-    public Task<DynamicPost> GetBySlugAsync(Guid blogId, string slug)
+    public Task<DynamicPost> GetBySlugAsync(string blogId, string slug)
     {
         return GetBySlugAsync<DynamicPost>(blogId, slug);
     }
@@ -331,27 +342,29 @@ internal sealed class PostService : IPostService
     /// <param name="blogId">The unique blog slug</param>
     /// <param name="slug">The unique slug</param>
     /// <returns>The post model</returns>
-    public async Task<T> GetBySlugAsync<T>(Guid blogId, string slug) where T : PostBase
+    public async Task<T> GetBySlugAsync<T>(string blogId, string slug) where T : PostBase
     {
         PostBase model = null;
 
         // Lets see if we can resolve the slug from cache
-        var postId = _cache == null ? null : await _cache.GetAsync<Guid?>($"PostId_{blogId}_{slug}").ConfigureAwait(false);
+        var postId = _cache == null
+            ? null
+            : await _cache.GetAsync<string>($"PostId_{blogId}_{slug}").ConfigureAwait(false);
 
-        if (postId.HasValue)
+        if (!string.IsNullOrEmpty(postId))
         {
             if (typeof(T) == typeof(PostInfo))
             {
                 if (_cache != null)
                 {
-                    model = await _cache.GetAsync<PostInfo>($"PostInfo_{postId.ToString()}").ConfigureAwait(false);
+                    model = await _cache.GetAsync<PostInfo>($"PostInfo_{postId}").ConfigureAwait(false);
                 }
             }
             else if (!typeof(DynamicPost).IsAssignableFrom(typeof(T)))
             {
                 if (_cache != null)
                 {
-                    model = await _cache.GetAsync<PostBase>(postId.ToString()).ConfigureAwait(false);
+                    model = await _cache.GetAsync<PostBase>(postId).ConfigureAwait(false);
                 }
             }
         }
@@ -372,6 +385,7 @@ internal sealed class PostService : IPostService
         {
             return (T)model;
         }
+
         return null;
     }
 
@@ -380,7 +394,7 @@ internal sealed class PostService : IPostService
     /// </summary>
     /// <param name="id">The unique id</param>
     /// <returns>The draft, or null if no draft exists</returns>
-    public Task<DynamicPost> GetDraftByIdAsync(Guid id)
+    public Task<DynamicPost> GetDraftByIdAsync(string id)
     {
         return GetDraftByIdAsync<DynamicPost>(id);
     }
@@ -391,7 +405,7 @@ internal sealed class PostService : IPostService
     /// <typeparam name="T">The model type</typeparam>
     /// <param name="id">The unique id</param>
     /// <returns>The draft, or null if no draft exists</returns>
-    public async Task<T> GetDraftByIdAsync<T>(Guid id) where T : PostBase
+    public async Task<T> GetDraftByIdAsync<T>(string id) where T : PostBase
     {
         var draft = await _repo.GetDraftById<T>(id).ConfigureAwait(false);
 
@@ -401,6 +415,7 @@ internal sealed class PostService : IPostService
 
             await OnLoadAsync(draft, blog, true).ConfigureAwait(false);
         }
+
         return draft;
     }
 
@@ -410,14 +425,16 @@ internal sealed class PostService : IPostService
     /// <param name="blogId">The blog id</param>
     /// <param name="slug">The unique slug</param>
     /// <returns>The model</returns>
-    public async Task<Taxonomy> GetCategoryBySlugAsync(Guid blogId, string slug)
+    public async Task<Taxonomy> GetCategoryBySlugAsync(string blogId, string slug)
     {
-        var id = _cache == null ? null : await _cache.GetAsync<Guid?>($"Category_{blogId}_{slug}").ConfigureAwait(false);
+        var id = _cache == null
+            ? null
+            : await _cache.GetAsync<string>($"Category_{blogId}_{slug}").ConfigureAwait(false);
         Taxonomy model = null;
 
-        if (id.HasValue)
+        if (!string.IsNullOrEmpty(id))
         {
-            model = await _cache.GetAsync<Taxonomy>(id.Value.ToString()).ConfigureAwait(false);
+            model = await _cache.GetAsync<Taxonomy>(id).ConfigureAwait(false);
         }
 
         if (model == null)
@@ -426,10 +443,11 @@ internal sealed class PostService : IPostService
 
             if (model != null && _cache != null)
             {
-                await _cache.SetAsync(model.Id.ToString(), model).ConfigureAwait(false);
+                await _cache.SetAsync(model.Id, model).ConfigureAwait(false);
                 await _cache.SetAsync($"Category_{blogId}_{slug}", model.Id).ConfigureAwait(false);
             }
         }
+
         return model;
     }
 
@@ -438,9 +456,9 @@ internal sealed class PostService : IPostService
     /// </summary>
     /// <param name="id">The unique id</param>
     /// <returns>The model</returns>
-    public async Task<Taxonomy> GetCategoryByIdAsync(Guid id)
+    public async Task<Taxonomy> GetCategoryByIdAsync(string id)
     {
-        Taxonomy model = _cache == null ? null : await _cache.GetAsync<Taxonomy>(id.ToString()).ConfigureAwait(false);
+        Taxonomy model = _cache == null ? null : await _cache.GetAsync<Taxonomy>(id).ConfigureAwait(false);
 
         if (model == null)
         {
@@ -448,9 +466,10 @@ internal sealed class PostService : IPostService
 
             if (model != null && _cache != null)
             {
-                await _cache.SetAsync(model.Id.ToString(), model).ConfigureAwait(false);
+                await _cache.SetAsync(model.Id, model).ConfigureAwait(false);
             }
         }
+
         return model;
     }
 
@@ -460,14 +479,14 @@ internal sealed class PostService : IPostService
     /// <param name="blogId">The blog id</param>
     /// <param name="slug">The unique slug</param>
     /// <returns>The model</returns>
-    public async Task<Taxonomy> GetTagBySlugAsync(Guid blogId, string slug)
+    public async Task<Taxonomy> GetTagBySlugAsync(string blogId, string slug)
     {
-        var id = _cache == null ? null : await _cache.GetAsync<Guid?>($"Tag_{blogId}_{slug}").ConfigureAwait(false);
+        var id = _cache == null ? null : await _cache.GetAsync<string>($"Tag_{blogId}_{slug}").ConfigureAwait(false);
         Taxonomy model = null;
 
-        if (id.HasValue)
+        if (!string.IsNullOrEmpty(id))
         {
-            model = await _cache.GetAsync<Taxonomy>(id.Value.ToString()).ConfigureAwait(false);
+            model = await _cache.GetAsync<Taxonomy>(id).ConfigureAwait(false);
         }
 
         if (model == null)
@@ -476,10 +495,11 @@ internal sealed class PostService : IPostService
 
             if (model != null && _cache != null)
             {
-                await _cache.SetAsync(model.Id.ToString(), model).ConfigureAwait(false);
+                await _cache.SetAsync(model.Id, model).ConfigureAwait(false);
                 await _cache.SetAsync($"Tag_{blogId}_{slug}", model.Id).ConfigureAwait(false);
             }
         }
+
         return model;
     }
 
@@ -488,9 +508,9 @@ internal sealed class PostService : IPostService
     /// </summary>
     /// <param name="id">The unique id</param>
     /// <returns>The model</returns>
-    public async Task<Taxonomy> GetTagByIdAsync(Guid id)
+    public async Task<Taxonomy> GetTagByIdAsync(string id)
     {
-        Taxonomy model = _cache == null ? null : await _cache.GetAsync<Taxonomy>(id.ToString()).ConfigureAwait(false);
+        Taxonomy model = _cache == null ? null : await _cache.GetAsync<Taxonomy>(id).ConfigureAwait(false);
 
         if (model == null)
         {
@@ -498,9 +518,10 @@ internal sealed class PostService : IPostService
 
             if (model != null && _cache != null)
             {
-                await _cache.SetAsync(model.Id.ToString(), model).ConfigureAwait(false);
+                await _cache.SetAsync(model.Id, model).ConfigureAwait(false);
             }
         }
+
         return model;
     }
 
@@ -509,7 +530,7 @@ internal sealed class PostService : IPostService
     /// </summary>
     /// <param name="id">The comment id</param>
     /// <returns>The model</returns>
-    public Task<Comment> GetCommentByIdAsync(Guid id)
+    public Task<Comment> GetCommentByIdAsync(string id)
     {
         return _repo.GetCommentById(id);
     }
@@ -537,7 +558,7 @@ internal sealed class PostService : IPostService
     /// </summary>
     /// <param name="model">The comment model</param>
     /// <param name="postId">The unique post id</param>
-    public Task SaveCommentAsync(Guid postId, Comment model)
+    public Task SaveCommentAsync(string postId, Comment model)
     {
         return SaveCommentAsync(postId, model, false);
     }
@@ -547,7 +568,7 @@ internal sealed class PostService : IPostService
     /// </summary>
     /// <param name="model">The comment model</param>
     /// <param name="postId">The unique post id</param>
-    public Task SaveCommentAndVerifyAsync(Guid postId, Comment model)
+    public Task SaveCommentAndVerifyAsync(string postId, Comment model)
     {
         return SaveCommentAsync(postId, model, true);
     }
@@ -561,7 +582,7 @@ internal sealed class PostService : IPostService
     /// <param name="page">The optional page number</param>
     /// <param name="pageSize">The optional page size</param>
     /// <returns>The available comments</returns>
-    private async Task<IEnumerable<Comment>> GetAllCommentsAsync(Guid? postId = null, bool onlyApproved = true,
+    private async Task<IEnumerable<Comment>> GetAllCommentsAsync(string postId = null, bool onlyApproved = true,
         bool onlyPending = false, int? page = null, int? pageSize = null)
     {
         // Ensure page number
@@ -588,7 +609,8 @@ internal sealed class PostService : IPostService
         }
         else
         {
-            comments = await _repo.GetAllComments(postId, onlyApproved, page.Value, pageSize.Value).ConfigureAwait(false);
+            comments = await _repo.GetAllComments(postId, onlyApproved, page.Value, pageSize.Value)
+                .ConfigureAwait(false);
         }
 
         // Execute hook
@@ -596,6 +618,7 @@ internal sealed class PostService : IPostService
         {
             App.Hooks.OnLoad<Comment>(comment);
         }
+
         return comments;
     }
 
@@ -605,7 +628,7 @@ internal sealed class PostService : IPostService
     /// <param name="model">The comment model</param>
     /// <param name="postId">The unique post id</param>
     /// <param name="verify">If default moderation settings should be applied</param>
-    private async Task SaveCommentAsync(Guid postId, Comment model, bool verify)
+    private async Task SaveCommentAsync(string postId, Comment model, bool verify)
     {
         // Make sure we have a post
         var post = await GetByIdAsync<PostInfo>(postId).ConfigureAwait(false);
@@ -613,9 +636,9 @@ internal sealed class PostService : IPostService
         if (post != null)
         {
             // Ensure id
-            if (model.Id == Guid.Empty)
+            if (string.IsNullOrEmpty(model.Id))
             {
-                model.Id = Guid.NewGuid();
+                model.Id = Snowflake.NewId().ToString();
             }
 
             // Ensure created date
@@ -625,7 +648,7 @@ internal sealed class PostService : IPostService
             }
 
             // Ensure content id
-            if (model.ContentId == Guid.Empty)
+            if (string.IsNullOrEmpty(model.ContentId))
             {
                 model.ContentId = postId;
             }
@@ -641,6 +664,7 @@ internal sealed class PostService : IPostService
                 {
                     model.IsApproved = config.CommentsApprove;
                 }
+
                 App.Hooks.OnValidate<Comment>(model);
             }
 
@@ -654,7 +678,7 @@ internal sealed class PostService : IPostService
         }
         else
         {
-            throw new ArgumentException($"Could not find post with id {postId.ToString()}");
+            throw new ArgumentException($"Could not find post with id {postId}");
         }
     }
 
@@ -666,9 +690,9 @@ internal sealed class PostService : IPostService
     private async Task SaveAsync<T>(T model, bool isDraft) where T : PostBase
     {
         // Ensure id
-        if (model.Id == Guid.Empty)
+        if (string.IsNullOrEmpty(model.Id))
         {
-            model.Id = Guid.NewGuid();
+            model.Id = Snowflake.NewId().ToString();
         }
 
         // Validate model
@@ -703,7 +727,8 @@ internal sealed class PostService : IPostService
         // after removing unwanted characters
         if (string.IsNullOrWhiteSpace(model.Slug))
         {
-            throw new ValidationException("The generated slug is empty as the title only contains special characters, please specify a slug to save the post.");
+            throw new ValidationException(
+                "The generated slug is empty as the title only contains special characters, please specify a slug to save the post.");
         }
 
         // Ensure that the slug is unique
@@ -714,7 +739,8 @@ internal sealed class PostService : IPostService
         }
 
         // Ensure category
-        if (model.Category == null || (string.IsNullOrWhiteSpace(model.Category.Title) && string.IsNullOrWhiteSpace(model.Category.Slug)))
+        if (model.Category == null || (string.IsNullOrWhiteSpace(model.Category.Title) &&
+                                       string.IsNullOrWhiteSpace(model.Category.Slug)))
         {
             throw new ValidationException("The Category field is required");
         }
@@ -773,7 +799,7 @@ internal sealed class PostService : IPostService
             var categories = await _repo.GetAllCategories(model.BlogId).ConfigureAwait(false);
             foreach (var category in categories)
             {
-                await _cache.RemoveAsync(category.Id.ToString()).ConfigureAwait(false);
+                await _cache.RemoveAsync(category.Id).ConfigureAwait(false);
                 await _cache.RemoveAsync($"Category_{model.BlogId}_{category.Slug}").ConfigureAwait(false);
             }
 
@@ -782,7 +808,7 @@ internal sealed class PostService : IPostService
             var tags = await _repo.GetAllTags(model.BlogId).ConfigureAwait(false);
             foreach (var tag in tags)
             {
-                await _cache.RemoveAsync(tag.Id.ToString()).ConfigureAwait(false);
+                await _cache.RemoveAsync(tag.Id).ConfigureAwait(false);
                 await _cache.RemoveAsync($"Tag_{model.BlogId}_{tag.Slug}").ConfigureAwait(false);
             }
         }
@@ -792,7 +818,7 @@ internal sealed class PostService : IPostService
     /// Deletes the model with the specified id.
     /// </summary>
     /// <param name="id">The unique id</param>
-    public async Task DeleteAsync(Guid id)
+    public async Task DeleteAsync(string id)
     {
         var model = await GetByIdAsync<PostInfo>(id).ConfigureAwait(false);
 
@@ -827,7 +853,7 @@ internal sealed class PostService : IPostService
     /// Deletes the comment with the specified id.
     /// </summary>
     /// <param name="id">The unique id</param>
-    public async Task DeleteCommentAsync(Guid id)
+    public async Task DeleteCommentAsync(string id)
     {
         var model = await GetCommentByIdAsync(id).ConfigureAwait(false);
 
@@ -857,7 +883,7 @@ internal sealed class PostService : IPostService
         }
         else
         {
-            throw new ArgumentException($"Could not find post with id {model.ContentId.ToString()}");
+            throw new ArgumentException($"Could not find post with id {model.ContentId}");
         }
     }
 
@@ -868,17 +894,17 @@ internal sealed class PostService : IPostService
     /// <param name="id">The unique id</param>
     /// <param name="blogPages">The blog pages</param>
     /// <returns>The post model</returns>
-    private async Task<T> GetByIdAsync<T>(Guid id, IList<PageInfo> blogPages) where T : PostBase
+    private async Task<T> GetByIdAsync<T>(string id, IList<PageInfo> blogPages) where T : PostBase
     {
         PostBase model = null;
 
         if (typeof(T) == typeof(PostInfo))
         {
-            model = _cache == null ? null : await _cache.GetAsync<PostInfo>($"PostInfo_{id.ToString()}").ConfigureAwait(false);
+            model = _cache == null ? null : await _cache.GetAsync<PostInfo>($"PostInfo_{id}").ConfigureAwait(false);
         }
         else if (!typeof(DynamicPost).IsAssignableFrom(typeof(T)))
         {
-            model = _cache == null ? null : await _cache.GetAsync<PostBase>(id.ToString()).ConfigureAwait(false);
+            model = _cache == null ? null : await _cache.GetAsync<PostBase>(id).ConfigureAwait(false);
 
             if (model != null)
             {
@@ -908,6 +934,7 @@ internal sealed class PostService : IPostService
         {
             return (T)model;
         }
+
         return null;
     }
 
@@ -917,9 +944,9 @@ internal sealed class PostService : IPostService
     /// </summary>
     /// <param name="siteId">The optional site id</param>
     /// <returns>The site id</returns>
-    private async Task<Guid?> EnsureSiteIdAsync(Guid? siteId)
+    private async Task<string> EnsureSiteIdAsync(string siteId)
     {
-        if (!siteId.HasValue)
+        if (string.IsNullOrEmpty(siteId))
         {
             var site = await _siteService.GetDefaultAsync().ConfigureAwait(false);
 
@@ -928,6 +955,7 @@ internal sealed class PostService : IPostService
                 return site.Id;
             }
         }
+
         return siteId;
     }
 
@@ -960,7 +988,7 @@ internal sealed class PostService : IPostService
                 model.PrimaryImage = new Extend.Fields.ImageField();
             }
 
-            if (model.PrimaryImage.Id.HasValue)
+            if (!string.IsNullOrEmpty(model.PrimaryImage.Id))
             {
                 await _factory.InitFieldAsync(model.PrimaryImage).ConfigureAwait(false);
             }
@@ -971,7 +999,7 @@ internal sealed class PostService : IPostService
                 model.OgImage = new Extend.Fields.ImageField();
             }
 
-            if (model.OgImage.Id.HasValue)
+            if (!string.IsNullOrEmpty(model.OgImage.Id))
             {
                 await _factory.InitFieldAsync(model.OgImage).ConfigureAwait(false);
             }
@@ -983,12 +1011,13 @@ internal sealed class PostService : IPostService
             {
                 if (model is PostInfo)
                 {
-                    await _cache.SetAsync($"PostInfo_{model.Id.ToString()}", model).ConfigureAwait(false);
+                    await _cache.SetAsync($"PostInfo_{model.Id}", model).ConfigureAwait(false);
                 }
                 else
                 {
-                    await _cache.SetAsync(model.Id.ToString(), model).ConfigureAwait(false);
+                    await _cache.SetAsync(model.Id, model).ConfigureAwait(false);
                 }
+
                 await _cache.SetAsync($"PostId_{model.BlogId}_{model.Slug}", model.Id).ConfigureAwait(false);
             }
         }
@@ -1002,9 +1031,9 @@ internal sealed class PostService : IPostService
     {
         if (_cache != null)
         {
-            await _cache.RemoveAsync(post.Id.ToString()).ConfigureAwait(false);
+            await _cache.RemoveAsync(post.Id).ConfigureAwait(false);
             await _cache.RemoveAsync($"PostId_{post.BlogId}_{post.Slug}").ConfigureAwait(false);
-            await _cache.RemoveAsync($"PostInfo_{post.Id.ToString()}").ConfigureAwait(false);
+            await _cache.RemoveAsync($"PostInfo_{post.Id}").ConfigureAwait(false);
         }
     }
 
@@ -1027,5 +1056,4 @@ internal sealed class PostService : IPostService
     {
         return model != null && model.Published.HasValue && model.Published.Value > DateTime.Now;
     }
-
 }

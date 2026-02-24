@@ -32,7 +32,7 @@ public class VideoFieldSerializer : ISerializer
     {
         return new VideoField
         {
-            Id = !string.IsNullOrEmpty(str) ? new Guid(str) : (Guid?)null
+            Id = !string.IsNullOrEmpty(str) ? str : null
         };
     }
 }

@@ -19,7 +19,7 @@ public class PostField : IField, IEquatable<PostField>
     /// <summary>
     /// Gets/sets the media id.
     /// </summary>
-    public Guid? Id { get; set; }
+    public string Id { get; set; }
 
     /// <summary>
     /// Gets/sets the related post object.
@@ -43,10 +43,10 @@ public class PostField : IField, IEquatable<PostField>
     /// <param name="api">The current api</param>
     public virtual async Task Init(IApi api)
     {
-        if (Id.HasValue)
+        if (!string.IsNullOrEmpty(Id))
         {
             Post = await api.Posts
-                .GetByIdAsync<Models.PostInfo>(Id.Value)
+                .GetByIdAsync<Models.PostInfo>(Id)
                 .ConfigureAwait(false);
 
             if (Post == null)
@@ -65,11 +65,20 @@ public class PostField : IField, IEquatable<PostField>
     /// <returns>The referenced post</returns>
     public virtual Task<T> GetPostAsync<T>(IApi api) where T : Models.Post<T>
     {
-        if (Id.HasValue)
+        if (!string.IsNullOrEmpty(Id))
         {
-            return api.Posts.GetByIdAsync<T>(Id.Value);
+            return api.Posts.GetByIdAsync<T>(Id);
         }
         return null;
+    }
+
+    /// <summary>
+    /// Implicit operator for converting a string id to a field.
+    /// </summary>
+    /// <param name="id">The id value</param>
+    public static implicit operator PostField(string id)
+    {
+        return new PostField { Id = id };
     }
 
     /// <summary>
@@ -80,7 +89,7 @@ public class PostField : IField, IEquatable<PostField>
     {
         return new PostField
         {
-            Id = guid
+            Id = guid.ToString()
         };
     }
 
@@ -99,7 +108,7 @@ public class PostField : IField, IEquatable<PostField>
     /// <inheritdoc />
     public override int GetHashCode()
     {
-        return Id.HasValue ? Id.GetHashCode() : 0;
+        return !string.IsNullOrEmpty(Id) ? Id.GetHashCode() : 0;
     }
 
     /// <inheritdoc />

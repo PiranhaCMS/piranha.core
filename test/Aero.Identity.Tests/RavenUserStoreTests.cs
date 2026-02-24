@@ -111,7 +111,7 @@ public class RavenUserStoreTests : RavenTestBase
         using var session = store.OpenAsyncSession();
         var userStore = new RavenUserStore<RavenUser>(session);
         var user = new RavenUser();
-        var stamp = Guid.NewGuid().ToString();
+        var stamp = Snowflake.NewId().ToString();
 
         // Act
         await userStore.SetSecurityStampAsync(user, stamp, CancellationToken.None);

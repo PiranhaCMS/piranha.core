@@ -17,7 +17,7 @@ namespace Piranha.Tests.Hooks;
 public class SiteHookTests : BaseTestsAsync
 {
     private const string TITLE = "My Hook Site";
-    private readonly Guid ID = Guid.NewGuid();
+    private readonly string ID = Snowflake.NewId();
 
     public class SiteOnLoadException : Exception {}
     public class SiteOnBeforeSaveException : Exception {}
@@ -27,6 +27,8 @@ public class SiteHookTests : BaseTestsAsync
 
     public override async Task InitializeAsync()
     {
+        await base.InitializeAsync();
+
         using (var api = CreateApi())
         {
             // Initialize

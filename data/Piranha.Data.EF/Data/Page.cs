@@ -1,4 +1,4 @@
-﻿/*
+/*
  * Copyright (c) .NET Foundation and Contributors
  *
  * This software may be modified and distributed under the terms
@@ -21,13 +21,13 @@ public sealed class Page : RoutedContentBase<PageField>
     /// <summary>
     /// Gets/sets the site id.
     /// </summary>
-    public Guid SiteId { get; set; }
+    public string SiteId { get; set; }
 
     /// <summary>
     /// Gets/sets the optional parent id. Used to
     /// position the page in the sitemap.
     /// </summary>
-    public Guid? ParentId { get; set; }
+    public string ParentId { get; set; }
 
     /// <summary>
     /// Gets/sets the type of content this page
@@ -38,7 +38,7 @@ public sealed class Page : RoutedContentBase<PageField>
     /// <summary>
     /// Gets/sets the optional primary image id.
     /// </summary>
-    public Guid? PrimaryImageId { get; set; }
+    public string PrimaryImageId { get; set; }
 
     /// <summary>
     /// Gets/sets the optional excerpt.
@@ -114,5 +114,5 @@ public sealed class Page : RoutedContentBase<PageField>
     /// <summary>
     /// Gets/sets the optional page this page is a copy of
     /// </summary>
-    public Guid? OriginalPageId { get; set; }
+    public string OriginalPageId { get; set; }
 }

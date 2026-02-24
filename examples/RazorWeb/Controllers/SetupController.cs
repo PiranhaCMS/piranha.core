@@ -31,7 +31,7 @@ public class SetupController : Controller
     [Route("/seed")]
     public async Task<IActionResult> Seed()
     {
-        var images = new Dictionary<string, Guid>();
+        var images = new Dictionary<string, string>();
 
         // Get the default site
         var site = await _api.Sites.GetDefaultAsync();
@@ -40,7 +40,7 @@ public class SetupController : Controller
         foreach (var image in Directory.GetFiles("seed"))
         {
             var info = new FileInfo(image);
-            var id = Guid.NewGuid();
+            var id = Snowflake.NewId();
             images.Add(info.Name, id);
 
             using (var stream = System.IO.File.OpenRead(image))
@@ -56,7 +56,7 @@ public class SetupController : Controller
 
         // Add blog page
         var blogPage = await StandardArchive.CreateAsync(_api);
-        blogPage.Id = Guid.NewGuid();
+        blogPage.Id = Snowflake.NewId();
         blogPage.SiteId = site.Id;
         blogPage.Title = "Blog Archive";
         blogPage.NavigationTitle = "Blog";
@@ -70,7 +70,7 @@ public class SetupController : Controller
 
         // Add docs page
         var docsPage = await StandardPage.CreateAsync(_api);
-        docsPage.Id = Guid.NewGuid();
+        docsPage.Id = Snowflake.NewId();
         docsPage.SiteId = site.Id;
         docsPage.SortOrder = 1;
         docsPage.Title = "Read The Docs";
@@ -88,7 +88,7 @@ public class SetupController : Controller
 
         // Add start page
         var startPage = await StandardPage.CreateAsync(_api);
-        startPage.Id = Guid.NewGuid();
+        startPage.Id = Snowflake.NewId();
         startPage.SiteId = site.Id;
         startPage.Title = "Welcome To Piranha CMS";
         startPage.NavigationTitle = "Home";
@@ -215,7 +215,7 @@ public class SetupController : Controller
         await _api.Posts.SaveAsync(post2);
 
         var post3 = await StandardPost.CreateAsync(_api);
-        post3.Id = Guid.NewGuid();
+        post3.Id = Snowflake.NewId();
         post3.BlogId = blogPage.Id;
         post3.Category = "Piranha";
         post3.Tags.Add("Development", "Release Info");

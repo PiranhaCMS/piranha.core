@@ -19,7 +19,7 @@ public class Taxonomies
         Models.Taxonomy t = "Test";
 
         Assert.NotNull(t);
-        Assert.Equal(Guid.Empty, t.Id);
+        Assert.Equal(string.Empty, t.Id);
         Assert.Equal("Test", t.Title);
         Assert.Null(t.Slug);
     }

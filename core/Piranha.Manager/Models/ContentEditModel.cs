@@ -18,12 +18,12 @@ public class ContentEditModel : AsyncResult
     /// <summary>
     /// Gets/sets the unique id.
     /// </summary>
-    public Guid Id { get; set; }
+    public string Id { get; set; }
 
     /// <summary>
     /// Gets/sets the optional language id.
     /// </summary>
-    public Guid? LanguageId { get; set; }
+    public string? LanguageId { get; set; }
 
     /// <summary>
     /// Gets/sets the content type id.

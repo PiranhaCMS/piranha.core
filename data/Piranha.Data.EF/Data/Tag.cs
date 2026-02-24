@@ -20,7 +20,7 @@ public sealed class Tag : TaxonomyBase
     /// Gets/sets the id of the blog page this
     /// category belongs to.
     /// </summary>
-    public Guid BlogId { get; set; }
+    public string BlogId { get; set; }
 
     /// <summary>
     /// Gets/sets the blog page this category belongs to.

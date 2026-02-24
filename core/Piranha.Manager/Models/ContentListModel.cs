@@ -20,7 +20,7 @@ public class ContentListModel
 {
     public class ContentItem
     {
-        public Guid Id { get; set; }
+        public string Id { get; set; }
         public string Title { get; set; }
         public string TypeId { get; set; }
         public string Modified { get; set; }

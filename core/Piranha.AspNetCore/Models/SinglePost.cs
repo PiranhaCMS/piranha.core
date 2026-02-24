@@ -51,7 +51,7 @@ public class SinglePost<T> : Microsoft.AspNetCore.Mvc.RazorPages.PageModel where
     /// </summary>
     /// <param name="id">The requested model id</param>
     /// <param name="draft">If the draft should be fetched</param>
-    public virtual async Task<IActionResult> OnGet(Guid id, bool draft = false)
+    public virtual async Task<IActionResult> OnGet(string id, bool draft = false)
     {
         try
         {

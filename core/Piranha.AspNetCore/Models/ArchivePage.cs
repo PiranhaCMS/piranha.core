@@ -79,8 +79,8 @@ public class ArchivePage<T, TPost> : Microsoft.AspNetCore.Mvc.RazorPages.PageMod
     /// <param name="category">The optionally requested category</param>
     /// <param name="tag">The optionally requested tag</param>
     /// <param name="draft">If the draft should be fetched</param>
-    public virtual async Task<IActionResult> OnGet(Guid id, int? year = null, int? month = null,
-        int? pagenum = null, Guid? category = null, Guid? tag = null, bool draft = false)
+    public virtual async Task<IActionResult> OnGet(string id, int? year = null, int? month = null,
+        int? pagenum = null, string? category = null, string? tag = null, bool draft = false)
     {
         try
         {

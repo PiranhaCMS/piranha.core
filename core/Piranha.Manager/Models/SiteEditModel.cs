@@ -22,7 +22,7 @@ public class SiteEditModel : Content.ContentEditModel
     /// <summary>
     /// Gets/sets the selected language id.
     /// </summary>
-    public Guid LanguageId { get; set; }
+    public string LanguageId { get; set; }
 
     /// <summary>
     /// Gets/sets the internal textual id.

@@ -20,12 +20,12 @@ public abstract class MediaContent
     /// entry is created, otherwise the specified media
     /// is updated.
     /// </summary>
-    public Guid? Id { get; set; }
+    public string? Id { get; set; }
 
     /// <summary>
     /// Gets/sets the optional folder id this media should be placed in.
     /// </summary>
-    public Guid? FolderId { get; set; }
+    public string? FolderId { get; set; }
 
     /// <summary>
     /// Gets/sets the filename.

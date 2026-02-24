@@ -16,7 +16,7 @@ public class PostRevision : ContentRevisionBase
     /// Gets/sets the id of the post this revision
     /// belongs to.
     /// </summary>
-    public Guid PostId { get; set; }
+    public string PostId { get; set; }
 
     /// <summary>
     /// Gets/sets the post this revision belongs to.

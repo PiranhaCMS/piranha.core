@@ -13,13 +13,8 @@ namespace Piranha.Extend;
 /// <summary>
 /// Base class for blocks.
 /// </summary>
-public abstract class Block
+public abstract class Block : Entity
 {
-    /// <summary>
-    /// Gets/sets the id of the block instance.
-    /// </summary>
-    public Guid Id { get; set; }
-
     /// <summary>
     /// Gets/set the block type id.
     /// </summary>

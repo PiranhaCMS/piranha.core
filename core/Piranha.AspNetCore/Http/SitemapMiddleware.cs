@@ -111,7 +111,7 @@ public class SitemapMiddleware : MiddlewareBase
             });
 
             // Get all posts for the blog
-            var posts = await api.Posts.GetAllAsync(item.Id);
+            var posts = await api.Posts.GetAllDynamicAsync(item.Id);
             foreach (var post in posts)
             {
                 if (post.MetaIndex && post.Published.HasValue && post.Published.Value <= DateTime.Now)

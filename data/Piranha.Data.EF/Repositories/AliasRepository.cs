@@ -1,4 +1,4 @@
-﻿/*
+/*
  * Copyright (c) .NET Foundation and Contributors
  *
  * This software may be modified and distributed under the terms
@@ -8,7 +8,7 @@
  *
  */
 
-using Microsoft.EntityFrameworkCore;
+using Raven.Client.Documents;
 using Piranha.Models;
 
 namespace Piranha.Repositories;
@@ -31,10 +31,9 @@ internal class AliasRepository : IAliasRepository
     /// </summary>
     /// <param name="siteId">The site id</param>
     /// <returns>The available models</returns>
-    public async Task<IEnumerable<Alias>> GetAll(Guid siteId)
+    public async Task<IEnumerable<Alias>> GetAll(string siteId)
     {
         return await _db.Aliases
-            .AsNoTracking()
             .Where(a => a.SiteId == siteId)
             .OrderBy(a => a.AliasUrl)
             .ThenBy(a => a.RedirectUrl)
@@ -48,8 +47,7 @@ internal class AliasRepository : IAliasRepository
                 Created = a.Created,
                 LastModified = a.LastModified
             })
-            .ToListAsync()
-            .ConfigureAwait(false);
+            .ToListAsync();
     }
 
     /// <summary>
@@ -57,10 +55,9 @@ internal class AliasRepository : IAliasRepository
     /// </summary>
     /// <param name="id">The unique id</param>
     /// <returns>The model, or NULL if it doesn't exist</returns>
-    public Task<Alias> GetById(Guid id)
+    public Task<Alias> GetById(string id)
     {
         return _db.Aliases
-            .AsNoTracking()
             .Where(a => a.Id == id)
             .Select(a => new Alias
             {
@@ -81,10 +78,9 @@ internal class AliasRepository : IAliasRepository
     /// <param name="url">The unique url</param>
     /// <param name="siteId">The site id</param>
     /// <returns>The model</returns>
-    public Task<Alias> GetByAliasUrl(string url, Guid siteId)
+    public Task<Alias> GetByAliasUrl(string url, string siteId)
     {
         return _db.Aliases
-            .AsNoTracking()
             .Where(a => a.SiteId == siteId && a.AliasUrl.ToLower() == url.ToLower())
             .Select(a => new Alias
             {
@@ -105,10 +101,9 @@ internal class AliasRepository : IAliasRepository
     /// <param name="url">The unique url</param>
     /// <param name="siteId">The site id</param>
     /// <returns>The model</returns>
-    public async Task<IEnumerable<Alias>> GetByRedirectUrl(string url, Guid siteId)
+    public async Task<IEnumerable<Alias>> GetByRedirectUrl(string url, string siteId)
     {
         return await _db.Aliases
-            .AsNoTracking()
             .Where(a => a.SiteId == siteId && a.RedirectUrl.ToLower() == url.ToLower())
             .Select(a => new Alias
             {
@@ -120,8 +115,7 @@ internal class AliasRepository : IAliasRepository
                 Created = a.Created,
                 LastModified = a.LastModified
             })
-            .ToListAsync()
-            .ConfigureAwait(false);
+            .ToListAsync();
     }
 
     /// <summary>
@@ -132,43 +126,43 @@ internal class AliasRepository : IAliasRepository
     public async Task Save(Alias model)
     {
         var alias = await _db.Aliases
-            .FirstOrDefaultAsync(p => p.Id == model.Id)
-            .ConfigureAwait(false);
+            .FirstOrDefaultAsync(p => p.Id == model.Id);
 
         if (alias == null)
         {
             alias = new Data.Alias
             {
-                Id = model.Id != Guid.Empty ? model.Id : Guid.NewGuid(),
+                Id = !string.IsNullOrEmpty(model.Id) ? model.Id : Snowflake.NewId().ToString(),
                 Created = DateTime.Now
             };
             // await _db.Aliases.AddAsync(alias).ConfigureAwait(false);
             await _db.session.StoreAsync(alias);
         }
+
         alias.SiteId = model.SiteId;
         alias.AliasUrl = model.AliasUrl;
         alias.RedirectUrl = model.RedirectUrl;
         alias.Type = model.Type;
         alias.LastModified = DateTime.Now;
 
-        await _db.SaveChangesAsync().ConfigureAwait(false);
+        await _db.SaveChangesAsync();
     }
 
     /// <summary>
     /// Deletes the model with the specified id.
     /// </summary>
     /// <param name="id">The unique id</param>
-    public async Task Delete(Guid id)
+    public async Task Delete(string id)
     {
         var alias = await _db.Aliases
-            .FirstOrDefaultAsync(a => a.Id == id)
-            .ConfigureAwait(false);
+            .FirstOrDefaultAsync(a => a.Id == id);
 
         if (alias != null)
         {
             //_db.Aliases.Remove(alias);
             _db.session.Delete(alias);
-            await _db.SaveChangesAsync().ConfigureAwait(false);
+            await _db.SaveChangesAsync();
         }
     }
 }
+

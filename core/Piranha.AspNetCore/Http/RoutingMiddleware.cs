@@ -303,7 +303,7 @@ public class RoutingMiddleware : MiddlewareBase
                     query.Append("id=");
                     query.Append(page.Id);
 
-                    if (!page.ParentId.HasValue && page.SortOrder == 0)
+                    if (string.IsNullOrEmpty(page.ParentId) && page.SortOrder == 0)
                     {
                         query.Append("&startpage=true");
                     }
@@ -357,7 +357,7 @@ public class RoutingMiddleware : MiddlewareBase
                                 {
                                     var categoryId = (await api.Posts.GetCategoryBySlugAsync(page.Id, segments[n]).ConfigureAwait(false))?.Id;
 
-                                    if (categoryId.HasValue)
+                                    if (!string.IsNullOrEmpty(categoryId))
                                     {
                                         query.Append("&category=");
                                         query.Append(categoryId);
@@ -375,7 +375,7 @@ public class RoutingMiddleware : MiddlewareBase
                                 {
                                     var tagId = (await api.Posts.GetTagBySlugAsync(page.Id, segments[n]).ConfigureAwait(false))?.Id;
 
-                                    if (tagId.HasValue)
+                                    if (!string.IsNullOrEmpty(tagId))
                                     {
                                         query.Append("&tag=");
                                         query.Append(tagId);

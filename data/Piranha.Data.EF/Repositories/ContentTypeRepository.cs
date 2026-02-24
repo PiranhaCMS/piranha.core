@@ -9,7 +9,7 @@
  */
 
 using System.Text.Json;
-using Microsoft.EntityFrameworkCore;
+using Raven.Client.Documents;
 
 using Piranha.Models;
 
@@ -32,18 +32,17 @@ internal class ContentTypeRepository : IContentTypeRepository
     /// Gets all available models.
     /// </summary>
     /// <returns>The available models</returns>
-    public async Task<IEnumerable<ContentType>> GetAll()
+    public async Task<IEnumerable<AeroContentType>> GetAll()
     {
-        var models = new List<ContentType>();
+        var models = new List<AeroContentType>();
         var types = await _db.ContentTypes
-            .AsNoTracking()
             .OrderBy(t => t.Id)
             .ToListAsync()
             .ConfigureAwait(false);
 
         foreach (var type in types)
         {
-            models.Add(JsonSerializer.Deserialize<ContentType>(type.Body));
+            models.Add(JsonSerializer.Deserialize<AeroContentType>(type.Body));
         }
         return models;
     }
@@ -53,11 +52,10 @@ internal class ContentTypeRepository : IContentTypeRepository
     /// </summary>
     /// <param name="group">The content group</param>
     /// <returns>The available models</returns>
-    public async Task<IEnumerable<ContentType>> GetByGroup(string group)
+    public async Task<IEnumerable<AeroContentType>> GetByGroup(string group)
     {
-        var models = new List<ContentType>();
+        var models = new List<AeroContentType>();
         var types = await _db.ContentTypes
-            .AsNoTracking()
             .Where(t => t.Group == group)
             .OrderBy(t => t.Id)
             .ToListAsync()
@@ -65,7 +63,7 @@ internal class ContentTypeRepository : IContentTypeRepository
 
         foreach (var type in types)
         {
-            models.Add(JsonSerializer.Deserialize<ContentType>(type.Body));
+            models.Add(JsonSerializer.Deserialize<AeroContentType>(type.Body));
         }
         return models;
     }
@@ -75,16 +73,15 @@ internal class ContentTypeRepository : IContentTypeRepository
     /// </summary>
     /// <param name="id">The unique id</param>
     /// <returns></returns>
-    public async Task<ContentType> GetById(string id)
+    public async Task<AeroContentType> GetById(string id)
     {
         var type = await _db.ContentTypes
-            .AsNoTracking()
             .FirstOrDefaultAsync(t => t.Id == id)
             .ConfigureAwait(false);
 
         if (type != null)
         {
-            return JsonSerializer.Deserialize<ContentType>(type.Body);
+            return JsonSerializer.Deserialize<AeroContentType>(type.Body);
         }
         return null;
     }
@@ -94,14 +91,14 @@ internal class ContentTypeRepository : IContentTypeRepository
     /// depending on its state.
     /// </summary>
     /// <param name="model">The model</param>
-    public async Task Save(ContentType model)
+    public async Task Save(AeroContentType model)
     {
         var type = await _db.ContentTypes
             .FirstOrDefaultAsync(t => t.Id == model.Id)
             .ConfigureAwait(false);
 
         if (type == null) {
-            type = new Data.ContentType
+            type = new AeroContentType
             {
                 Id = model.Id,
                 Group = model.Group,
@@ -134,3 +131,4 @@ internal class ContentTypeRepository : IContentTypeRepository
         }
     }
 }
+

@@ -41,7 +41,7 @@ public class SiteService
     /// </summary>
     /// <param name="id">The unique id</param>
     /// <returns>The edit model</returns>
-    public async Task<SiteEditModel> GetById(Guid id)
+    public async Task<SiteEditModel> GetById(string id)
     {
         var site = await _api.Sites.GetByIdAsync(id);
 
@@ -60,7 +60,7 @@ public class SiteService
     /// </summary>
     /// <param name="id">The unique id</param>
     /// <returns>The edit model</returns>
-    public async Task<SiteContentEditModel> GetContentById(Guid id)
+    public async Task<SiteContentEditModel> GetContentById(string id)
     {
         var site = await _api.Sites.GetContentByIdAsync(id);
 
@@ -84,7 +84,7 @@ public class SiteService
     {
         return new SiteEditModel
         {
-            Id = Guid.NewGuid(),
+            Id = Snowflake.NewId(),
             LanguageId = (await _api.Languages.GetDefaultAsync()).Id,
             Languages = await _api.Languages.GetAllAsync()
         };
@@ -123,9 +123,9 @@ public class SiteService
 
         if (siteType != null)
         {
-            if (model.Id == Guid.Empty)
+            if (model.Id == string.Empty)
             {
-                model.Id = Guid.NewGuid();
+                model.Id = Snowflake.NewId();
             }
 
             var site = await _api.Sites.GetContentByIdAsync(model.Id);
@@ -205,7 +205,7 @@ public class SiteService
     /// Deletes the site with the given id.
     /// </summary>
     /// <param name="id">The unique id</param>
-    public Task Delete(Guid id)
+    public Task Delete(string id)
     {
         return _api.Sites.DeleteAsync(id);
     }

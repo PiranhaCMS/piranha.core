@@ -25,7 +25,7 @@ public interface ILanguageService
     /// </summary>
     /// <param name="id">The unique id</param>
     /// <returns>The model, or null if it doesn't exist</returns>
-    Task<Language> GetByIdAsync(Guid id);
+    Task<Language> GetByIdAsync(string id);
 
     /// <summary>
     /// Gets the default side.
@@ -44,7 +44,7 @@ public interface ILanguageService
     /// Deletes the model with the specified id.
     /// </summary>
     /// <param name="id">The unique id</param>
-    Task DeleteAsync(Guid id);
+    Task DeleteAsync(string id);
 
     /// <summary>
     /// Deletes the given model.

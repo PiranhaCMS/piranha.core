@@ -9,7 +9,7 @@
  */
 
 using System.Text.Json;
-using Microsoft.EntityFrameworkCore;
+using Raven.Client.Documents;
 
 using Piranha.Data;
 using Piranha.Services;
@@ -39,11 +39,11 @@ internal class PostRepository : IPostRepository
     /// <param name="index">The optional page to fetch</param>
     /// <param name="pageSize">The optional page size</param>
     /// <returns>The posts</returns>
-    public async Task<IEnumerable<Guid>> GetAll(Guid blogId, int? index = null, int? pageSize = null)
+    public async Task<IEnumerable<string>> GetAll(string blogId, int? index = null, int? pageSize = null)
     {
         // Prepare base query
         IQueryable<Data.Post> query = _db.Posts
-            .AsNoTracking()
+            
             .Where(p => p.BlogId == blogId)
             .OrderByDescending(p => p.Published)
             .ThenByDescending(p => p.LastModified)
@@ -69,10 +69,10 @@ internal class PostRepository : IPostRepository
     /// </summary>
     /// <param name="siteId">The site id</param>
     /// <returns>The posts</returns>
-    public async Task<IEnumerable<Guid>> GetAllBySiteId(Guid siteId)
+    public async Task<IEnumerable<string>> GetAllBySiteId(string siteId)
     {
         return await _db.Posts
-            .AsNoTracking()
+            
             .Where(p => p.Blog.SiteId == siteId)
             .OrderByDescending(p => p.Published)
             .ThenByDescending(p => p.LastModified)
@@ -87,10 +87,10 @@ internal class PostRepository : IPostRepository
     /// </summary>
     /// <param name="blogId">The blog id</param>
     /// <returns>The available categories</returns>
-    public async Task<IEnumerable<Models.Taxonomy>> GetAllCategories(Guid blogId)
+    public async Task<IEnumerable<Models.Taxonomy>> GetAllCategories(string blogId)
     {
         return await _db.Categories
-            .AsNoTracking()
+            
             .Where(c => c.BlogId == blogId)
             .OrderBy(c => c.Title)
             .Select(c => new Models.Taxonomy
@@ -108,10 +108,10 @@ internal class PostRepository : IPostRepository
     /// </summary>
     /// <param name="blogId">The blog id</param>
     /// <returns>The available tags</returns>
-    public async Task<IEnumerable<Models.Taxonomy>> GetAllTags(Guid blogId)
+    public async Task<IEnumerable<Models.Taxonomy>> GetAllTags(string blogId)
     {
         return await _db.Tags
-            .AsNoTracking()
+            
             .Where(c => c.BlogId == blogId)
             .OrderBy(c => c.Title)
             .Select(c => new Models.Taxonomy
@@ -130,10 +130,10 @@ internal class PostRepository : IPostRepository
     /// </summary>
     /// <param name="blogId">The unique blog id</param>
     /// <returns>The posts that have a draft</returns>
-    public async Task<IEnumerable<Guid>> GetAllDrafts(Guid blogId)
+    public async Task<IEnumerable<string>> GetAllDrafts(string blogId)
     {
         return await _db.PostRevisions
-            .AsNoTracking()
+            
             .Where(r => r.Post.BlogId == blogId && r.Created > r.Post.LastModified)
             .Select(r => r.PostId)
             .Distinct()
@@ -150,7 +150,7 @@ internal class PostRepository : IPostRepository
     /// <param name="page">The page number</param>
     /// <param name="pageSize">The page size</param>
     /// <returns>The available comments</returns>
-    public Task<IEnumerable<Models.Comment>> GetAllComments(Guid? postId, bool onlyApproved,
+    public Task<IEnumerable<Models.Comment>> GetAllComments(string postId, bool onlyApproved,
         int page, int pageSize)
     {
         return GetAllComments(postId, onlyApproved, false, page, pageSize);
@@ -163,7 +163,7 @@ internal class PostRepository : IPostRepository
     /// <param name="page">The page number</param>
     /// <param name="pageSize">The page size</param>
     /// <returns>The available comments</returns>
-    public Task<IEnumerable<Models.Comment>> GetAllPendingComments(Guid? postId,
+    public Task<IEnumerable<Models.Comment>> GetAllPendingComments(string postId,
         int page, int pageSize)
     {
         return GetAllComments(postId, false, true, page, pageSize);
@@ -175,7 +175,7 @@ internal class PostRepository : IPostRepository
     /// <typeparam name="T">The model type</typeparam>
     /// <param name="id">The unique id</param>
     /// <returns>The post model</returns>
-    public async Task<T> GetById<T>(Guid id) where T : Models.PostBase
+    public async Task<T> GetById<T>(string id) where T : Models.PostBase
     {
         var post = await GetQuery<T>()
             .FirstOrDefaultAsync(p => p.Id == id)
@@ -195,7 +195,7 @@ internal class PostRepository : IPostRepository
     /// <param name="blogId">The blog id</param>
     /// <param name="slug">The unique slug</param>
     /// <returns>The post model</returns>
-    public async Task<T> GetBySlug<T>(Guid blogId, string slug) where T : Models.PostBase
+    public async Task<T> GetBySlug<T>(string blogId, string slug) where T : Models.PostBase
     {
         // No cache found, load from database
         var post = await GetQuery<T>()
@@ -215,7 +215,7 @@ internal class PostRepository : IPostRepository
     /// <typeparam name="T">The model type</typeparam>
     /// <param name="id">The unique id</param>
     /// <returns>The draft, or null if no draft exists</returns>
-    public async Task<T> GetDraftById<T>(Guid id) where T : Models.PostBase
+    public async Task<T> GetDraftById<T>(string id) where T : Models.PostBase
     {
         DateTime? lastModified = await _db.Posts
             .Where(p => p.Id == id)
@@ -245,7 +245,7 @@ internal class PostRepository : IPostRepository
     /// </summary>
     /// <param name="archiveId">The archive id</param>
     /// <returns>The number of posts</returns>
-    public Task<int> GetCount(Guid archiveId)
+    public Task<int> GetCount(string archiveId)
     {
         return _db.Posts
             .Where(p => p.BlogId == archiveId)
@@ -253,29 +253,11 @@ internal class PostRepository : IPostRepository
     }
 
     /// <summary>
-    /// Gets the category with the given slug.
-    /// </summary>
-    /// <param name="blogId">The blog id</param>
-    /// <param name="slug">The unique slug</param>
-    /// <returns>The category</returns>
-    public Task<Models.Taxonomy> GetCategoryBySlug(Guid blogId, string slug)
-    {
-        return _db.Categories
-            .Where(c => c.BlogId == blogId && c.Slug == slug)
-            .Select(c => new Models.Taxonomy
-            {
-                Id = c.Id,
-                Title = c.Title,
-                Slug = c.Slug
-            }).FirstOrDefaultAsync();
-    }
-
-    /// <summary>
-    /// Gets the category with the given id.
+    /// Gets the category with the id.
     /// </summary>
     /// <param name="id">The unique id</param>
-    /// <returns>The category</returns>
-    public Task<Models.Taxonomy> GetCategoryById(Guid id)
+    /// <returns>The model</returns>
+    public Task<Models.Taxonomy> GetCategoryById(string id)
     {
         return _db.Categories
             .Where(c => c.Id == id)
@@ -288,15 +270,32 @@ internal class PostRepository : IPostRepository
     }
 
     /// <summary>
-    /// Gets the tag with the given slug.
+    /// Gets the category with the given slug.
     /// </summary>
     /// <param name="blogId">The blog id</param>
     /// <param name="slug">The unique slug</param>
-    /// <returns>The tag</returns>
-    public Task<Models.Taxonomy> GetTagBySlug(Guid blogId, string slug)
+    /// <returns>The category</returns>
+    public Task<Models.Taxonomy> GetCategoryBySlug(string blogId, string slug)
+    {
+        return _db.Categories
+            .Where(c => c.BlogId == blogId && c.Slug == slug)
+            .Select(c => new Models.Taxonomy
+            {
+                Id = c.Id,
+                Title = c.Title,
+                Slug = c.Slug
+            }).FirstOrDefaultAsync();
+    }
+
+    /// <summary>
+    /// Gets the tag with the given id.
+    /// </summary>
+    /// <param name="id">The unique id</param>
+    /// <returns>The category</returns>
+    public Task<Models.Taxonomy> GetTagById(string id)
     {
         return _db.Tags
-            .Where(t => t.BlogId == blogId && t.Slug == slug)
+            .Where(t => t.Id == id)
             .Select(t => new Models.Taxonomy
             {
                 Id = t.Id,
@@ -306,14 +305,15 @@ internal class PostRepository : IPostRepository
     }
 
     /// <summary>
-    /// Gets the tag with the given id.
+    /// Gets the tag with the given slug.
     /// </summary>
-    /// <param name="id">The unique id</param>
-    /// <returns>The category</returns>
-    public Task<Models.Taxonomy> GetTagById(Guid id)
+    /// <param name="blogId">The blog id</param>
+    /// <param name="slug">The unique slug</param>
+    /// <returns>The tag</returns>
+    public Task<Models.Taxonomy> GetTagBySlug(string blogId, string slug)
     {
         return _db.Tags
-            .Where(t => t.Id == id)
+            .Where(t => t.BlogId == blogId && t.Slug == slug)
             .Select(t => new Models.Taxonomy
             {
                 Id = t.Id,
@@ -327,7 +327,7 @@ internal class PostRepository : IPostRepository
     /// </summary>
     /// <param name="id">The comment id</param>
     /// <returns>The model</returns>
-    public async Task<Models.Comment> GetCommentById(Guid id)
+    public async Task<Models.Comment> GetCommentById(string id)
     {
         return await _db.PostComments
             .Where(c => c.Id == id)
@@ -342,7 +342,7 @@ internal class PostRepository : IPostRepository
                 IsApproved = c.IsApproved,
                 Body = c.Body,
                 Created = c.Created
-            }).FirstOrDefaultAsync().ConfigureAwait(false);
+            }).FirstOrDefaultAsync();
     }
 
     /// <summary>
@@ -368,7 +368,7 @@ internal class PostRepository : IPostRepository
     /// </summary>
     /// <param name="postId">The unique post id</param>
     /// <param name="model">The comment model</param>
-    public async Task SaveComment(Guid postId, Models.Comment model)
+    public async Task SaveComment(string postId, Models.Comment model)
     {
         var comment = await _db.PostComments
             .FirstOrDefaultAsync(c => c.Id == model.Id);
@@ -401,7 +401,7 @@ internal class PostRepository : IPostRepository
     /// </summary>
     /// <param name="id">The unique id</param>
     /// <param name="revisions">The maximum number of revisions that should be stored</param>
-    public async Task CreateRevision(Guid id, int revisions)
+    public async Task CreateRevision(string id, int revisions)
     {
         var post = await GetQuery<Models.PostBase>()
             .FirstOrDefaultAsync(p => p.Id == id)
@@ -412,7 +412,7 @@ internal class PostRepository : IPostRepository
             //await _db.PostRevisions.AddAsync(new PostRevision
             await _db.session.StoreAsync(new PostRevision()
             {
-                Id = Guid.NewGuid(),
+                Id = Snowflake.NewId(),
                 PostId = id,
                 Data = JsonSerializer.Serialize(post),
                 Created = post.LastModified
@@ -457,10 +457,10 @@ internal class PostRepository : IPostRepository
     /// Deletes the model with the specified id.
     /// </summary>
     /// <param name="id">The unique id</param>
-    public async Task Delete(Guid id)
+    public async Task Delete(string id)
     {
         var model = await _db.Posts
-            .Include(p => p.Blocks).ThenInclude(b => b.Block).ThenInclude(b => b.Fields)
+            
             .FirstOrDefaultAsync(p => p.Id == id)
             .ConfigureAwait(false);
 
@@ -501,7 +501,7 @@ internal class PostRepository : IPostRepository
     /// with the given id.
     /// </summary>
     /// <param name="id">The unique id</param>
-    public async Task DeleteDraft(Guid id)
+    public async Task DeleteDraft(string id)
     {
         var post = await GetQuery<Models.PostInfo>()
             .FirstOrDefaultAsync(p => p.Id == id)
@@ -531,7 +531,7 @@ internal class PostRepository : IPostRepository
     /// Deletes the comment with the specified id.
     /// </summary>
     /// <param name="id">The unique id</param>
-    public async Task DeleteComment(Guid id)
+    public async Task DeleteComment(string id)
     {
         var comment = await _db.PostComments
             .FirstOrDefaultAsync(c => c.Id == id)
@@ -556,17 +556,17 @@ internal class PostRepository : IPostRepository
     /// <param name="page">The page number</param>
     /// <param name="pageSize">The page size</param>
     /// <returns>The available comments</returns>
-    public async Task<IEnumerable<Models.Comment>> GetAllComments(Guid? postId, bool onlyApproved,
+    public async Task<IEnumerable<Models.Comment>> GetAllComments(string? postId, bool onlyApproved,
         bool onlyPending, int page, int pageSize)
     {
         // Create base query
         IQueryable<PostComment> query = _db.PostComments
-            .AsNoTracking();
+            ;
 
         // Check if only should include a comments for a certain post
-        if (postId.HasValue)
+        if (!string.IsNullOrEmpty(postId))
         {
-            query = query.Where(c => c.PostId == postId.Value);
+            query = query.Where(c => c.PostId == postId);
         }
 
         // Check if we should only include approved
@@ -603,7 +603,7 @@ internal class PostRepository : IPostRepository
                 IsApproved = c.IsApproved,
                 Body = c.Body,
                 Created = c.Created
-            }).ToListAsync().ConfigureAwait(false);
+            }).ToListAsync();
     }
 
     /// <summary>
@@ -642,7 +642,7 @@ internal class PostRepository : IPostRepository
                 {
                     category = new Category
                     {
-                        Id = model.Category.Id != Guid.Empty ? model.Category.Id : Guid.NewGuid(),
+                        Id = !string.IsNullOrEmpty(model.Category.Id) ? model.Category.Id : Snowflake.NewId(),
                         BlogId = model.BlogId,
                         Title = model.Category.Title,
                         Slug = Utils.GenerateSlug(model.Category.Title),
@@ -683,7 +683,7 @@ internal class PostRepository : IPostRepository
                     {
                         tag = new Tag
                         {
-                            Id = t.Id != Guid.Empty ? t.Id : Guid.NewGuid(),
+                            Id = !string.IsNullOrEmpty(t.Id) ? t.Id : Snowflake.NewId(),
                             BlogId = model.BlogId,
                             Title = t.Title,
                             Slug = Utils.GenerateSlug(t.Title),
@@ -712,18 +712,18 @@ internal class PostRepository : IPostRepository
             IQueryable<Post> postQuery = _db.Posts;
             if (isDraft)
             {
-                postQuery = postQuery.AsNoTracking();
+                postQuery = postQuery;
             }
 
             // FirstOrDefaultAsync(p => p.Id ...
             postQuery = postQuery.OrderBy(p => p.Id);
 
             var post = await postQuery
-                .Include(p => p.Permissions)
-                .Include(p => p.Blocks).ThenInclude(b => b.Block).ThenInclude(b => b.Fields)
-                .Include(p => p.Fields)
-                .Include(p => p.Tags).ThenInclude(t => t.Tag)
-                .AsSplitQuery()
+                
+                
+                
+                
+                
                 .FirstOrDefaultAsync(p => p.Id == model.Id)
                 .ConfigureAwait(false);
 
@@ -732,7 +732,7 @@ internal class PostRepository : IPostRepository
             {
                 post = new Post
                 {
-                    Id = model.Id != Guid.Empty ? model.Id : Guid.NewGuid(),
+                    Id = !string.IsNullOrEmpty(model.Id) ? model.Id : Snowflake.NewId(),
                     Created = DateTime.Now,
                     LastModified = DateTime.Now
                 };
@@ -770,7 +770,7 @@ internal class PostRepository : IPostRepository
             {
                 foreach (var field in post.Fields)
                 {
-                    if (field.PostId == Guid.Empty)
+                    if (field.PostId == string.Empty)
                     {
                         field.PostId = post.Id;
                         //await _db.PostFields.AddAsync(field).ConfigureAwait(false);
@@ -803,7 +803,7 @@ internal class PostRepository : IPostRepository
                     .Where(b => !current.Contains(b.BlockId) && !b.Block.IsReusable && b.Block.ParentId == null)
                     .Select(b => b.Block);
                 var removedItems = post.Blocks
-                    .Where(b => !current.Contains(b.BlockId) && b.Block.ParentId != null && removed.Select(p => p.Id).ToList().Contains(b.Block.ParentId.Value))
+                    .Where(b => !current.Contains(b.BlockId) && b.Block.ParentId != null && removed.Select(p => p.Id).ToList().Contains(b.Block.ParentId))
                     .Select(b => b.Block);
 
                 if (!isDraft)
@@ -827,18 +827,18 @@ internal class PostRepository : IPostRepository
                     IQueryable<Block> blockQuery = _db.Blocks;
                     if (isDraft)
                     {
-                        blockQuery = blockQuery.AsNoTracking();
+                        blockQuery = blockQuery;
                     }
 
                     var block = blockQuery
-                        .Include(b => b.Fields)
+                        
                         .FirstOrDefault(b => b.Id == blocks[n].Id);
 
                     if (block == null)
                     {
                         block = new Block
                         {
-                            Id = blocks[n].Id != Guid.Empty ? blocks[n].Id : Guid.NewGuid(),
+                            Id = !string.IsNullOrEmpty(blocks[n].Id) ? blocks[n].Id : Snowflake.NewId(),
                             Created = DateTime.Now
                         };
                         if (!isDraft)
@@ -871,7 +871,7 @@ internal class PostRepository : IPostRepository
                         {
                             field = new BlockField
                             {
-                                Id = newField.Id != Guid.Empty ? newField.Id : Guid.NewGuid(),
+                                Id = !string.IsNullOrEmpty(newField.Id) ? newField.Id : Snowflake.NewId(),
                                 BlockId = block.Id,
                                 FieldId = newField.FieldId
                             };
@@ -890,7 +890,7 @@ internal class PostRepository : IPostRepository
                     // Create the post block
                     var postBlock = new PostBlock
                     {
-                        Id = Guid.NewGuid(),
+                        Id = Snowflake.NewId(),
                         BlockId = block.Id,
                         Block = block,
                         PostId = post.Id,
@@ -960,7 +960,7 @@ internal class PostRepository : IPostRepository
                 {
                     draft = new PostRevision
                     {
-                        Id = Guid.NewGuid(),
+                        Id = Snowflake.NewId(),
                         PostId = post.Id
                     };
                     // await _db.PostRevisions
@@ -981,7 +981,7 @@ internal class PostRepository : IPostRepository
     /// Deletes all unused categories for the specified blog.
     /// </summary>
     /// <param name="blogId">The blog id</param>
-    private async Task DeleteUnusedCategories(Guid blogId)
+    private async Task DeleteUnusedCategories(string blogId)
     {
         var used = await _db.Posts
             .Where(p => p.BlogId == blogId)
@@ -1020,7 +1020,7 @@ internal class PostRepository : IPostRepository
     /// Deletes all unused tags for the specified blog.
     /// </summary>
     /// <param name="blogId">The blog id</param>
-    private async Task DeleteUnusedTags(Guid blogId)
+    private async Task DeleteUnusedTags(string blogId)
     {
         var used = await _db.PostTags
             .Where(t => t.Post.BlogId == blogId)
@@ -1070,21 +1070,21 @@ internal class PostRepository : IPostRepository
         var loadRelated = !typeof(Models.IContentInfo).IsAssignableFrom(typeof(T));
 
         IQueryable<Post> query = _db.Posts
-            .AsNoTracking()
-            .Include(p => p.Permissions)
-            .Include(p => p.Category)
-            .Include(p => p.Tags).ThenInclude(t => t.Tag);
+            
+            
+            
+            ;
 
         if (loadRelated)
         {
             query = query
-                .Include(p => p.Blocks).ThenInclude(b => b.Block).ThenInclude(b => b.Fields)
-                .Include(p => p.Fields);
+                
+                ;
         }
 
         query = query.OrderBy(p => p.Created);
 
-        return query.AsSplitQuery();
+        return query;
     }
 
     /// <summary>
@@ -1115,9 +1115,9 @@ internal class PostRepository : IPostRepository
             {
                 foreach (var postBlock in post.Blocks.OrderBy(b => b.SortOrder))
                 {
-                    if (postBlock.Block.ParentId.HasValue)
+                    if (!string.IsNullOrEmpty(postBlock.Block.ParentId))
                     {
-                        var parent = post.Blocks.FirstOrDefault(b => b.BlockId == postBlock.Block.ParentId.Value);
+                        var parent = post.Blocks.FirstOrDefault(b => b.BlockId == postBlock.Block.ParentId);
                         if (parent != null)
                         {
                             postBlock.Block.ParentId = parent.Block.Id;
@@ -1129,3 +1129,4 @@ internal class PostRepository : IPostRepository
         }
     }
 }
+

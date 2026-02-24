@@ -20,31 +20,31 @@ namespace Piranha.Tests.Services;
 [Collection("Integration tests")]
 public class CommentTestsMemoryCache : CommentTests
 {
-    public override Task InitializeAsync()
+    public override async Task InitializeAsync()
     {
+        await base.InitializeAsync();
         _cache = new Cache.MemoryCache((IMemoryCache)_services.GetService(typeof(IMemoryCache)));
-        return base.InitializeAsync();
     }
 }
 
 [Collection("Integration tests")]
 public class CommentTestsDistributedCache : CommentTests
 {
-    public override Task InitializeAsync()
+    public override async Task InitializeAsync()
     {
+        await base.InitializeAsync();
         _cache = new Cache.DistributedCache((IDistributedCache)_services.GetService(typeof(IDistributedCache)));
-        return base.InitializeAsync();
     }
 }
 
 [Collection("Integration tests")]
 public class CommentTests : BaseTestsAsync
 {
-    private Guid SITE_ID = Guid.NewGuid();
-    private Guid BLOG_ID = Guid.NewGuid();
-    private Guid NEWS_ID = Guid.NewGuid();
-    private Guid BLOGPOST_ID = Guid.NewGuid();
-    private Guid NEWSPOST_ID = Guid.NewGuid();
+    private string SITE_ID = Snowflake.NewId();
+    private string BLOG_ID = Snowflake.NewId();
+    private string NEWS_ID = Snowflake.NewId();
+    private string BLOGPOST_ID = Snowflake.NewId();
+    private string NEWSPOST_ID = Snowflake.NewId();
 
     [PageType(Title = "Blog Archive", IsArchive = true, UseBlocks = false)]
     public class BlogArchive : Page<BlogArchive> {}
@@ -54,6 +54,8 @@ public class CommentTests : BaseTestsAsync
 
     public override async Task InitializeAsync()
     {
+        await base.InitializeAsync();
+
         using (var api = CreateApi())
         {
             // Import content types
@@ -114,13 +116,13 @@ public class CommentTests : BaseTestsAsync
     {
         using (var api = CreateApi())
         {
-            var posts = await api.Posts.GetAllAsync(BLOG_ID);
+            var posts = await api.Posts.GetAllDynamicAsync(BLOG_ID);
             foreach (var p in posts)
             {
                 await api.Posts.DeleteAsync(p);
             }
 
-            posts = await api.Posts.GetAllAsync(NEWS_ID);
+            posts = await api.Posts.GetAllDynamicAsync(NEWS_ID);
             foreach (var p in posts)
             {
                 await api.Posts.DeleteAsync(p);
@@ -234,7 +236,7 @@ public class CommentTests : BaseTestsAsync
                 config.CommentsApprove = true;
             }
 
-            var id = Guid.NewGuid();
+            var id = Snowflake.NewId();
 
             await api.Posts.SaveCommentAndVerifyAsync(BLOGPOST_ID, new PostComment
             {
@@ -261,7 +263,7 @@ public class CommentTests : BaseTestsAsync
                 config.CommentsApprove = false;
             }
 
-            var id = Guid.NewGuid();
+            var id = Snowflake.NewId();
 
             await api.Posts.SaveCommentAndVerifyAsync(BLOGPOST_ID, new PostComment
             {
@@ -365,7 +367,7 @@ public class CommentTests : BaseTestsAsync
                 config.CommentsApprove = true;
             }
 
-            var id = Guid.NewGuid();
+            var id = Snowflake.NewId();
 
             await api.Pages.SaveCommentAndVerifyAsync(BLOG_ID, new PageComment
             {
@@ -392,7 +394,7 @@ public class CommentTests : BaseTestsAsync
                 config.CommentsApprove = false;
             }
 
-            var id = Guid.NewGuid();
+            var id = Snowflake.NewId();
 
             await api.Pages.SaveCommentAndVerifyAsync(BLOG_ID, new PageComment
             {

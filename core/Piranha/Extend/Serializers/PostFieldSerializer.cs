@@ -32,7 +32,7 @@ public class PostFieldSerializer : ISerializer
     {
         return new PostField
         {
-            Id = !string.IsNullOrEmpty(str) ? new Guid(str) : (Guid?)null
+            Id = !string.IsNullOrEmpty(str) ? str : null
         };
     }
 }

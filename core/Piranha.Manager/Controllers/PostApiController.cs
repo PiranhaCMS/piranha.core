@@ -50,7 +50,7 @@ public class PostApiController : Controller
     [Route("list/{id}/{index?}")]
     [HttpGet]
     [Authorize(Policy = Permission.Posts)]
-    public async Task<PostListModel> List(Guid id, int index = 0)
+    public async Task<PostListModel> List(string id, int index = 0)
     {
         return await _service.GetList(id, index);
     }
@@ -60,10 +60,10 @@ public class PostApiController : Controller
     /// </summary>
     /// <param name="id">The unique id</param>
     /// <returns>The post edit model</returns>
-    [Route("{id:Guid}")]
+    [Route("{id}")]
     [HttpGet]
     [Authorize(Policy = Permission.PostsEdit)]
-    public async Task<PostEditModel> Get(Guid id)
+    public async Task<PostEditModel> Get(string id)
     {
         return await _service.GetById(id);
     }
@@ -77,7 +77,7 @@ public class PostApiController : Controller
     [Route("info/{id}")]
     [HttpGet]
     [Authorize(Policy = Permission.Posts)]
-    public async Task<Piranha.Models.PostInfo> GetInfo(Guid id)
+    public async Task<Piranha.Models.PostInfo> GetInfo(string id)
     {
         return await _api.Posts.GetByIdAsync<Piranha.Models.PostInfo>(id);
     }
@@ -91,7 +91,7 @@ public class PostApiController : Controller
     [Route("create/{archiveId}/{typeId}")]
     [HttpGet]
     [Authorize(Policy = Permission.PostsAdd)]
-    public async Task<PostEditModel> Create(Guid archiveId, string typeId)
+    public async Task<PostEditModel> Create(string archiveId, string typeId)
     {
         return await _service.Create(archiveId, typeId);
     }
@@ -99,7 +99,7 @@ public class PostApiController : Controller
     [Route("modal")]
     [HttpGet]
     [Authorize(Policy = Permission.Posts)]
-    public async Task<PostModalModel> Modal(Guid? siteId, Guid? archiveId)
+    public async Task<PostModalModel> Modal(string? siteId, string? archiveId)
     {
         return await _service.GetArchiveMap(siteId, archiveId);
     }
@@ -164,7 +164,7 @@ public class PostApiController : Controller
     [Route("revert")]
     [HttpPost]
     [Authorize(Policy = Permission.PostsSave)]
-    public async Task<PostEditModel> Revert([FromBody]Guid id)
+    public async Task<PostEditModel> Revert([FromBody]string id)
     {
         var post = await _service.GetById(id, false);
 
@@ -195,7 +195,7 @@ public class PostApiController : Controller
     [Route("delete")]
     [HttpDelete]
     [Authorize(Policy = Permission.PostsDelete)]
-    public async Task<StatusMessage> Delete([FromBody]Guid id)
+    public async Task<StatusMessage> Delete([FromBody]string id)
     {
         try
         {

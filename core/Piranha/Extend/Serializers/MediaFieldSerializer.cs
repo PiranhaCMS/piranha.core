@@ -32,7 +32,7 @@ public class MediaFieldSerializer : ISerializer
     {
         return new MediaField
         {
-            Id = !string.IsNullOrEmpty(str) ? new Guid(str) : (Guid?)null
+            Id = !string.IsNullOrEmpty(str) ? str : null
         };
     }
 }

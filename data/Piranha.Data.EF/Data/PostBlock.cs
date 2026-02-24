@@ -17,28 +17,23 @@ namespace Piranha.Data;
 /// Connection between a post and a block.
 /// </summary>
 [Serializable]
-public sealed class PostBlock : IContentBlock
+public sealed class PostBlock : Entity, IContentBlock
 {
-    /// <summary>
-    /// Gets/sets the unique id.
-    /// </summary>
-    public Guid Id { get; set; }
-
     /// <summary>
     /// This property is not used any more, but is kept for atm
     /// backwards compatible SQLite migrations.
     /// </summary>
-    public Guid? ParentId { get; set; }
+    public string ParentId { get; set; }
 
     /// <summary>
     /// Gets/sets the post id.
     /// </summary>
-    public Guid PostId { get; set; }
+    public string PostId { get; set; }
 
     /// <summary>
     /// Gets/sets the block id.
     /// </summary>
-    public Guid BlockId { get; set; }
+    public string BlockId { get; set; }
 
     /// <summary>
     /// Gets/sets the zero based sort index.

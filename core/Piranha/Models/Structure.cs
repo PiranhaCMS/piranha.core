@@ -23,11 +23,11 @@ public abstract class Structure<TThis, T> : List<T> where T : StructureItem<TThi
     /// <param name="id">The unique id</param>
     /// <param name="includeRootNode">If the root node should be included</param>
     /// <returns>The partial structure</returns>
-    public TThis GetPartial(Guid? id, bool includeRootNode = false)
+    public TThis GetPartial(string? id, bool includeRootNode = false)
     {
-        if (id.HasValue)
+        if (!string.IsNullOrEmpty(id))
         {
-            return GetPartialRecursive(this, id.Value, includeRootNode);
+            return GetPartialRecursive(this, id, includeRootNode);
         }
         return (TThis)this;
     }
@@ -37,11 +37,11 @@ public abstract class Structure<TThis, T> : List<T> where T : StructureItem<TThi
     /// </summary>
     /// <param name="id">The unique id</param>
     /// <returns>The breadcrumb</returns>
-    public IList<T> GetBreadcrumb(Guid? id)
+    public IList<T> GetBreadcrumb(string? id)
     {
-        if (id.HasValue)
+        if (!string.IsNullOrEmpty(id))
         {
-            return GetBreadcrumbRecursive(this, id.Value);
+            return GetBreadcrumbRecursive(this, id);
         }
         return new List<T>();
     }
@@ -54,7 +54,7 @@ public abstract class Structure<TThis, T> : List<T> where T : StructureItem<TThi
     /// <param name="id">The unique id</param>
     /// <param name="includeRootNode">If the root node should be included</param>
     /// <returns>The partial structure if found</returns>
-    private TThis GetPartialRecursive(IList<T> items, Guid id, bool includeRootNode)
+    private TThis GetPartialRecursive(IList<T> items, string id, bool includeRootNode)
     {
         foreach (var item in items)
         {
@@ -90,7 +90,7 @@ public abstract class Structure<TThis, T> : List<T> where T : StructureItem<TThi
     /// <param name="items">The items</param>
     /// <param name="id">The unique id</param>
     /// <returns>The breadcrumb items</returns>
-    private IList<T> GetBreadcrumbRecursive(IList<T> items, Guid id)
+    private IList<T> GetBreadcrumbRecursive(IList<T> items, string id)
     {
         foreach (var item in items)
         {

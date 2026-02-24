@@ -36,7 +36,7 @@ public class ContentBlockField : BlockFieldBase, ITranslatable
     /// <param name="parentId">The parent id</param>
     /// <param name="languageId">The language id</param>
     /// <param name="model">The model</param>
-    public void SetTranslation(Guid parentId, Guid languageId, object model)
+    public void SetTranslation(string parentId, string languageId, object model)
     {
         var translation = Translations.FirstOrDefault(t => t.LanguageId == languageId);
 
@@ -57,7 +57,7 @@ public class ContentBlockField : BlockFieldBase, ITranslatable
     /// </summary>
     /// <param name="languageId">The language id</param>
     /// <returns>The translation</returns>
-    public object GetTranslation(Guid languageId)
+    public object GetTranslation(string languageId)
     {
         return Translations.FirstOrDefault(t => t.LanguageId == languageId)?.Value;
     }

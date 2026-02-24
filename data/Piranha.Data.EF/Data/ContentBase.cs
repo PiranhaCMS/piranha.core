@@ -11,13 +11,8 @@
 namespace Piranha.Data;
 
 [Serializable]
-public abstract class ContentBase<T> where T : ContentFieldBase
+public abstract class ContentBase<T> : Entity where T : ContentFieldBase
 {
-    /// <summary>
-    /// Gets/sets the unique id.
-    /// </summary>
-    public Guid Id { get; set; }
-
     /// <summary>
     /// Gets/sets the main title.
     /// </summary>

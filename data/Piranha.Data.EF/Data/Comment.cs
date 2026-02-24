@@ -11,13 +11,8 @@
 namespace Piranha.Data;
 
 [Serializable]
-public class Comment
+public class Comment : Entity
 {
-    /// <summary>
-    /// Gets/sets the unique id.
-    /// </summary>
-    public Guid Id { get; set; }
-
     /// <summary>
     /// Gets/sets the optional user id.
     /// </summary>

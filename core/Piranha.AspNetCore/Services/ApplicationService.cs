@@ -56,7 +56,7 @@ public class ApplicationService : IApplicationService
     /// <summary>
     /// Gets/sets the id of the currently requested page.
     /// </summary>
-    public Guid PageId { get; set; }
+    public string PageId { get; set; }
 
     /// <summary>
     /// Gets/sets the current page.

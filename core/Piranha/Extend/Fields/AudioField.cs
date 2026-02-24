@@ -19,12 +19,21 @@ namespace Piranha.Extend.Fields;
 public class AudioField : MediaFieldBase<AudioField>
 {
     /// <summary>
+    /// Implicit operator for converting a string id to a field.
+    /// </summary>
+    /// <param name="id">The id value</param>
+    public static implicit operator AudioField(string id)
+    {
+        return new AudioField { Id = id };
+    }
+
+    /// <summary>
     /// Implicit operator for converting a Guid id to a field.
     /// </summary>
     /// <param name="guid">The guid value</param>
     public static implicit operator AudioField(Guid guid)
     {
-        return new AudioField { Id = guid };
+        return new AudioField { Id = guid.ToString() };
     }
 
     /// <summary>

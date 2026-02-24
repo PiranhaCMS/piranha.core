@@ -8,7 +8,7 @@
  *
  */
 
-using Microsoft.EntityFrameworkCore;
+using Raven.Client.Documents;
 using Piranha.Data;
 using Piranha.Data.EF;
 
@@ -18,7 +18,7 @@ internal class MediaRepository : IMediaRepository
 {
     class FolderCount
     {
-        public Guid? FolderId { get; set; }
+        public string? FolderId { get; set; }
         public int Count { get; set; }
     }
 
@@ -38,9 +38,8 @@ internal class MediaRepository : IMediaRepository
     /// </summary>
     /// <param name="folderId">The optional folder id</param>
     /// <returns>The available media</returns>
-    public async Task<IEnumerable<Guid>> GetAll(Guid? folderId = null) =>
+    public async Task<IEnumerable<string>> GetAll(string? folderId = null) =>
         await _db.Media
-            .AsNoTracking()
             .Where(m => m.FolderId == folderId)
             .OrderBy(m => m.Filename)
             .Select(m => m.Id)
@@ -52,9 +51,8 @@ internal class MediaRepository : IMediaRepository
     /// </summary>
     /// <param name="folderId"></param>
     /// <returns></returns>
-    public Task<int> CountAll(Guid? folderId) =>
+    public Task<int> CountAll(string? folderId) =>
         _db.Media
-            .AsNoTracking()
             .Where(m => m.FolderId == folderId).CountAsync();
 
     /// <summary>
@@ -63,9 +61,8 @@ internal class MediaRepository : IMediaRepository
     /// </summary>
     /// <param name="folderId">The optional folder id</param>
     /// <returns>The available media folders</returns>
-    public async Task<IEnumerable<Guid>> GetAllFolders(Guid? folderId = null) =>
+    public async Task<IEnumerable<string>> GetAllFolders(string? folderId = null) =>
         await _db.MediaFolders
-            .AsNoTracking()
             .Where(f => f.ParentId == folderId)
             .OrderBy(f => f.Name)
             .Select(f => f.Id)
@@ -77,9 +74,9 @@ internal class MediaRepository : IMediaRepository
     /// </summary>
     /// <param name="ids">One or several media id</param>
     /// <returns>The matching media</returns>
-    public Task<IEnumerable<Models.Media>> GetById(params Guid[] ids) =>
-        _db.Media.AsNoTracking()
-            .Include(c => c.Versions)
+    public Task<IEnumerable<Models.Media>> GetById(params string[] ids) =>
+        _db.Media
+            
             .Where(m => ids.Contains(m.Id))
             .OrderBy(m => m.Filename)
             .ToArrayAsync()
@@ -90,10 +87,9 @@ internal class MediaRepository : IMediaRepository
     /// </summary>
     /// <param name="id">The unique id</param>
     /// <returns>The media</returns>
-    public Task<Models.Media> GetById(Guid id) =>
+    public Task<Models.Media> GetById(string id) =>
         _db.Media
-            .AsNoTracking()
-            .Include(m => m.Versions)
+            
             .FirstOrDefaultAsync(m => m.Id == id).ContinueWith(t => (Models.Media)t.Result);
 
     /// <summary>
@@ -101,9 +97,8 @@ internal class MediaRepository : IMediaRepository
     /// </summary>
     /// <param name="id">The unique id</param>
     /// <returns>The media folder</returns>
-    public Task<Models.MediaFolder> GetFolderById(Guid id) =>
+    public Task<Models.MediaFolder> GetFolderById(string id) =>
         _db.MediaFolders
-            .AsNoTracking()
             .Select(f => new Models.MediaFolder
             {
                 Id = f.Id,
@@ -120,14 +115,12 @@ internal class MediaRepository : IMediaRepository
     public async Task<Models.MediaStructure> GetStructure()
     {
         var folders = await _db.MediaFolders
-            .AsNoTracking()
             .OrderBy(f => f.ParentId)
             .ThenBy(f => f.Name)
             .ToListAsync()
             .ConfigureAwait(false);
 
         var count = await _db.Media
-            .AsNoTracking()
             .GroupBy(m => m.FolderId)
             .Select(m => new FolderCount
             {
@@ -148,7 +141,7 @@ internal class MediaRepository : IMediaRepository
     public async Task Save(Models.Media model)
     {
         var media = await _db.Media
-            .Include(m => m.Versions)
+            
             .FirstOrDefaultAsync(m => m.Id == model.Id)
             .ConfigureAwait(false);
 
@@ -156,7 +149,7 @@ internal class MediaRepository : IMediaRepository
         {
             media = new Media
             {
-                Id = model.Id,
+                Id = !string.IsNullOrEmpty(model.Id) ? model.Id : Snowflake.NewId(),
                 Created = DateTime.Now
             };
             //await _db.Media.AddAsync(media).ConfigureAwait(false);
@@ -226,7 +219,7 @@ internal class MediaRepository : IMediaRepository
         {
             folder = new Data.MediaFolder()
             {
-                Id = model.Id != Guid.Empty ? model.Id : Guid.NewGuid(),
+                Id = !string.IsNullOrEmpty(model.Id) ? model.Id : Snowflake.NewId().ToString(),
                 Created = DateTime.Now
             };
             model.Id = folder.Id;
@@ -244,7 +237,7 @@ internal class MediaRepository : IMediaRepository
     /// </summary>
     /// <param name="model">The model</param>
     /// <param name="folderId">The folder id</param>
-    public async Task Move(Models.Media model, Guid? folderId)
+    public async Task Move(Models.Media model, string? folderId)
     {
         var media = await _db.Media
             .FirstOrDefaultAsync(m => m.Id == model.Id)
@@ -261,10 +254,10 @@ internal class MediaRepository : IMediaRepository
     /// Deletes the media with the given id.
     /// </summary>
     /// <param name="id">The unique id</param>
-    public async Task Delete(Guid id)
+    public async Task Delete(string id)
     {
         var media = await _db.Media
-            .Include(m => m.Versions)
+            
             .FirstOrDefaultAsync(m => m.Id == id)
             .ConfigureAwait(false);
 
@@ -281,7 +274,7 @@ internal class MediaRepository : IMediaRepository
     /// Deletes the media folder with the given id.
     /// </summary>
     /// <param name="id">The unique id</param>
-    public async Task DeleteFolder(Guid id)
+    public async Task DeleteFolder(string id)
     {
         var folder = await _db.MediaFolders
             .FirstOrDefaultAsync(f => f.Id == id)
@@ -304,7 +297,7 @@ internal class MediaRepository : IMediaRepository
     /// <param name="parentId">The current parent id</param>
     /// <param name="level">The current level in the structure</param>
     /// <returns>The structure</returns>
-    private Models.MediaStructure Sort(IEnumerable<MediaFolder> folders, IList<FolderCount> count, Guid? parentId = null, int level = 0)
+    private Models.MediaStructure Sort(IEnumerable<MediaFolder> folders, IList<FolderCount> count, string? parentId = null, int level = 0)
     {
         var rootCount = count.FirstOrDefault(c => c.FolderId == null)?.Count;
         var totalCount = count.Sum(c => c.Count);
@@ -330,3 +323,4 @@ internal class MediaRepository : IMediaRepository
         return result;
     }
 }
+

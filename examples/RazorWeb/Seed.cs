@@ -24,7 +24,7 @@ public static class Seed
             return;
         }
 
-        var images = new Dictionary<string, Guid>();
+        var images = new Dictionary<string, string>();
 
         // Get the default site
         var site = await api.Sites.GetDefaultAsync();
@@ -33,7 +33,7 @@ public static class Seed
         foreach (var image in Directory.GetFiles("seed"))
         {
             var info = new FileInfo(image);
-            var id = Guid.NewGuid();
+            var id = Snowflake.NewId();
             images.Add(info.Name, id);
 
             using (var stream = System.IO.File.OpenRead(image))
@@ -49,7 +49,7 @@ public static class Seed
 
         // Add blog page
         var blogPage = await StandardArchive.CreateAsync(api);
-        blogPage.Id = Guid.NewGuid();
+        blogPage.Id = Snowflake.NewId();
         blogPage.SiteId = site.Id;
         blogPage.Title = "Blog Archive";
         blogPage.NavigationTitle = "Blog";
@@ -63,7 +63,7 @@ public static class Seed
 
         // Add docs page
         var docsPage = await StandardPage.CreateAsync(api);
-        docsPage.Id = Guid.NewGuid();
+        docsPage.Id = Snowflake.NewId();
         docsPage.SiteId = site.Id;
         docsPage.SortOrder = 1;
         docsPage.Title = "Read The Docs";
@@ -81,7 +81,7 @@ public static class Seed
 
         // Add start page
         var startPage = await StandardPage.CreateAsync(api);
-        startPage.Id = Guid.NewGuid();
+        startPage.Id = Snowflake.NewId();
         startPage.SiteId = site.Id;
         startPage.Title = "Welcome To Piranha CMS";
         startPage.NavigationTitle = "Home";
@@ -208,7 +208,7 @@ public static class Seed
         await api.Posts.SaveAsync(post2);
 
         var post3 = await StandardPost.CreateAsync(api);
-        post3.Id = Guid.NewGuid();
+        post3.Id = Snowflake.NewId();
         post3.BlogId = blogPage.Id;
         post3.Category = "Piranha";
         post3.Tags.Add("Development", "Release Info");

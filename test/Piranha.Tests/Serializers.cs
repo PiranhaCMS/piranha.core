@@ -141,7 +141,7 @@ public class Serializers
     [Fact]
     public void SerializeImageField() {
         var serializer = new ImageFieldSerializer();
-        var id = Guid.NewGuid();
+        var id = Snowflake.NewId();
 
         var str = serializer.Serialize(new ImageField
         {
@@ -154,11 +154,11 @@ public class Serializers
     [Fact]
     public void DeserializeImageField() {
         var serializer = new ImageFieldSerializer();
-        var id = Guid.NewGuid();
+        var id = Snowflake.NewId();
 
         var field = (ImageField)serializer.Deserialize(id.ToString());
 
-        Assert.Equal(id, field.Id.Value);
+        Assert.Equal(id, field.Id);
     }
 
     [Fact]
@@ -183,7 +183,7 @@ public class Serializers
     [Fact]
     public void SerializeDocumentField() {
         var serializer = new DocumentFieldSerializer();
-        var id = Guid.NewGuid();
+        var id = Snowflake.NewId();
 
         var str = serializer.Serialize(new DocumentField
         {
@@ -196,11 +196,11 @@ public class Serializers
     [Fact]
     public void DeserializeDocumentField() {
         var serializer = new DocumentFieldSerializer();
-        var id = Guid.NewGuid();
+        var id = Snowflake.NewId();
 
         var field = (DocumentField)serializer.Deserialize(id.ToString());
 
-        Assert.Equal(id, field.Id.Value);
+        Assert.Equal(id, field.Id);
     }
 
     [Fact]
@@ -225,7 +225,7 @@ public class Serializers
     [Fact]
     public void SerializeVideoField() {
         var serializer = new VideoFieldSerializer();
-        var id = Guid.NewGuid();
+        var id = Snowflake.NewId();
 
         var str = serializer.Serialize(new VideoField
         {
@@ -238,11 +238,11 @@ public class Serializers
     [Fact]
     public void DeserializeVideoField() {
         var serializer = new VideoFieldSerializer();
-        var id = Guid.NewGuid();
+        var id = Snowflake.NewId();
 
         var field = (VideoField)serializer.Deserialize(id.ToString());
 
-        Assert.Equal(id, field.Id.Value);
+        Assert.Equal(id, field.Id);
     }
 
     [Fact]
@@ -268,7 +268,7 @@ public class Serializers
     public void SerializeAudioField()
     {
         var serializer = new AudioFieldSerializer();
-        var id = Guid.NewGuid();
+        var id = Snowflake.NewId();
 
         var str = serializer.Serialize(new AudioField
         {
@@ -282,11 +282,11 @@ public class Serializers
     public void DeserializeAudioField()
     {
         var serializer = new AudioFieldSerializer();
-        var id = Guid.NewGuid();
+        var id = Snowflake.NewId();
 
         var field = (AudioField)serializer.Deserialize(id.ToString());
 
-        Assert.Equal(id, field.Id.Value);
+        Assert.Equal(id, field.Id);
     }
 
     [Fact]
@@ -313,7 +313,7 @@ public class Serializers
     [Fact]
     public void SerializeMediaField() {
         var serializer = new MediaFieldSerializer();
-        var id = Guid.NewGuid();
+        var id = Snowflake.NewId();
 
         var str = serializer.Serialize(new MediaField
         {
@@ -326,11 +326,11 @@ public class Serializers
     [Fact]
     public void DeserializeMediaField() {
         var serializer = new MediaFieldSerializer();
-        var id = Guid.NewGuid();
+        var id = Snowflake.NewId();
 
         var field = (MediaField)serializer.Deserialize(id.ToString());
 
-        Assert.Equal(id, field.Id.Value);
+        Assert.Equal(id, field.Id);
     }
 
     [Fact]
@@ -443,7 +443,7 @@ public class Serializers
     [Fact]
     public void SerializePageField() {
         var serializer = new PageFieldSerializer();
-        var pageId = Guid.NewGuid();
+        var pageId = Snowflake.NewId();
 
         var str = serializer.Serialize(new PageField
         {
@@ -456,7 +456,7 @@ public class Serializers
     [Fact]
     public void DeserializePageField() {
         var serializer = new PageFieldSerializer();
-        var pageId = Guid.NewGuid();
+        var pageId = Snowflake.NewId();
 
         var field = (PageField)serializer.Deserialize(pageId.ToString());
 
@@ -476,7 +476,7 @@ public class Serializers
     [Fact]
     public void SerializePostField() {
         var serializer = new PostFieldSerializer();
-        var postId = Guid.NewGuid();
+        var postId = Snowflake.NewId();
 
         var str = serializer.Serialize(new PostField
         {
@@ -489,7 +489,7 @@ public class Serializers
     [Fact]
     public void DeserializePostField() {
         var serializer = new PostFieldSerializer();
-        var postId = Guid.NewGuid();
+        var postId = Snowflake.NewId();
 
         var field = (PostField)serializer.Deserialize(postId.ToString());
 

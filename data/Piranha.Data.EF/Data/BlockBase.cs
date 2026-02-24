@@ -19,13 +19,13 @@ public abstract class BlockBase<T> where T : BlockFieldBase
     /// <summary>
     /// Gets/sets the unique id.
     /// </summary>
-    public Guid Id { get; set; }
+    public string Id { get; set; }
 
     /// <summary>
     /// This is not part of the data model. It's only used
     /// for internal mapping.
     /// </summary>
-    public Guid? ParentId { get; set; }
+    public string? ParentId { get; set; }
 
     /// <summary>
     /// Gets/sets the CLR type of the block.

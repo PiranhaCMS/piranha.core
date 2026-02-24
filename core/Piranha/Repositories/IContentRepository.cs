@@ -20,7 +20,7 @@ public interface IContentRepository
     /// </summary>
     /// <param name="groupId">The optional group id</param>
     /// <returns>The available content</returns>
-    Task<IEnumerable<Guid>> GetAll(string groupId = null);
+    Task<IEnumerable<string>> GetAll(string groupId = null);
 
     /// <summary>
     /// Gets the content model with the specified id.
@@ -29,7 +29,7 @@ public interface IContentRepository
     /// <param name="id">The unique id</param>
     /// <param name="languageId">The selected language id</param>
     /// <returns>The content model</returns>
-    Task<T> GetById<T>(Guid id, Guid languageId) where T : GenericContent;
+    Task<T> GetById<T>(string id, string languageId) where T : GenericContent;
 
     /// <summary>
     /// Gets all available categories for the specified group.
@@ -51,7 +51,7 @@ public interface IContentRepository
     /// </summary>
     /// <param name="contentId">The unique content id</param>
     /// <returns>The translation status</returns>
-    Task<TranslationStatus> GetTranslationStatusById(Guid contentId);
+    Task<TranslationStatus> GetTranslationStatusById(string contentId);
 
     /// <summary>
     /// Gets the translation summary for the content group with
@@ -66,11 +66,11 @@ public interface IContentRepository
     /// </summary>
     /// <param name="model">The content model</param>
     /// <param name="languageId">The selected language id</param>
-    Task Save<T>(T model, Guid languageId) where T : GenericContent;
+    Task Save<T>(T model, string languageId) where T : GenericContent;
 
     /// <summary>
     /// Deletes the content model with the specified id.
     /// </summary>
     /// <param name="id">The unique id</param>
-    Task Delete(Guid id);
+    Task Delete(string id);
 }

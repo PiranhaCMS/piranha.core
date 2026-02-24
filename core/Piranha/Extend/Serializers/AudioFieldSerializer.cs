@@ -32,7 +32,7 @@ public class AudioFieldSerializer : ISerializer
     {
         return new AudioField
         {
-            Id = !string.IsNullOrEmpty(str) ? new Guid(str) : (Guid?)null
+            Id = !string.IsNullOrEmpty(str) ? str : null
         };
     }
 }

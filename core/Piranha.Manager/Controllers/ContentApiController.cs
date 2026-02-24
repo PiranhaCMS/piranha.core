@@ -155,7 +155,7 @@ public class ContentApiController : Controller
     [Route("{id}/{languageId?}")]
     [HttpGet]
     [Authorize(Policy = Permission.Content)]
-    public async Task<ContentEditModel> Get(Guid id, Guid? languageId = null)
+    public async Task<ContentEditModel> Get(string id, string? languageId = null)
     {
         return await _content.GetByIdAsync(id, languageId);
     }
@@ -169,7 +169,7 @@ public class ContentApiController : Controller
     [Route("info/{id}")]
     [HttpGet]
     [Authorize(Policy = Permission.Content)]
-    public async Task<Piranha.Models.ContentInfo> GetInfo(Guid id)
+    public async Task<Piranha.Models.ContentInfo> GetInfo(string id)
     {
         return await _api.Content.GetByIdAsync<Piranha.Models.ContentInfo>(id);
     }
@@ -230,7 +230,7 @@ public class ContentApiController : Controller
     [Route("delete")]
     [HttpDelete]
     [Authorize(Policy = Permission.ContentDelete)]
-    public async Task<StatusMessage> Delete([FromBody]Guid id)
+    public async Task<StatusMessage> Delete([FromBody]string id)
     {
         try
         {

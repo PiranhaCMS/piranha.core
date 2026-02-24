@@ -13,13 +13,8 @@ using System.ComponentModel.DataAnnotations;
 namespace Piranha.Models;
 
 [Serializable]
-public class Taxonomy
+public class Taxonomy : Entity
 {
-    /// <summary>
-    /// Gets/sets the unique id.
-    /// </summary>
-    public Guid Id { get; set; }
-
     /// <summary>
     /// Gets/sets the title.
     /// </summary>

@@ -1,7 +1,7 @@
 # Implementation Plan: Resolve Failing Unit Tests
 
 ## Phase 1: Test Discovery and Triage
-- [ ] Task: Execute full test suite and log failures
+- [~] Task: Execute full test suite and log failures
 - [ ] Task: Categorize failures by project and cause (e.g., missing dependencies, logic errors, migration artifacts)
 - [ ] Task: Conductor - User Manual Verification 'Phase 1: Test Discovery and Triage' (Protocol in workflow.md)
 

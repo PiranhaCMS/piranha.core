@@ -19,20 +19,20 @@ namespace Piranha.Tests.Services;
 [Collection("Integration tests")]
 public class ParamTestsMemoryCache : ParamTests
 {
-    public override Task InitializeAsync()
+    public override async Task InitializeAsync()
     {
+        await base.InitializeAsync();
         _cache = new Cache.MemoryCache((IMemoryCache)_services.GetService(typeof(IMemoryCache)));
-        return base.InitializeAsync();
     }
 }
 
 [Collection("Integration tests")]
 public class ParamTestsDistributedCache : ParamTests
 {
-    public override Task InitializeAsync()
+    public override async Task InitializeAsync()
     {
+        await base.InitializeAsync();
         _cache = new Cache.DistributedCache((IDistributedCache)_services.GetService(typeof(IDistributedCache)));
-        return base.InitializeAsync();
     }
 }
 
@@ -44,11 +44,13 @@ public class ParamTests : BaseTestsAsync
     private const string PARAM_4 = "MyFourthParam";
     private const string PARAM_5 = "MyFifthParam";
 
-    private readonly Guid PARAM_1_ID = Guid.NewGuid();
+    private readonly string PARAM_1_ID = Snowflake.NewId();
     private readonly string PARAM_1_VALUE = "My first value";
 
     public override async Task InitializeAsync()
     {
+        await base.InitializeAsync();
+
         using (var api = CreateApi())
         {
             await api.Params.SaveAsync(new Param
@@ -151,7 +153,7 @@ public class ParamTests : BaseTestsAsync
     {
         using (var api = CreateApi())
         {
-            var none = await api.Params.GetByIdAsync(Guid.NewGuid());
+            var none = await api.Params.GetByIdAsync(Snowflake.NewId());
 
             Assert.Null(none);
         }

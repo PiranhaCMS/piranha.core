@@ -16,7 +16,7 @@ namespace Piranha.Data;
 [Serializable]
 public sealed class PagePermission
 {
-    public Guid PageId { get; set; }
+    public string PageId { get; set; }
     public string Permission { get; set; }
 
     [JsonIgnore]

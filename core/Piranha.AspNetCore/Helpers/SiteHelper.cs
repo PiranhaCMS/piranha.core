@@ -24,12 +24,12 @@ public class SiteHelper : ISiteHelper
     /// <summary>
     /// Gets the id of the currently requested site.
     /// </summary>
-    public Guid Id { get; set; }
+    public string Id { get; set; }
 
     /// <summary>
     /// Gets/sets the language id of the currently requested site.
     /// </summary>
-    public Guid LanguageId { get; set; }
+    public string LanguageId { get; set; }
 
     /// <summary>
     /// Gets/sets the optional culture of the requested site.
@@ -72,7 +72,7 @@ public class SiteHelper : ISiteHelper
     /// <returns>The site content model</returns>
     public Task<T> GetContentAsync<T>() where T : SiteContent<T>
     {
-        if (Id != Guid.Empty)
+        if (Id != Guid.Empty.ToString())
         {
             return _api.Sites.GetContentByIdAsync<T>(Id);
         }

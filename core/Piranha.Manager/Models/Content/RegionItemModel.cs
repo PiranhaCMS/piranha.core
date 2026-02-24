@@ -18,7 +18,7 @@ public class RegionItemModel
     /// <summary>
     /// Gets/sets the unique client id.
     /// </summary>
-    public string Uid { get; set; } = "uid-" + Math.Abs(Guid.NewGuid().GetHashCode()).ToString();
+    public string Uid { get; set; } = "uid-" + Math.Abs(Snowflake.NewId().GetHashCode()).ToString();
 
     /// <summary>
     /// Gets/sets the title if used in a list.

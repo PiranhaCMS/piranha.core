@@ -1,4 +1,4 @@
-﻿/*
+/*
  * Copyright (c) .NET Foundation and Contributors
  *
  * This software may be modified and distributed under the terms
@@ -9,7 +9,7 @@
  */
 
 using System.Text.Json;
-using Microsoft.EntityFrameworkCore;
+using Raven.Client.Documents;
 
 using Piranha.Models;
 
@@ -36,7 +36,7 @@ internal class SiteTypeRepository : ISiteTypeRepository
     {
         var models = new List<SiteType>();
         var types = await _db.SiteTypes
-            .AsNoTracking()
+            
             .OrderBy(t => t.Id)
             .ToListAsync()
             .ConfigureAwait(false);
@@ -56,7 +56,7 @@ internal class SiteTypeRepository : ISiteTypeRepository
     public async Task<SiteType> GetById(string id)
     {
         var type = await _db.SiteTypes
-            .AsNoTracking()
+            
             .FirstOrDefaultAsync(t => t.Id == id)
             .ConfigureAwait(false);
 
@@ -101,7 +101,7 @@ internal class SiteTypeRepository : ISiteTypeRepository
     public async Task Delete(string id)
     {
         var type = await _db.SiteTypes
-            .FirstOrDefaultAsync(t => t.Id == id).ConfigureAwait(false);
+            .FirstOrDefaultAsync();
 
         if (type != null)
         {
@@ -111,3 +111,4 @@ internal class SiteTypeRepository : ISiteTypeRepository
         }
     }
 }
+

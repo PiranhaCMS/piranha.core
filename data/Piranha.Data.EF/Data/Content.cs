@@ -8,6 +8,8 @@
  *
  */
 
+using Piranha.Models;
+
 namespace Piranha.Data;
 
 [Serializable]
@@ -17,12 +19,12 @@ public sealed class Content : ContentBase<ContentField>, ICategorized, ITranslat
     /// The currently selected language id. This is only used for
     /// mapping and is not stored in the database.
     /// </summary>
-    internal Guid? SelectedLanguageId { get; set; }
+    internal string? SelectedLanguageId { get; set; }
 
     /// <summary>
     /// Gets/sets the optional category id.
     /// </summary>
-    public Guid? CategoryId { get; set; }
+    public string CategoryId { get; set; }
 
     /// <summary>
     /// Gets/sets the id of the content type.
@@ -32,7 +34,7 @@ public sealed class Content : ContentBase<ContentField>, ICategorized, ITranslat
     /// <summary>
     /// Gets/sets the optional primary image id.
     /// </summary>
-    public Guid? PrimaryImageId { get; set; }
+    public string PrimaryImageId { get; set; }
 
     /// <summary>
     /// Gets/sets the optional excerpt.
@@ -62,7 +64,7 @@ public sealed class Content : ContentBase<ContentField>, ICategorized, ITranslat
     /// <summary>
     /// Gets/sets the content type.
     /// </summary>
-    public ContentType Type { get; set; }
+    public AeroContentType Type { get; set; }
 
     /// <summary>
     /// Sets the translation for the specified language.
@@ -70,7 +72,7 @@ public sealed class Content : ContentBase<ContentField>, ICategorized, ITranslat
     /// <param name="parentId">The parent id</param>
     /// <param name="languageId">The language id</param>
     /// <param name="model">The model</param>
-    public void SetTranslation(Guid parentId, Guid languageId, object model)
+    public void SetTranslation(string parentId, string languageId, object model)
     {
         if (model is Models.GenericContent content)
         {
@@ -96,7 +98,7 @@ public sealed class Content : ContentBase<ContentField>, ICategorized, ITranslat
     /// </summary>
     /// <param name="languageId">The language id</param>
     /// <returns>The translation</returns>
-    public object GetTranslation(Guid languageId)
+    public object GetTranslation(string languageId)
     {
         return Translations.FirstOrDefault(t => t.LanguageId == languageId);
     }

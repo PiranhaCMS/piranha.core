@@ -39,8 +39,8 @@ public class PostApiController : Controller
     /// <param name="id">The post id</param>
     /// <returns>The post model</returns>
     [HttpGet]
-    [Route("{id:Guid}")]
-    public virtual async Task<IActionResult> GetById(Guid id)
+    [Route("{id:string}")]
+    public virtual async Task<IActionResult> GetById(string id)
     {
         if (!Module.AllowAnonymousAccess)
         {
@@ -61,7 +61,7 @@ public class PostApiController : Controller
     /// <returns>The post model</returns>
     [HttpGet]
     [Route("{archiveId}/{slug}")]
-    public virtual async Task<IActionResult> GetBySlugAndArchive(Guid archiveId, string slug)
+    public virtual async Task<IActionResult> GetBySlugAndArchive(string archiveId, string slug)
     {
         if (!Module.AllowAnonymousAccess)
         {
@@ -80,8 +80,8 @@ public class PostApiController : Controller
     /// <param name="id">The post id</param>
     /// <returns>The post model</returns>
     [HttpGet]
-    [Route("info/{id:Guid}")]
-    public virtual async Task<IActionResult> GetInfoById(Guid id)
+    [Route("info/{id:string}")]
+    public virtual async Task<IActionResult> GetInfoById(string id)
     {
         if (!Module.AllowAnonymousAccess)
         {
@@ -102,7 +102,7 @@ public class PostApiController : Controller
     /// <returns>The post model</returns>
     [HttpGet]
     [Route("info/{archiveId}/{slug}")]
-    public virtual async Task<IActionResult> GetInfoBySlugAndSite(Guid archiveId, string slug)
+    public virtual async Task<IActionResult> GetInfoBySlugAndSite(string archiveId, string slug)
     {
         if (!Module.AllowAnonymousAccess)
         {

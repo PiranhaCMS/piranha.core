@@ -8,7 +8,7 @@
  *
  */
 
-using Microsoft.EntityFrameworkCore;
+using Raven.Client.Documents;
 using Piranha.Models;
 
 namespace Piranha.Repositories;
@@ -34,7 +34,6 @@ internal class LanguageRepository : ILanguageRepository
     public async Task<IEnumerable<Language>> GetAll()
     {
         return await _db.Languages
-            .AsNoTracking()
             .OrderBy(l => l.Title)
             .Select(l => new Language
             {
@@ -52,10 +51,9 @@ internal class LanguageRepository : ILanguageRepository
     /// </summary>
     /// <param name="id">The unique id</param>
     /// <returns>The model, or null if it doesn't exist</returns>
-    public async Task<Language> GetById(Guid id)
+    public async Task<Language> GetById(string id)
     {
         return await _db.Languages
-            .AsNoTracking()
             .Where(l => l.Id == id)
             .Select(l => new Language
             {
@@ -75,7 +73,6 @@ internal class LanguageRepository : ILanguageRepository
     public async Task<Language> GetDefault()
     {
         return await _db.Languages
-            .AsNoTracking()
             .Where(l => l.IsDefault)
             .Select(l => new Language
             {
@@ -103,7 +100,7 @@ internal class LanguageRepository : ILanguageRepository
         {
             language = new Data.Language
             {
-                Id = model.Id != Guid.Empty ? model.Id : Guid.NewGuid()
+                Id = !string.IsNullOrEmpty(model.Id) ? model.Id : Snowflake.NewId().ToString()
             };
             //await _db.Languages.AddAsync(language).ConfigureAwait(false);
             await _db.session.StoreAsync(language).ConfigureAwait(false);
@@ -119,7 +116,7 @@ internal class LanguageRepository : ILanguageRepository
     /// Deletes the model with the specified id.
     /// </summary>
     /// <param name="id">The unique id</param>
-    public async Task Delete(Guid id)
+    public async Task Delete(string id)
     {
         var language = await _db.Languages
             .FirstOrDefaultAsync(l => l.Id == id)
@@ -134,3 +131,4 @@ internal class LanguageRepository : ILanguageRepository
         }
     }
 }
+

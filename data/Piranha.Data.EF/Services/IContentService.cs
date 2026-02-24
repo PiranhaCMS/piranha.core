@@ -31,7 +31,7 @@ public interface IContentService<TContent, TField, TModelBase>
     /// <param name="process">Optional func that should be called after transformation</param>
     /// <param name="languageId">The optional language id</param>
     /// <returns>The page model</returns>
-    Task<T> TransformAsync<T>(TContent content, Models.ContentTypeBase type, Func<TContent, T, Task> process = null, Guid? languageId = null)
+    Task<T> TransformAsync<T>(TContent content, Models.ContentTypeBase type, Func<TContent, T, Task> process = null, string? languageId = null)
         where T : Models.ContentBase, TModelBase;
 
     /// <summary>
@@ -42,7 +42,7 @@ public interface IContentService<TContent, TField, TModelBase>
     /// <param name="dest">The optional dest object</param>
     /// <param name="languageId">The optional language id</param>
     /// <returns>The content data</returns>
-    TContent Transform<T>(T model, Models.ContentTypeBase type, TContent dest = null, Guid? languageId = null)
+    TContent Transform<T>(T model, Models.ContentTypeBase type, TContent dest = null, string? languageId = null)
         where T : Models.ContentBase, TModelBase;
 
     /// <summary>
@@ -58,7 +58,7 @@ public interface IContentService<TContent, TField, TModelBase>
     /// <param name="blocks">The data</param>
     /// <param name="languageId">The language id</param>
     /// <returns>The transformed blocks</returns>
-    IList<Extend.Block> TransformBlocks(IEnumerable<Data.ContentBlock> blocks, Guid? languageId);
+    IList<Extend.Block> TransformBlocks(IEnumerable<Data.ContentBlock> blocks, string? languageId);
 
     /// <summary>
     /// Transforms the given blocks to the internal data model.
@@ -73,5 +73,5 @@ public interface IContentService<TContent, TField, TModelBase>
     /// <param name="models">The blocks</param>
     /// <param name="languageId">The current language</param>
     /// <returns>The data model</returns>
-    IList<Data.ContentBlock> TransformContentBlocks(IList<Extend.Block> models, Guid languageId);
+    IList<Data.ContentBlock> TransformContentBlocks(IList<Extend.Block> models, string languageId);
 }

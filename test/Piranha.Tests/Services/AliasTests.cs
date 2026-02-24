@@ -18,20 +18,20 @@ namespace Piranha.Tests.Services;
 [Collection("Integration tests")]
 public class AliasTestsMemoryCache : AliasTests
 {
-    public override Task InitializeAsync()
+    public override async Task InitializeAsync()
     {
+        await base.InitializeAsync();
         _cache = new Cache.MemoryCache((IMemoryCache)_services.GetService(typeof(IMemoryCache)));
-        return base.InitializeAsync();
     }
 }
 
 [Collection("Integration tests")]
 public class AliasTestsDistributedCache : AliasTests
 {
-    public override Task InitializeAsync()
+    public override async Task InitializeAsync()
     {
+        await base.InitializeAsync();
         _cache = new Cache.DistributedCache((IDistributedCache)_services.GetService(typeof(IDistributedCache)));
-        return base.InitializeAsync();
     }
 }
 
@@ -44,11 +44,13 @@ public class AliasTests : BaseTestsAsync
     private const string ALIAS_4 = "/another-moved-page";
     private const string ALIAS_5 = "/the-last-moved-page";
 
-    private readonly Guid SITE_ID = Guid.NewGuid();
-    private readonly Guid ALIAS_1_ID = Guid.NewGuid();
+    private readonly string SITE_ID = Snowflake.NewId();
+    private readonly string ALIAS_1_ID = Snowflake.NewId();
 
     public override async Task InitializeAsync()
     {
+        await base.InitializeAsync();
+
         using (var api = CreateApi())
         {
             // Add site
@@ -146,7 +148,7 @@ public class AliasTests : BaseTestsAsync
     {
         using (var api = CreateApi())
         {
-            var none = await api.Aliases.GetByIdAsync(Guid.NewGuid());
+            var none = await api.Aliases.GetByIdAsync(Snowflake.NewId());
 
             Assert.Null(none);
         }

@@ -82,9 +82,9 @@ public class ContentService
     /// <param name="id">The content id</param>
     /// <param name="languageId">The optional language id</param>
     /// <returns>Edit model</returns>
-    public async Task<ContentEditModel> GetByIdAsync(Guid id, Guid? languageId = null)
+    public async Task<ContentEditModel> GetByIdAsync(string id, string? languageId = null)
     {
-        if (!languageId.HasValue)
+        if (string.IsNullOrEmpty(languageId))
         {
             languageId = (await _api.Languages.GetDefaultAsync()).Id;
         }
@@ -125,7 +125,7 @@ public class ContentService
         var content = await _api.Content.CreateAsync<DynamicContent>(typeId);
         if (content != null)
         {
-            content.Id = Guid.NewGuid();
+            content.Id = Snowflake.NewId();
 
             await _factory.InitDynamicManagerAsync(content, type);
 
@@ -154,9 +154,9 @@ public class ContentService
 
         if (contentType != null)
         {
-            if (model.Id == Guid.Empty)
+            if (model.Id == Guid.Empty.ToString() || string.IsNullOrEmpty(model.Id))
             {
-                model.Id = Guid.NewGuid();
+                model.Id = Snowflake.NewId();
             }
 
             var content = await _api.Content.GetByIdAsync(model.Id, model.LanguageId);
@@ -316,7 +316,7 @@ public class ContentService
     /// Deletes the content with the given id.
     /// </summary>
     /// <param name="id">The unique id</param>
-    public async Task DeleteAsync(Guid id)
+    public async Task DeleteAsync(string id)
     {
         await _api.Content.DeleteAsync(id);
     }

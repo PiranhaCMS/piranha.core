@@ -15,10 +15,12 @@ namespace Piranha.Tests.ImageSharp;
 [Collection("Integration tests")]
 public class MediaServiceTests : BaseTestsAsync
 {
-    private Guid imageId;
+    private string imageId;
 
     public override async Task InitializeAsync()
     {
+        await base.InitializeAsync();
+
         using (var api = CreateApi())
         {
             // Add media
@@ -31,7 +33,7 @@ public class MediaServiceTests : BaseTestsAsync
                 };
                 await api.Media.SaveAsync(image1);
 
-                imageId = image1.Id.Value;
+                imageId = image1.Id;
             }
         }
     }

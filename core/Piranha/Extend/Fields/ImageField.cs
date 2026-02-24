@@ -19,12 +19,21 @@ namespace Piranha.Extend.Fields;
 public class ImageField : MediaFieldBase<ImageField>
 {
     /// <summary>
+    /// Implicit operator for converting a string id to a field.
+    /// </summary>
+    /// <param name="id">The id value</param>
+    public static implicit operator ImageField(string id)
+    {
+        return new ImageField { Id = id };
+    }
+
+    /// <summary>
     /// Implicit operator for converting a Guid id to a field.
     /// </summary>
     /// <param name="guid">The guid value</param>
     public static implicit operator ImageField(Guid guid)
     {
-        return new ImageField { Id = guid };
+        return new ImageField { Id = guid.ToString() };
     }
 
     /// <summary>
@@ -58,9 +67,9 @@ public class ImageField : MediaFieldBase<ImageField>
     /// <returns>The image url</returns>
     public string Resize(IApi api, int width, int? height = null)
     {
-        if (Id.HasValue)
+        if (!string.IsNullOrEmpty(Id))
         {
-            return api.Media.EnsureVersion(Id.Value, width, height);
+            return api.Media.EnsureVersion(Id, width, height);
         }
         return null;
     }

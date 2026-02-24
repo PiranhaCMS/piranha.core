@@ -27,8 +27,8 @@ public class CommentApiController : Controller
 {
     public class ApprovalModel
     {
-        public Guid Id { get; set; }
-        public Guid? ParentId { get; set; }
+        public string Id { get; set; }
+        public string? ParentId { get; set; }
     }
 
     private readonly CommentService _service;
@@ -47,10 +47,10 @@ public class CommentApiController : Controller
     /// Gets the list model.
     /// </summary>
     /// <returns>The list model</returns>
-    [Route("{id:Guid?}")]
+    [Route("{id:string?}")]
     [HttpGet]
     [Authorize(Policy = Permission.Comments)]
-    public Task<CommentListModel> List(Guid? id = null)
+    public Task<CommentListModel> List(string? id = null)
     {
         return _service.Get(id);
     }
@@ -92,7 +92,7 @@ public class CommentApiController : Controller
     [Route("delete")]
     [HttpDelete]
     [Authorize(Policy = Permission.CommentsDelete)]
-    public async Task<StatusMessage> Delete([FromBody]Guid id)
+    public async Task<StatusMessage> Delete([FromBody]string id)
     {
         await _service.DeleteAsync(id).ConfigureAwait(false);
 

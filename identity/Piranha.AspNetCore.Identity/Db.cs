@@ -77,7 +77,7 @@ public abstract class Db<T> :
         {
             role = new Role
             {
-                Id = Guid.NewGuid(),
+                Id = Snowflake.NewId(),
                 Name = "SysAdmin",
                 NormalizedName = "SYSADMIN"
             };

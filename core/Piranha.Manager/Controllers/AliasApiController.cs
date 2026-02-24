@@ -47,7 +47,7 @@ public class AliasApiController : Controller
     [Route("list/{siteId?}")]
     [HttpGet]
     [Authorize(Policy = Permission.Aliases)]
-    public async Task<AliasListModel> List(Guid? siteId = null)
+    public async Task<AliasListModel> List(string? siteId = null)
     {
         return await _service.GetList(siteId);
     }
@@ -97,7 +97,7 @@ public class AliasApiController : Controller
     [Route("delete")]
     [HttpDelete]
     [Authorize(Policy = Permission.AliasesDelete)]
-    public async Task<IActionResult> Delete([FromBody]Guid id)
+    public async Task<IActionResult> Delete([FromBody]string id)
     {
         var alias = await _service.Delete(id);
 

@@ -13,17 +13,12 @@ using System.ComponentModel.DataAnnotations;
 namespace Piranha.Models;
 
 [Serializable]
-public class Alias
+public class Alias : Entity
 {
-    /// <summary>
-    /// Gets/sets the unique id.
-    /// </summary>
-    public Guid Id { get; set; }
-
     /// <summary>
     /// Gets/sets the id of the site this alias is for.
     /// </summary>
-    public Guid SiteId { get; set; }
+    public string SiteId { get; set; }
 
     /// <summary>
     /// Gets/sets the alias url.

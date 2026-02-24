@@ -32,7 +32,7 @@ public class DocumentFieldSerializer : ISerializer
     {
         return new DocumentField
         {
-            Id = !string.IsNullOrEmpty(str) ? new Guid(str) : (Guid?)null
+            Id = !string.IsNullOrEmpty(str) ? str : null
         };
     }
 }

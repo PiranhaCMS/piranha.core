@@ -22,7 +22,7 @@ public sealed class ContentBlock : BlockBase<ContentBlockField>
     /// <summary>
     /// Gets/sets the content id.
     /// </summary>
-    public Guid ContentId { get; set; }
+    public string ContentId { get; set; }
 
     /// <summary>
     /// Gets/sets the zero based sort index.

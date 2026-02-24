@@ -37,8 +37,8 @@ public class SitemapApiController : Controller
     /// <param name="id">The optional site id</param>
     /// <returns>The sitemap</returns>
     [HttpGet]
-    [Route("{id:Guid?}")]
-    public virtual async Task<IActionResult> GetById(Guid? id = null)
+    [Route("{id}")]
+    public virtual async Task<IActionResult> GetById(string? id = null)
     {
         if (!Module.AllowAnonymousAccess)
         {

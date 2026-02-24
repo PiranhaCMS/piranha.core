@@ -17,8 +17,8 @@ namespace Piranha.Tests.Hooks;
 public class AliasHookTests : BaseTestsAsync
 {
     private const string ALIAS = "/alias-url";
-    private readonly Guid SITE_ID = Guid.NewGuid();
-    private readonly Guid ID = Guid.NewGuid();
+    private readonly string SITE_ID = Snowflake.NewId();
+    private readonly string ID = Snowflake.NewId();
 
     public class AliasOnLoadException : Exception {}
     public class AliasOnBeforeSaveException : Exception {}
@@ -28,6 +28,8 @@ public class AliasHookTests : BaseTestsAsync
 
     public override async Task InitializeAsync()
     {
+        await base.InitializeAsync();
+
         using (var api = CreateApi())
         {
             // Initialize

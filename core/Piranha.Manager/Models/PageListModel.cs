@@ -19,7 +19,7 @@ public class PageListModel
 {
     public class PageSite
     {
-        public Guid Id { get; set; }
+        public string Id { get; set; }
         public string Title { get; set; }
         public string Slug { get; set; }
         public string EditUrl { get; set; }
@@ -31,8 +31,8 @@ public class PageListModel
         public static readonly string Draft = "Draft";
         public static readonly string Unpublished = "Unpublished";
 
-        public Guid Id { get; set; }
-        public Guid SiteId { get; set; }
+        public string Id { get; set; }
+        public string SiteId { get; set; }
         public string Title { get; set; }
         public string TypeName { get; set; }
         public string Published { get; set; }

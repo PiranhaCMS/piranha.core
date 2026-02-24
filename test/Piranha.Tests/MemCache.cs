@@ -15,9 +15,9 @@ namespace Piranha.Tests;
 
 public class MemCache : BaseTestsAsync
 {
-    private readonly string id1 = Guid.NewGuid().ToString();
-    private readonly string id2 = Guid.NewGuid().ToString();
-    private readonly string id3 = Guid.NewGuid().ToString();
+    private readonly string id1 = Snowflake.NewId().ToString();
+    private readonly string id2 = Snowflake.NewId().ToString();
+    private readonly string id3 = Snowflake.NewId().ToString();
     private readonly string val1 = "My first value";
     private readonly string val2 = "My second value";
     private readonly string val3 = "My third value";
@@ -25,6 +25,7 @@ public class MemCache : BaseTestsAsync
 
     public override async Task InitializeAsync()
     {
+        await base.InitializeAsync();
         _cache = new Cache.MemoryCache((IMemoryCache)_services.GetService(typeof(IMemoryCache)));
 
         await _cache.SetAsync(id1, val1);

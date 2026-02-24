@@ -32,12 +32,12 @@ public class AliasService
     /// </summary>
     /// <param name="siteId">The optional site id</param>
     /// <returns>The list model</returns>
-    public async Task<AliasListModel> GetList(Guid? siteId = null)
+    public async Task<AliasListModel> GetList(string? siteId = null)
     {
         Site site = null;
 
         // Ensure that we have a site id
-        if (!siteId.HasValue)
+        if (string.IsNullOrEmpty(siteId))
         {
             site = await _api.Sites.GetDefaultAsync();
             siteId = site.Id;
@@ -45,12 +45,12 @@ public class AliasService
 
         if (site == null)
         {
-            site = await _api.Sites.GetByIdAsync(siteId.Value);
+            site = await _api.Sites.GetByIdAsync(siteId);
         }
 
         var model = new AliasListModel
         {
-            SiteId = siteId.Value,
+            SiteId = siteId,
             SiteTitle = site.Title
         };
 
@@ -63,7 +63,7 @@ public class AliasService
         }).ToList();
 
         // Get all available aliases for the current site
-        var aliases = await _api.Aliases.GetAllAsync(siteId.Value);
+        var aliases = await _api.Aliases.GetAllAsync(siteId);
         model.Items = aliases.Select(a => new AliasListModel.AliasItem
         {
             Id = a.Id,
@@ -84,7 +84,7 @@ public class AliasService
     {
         await _api.Aliases.SaveAsync(new Alias
         {
-            Id = model.Id.HasValue ? model.Id.Value : Guid.NewGuid(),
+            Id = string.IsNullOrEmpty(model.Id) ? Snowflake.NewId() : model.Id,
             SiteId = model.SiteId,
             AliasUrl = model.AliasUrl,
             RedirectUrl = model.RedirectUrl,
@@ -97,7 +97,7 @@ public class AliasService
     /// </summary>
     /// <param name="id">The unique id</param>
     /// <returns>The deleted alias</returns>
-    public async Task<AliasListModel.AliasItem> Delete(Guid id)
+    public async Task<AliasListModel.AliasItem> Delete(string id)
     {
         var alias = await _api.Aliases.GetByIdAsync(id);
 

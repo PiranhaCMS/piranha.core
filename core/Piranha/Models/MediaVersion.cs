@@ -11,13 +11,8 @@
 namespace Piranha.Models;
 
 [Serializable]
-public class MediaVersion
+public class MediaVersion : Entity
 {
-    /// <summary>
-    /// Gets/sets the unique id.
-    /// </summary>
-    public Guid Id { get; set; }
-
     /// <summary>
     /// Gets/sets the file size in bytes.
     /// </summary>

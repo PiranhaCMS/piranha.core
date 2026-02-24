@@ -14,17 +14,12 @@ using Piranha.Extend.Fields;
 namespace Piranha.Models;
 
 [Serializable]
-public sealed class Site
+public sealed class Site : Entity
 {
-    /// <summary>
-    /// Gets/sets the unique id.
-    /// </summary>
-    public Guid Id { get; set; }
-
     /// <summary>
     /// Gets/sets the language id.
     /// </summary>
-    public Guid LanguageId { get; set; }
+    public string LanguageId { get; set; }
 
     /// <summary>
     /// Gets/sets the optional site type id.

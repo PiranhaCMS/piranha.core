@@ -26,7 +26,7 @@ public class MediaFieldBase<T> : IField, IEquatable<T> where T : MediaFieldBase<
     /// Gets/sets the media id.
     /// </summary>
     /// <returns></returns>
-    public Guid? Id { get; set; }
+    public string Id { get; set; }
 
     /// <summary>
     /// Gets/sets the related media object.
@@ -45,10 +45,10 @@ public class MediaFieldBase<T> : IField, IEquatable<T> where T : MediaFieldBase<
     /// <param name="api">The current api</param>
     public virtual async Task Init(IApi api)
     {
-        if (Id.HasValue)
+        if (!string.IsNullOrEmpty(Id))
         {
             Media = await api.Media
-                .GetByIdAsync(Id.Value)
+                .GetByIdAsync(Id)
                 .ConfigureAwait(false);
 
             if (Media == null)
@@ -63,7 +63,7 @@ public class MediaFieldBase<T> : IField, IEquatable<T> where T : MediaFieldBase<
     /// <inheritdoc />
     public override int GetHashCode()
     {
-        return Id.HasValue ? Id.GetHashCode() : 0;
+        return !string.IsNullOrEmpty(Id) ? Id.GetHashCode() : 0;
     }
 
     /// <inheritdoc />

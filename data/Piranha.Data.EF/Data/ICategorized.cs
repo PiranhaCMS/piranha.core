@@ -18,5 +18,5 @@ public interface ICategorized
     /// <summary>
     /// Gets/sets the category id.
     /// </summary>
-    Guid? CategoryId { get; set; }
+    string? CategoryId { get; set; }
 }

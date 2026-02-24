@@ -44,7 +44,7 @@ public class MediaApiController : Controller
     /// <returns>The list model</returns>
     [Route("{id}")]
     [HttpGet]
-    public async Task<IActionResult> Get(Guid id)
+    public async Task<IActionResult> Get(string id)
     {
         var media = await _service.GetById(id);
         if (media == null)
@@ -64,7 +64,7 @@ public class MediaApiController : Controller
     /// <returns>The public url</returns>
     [Route("url/{id}/{width?}/{height?}")]
     [HttpGet]
-    public async Task<IActionResult> GetUrl(Guid id, int? width = null, int? height = null)
+    public async Task<IActionResult> GetUrl(string id, int? width = null, int? height = null)
     {
         if (!width.HasValue)
         {
@@ -86,9 +86,9 @@ public class MediaApiController : Controller
     /// Gets the list model.
     /// </summary>
     /// <returns>The list model</returns>
-    [Route("list/{folderId:Guid?}")]
+    [Route("list/{folderId:string?}")]
     [HttpGet]
-    public async Task<MediaListModel> List(Guid? folderId = null, [FromQuery]MediaType? filter = null, [FromQuery] int? width = null, [FromQuery] int? height = null)
+    public async Task<MediaListModel> List(string? folderId = null, [FromQuery]MediaType? filter = null, [FromQuery] int? width = null, [FromQuery] int? height = null)
     {
         return await _service.GetList(folderId, filter, width, height);
     }
@@ -153,7 +153,7 @@ public class MediaApiController : Controller
     [Route("folder/delete")]
     [HttpDelete]
     [Authorize(Policy = Permission.MediaDeleteFolder)]
-    public async Task<IActionResult> DeleteFolder([FromBody]Guid id)
+    public async Task<IActionResult> DeleteFolder([FromBody]string id)
     {
         try
         {
@@ -240,7 +240,7 @@ public class MediaApiController : Controller
     [HttpPost]
     [Consumes("application/json")]
     [Authorize(Policy = Permission.MediaEdit)]
-    public async Task<IActionResult> Move([FromBody] IEnumerable<Guid> items, Guid? folderId)
+    public async Task<IActionResult> Move([FromBody] IEnumerable<string> items, string? folderId)
     {
         try
         {
@@ -259,7 +259,7 @@ public class MediaApiController : Controller
                 var folder = await _api.Media.GetFolderByIdAsync(id);
                 if (folder != null)
                 {
-                    if (folderId.HasValue && folderId == folder.Id)
+                    if (!string.IsNullOrEmpty(folderId) && folderId == folder.Id)
                         continue;
 
                     folder.ParentId = folderId;
@@ -299,7 +299,7 @@ public class MediaApiController : Controller
     [HttpDelete]
     [Consumes("application/json")]
     [Authorize(Policy = Permission.MediaDelete)]
-    public async Task<IActionResult> Delete([FromBody] IEnumerable<Guid> items)
+    public async Task<IActionResult> Delete([FromBody] IEnumerable<string> items)
     {
         try
         {

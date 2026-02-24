@@ -31,7 +31,7 @@ public class MediaService
     /// </summary>
     /// <param name="id">Media id</param>
     /// <returns>Model</returns>
-    public async Task<MediaListModel.MediaItem> GetById(Guid id)
+    public async Task<MediaListModel.MediaItem> GetById(string id)
     {
         var media = await _api.Media.GetByIdAsync(id);
         if (media == null)
@@ -62,7 +62,7 @@ public class MediaService
     /// <param name="structure">The complete media folder structure</param>
     /// <param name="folderId">The folder id</param>
     /// <returns></returns>
-    public async Task<List<MediaFolderSimple>> GetFolderBreadCrumb(MediaStructure structure, Guid? folderId)
+    public async Task<List<MediaFolderSimple>> GetFolderBreadCrumb(MediaStructure structure, string? folderId)
     {
         var folders = await GetFolderBreadCrumbReversed(structure, folderId);
         folders.Reverse();
@@ -75,11 +75,11 @@ public class MediaService
     /// <param name="structure">The complete media folder structure</param>
     /// <param name="folderId">The folder id</param>
     /// <returns></returns>
-    private async Task<List<MediaFolderSimple>> GetFolderBreadCrumbReversed(MediaStructure structure, Guid? folderId)
+    private async Task<List<MediaFolderSimple>> GetFolderBreadCrumbReversed(MediaStructure structure, string? folderId)
     {
         var folders = new List<MediaFolderSimple>();
 
-        if (!folderId.HasValue)
+        if (string.IsNullOrEmpty(folderId))
             return folders;
 
         foreach (var item in structure)
@@ -112,7 +112,7 @@ public class MediaService
     /// <param name="width">The optional width for images</param>
     /// <param name="height">The optional height for images</param>
     /// <returns>The list model</returns>
-    public async Task<MediaListModel> GetList(Guid? folderId = null, MediaType? filter = null, int? width = null, int? height = null)
+    public async Task<MediaListModel> GetList(string? folderId = null, MediaType? filter = null, int? width = null, int? height = null)
     {
         var model = new MediaListModel
         {
@@ -126,7 +126,7 @@ public class MediaService
         model.RootCount = model.Structure.MediaCount;
         model.TotalCount = model.Structure.TotalCount;
 
-        if (folderId.HasValue)
+        if (!string.IsNullOrEmpty(folderId))
         {
             var partial = model.Structure.GetPartial(folderId, true);
 
@@ -136,9 +136,9 @@ public class MediaService
             }
         }
 
-        if (folderId.HasValue)
+        if (!string.IsNullOrEmpty(folderId))
         {
-            var folder = await _api.Media.GetFolderByIdAsync(folderId.Value);
+            var folder = await _api.Media.GetFolderByIdAsync(folderId);
             if (folder != null)
             {
                 model.CurrentFolderName = folder.Name;
@@ -199,9 +199,9 @@ public class MediaService
 
     public async Task SaveFolder(MediaFolderModel model)
     {
-        if (model.Id.HasValue)
+        if (!string.IsNullOrEmpty(model.Id))
         {
-            var folder = await _api.Media.GetFolderByIdAsync(model.Id.Value);
+            var folder = await _api.Media.GetFolderByIdAsync(model.Id);
             folder.Name = model.Name;
 
             await _api.Media.SaveFolderAsync(folder);
@@ -216,7 +216,7 @@ public class MediaService
         }
     }
 
-    public async Task<Guid?> DeleteFolder(Guid id)
+    public async Task<string?> DeleteFolder(string id)
     {
         var folder = await _api.Media.GetFolderByIdAsync(id);
 
@@ -286,7 +286,7 @@ public class MediaService
         return false;
     }
 
-    public async Task<Guid?> DeleteMedia(Guid id)
+    public async Task<string?> DeleteMedia(string id)
     {
         var media = await _api.Media.GetByIdAsync(id);
 

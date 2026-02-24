@@ -20,12 +20,12 @@ public class MediaUploadModel
     /// <summary>
     /// Gets/sets the optional id.
     /// </summary>
-    public Guid? Id { get; set; }
+    public string? Id { get; set; }
 
     /// <summary>
     /// Gets/sets the parent id.
     /// </summary>
-    public Guid? ParentId { get; set; }
+    public string? ParentId { get; set; }
 
     /// <summary>
     /// Gets/sets the uploaded file.

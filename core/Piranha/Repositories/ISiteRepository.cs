@@ -25,7 +25,7 @@ public interface ISiteRepository
     /// </summary>
     /// <param name="id">The unique id</param>
     /// <returns>The model, or NULL if it doesn't exist</returns>
-    Task<Site> GetById(Guid id);
+    Task<Site> GetById(string id);
 
     /// <summary>
     /// Gets the model with the given internal id.
@@ -45,7 +45,7 @@ public interface ISiteRepository
     /// </summary>
     /// <param name="id">Site id</param>
     /// <returns>The site content model</returns>
-    Task<DynamicSiteContent> GetContentById(Guid id);
+    Task<DynamicSiteContent> GetContentById(string id);
 
     /// <summary>
     /// Gets the site content for given site id.
@@ -53,7 +53,7 @@ public interface ISiteRepository
     /// <param name="id">Site id</param>
     /// <typeparam name="T">The site model type</typeparam>
     /// <returns>The site content model</returns>
-    Task<T> GetContentById<T>(Guid id) where T : SiteContent<T>;
+    Task<T> GetContentById<T>(string id) where T : SiteContent<T>;
 
     /// <summary>
     /// Gets the hierachical sitemap structure.
@@ -61,7 +61,7 @@ public interface ISiteRepository
     /// <param name="id">The site id</param>
     /// <param name="onlyPublished">If only published items should be included</param>
     /// <returns>The sitemap</returns>
-    Task<Sitemap> GetSitemap(Guid id, bool onlyPublished = true);
+    Task<Sitemap> GetSitemap(string id, bool onlyPublished = true);
 
     /// <summary>
     /// Adds or updates the given model in the database
@@ -77,11 +77,11 @@ public interface ISiteRepository
     /// <param name="siteId">The site id</param>
     /// <param name="content">The site content</param>
     /// <typeparam name="T">The site content type</typeparam>
-    Task SaveContent<T>(Guid siteId, T content) where T : SiteContent<T>;
+    Task SaveContent<T>(string siteId, T content) where T : SiteContent<T>;
 
     /// <summary>
     /// Deletes the model with the specified id.
     /// </summary>
     /// <param name="id">The unique id</param>
-    Task Delete(Guid id);
+    Task Delete(string id);
 }

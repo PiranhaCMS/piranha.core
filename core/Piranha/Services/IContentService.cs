@@ -28,7 +28,7 @@ public interface IContentService
     /// <param name="groupId">The optional group id</param>
     /// <param name="languageId">The optional language id</param>
     /// <returns>The available content</returns>
-    Task<IEnumerable<DynamicContent>> GetAllAsync(string groupId = null, Guid? languageId = null);
+    Task<IEnumerable<DynamicContent>> GetAllAsync(string groupId = null, string languageId = null);
 
     /// <summary>
     /// Gets all of the available content for the optional
@@ -38,7 +38,7 @@ public interface IContentService
     /// <param name="groupId">The optional group id</param>
     /// <param name="languageId">The optional language id</param>
     /// <returns>The available content</returns>
-    Task<IEnumerable<T>> GetAllAsync<T>(string groupId = null, Guid? languageId = null) where T : GenericContent;
+    Task<IEnumerable<T>> GetAllAsync<T>(string groupId = null, string languageId = null) where T : GenericContent;
 
     /// <summary>
     /// Gets the content model with the specified id.
@@ -46,7 +46,7 @@ public interface IContentService
     /// <param name="id">The unique id</param>
     /// <param name="languageId">The optional language id</param>
     /// <returns>The content model</returns>
-    Task<DynamicContent> GetByIdAsync(Guid id, Guid? languageId = null);
+    Task<DynamicContent> GetByIdAsync(string id, string languageId = null);
 
     /// <summary>
     /// Gets the content model with the specified id.
@@ -55,7 +55,7 @@ public interface IContentService
     /// <param name="id">The unique id</param>
     /// <param name="languageId">The optional language id</param>
     /// <returns>The content model</returns>
-    Task<T> GetByIdAsync<T>(Guid id, Guid? languageId = null) where T : GenericContent;
+    Task<T> GetByIdAsync<T>(string id, string languageId = null) where T : GenericContent;
 
     /// <summary>
     /// Gets all available categories for the specified group.
@@ -77,7 +77,7 @@ public interface IContentService
     /// </summary>
     /// <param name="contentId">The unique content id</param>
     /// <returns>The translation status</returns>
-    Task<TranslationStatus> GetTranslationStatusByIdAsync(Guid contentId);
+    Task<TranslationStatus> GetTranslationStatusByIdAsync(string contentId);
 
     /// <summary>
     /// Gets the translation summary for the content group with
@@ -92,13 +92,13 @@ public interface IContentService
     /// </summary>
     /// <param name="model">The content model</param>
     /// <param name="languageId">The optional language id</param>
-    Task SaveAsync<T>(T model, Guid? languageId = null) where T : GenericContent;
+    Task SaveAsync<T>(T model, string languageId = null) where T : GenericContent;
 
     /// <summary>
     /// Deletes the content model with the specified id.
     /// </summary>
     /// <param name="id">The unique id</param>
-    Task DeleteAsync(Guid id);
+    Task DeleteAsync(string id);
 
     /// <summary>
     /// Deletes the given content model.

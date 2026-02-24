@@ -25,7 +25,7 @@ public interface IParamRepository
     /// </summary>
     /// <param name="id">The unique id</param>
     /// <returns>The model, or NULL if it doesn't exist</returns>
-    Task<Param> GetById(Guid id);
+    Task<Param> GetById(string id);
 
     /// <summary>
     /// Gets the model with the given internal id.
@@ -45,5 +45,5 @@ public interface IParamRepository
     /// Deletes the model with the specified id.
     /// </summary>
     /// <param name="id">The unique id</param>
-    Task Delete(Guid id);
+    Task Delete(string id);
 }

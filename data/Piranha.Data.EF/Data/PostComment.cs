@@ -16,7 +16,7 @@ public sealed class PostComment : Comment
     /// <summary>
     /// Gets/sets the post id.
     /// </summary>
-    public Guid PostId { get; set; }
+    public string PostId { get; set; }
 
     /// <summary>
     /// Gets/sets the post.

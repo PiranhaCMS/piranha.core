@@ -10,8 +10,23 @@
 
 using Microsoft.EntityFrameworkCore;
 using Piranha.Data;
+using Piranha.Models;
 using Raven.Client.Documents.Linq;
 using Raven.Client.Documents.Session;
+using Alias = Piranha.Data.Alias;
+using ContentGroup = Piranha.Data.ContentGroup;
+using Language = Piranha.Data.Language;
+using Media = Piranha.Data.Media;
+using MediaFolder = Piranha.Data.MediaFolder;
+using MediaVersion = Piranha.Data.MediaVersion;
+using PageComment = Piranha.Data.PageComment;
+using PageType = Piranha.Data.PageType;
+using Param = Piranha.Data.Param;
+using PostComment = Piranha.Data.PostComment;
+using PostType = Piranha.Data.PostType;
+using Site = Piranha.Data.Site;
+using SiteType = Piranha.Data.SiteType;
+using Taxonomy = Piranha.Data.Taxonomy;
 
 namespace Piranha;
 
@@ -90,7 +105,7 @@ public interface IDb : IDisposable
     /// <summary>
     /// Gets/sets the content type set.
     /// </summary>
-    IRavenQueryable<ContentType> ContentTypes { get => session.Query<ContentType>(); }
+    IRavenQueryable<AeroContentType> ContentTypes { get => session.Query<AeroContentType>(); }
 
     /// <summary>
     /// Gets/sets the language set.

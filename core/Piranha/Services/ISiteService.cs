@@ -25,7 +25,7 @@ public interface ISiteService
     /// </summary>
     /// <param name="id">The unique id</param>
     /// <returns>The model, or null if it doesn't exist</returns>
-    Task<Site> GetByIdAsync(Guid id);
+    Task<Site> GetByIdAsync(string id);
 
     /// <summary>
     /// Gets the model with the given internal id.
@@ -52,7 +52,7 @@ public interface ISiteService
     /// </summary>
     /// <param name="id">Site id</param>
     /// <returns>The site content model</returns>
-    Task<DynamicSiteContent> GetContentByIdAsync(Guid id);
+    Task<DynamicSiteContent> GetContentByIdAsync(string id);
 
     /// <summary>
     /// Gets the site content for given site id.
@@ -60,7 +60,7 @@ public interface ISiteService
     /// <param name="id">Site id</param>
     /// <typeparam name="T">The site model type</typeparam>
     /// <returns>The site content model</returns>
-    Task<T> GetContentByIdAsync<T>(Guid id) where T : SiteContent<T>;
+    Task<T> GetContentByIdAsync<T>(string id) where T : SiteContent<T>;
 
     /// <summary>
     /// Gets the hierarchical sitemap structure.
@@ -68,7 +68,7 @@ public interface ISiteService
     /// <param name="id">The optional site id</param>
     /// <param name="onlyPublished">If only published items should be included</param>
     /// <returns>The sitemap</returns>
-    Task<Sitemap> GetSitemapAsync(Guid? id = null, bool onlyPublished = true);
+    Task<Sitemap> GetSitemapAsync(string id = null, bool onlyPublished = true);
 
     /// <summary>
     /// Adds or updates the given model in the database
@@ -84,7 +84,7 @@ public interface ISiteService
     /// <param name="siteId">The site id</param>
     /// <param name="model">The site content model</param>
     /// <typeparam name="T">The site content type</typeparam>
-    Task SaveContentAsync<T>(Guid siteId, T model) where T : SiteContent<T>;
+    Task SaveContentAsync<T>(string siteId, T model) where T : SiteContent<T>;
 
     /// <summary>
     /// Creates and initializes a new site content model of the specified type.
@@ -98,13 +98,13 @@ public interface ISiteService
     /// </summary>
     /// <param name="id">The site id</param>
     /// <param name="updateLastModified">If the global last modified date should be updated</param>
-    Task InvalidateSitemapAsync(Guid id, bool updateLastModified = true);
+    Task InvalidateSitemapAsync(string id, bool updateLastModified = true);
 
     /// <summary>
     /// Deletes the model with the specified id.
     /// </summary>
     /// <param name="id">The unique id</param>
-    Task DeleteAsync(Guid id);
+    Task DeleteAsync(string id);
 
     /// <summary>
     /// Deletes the given model.
@@ -116,5 +116,5 @@ public interface ISiteService
     /// Removes the sitemap from the cache.
     /// </summary>
     /// <param name="id">The unique id</param>
-    Task RemoveSitemapFromCacheAsync(Guid id);
+    Task RemoveSitemapFromCacheAsync(string id);
 }

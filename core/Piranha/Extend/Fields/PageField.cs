@@ -8,6 +8,9 @@
  *
  */
 
+using Piranha.Models;
+using Piranha.Extend;
+
 namespace Piranha.Extend.Fields;
 
 /// <summary>
@@ -20,7 +23,7 @@ public class PageField : IField, IEquatable<PageField>
     /// Gets/sets the page id.
     /// </summary>
     /// <returns></returns>
-    public Guid? Id { get; set; }
+    public string Id { get; set; }
 
     /// <summary>
     /// Gets/sets the related page object.
@@ -44,10 +47,10 @@ public class PageField : IField, IEquatable<PageField>
     /// <param name="api">The current api</param>
     public virtual async Task Init(IApi api)
     {
-        if (Id.HasValue)
+        if (!string.IsNullOrEmpty(Id))
         {
             Page = await api.Pages
-                .GetByIdAsync<Models.PageInfo>(Id.Value)
+                .GetByIdAsync<Models.PageInfo>(Id)
                 .ConfigureAwait(false);
 
             if (Page == null)
@@ -66,11 +69,21 @@ public class PageField : IField, IEquatable<PageField>
     /// <returns>The referenced page</returns>
     public virtual Task<T> GetPageAsync<T>(IApi api) where T : Models.GenericPage<T>
     {
-        if (Id.HasValue)
+        if (!string.IsNullOrEmpty(Id))
         {
-            return api.Pages.GetByIdAsync<T>(Id.Value);
+            return api.Pages.GetByIdAsync<T>(Id);
         }
+
         return null;
+    }
+
+    /// <summary>
+    /// Implicit operator for converting a string id to a field.
+    /// </summary>
+    /// <param name="id">The string id value</param>
+    public static implicit operator PageField(string id)
+    {
+        return new PageField { Id = id };
     }
 
     /// <summary>
@@ -79,7 +92,7 @@ public class PageField : IField, IEquatable<PageField>
     /// <param name="guid">The guid value</param>
     public static implicit operator PageField(Guid guid)
     {
-        return new PageField { Id = guid };
+        return new PageField { Id = guid.ToString() };
     }
 
     /// <summary>
@@ -94,7 +107,7 @@ public class PageField : IField, IEquatable<PageField>
     /// <inheritdoc />
     public override int GetHashCode()
     {
-        return Id.HasValue ? Id.GetHashCode() : 0;
+        return !string.IsNullOrEmpty(Id) ? Id.GetHashCode() : 0;
     }
 
     /// <inheritdoc />
@@ -104,6 +117,7 @@ public class PageField : IField, IEquatable<PageField>
         {
             return Equals(field);
         }
+
         return false;
     }
 
@@ -118,6 +132,7 @@ public class PageField : IField, IEquatable<PageField>
         {
             return false;
         }
+
         return Id == obj.Id;
     }
 
@@ -129,7 +144,7 @@ public class PageField : IField, IEquatable<PageField>
     /// <returns>True if the fields are equal</returns>
     public static bool operator ==(PageField field1, PageField field2)
     {
-        if ((object) field1 != null && (object) field2 != null)
+        if ((object)field1 != null && (object)field2 != null)
         {
             return field1.Equals(field2);
         }
@@ -138,6 +153,7 @@ public class PageField : IField, IEquatable<PageField>
         {
             return true;
         }
+
         return false;
     }
 

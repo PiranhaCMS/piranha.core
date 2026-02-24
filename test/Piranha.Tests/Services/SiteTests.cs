@@ -24,8 +24,8 @@ public class SiteTestsMemoryCache : SiteTests
 {
     public override async Task InitializeAsync()
     {
-        _cache = new Cache.MemoryCache((IMemoryCache)_services.GetService(typeof(IMemoryCache)));
         await base.InitializeAsync();
+        _cache = new Cache.MemoryCache((IMemoryCache)_services.GetService(typeof(IMemoryCache)));
     }
 }
 
@@ -34,8 +34,8 @@ public class SiteTestsDistributedCache : SiteTests
 {
     public override async Task InitializeAsync()
     {
-        _cache = new Cache.DistributedCache((IDistributedCache)_services.GetService(typeof(IDistributedCache)));
         await base.InitializeAsync();
+        _cache = new Cache.DistributedCache((IDistributedCache)_services.GetService(typeof(IDistributedCache)));
     }
 }
 
@@ -49,7 +49,7 @@ public class SiteTests : BaseTestsAsync
     private const string SITE_6 = "MySixthSite";
     private const string SITE_1_HOSTS = "mysite.com";
 
-    private readonly Guid SITE_1_ID = Guid.NewGuid();
+    private readonly string SITE_1_ID = Snowflake.NewId();
 
     [PageType(Title = "PageType")]
     public class MyPage : Models.Page<MyPage>
@@ -239,7 +239,7 @@ public class SiteTests : BaseTestsAsync
     [Fact]
     public async Task AddAndGenerateInternalId()
     {
-        var id = Guid.NewGuid();
+        var id = Snowflake.NewId();
 
         using (var api = CreateApi())
         {
@@ -273,7 +273,7 @@ public class SiteTests : BaseTestsAsync
     {
         using (var api = CreateApi())
         {
-            var none = await api.Sites.GetByIdAsync(Guid.NewGuid());
+            var none = await api.Sites.GetByIdAsync(Snowflake.NewId());
 
             Assert.Null(none);
         }

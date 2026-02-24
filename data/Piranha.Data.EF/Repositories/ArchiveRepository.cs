@@ -8,7 +8,7 @@
  *
  */
 
-using Microsoft.EntityFrameworkCore;
+using Raven.Client.Documents;
 
 namespace Piranha.Repositories;
 
@@ -28,37 +28,40 @@ internal class ArchiveRepository : IArchiveRepository
         _db = db;
     }
 
-    public Task<int> GetPostCount(Guid archiveId, Guid? categoryId = null, Guid? tagId = null, int? year = null, int? month = null)
+    public Task<int> GetPostCount(string archiveId, string categoryId = null, string tagId = null, int? year = null,
+        int? month = null)
     {
         return GetQuery(archiveId, categoryId, tagId, year, month)
             .CountAsync();
     }
 
-    public async Task<IEnumerable<Guid>> GetPosts(Guid archiveId, int pageSize, int currentPage, Guid? categoryId = null, Guid? tagId = null, int? year = null, int? month = null)
+    public async Task<IEnumerable<string>> GetPosts(string archiveId, int pageSize, int currentPage,
+        string categoryId = null, string tagId = null, int? year = null, int? month = null)
     {
         return await GetQuery(archiveId, categoryId, tagId, year, month)
             .OrderByDescending(p => p.Published)
             .Skip((currentPage - 1) * pageSize)
             .Take(pageSize)
             .Select(p => p.Id)
-            .ToListAsync()
-            .ConfigureAwait(false);
+            .ToListAsync();
     }
 
-    private IQueryable<Data.Post> GetQuery(Guid archiveId, Guid? categoryId = null, Guid? tagId = null, int? year = null, int? month = null)
+    private IQueryable<Data.Post> GetQuery(string archiveId, string categoryId = null, string tagId = null,
+        int? year = null, int? month = null)
     {
         // Build the query.
         var now = DateTime.Now;
         var query = _db.Posts
             .Where(p => p.BlogId == archiveId && p.Published <= now);
 
-        if (categoryId.HasValue)
+        if (!string.IsNullOrEmpty(categoryId))
         {
-            query = query.Where(p => p.CategoryId == categoryId.Value);
+            query = query.Where(p => p.CategoryId == categoryId);
         }
-        if (tagId.HasValue)
+
+        if (!string.IsNullOrEmpty(tagId))
         {
-            query = query.Where(p => p.Tags.Any(t => t.TagId == tagId.Value));
+            query = query.Where(p => p.Tags.Any(t => t.TagId == tagId));
         }
 
         if (year.HasValue)
@@ -76,8 +79,11 @@ internal class ArchiveRepository : IArchiveRepository
                 from = new DateTime(year.Value, 1, 1);
                 to = from.AddYears(1);
             }
+
             query = query.Where(p => p.Published >= from && p.Published < to);
         }
+
         return query;
     }
 }
+

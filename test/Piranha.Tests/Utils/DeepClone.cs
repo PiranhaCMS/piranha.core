@@ -47,7 +47,7 @@ public class DeepClone
         Alias alias = new Alias();
 
         Alias result = Piranha.Utils.DeepClone<Alias>(alias);
-        alias.Id = Guid.NewGuid();
+        alias.Id = Snowflake.NewId();
 
         // Result should not be null true and not referentially equal to 'parameter'.
         Assert.NotNull(result);

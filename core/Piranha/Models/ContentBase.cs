@@ -16,13 +16,8 @@ namespace Piranha.Models;
 /// Abstract base class for templated content.
 /// </summary>
 [Serializable]
-public abstract class ContentBase
+public abstract class ContentBase : Entity
 {
-    /// <summary>
-    /// Gets/sets the unique id.
-    /// </summary>
-    public Guid Id { get; set; }
-
     /// <summary>
     /// Gets/sets the content type id.
     /// </summary>

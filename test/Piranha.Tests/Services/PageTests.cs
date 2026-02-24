@@ -25,8 +25,8 @@ public class PageTestsMemoryCache : PageTests
 {
     public override async Task InitializeAsync()
     {
-        _cache = new Cache.MemoryCache((IMemoryCache)_services.GetService(typeof(IMemoryCache)));
         await base.InitializeAsync();
+        _cache = new Cache.MemoryCache((IMemoryCache)_services.GetService(typeof(IMemoryCache)));
     }
 }
 
@@ -35,22 +35,22 @@ public class PageTestsDistributedCache : PageTests
 {
     public override async Task InitializeAsync()
     {
-        _cache = new Cache.DistributedCache((IDistributedCache)_services.GetService(typeof(IDistributedCache)));
         await base.InitializeAsync();
+        _cache = new Cache.DistributedCache((IDistributedCache)_services.GetService(typeof(IDistributedCache)));
     }
 }
 
 [Collection("Integration tests")]
 public class PageTests : BaseTestsAsync
 {
-    public readonly Guid SITE_ID = Guid.NewGuid();
-    public readonly Guid SITE_EMPTY_ID = Guid.NewGuid();
-    public readonly Guid PAGE_1_ID = Guid.NewGuid();
-    public readonly Guid PAGE_2_ID = Guid.NewGuid();
-    public readonly Guid PAGE_3_ID = Guid.NewGuid();
-    public readonly Guid PAGE_7_ID = Guid.NewGuid();
-    public readonly Guid PAGE_8_ID = Guid.NewGuid();
-    public readonly Guid PAGE_DI_ID = Guid.NewGuid();
+    public readonly string SITE_ID = Snowflake.NewId();
+    public readonly string SITE_EMPTY_ID = Snowflake.NewId();
+    public readonly string PAGE_1_ID = Snowflake.NewId();
+    public readonly string PAGE_2_ID = Snowflake.NewId();
+    public readonly string PAGE_3_ID = Snowflake.NewId();
+    public readonly string PAGE_7_ID = Snowflake.NewId();
+    public readonly string PAGE_8_ID = Snowflake.NewId();
+    public readonly string PAGE_DI_ID = Snowflake.NewId();
 
     public interface IMyService
     {
@@ -293,7 +293,7 @@ public class PageTests : BaseTestsAsync
     {
         using (var api = CreateApi())
         {
-            var none = await api.Pages.GetByIdAsync(Guid.NewGuid());
+            var none = await api.Pages.GetByIdAsync(Snowflake.NewId());
 
             Assert.Null(none);
         }
@@ -749,7 +749,7 @@ public class PageTests : BaseTestsAsync
         using (var api = CreateApi())
         {
             var page = await MyPage.CreateAsync(api, "MyPage");
-            page.Id = Guid.NewGuid();
+            page.Id = Snowflake.NewId();
             page.ParentId = PAGE_1_ID;
             page.SiteId = SITE_ID;
             page.Title = "My subpage";
@@ -776,7 +776,7 @@ public class PageTests : BaseTestsAsync
             }
 
             var page = await MyPage.CreateAsync(api, "MyPage");
-            page.Id = Guid.NewGuid();
+            page.Id = Snowflake.NewId();
             page.ParentId = PAGE_1_ID;
             page.SiteId = SITE_ID;
             page.Title = "My second subpage";
@@ -1084,7 +1084,7 @@ public class PageTests : BaseTestsAsync
             var copy = await api.Pages.GetByIdAsync<MyPage>(PAGE_8_ID);
             var originalBlock = new Extend.Blocks.TextBlock
             {
-                Id = Guid.NewGuid(),
+                Id = Snowflake.NewId(),
                 Body = "test",
             };
 

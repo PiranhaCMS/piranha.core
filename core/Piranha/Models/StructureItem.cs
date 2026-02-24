@@ -14,15 +14,10 @@ namespace Piranha.Models;
 /// Abstract class for an hierarchical item in a structure.
 /// </summary>
 [Serializable]
-public abstract class StructureItem<TStructure, T>
+public abstract class StructureItem<TStructure, T> : Entity
     where T : StructureItem<TStructure, T>
     where TStructure : Structure<TStructure, T>
 {
-    /// <summary>
-    /// Gets/sets the unique id.
-    /// </summary>
-    public Guid Id { get; set; }
-
     /// <summary>
     /// Gets/sets the level in the hierarchy.
     /// </summary>

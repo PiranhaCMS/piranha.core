@@ -13,17 +13,12 @@ using System.ComponentModel.DataAnnotations;
 namespace Piranha.Models;
 
 [Serializable]
-public abstract class MediaBase
+public abstract class MediaBase : Entity
 {
-    /// <summary>
-    /// Gets/sets the unique id.
-    /// </summary>
-    public Guid Id { get; set; }
-
     /// <summary>
     /// Gets/sets the optional folder id.
     /// </summary>
-    public Guid? FolderId { get; set; }
+    public string? FolderId { get; set; }
 
     /// <summary>
     /// Gets/sets the media type.

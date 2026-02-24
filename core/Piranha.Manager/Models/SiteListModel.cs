@@ -18,7 +18,7 @@ public class SiteListModel
     /// <summary>
     /// Gets/sets the currently selected site id.
     /// </summary>
-    public Guid SiteId { get; set; }
+    public required string SiteId { get; set; } = Snowflake.NewId();
 
     /// <summary>
     /// Gets/sets the title of the currently selected site.

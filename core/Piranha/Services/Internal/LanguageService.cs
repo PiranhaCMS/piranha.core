@@ -51,7 +51,7 @@ internal sealed class LanguageService : ILanguageService
     /// </summary>
     /// <param name="id">The unique id</param>
     /// <returns>The model</returns>
-    public async Task<Language> GetByIdAsync(Guid id)
+    public async Task<Language> GetByIdAsync(string id)
     {
         var languages = await GetLanguages().ConfigureAwait(false);
 
@@ -85,9 +85,9 @@ internal sealed class LanguageService : ILanguageService
     public async Task SaveAsync(Language model)
     {
         // Make sure we have an id
-        if (model.Id == Guid.Empty)
+        if (string.IsNullOrEmpty(model.Id))
         {
-            model.Id = Guid.NewGuid();
+            model.Id = Snowflake.NewId().ToString();
         }
 
         // Validate model
@@ -130,7 +130,7 @@ internal sealed class LanguageService : ILanguageService
     /// Deletes the model with the specified id.
     /// </summary>
     /// <param name="id">The unique id</param>
-    public async Task DeleteAsync(Guid id)
+    public async Task DeleteAsync(string id)
     {
         var model = await _repo.GetById(id).ConfigureAwait(false);
 

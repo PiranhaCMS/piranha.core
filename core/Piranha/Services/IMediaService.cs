@@ -19,14 +19,14 @@ public interface IMediaService
     /// </summary>
     /// <param name="folderId">The optional folder id</param>
     /// <returns>The available media</returns>
-    Task<IEnumerable<Media>> GetAllByFolderIdAsync(Guid? folderId = null);
+    Task<IEnumerable<Media>> GetAllByFolderIdAsync(string? folderId = null);
 
     /// <summary>
     /// Get the amount of media available in the specified folder.
     /// </summary>
     /// <param name="folderId">The optional folder id</param>
     /// <returns>The quantity of media items present.</returns>
-    Task<int> CountFolderItemsAsync(Guid? folderId = null);
+    Task<int> CountFolderItemsAsync(string? folderId = null);
 
     /// <summary>
     /// Gets all media folders available in the specified
@@ -34,28 +34,28 @@ public interface IMediaService
     /// </summary>
     /// <param name="folderId">The optional folder id</param>
     /// <returns>The available media folders</returns>
-    Task<IEnumerable<MediaFolder>> GetAllFoldersAsync(Guid? folderId = null);
+    Task<IEnumerable<MediaFolder>> GetAllFoldersAsync(string? folderId = null);
 
     /// <summary>
     /// Gets the media with the given id.
     /// </summary>
     /// <param name="id">The unique id</param>
     /// <returns>The media</returns>
-    Task<Media> GetByIdAsync(Guid id);
+    Task<Media> GetByIdAsync(string id);
 
     /// <summary>
     /// Gets the media with the given id.
     /// </summary>
     /// <param name="ids">The unique id</param>
     /// <returns>The media</returns>
-    Task<IEnumerable<Media>> GetByIdAsync(params Guid[] ids);
+    Task<IEnumerable<Media>> GetByIdAsync(params string[] ids);
 
     /// <summary>
     /// Gets the media folder with the given id.
     /// </summary>
     /// <param name="id">The unique id</param>
     /// <returns>The media folder</returns>
-    Task<MediaFolder> GetFolderByIdAsync(Guid id);
+    Task<MediaFolder> GetFolderByIdAsync(string id);
 
     /// <summary>
     /// Gets the hierarchical media structure.
@@ -88,7 +88,7 @@ public interface IMediaService
     /// </summary>
     /// <param name="model">The model</param>
     /// <param name="folderId">The folder id</param>
-    Task MoveAsync(Media model, Guid? folderId);
+    Task MoveAsync(Media model, string? folderId);
 
     /// <summary>
     /// Ensures that the image version with the given size exsists
@@ -98,7 +98,7 @@ public interface IMediaService
     /// <param name="width">The requested width</param>
     /// <param name="height">The optionally requested height</param>
     /// <returns>The public URL</returns>
-    string EnsureVersion(Guid id, int width, int? height = null);
+    string EnsureVersion(string id, int width, int? height = null);
 
     /// <summary>
     /// Ensures that the image version with the given size exists
@@ -108,7 +108,7 @@ public interface IMediaService
     /// <param name="width">The requested width</param>
     /// <param name="height">The optionally requested height</param>
     /// <returns>The public URL</returns>
-    Task<string> EnsureVersionAsync(Guid id, int width, int? height = null);
+    Task<string> EnsureVersionAsync(string id, int width, int? height = null);
 
     Task<string> EnsureVersionAsync(Media media, int width, int? height = null);
 
@@ -116,7 +116,7 @@ public interface IMediaService
     /// Deletes the media with the given id.
     /// </summary>
     /// <param name="id">The unique id</param>
-    Task DeleteAsync(Guid id);
+    Task DeleteAsync(string id);
 
     /// <summary>
     /// Deletes the given model.
@@ -128,7 +128,7 @@ public interface IMediaService
     /// Deletes the media folder with the given id.
     /// </summary>
     /// <param name="id">The unique id</param>
-    Task DeleteFolderAsync(Guid id);
+    Task DeleteFolderAsync(string id);
 
     /// <summary>
     /// Deletes the given model.

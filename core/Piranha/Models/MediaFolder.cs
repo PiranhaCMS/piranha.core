@@ -13,17 +13,12 @@ using System.ComponentModel.DataAnnotations;
 namespace Piranha.Models;
 
 [Serializable]
-public class MediaFolder
+public class MediaFolder : Entity
 {
-    /// <summary>
-    /// Gets/sets the unique id.
-    /// </summary>
-    public Guid Id { get; set; }
-
     /// <summary>
     /// Gets/sets the optional parent id.
     /// </summary>
-    public Guid? ParentId { get; set; }
+    public string? ParentId { get; set; }
 
     /// <summary>
     /// Gets/sets the folder name.
@@ -45,13 +40,8 @@ public class MediaFolder
 }
 
 [Serializable]
-public class MediaFolderSimple
+public class MediaFolderSimple : Entity
 {
-    /// <summary>
-    /// Gets/sets the unique id.
-    /// </summary>
-    public Guid Id { get; set; }
-
     /// <summary>
     /// Gets/sets the folder name.
     /// </summary>

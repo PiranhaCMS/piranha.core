@@ -25,7 +25,7 @@ public interface ILanguageRepository
     /// </summary>
     /// <param name="id">The unique id</param>
     /// <returns>The model, or null if it doesn't exist</returns>
-    Task<Language> GetById(Guid id);
+    Task<Language> GetById(string id);
 
     /// <summary>
     /// Gets the default model.
@@ -44,5 +44,5 @@ public interface ILanguageRepository
     /// Deletes the model with the specified id.
     /// </summary>
     /// <param name="id">The unique id</param>
-    Task Delete(Guid id);
+    Task Delete(string id);
 }

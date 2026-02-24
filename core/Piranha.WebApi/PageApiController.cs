@@ -39,8 +39,8 @@ public class PageApiController : Controller
     /// <param name="id">The page id</param>
     /// <returns>The page model</returns>
     [HttpGet]
-    [Route("{id:Guid}")]
-    public virtual async Task<IActionResult> GetById(Guid id)
+    [Route("{id:string}")]
+    public virtual async Task<IActionResult> GetById(string id)
     {
         if (!Module.AllowAnonymousAccess)
         {
@@ -81,7 +81,7 @@ public class PageApiController : Controller
     /// <returns>The page model</returns>
     [HttpGet]
     [Route("{siteId}/{slug}")]
-    public virtual async Task<IActionResult> GetBySlugAndSite(Guid siteId, string slug)
+    public virtual async Task<IActionResult> GetBySlugAndSite(string siteId, string slug)
     {
         if (!Module.AllowAnonymousAccess)
         {
@@ -100,8 +100,8 @@ public class PageApiController : Controller
     /// <param name="id">The page id</param>
     /// <returns>The page model</returns>
     [HttpGet]
-    [Route("info/{id:Guid}")]
-    public virtual async Task<IActionResult> GetInfoById(Guid id)
+    [Route("info/{id:string}")]
+    public virtual async Task<IActionResult> GetInfoById(string id)
     {
         if (!Module.AllowAnonymousAccess)
         {
@@ -142,7 +142,7 @@ public class PageApiController : Controller
     /// <returns>The page model</returns>
     [HttpGet]
     [Route("info/{siteId}/{slug}")]
-    public virtual async Task<IActionResult> GetInfoBySlugAndSite(Guid siteId, string slug)
+    public virtual async Task<IActionResult> GetInfoBySlugAndSite(string siteId, string slug)
     {
         if (!Module.AllowAnonymousAccess)
         {

@@ -18,15 +18,15 @@ public class ETag
     public void UniqueById() {
         var date = DateTime.Now;
 
-        var etag1 = Piranha.Utils.GenerateETag(Guid.NewGuid().ToString(), date);
-        var etag2 = Piranha.Utils.GenerateETag(Guid.NewGuid().ToString(), date);
+        var etag1 = Piranha.Utils.GenerateETag(Snowflake.NewId().ToString(), date);
+        var etag2 = Piranha.Utils.GenerateETag(Snowflake.NewId().ToString(), date);
 
         Assert.NotEqual(etag1, etag2);
     }
 
     [Fact]
     public void UniqueByDate() {
-        var id = Guid.NewGuid().ToString();
+        var id = Snowflake.NewId().ToString();
         var date = DateTime.Now;
 
         var etag1 = Piranha.Utils.GenerateETag(id, date);
@@ -37,7 +37,7 @@ public class ETag
 
     [Fact]
     public void EqualTags() {
-        var id = Guid.NewGuid().ToString();
+        var id = Snowflake.NewId().ToString();
         var date = DateTime.Now;
 
         var etag1 = Piranha.Utils.GenerateETag(id, date);

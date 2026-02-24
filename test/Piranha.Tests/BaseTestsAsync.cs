@@ -16,14 +16,13 @@ using Piranha.Repositories;
 using Piranha.Services;
 using Raven.Client.Documents;
 using Raven.Client.Documents.Session;
-using Raven.TestDriver;
 
 namespace Piranha.Tests;
 
 /// <summary>
 /// Base class for using the api.
 /// </summary>
-public abstract class BaseTestsAsync : RavenTestDriver, IAsyncLifetime
+public abstract class BaseTestsAsync : RavenTestBase, IAsyncLifetime
 {
     protected IStorage _storage = new Local.FileStorage("uploads/", "~/uploads/");
     protected IImageProcessor _processor = new ImageSharpProcessor();
@@ -35,7 +34,7 @@ public abstract class BaseTestsAsync : RavenTestDriver, IAsyncLifetime
 
     public virtual async Task InitializeAsync()
     {
-        _store = GetDocumentStore();
+        _store = CreateStore();
         _session = _store.OpenAsyncSession();
         _services = CreateServiceCollection(_session).BuildServiceProvider();
     }
@@ -50,7 +49,7 @@ public abstract class BaseTestsAsync : RavenTestDriver, IAsyncLifetime
     {
         return new ServiceCollection()
             .AddScoped(_ => session)
-            .AddPiranhaStore<TestDb>()
+            .AddPiranhaStore<SQLiteDb>()
             .AddPiranha()
             .AddMemoryCache()
             .AddDistributedMemoryCache()
@@ -61,7 +60,7 @@ public abstract class BaseTestsAsync : RavenTestDriver, IAsyncLifetime
     /// Gets the test context.
     /// </summary>
     protected IDb GetDb() {
-        return new TestDb(_session);
+        return new SQLiteDb(_session);
     }
 
     /// <summary>

@@ -13,12 +13,12 @@ namespace Piranha.Manager.Models.Content;
 /// <summary>
 /// Content edit model.
 /// </summary>
-public abstract class ContentEditModel : AsyncResult
+public abstract class ContentEditModel : AsyncResult, IEntity
 {
     /// <summary>
     /// Gets/sets the unique id.
     /// </summary>
-    public Guid Id { get; set; }
+    public string Id { get; set; } = Snowflake.NewId();
 
     /// <summary>
     /// Gets/sets the content type id.

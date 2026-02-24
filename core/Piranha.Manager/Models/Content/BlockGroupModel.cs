@@ -16,11 +16,6 @@ namespace Piranha.Manager.Models.Content;
 public class BlockGroupModel : BlockModel
 {
     /// <summary>
-    /// Gets/sets the unique id.
-    /// </summary>
-    public Guid Id { get; set; }
-
-    /// <summary>
     /// Gets/sets the type of the block group.
     /// </summary>
     public string Type { get; set; }

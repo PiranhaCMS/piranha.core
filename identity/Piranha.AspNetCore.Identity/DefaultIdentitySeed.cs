@@ -50,7 +50,7 @@ public class DefaultIdentitySeed : IIdentitySeed
             {
                 UserName = "admin",
                 Email = "admin@piranhacms.org",
-                SecurityStamp = Guid.NewGuid().ToString()
+                SecurityStamp = Snowflake.NewId().ToString()
             };
             var createResult = await _userManager.CreateAsync(user, "password");
 

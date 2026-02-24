@@ -59,7 +59,7 @@ public class RoleEditModel
 
         if (role == null)
         {
-            Role.Id = Role.Id != Guid.Empty ? Role.Id : Guid.NewGuid();
+            Role.Id = Role.Id != Guid.Empty ? Role.Id : Snowflake.NewId();
             Role.NormalizedName = !string.IsNullOrEmpty(Role.NormalizedName)
                 ? Role.NormalizedName.ToUpper()
                 : Role.Name.ToUpper();

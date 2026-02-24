@@ -17,7 +17,7 @@ namespace Piranha.Tests.Hooks;
 public class ParamHookTests : BaseTestsAsync
 {
     private const string KEY = "MyHookParam";
-    private readonly Guid ID = Guid.NewGuid();
+    private readonly string ID = Snowflake.NewId();
 
     public class ParamOnLoadException : Exception {}
     public class ParamOnBeforeSaveException : Exception {}
@@ -27,6 +27,8 @@ public class ParamHookTests : BaseTestsAsync
 
     public override async Task InitializeAsync()
     {
+        await base.InitializeAsync();
+
         using (var api = CreateApi())
         {
             // Initialize

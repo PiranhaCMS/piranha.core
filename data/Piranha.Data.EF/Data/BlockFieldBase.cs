@@ -14,18 +14,13 @@ namespace Piranha.Data;
 /// Content field for a block.
 /// </summary>
 [Serializable]
-public abstract class BlockFieldBase
+public abstract class BlockFieldBase : Entity
 {
-    /// <summary>
-    /// Gets/sets the unique id.
-    /// </summary>
-    public Guid Id { get; set; }
-
     /// <summary>
     /// Gets/sets the id of the block this field
     /// belongs to.
     /// </summary>
-    public Guid BlockId { get; set; }
+    public string BlockId { get; set; }
 
     /// <summary>
     /// Gets/sets the field id.

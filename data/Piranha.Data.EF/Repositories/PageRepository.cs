@@ -1,4 +1,4 @@
-﻿/*
+/*
  * Copyright (c) .NET Foundation and Contributors
  *
  * This software may be modified and distributed under the terms
@@ -9,7 +9,7 @@
  */
 
 using System.Text.Json;
-using Microsoft.EntityFrameworkCore;
+using Raven.Client.Documents;
 
 using Piranha.Data;
 using Piranha.Services;
@@ -37,10 +37,9 @@ internal class PageRepository : IPageRepository
     /// </summary>
     /// <param name="siteId">The site id</param>
     /// <returns>The pages</returns>
-    public async Task<IEnumerable<Guid>> GetAll(Guid siteId)
+    public async Task<IEnumerable<string>> GetAll(string siteId)
     {
         return await _db.Pages
-            .AsNoTracking()
             .Where(p => p.SiteId == siteId)
             .OrderBy(p => p.ParentId)
             .ThenBy(p => p.SortOrder)
@@ -54,10 +53,9 @@ internal class PageRepository : IPageRepository
     /// </summary>
     /// <param name="siteId">The site id</param>
     /// <returns>The pages</returns>
-    public async Task<IEnumerable<Guid>> GetAllBlogs(Guid siteId)
+    public async Task<IEnumerable<string>> GetAllBlogs(string siteId)
     {
         return await _db.Pages
-            .AsNoTracking()
             .Where(p => p.SiteId == siteId && p.ContentType == "Blog")
             .OrderBy(p => p.ParentId)
             .ThenBy(p => p.SortOrder)
@@ -72,10 +70,9 @@ internal class PageRepository : IPageRepository
     /// </summary>
     /// <param name="siteId">The unique site id</param>
     /// <returns>The pages that have a draft</returns>
-    public async Task<IEnumerable<Guid>> GetAllDrafts(Guid siteId)
+    public async Task<IEnumerable<string>> GetAllDrafts(string siteId)
     {
         return await _db.PageRevisions
-            .AsNoTracking()
             .Where(r => r.Page.SiteId == siteId && r.Created > r.Page.LastModified)
             .Select(r => r.PageId)
             .Distinct()
@@ -92,7 +89,7 @@ internal class PageRepository : IPageRepository
     /// <param name="page">The page number</param>
     /// <param name="pageSize">The page size</param>
     /// <returns>The available comments</returns>
-    public Task<IEnumerable<Models.Comment>> GetAllComments(Guid? pageId, bool onlyApproved,
+    public Task<IEnumerable<Models.Comment>> GetAllComments(string pageId, bool onlyApproved,
         int page, int pageSize)
     {
         return GetAllComments(pageId, onlyApproved, false, page, pageSize);
@@ -105,7 +102,7 @@ internal class PageRepository : IPageRepository
     /// <param name="page">The page number</param>
     /// <param name="pageSize">The page size</param>
     /// <returns>The available comments</returns>
-    public Task<IEnumerable<Models.Comment>> GetAllPendingComments(Guid? pageId,
+    public Task<IEnumerable<Models.Comment>> GetAllPendingComments(string pageId,
         int page, int pageSize)
     {
         return GetAllComments(pageId, false, true, page, pageSize);
@@ -117,7 +114,7 @@ internal class PageRepository : IPageRepository
     /// <typeparam name="T">The model type</typeparam>
     /// <param name="siteId">The site id</param>
     /// <returns>The page model</returns>
-    public async Task<T> GetStartpage<T>(Guid siteId) where T : Models.PageBase
+    public async Task<T> GetStartpage<T>(string siteId) where T : Models.PageBase
     {
         var page = await GetQuery<T>()
             .FirstOrDefaultAsync(p => p.SiteId == siteId && p.ParentId == null && p.SortOrder == 0)
@@ -136,7 +133,7 @@ internal class PageRepository : IPageRepository
     /// <typeparam name="T">The model type</typeparam>
     /// <param name="id">The unique id</param>
     /// <returns>The page model</returns>
-    public async Task<T> GetById<T>(Guid id) where T : Models.PageBase
+    public async Task<T> GetById<T>(string id) where T : Models.PageBase
     {
         var page = await GetQuery<T>()
             .FirstOrDefaultAsync(p => p.Id == id)
@@ -155,7 +152,7 @@ internal class PageRepository : IPageRepository
     /// <typeparam name="T">The model type</typeparam>
     /// <param name="ids">The unique id's</param>
     /// <returns>The page models</returns>
-    public async Task<IEnumerable<T>> GetByIds<T>(params Guid[] ids) where T : Models.PageBase
+    public async Task<IEnumerable<T>> GetByIds<T>(params string[] ids) where T : Models.PageBase
     {
         var ret = new List<T>();
         var pages = await GetQuery<T>()
@@ -177,7 +174,7 @@ internal class PageRepository : IPageRepository
     /// <param name="slug">The unique slug</param>
     /// <param name="siteId">The site id</param>
     /// <returns>The page model</returns>
-    public async Task<T> GetBySlug<T>(string slug, Guid siteId) where T : Models.PageBase
+    public async Task<T> GetBySlug<T>(string slug, string siteId) where T : Models.PageBase
     {
         var page = await GetQuery<T>()
             .FirstOrDefaultAsync(p => p.SiteId == siteId && p.Slug == slug)
@@ -196,7 +193,7 @@ internal class PageRepository : IPageRepository
     /// <typeparam name="T">The model type</typeparam>
     /// <param name="id">The unique id</param>
     /// <returns>The draft, or null if no draft exists</returns>
-    public async Task<T> GetDraftById<T>(Guid id) where T : Models.PageBase
+    public async Task<T> GetDraftById<T>(string id) where T : Models.PageBase
     {
         DateTime? lastModified = await _db.Pages
             .Where(p => p.Id == id)
@@ -229,12 +226,12 @@ internal class PageRepository : IPageRepository
     /// <param name="parentId">The new parent id</param>
     /// <param name="sortOrder">The new sort order</param>
     /// <returns>The other pages that were affected by the move</returns>
-    public async Task<IEnumerable<Guid>> Move<T>(T model, Guid? parentId, int sortOrder) where T : Models.PageBase
+    public async Task<IEnumerable<string>> Move<T>(T model, string? parentId, int sortOrder) where T : Models.PageBase
     {
-        var affected = new List<Guid>();
+        var affected = new List<string>();
 
-        var source = await _db.Pages.Where(p => p.SiteId == model.SiteId && p.ParentId == model.ParentId && p.Id != model.Id).ToListAsync().ConfigureAwait(false);
-        var dest = model.ParentId == parentId ? source : await _db.Pages.Where(p => p.SiteId == model.SiteId && p.ParentId == parentId).ToListAsync().ConfigureAwait(false);
+        var source = await _db.Pages.Where(p => p.SiteId == model.SiteId && p.ParentId == model.ParentId && p.Id != model.Id).ToListAsync();
+        var dest = model.ParentId == parentId ? source : await _db.Pages.Where(p => p.SiteId == model.SiteId && p.ParentId == parentId).ToListAsync();
 
         // Remove the old position for the page
         affected.AddRange(MovePages(source, model.Id, model.SiteId, model.SortOrder + 1, false));
@@ -258,7 +255,7 @@ internal class PageRepository : IPageRepository
     /// </summary>
     /// <param name="id">The comment id</param>
     /// <returns>The model</returns>
-    public async Task<Models.Comment> GetCommentById(Guid id)
+    public async Task<Models.Comment> GetCommentById(string id)
     {
         return await _db.PageComments
             .Where(c => c.Id == id)
@@ -273,7 +270,7 @@ internal class PageRepository : IPageRepository
                 IsApproved = c.IsApproved,
                 Body = c.Body,
                 Created = c.Created
-            }).FirstOrDefaultAsync().ConfigureAwait(false);
+            }).FirstOrDefaultAsync();
     }
 
     /// <summary>
@@ -281,7 +278,7 @@ internal class PageRepository : IPageRepository
     /// </summary>
     /// <param name="model">The page model</param>
     /// <returns>The other pages that were affected by the move</returns>
-    public Task<IEnumerable<Guid>> Save<T>(T model) where T : Models.PageBase
+    public Task<IEnumerable<string>> Save<T>(T model) where T : Models.PageBase
     {
         return Save<T>(model, false);
     }
@@ -300,7 +297,7 @@ internal class PageRepository : IPageRepository
     /// </summary>
     /// <param name="pageId">The unique page id</param>
     /// <param name="model">The comment model</param>
-    public async Task SaveComment(Guid pageId, Models.Comment model)
+    public async Task SaveComment(string pageId, Models.Comment model)
     {
         var comment = await _db.PageComments
             .FirstOrDefaultAsync(c => c.Id == model.Id);
@@ -333,7 +330,7 @@ internal class PageRepository : IPageRepository
     /// </summary>
     /// <param name="id">The unique id</param>
     /// <param name="revisions">The maximum number of revisions that should be stored</param>
-    public async Task CreateRevision(Guid id, int revisions)
+    public async Task CreateRevision(string id, int revisions)
     {
         var page = await GetQuery<Models.PageBase>()
             .FirstOrDefaultAsync(p => p.Id == id)
@@ -344,7 +341,7 @@ internal class PageRepository : IPageRepository
             //await _db.PageRevisions.AddAsync(new PageRevision
             await _db.session.StoreAsync(new PageRevision
             {
-                Id = Guid.NewGuid(),
+                Id = Snowflake.NewId(),
                 PageId = id,
                 Data = JsonSerializer.Serialize(page),
                 Created = page.LastModified
@@ -386,13 +383,14 @@ internal class PageRepository : IPageRepository
     /// Deletes the model with the specified id.
     /// </summary>
     /// <param name="id">The unique id</param>
-    public async Task<IEnumerable<Guid>> Delete(Guid id)
+    /// <returns>The other pages that were affected by the move</returns>
+    public async Task<IEnumerable<string>> Delete(string id)
     {
         var model = await _db.Pages
-            .Include(p => p.Blocks).ThenInclude(b => b.Block).ThenInclude(b => b.Fields)
+            
             .FirstOrDefaultAsync(p => p.Id == id)
             .ConfigureAwait(false);
-        var affected = new List<Guid>();
+        var affected = new List<string>();
 
         if (model != null)
         {
@@ -425,7 +423,7 @@ internal class PageRepository : IPageRepository
             _db.session.Delete(model);
 
 
-            var siblings = await _db.Pages.Where(p => p.SiteId == model.SiteId && p.ParentId == model.ParentId).ToListAsync().ConfigureAwait(false);
+            var siblings = await _db.Pages.Where(p => p.SiteId == model.SiteId && p.ParentId == model.ParentId).ToListAsync();
 
             // Move all remaining pages after this page in the site structure.
             affected.AddRange(MovePages(siblings, id, model.SiteId, model.SortOrder + 1, false));
@@ -440,7 +438,7 @@ internal class PageRepository : IPageRepository
     /// with the given id.
     /// </summary>
     /// <param name="id">The unique id</param>
-    public async Task DeleteDraft(Guid id)
+    public async Task DeleteDraft(string id)
     {
         var page = await GetQuery<Models.PageInfo>()
             .FirstOrDefaultAsync(p => p.Id == id)
@@ -467,7 +465,7 @@ internal class PageRepository : IPageRepository
     /// Deletes the comment with the specified id.
     /// </summary>
     /// <param name="id">The unique id</param>
-    public async Task DeleteComment(Guid id)
+    public async Task DeleteComment(string id)
     {
         var comment = await _db.PageComments
             .FirstOrDefaultAsync(c => c.Id == id)
@@ -492,12 +490,12 @@ internal class PageRepository : IPageRepository
     /// <param name="page">The page number</param>
     /// <param name="pageSize">The page size</param>
     /// <returns>The available comments</returns>
-    public async Task<IEnumerable<Models.Comment>> GetAllComments(Guid? pageId, bool onlyApproved,
+    public async Task<IEnumerable<Models.Comment>> GetAllComments(string? pageId, bool onlyApproved,
         bool onlyPending, int page, int pageSize)
     {
         // Create base query
         System.Linq.IQueryable<PageComment> query = _db.PageComments
-            .AsNoTracking();
+            ;
 
         // Check if only should include a comments for a certain post
         if (pageId.HasValue)
@@ -539,7 +537,7 @@ internal class PageRepository : IPageRepository
                 IsApproved = c.IsApproved,
                 Body = c.Body,
                 Created = c.Created
-            }).ToListAsync().ConfigureAwait(false);
+            }).ToListAsync();
     }
 
     /// <summary>
@@ -547,10 +545,10 @@ internal class PageRepository : IPageRepository
     /// </summary>
     /// <param name="model">The page model</param>
     /// <param name="isDraft">If the model should be saved as a draft</param>
-    private async Task<IEnumerable<Guid>> Save<T>(T model, bool isDraft) where T : Models.PageBase
+    private async Task<IEnumerable<string>> Save<T>(T model, bool isDraft) where T : Models.PageBase
     {
         var type = App.PageTypes.GetById(model.TypeId);
-        var affected = new List<Guid>();
+        var affected = new List<string>();
         var isNew = false;
         var lastModified = DateTime.MinValue;
 
@@ -559,17 +557,17 @@ internal class PageRepository : IPageRepository
             System.Linq.IQueryable<Page> pageQuery = _db.Pages;
             if (isDraft)
             {
-                pageQuery = pageQuery.AsNoTracking();
+                pageQuery = pageQuery;
             }
 
             // FirstOrDefaultAsync(p => p.Id ...
             pageQuery = pageQuery.OrderBy(p => p.Id);
 
             var page = await pageQuery
-                .Include(p => p.Permissions)
-                .Include(p => p.Blocks).ThenInclude(b => b.Block).ThenInclude(b => b.Fields)
-                .Include(p => p.Fields)
-                .AsSplitQuery()
+                
+                
+                
+                
                 .FirstOrDefaultAsync(p => p.Id == model.Id)
                 .ConfigureAwait(false);
 
@@ -584,13 +582,13 @@ internal class PageRepository : IPageRepository
 
             if (model.OriginalPageId.HasValue)
             {
-                var originalPageIsCopy = (await _db.Pages.AsNoTracking().FirstOrDefaultAsync(p => p.Id == model.OriginalPageId).ConfigureAwait(false))?.OriginalPageId.HasValue ?? false;
+                var originalPageIsCopy = (await _db.Pages.FirstOrDefaultAsync())?.OriginalPageId.HasValue ?? false;
                 if (originalPageIsCopy)
                 {
                     throw new InvalidOperationException("Can not set copy of a copy");
                 }
 
-                var originalPageType = (await _db.Pages.AsNoTracking().FirstOrDefaultAsync(p => p.Id == model.OriginalPageId).ConfigureAwait(false))?.PageTypeId;
+                var originalPageType = (await _db.Pages.FirstOrDefaultAsync())?.PageTypeId;
                 if (originalPageType != model.TypeId)
                 {
                     throw new InvalidOperationException("Copy can not have a different content type");
@@ -601,7 +599,7 @@ internal class PageRepository : IPageRepository
                 {
                     page = new Page()
                     {
-                        Id = model.Id != Guid.Empty ? model.Id : Guid.NewGuid(),
+                        Id = !string.IsNullOrEmpty(model.Id) ? model.Id : Snowflake.NewId().ToString(),
                         Created = DateTime.Now,
                     };
 
@@ -611,7 +609,7 @@ internal class PageRepository : IPageRepository
                         await _db.session.StoreAsync(page).ConfigureAwait(false);
 
                         // Make room for the new page
-                        var dest = await _db.Pages.Where(p => p.SiteId == model.SiteId && p.ParentId == model.ParentId).ToListAsync().ConfigureAwait(false);
+                        var dest = await _db.Pages.Where(p => p.SiteId == model.SiteId && p.ParentId == model.ParentId).ToListAsync();
                         affected.AddRange(MovePages(dest, page.Id, model.SiteId, model.SortOrder, true));
                     }
                 }
@@ -620,8 +618,8 @@ internal class PageRepository : IPageRepository
                     // Check if the page has been moved
                     if (!isDraft && (page.ParentId != model.ParentId || page.SortOrder != model.SortOrder))
                     {
-                        var source = await _db.Pages.Where(p => p.SiteId == page.SiteId && p.ParentId == page.ParentId && p.Id != model.Id).ToListAsync().ConfigureAwait(false);
-                        var dest = page.ParentId == model.ParentId ? source : await _db.Pages.Where(p => p.SiteId == model.SiteId && p.ParentId == model.ParentId).ToListAsync().ConfigureAwait(false);
+                        var source = await _db.Pages.Where(p => p.SiteId == page.SiteId && p.ParentId == page.ParentId && p.Id != model.Id).ToListAsync();
+                        var dest = page.ParentId == model.ParentId ? source : await _db.Pages.Where(p => p.SiteId == model.SiteId && p.ParentId == model.ParentId).ToListAsync();
 
                         // Remove the old position for the page
                         affected.AddRange(MovePages(source, page.Id, page.SiteId, page.SortOrder + 1, false));
@@ -675,7 +673,7 @@ internal class PageRepository : IPageRepository
                     {
                         draft = new PageRevision
                         {
-                            Id = Guid.NewGuid(),
+                            Id = Snowflake.NewId(),
                             PageId = page.Id
                         };
                         // await _db.PageRevisions
@@ -697,7 +695,7 @@ internal class PageRepository : IPageRepository
             {
                 page = new Page
                 {
-                    Id = model.Id != Guid.Empty ? model.Id : Guid.NewGuid(),
+                    Id = !string.IsNullOrEmpty(model.Id) ? model.Id : Snowflake.NewId().ToString(),
                     ParentId = model.ParentId,
                     SortOrder = model.SortOrder,
                     PageTypeId = model.TypeId,
@@ -712,7 +710,7 @@ internal class PageRepository : IPageRepository
                     await _db.session.StoreAsync(page).ConfigureAwait(false);
 
                     // Make room for the new page
-                    var dest = await _db.Pages.Where(p => p.SiteId == model.SiteId && p.ParentId == model.ParentId).ToListAsync().ConfigureAwait(false);
+                    var dest = await _db.Pages.Where(p => p.SiteId == model.SiteId && p.ParentId == model.ParentId).ToListAsync();
                     affected.AddRange(MovePages(dest, page.Id, model.SiteId, model.SortOrder, true));
                 }
             }
@@ -721,8 +719,8 @@ internal class PageRepository : IPageRepository
                 // Check if the page has been moved
                 if (!isDraft && (page.ParentId != model.ParentId || page.SortOrder != model.SortOrder))
                 {
-                    var source = await _db.Pages.Where(p => p.SiteId == page.SiteId && p.ParentId == page.ParentId && p.Id != model.Id).ToListAsync().ConfigureAwait(false);
-                    var dest = page.ParentId == model.ParentId ? source : await _db.Pages.Where(p => p.SiteId == model.SiteId && p.ParentId == model.ParentId).ToListAsync().ConfigureAwait(false);
+                    var source = await _db.Pages.Where(p => p.SiteId == page.SiteId && p.ParentId == page.ParentId && p.Id != model.Id).ToListAsync();
+                    var dest = page.ParentId == model.ParentId ? source : await _db.Pages.Where(p => p.SiteId == model.SiteId && p.ParentId == model.ParentId).ToListAsync();
 
                     // Remove the old position for the page
                     affected.AddRange(MovePages(source, page.Id, page.SiteId, page.SortOrder + 1, false));
@@ -762,7 +760,7 @@ internal class PageRepository : IPageRepository
             {
                 foreach (var field in page.Fields)
                 {
-                    if (field.PageId == Guid.Empty)
+                    if (field.PageId == string.Empty)
                     {
                         field.PageId = page.Id;
                         //await _db.PageFields.AddAsync(field).ConfigureAwait(false);
@@ -806,11 +804,11 @@ internal class PageRepository : IPageRepository
                     System.Linq.IQueryable<Block> blockQuery = _db.Blocks;
                     if (isDraft)
                     {
-                        blockQuery = blockQuery.AsNoTracking();
+                        blockQuery = blockQuery;
                     }
 
                     var block = await blockQuery
-                        .Include(b => b.Fields)
+                        
                         .FirstOrDefaultAsync(b => b.Id == blocks[n].Id)
                         .ConfigureAwait(false);
 
@@ -818,7 +816,7 @@ internal class PageRepository : IPageRepository
                     {
                         block = new Block
                         {
-                            Id = blocks[n].Id != Guid.Empty ? blocks[n].Id : Guid.NewGuid(),
+                            Id = blocks[n].Id != string.Empty ? blocks[n].Id : Snowflake.NewId(),
                             Created = DateTime.Now
                         };
                         if (!isDraft)
@@ -850,7 +848,7 @@ internal class PageRepository : IPageRepository
                         {
                             field = new BlockField
                             {
-                                Id = newField.Id != Guid.Empty ? newField.Id : Guid.NewGuid(),
+                                Id = newField.Id != string.Empty ? newField.Id : Snowflake.NewId(),
                                 BlockId = block.Id,
                                 FieldId = newField.FieldId
                             };
@@ -869,7 +867,7 @@ internal class PageRepository : IPageRepository
                     // Create the page block
                     var pageBlock = new PageBlock
                     {
-                        Id = Guid.NewGuid(),
+                        Id = Snowflake.NewId(),
                         BlockId = block.Id,
                         Block = block,
                         PageId = page.Id,
@@ -897,7 +895,7 @@ internal class PageRepository : IPageRepository
                 {
                     draft = new PageRevision
                     {
-                        Id = Guid.NewGuid(),
+                        Id = Snowflake.NewId(),
                         PageId = page.Id
                     };
                     // await _db.PageRevisions
@@ -925,8 +923,8 @@ internal class PageRepository : IPageRepository
         var loadRelated = !typeof(Models.IContentInfo).IsAssignableFrom(typeof(T));
 
         System.Linq.IQueryable<Page> query = _db.Pages
-            .AsNoTracking()
-            .Include(p => p.Permissions);
+            
+            ;
 
         // FirstOrDefaultAsync(p => p.Id ...
         query = query.OrderBy(p => p.Id);
@@ -934,9 +932,9 @@ internal class PageRepository : IPageRepository
         if (loadRelated)
         {
             query = query
-                .Include(p => p.Blocks).ThenInclude(b => b.Block).ThenInclude(b => b.Fields)
-                .Include(p => p.Fields)
-                .AsSplitQuery();
+                
+                
+                ;
         }
         return query;
     }
@@ -991,7 +989,7 @@ internal class PageRepository : IPageRepository
     /// <param name="siteId">The site id</param>
     /// <param name="sortOrder">The sort order</param>
     /// <param name="increase">If sort order should be increase or decreased</param>
-    private IEnumerable<Guid> MovePages(IList<Page> pages, Guid pageId, Guid siteId, int sortOrder, bool increase)
+    private IEnumerable<string> MovePages(IList<Page> pages, string pageId, string siteId, int sortOrder, bool increase)
     {
         var affected = pages.Where(p => p.SortOrder >= sortOrder).ToList();
 
@@ -1002,3 +1000,4 @@ internal class PageRepository : IPageRepository
         return affected.Select(p => p.Id).ToList();
     }
 }
+

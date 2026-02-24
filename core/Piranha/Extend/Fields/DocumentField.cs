@@ -19,12 +19,21 @@ namespace Piranha.Extend.Fields;
 public class DocumentField : MediaFieldBase<DocumentField>
 {
     /// <summary>
+    /// Implicit operator for converting a string id to a field.
+    /// </summary>
+    /// <param name="id">The id value</param>
+    public static implicit operator DocumentField(string id)
+    {
+        return new DocumentField { Id = id };
+    }
+
+    /// <summary>
     /// Implicit operator for converting a Guid id to a field.
     /// </summary>
     /// <param name="guid">The guid value</param>
     public static implicit operator DocumentField(Guid guid)
     {
-        return new DocumentField { Id = guid };
+        return new DocumentField { Id = guid.ToString() };
     }
 
     /// <summary>

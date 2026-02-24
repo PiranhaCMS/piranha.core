@@ -11,7 +11,7 @@
 namespace Piranha.Data;
 
 [Serializable]
-public sealed class Alias : Models.Alias
+public sealed class Alias : Models.Alias 
 {
     /// <summary>
     /// Gets/sets the site this alias is for.

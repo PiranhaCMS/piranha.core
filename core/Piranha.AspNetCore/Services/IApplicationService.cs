@@ -44,7 +44,7 @@ public interface IApplicationService
     /// <summary>
     /// Gets/sets the id of the currently requested page.
     /// </summary>
-    Guid PageId { get; set; }
+    string PageId { get; set; }
 
     /// <summary>
     /// Gets/sets the current page.

@@ -21,12 +21,12 @@ public abstract class PageBase : RoutedContentBase
     /// <summary>
     /// Gets/sets the site id.
     /// </summary>
-    public Guid SiteId { get; set; }
+    public string SiteId { get; set; }
 
     /// <summary>
     /// Gets/sets the optional parent id.
     /// </summary>
-    public Guid? ParentId { get; set; }
+    public string ParentId { get; set; }
 
     /// <summary>
     /// Gets/sets the sort order of the page in its hierarchical position.
@@ -47,10 +47,10 @@ public abstract class PageBase : RoutedContentBase
     /// <summary>
     /// Gets/sets the id of the page this page is a copy of
     /// </summary>
-    public Guid? OriginalPageId { get; set; }
+    public string OriginalPageId { get; set; }
 
     /// <summary>
     /// Gets if this is the startpage of the site.
     /// </summary>
-    public bool IsStartPage => !ParentId.HasValue && SortOrder == 0;
+    public bool IsStartPage => string.IsNullOrEmpty(ParentId) && SortOrder == 0;
 }

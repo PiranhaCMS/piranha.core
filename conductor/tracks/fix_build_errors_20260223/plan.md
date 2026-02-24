@@ -1,12 +1,12 @@
 # Implementation Plan: Resolve Solution Build Errors
 
 ## Phase 1: Discovery and Core Fixes
-- [ ] Task: Identify and triage all build errors
-    - [ ] Run `dotnet build` at the solution level
-    - [ ] Categorize errors by project and type (missing references, type mismatches, migration artifacts)
-- [ ] Task: Resolve errors in Piranha Core projects
-    - [ ] Fix compilation issues in `core/Piranha`
-    - [ ] Fix compilation issues in `core/Piranha.AspNetCore`
+- [x] Task: Identify and triage all build errors 6279c1e
+    - [x] Run `dotnet build` at the solution level
+    - [x] Categorize errors by project and type (missing references, type mismatches, migration artifacts)
+- [x] Task: Resolve errors in Piranha Core projects 6279c1e
+    - [x] Fix compilation issues in `core/Piranha`
+    - [x] Fix compilation issues in `core/Piranha.AspNetCore`
 - [ ] Task: Conductor - User Manual Verification 'Phase 1: Discovery and Core Fixes' (Protocol in workflow.md)
 
 ## Phase 2: Infrastructure and Data Layer Fixes

@@ -23,12 +23,12 @@ public class AliasListModel
         /// <summary>
         /// Gets/sets the optional id.
         /// </summary>
-        public Guid? Id { get; set; }
+        public string? Id { get; set; }
 
         /// <summary>
         /// Gets/sets the site id.
         /// </summary>
-        public Guid SiteId { get; set; }
+        public string SiteId { get; set; }
 
         /// <summary>
         /// Gets/sets the alias url.
@@ -48,14 +48,14 @@ public class AliasListModel
 
     public class AliasSite
     {
-        public Guid Id { get; set; }
+        public string Id { get; set; }
         public string Title { get; set; }
     }
 
     /// <summary>
     /// Gets/sets the current site id.
     /// </summary>
-    public Guid SiteId { get; set; }
+    public string SiteId { get; set; }
 
     /// <summary>
     /// Gets/sets the current site title.

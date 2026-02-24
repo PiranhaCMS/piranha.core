@@ -86,7 +86,7 @@ public class LanguageApiController : Controller
     /// <param name="id">The unique id</param>
     [Route("{id}")]
     [HttpDelete]
-    public async Task<IActionResult> Delete(Guid id)
+    public async Task<IActionResult> Delete(string id)
     {
         try
         {

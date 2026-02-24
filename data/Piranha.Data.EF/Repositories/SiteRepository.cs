@@ -1,4 +1,4 @@
-﻿/*
+/*
  * Copyright (c) .NET Foundation and Contributors
  *
  * This software may be modified and distributed under the terms
@@ -8,7 +8,7 @@
  *
  */
 
-using Microsoft.EntityFrameworkCore;
+using Raven.Client.Documents;
 using Piranha.Data;
 using Piranha.Data.EF;
 using Piranha.Extend.Fields;
@@ -41,7 +41,7 @@ internal class SiteRepository : ISiteRepository
         Language defaultLanguage = null;
 
         var sites = await _db.Sites
-            .AsNoTracking()
+            
             .OrderBy(s => s.Title)
             .ToListAsync()
             .ConfigureAwait(false);
@@ -50,7 +50,7 @@ internal class SiteRepository : ISiteRepository
 
         foreach (var site in sites)
         {
-            if (!site.LanguageId.HasValue && defaultLanguage == null)
+            if (string.IsNullOrEmpty(site.LanguageId && defaultLanguage == null))
             {
                 defaultLanguage = await _db.Languages
                     .FirstOrDefaultAsync(l => l.IsDefault);
@@ -59,12 +59,12 @@ internal class SiteRepository : ISiteRepository
             models.Add(new Models.Site
             {
                 Id = site.Id,
-                LanguageId = site.LanguageId.HasValue ? site.LanguageId.Value : defaultLanguage.Id,
+                LanguageId = string.IsNullOrEmpty(site.LanguageId) ? defaultLanguage.Id,
                 SiteTypeId = site.SiteTypeId,
                 Title = site.Title,
                 InternalId = site.InternalId,
                 Description = site.Description,
-                Logo = site.LogoId.HasValue ? site.LogoId.Value : new ImageField(),
+                Logo = string.IsNullOrEmpty(site.LogoId) ?  new ImageField() : site.LogoId,
                 Hostnames = site.Hostnames,
                 IsDefault = site.IsDefault,
                 ContentLastModified = site.ContentLastModified,
@@ -80,16 +80,16 @@ internal class SiteRepository : ISiteRepository
     /// </summary>
     /// <param name="id">The unique id</param>
     /// <returns>The model, or NULL if it doesn't exist</returns>
-    public async Task<Models.Site> GetById(Guid id)
+    public async Task<Models.Site> GetById(string id)
     {
         var site = await _db.Sites
-            .AsNoTracking()
+            
             .FirstOrDefaultAsync(s => s.Id == id);
 
         if (site != null)
         {
             Language defaultLanguage = null;
-            if (!site.LanguageId.HasValue)
+            if (string.IsNullOrEmpty(site.LanguageId))
             {
                 defaultLanguage = await _db.Languages
                     .FirstOrDefaultAsync(l => l.IsDefault);
@@ -98,12 +98,12 @@ internal class SiteRepository : ISiteRepository
             return new Models.Site
             {
                 Id = site.Id,
-                LanguageId = site.LanguageId.HasValue ? site.LanguageId.Value : defaultLanguage.Id,
+                LanguageId = string.IsNullOrEmpty(site.LanguageId) ? defaultLanguage.Id : site.LanguageId,
                 SiteTypeId = site.SiteTypeId,
                 Title = site.Title,
                 InternalId = site.InternalId,
                 Description = site.Description,
-                Logo = site.LogoId.HasValue ? site.LogoId.Value : new ImageField(),
+                Logo = string.IsNullOrEmpty(site.LogoId) ? new ImageField() : site.LogoId,
                 Hostnames = site.Hostnames,
                 IsDefault = site.IsDefault,
                 ContentLastModified = site.ContentLastModified,
@@ -122,13 +122,13 @@ internal class SiteRepository : ISiteRepository
     public async Task<Models.Site> GetByInternalId(string internalId)
     {
         var site = await _db.Sites
-            .AsNoTracking()
+            
             .FirstOrDefaultAsync(s => s.InternalId == internalId);
 
         if (site != null)
         {
             Language defaultLanguage = null;
-            if (!site.LanguageId.HasValue)
+            if (string.IsNullOrEmpty(site.LanguageId))
             {
                 defaultLanguage = await _db.Languages
                     .FirstOrDefaultAsync(l => l.IsDefault);
@@ -160,7 +160,7 @@ internal class SiteRepository : ISiteRepository
     public async Task<Models.Site> GetDefault()
     {
         var site = await _db.Sites
-            .AsNoTracking()
+            
             .FirstOrDefaultAsync(s => s.IsDefault);
 
         if (site != null)
@@ -196,7 +196,7 @@ internal class SiteRepository : ISiteRepository
     /// </summary>
     /// <param name="id">Site id</param>
     /// <returns>The site content model</returns>
-    public Task<Models.DynamicSiteContent> GetContentById(Guid id)
+    public Task<Models.DynamicSiteContent> GetContentById(string id)
     {
         return GetContentById<Models.DynamicSiteContent>(id);
     }
@@ -207,10 +207,10 @@ internal class SiteRepository : ISiteRepository
     /// <param name="id">Site id</param>
     /// <typeparam name="T">The site model type</typeparam>
     /// <returns>The site content model</returns>
-    public async Task<T> GetContentById<T>(Guid id) where T : Models.SiteContent<T>
+    public async Task<T> GetContentById<T>(string id) where T : Models.SiteContent<T>
     {
         var site = await _db.Sites
-            .Include(s => s.Fields)
+            
             .Where(s => s.Id == id)
             .FirstOrDefaultAsync()
             .ConfigureAwait(false);
@@ -240,11 +240,11 @@ internal class SiteRepository : ISiteRepository
     /// <param name="id">The optional site id</param>
     /// <param name="onlyPublished">If only published items should be included</param>
     /// <returns>The sitemap</returns>
-    public async Task<Models.Sitemap> GetSitemap(Guid id, bool onlyPublished = true)
+    public async Task<Models.Sitemap> GetSitemap(string id, bool onlyPublished = true)
     {
         var pages = await _db.Pages
-            .AsNoTracking()
-            .Include(p => p.Permissions)
+            
+            
             .Where(p => p.SiteId == id)
             .OrderBy(p => p.ParentId)
             .ThenBy(p => p.SortOrder)
@@ -273,7 +273,7 @@ internal class SiteRepository : ISiteRepository
         {
             site = new Data.Site
             {
-                Id = model.Id != Guid.Empty ? model.Id : Guid.NewGuid(),
+                Id = !string.IsNullOrEmpty(model.Id) ? model.Id : Snowflake.NewId(),
                 Created = DateTime.Now
             };
             //await _db.Sites.AddAsync(site).ConfigureAwait(false);
@@ -300,10 +300,10 @@ internal class SiteRepository : ISiteRepository
     /// <param name="siteId">The site id</param>
     /// <param name="content">The site content</param>
     /// <typeparam name="T">The site content type</typeparam>
-    public async Task SaveContent<T>(Guid siteId, T content) where T : Models.SiteContent<T>
+    public async Task SaveContent<T>(string siteId, T content) where T : Models.SiteContent<T>
     {
         var site = await _db.Sites
-            .Include(s => s.Fields)
+            
             .FirstOrDefaultAsync(s => s.Id == siteId)
             .ConfigureAwait(false);
 
@@ -329,7 +329,7 @@ internal class SiteRepository : ISiteRepository
             // Make sure foreign key is set for fields
             foreach (var field in site.Fields)
             {
-                if (field.SiteId == Guid.Empty)
+                if (field.SiteId == string.Empty.ToString() || string.IsNullOrEmpty(field.SiteId))
                 {
                     field.SiteId = site.Id;
                     //await _db.SiteFields.AddAsync(field).ConfigureAwait(false);
@@ -349,7 +349,7 @@ internal class SiteRepository : ISiteRepository
     /// Deletes the model with the specified id.
     /// </summary>
     /// <param name="id">The unique id</param>
-    public async Task Delete(Guid id)
+    public async Task Delete(string id)
     {
         var site = await _db.Sites
             .FirstOrDefaultAsync(s => s.Id == id)
@@ -370,7 +370,7 @@ internal class SiteRepository : ISiteRepository
     /// <param name="parentId">The current parent id</param>
     /// <param name="level">The level in structure</param>
     /// <returns>The sitemap</returns>
-    private Models.Sitemap Sort(IEnumerable<Page> pages, Guid? parentId = null, int level = 0)
+    private Models.Sitemap Sort(IEnumerable<Page> pages, string? parentId = null, int level = 0)
     {
         var result = new Models.Sitemap();
 
@@ -392,3 +392,4 @@ internal class SiteRepository : ISiteRepository
         return result;
     }
 }
+

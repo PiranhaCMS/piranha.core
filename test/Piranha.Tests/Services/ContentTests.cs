@@ -23,8 +23,8 @@ public class ContentTestsMemoryCache : ContentTests
 {
     public override async Task InitializeAsync()
     {
-        _cache = new Cache.MemoryCache((IMemoryCache)_services.GetService(typeof(IMemoryCache)));
         await base.InitializeAsync();
+        _cache = new Cache.MemoryCache((IMemoryCache)_services.GetService(typeof(IMemoryCache)));
     }
 }
 
@@ -33,19 +33,19 @@ public class ContentTestsDistributedCache : ContentTests
 {
     public override async Task InitializeAsync()
     {
-        _cache = new Cache.DistributedCache((IDistributedCache)_services.GetService(typeof(IDistributedCache)));
         await base.InitializeAsync();
+        _cache = new Cache.DistributedCache((IDistributedCache)_services.GetService(typeof(IDistributedCache)));
     }
 }
 
 [Collection("Integration tests")]
 public class ContentTests : BaseTestsAsync
 {
-    private readonly Guid ID_1 = Guid.NewGuid();
-    private readonly Guid ID_2 = Guid.NewGuid();
-    private readonly Guid ID_3 = Guid.NewGuid();
+    private readonly string ID_1 = Snowflake.NewId();
+    private readonly string ID_2 = Snowflake.NewId();
+    private readonly string ID_3 = Snowflake.NewId();
 
-    private readonly Guid ID_LANG = Guid.NewGuid();
+    private readonly string ID_LANG = Snowflake.NewId();
 
     [ContentGroup(Id = "MyContentGroup", Title = "My content group")]
     public abstract class MyContentGroup<T> : Content<T> where T : MyContentGroup<T>

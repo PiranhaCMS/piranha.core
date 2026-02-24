@@ -8,7 +8,7 @@
  *
  */
 
-using Microsoft.EntityFrameworkCore;
+using Raven.Client.Documents;
 using Piranha.Data.EF;
 using Piranha.Models;
 
@@ -35,10 +35,8 @@ internal class ContentGroupRepository : IContentGroupRepository
     {
         var models = new List<ContentGroup>();
         var groups = await _db.ContentGroups
-            .AsNoTracking()
             .OrderBy(g => g.Title)
-            .ToListAsync()
-            .ConfigureAwait(false);
+            .ToListAsync();
 
         foreach (var group in groups)
         {
@@ -55,9 +53,7 @@ internal class ContentGroupRepository : IContentGroupRepository
     public async Task<ContentGroup> GetByIdAsync(string id)
     {
         var group = await _db.ContentGroups
-            .AsNoTracking()
-            .FirstOrDefaultAsync(g => g.Id == id)
-            .ConfigureAwait(false);
+            .FirstOrDefaultAsync(g => g.Id == id);
 
         if (group != null)
         {
@@ -74,8 +70,7 @@ internal class ContentGroupRepository : IContentGroupRepository
     public async Task SaveAsync(ContentGroup model)
     {
         var group = await _db.ContentGroups
-            .FirstOrDefaultAsync(g => g.Id == model.Id)
-            .ConfigureAwait(false);
+            .FirstOrDefaultAsync(g => g.Id == model.Id);
 
         if (group == null) {
             group = new Data.ContentGroup
@@ -90,7 +85,7 @@ internal class ContentGroupRepository : IContentGroupRepository
         Module.Mapper.Map<ContentGroup, Data.ContentGroup>(model, group);
         group.LastModified = DateTime.Now;
 
-        await _db.SaveChangesAsync().ConfigureAwait(false);
+        await _db.SaveChangesAsync();
     }
 
     /// <summary>
@@ -100,14 +95,14 @@ internal class ContentGroupRepository : IContentGroupRepository
     public async Task DeleteAsync(string id)
     {
         var group = await _db.ContentGroups
-            .FirstOrDefaultAsync(g => g.Id == id)
-            .ConfigureAwait(false);
+            .FirstOrDefaultAsync(g => g.Id == id);
 
         if (group != null)
         {
             //_db.ContentGroups.Remove(group);
             _db.session.Delete(group);
-            await _db.SaveChangesAsync().ConfigureAwait(false);
+            await _db.SaveChangesAsync();
         }
     }
 }
+

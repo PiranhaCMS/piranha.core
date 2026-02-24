@@ -12,14 +12,13 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Raven.Client.Documents;
 using Raven.Client.Documents.Session;
-using Raven.TestDriver;
 
 namespace Piranha.Tests;
 
 /// <summary>
 /// Base class for using the api.
 /// </summary>
-public abstract class BaseTests : RavenTestDriver, IDisposable
+public abstract class BaseTests : RavenTestBase, IDisposable
 {
     protected IStorage storage = new Local.FileStorage("uploads/", "~/uploads/");
     protected IServiceProvider services = new ServiceCollection()
@@ -32,7 +31,7 @@ public abstract class BaseTests : RavenTestDriver, IDisposable
     /// Default constructor.
     /// </summary>
     public BaseTests() {
-        _store = GetDocumentStore();
+        _store = CreateStore();
         _session = _store.OpenAsyncSession();
         Init();
     }
@@ -61,6 +60,6 @@ public abstract class BaseTests : RavenTestDriver, IDisposable
     /// Gets the test context.
     /// </summary>
     protected IDb GetDb() {
-        return new TestDb(_session);
+        return new SQLiteDb(_session);
     }
 }

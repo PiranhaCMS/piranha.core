@@ -25,8 +25,8 @@ public class PostTestsMemoryCache : PostTests
 {
     public override async Task InitializeAsync()
     {
-        _cache = new Cache.MemoryCache((IMemoryCache)_services.GetService(typeof(IMemoryCache)));
         await base.InitializeAsync();
+        _cache = new Cache.MemoryCache((IMemoryCache)_services.GetService(typeof(IMemoryCache)));
     }
 }
 
@@ -35,21 +35,21 @@ public class PostTestsDistributedCache : PostTests
 {
     public override async Task InitializeAsync()
     {
-        _cache = new Cache.DistributedCache((IDistributedCache)_services.GetService(typeof(IDistributedCache)));
         await base.InitializeAsync();
+        _cache = new Cache.DistributedCache((IDistributedCache)_services.GetService(typeof(IDistributedCache)));
     }
 }
 
 [Collection("Integration tests")]
 public class PostTests : BaseTestsAsync
 {
-    private readonly Guid SITE_ID = Guid.NewGuid();
-    private readonly Guid BLOG_ID = Guid.NewGuid();
-    private readonly Guid CAT_1_ID = Guid.NewGuid();
-    private readonly Guid POST_1_ID = Guid.NewGuid();
-    private readonly Guid POST_2_ID = Guid.NewGuid();
-    private readonly Guid POST_3_ID = Guid.NewGuid();
-    private readonly Guid POST_DI_ID = Guid.NewGuid();
+    private readonly string SITE_ID = Snowflake.NewId();
+    private readonly string BLOG_ID = Snowflake.NewId();
+    private readonly string CAT_1_ID = Snowflake.NewId();
+    private readonly string POST_1_ID = Snowflake.NewId();
+    private readonly string POST_2_ID = Snowflake.NewId();
+    private readonly string POST_3_ID = Snowflake.NewId();
+    private readonly string POST_DI_ID = Snowflake.NewId();
 
     public interface IMyService
     {
@@ -215,7 +215,7 @@ public class PostTests : BaseTestsAsync
     {
         using (var api = CreateApi())
         {
-            var posts = await api.Posts.GetAllAsync(BLOG_ID);
+            var posts = await api.Posts.GetAllDynamicAsync(BLOG_ID);
             foreach (var post in posts)
             {
                 await api.Posts.DeleteAsync(post);
@@ -255,7 +255,7 @@ public class PostTests : BaseTestsAsync
     {
         using (var api = CreateApi())
         {
-            var none = await api.Posts.GetByIdAsync(Guid.NewGuid());
+            var none = await api.Posts.GetByIdAsync(Snowflake.NewId());
 
             Assert.Null(none);
         }
@@ -299,7 +299,7 @@ public class PostTests : BaseTestsAsync
     {
         using (var api = CreateApi())
         {
-            var none = await api.Posts.GetBySlugAsync(Guid.NewGuid(), "none-existing-slug");
+            var none = await api.Posts.GetBySlugAsync(Snowflake.NewId(), "none-existing-slug");
 
             Assert.Null(none);
         }
@@ -334,7 +334,7 @@ public class PostTests : BaseTestsAsync
     {
         using (var api = CreateApi())
         {
-            var posts = await api.Posts.GetAllAsync(BLOG_ID);
+            var posts = await api.Posts.GetAllDynamicAsync(BLOG_ID);
 
             Assert.NotNull(posts);
             Assert.NotEmpty(posts);
@@ -370,7 +370,7 @@ public class PostTests : BaseTestsAsync
     {
         using (var api = CreateApi())
         {
-            var posts = await api.Posts.GetAllAsync("blog");
+            var posts = await api.Posts.GetAllDynamicAsync("blog");
 
             Assert.NotNull(posts);
             Assert.NotEmpty(posts);
@@ -406,7 +406,7 @@ public class PostTests : BaseTestsAsync
     {
         using (var api = CreateApi())
         {
-            var posts = await api.Posts.GetAllAsync("blog", SITE_ID);
+            var posts = await api.Posts.GetAllDynamicAsync("blog", SITE_ID);
 
             Assert.NotNull(posts);
             Assert.NotEmpty(posts);
@@ -418,7 +418,7 @@ public class PostTests : BaseTestsAsync
     {
         using (var api = CreateApi())
         {
-            var posts = await api.Posts.GetAllAsync(Guid.NewGuid());
+            var posts = await api.Posts.GetAllDynamicAsync(Snowflake.NewId());
 
             Assert.NotNull(posts);
             Assert.Empty(posts);
@@ -430,7 +430,7 @@ public class PostTests : BaseTestsAsync
     {
         using (var api = CreateApi())
         {
-            var posts = await api.Posts.GetAllAsync("no-blog");
+            var posts = await api.Posts.GetAllDynamicAsync("no-blog");
 
             Assert.NotNull(posts);
             Assert.Empty(posts);
@@ -442,7 +442,7 @@ public class PostTests : BaseTestsAsync
     {
         using (var api = CreateApi())
         {
-            var posts = await api.Posts.GetAllAsync("blog", Guid.NewGuid());
+            var posts = await api.Posts.GetAllDynamicAsync("blog", Snowflake.NewId());
 
             Assert.NotNull(posts);
             Assert.Empty(posts);
@@ -655,7 +655,7 @@ public class PostTests : BaseTestsAsync
     {
         using (var api = CreateApi())
         {
-            var count = (await api.Posts.GetAllAsync(BLOG_ID)).Count();
+            var count = (await api.Posts.GetAllDynamicAsync(BLOG_ID)).Count();
             var catCount = (await api.Posts.GetAllCategoriesAsync(BLOG_ID)).Count();
             var post = await MyPost.CreateAsync(api, "MyPost");
             post.BlogId = BLOG_ID;
@@ -666,7 +666,7 @@ public class PostTests : BaseTestsAsync
 
             await api.Posts.SaveAsync(post);
 
-            Assert.Equal(count + 1, (await api.Posts.GetAllAsync(BLOG_ID)).Count());
+            Assert.Equal(count + 1, (await api.Posts.GetAllDynamicAsync(BLOG_ID)).Count());
             Assert.Equal(catCount, (await api.Posts.GetAllCategoriesAsync(BLOG_ID)).Count());
         }
     }
@@ -676,7 +676,7 @@ public class PostTests : BaseTestsAsync
     {
         using (var api = CreateApi())
         {
-            var count = (await api.Posts.GetAllAsync(BLOG_ID)).Count();
+            var count = (await api.Posts.GetAllDynamicAsync(BLOG_ID)).Count();
             var catCount = (await api.Posts.GetAllCategoriesAsync(BLOG_ID)).Count();
             var tagCount = (await api.Posts.GetAllTagsAsync(BLOG_ID)).Count();
 
@@ -690,7 +690,7 @@ public class PostTests : BaseTestsAsync
 
             await api.Posts.SaveAsync(post);
 
-            Assert.Equal(count + 1, (await api.Posts.GetAllAsync(BLOG_ID)).Count());
+            Assert.Equal(count + 1, (await api.Posts.GetAllDynamicAsync(BLOG_ID)).Count());
             Assert.Equal(catCount, (await api.Posts.GetAllCategoriesAsync(BLOG_ID)).Count());
             Assert.Equal(tagCount + 3, (await api.Posts.GetAllTagsAsync(BLOG_ID)).Count());
 
@@ -777,13 +777,13 @@ public class PostTests : BaseTestsAsync
         using (var api = CreateApi())
         {
             var post = await api.Posts.GetByIdAsync<MyPost>(POST_3_ID);
-            var count = (await api.Posts.GetAllAsync(BLOG_ID)).Count();
+            var count = (await api.Posts.GetAllDynamicAsync(BLOG_ID)).Count();
 
             Assert.NotNull(post);
 
             await api.Posts.DeleteAsync(post);
 
-            Assert.Equal(count - 1, (await api.Posts.GetAllAsync(BLOG_ID)).Count());
+            Assert.Equal(count - 1, (await api.Posts.GetAllDynamicAsync(BLOG_ID)).Count());
         }
     }
 
@@ -792,11 +792,11 @@ public class PostTests : BaseTestsAsync
     {
         using (var api = CreateApi())
         {
-            var count = (await api.Posts.GetAllAsync(BLOG_ID)).Count();
+            var count = (await api.Posts.GetAllDynamicAsync(BLOG_ID)).Count();
 
             await api.Posts.DeleteAsync(POST_2_ID);
 
-            Assert.Equal(count - 1, (await api.Posts.GetAllAsync(BLOG_ID)).Count());
+            Assert.Equal(count - 1, (await api.Posts.GetAllDynamicAsync(BLOG_ID)).Count());
         }
     }
 

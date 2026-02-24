@@ -32,12 +32,12 @@ public class PostService
         _factory = factory;
     }
 
-    public async Task<PostModalModel> GetArchiveMap(Guid? siteId, Guid? archiveId)
+    public async Task<PostModalModel> GetArchiveMap(string? siteId, string? archiveId)
     {
         var model = new PostModalModel();
 
         // Get default site if none is selected
-        if (!siteId.HasValue)
+        if (string.IsNullOrEmpty(siteId))
         {
             var site = await _api.Sites.GetDefaultAsync();
             if (site != null)
@@ -46,7 +46,7 @@ public class PostService
             }
         }
 
-        model.SiteId = siteId.Value;
+        model.SiteId = siteId;
 
         // Get the sites available
         model.Sites = (await _api.Sites.GetAllAsync())
@@ -59,14 +59,14 @@ public class PostService
             .ToList();
 
         // Get the current site title
-        var currentSite = model.Sites.FirstOrDefault(s => s.Id == siteId.Value);
+        var currentSite = model.Sites.FirstOrDefault(s => s.Id == siteId);
         if (currentSite != null)
         {
             model.SiteTitle = currentSite.Title;
         }
 
         // Get the blogs available
-        model.Archives = (await _api.Pages.GetAllBlogsAsync<PageInfo>(siteId.Value))
+        model.Archives = (await _api.Pages.GetAllBlogsAsync<PageInfo>(siteId))
             .Select(p => new PostModalModel.ArchiveItem
             {
                 Id = p.Id,
@@ -78,13 +78,13 @@ public class PostService
 
         if (model.Archives.Any())
         {
-            if (!archiveId.HasValue)
+            if (string.IsNullOrEmpty(archiveId))
             {
                 // Select the first blog
                 archiveId = model.Archives.First().Id;
             }
 
-            var archive = model.Archives.FirstOrDefault(b => b.Id == archiveId.Value);
+            var archive = model.Archives.FirstOrDefault(b => b.Id == archiveId);
             if (archive != null)
             {
                 model.ArchiveId = archive.Id;
@@ -93,7 +93,7 @@ public class PostService
             }
 
             // Get the available posts
-            model.Posts = (await _api.Posts.GetAllAsync<PostInfo>(archiveId.Value))
+            model.Posts = (await _api.Posts.GetAllAsync<PostInfo>(archiveId))
                 .Select(p => new PostModalModel.PostModalItem
                 {
                     Id = p.Id,
@@ -111,7 +111,7 @@ public class PostService
         return model;
     }
 
-    public async Task<PostListModel> GetList(Guid archiveId, int index = 0)
+    public async Task<PostListModel> GetList(string archiveId, int index = 0)
     {
         var page = await _api.Pages.GetByIdAsync<PageInfo>(archiveId);
         if (page == null)
@@ -178,7 +178,7 @@ public class PostService
         return model;
     }
 
-    public async Task<PostEditModel> GetById(Guid id, bool useDraft = true)
+    public async Task<PostEditModel> GetById(string id, bool useDraft = true)
     {
         var isDraft = true;
         var post = useDraft ? await _api.Posts.GetDraftByIdAsync(id) : null;
@@ -212,13 +212,13 @@ public class PostService
         return null;
     }
 
-    public async Task<PostEditModel> Create(Guid archiveId, string typeId)
+    public async Task<PostEditModel> Create(string archiveId, string typeId)
     {
         var post = await _api.Posts.CreateAsync<DynamicPost>(typeId);
 
         if (post != null)
         {
-            post.Id = Guid.NewGuid();
+            post.Id = Snowflake.NewId();
             post.BlogId = archiveId;
 
             // Perform manager init
@@ -246,9 +246,9 @@ public class PostService
 
         if (postType != null)
         {
-            if (model.Id == Guid.Empty)
+            if (model.Id == string.Empty)
             {
-                model.Id = Guid.NewGuid();
+                model.Id = Snowflake.NewId();
             }
 
             var post = await _api.Posts.GetByIdAsync(model.Id);
@@ -432,7 +432,7 @@ public class PostService
     /// Deletes the post with the given id.
     /// </summary>
     /// <param name="id">The unique id</param>
-    public Task Delete(Guid id)
+    public Task Delete(string id)
     {
         return _api.Posts.DeleteAsync(id);
     }

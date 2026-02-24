@@ -342,18 +342,18 @@ public class Fields : BaseTests
     public void ImageFieldConversions() {
         var media = new Media
         {
-            Id = Guid.NewGuid()
+            Id = Snowflake.NewId()
         };
 
         Piranha.Extend.Fields.ImageField field = media;
-        Assert.Equal(media.Id, field.Id.Value);
+        Assert.Equal(media.Id, field.Id);
     }
 
     [Fact]
     public async Task ImageFieldInitMissing() {
         using (var api = CreateApi()) {
             var field = new Piranha.Extend.Fields.ImageField {
-                Id = Guid.NewGuid()
+                Id = Snowflake.NewId()
             };
 
             await field.Init(api);
@@ -365,7 +365,7 @@ public class Fields : BaseTests
     [Fact]
     public void ImageFieldEquals() {
         var field1 = new Piranha.Extend.Fields.ImageField {
-            Id = Guid.NewGuid()
+            Id = Snowflake.NewId()
         };
         var field2 = new Piranha.Extend.Fields.ImageField {
             Id = field1.Id
@@ -379,7 +379,7 @@ public class Fields : BaseTests
     [Fact]
     public void ImageFieldNotEquals() {
         var field1 = new Piranha.Extend.Fields.ImageField {
-            Id = Guid.NewGuid()
+            Id = Snowflake.NewId()
         };
         var field2 = new Piranha.Extend.Fields.ImageField {
             Id = null
@@ -394,18 +394,18 @@ public class Fields : BaseTests
     public void DocumentFieldConversions() {
         var media = new Media
         {
-            Id = Guid.NewGuid()
+            Id = Snowflake.NewId()
         };
 
         Piranha.Extend.Fields.DocumentField field = media;
-        Assert.Equal(media.Id, field.Id.Value);
+        Assert.Equal(media.Id, field.Id);
     }
 
     [Fact]
     public async Task DocumentFieldInitMissing() {
         using (var api = CreateApi()) {
             var field = new Piranha.Extend.Fields.DocumentField {
-                Id = Guid.NewGuid()
+                Id = Snowflake.NewId()
             };
 
             await field.Init(api);
@@ -417,7 +417,7 @@ public class Fields : BaseTests
     [Fact]
     public void DocumentFieldEquals() {
         var field1 = new Piranha.Extend.Fields.DocumentField {
-            Id = Guid.NewGuid()
+            Id = Snowflake.NewId()
         };
         var field2 = new Piranha.Extend.Fields.DocumentField {
             Id = field1.Id
@@ -431,7 +431,7 @@ public class Fields : BaseTests
     [Fact]
     public void DocumentFieldNotEquals() {
         var field1 = new Piranha.Extend.Fields.DocumentField {
-            Id = Guid.NewGuid()
+            Id = Snowflake.NewId()
         };
         var field2 = new Piranha.Extend.Fields.DocumentField {
             Id = null
@@ -446,18 +446,18 @@ public class Fields : BaseTests
     public void VideoFieldConversions() {
         var media = new Media
         {
-            Id = Guid.NewGuid()
+            Id = Snowflake.NewId()
         };
 
         Piranha.Extend.Fields.VideoField field = media;
-        Assert.Equal(media.Id, field.Id.Value);
+        Assert.Equal(media.Id, field.Id);
     }
 
     [Fact]
     public async Task VideoFieldInitMissing() {
         using (var api = CreateApi()) {
             var field = new Piranha.Extend.Fields.VideoField {
-                Id = Guid.NewGuid()
+                Id = Snowflake.NewId()
             };
 
             await field.Init(api);
@@ -469,7 +469,7 @@ public class Fields : BaseTests
     [Fact]
     public void VideoFieldEquals() {
         var field1 = new Piranha.Extend.Fields.VideoField {
-            Id = Guid.NewGuid()
+            Id = Snowflake.NewId()
         };
         var field2 = new Piranha.Extend.Fields.VideoField {
             Id = field1.Id
@@ -483,7 +483,7 @@ public class Fields : BaseTests
     [Fact]
     public void VideoFieldNotEquals() {
         var field1 = new Piranha.Extend.Fields.VideoField {
-            Id = Guid.NewGuid()
+            Id = Snowflake.NewId()
         };
         var field2 = new Piranha.Extend.Fields.VideoField {
             Id = null
@@ -499,11 +499,11 @@ public class Fields : BaseTests
     {
         var media = new Media
         {
-            Id = Guid.NewGuid()
+            Id = Snowflake.NewId()
         };
 
         Piranha.Extend.Fields.AudioField field = media;
-        Assert.Equal(media.Id, field.Id.Value);
+        Assert.Equal(media.Id, field.Id);
     }
 
     [Fact]
@@ -513,7 +513,7 @@ public class Fields : BaseTests
         {
             var field = new Piranha.Extend.Fields.AudioField
             {
-                Id = Guid.NewGuid()
+                Id = Snowflake.NewId()
             };
 
             await field.Init(api);
@@ -527,7 +527,7 @@ public class Fields : BaseTests
     {
         var field1 = new Piranha.Extend.Fields.AudioField
         {
-            Id = Guid.NewGuid()
+            Id = Snowflake.NewId()
         };
         var field2 = new Piranha.Extend.Fields.AudioField
         {
@@ -544,7 +544,7 @@ public class Fields : BaseTests
     {
         var field1 = new Piranha.Extend.Fields.AudioField
         {
-            Id = Guid.NewGuid()
+            Id = Snowflake.NewId()
         };
         var field2 = new Piranha.Extend.Fields.AudioField
         {
@@ -560,18 +560,18 @@ public class Fields : BaseTests
     public void MediaFieldConversions() {
         var media = new Media
         {
-            Id = Guid.NewGuid()
+            Id = Snowflake.NewId()
         };
 
         Piranha.Extend.Fields.MediaField field = media;
-        Assert.Equal(media.Id, field.Id.Value);
+        Assert.Equal(media.Id, field.Id);
     }
 
     [Fact]
     public async Task MediaFieldInitMissing() {
         using (var api = CreateApi()) {
             var field = new Piranha.Extend.Fields.MediaField {
-                Id = Guid.NewGuid()
+                Id = Snowflake.NewId()
             };
 
             await field.Init(api);
@@ -583,7 +583,7 @@ public class Fields : BaseTests
     [Fact]
     public void MediaFieldEquals() {
         var field1 = new Piranha.Extend.Fields.MediaField {
-            Id = Guid.NewGuid()
+            Id = Snowflake.NewId()
         };
         var field2 = new Piranha.Extend.Fields.MediaField {
             Id = field1.Id
@@ -597,7 +597,7 @@ public class Fields : BaseTests
     [Fact]
     public void MediaFieldNotEquals() {
         var field1 = new Piranha.Extend.Fields.MediaField {
-            Id = Guid.NewGuid()
+            Id = Snowflake.NewId()
         };
         var field2 = new Piranha.Extend.Fields.MediaField {
             Id = null
@@ -610,10 +610,10 @@ public class Fields : BaseTests
 
     [Fact]
     public void ImageFieldConversionsNullImage() {
-        var id = Guid.NewGuid();
+        var id = Snowflake.NewId();
 
         Piranha.Extend.Fields.ImageField field = id;
-        Assert.Equal(id, field.Id.Value);
+        Assert.Equal(id, field.Id);
 
         string url = field;
         Assert.Equal("", url);
@@ -621,10 +621,10 @@ public class Fields : BaseTests
 
     [Fact]
     public void DocumentFieldConversionsNullDocument() {
-        var id = Guid.NewGuid();
+        var id = Snowflake.NewId();
 
         Piranha.Extend.Fields.DocumentField field = id;
-        Assert.Equal(id, field.Id.Value);
+        Assert.Equal(id, field.Id);
 
         string url = field;
         Assert.Equal("", url);
@@ -632,10 +632,10 @@ public class Fields : BaseTests
 
     [Fact]
     public void VideoFieldConversionsNullVideo() {
-        var id = Guid.NewGuid();
+        var id = Snowflake.NewId();
 
         Piranha.Extend.Fields.VideoField field = id;
-        Assert.Equal(id, field.Id.Value);
+        Assert.Equal(id, field.Id);
 
         string url = field;
         Assert.Equal("", url);
@@ -644,10 +644,10 @@ public class Fields : BaseTests
     [Fact]
     public void AudioFieldConversionsNullAudio()
     {
-        var id = Guid.NewGuid();
+        var id = Snowflake.NewId();
 
         Piranha.Extend.Fields.AudioField field = id;
-        Assert.Equal(id, field.Id.Value);
+        Assert.Equal(id, field.Id);
 
         string url = field;
         Assert.Equal("", url);
@@ -655,10 +655,10 @@ public class Fields : BaseTests
 
     [Fact]
     public void MediaFieldConversionsNullMedia() {
-        var id = Guid.NewGuid();
+        var id = Snowflake.NewId();
 
         Piranha.Extend.Fields.MediaField field = id;
-        Assert.Equal(id, field.Id.Value);
+        Assert.Equal(id, field.Id);
 
         string url = field;
         Assert.Equal("", url);
@@ -747,7 +747,7 @@ public class Fields : BaseTests
     [Fact]
     public void PageFieldEquals() {
         var field1 = new Piranha.Extend.Fields.PageField {
-            Id = Guid.NewGuid()
+            Id = Snowflake.NewId()
         };
         var field2 = new Piranha.Extend.Fields.PageField {
             Id = field1.Id
@@ -761,7 +761,7 @@ public class Fields : BaseTests
     [Fact]
     public void PageFieldNotEquals() {
         var field1 = new Piranha.Extend.Fields.PageField {
-            Id = Guid.NewGuid()
+            Id = Snowflake.NewId()
         };
         var field2 = new Piranha.Extend.Fields.PageField {
             Id = null
@@ -775,7 +775,7 @@ public class Fields : BaseTests
     [Fact]
     public void PostFieldEquals() {
         var field1 = new Piranha.Extend.Fields.PostField {
-            Id = Guid.NewGuid()
+            Id = Snowflake.NewId()
         };
         var field2 = new Piranha.Extend.Fields.PostField {
             Id = field1.Id
@@ -789,7 +789,7 @@ public class Fields : BaseTests
     [Fact]
     public void PostFieldNotEquals() {
         var field1 = new Piranha.Extend.Fields.PostField {
-            Id = Guid.NewGuid()
+            Id = Snowflake.NewId()
         };
         var field2 = new Piranha.Extend.Fields.PostField {
             Id = null

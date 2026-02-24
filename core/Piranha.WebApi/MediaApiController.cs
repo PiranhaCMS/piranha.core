@@ -37,8 +37,8 @@ public class MediaApiController : Controller
     /// <param name="id">The media id</param>
     /// <returns>The media asset</returns>
     [HttpGet]
-    [Route("{id:Guid}")]
-    public virtual async Task<IActionResult> GetById(Guid id)
+    [Route("{id:string}")]
+    public virtual async Task<IActionResult> GetById(string id)
     {
         if (!Module.AllowAnonymousAccess)
         {
@@ -58,8 +58,8 @@ public class MediaApiController : Controller
     /// <param name="folderId">The optional folder id</param>
     /// <returns></returns>
     [HttpGet]
-    [Route("list/{folderId:Guid?}")]
-    public virtual async Task<IActionResult> GetByFolderId(Guid? folderId = null)
+    [Route("list/{folderId:string?}")]
+    public virtual async Task<IActionResult> GetByFolderId(string? folderId = null)
     {
         if (!Module.AllowAnonymousAccess)
         {

@@ -78,7 +78,7 @@ public class PageService
     /// </summary>
     /// <param name="siteId">The site id</param>
     /// <returns>The structure</returns>
-    private async Task<List<PageListModel.PageItem>> GetPageStructure(Guid siteId)
+    private async Task<List<PageListModel.PageItem>> GetPageStructure(string siteId)
     {
         var pages = new List<PageListModel.PageItem>();
 
@@ -99,7 +99,7 @@ public class PageService
         return pages;
     }
 
-    private async Task<List<PageListModel.PageItem>> GetArchivePages(Guid siteId)
+    private async Task<List<PageListModel.PageItem>> GetArchivePages(string siteId)
     {
         var archives = new List<PageListModel.PageItem>();
 
@@ -128,7 +128,7 @@ public class PageService
     /// </summary>
     /// <param name="siteId">The current site</param>
     /// <returns>The model</returns>
-    public async Task<SiteListModel> GetSiteList(Guid siteId)
+    public async Task<SiteListModel> GetSiteList(string siteId)
     {
         var site = await _api.Sites.GetByIdAsync(siteId);
 
@@ -156,7 +156,7 @@ public class PageService
     /// </summary>
     /// <param name="siteId">The current site</param>
     /// <returns>The model</returns>
-    public async Task<SiteListModel> GetArchiveList(Guid siteId)
+    public async Task<SiteListModel> GetArchiveList(string siteId)
     {
         var site = await _api.Sites.GetByIdAsync(siteId);
 
@@ -182,18 +182,18 @@ public class PageService
     /// Gets the sitemap model.
     /// </summary>
     /// <returns>The list model</returns>
-    public async Task<Sitemap> GetSitemap(Guid? siteId = null)
+    public async Task<Sitemap> GetSitemap(string? siteId = null)
     {
         return await _api.Sites.GetSitemapAsync(siteId, false);
     }
 
-    public async Task<PageEditModel> Create(Guid siteId, string typeId)
+    public async Task<PageEditModel> Create(string siteId, string typeId)
     {
         var page = await _api.Pages.CreateAsync<DynamicPage>(typeId);
 
         if (page != null)
         {
-            page.Id = Guid.NewGuid();
+            page.Id = Snowflake.NewId();
             page.SiteId = siteId;
             page.SortOrder = (await _api.Sites.GetSitemapAsync(page.SiteId, false)).Count;
 
@@ -206,7 +206,7 @@ public class PageService
         return null;
     }
 
-    public async Task<PageEditModel> CreateRelative(Guid pageId, string typeId, bool after)
+    public async Task<PageEditModel> CreateRelative(string pageId, string typeId, bool after)
     {
         var relative = await _api.Pages.GetByIdAsync<PageInfo>(pageId);
 
@@ -214,7 +214,7 @@ public class PageService
         {
             var page = await _api.Pages.CreateAsync<DynamicPage>(typeId);
 
-            page.Id = Guid.NewGuid();
+            page.Id = Snowflake.NewId();
             page.SiteId = relative.SiteId;
             page.ParentId = after ? relative.ParentId : relative.Id;
             page.SortOrder = after ? relative.SortOrder + 1 : 0;
@@ -231,7 +231,7 @@ public class PageService
         return null;
     }
 
-    public async Task<PageEditModel> Copy(Guid sourceId, Guid siteId)
+    public async Task<PageEditModel> Copy(string sourceId, string siteId)
     {
         var original = await _api.Pages.GetByIdAsync(sourceId);
 
@@ -255,7 +255,7 @@ public class PageService
         return null;
     }
 
-    public async Task<PageEditModel> CopyRelative(Guid sourceId, Guid pageId, bool after)
+    public async Task<PageEditModel> CopyRelative(string sourceId, string pageId, bool after)
     {
         var relative = await _api.Pages.GetByIdAsync<PageInfo>(pageId);
 
@@ -281,7 +281,7 @@ public class PageService
         return null;
     }
 
-    public async Task<PageEditModel> GetById(Guid id, bool useDraft = true)
+    public async Task<PageEditModel> GetById(string id, bool useDraft = true)
     {
         var isDraft = true;
         var page = useDraft ? await _api.Pages.GetDraftByIdAsync(id) : null;
@@ -308,7 +308,7 @@ public class PageService
         return null;
     }
 
-    public async Task<PageEditModel> Detach(Guid id)
+    public async Task<PageEditModel> Detach(string id)
     {
         var page = await _api.Pages.GetByIdAsync(id);
 
@@ -333,9 +333,9 @@ public class PageService
 
         if (pageType != null)
         {
-            if (model.Id == Guid.Empty)
+            if (model.Id == string.Empty)
             {
-                model.Id = Guid.NewGuid();
+                model.Id = Snowflake.NewId();
             }
 
             var page = await _api.Pages.GetByIdAsync(model.Id);
@@ -388,7 +388,7 @@ public class PageService
             //
             // We only need to save regions & blocks for pages that are not copies
             //
-            if (!page.OriginalPageId.HasValue)
+            if (string.IsNullOrEmpty(page.OriginalPageId))
             {
                 // Save regions
                 foreach (var region in pageType.Regions)
@@ -520,7 +520,7 @@ public class PageService
     /// Deletes the page with the given id.
     /// </summary>
     /// <param name="id">The unique id</param>
-    public Task Delete(Guid id)
+    public Task Delete(string id)
     {
         return _api.Pages.DeleteAsync(id);
     }
@@ -548,17 +548,17 @@ public class PageService
         return false;
     }
 
-    private Tuple<Guid?,int> GetPosition(Guid id, IList<StructureModel.StructureItem> items, Guid? parentId = null)
+    private Tuple<string?,int> GetPosition(string id, IList<StructureModel.StructureItem> items, string? parentId = null)
     {
         for (var n = 0; n < items.Count; n++)
         {
-            if (id == new Guid(items[n].Id))
+            if (id == new string(items[n].Id))
             {
-                return new Tuple<Guid?, int>(parentId, n);
+                return new Tuple<string?, int>(parentId, n);
             }
             else if (items[n].Children.Count > 0)
             {
-                var pos = GetPosition(id, items[n].Children, new Guid(items[n].Id));
+                var pos = GetPosition(id, items[n].Children, new string(items[n].Id));
 
                 if (pos != null)
                 {
@@ -569,7 +569,7 @@ public class PageService
         return null;
     }
 
-    private PageListModel.PageItem MapRecursive(Guid siteId, SitemapItem item, int level, int expandedLevels, IEnumerable<Guid> drafts)
+    private PageListModel.PageItem MapRecursive(string siteId, SitemapItem item, int level, int expandedLevels, IEnumerable<string> drafts)
     {
         var model = new PageListModel.PageItem
         {
@@ -582,7 +582,7 @@ public class PageService
                 !item.Published.HasValue ? _localizer.General[PageListModel.PageItem.Unpublished] : "",
             EditUrl = "manager/page/edit/",
             IsExpanded = level < expandedLevels,
-            IsCopy = item.OriginalPageId.HasValue,
+            IsCopy = !string.IsNullOrEmpty(item.OriginalPageId),
             IsRestricted = item.Permissions.Count > 0,
             IsScheduled = item.Published.HasValue && item.Published.Value > DateTime.Now,
             IsUnpublished = !item.Published.HasValue,
@@ -760,7 +760,7 @@ public class PageService
                         Component = blockType.Component,
                         Width = blockType.Width.ToString().ToLower(),
                         IsGroup = true,
-                        IsReadonly = page.OriginalPageId.HasValue,
+                        IsReadonly = !string.IsNullOrEmpty(page.OriginalPageId),
                         isCollapsed = config.ManagerDefaultCollapsedBlocks,
                         ShowHeader = !config.ManagerDefaultCollapsedBlockGroupHeaders
                     }
@@ -828,7 +828,7 @@ public class PageService
                             Icon = blockType.Icon,
                             Component = blockType.Component,
                             Width = blockType.Width.ToString().ToLower(),
-                            IsReadonly = page.OriginalPageId.HasValue,
+                            IsReadonly = !string.IsNullOrEmpty(page.OriginalPageId),
                             isCollapsed = config.ManagerDefaultCollapsedBlocks
                         }
                     });
@@ -848,7 +848,7 @@ public class PageService
                             Icon = blockType.Icon,
                             Component = blockType.Component,
                             Width = blockType.Width.ToString().ToLower(),
-                            IsReadonly = page.OriginalPageId.HasValue,
+                            IsReadonly = !string.IsNullOrEmpty(page.OriginalPageId),
                             isCollapsed = config.ManagerDefaultCollapsedBlocks
                         }
                     });

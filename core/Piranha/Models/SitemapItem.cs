@@ -16,12 +16,12 @@ public class SitemapItem : StructureItem<Sitemap, SitemapItem>
     /// <summary>
     /// Gets/sets the optional original id.
     /// </summary>
-    public Guid? OriginalPageId { get; set; }
+    public string? OriginalPageId { get; set; }
 
     /// <summary>
     /// Gets/sets the optional parent id.
     /// </summary>
-    public Guid? ParentId { get; set; }
+    public string? ParentId { get; set; }
 
     /// <summary>
     /// Gets/sets the sort order.
@@ -114,7 +114,7 @@ public class SitemapItem : StructureItem<Sitemap, SitemapItem>
     /// </summary>
     /// <param name="id">The unique id</param>
     /// <returns>If the child was found</returns>
-    public bool HasChild(Guid id)
+    public bool HasChild(string id)
     {
         foreach (var item in Items)
         {

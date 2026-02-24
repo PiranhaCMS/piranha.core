@@ -8,9 +8,10 @@
  *
  */
 
-using Microsoft.EntityFrameworkCore;
+using Raven.Client.Documents;
 using Piranha.Data;
 using Piranha.Services;
+using Raven.Client.Documents.Linq;
 
 namespace Piranha.Repositories;
 
@@ -36,23 +37,20 @@ internal class ContentRepository : IContentRepository
     /// </summary>
     /// <param name="groupId">The optional group id</param>
     /// <returns>The available content</returns>
-    public async Task<IEnumerable<Guid>> GetAll(string groupId = null)
+    public async Task<IEnumerable<string>> GetAll(string groupId = null)
     {
-        var query = _db.Content
-            .AsNoTracking();
+        var query = _db.Content;
 
         if (!string.IsNullOrEmpty(groupId))
         {
-            query = query
-                .Where(c => c.Type.Group == groupId);
+            query = (IRavenQueryable<Content>)query.Where(c => c.Type.Group == groupId);
         }
 
         return await query
             .OrderBy(c => c.Title)
             .ThenBy(c => c.LastModified)
             .Select(c => c.Id)
-            .ToListAsync()
-            .ConfigureAwait(false);
+            .ToListAsync();
     }
 
     /// <summary>
@@ -62,17 +60,17 @@ internal class ContentRepository : IContentRepository
     /// <param name="id">The unique id</param>
     /// <param name="languageId">The selected language id</param>
     /// <returns>The content model</returns>
-    public async Task<T> GetById<T>(Guid id, Guid languageId) where T : Models.GenericContent
+    public async Task<T> GetById<T>(string id, string languageId) where T : Models.GenericContent
     {
         var content = await GetQuery()
-            .FirstOrDefaultAsync(c => c.Id == id)
-            .ConfigureAwait(false);
+            .FirstOrDefaultAsync(c => c.Id == id);
 
         if (content != null)
         {
-            return await _service.TransformAsync<T>(content, App.ContentTypes.GetById(content.TypeId), ProcessAsync, languageId)
-                .ConfigureAwait(false);
+            return await _service.TransformAsync<T>(content, App.ContentTypes.GetById(content.TypeId), ProcessAsync,
+                languageId);
         }
+
         return null;
     }
 
@@ -102,12 +100,10 @@ internal class ContentRepository : IContentRepository
     /// </summary>
     /// <param name="contentId">The unique content id</param>
     /// <returns>The translation status</returns>
-    public async Task<Models.TranslationStatus> GetTranslationStatusById(Guid contentId)
+    public async Task<Models.TranslationStatus> GetTranslationStatusById(string contentId)
     {
-        var allLanguages = await _db.Languages
-            .OrderBy(l => l.Title)
-            .ToListAsync()
-            .ConfigureAwait(false);
+        var allLanguages = await _db.Languages.OrderBy(l => l.Title)
+            .ToListAsync();
 
         var defaultLang = allLanguages
             .FirstOrDefault(l => l.IsDefault);
@@ -115,10 +111,8 @@ internal class ContentRepository : IContentRepository
             .Where(l => !l.IsDefault)
             .ToList();
 
-        var translations = await _db.ContentTranslations
-            .Where(t => t.ContentId == contentId)
-            .ToListAsync()
-            .ConfigureAwait(false);
+        var translations = await _db.ContentTranslations.Where(t => t.ContentId == contentId)
+            .ToListAsync();
 
         return GetTranslationStatus(contentId, defaultLang, languages, translations);
     }
@@ -136,10 +130,8 @@ internal class ContentRepository : IContentRepository
             GroupId = groupId,
         };
 
-        var allLanguages = await _db.Languages
-            .OrderBy(l => l.Title)
-            .ToListAsync()
-            .ConfigureAwait(false);
+        var allLanguages = await _db.Languages.OrderBy(l => l.Title)
+            .ToListAsync();
 
         var defaultLang = allLanguages
             .FirstOrDefault(l => l.IsDefault);
@@ -148,10 +140,8 @@ internal class ContentRepository : IContentRepository
             .ToList();
 
         var translations = await _db.ContentTranslations
-            .Where(t => t.Content.Type.Group == groupId)
-            .OrderBy(t => t.ContentId)
-            .ToListAsync()
-            .ConfigureAwait(false);
+            .Where(t => t.Content.Type.Group == groupId).OrderBy(t => t.ContentId)
+            .ToListAsync();
 
         var contentIds = translations
             .Select(t => t.ContentId)
@@ -191,7 +181,7 @@ internal class ContentRepository : IContentRepository
     /// </summary>
     /// <param name="model">The content model</param>
     /// <param name="languageId">The selected language id</param>
-    public async Task Save<T>(T model, Guid languageId) where T : Models.GenericContent
+    public async Task Save<T>(T model, string languageId) where T : Models.GenericContent
     {
         var type = App.ContentTypes.GetById(model.TypeId);
         var lastModified = DateTime.MinValue;
@@ -204,29 +194,33 @@ internal class ContentRepository : IContentRepository
                 if (model is Models.ICategorizedContent categorized)
                 {
                     var category = await _db.Taxonomies
-                        .FirstOrDefaultAsync(c => c.Id == categorized.Category.Id)
-                        .ConfigureAwait(false);
+                        .FirstOrDefaultAsync(c => c.Id == categorized.Category.Id);
 
                     if (category == null)
                     {
                         if (!string.IsNullOrWhiteSpace(categorized.Category.Slug))
                         {
                             category = await _db.Taxonomies
-                                .FirstOrDefaultAsync(c => c.GroupId == type.Group && c.Slug == categorized.Category.Slug && c.Type == TaxonomyType.Category)
-                                .ConfigureAwait(false);
+                                .FirstOrDefaultAsync(c =>
+                                    c.GroupId == type.Group && c.Slug == categorized.Category.Slug &&
+                                    c.Type == TaxonomyType.Category);
                         }
+
                         if (category == null && !string.IsNullOrWhiteSpace(categorized.Category.Title))
                         {
                             category = await _db.Taxonomies
-                                .FirstOrDefaultAsync(c => c.GroupId == type.Group && c.Title == categorized.Category.Title && c.Type == TaxonomyType.Category)
-                                .ConfigureAwait(false);
+                                .FirstOrDefaultAsync(c =>
+                                    c.GroupId == type.Group && c.Title == categorized.Category.Title &&
+                                    c.Type == TaxonomyType.Category);
                         }
 
                         if (category == null)
                         {
                             category = new Taxonomy
                             {
-                                Id = categorized.Category.Id != Guid.Empty ? categorized.Category.Id : Guid.NewGuid(),
+                                Id = !string.IsNullOrEmpty(categorized.Category.Id)
+                                    ? categorized.Category.Id
+                                    : Snowflake.NewId(),
                                 GroupId = type.Group,
                                 Type = TaxonomyType.Category,
                                 Title = categorized.Category.Title,
@@ -234,9 +228,10 @@ internal class ContentRepository : IContentRepository
                                 Created = DateTime.Now,
                                 LastModified = DateTime.Now
                             };
-                           //await _db.Taxonomies.AddAsync(category).ConfigureAwait(false);
-                           await _db.session.StoreAsync(category).ConfigureAwait(false);
+                            //await _db.Taxonomies.AddAsync(category).ConfigureAwait(false);
+                            await _db.session.StoreAsync(category);
                         }
+
                         categorized.Category.Id = category.Id;
                         categorized.Category.Title = category.Title;
                         categorized.Category.Slug = category.Slug;
@@ -252,29 +247,29 @@ internal class ContentRepository : IContentRepository
                     foreach (var t in tagged.Tags)
                     {
                         var tag = await _db.Taxonomies
-                            .FirstOrDefaultAsync(tg => tg.Id == t.Id)
-                            .ConfigureAwait(false);
+                            .FirstOrDefaultAsync(tg => tg.Id == t.Id);
 
                         if (tag == null)
                         {
                             if (!string.IsNullOrWhiteSpace(t.Slug))
                             {
                                 tag = await _db.Taxonomies
-                                    .FirstOrDefaultAsync(tg => tg.GroupId == type.Group && tg.Slug == t.Slug && tg.Type == TaxonomyType.Tag)
-                                    .ConfigureAwait(false);
+                                    .FirstOrDefaultAsync(tg =>
+                                        tg.GroupId == type.Group && tg.Slug == t.Slug && tg.Type == TaxonomyType.Tag);
                             }
+
                             if (tag == null && !string.IsNullOrWhiteSpace(t.Title))
                             {
                                 tag = await _db.Taxonomies
-                                    .FirstOrDefaultAsync(tg => tg.GroupId == type.Group && tg.Title == t.Title && tg.Type == TaxonomyType.Tag)
-                                    .ConfigureAwait(false);
+                                    .FirstOrDefaultAsync(tg =>
+                                        tg.GroupId == type.Group && tg.Title == t.Title && tg.Type == TaxonomyType.Tag);
                             }
 
                             if (tag == null)
                             {
                                 tag = new Taxonomy
                                 {
-                                    Id = t.Id != Guid.Empty ? t.Id : Guid.NewGuid(),
+                                    Id = !string.IsNullOrEmpty(t.Id) ? t.Id : Snowflake.NewId(),
                                     GroupId = type.Group,
                                     Type = TaxonomyType.Tag,
                                     Title = t.Title,
@@ -283,10 +278,12 @@ internal class ContentRepository : IContentRepository
                                     LastModified = DateTime.Now
                                 };
                                 //await _db.Taxonomies.AddAsync(tag).ConfigureAwait(false);
-                                await _db.session.StoreAsync(tag).ConfigureAwait(false);
+                                await _db.session.StoreAsync(tag);
                             }
+
                             t.Id = tag.Id;
                         }
+
                         t.Title = tag.Title;
                         t.Slug = tag.Slug;
                     }
@@ -294,44 +291,38 @@ internal class ContentRepository : IContentRepository
             }
 
             var content = await _db.Content
-                .Include(c => c.Translations)
-                .Include(c => c.Blocks).ThenInclude(b => b.Fields).ThenInclude(f => f.Translations)
-                .Include(c => c.Fields).ThenInclude(f => f.Translations)
-                .Include(c => c.Category)
-                .Include(c => c.Tags).ThenInclude(t => t.Taxonomy)
-                                         .AsSplitQuery()
-                .FirstOrDefaultAsync(p => p.Id == model.Id)
-                .ConfigureAwait(false);
+                .FirstOrDefaultAsync(p => p.Id == model.Id);
 
             // If not, create new content
             if (content == null)
             {
                 content = new Content
                 {
-                    Id = model.Id != Guid.Empty ? model.Id : Guid.NewGuid(),
+                    Id = !string.IsNullOrEmpty(model.Id) ? model.Id : Snowflake.NewId(),
                     Created = DateTime.Now,
                     LastModified = DateTime.Now
                 };
                 model.Id = content.Id;
 
                 //await _db.Content.AddAsync(content).ConfigureAwait(false);
-                await _db.session.StoreAsync(content).ConfigureAwait(false);
+                await _db.session.StoreAsync(content);
             }
             else
             {
                 content.LastModified = DateTime.Now;
             }
+
             content = _service.Transform<T>(model, type, content, languageId);
 
             // Process fields
             foreach (var field in content.Fields)
             {
                 // Ensure foreign key for new fields
-                if (field.ContentId == Guid.Empty)
+                if (string.IsNullOrEmpty(field.ContentId))
                 {
                     field.ContentId = content.Id;
                     //await _db.ContentFields.AddAsync(field).ConfigureAwait(false);
-                    await _db.session.StoreAsync(field).ConfigureAwait(false);
+                    await _db.session.StoreAsync(field);
                 }
             }
 
@@ -348,6 +339,7 @@ internal class ContentRepository : IContentRepository
                             removedTags.Add(tag);
                         }
                     }
+
                     foreach (var removed in removedTags)
                     {
                         content.Tags.Remove(removed);
@@ -384,17 +376,18 @@ internal class ContentRepository : IContentRepository
                         .Where(b => !current.Contains(b.Id) && b.ParentId == null)
                         .ToList();
                     var removedItems = content.Blocks
-                        .Where(b => !current.Contains(b.Id) && b.ParentId != null) // && removed.Select(p => p.Id).ToList().Contains(b.ParentId.Value))
+                        .Where(b => !current.Contains(b.Id) &&
+                                    b.ParentId !=
+                                    null) // && removed.Select(p => p.Id).ToList().Contains(b.ParentId.Value))
                         .ToList();
 
                     // _db.ContentBlocks.RemoveRange(removed);
                     // _db.ContentBlocks.RemoveRange(removedItems);
                     foreach (var item in removed)
                         _db.session.Delete(item);
-                    
+
                     foreach (var item in removedItems)
                         _db.session.Delete(item);
-                    
 
 
                     // Map the new block
@@ -406,11 +399,12 @@ internal class ContentRepository : IContentRepository
                         {
                             block = new ContentBlock
                             {
-                                Id = blocks[n].Id != Guid.Empty ? blocks[n].Id : Guid.NewGuid()
+                                Id = !string.IsNullOrEmpty(blocks[n].Id) ? blocks[n].Id : Snowflake.NewId()
                             };
                             //await _db.ContentBlocks.AddAsync(block).ConfigureAwait(false);
-                            await _db.session.StoreAsync(block).ConfigureAwait(false);
+                            await _db.session.StoreAsync(block);
                         }
+
                         block.ParentId = blocks[n].ParentId;
                         block.SortOrder = n;
                         block.CLRType = blocks[n].CLRType;
@@ -430,21 +424,23 @@ internal class ContentRepository : IContentRepository
                             {
                                 field = new ContentBlockField
                                 {
-                                    Id = newField.Id != Guid.Empty ? newField.Id : Guid.NewGuid(),
+                                    Id = !string.IsNullOrEmpty(newField.Id) ? newField.Id : Snowflake.NewId(),
                                     BlockId = block.Id,
                                     FieldId = newField.FieldId
                                 };
                                 //await _db.ContentBlockFields.AddAsync(field).ConfigureAwait(false);
-                                await _db.session.StoreAsync(field).ConfigureAwait(false);
+                                await _db.session.StoreAsync(field);
                                 block.Fields.Add(field);
                             }
+
                             field.SortOrder = newField.SortOrder;
                             field.CLRType = newField.CLRType;
                             field.Value = newField.Value;
 
                             foreach (var newTranslation in newField.Translations)
                             {
-                                var translation = field.Translations.FirstOrDefault(t => t.LanguageId == newTranslation.LanguageId);
+                                var translation =
+                                    field.Translations.FirstOrDefault(t => t.LanguageId == newTranslation.LanguageId);
                                 if (translation == null)
                                 {
                                     translation = new ContentBlockFieldTranslation
@@ -453,24 +449,26 @@ internal class ContentRepository : IContentRepository
                                         LanguageId = languageId
                                     };
                                     //await _db.ContentBlockFieldTranslations.AddAsync(translation).ConfigureAwait(false);
-                                    await _db.session.StoreAsync(translation).ConfigureAwait(false);
+                                    await _db.session.StoreAsync(translation);
                                     field.Translations.Add(translation);
                                 }
+
                                 translation.Value = newTranslation.Value;
                             }
                         }
+
                         content.Blocks.Add(block);
                     }
                 }
             }
 
-            await _db.SaveChangesAsync().ConfigureAwait(false);
+            await _db.SaveChangesAsync();
 
             /*
                 * TODO
                 *
-            await DeleteUnusedCategories(model.BlogId).ConfigureAwait(false);
-            await DeleteUnusedTags(model.BlogId).ConfigureAwait(false);
+            await DeleteUnusedCategories(model.BlogId);
+            await DeleteUnusedTags(model.BlogId);
                 */
         }
     }
@@ -479,27 +477,23 @@ internal class ContentRepository : IContentRepository
     /// Deletes the content model with the specified id.
     /// </summary>
     /// <param name="id">The unique id</param>
-    public async Task Delete(Guid id)
+    public async Task Delete(string id)
     {
         var model = await _db.Content
-            .Include(c => c.Translations)
-            .Include(c => c.Fields).ThenInclude(f => f.Translations)
-            .AsSplitQuery()
-            .FirstOrDefaultAsync(p => p.Id == id)
-            .ConfigureAwait(false);
+            .FirstOrDefaultAsync(p => p.Id == id);
 
         if (model != null)
         {
             //_db.Content.Remove(model);
             _db.session.Delete(model);
 
-            await _db.SaveChangesAsync().ConfigureAwait(false);
+            await _db.SaveChangesAsync();
 
             /*
                 * TODO
                 *
-            await DeleteUnusedCategories(model.BlogId).ConfigureAwait(false);
-            await DeleteUnusedTags(model.BlogId).ConfigureAwait(false);
+            await DeleteUnusedCategories(model.BlogId);
+            await DeleteUnusedTags(model.BlogId);
                 */
         }
     }
@@ -508,11 +502,9 @@ internal class ContentRepository : IContentRepository
     {
         var result = new List<Models.Taxonomy>();
         var taxonomies = await _db.Taxonomies
-            .AsNoTracking()
             .Where(t => t.GroupId == groupId && t.Type == type)
             .OrderBy(t => t.Title)
-            .ToListAsync()
-            .ConfigureAwait(false);
+            .ToListAsync();
 
         foreach (var taxonomy in taxonomies)
         {
@@ -524,11 +516,12 @@ internal class ContentRepository : IContentRepository
                 Type = taxonomy.Type == TaxonomyType.Category ? Models.TaxonomyType.Category : Models.TaxonomyType.Tag
             });
         }
+
         return result;
     }
 
     private Models.TranslationStatus GetTranslationStatus(
-        Guid contentId,
+        string contentId,
         Language defaultLanguage,
         IEnumerable<Language> languages,
         IEnumerable<ContentTranslation> translations)
@@ -545,10 +538,10 @@ internal class ContentRepository : IContentRepository
                 Translations = languages
                     .Where(l => !l.IsDefault)
                     .Select(l => new Models.TranslationStatus.TranslationStatusItem
-                {
-                    LanguageId = l.Id,
-                    LanguageTitle = l.Title
-                }).OrderBy(l => l.LanguageTitle).ToList()
+                    {
+                        LanguageId = l.Id,
+                        LanguageTitle = l.Title
+                    }).OrderBy(l => l.LanguageTitle).ToList()
             };
 
             // Examine the available translations
@@ -579,17 +572,9 @@ internal class ContentRepository : IContentRepository
     /// Gets the base query for content.
     /// </summary>
     /// <returns>The queryable</returns>
-    private IQueryable<Content> GetQuery()
+    private IRavenQueryable<Content> GetQuery()
     {
-        return (IQueryable<Content>)_db.Content
-            .AsNoTracking()
-            .Include(c => c.Category)
-            .Include(c => c.Translations)
-            .Include(c => c.Blocks).ThenInclude(b => b.Fields).ThenInclude(f => f.Translations)
-            .Include(c => c.Fields).ThenInclude(f => f.Translations)
-            .Include(c => c.Tags).ThenInclude(t => t.Taxonomy)
-            .AsSplitQuery()
-            .AsQueryable();
+        return _db.Content;
     }
 
     /// <summary>
@@ -599,7 +584,8 @@ internal class ContentRepository : IContentRepository
     /// <param name="model">The target model</param>
     private Task ProcessAsync<T>(Data.Content content, T model) where T : Models.GenericContent
     {
-        return Task.Run(() => {
+        return Task.Run(() =>
+        {
             // Map category
             if (content.Category != null && model is Models.ICategorizedContent categorizedModel)
             {
@@ -628,8 +614,10 @@ internal class ContentRepository : IContentRepository
             // Map Blocks
             if (!(model is Models.IContentInfo) && model is Models.IBlockContent blockModel)
             {
-                blockModel.Blocks = _service.TransformBlocks(content.Blocks.OrderBy(b => b.SortOrder), content.SelectedLanguageId);
+                blockModel.Blocks = _service.TransformBlocks(content.Blocks.OrderBy(b => b.SortOrder),
+                    content.SelectedLanguageId);
             }
         });
     }
 }
+

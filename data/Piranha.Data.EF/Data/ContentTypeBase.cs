@@ -11,13 +11,8 @@
 namespace Piranha.Data;
 
 [Serializable]
-public abstract class ContentTypeBase
+public abstract class ContentTypeBase : Entity
 {
-    /// <summary>
-    /// Gets/sets the unique id.
-    /// </summary>
-    public string Id { get; set; }
-
     /// <summary>
     /// Gets/sets the CLR type of the content model.
     /// </summary>

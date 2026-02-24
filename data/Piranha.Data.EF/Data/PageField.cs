@@ -1,4 +1,4 @@
-﻿/*
+/*
  * Copyright (c) .NET Foundation and Contributors
  *
  * This software may be modified and distributed under the terms
@@ -19,7 +19,7 @@ public sealed class PageField : ContentFieldBase
     /// <summary>
     /// Gets/sets the page id.
     /// </summary>
-    public Guid PageId { get; set; }
+    public string PageId { get; set; }
 
     /// <summary>
     /// Gets/sets the page.

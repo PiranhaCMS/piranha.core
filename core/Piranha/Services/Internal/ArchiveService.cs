@@ -44,8 +44,8 @@ internal sealed class ArchiveService : IArchiveService
     /// <param name="month">The optional year</param>
     /// <param name="pageSize">The optional page size. If not provided, this will be read from config</param>
     /// <returns>The post archive</returns>
-    public Task<PostArchive<DynamicPost>> GetByIdAsync(Guid archiveId, int? currentPage = 1,
-        Guid? categoryId = null, Guid? tagId = null, int? year = null, int? month = null, int? pageSize = null)
+    public Task<PostArchive<DynamicPost>> GetByIdAsync(string archiveId, int? currentPage = 1,
+        string categoryId = null, string tagId = null, int? year = null, int? month = null, int? pageSize = null)
     {
         return GetByIdAsync<DynamicPost>(archiveId, currentPage,
             categoryId, tagId, year, month, pageSize);
@@ -64,8 +64,8 @@ internal sealed class ArchiveService : IArchiveService
     /// <param name="pageSize">The optional page size. If not provided, this will be read from config</param>
     /// <typeparam name="T">The post type</typeparam>
     /// <returns>The post archive</returns>
-    public async Task<PostArchive<T>> GetByIdAsync<T>(Guid archiveId, int? currentPage = 1,
-        Guid? categoryId = null, Guid? tagId = null, int? year = null, int? month = null, int? pageSize = null)
+    public async Task<PostArchive<T>> GetByIdAsync<T>(string archiveId, int? currentPage = 1,
+        string categoryId = null, string tagId = null, int? year = null, int? month = null, int? pageSize = null)
         where T : Models.PostBase
     {
         var model = new PostArchive<T>();
@@ -96,17 +96,19 @@ internal sealed class ArchiveService : IArchiveService
         model.CurrentPage = Math.Min(Math.Max(1, currentPage.HasValue ? currentPage.Value : 1), model.TotalPages);
 
         // Set related info
-        if (categoryId.HasValue)
+        if (!string.IsNullOrEmpty(categoryId))
         {
-            model.Category = await _postService.GetCategoryByIdAsync(categoryId.Value).ConfigureAwait(false);
+            model.Category = await _postService.GetCategoryByIdAsync(categoryId).ConfigureAwait(false);
         }
-        if (tagId.HasValue)
+
+        if (!string.IsNullOrEmpty(tagId))
         {
-            model.Tag = await _postService.GetTagByIdAsync(tagId.Value).ConfigureAwait(false);
+            model.Tag = await _postService.GetTagByIdAsync(tagId).ConfigureAwait(false);
         }
 
         // Get the id of the current posts
-        var posts = await _repo.GetPosts(archiveId, pageSize.Value, model.CurrentPage, categoryId, tagId, year, month).ConfigureAwait(false);
+        var posts = await _repo.GetPosts(archiveId, pageSize.Value, model.CurrentPage, categoryId, tagId, year, month)
+            .ConfigureAwait(false);
 
         // Get the posts
         foreach (var postId in posts)
@@ -118,6 +120,7 @@ internal sealed class ArchiveService : IArchiveService
                 model.Posts.Add(post);
             }
         }
+
         return model;
     }
 }

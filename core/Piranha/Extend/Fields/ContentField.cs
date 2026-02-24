@@ -20,7 +20,7 @@ public class ContentField : IField, IEquatable<ContentField>
     /// Gets/sets the content id.
     /// </summary>
     /// <returns></returns>
-    public Guid? Id { get; set; }
+    public string Id { get; set; }
 
     /// <summary>
     /// Gets/sets the related content object.
@@ -44,10 +44,10 @@ public class ContentField : IField, IEquatable<ContentField>
     /// <param name="api">The current api</param>
     public virtual async Task Init(IApi api)
     {
-        if (Id.HasValue)
+        if (!string.IsNullOrEmpty(Id))
         {
             Content = await api.Content
-                .GetByIdAsync<Models.ContentInfo>(Id.Value)
+                .GetByIdAsync<Models.ContentInfo>(Id)
                 .ConfigureAwait(false);
 
             if (Content == null)
@@ -60,12 +60,21 @@ public class ContentField : IField, IEquatable<ContentField>
     }
 
     /// <summary>
+    /// Implicit operator for converting a string id to a field.
+    /// </summary>
+    /// <param name="id">The id value</param>
+    public static implicit operator ContentField(string id)
+    {
+        return new ContentField { Id = id };
+    }
+
+    /// <summary>
     /// Implicit operator for converting a Guid id to a field.
     /// </summary>
     /// <param name="guid">The guid value</param>
     public static implicit operator ContentField(Guid guid)
     {
-        return new ContentField { Id = guid };
+        return new ContentField { Id = guid.ToString() };
     }
 
     /// <summary>
@@ -80,7 +89,7 @@ public class ContentField : IField, IEquatable<ContentField>
     /// <inheritdoc />
     public override int GetHashCode()
     {
-        return Id.HasValue ? Id.GetHashCode() : 0;
+        return !string.IsNullOrEmpty(Id) ? Id.GetHashCode() : 0;
     }
 
     /// <inheritdoc />

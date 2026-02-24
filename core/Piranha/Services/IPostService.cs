@@ -27,7 +27,7 @@ public interface IPostService
     /// <param name="index">The optional page to fetch</param>
     /// <param name="pageSize">The optional page size</param>
     /// <returns>The posts</returns>
-    Task<IEnumerable<DynamicPost>> GetAllAsync(Guid blogId, int? index = null, int? pageSize = null);
+    Task<IEnumerable<DynamicPost>> GetAllDynamicAsync(string blogId, int? index = null, int? pageSize = null);
 
     /// <summary>
     /// Gets the available post items.
@@ -36,21 +36,21 @@ public interface IPostService
     /// <param name="index">The optional page to fetch</param>
     /// <param name="pageSize">The optional page size</param>
     /// <returns>The posts</returns>
-    Task<IEnumerable<T>> GetAllAsync<T>(Guid blogId, int? index = null, int? pageSize = null) where T : PostBase;
+    Task<IEnumerable<T>> GetAllAsync<T>(string blogId, int? index = null, int? pageSize = null) where T : PostBase;
 
     /// <summary>
     /// Gets the available posts for the specified blog.
     /// </summary>
     /// <param name="siteId">The optional site id</param>
     /// <returns>The posts</returns>
-    Task<IEnumerable<DynamicPost>> GetAllBySiteIdAsync(Guid? siteId = null);
+    Task<IEnumerable<DynamicPost>> GetAllBySiteIdAsync(string siteId = null);
 
     /// <summary>
     /// Gets the available post items.
     /// </summary>
     /// <param name="siteId">The optional site id</param>
     /// <returns>The posts</returns>
-    Task<IEnumerable<T>> GetAllBySiteIdAsync<T>(Guid? siteId = null) where T : PostBase;
+    Task<IEnumerable<T>> GetAllBySiteIdAsync<T>(string siteId = null) where T : PostBase;
 
     /// <summary>
     /// Gets the available posts for the specified blog.
@@ -58,7 +58,7 @@ public interface IPostService
     /// <param name="slug">The blog slug</param>
     /// <param name="siteId">The optional site id</param>
     /// <returns>The posts</returns>
-    Task<IEnumerable<DynamicPost>> GetAllAsync(string slug, Guid? siteId = null);
+    Task<IEnumerable<DynamicPost>> GetDynamicAllAsync(string slug, string siteId = null);
 
     /// <summary>
     /// Gets the available posts for the specified blog.
@@ -66,21 +66,21 @@ public interface IPostService
     /// <param name="slug">The blog slug</param>
     /// <param name="siteId">The optional site id</param>
     /// <returns>The posts</returns>
-    Task<IEnumerable<T>> GetAllAsync<T>(string slug, Guid? siteId = null) where T : PostBase;
+    Task<IEnumerable<T>> GetAllAsync<T>(string slug, string siteId = null) where T : PostBase;
 
     /// <summary>
     /// Gets all available categories for the specified blog.
     /// </summary>
     /// <param name="blogId">The blog id</param>
     /// <returns>The available categories</returns>
-    Task<IEnumerable<Taxonomy>> GetAllCategoriesAsync(Guid blogId);
+    Task<IEnumerable<Taxonomy>> GetAllCategoriesAsync(string blogId);
 
     /// <summary>
     /// Gets all available tags for the specified blog.
     /// </summary>
     /// <param name="blogId">The blog id</param>
     /// <returns>The available tags</returns>
-    Task<IEnumerable<Taxonomy>> GetAllTagsAsync(Guid blogId);
+    Task<IEnumerable<Taxonomy>> GetAllTagsAsync(string blogId);
 
     /// <summary>
     /// Gets the id of all posts that have a draft for
@@ -88,7 +88,7 @@ public interface IPostService
     /// </summary>
     /// <param name="blogId">The blog id</param>
     /// <returns>The posts that have a draft</returns>
-    Task<IEnumerable<Guid>> GetAllDraftsAsync(Guid blogId);
+    Task<IEnumerable<string>> GetAllDraftsAsync(string blogId);
 
     /// <summary>
     /// Gets the comments available for the post with the specified id. If no post id
@@ -99,7 +99,7 @@ public interface IPostService
     /// <param name="page">The optional page number</param>
     /// <param name="pageSize">The optional page size</param>
     /// <returns>The available comments</returns>
-    Task<IEnumerable<Comment>> GetAllCommentsAsync(Guid? postId = null, bool onlyApproved = true,
+    Task<IEnumerable<Comment>> GetAllCommentsAsync(string postId = null, bool onlyApproved = true,
         int? page = null, int? pageSize = null);
 
     /// <summary>
@@ -110,7 +110,7 @@ public interface IPostService
     /// <param name="page">The optional page number</param>
     /// <param name="pageSize">The optional page size</param>
     /// <returns>The available comments</returns>
-    Task<IEnumerable<Comment>> GetAllPendingCommentsAsync(Guid? postId = null,
+    Task<IEnumerable<Comment>> GetAllPendingCommentsAsync(string postId = null,
         int? page = null, int? pageSize = null);
 
     /// <summary>
@@ -118,14 +118,14 @@ public interface IPostService
     /// </summary>
     /// <param name="archiveId">The archive id</param>
     /// <returns>The number of posts</returns>
-    Task<int> GetCountAsync(Guid archiveId);
+    Task<int> GetCountAsync(string archiveId);
 
     /// <summary>
     /// Gets the post model with the specified id.
     /// </summary>
     /// <param name="id">The unique id</param>
     /// <returns>The post model</returns>
-    Task<DynamicPost> GetByIdAsync(Guid id);
+    Task<DynamicPost> GetByIdAsync(string id);
 
     /// <summary>
     /// Gets the post model with the specified id.
@@ -133,14 +133,14 @@ public interface IPostService
     /// <typeparam name="T">The model type</typeparam>
     /// <param name="id">The unique id</param>
     /// <returns>The post model</returns>
-    Task<T> GetByIdAsync<T>(Guid id) where T : PostBase;
+    Task<T> GetByIdAsync<T>(string id) where T : PostBase;
 
     /// <summary>
     /// Gets the draft for the post model with the specified id.
     /// </summary>
     /// <param name="id">The unique id</param>
     /// <returns>The draft, or null if no draft exists</returns>
-    Task<DynamicPost> GetDraftByIdAsync(Guid id);
+    Task<DynamicPost> GetDraftByIdAsync(string id);
 
     /// <summary>
     /// Gets the draft for the post model with the specified id.
@@ -148,7 +148,7 @@ public interface IPostService
     /// <typeparam name="T">The model type</typeparam>
     /// <param name="id">The unique id</param>
     /// <returns>The draft, or null if no draft exists</returns>
-    Task<T> GetDraftByIdAsync<T>(Guid id) where T : PostBase;
+    Task<T> GetDraftByIdAsync<T>(string id) where T : PostBase;
 
     /// <summary>
     /// Gets the post model with the specified slug.
@@ -157,7 +157,7 @@ public interface IPostService
     /// <param name="slug">The unique slug</param>
     /// <param name="siteId">The optional site id</param>
     /// <returns>The post model</returns>
-    Task<DynamicPost> GetBySlugAsync(string blog, string slug, Guid? siteId = null);
+    Task<DynamicPost> GetBySlugAsync(string blog, string slug, string siteId = null);
 
     /// <summary>
     /// Gets the post model with the specified slug.
@@ -167,7 +167,7 @@ public interface IPostService
     /// <param name="slug">The unique slug</param>
     /// <param name="siteId">The optional site id</param>
     /// <returns>The post model</returns>
-    Task<T> GetBySlugAsync<T>(string blog, string slug, Guid? siteId = null) where T : PostBase;
+    Task<T> GetBySlugAsync<T>(string blog, string slug, string siteId = null) where T : PostBase;
 
     /// <summary>
     /// Gets the post model with the specified slug.
@@ -175,7 +175,7 @@ public interface IPostService
     /// <param name="blogId">The unique blog slug</param>
     /// <param name="slug">The unique slug</param>
     /// <returns>The post model</returns>
-    Task<DynamicPost> GetBySlugAsync(Guid blogId, string slug);
+    Task<DynamicPost> GetBySlugAsync(string blogId, string slug);
 
     /// <summary>
     /// Gets the post model with the specified slug.
@@ -184,14 +184,14 @@ public interface IPostService
     /// <param name="blogId">The unique blog slug</param>
     /// <param name="slug">The unique slug</param>
     /// <returns>The post model</returns>
-    Task<T> GetBySlugAsync<T>(Guid blogId, string slug) where T : PostBase;
+    Task<T> GetBySlugAsync<T>(string blogId, string slug) where T : PostBase;
 
     /// <summary>
     /// Gets the category with the id.
     /// </summary>
     /// <param name="id">The unique id</param>
     /// <returns>The model</returns>
-    Task<Taxonomy> GetCategoryByIdAsync(Guid id);
+    Task<Taxonomy> GetCategoryByIdAsync(string id);
 
     /// <summary>
     /// Gets the category with the given slug.
@@ -199,14 +199,14 @@ public interface IPostService
     /// <param name="blogId">The blog id</param>
     /// <param name="slug">The unique slug</param>
     /// <returns>The model</returns>
-    Task<Taxonomy> GetCategoryBySlugAsync(Guid blogId, string slug);
+    Task<Taxonomy> GetCategoryBySlugAsync(string blogId, string slug);
 
     /// <summary>
     /// Gets the tag with the id.
     /// </summary>
     /// <param name="id">The unique id</param>
     /// <returns>The model</returns>
-    Task<Taxonomy> GetTagByIdAsync(Guid id);
+    Task<Taxonomy> GetTagByIdAsync(string id);
 
     /// <summary>
     /// Gets the tag with the given slug.
@@ -214,14 +214,14 @@ public interface IPostService
     /// <param name="blogId">The blog id</param>
     /// <param name="slug">The unique slug</param>
     /// <returns>The model</returns>
-    Task<Taxonomy> GetTagBySlugAsync(Guid blogId, string slug);
+    Task<Taxonomy> GetTagBySlugAsync(string blogId, string slug);
 
     /// <summary>
     /// Gets the comment with the given id.
     /// </summary>
     /// <param name="id">The comment id</param>
     /// <returns>The model</returns>
-    Task<Comment> GetCommentByIdAsync(Guid id);
+    Task<Comment> GetCommentByIdAsync(string id);
 
     /// <summary>
     /// Saves the given post model.
@@ -240,20 +240,20 @@ public interface IPostService
     /// </summary>
     /// <param name="model">The comment model</param>
     /// <param name="postId">The unique post id</param>
-    Task SaveCommentAsync(Guid postId, Comment model);
+    Task SaveCommentAsync(string postId, Comment model);
 
     /// <summary>
     /// Saves the comment and verifies if should be approved or not.
     /// </summary>
     /// <param name="model">The comment model</param>
     /// <param name="postId">The unique post id</param>
-    Task SaveCommentAndVerifyAsync(Guid postId, Comment model);
+    Task SaveCommentAndVerifyAsync(string postId, Comment model);
 
     /// <summary>
     /// Deletes the model with the specified id.
     /// </summary>
     /// <param name="id">The unique id</param>
-    Task DeleteAsync(Guid id);
+    Task DeleteAsync(string id);
 
     /// <summary>
     /// Deletes the given model.
@@ -265,7 +265,7 @@ public interface IPostService
     /// Deletes the comment with the specified id.
     /// </summary>
     /// <param name="id">The unique id</param>
-    Task DeleteCommentAsync(Guid id);
+    Task DeleteCommentAsync(string id);
 
     /// <summary>
     /// Deletes the given comment.

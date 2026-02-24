@@ -65,7 +65,7 @@ public class SinglePostWithComments<T> : SinglePost<T> where T : PostBase
     /// </summary>
     /// <param name="id">The requested model id</param>
     /// <param name="draft">If the draft should be fetched</param>
-    public override async Task<IActionResult> OnGet(Guid id, bool draft = false)
+    public override async Task<IActionResult> OnGet(string id, bool draft = false)
     {
         var result = await base.OnGet(id, draft);
 
@@ -81,7 +81,7 @@ public class SinglePostWithComments<T> : SinglePost<T> where T : PostBase
     /// </summary>
     /// <param name="id">The requested model id</param>
     /// <param name="draft">If the draft should be fetched</param>
-    public virtual async Task<IActionResult> OnPostSaveComment(Guid id, bool draft = false)
+    public virtual async Task<IActionResult> OnPostSaveComment(string id, bool draft = false)
     {
         // Create the comment
         var comment = new PostComment

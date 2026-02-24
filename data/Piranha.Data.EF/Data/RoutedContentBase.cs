@@ -61,7 +61,7 @@ public abstract class RoutedContentBase<T> : ContentBase<T> where T : ContentFie
     /// <summary>
     /// Gets/sets the optional open graph image.
     /// </summary>
-    public Guid OgImageId { get; set; }
+    public string OgImageId { get; set; }
 
 
     /// <summary>

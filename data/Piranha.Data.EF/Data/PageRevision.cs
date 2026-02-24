@@ -16,7 +16,7 @@ public class PageRevision : ContentRevisionBase
     /// Gets/sets the id of the page this revision
     /// belongs to.
     /// </summary>
-    public Guid PageId { get; set; }
+    public string PageId { get; set; }
 
     /// <summary>
     /// Gets/sets the page this revision belongs to.

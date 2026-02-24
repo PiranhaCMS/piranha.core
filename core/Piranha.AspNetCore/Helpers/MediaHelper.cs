@@ -38,9 +38,9 @@ public class MediaHelper : IMediaHelper
     /// <returns>The public URL of the resized image</returns>
     public string ResizeImage(ImageField image, int width, int? height = null)
     {
-        if (image == null || image.Id == Guid.Empty)
+        if (string.IsNullOrEmpty(image)|| image.Id == Guid.Empty.ToString())
             return null;
-        return _api.Media.EnsureVersion(image.Id.Value, width, height);
+        return _api.Media.EnsureVersion(image.Id, width, height);
     }
 
     /// <summary>
@@ -52,7 +52,7 @@ public class MediaHelper : IMediaHelper
     /// <returns>The public URL of the resized image</returns>
     public string ResizeImage(Media image, int width, int? height = null)
     {
-        if (image == null || image.Id == Guid.Empty || image.Type != MediaType.Image)
+        if (image is null || image.Id == Guid.Empty.ToString() || image.Type != MediaType.Image)
             return null;
         return _api.Media.EnsureVersion(image.Id, width, height);
     }

@@ -14,7 +14,7 @@ public class CommentListModel
 {
     public class CommentItem
     {
-        public Guid Id { get; set; }
+        public string Id { get; set; }
         public string Author { get; set; }
         public string AuthorImage { get; set; }
         public string Email { get; set; }
@@ -29,7 +29,7 @@ public class CommentListModel
     /// <summary>
     /// Gets/sets the optionally select content id.
     /// </summary>
-    public Guid? ContentId { get; set; }
+    public string? ContentId { get; set; }
 
     /// <summary>
     /// Gets/sets the available comments.

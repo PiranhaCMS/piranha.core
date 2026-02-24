@@ -21,28 +21,28 @@ public interface IPostRepository
     /// <param name="index">The optional page to fetch</param>
     /// <param name="pageSize">The optional page size</param>
     /// <returns>The posts</returns>
-    Task<IEnumerable<Guid>> GetAll(Guid blogId, int? index = null, int? pageSize = null);
+    Task<IEnumerable<string>> GetAll(string blogId, int? index = null, int? pageSize = null);
 
     /// <summary>
     /// Gets the available posts for the specified site.
     /// </summary>
     /// <param name="siteId">The site id</param>
     /// <returns>The posts</returns>
-    Task<IEnumerable<Guid>> GetAllBySiteId(Guid siteId);
+    Task<IEnumerable<string>> GetAllBySiteId(string siteId);
 
     /// <summary>
     /// Gets all available categories for the specified blog.
     /// </summary>
     /// <param name="blogId">The blog id</param>
     /// <returns>The available categories</returns>
-    Task<IEnumerable<Taxonomy>> GetAllCategories(Guid blogId);
+    Task<IEnumerable<Taxonomy>> GetAllCategories(string blogId);
 
     /// <summary>
     /// Gets all available tags for the specified blog.
     /// </summary>
     /// <param name="blogId">The blog id</param>
     /// <returns>The available tags</returns>
-    Task<IEnumerable<Taxonomy>> GetAllTags(Guid blogId);
+    Task<IEnumerable<Taxonomy>> GetAllTags(string blogId);
 
     /// <summary>
     /// Gets the id of all posts that have a draft for
@@ -50,7 +50,7 @@ public interface IPostRepository
     /// </summary>
     /// <param name="blogId">The unique blog id</param>
     /// <returns>The posts that have a draft</returns>
-    Task<IEnumerable<Guid>> GetAllDrafts(Guid blogId);
+    Task<IEnumerable<string>> GetAllDrafts(string blogId);
 
     /// <summary>
     /// Gets the comments available for the post with the specified id.
@@ -60,7 +60,7 @@ public interface IPostRepository
     /// <param name="page">The page number</param>
     /// <param name="pageSize">The page size</param>
     /// <returns>The available comments</returns>
-    Task<IEnumerable<Comment>> GetAllComments(Guid? postId, bool onlyApproved,
+    Task<IEnumerable<Comment>> GetAllComments(string postId, bool onlyApproved,
         int page, int pageSize);
 
     /// <summary>
@@ -70,7 +70,7 @@ public interface IPostRepository
     /// <param name="page">The page number</param>
     /// <param name="pageSize">The page size</param>
     /// <returns>The available comments</returns>
-    Task<IEnumerable<Comment>> GetAllPendingComments(Guid? postId,
+    Task<IEnumerable<Comment>> GetAllPendingComments(string postId,
         int page, int pageSize);
 
     /// <summary>
@@ -79,7 +79,7 @@ public interface IPostRepository
     /// <typeparam name="T">The model type</typeparam>
     /// <param name="id">The unique id</param>
     /// <returns>The post model</returns>
-    Task<T> GetById<T>(Guid id) where T : PostBase;
+    Task<T> GetById<T>(string id) where T : PostBase;
 
     /// <summary>
     /// Gets the post model with the specified slug.
@@ -88,7 +88,7 @@ public interface IPostRepository
     /// <param name="blogId">The blog id</param>
     /// <param name="slug">The unique slug</param>
     /// <returns>The post model</returns>
-    Task<T> GetBySlug<T>(Guid blogId, string slug) where T : PostBase;
+    Task<T> GetBySlug<T>(string blogId, string slug) where T : PostBase;
 
     /// <summary>
     /// Gets the draft for the post model with the specified id.
@@ -96,21 +96,21 @@ public interface IPostRepository
     /// <typeparam name="T">The model type</typeparam>
     /// <param name="id">The unique id</param>
     /// <returns>The draft, or null if no draft exists</returns>
-    Task<T> GetDraftById<T>(Guid id) where T : PostBase;
+    Task<T> GetDraftById<T>(string id) where T : PostBase;
 
     /// <summary>
     /// Gets the number of available posts in the specified archive.
     /// </summary>
     /// <param name="archiveId">The archive id</param>
     /// <returns>The number of posts</returns>
-    Task<int> GetCount(Guid archiveId);
+    Task<int> GetCount(string archiveId);
 
     /// <summary>
     /// Gets the category with the id.
     /// </summary>
     /// <param name="id">The unique id</param>
     /// <returns>The model</returns>
-    Task<Taxonomy> GetCategoryById(Guid id);
+    Task<Taxonomy> GetCategoryById(string id);
 
     /// <summary>
     /// Gets the category with the given slug.
@@ -118,14 +118,14 @@ public interface IPostRepository
     /// <param name="blogId">The blog id</param>
     /// <param name="slug">The unique slug</param>
     /// <returns>The category</returns>
-    Task<Taxonomy> GetCategoryBySlug(Guid blogId, string slug);
+    Task<Taxonomy> GetCategoryBySlug(string blogId, string slug);
 
     /// <summary>
     /// Gets the tag with the id.
     /// </summary>
     /// <param name="id">The unique id</param>
     /// <returns>The model</returns>
-    Task<Taxonomy> GetTagById(Guid id);
+    Task<Taxonomy> GetTagById(string id);
 
     /// <summary>
     /// Gets the tag with the given slug.
@@ -133,14 +133,14 @@ public interface IPostRepository
     /// <param name="blogId">The blog id</param>
     /// <param name="slug">The unique slug</param>
     /// <returns>The tag</returns>
-    Task<Taxonomy> GetTagBySlug(Guid blogId, string slug);
+    Task<Taxonomy> GetTagBySlug(string blogId, string slug);
 
     /// <summary>
     /// Gets the comment with the given id.
     /// </summary>
     /// <param name="id">The comment id</param>
     /// <returns>The model</returns>
-    Task<Comment> GetCommentById(Guid id);
+    Task<Comment> GetCommentById(string id);
 
     /// <summary>
     /// Saves the given post model
@@ -159,7 +159,7 @@ public interface IPostRepository
     /// </summary>
     /// <param name="postId">The unique post id</param>
     /// <param name="model">The comment model</param>
-    Task SaveComment(Guid postId, Comment model);
+    Task SaveComment(string postId, Comment model);
 
     /// <summary>
     /// Creates a revision from the current version
@@ -167,24 +167,24 @@ public interface IPostRepository
     /// </summary>
     /// <param name="id">The unique id</param>
     /// <param name="revisions">The maximum number of revisions that should be stored</param>
-    Task CreateRevision(Guid id, int revisions);
+    Task CreateRevision(string id, int revisions);
 
     /// <summary>
     /// Deletes the model with the specified id.
     /// </summary>
     /// <param name="id">The unique id</param>
-    Task Delete(Guid id);
+    Task Delete(string id);
 
     /// <summary>
     /// Deletes the current draft revision for the post
     /// with the given id.
     /// </summary>
     /// <param name="id">The unique id</param>
-    Task DeleteDraft(Guid id);
+    Task DeleteDraft(string id);
 
     /// <summary>
     /// Deletes the comment with the specified id.
     /// </summary>
     /// <param name="id">The unique id</param>
-    Task DeleteComment(Guid id);
+    Task DeleteComment(string id);
 }

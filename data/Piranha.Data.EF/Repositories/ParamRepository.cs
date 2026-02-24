@@ -1,4 +1,4 @@
-﻿/*
+/*
  * Copyright (c) .NET Foundation and Contributors
  *
  * This software may be modified and distributed under the terms
@@ -8,7 +8,7 @@
  *
  */
 
-using Microsoft.EntityFrameworkCore;
+using Raven.Client.Documents;
 using Piranha.Models;
 
 namespace Piranha.Repositories;
@@ -33,7 +33,7 @@ internal class ParamRepository : IParamRepository
     public async Task<IEnumerable<Param>> GetAll()
     {
         return await _db.Params
-            .AsNoTracking()
+            
             .OrderBy(p => p.Key)
             .Select(p => new Param
             {
@@ -44,8 +44,7 @@ internal class ParamRepository : IParamRepository
                 Created = p.Created,
                 LastModified = p.LastModified
             })
-            .ToListAsync()
-            .ConfigureAwait(false);
+            .ToListAsync();
     }
 
     /// <summary>
@@ -53,10 +52,10 @@ internal class ParamRepository : IParamRepository
     /// </summary>
     /// <param name="id">The unique id</param>
     /// <returns>The model, or NULL if it doesn't exist</returns>
-    public Task<Param> GetById(Guid id)
+    public Task<Param> GetById(string id)
     {
         return _db.Params
-            .AsNoTracking()
+            
             .Select(p => new Param
             {
                 Id = p.Id,
@@ -77,7 +76,7 @@ internal class ParamRepository : IParamRepository
     public Task<Param> GetByKey(string key)
     {
         return _db.Params
-            .AsNoTracking()
+            
             .Select(p => new Param
             {
                 Id = p.Id,
@@ -98,43 +97,42 @@ internal class ParamRepository : IParamRepository
     public async Task Save(Param model)
     {
         var param = await _db.Params
-            .FirstOrDefaultAsync(p => p.Id == model.Id)
-            .ConfigureAwait(false);
+            .FirstOrDefaultAsync(p => p.Id == model.Id);
 
         if (param == null)
         {
             param = new Data.Param
             {
-                Id = model.Id != Guid.Empty ? model.Id : Guid.NewGuid(),
+                Id = !string.IsNullOrEmpty(model.Id) ? model.Id : Snowflake.NewId().ToString(),
                 Created = DateTime.Now
             };
             //await _db.Params.AddAsync(param).ConfigureAwait(false);
-            await _db.session.StoreAsync(param).ConfigureAwait(false);
+            await _db.session.StoreAsync(param);
         }
         param.Key = model.Key;
         param.Description = model.Description;
         param.Value = model.Value;
         param.LastModified = DateTime.Now;
 
-        await _db.SaveChangesAsync().ConfigureAwait(false);
+        await _db.SaveChangesAsync();
     }
 
     /// <summary>
     /// Deletes the model with the specified id.
     /// </summary>
     /// <param name="id">The unique id</param>
-    public async Task Delete(Guid id)
+    public async Task Delete(string id)
     {
         var param = await _db.Params
-            .FirstOrDefaultAsync(p => p.Id == id)
-            .ConfigureAwait(false);
+            .FirstOrDefaultAsync(p => p.Id == id);
 
         if (param != null)
         {
             //_db.Params.Remove(param);
             _db.session.Delete(param);
 
-            await _db.SaveChangesAsync().ConfigureAwait(false);
+            await _db.SaveChangesAsync();
         }
     }
 }
+

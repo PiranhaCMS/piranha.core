@@ -16,7 +16,7 @@ namespace Piranha.Data;
 [Serializable]
 public sealed class PostPermission
 {
-    public Guid PostId { get; set; }
+    public string PostId { get; set; }
     public string Permission { get; set; }
 
     [JsonIgnore]

@@ -19,7 +19,7 @@ public sealed class ContentField : ContentFieldBase, ITranslatable
     /// <summary>
     /// Gets/sets the content id.
     /// </summary>
-    public Guid ContentId { get; set; }
+    public string ContentId { get; set; }
 
     /// <summary>
     /// Gets/sets the content.
@@ -38,7 +38,7 @@ public sealed class ContentField : ContentFieldBase, ITranslatable
     /// <param name="parentId">The parent id</param>
     /// <param name="languageId">The language id</param>
     /// <param name="model">The model</param>
-    public void SetTranslation(Guid parentId, Guid languageId, object model)
+    public void SetTranslation(string parentId, string languageId, object model)
     {
         var translation = Translations.FirstOrDefault(t => t.LanguageId == languageId);
 
@@ -59,7 +59,7 @@ public sealed class ContentField : ContentFieldBase, ITranslatable
     /// </summary>
     /// <param name="languageId">The language id</param>
     /// <returns>The translation</returns>
-    public object GetTranslation(Guid languageId)
+    public object GetTranslation(string languageId)
     {
         return Translations.FirstOrDefault(t => t.LanguageId == languageId)?.Value;
     }

@@ -39,7 +39,7 @@ internal class ContentService<TContent, TField, TModelBase> : IContentService<TC
     }
 
     /// <inheritdoc />
-    public async Task<T> TransformAsync<T>(TContent content, Models.ContentTypeBase type, Func<TContent, T, Task> process = null, Guid? languageId = null)
+    public async Task<T> TransformAsync<T>(TContent content, Models.ContentTypeBase type, Func<TContent, T, Task> process = null, string? languageId = null)
         where T : Models.ContentBase, TModelBase
     {
         if (content is Content genericContent)
@@ -164,7 +164,7 @@ internal class ContentService<TContent, TField, TModelBase> : IContentService<TC
     }
 
     /// <inheritdoc />
-    public TContent Transform<T>(T model, Models.ContentTypeBase type, TContent dest = null, Guid? languageId = null)
+    public TContent Transform<T>(T model, Models.ContentTypeBase type, TContent dest = null, string? languageId = null)
         where T : Models.ContentBase, TModelBase
     {
         var content = dest == null ? Activator.CreateInstance<TContent>() : dest;
@@ -172,13 +172,13 @@ internal class ContentService<TContent, TField, TModelBase> : IContentService<TC
         //
         // 1: Map id
         //
-        if (model.Id != Guid.Empty)
+        if (model.Id != string.Empty)
         {
             content.Id = model.Id;
         }
         else
         {
-            content.Id = model.Id = Guid.NewGuid();
+            content.Id = model.Id = Snowflake.NewId();
         }
         content.Created = DateTime.Now;
 
@@ -202,7 +202,7 @@ internal class ContentService<TContent, TField, TModelBase> : IContentService<TC
         {
             if (content is ICategorized categorizedContent)
             {
-                if (type is Models.ContentType contentType)
+                if (type is Models.AeroContentType contentType)
                 {
                     if (contentType.UseCategory)
                     {
@@ -234,7 +234,7 @@ internal class ContentService<TContent, TField, TModelBase> : IContentService<TC
                 }
                 else
                 {
-                    var items = new List<Guid>();
+                    var items = new List<string>();
                     var sortOrder = 0;
                     foreach (var region in GetEnumerable(model, regionKey))
                     {
@@ -317,7 +317,7 @@ internal class ContentService<TContent, TField, TModelBase> : IContentService<TC
     }
 
     /// <inheritdoc />
-    public IList<Extend.Block> TransformBlocks(IEnumerable<ContentBlock> blocks, Guid? languageId)
+    public IList<Extend.Block> TransformBlocks(IEnumerable<ContentBlock> blocks, string? languageId)
     {
         var models = new List<Extend.Block>();
 
@@ -385,7 +385,7 @@ internal class ContentService<TContent, TField, TModelBase> : IContentService<TC
                 {
                     var block = new Block()
                     {
-                        Id = models[n].Id != Guid.Empty ? models[n].Id : Guid.NewGuid(),
+                        Id = models[n].Id != string.Empty ? models[n].Id : Snowflake.NewId(),
                         CLRType = models[n].GetType().FullName,
                         Created = DateTime.Now,
                         LastModified = DateTime.Now
@@ -398,7 +398,7 @@ internal class ContentService<TContent, TField, TModelBase> : IContentService<TC
                             // Only save fields to the database
                             var field = new BlockField()
                             {
-                                Id = Guid.NewGuid(),
+                                Id = Snowflake.NewId(),
                                 BlockId = block.Id,
                                 FieldId = prop.Name,
                                 SortOrder = 0,
@@ -430,7 +430,7 @@ internal class ContentService<TContent, TField, TModelBase> : IContentService<TC
     }
 
     /// <inheritdoc />
-    public IList<ContentBlock> TransformContentBlocks(IList<Extend.Block> models, Guid languageId)
+    public IList<ContentBlock> TransformContentBlocks(IList<Extend.Block> models, string languageId)
     {
         var blocks = new List<ContentBlock>();
 
@@ -443,9 +443,9 @@ internal class ContentService<TContent, TField, TModelBase> : IContentService<TC
                 if (type != null)
                 {
                     // Make sure we generate an id if it's empty
-                    if (models[n].Id == Guid.Empty)
+                    if (models[n].Id == string.Empty)
                     {
-                        models[n].Id = Guid.NewGuid();
+                        models[n].Id = Snowflake.NewId();
                     }
 
                     var block = new ContentBlock()
@@ -463,7 +463,7 @@ internal class ContentService<TContent, TField, TModelBase> : IContentService<TC
                             // Only save fields to the database
                             var field = new ContentBlockField()
                             {
-                                Id = Guid.NewGuid(),
+                                Id = Snowflake.NewId(),
                                 BlockId = block.Id,
                                 FieldId = prop.Name,
                                 SortOrder = 0,
@@ -580,9 +580,9 @@ internal class ContentService<TContent, TField, TModelBase> : IContentService<TC
     /// <param name="regionId">The region id</param>
     /// <param name="sortOrder">The optional sort order</param>
     /// <param name="languageId">The optional language id</param>
-    private IList<Guid> MapRegion(TContent content, object region, Models.ContentTypeRegion regionType, string regionId, int sortOrder = 0, Guid? languageId = null)
+    private IList<string> MapRegion(TContent content, object region, Models.ContentTypeRegion regionType, string regionId, int sortOrder = 0, string? languageId = null)
     {
-        var items = new List<Guid>();
+        var items = new List<string>();
 
         // Now map all of the fields
         for (var n = 0; n < regionType.Fields.Count; n++)
@@ -622,7 +622,7 @@ internal class ContentService<TContent, TField, TModelBase> : IContentService<TC
                     if (field == null)
                     {
                         field = Activator.CreateInstance<TField>();
-                        field.Id = Guid.NewGuid();
+                        field.Id = Snowflake.NewId();
                         field.RegionId = regionId;
                         field.FieldId = fieldDef.Id;
 
@@ -659,7 +659,7 @@ internal class ContentService<TContent, TField, TModelBase> : IContentService<TC
     /// <param name="regionId">The region id</param>
     /// <param name="field">The field</param>
     /// <param name="languageId">The languageId</param>
-    private void SetSimpleValue<T>(T model, string regionId, TField field, Guid? languageId) where T : Models.ContentBase
+    private void SetSimpleValue<T>(T model, string regionId, TField field, string? languageId) where T : Models.ContentBase
     {
         if (model is Models.IDynamicContent dynamicModel)
         {
@@ -685,7 +685,7 @@ internal class ContentService<TContent, TField, TModelBase> : IContentService<TC
     /// <param name="regionId">The region id</param>
     /// <param name="field">The field</param>
     /// <param name="languageId">The languageId</param>
-    private void AddSimpleValue<T>(T model, string regionId, TField field, Guid? languageId) where T : Models.ContentBase
+    private void AddSimpleValue<T>(T model, string regionId, TField field, string? languageId) where T : Models.ContentBase
     {
         if (model is Models.IDynamicContent dynamicModel)
         {
@@ -712,7 +712,7 @@ internal class ContentService<TContent, TField, TModelBase> : IContentService<TC
     /// <param name="fieldId">The field id</param>
     /// <param name="field">The field</param>
     /// <param name="languageId">The languageId</param>
-    private void SetComplexValue<T>(T model, string regionId, string fieldId, TField field, Guid? languageId)
+    private void SetComplexValue<T>(T model, string regionId, string fieldId, TField field, string? languageId)
         where T : Models.ContentBase
     {
         if (model is Models.IDynamicContent dynamicModel)
@@ -749,7 +749,7 @@ internal class ContentService<TContent, TField, TModelBase> : IContentService<TC
     /// <param name="regionId">The region id</param>
     /// <param name="fields">The field</param>
     /// <param name="languageId">The languageId</param>
-    private async Task AddComplexValueAsync<T>(T model, Models.ContentTypeBase contentType, string regionId, IList<TField> fields, Guid? languageId)
+    private async Task AddComplexValueAsync<T>(T model, Models.ContentTypeBase contentType, string regionId, IList<TField> fields, string? languageId)
         where T : Models.ContentBase
     {
         if (fields.Count > 0)
@@ -798,7 +798,7 @@ internal class ContentService<TContent, TField, TModelBase> : IContentService<TC
     /// <param name="field">The page field</param>
     /// <param name="languageId">The optional language id</param>
     /// <returns>The value</returns>
-    private object DeserializeValue(TField field, Guid? languageId)
+    private object DeserializeValue(TField field, string? languageId)
     {
         var type = App.Fields.GetByType(field.CLRType);
 
@@ -819,7 +819,7 @@ internal class ContentService<TContent, TField, TModelBase> : IContentService<TC
     /// <param name="field">The page field</param>
     /// <param name="languageId">The optional language id</param>
     /// <returns>The value</returns>
-    private object DeserializeValue(BlockFieldBase field, Guid? languageId)
+    private object DeserializeValue(BlockFieldBase field, string? languageId)
     {
         var type = App.Fields.GetByType(field.CLRType);
 

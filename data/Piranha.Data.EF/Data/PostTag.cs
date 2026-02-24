@@ -19,12 +19,12 @@ public sealed class PostTag
     /// <summary>
     /// Gets/sets the post id.
     /// </summary>
-    public Guid PostId { get; set; }
+    public string PostId { get; set; }
 
     /// <summary>
     /// Gets/sets the tag id.
     /// </summary>
-    public Guid TagId { get; set; }
+    public string TagId { get; set; }
 
     /// <summary>
     /// Gets/sets the post.

@@ -73,8 +73,10 @@ internal sealed class PageService : IPageService
                 model.EnableComments = config.CommentsEnabledForPages;
                 model.CloseCommentsAfterDays = config.CommentsCloseAfterDays;
             }
+
             return model;
         }
+
         return null;
     }
 
@@ -87,7 +89,7 @@ internal sealed class PageService : IPageService
     {
         var model = await GetByIdAsync<T>(originalPage.Id).ConfigureAwait(false);
 
-        model.Id = Guid.NewGuid();
+        model.Id = Snowflake.NewId().ToString();
         model.OriginalPageId = originalPage.Id;
         model.Title = $"Copy of {model.Title}";
         model.NavigationTitle = null;
@@ -104,7 +106,7 @@ internal sealed class PageService : IPageService
     /// <returns>The standalone page</returns>
     public async Task DetachAsync<T>(T model) where T : Models.PageBase
     {
-        if (!model.OriginalPageId.HasValue)
+        if (string.IsNullOrEmpty(model.OriginalPageId))
         {
             throw new ValidationException("Page is not an copy");
         }
@@ -116,13 +118,13 @@ internal sealed class PageService : IPageService
         // Reset blocks so they are recreated
         foreach (var pageBlock in page.Blocks)
         {
-            pageBlock.Id = Guid.Empty;
+            pageBlock.Id = null;
 
             if (pageBlock is Extend.BlockGroup)
             {
                 foreach (var childBlock in ((Extend.BlockGroup)pageBlock).Items)
                 {
-                    childBlock.Id = Guid.Empty;
+                    childBlock.Id = null;
                 }
             }
         }
@@ -134,7 +136,7 @@ internal sealed class PageService : IPageService
     /// Gets all available models.
     /// </summary>
     /// <returns>The available models</returns>
-    public Task<IEnumerable<DynamicPage>> GetAllAsync(Guid? siteId = null)
+    public Task<IEnumerable<DynamicPage>> GetAllAsync(string siteId = null)
     {
         return GetAllAsync<DynamicPage>(siteId);
     }
@@ -143,7 +145,7 @@ internal sealed class PageService : IPageService
     /// Gets all available models.
     /// </summary>
     /// <returns>The available models</returns>
-    public async Task<IEnumerable<T>> GetAllAsync<T>(Guid? siteId = null) where T : PageBase
+    public async Task<IEnumerable<T>> GetAllAsync<T>(string siteId = null) where T : PageBase
     {
         var models = new List<T>();
         var pages = await _repo.GetAll(await EnsureSiteIdAsync(siteId).ConfigureAwait(false))
@@ -158,6 +160,7 @@ internal sealed class PageService : IPageService
                 models.Add(page);
             }
         }
+
         return models;
     }
 
@@ -166,7 +169,7 @@ internal sealed class PageService : IPageService
     /// </summary>
     /// <param name="siteId">The optional site id</param>
     /// <returns>The pages</returns>
-    public Task<IEnumerable<DynamicPage>> GetAllBlogsAsync(Guid? siteId = null)
+    public Task<IEnumerable<DynamicPage>> GetAllBlogsAsync(string siteId = null)
     {
         return GetAllBlogsAsync<DynamicPage>(siteId);
     }
@@ -176,7 +179,7 @@ internal sealed class PageService : IPageService
     /// </summary>
     /// <param name="siteId">The optional site id</param>
     /// <returns>The pages</returns>
-    public async Task<IEnumerable<T>> GetAllBlogsAsync<T>(Guid? siteId = null) where T : Models.PageBase
+    public async Task<IEnumerable<T>> GetAllBlogsAsync<T>(string siteId = null) where T : Models.PageBase
     {
         var models = new List<T>();
         var pages = await _repo.GetAllBlogs(await EnsureSiteIdAsync(siteId).ConfigureAwait(false))
@@ -191,6 +194,7 @@ internal sealed class PageService : IPageService
                 models.Add(page);
             }
         }
+
         return models;
     }
 
@@ -200,7 +204,7 @@ internal sealed class PageService : IPageService
     /// </summary>
     /// <param name="siteId">The unique site id</param>
     /// <returns>The pages that have a draft</returns>
-    public async Task<IEnumerable<Guid>> GetAllDraftsAsync(Guid? siteId = null)
+    public async Task<IEnumerable<string>> GetAllDraftsAsync(string siteId = null)
     {
         return await _repo.GetAllDrafts(await EnsureSiteIdAsync(siteId).ConfigureAwait(false));
     }
@@ -214,7 +218,7 @@ internal sealed class PageService : IPageService
     /// <param name="page">The optional page number</param>
     /// <param name="pageSize">The optional page size</param>
     /// <returns>The available comments</returns>
-    public Task<IEnumerable<Comment>> GetAllCommentsAsync(Guid? pageId = null, bool onlyApproved = true,
+    public Task<IEnumerable<Comment>> GetAllCommentsAsync(string pageId = null, bool onlyApproved = true,
         int? page = null, int? pageSize = null)
     {
         return GetAllCommentsAsync(pageId, onlyApproved, false, page, pageSize);
@@ -228,7 +232,7 @@ internal sealed class PageService : IPageService
     /// <param name="page">The optional page number</param>
     /// <param name="pageSize">The optional page size</param>
     /// <returns>The available comments</returns>
-    public Task<IEnumerable<Comment>> GetAllPendingCommentsAsync(Guid? pageId = null,
+    public Task<IEnumerable<Comment>> GetAllPendingCommentsAsync(string pageId = null,
         int? page = null, int? pageSize = null)
     {
         return GetAllCommentsAsync(pageId, false, true, page, pageSize);
@@ -239,7 +243,7 @@ internal sealed class PageService : IPageService
     /// </summary>
     /// <param name="siteId">The optional site id</param>
     /// <returns>The page model</returns>
-    public Task<DynamicPage> GetStartpageAsync(Guid? siteId = null)
+    public Task<DynamicPage> GetStartpageAsync(string siteId = null)
     {
         return GetStartpageAsync<DynamicPage>(siteId);
     }
@@ -250,7 +254,7 @@ internal sealed class PageService : IPageService
     /// <typeparam name="T">The model type</typeparam>
     /// <param name="siteId">The optional site id</param>
     /// <returns>The page model</returns>
-    public async Task<T> GetStartpageAsync<T>(Guid? siteId = null) where T : Models.PageBase
+    public async Task<T> GetStartpageAsync<T>(string siteId = null) where T : Models.PageBase
     {
         siteId = await EnsureSiteIdAsync(siteId).ConfigureAwait(false);
         PageBase model = null;
@@ -259,14 +263,14 @@ internal sealed class PageService : IPageService
         {
             if (_cache != null)
             {
-                model = await _cache.GetAsync<PageInfo>($"PageInfo_{siteId.Value}").ConfigureAwait(false);
+                model = await _cache.GetAsync<PageInfo>($"PageInfo_{siteId}").ConfigureAwait(false);
             }
         }
         else if (!typeof(DynamicPage).IsAssignableFrom(typeof(T)))
         {
             if (_cache != null)
             {
-                model = await _cache.GetAsync<PageBase>($"Page_{siteId.Value}").ConfigureAwait(false);
+                model = await _cache.GetAsync<PageBase>($"Page_{siteId}").ConfigureAwait(false);
             }
 
             if (model != null)
@@ -277,7 +281,7 @@ internal sealed class PageService : IPageService
 
         if (model == null)
         {
-            model = await _repo.GetStartpage<T>(siteId.Value).ConfigureAwait(false);
+            model = await _repo.GetStartpage<T>(siteId).ConfigureAwait(false);
 
             await OnLoadAsync(model).ConfigureAwait(false);
         }
@@ -286,6 +290,7 @@ internal sealed class PageService : IPageService
         {
             return await MapOriginalAsync((T)model).ConfigureAwait(false);
         }
+
         return null;
     }
 
@@ -294,19 +299,9 @@ internal sealed class PageService : IPageService
     /// </summary>
     /// <param name="id">The unique id</param>
     /// <returns>The page model</returns>
-    public Task<DynamicPage> GetByIdAsync(Guid id)
+    public Task<DynamicPage> GetByIdAsync(string id)
     {
         return GetByIdAsync<DynamicPage>(id);
-    }
-
-    /// <summary>
-    /// Gets the model with the specified id.
-    /// </summary>
-    /// <param name="id">The unique id</param>
-    /// <returns>The model, or null if it doesn't exist</returns>
-    public async Task<T> GetByIdAsync<T>(Guid id) where T : PageBase
-    {
-        return (await GetByIdsAsync<T>(id)).FirstOrDefault();
     }
 
     /// <summary>
@@ -314,10 +309,10 @@ internal sealed class PageService : IPageService
     /// </summary>
     /// <param name="ids">The unique id's</param>
     /// <returns>The page models</returns>
-    public async Task<IEnumerable<T>> GetByIdsAsync<T>(params Guid[] ids) where T : PageBase
+    public async Task<IEnumerable<T>> GetByIdsAsync<T>(params string[] ids) where T : PageBase
     {
         var ret = new List<T>();
-        var notCached = new List<Guid>();
+        var notCached = new List<string>();
 
         // Try to get the requested models from cache
         foreach (var id in ids)
@@ -328,14 +323,14 @@ internal sealed class PageService : IPageService
             {
                 if (_cache != null)
                 {
-                    model = await _cache.GetAsync<PageInfo>($"PageInfo_{id.ToString()}").ConfigureAwait(false);
+                    model = await _cache.GetAsync<PageInfo>($"PageInfo_{id}").ConfigureAwait(false);
                 }
             }
             else if (!typeof(DynamicPage).IsAssignableFrom(typeof(T)))
             {
                 if (_cache != null)
                 {
-                    model = await _cache.GetAsync<PageBase>(id.ToString()).ConfigureAwait(false);
+                    model = await _cache.GetAsync<PageBase>(id).ConfigureAwait(false);
                 }
 
                 if (model != null)
@@ -378,7 +373,19 @@ internal sealed class PageService : IPageService
                 sorted.Add(model);
             }
         }
+
         return sorted;
+    }
+
+
+    /// <summary>
+    /// Gets the model with the specified id.
+    /// </summary>
+    /// <param name="id">The unique id</param>
+    /// <returns>The model, or null if it doesn't exist</returns>
+    public async Task<T> GetByIdAsync<T>(string id) where T : PageBase
+    {
+        return (await GetByIdsAsync<T>(id)).FirstOrDefault();
     }
 
 
@@ -388,7 +395,7 @@ internal sealed class PageService : IPageService
     /// <param name="slug">The unique slug</param>
     /// <param name="siteId">The optional site id</param>
     /// <returns>The page model</returns>
-    public Task<DynamicPage> GetBySlugAsync(string slug, Guid? siteId = null)
+    public Task<DynamicPage> GetBySlugAsync(string slug, string siteId = null)
     {
         return GetBySlugAsync<DynamicPage>(slug, siteId);
     }
@@ -400,28 +407,30 @@ internal sealed class PageService : IPageService
     /// <param name="slug">The unique slug</param>
     /// <param name="siteId">The optional site id</param>
     /// <returns>The page model</returns>
-    public async Task<T> GetBySlugAsync<T>(string slug, Guid? siteId = null) where T : Models.PageBase
+    public async Task<T> GetBySlugAsync<T>(string slug, string siteId = null) where T : Models.PageBase
     {
         siteId = await EnsureSiteIdAsync(siteId).ConfigureAwait(false);
         PageBase model = null;
 
         // Lets see if we can resolve the slug from cache
-        var pageId = _cache == null ? null : await _cache.GetAsync<Guid?>($"PageId_{siteId}_{slug}").ConfigureAwait(false);
+        var pageId = _cache == null
+            ? null
+            : await _cache.GetAsync<string>($"PageId_{siteId}_{slug}").ConfigureAwait(false);
 
-        if (pageId.HasValue)
+        if (!string.IsNullOrEmpty(pageId))
         {
             if (typeof(T) == typeof(Models.PageInfo))
             {
                 if (_cache != null)
                 {
-                    model = await _cache.GetAsync<PageInfo>($"PageInfo_{pageId.ToString()}").ConfigureAwait(false);
+                    model = await _cache.GetAsync<PageInfo>($"PageInfo_{pageId}").ConfigureAwait(false);
                 }
             }
             else if (!typeof(DynamicPage).IsAssignableFrom(typeof(T)))
             {
                 if (_cache != null)
                 {
-                    model = await _cache.GetAsync<PageBase>(pageId.ToString()).ConfigureAwait(false);
+                    model = await _cache.GetAsync<PageBase>(pageId).ConfigureAwait(false);
                 }
 
                 if (model != null)
@@ -433,7 +442,7 @@ internal sealed class PageService : IPageService
 
         if (model == null)
         {
-            model = await _repo.GetBySlug<T>(slug, siteId.Value).ConfigureAwait(false);
+            model = await _repo.GetBySlug<T>(slug, siteId).ConfigureAwait(false);
 
             await OnLoadAsync(model).ConfigureAwait(false);
         }
@@ -442,6 +451,7 @@ internal sealed class PageService : IPageService
         {
             return await MapOriginalAsync((T)model).ConfigureAwait(false);
         }
+
         return null;
     }
 
@@ -451,22 +461,25 @@ internal sealed class PageService : IPageService
     /// <param name="slug">The unique slug</param>
     /// <param name="siteId">The optional page id</param>
     /// <returns>The id</returns>
-    public async Task<Guid?> GetIdBySlugAsync(string slug, Guid? siteId = null)
+    public async Task<string> GetIdBySlugAsync(string slug, string siteId = null)
     {
         siteId = await EnsureSiteIdAsync(siteId).ConfigureAwait(false);
 
         // Lets see if we can resolve the slug from cache
-        var pageId = _cache == null ? null : await _cache.GetAsync<Guid?>($"PageId_{siteId}_{slug}").ConfigureAwait(false);
+        var pageId = _cache == null
+            ? null
+            : await _cache.GetAsync<string>($"PageId_{siteId}_{slug}").ConfigureAwait(false);
 
-        if (!pageId.HasValue)
+        if (string.IsNullOrEmpty(pageId))
         {
-            var info = await _repo.GetBySlug<PageInfo>(slug, siteId.Value).ConfigureAwait(false);
+            var info = await _repo.GetBySlug<PageInfo>(slug, siteId).ConfigureAwait(false);
 
             if (info != null)
             {
                 pageId = info.Id;
             }
         }
+
         return pageId;
     }
 
@@ -475,7 +488,7 @@ internal sealed class PageService : IPageService
     /// </summary>
     /// <param name="id">The unique id</param>
     /// <returns>The draft, or null if no draft exists</returns>
-    public Task<DynamicPage> GetDraftByIdAsync(Guid id)
+    public Task<DynamicPage> GetDraftByIdAsync(string id)
     {
         return GetDraftByIdAsync<DynamicPage>(id);
     }
@@ -486,7 +499,7 @@ internal sealed class PageService : IPageService
     /// <typeparam name="T">The model type</typeparam>
     /// <param name="id">The unique id</param>
     /// <returns>The draft, or null if no draft exists</returns>
-    public async Task<T> GetDraftByIdAsync<T>(Guid id) where T : PageBase
+    public async Task<T> GetDraftByIdAsync<T>(string id) where T : PageBase
     {
         var draft = await _repo.GetDraftById<T>(id).ConfigureAwait(false);
 
@@ -502,7 +515,7 @@ internal sealed class PageService : IPageService
     /// <param name="model">The page to move</param>
     /// <param name="parentId">The new parent id</param>
     /// <param name="sortOrder">The new sort order</param>
-    public async Task MoveAsync<T>(T model, Guid? parentId, int sortOrder) where T : Models.PageBase
+    public async Task MoveAsync<T>(T model, string parentId, int sortOrder) where T : Models.PageBase
     {
         // Call hooks & save
         App.Hooks.OnBeforeSave<PageBase>(model);
@@ -524,6 +537,7 @@ internal sealed class PageService : IPageService
                 }
             }
         }
+
         await _siteService.InvalidateSitemapAsync(model.SiteId).ConfigureAwait(false);
     }
 
@@ -532,7 +546,7 @@ internal sealed class PageService : IPageService
     /// </summary>
     /// <param name="id">The comment id</param>
     /// <returns>The model</returns>
-    public Task<Comment> GetCommentByIdAsync(Guid id)
+    public Task<Comment> GetCommentByIdAsync(string id)
     {
         return _repo.GetCommentById(id);
     }
@@ -564,7 +578,7 @@ internal sealed class PageService : IPageService
     /// <param name="page">The optional page number</param>
     /// <param name="pageSize">The optional page size</param>
     /// <returns>The available comments</returns>
-    private async Task<IEnumerable<Comment>> GetAllCommentsAsync(Guid? pageId = null, bool onlyApproved = true,
+    private async Task<IEnumerable<Comment>> GetAllCommentsAsync(string pageId = null, bool onlyApproved = true,
         bool onlyPending = false, int? page = null, int? pageSize = null)
     {
         // Ensure page number
@@ -591,7 +605,8 @@ internal sealed class PageService : IPageService
         }
         else
         {
-            comments = await _repo.GetAllComments(pageId, onlyApproved, page.Value, pageSize.Value).ConfigureAwait(false);
+            comments = await _repo.GetAllComments(pageId, onlyApproved, page.Value, pageSize.Value)
+                .ConfigureAwait(false);
         }
 
         // Execute hook
@@ -599,6 +614,7 @@ internal sealed class PageService : IPageService
         {
             App.Hooks.OnLoad<Comment>(comment);
         }
+
         return comments;
     }
 
@@ -610,9 +626,9 @@ internal sealed class PageService : IPageService
     private async Task SaveAsync<T>(T model, bool isDraft) where T : PageBase
     {
         // Ensure id
-        if (model.Id == Guid.Empty)
+        if (string.IsNullOrEmpty(model.Id))
         {
-            model.Id = Guid.NewGuid();
+            model.Id = Snowflake.NewId().ToString();
         }
 
         // Validate model
@@ -641,16 +657,19 @@ internal sealed class PageService : IPageService
             // Check if we should generate hierarchical slugs
             using (var config = new Config(_paramService))
             {
-                if (config.HierarchicalPageSlugs && model.ParentId.HasValue)
+                if (config.HierarchicalPageSlugs && !string.IsNullOrEmpty(model.ParentId))
                 {
-                    var parentSlug = (await GetByIdAsync<PageInfo>(model.ParentId.Value).ConfigureAwait(false))?.Slug;
+                    var parentSlug = (await GetByIdAsync<PageInfo>(model.ParentId).ConfigureAwait(false))?.Slug;
 
                     if (!string.IsNullOrWhiteSpace(parentSlug))
                     {
                         prefix = parentSlug + "/";
                     }
                 }
-                model.Slug = prefix + Utils.GenerateSlug(!string.IsNullOrWhiteSpace(model.NavigationTitle) ? model.NavigationTitle : model.Title);
+
+                model.Slug = prefix + Utils.GenerateSlug(!string.IsNullOrWhiteSpace(model.NavigationTitle)
+                    ? model.NavigationTitle
+                    : model.Title);
             }
         }
         else
@@ -662,7 +681,8 @@ internal sealed class PageService : IPageService
         // after removing unwanted characters
         if (string.IsNullOrWhiteSpace(model.Slug))
         {
-            throw new ValidationException("The generated slug is empty as the title only contains special characters, please specify a slug to save the page.");
+            throw new ValidationException(
+                "The generated slug is empty as the title only contains special characters, please specify a slug to save the page.");
         }
 
         // Ensure that the slug is unique
@@ -676,7 +696,7 @@ internal sealed class PageService : IPageService
         var current = await _repo.GetById<PageInfo>(model.Id).ConfigureAwait(false);
         var changeState = IsPublished(current) != IsPublished(model);
 
-        IEnumerable<Guid> affected = new Guid[0];
+        IEnumerable<string> affected = new string[0];
 
         // Call before save hook
         App.Hooks.OnBeforeSave<PageBase>(model);
@@ -749,7 +769,7 @@ internal sealed class PageService : IPageService
     /// </summary>
     /// <param name="pageId">The unique page id</param>
     /// <param name="model">The comment model</param>
-    public Task SaveCommentAsync(Guid pageId, PageComment model)
+    public Task SaveCommentAsync(string pageId, PageComment model)
     {
         return SaveCommentAsync(pageId, model, false);
     }
@@ -759,7 +779,7 @@ internal sealed class PageService : IPageService
     /// </summary>
     /// <param name="pageId">The unique page id</param>
     /// <param name="model">The comment model</param>
-    public Task SaveCommentAndVerifyAsync(Guid pageId, PageComment model)
+    public Task SaveCommentAndVerifyAsync(string pageId, PageComment model)
     {
         return SaveCommentAsync(pageId, model, true);
     }
@@ -770,7 +790,7 @@ internal sealed class PageService : IPageService
     /// <param name="pageId">The unique page id</param>
     /// <param name="model">The comment model</param>
     /// <param name="verify">If comment verification should be applied</param>
-    private async Task SaveCommentAsync(Guid pageId, Comment model, bool verify)
+    private async Task SaveCommentAsync(string pageId, Comment model, bool verify)
     {
         // Make sure we have a post
         var page = await GetByIdAsync<PageInfo>(pageId).ConfigureAwait(false);
@@ -778,9 +798,9 @@ internal sealed class PageService : IPageService
         if (page != null)
         {
             // Ensure id
-            if (model.Id == Guid.Empty)
+            if (string.IsNullOrEmpty(model.Id))
             {
-                model.Id = Guid.NewGuid();
+                model.Id = Snowflake.NewId().ToString();
             }
 
             // Ensure created date
@@ -790,7 +810,7 @@ internal sealed class PageService : IPageService
             }
 
             // Ensure content id
-            if (model.ContentId == Guid.Empty)
+            if (string.IsNullOrEmpty(model.ContentId))
             {
                 model.ContentId = pageId;
             }
@@ -806,6 +826,7 @@ internal sealed class PageService : IPageService
                 {
                     model.IsApproved = config.CommentsApprove;
                 }
+
                 App.Hooks.OnValidate<Comment>(model);
             }
 
@@ -819,7 +840,7 @@ internal sealed class PageService : IPageService
         }
         else
         {
-            throw new ArgumentException($"Could not find page with id {pageId.ToString()}");
+            throw new ArgumentException($"Could not find page with id {pageId}");
         }
     }
 
@@ -827,7 +848,7 @@ internal sealed class PageService : IPageService
     /// Deletes the model with the specified id.
     /// </summary>
     /// <param name="id">The unique id</param>
-    public async Task DeleteAsync(Guid id)
+    public async Task DeleteAsync(string id)
     {
         var model = await GetByIdAsync<PageInfo>(id).ConfigureAwait(false);
 
@@ -864,7 +885,7 @@ internal sealed class PageService : IPageService
     /// Deletes the comment with the specified id.
     /// </summary>
     /// <param name="id">The unique id</param>
-    public async Task DeleteCommentAsync(Guid id)
+    public async Task DeleteCommentAsync(string id)
     {
         var model = await GetCommentByIdAsync(id).ConfigureAwait(false);
 
@@ -894,7 +915,7 @@ internal sealed class PageService : IPageService
         }
         else
         {
-            throw new ArgumentException($"Could not find page with id {model.ContentId.ToString()}");
+            throw new ArgumentException($"Could not find page with id {model.ContentId}");
         }
     }
 
@@ -907,12 +928,12 @@ internal sealed class PageService : IPageService
     /// <returns>The new merged model</returns>
     private async Task<T> MapOriginalAsync<T>(T model) where T : PageBase
     {
-        if (model == null || !model.OriginalPageId.HasValue)
+        if (model == null || string.IsNullOrEmpty(model.OriginalPageId))
         {
             return model;
         }
 
-        var original = await GetByIdAsync<T>(model.OriginalPageId.Value).ConfigureAwait(false);
+        var original = await GetByIdAsync<T>(model.OriginalPageId).ConfigureAwait(false);
 
         if (original != null)
         {
@@ -951,6 +972,7 @@ internal sealed class PageService : IPageService
 
             return copy;
         }
+
         return null;
     }
 
@@ -960,9 +982,9 @@ internal sealed class PageService : IPageService
     /// </summary>
     /// <param name="siteId">The optional site id</param>
     /// <returns>The site id</returns>
-    private async Task<Guid> EnsureSiteIdAsync(Guid? siteId)
+    private async Task<string> EnsureSiteIdAsync(string siteId)
     {
-        if (!siteId.HasValue)
+        if (string.IsNullOrEmpty(siteId))
         {
             var site = await _siteService.GetDefaultAsync().ConfigureAwait(false);
 
@@ -971,7 +993,8 @@ internal sealed class PageService : IPageService
                 return site.Id;
             }
         }
-        return siteId.Value;
+
+        return siteId;
     }
 
     /// <summary>
@@ -986,7 +1009,8 @@ internal sealed class PageService : IPageService
             // Initialize model
             if (model is IDynamicContent dynamicModel)
             {
-                await _factory.InitDynamicAsync(dynamicModel, App.PageTypes.GetById(model.TypeId)).ConfigureAwait(false);
+                await _factory.InitDynamicAsync(dynamicModel, App.PageTypes.GetById(model.TypeId))
+                    .ConfigureAwait(false);
             }
             else
             {
@@ -999,7 +1023,7 @@ internal sealed class PageService : IPageService
                 model.PrimaryImage = new Extend.Fields.ImageField();
             }
 
-            if (model.PrimaryImage.Id.HasValue)
+            if (!string.IsNullOrEmpty(model.PrimaryImage.Id))
             {
                 await _factory.InitFieldAsync(model.PrimaryImage).ConfigureAwait(false);
             }
@@ -1010,7 +1034,7 @@ internal sealed class PageService : IPageService
                 model.OgImage = new Extend.Fields.ImageField();
             }
 
-            if (model.OgImage.Id.HasValue)
+            if (!string.IsNullOrEmpty(model.OgImage.Id))
             {
                 await _factory.InitFieldAsync(model.OgImage).ConfigureAwait(false);
             }
@@ -1022,14 +1046,15 @@ internal sealed class PageService : IPageService
             {
                 if (model is PageInfo)
                 {
-                    await _cache.SetAsync($"PageInfo_{model.Id.ToString()}", model).ConfigureAwait(false);
+                    await _cache.SetAsync($"PageInfo_{model.Id}", model).ConfigureAwait(false);
                 }
                 else
                 {
-                    await _cache.SetAsync(model.Id.ToString(), model).ConfigureAwait(false);
+                    await _cache.SetAsync(model.Id, model).ConfigureAwait(false);
                 }
+
                 await _cache.SetAsync($"PageId_{model.SiteId}_{model.Slug}", model.Id).ConfigureAwait(false);
-                if (!model.ParentId.HasValue && model.SortOrder == 0)
+                if (string.IsNullOrEmpty(model.ParentId) && model.SortOrder == 0)
                 {
                     if (model is PageInfo)
                     {
@@ -1052,18 +1077,18 @@ internal sealed class PageService : IPageService
     {
         if (_cache != null)
         {
-            await _cache.RemoveAsync(model.Id.ToString()).ConfigureAwait(false);
-            await _cache.RemoveAsync($"PageInfo_{model.Id.ToString()}").ConfigureAwait(false);
+            await _cache.RemoveAsync(model.Id).ConfigureAwait(false);
+            await _cache.RemoveAsync($"PageInfo_{model.Id}").ConfigureAwait(false);
             await _cache.RemoveAsync($"PageId_{model.SiteId}_{model.Slug}").ConfigureAwait(false);
 
-            if (!model.ParentId.HasValue && model.SortOrder == 0)
+            if (string.IsNullOrEmpty(model.ParentId) && model.SortOrder == 0)
             {
                 await _cache.RemoveAsync($"Page_{model.SiteId}").ConfigureAwait(false);
                 await _cache.RemoveAsync($"PageInfo_{model.SiteId}").ConfigureAwait(false);
             }
 
             // Remove the site & clear the sitemap from cache
-            await _siteService.RemoveSitemapFromCacheAsync(model.SiteId).ConfigureAwait(false);
+            await _siteService.RemoveSitemapFromCacheAsync(model.SiteId.ToString());
         }
     }
 

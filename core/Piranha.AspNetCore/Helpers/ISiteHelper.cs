@@ -22,12 +22,12 @@ public interface ISiteHelper
     /// <summary>
     /// Gets/sets the id of the currently requested site.
     /// </summary>
-    Guid Id { get; set; }
+    string Id { get; set; }
 
     /// <summary>
     /// Gets/sets the language id of the currently requested site.
     /// </summary>
-    Guid LanguageId { get; set; }
+    string LanguageId { get; set; }
 
     /// <summary>
     /// Gets/sets the optional culture of the requested site.

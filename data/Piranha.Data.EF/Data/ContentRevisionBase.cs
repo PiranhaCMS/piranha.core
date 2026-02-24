@@ -13,13 +13,8 @@ using System.Text.Json;
 
 namespace Piranha.Data;
 
-public abstract class ContentRevisionBase
+public abstract class ContentRevisionBase : Entity
 {
-    /// <summary>
-    /// Gets/sets the unique id.
-    /// </summary>
-    public Guid Id { get; set; }
-
     /// <summary>
     /// Gets/sets the data of the revision serialized
     /// as JSON.

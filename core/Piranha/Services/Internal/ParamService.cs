@@ -49,9 +49,9 @@ internal sealed class ParamService : IParamService
     /// </summary>
     /// <param name="id">The unique id</param>
     /// <returns>The model, or null if it doesn't exist</returns>
-    public async Task<Param> GetByIdAsync(Guid id)
+    public async Task<Param> GetByIdAsync(string id)
     {
-        var model = _cache == null ? null : await _cache.GetAsync<Param>(id.ToString()).ConfigureAwait(false);
+        var model = _cache == null ? null : await _cache.GetAsync<Param>(id).ConfigureAwait(false);
 
         if (model == null)
         {
@@ -69,12 +69,12 @@ internal sealed class ParamService : IParamService
     /// <returns>The model</returns>
     public async Task<Param> GetByKeyAsync(string key)
     {
-        var id = _cache == null ? null : await _cache.GetAsync<Guid?>($"ParamKey_{key}").ConfigureAwait(false);
+        var id = _cache == null ? null : await _cache.GetAsync<string>($"ParamKey_{key}").ConfigureAwait(false);
         Param model = null;
 
-        if (id.HasValue)
+        if (!string.IsNullOrEmpty(id))
         {
-            model = await GetByIdAsync(id.Value).ConfigureAwait(false);
+            model = await GetByIdAsync(id).ConfigureAwait(false);
         }
         else
         {
@@ -93,9 +93,9 @@ internal sealed class ParamService : IParamService
     public async Task SaveAsync(Param model)
     {
         // Ensure id
-        if (model.Id == Guid.Empty)
+        if (string.IsNullOrEmpty(model.Id))
         {
-            model.Id = Guid.NewGuid();
+            model.Id = Snowflake.NewId().ToString();
         }
 
         // Validate model
@@ -122,7 +122,7 @@ internal sealed class ParamService : IParamService
     /// Deletes the model with the specified id.
     /// </summary>
     /// <param name="id">The unique id</param>
-    public async Task DeleteAsync(Guid id)
+    public async Task DeleteAsync(string id)
     {
         var model = await GetByIdAsync(id).ConfigureAwait(false);
 
@@ -159,7 +159,7 @@ internal sealed class ParamService : IParamService
 
             if (_cache != null)
             {
-                await _cache.SetAsync(model.Id.ToString(), model).ConfigureAwait(false);
+                await _cache.SetAsync(model.Id, model).ConfigureAwait(false);
                 await _cache.SetAsync($"ParamKey_{model.Key}", model.Id).ConfigureAwait(false);
             }
         }
@@ -173,7 +173,7 @@ internal sealed class ParamService : IParamService
     {
         if (_cache != null)
         {
-            await _cache.RemoveAsync(model.Id.ToString()).ConfigureAwait(false);
+            await _cache.RemoveAsync(model.Id).ConfigureAwait(false);
             await _cache.RemoveAsync($"ParamKey_{model.Key}").ConfigureAwait(false);
         }
     }

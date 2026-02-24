@@ -19,7 +19,7 @@ internal sealed class AliasService : IAliasService
 {
     internal class AliasUrlCacheEntry
     {
-        public Guid Id { get; set; }
+        public string Id { get; set; }
         public string AliasUrl { get; set; }
     }
 
@@ -49,9 +49,9 @@ internal sealed class AliasService : IAliasService
     /// </summary>
     /// <param name="siteId">The optional site id</param>
     /// <returns>The available models</returns>
-    public async Task<IEnumerable<Alias>> GetAllAsync(Guid? siteId = null)
+    public async Task<IEnumerable<Alias>> GetAllAsync(string siteId = null)
     {
-        if (!siteId.HasValue)
+        if (string.IsNullOrEmpty(siteId))
         {
             var site = await _siteService.GetDefaultAsync().ConfigureAwait(false);
             if (site != null)
@@ -60,10 +60,11 @@ internal sealed class AliasService : IAliasService
             }
         }
 
-        if (siteId.HasValue)
+        if (!string.IsNullOrEmpty(siteId))
         {
-            return await _repo.GetAll(siteId.Value).ConfigureAwait(false);
+            return await _repo.GetAll(siteId).ConfigureAwait(false);
         }
+
         return null;
     }
 
@@ -72,9 +73,9 @@ internal sealed class AliasService : IAliasService
     /// </summary>
     /// <param name="id">The unique id</param>
     /// <returns>The model, or null if it doesn't exist</returns>
-    public async Task<Alias> GetByIdAsync(Guid id)
+    public async Task<Alias> GetByIdAsync(string id)
     {
-        var model = _cache == null ? null : await _cache.GetAsync<Alias>(id.ToString()).ConfigureAwait(false);
+        var model = _cache == null ? null : await _cache.GetAsync<Alias>(id).ConfigureAwait(false);
 
         if (model == null)
         {
@@ -82,6 +83,7 @@ internal sealed class AliasService : IAliasService
 
             await OnLoad(model).ConfigureAwait(false);
         }
+
         return model;
     }
 
@@ -91,9 +93,9 @@ internal sealed class AliasService : IAliasService
     /// <param name="url">The unique url</param>
     /// <param name="siteId">The optional site id</param>
     /// <returns>The model</returns>
-    public async Task<Alias> GetByAliasUrlAsync(string url, Guid? siteId = null)
+    public async Task<Alias> GetByAliasUrlAsync(string url, string siteId = null)
     {
-        if (!siteId.HasValue)
+        if (string.IsNullOrEmpty(siteId))
         {
             var site = await _siteService.GetDefaultAsync().ConfigureAwait(false);
             if (site != null)
@@ -102,13 +104,14 @@ internal sealed class AliasService : IAliasService
             }
         }
 
-        if (siteId.HasValue)
+        if (!string.IsNullOrEmpty(siteId))
         {
-            var aliasUrls = await GetAliasUrls(siteId.Value).ConfigureAwait(false);
+            var aliasUrls = await GetAliasUrls(siteId).ConfigureAwait(false);
 
             if (aliasUrls != null)
             {
-                var aliasUrl = aliasUrls.FirstOrDefault(x => x.AliasUrl.Equals(url, StringComparison.InvariantCultureIgnoreCase));
+                var aliasUrl = aliasUrls.FirstOrDefault(x =>
+                    x.AliasUrl.Equals(url, StringComparison.InvariantCultureIgnoreCase));
 
                 if (aliasUrl != null)
                 {
@@ -117,9 +120,10 @@ internal sealed class AliasService : IAliasService
             }
             else
             {
-                return await _repo.GetByAliasUrl(url, siteId.Value);
+                return await _repo.GetByAliasUrl(url, siteId);
             }
         }
+
         return null;
     }
 
@@ -129,9 +133,9 @@ internal sealed class AliasService : IAliasService
     /// <param name="url">The unique url</param>
     /// <param name="siteId">The optional site id</param>
     /// <returns>The model</returns>
-    public async Task<IEnumerable<Alias>> GetByRedirectUrlAsync(string url, Guid? siteId = null)
+    public async Task<IEnumerable<Alias>> GetByRedirectUrlAsync(string url, string siteId = null)
     {
-        if (!siteId.HasValue)
+        if (string.IsNullOrEmpty(siteId))
         {
             var site = await _siteService.GetDefaultAsync().ConfigureAwait(false);
             if (site != null)
@@ -139,7 +143,8 @@ internal sealed class AliasService : IAliasService
                 siteId = site.Id;
             }
         }
-        return await _repo.GetByRedirectUrl(url, siteId.Value).ConfigureAwait(false);
+
+        return await _repo.GetByRedirectUrl(url, siteId).ConfigureAwait(false);
     }
 
     /// <summary>
@@ -150,9 +155,9 @@ internal sealed class AliasService : IAliasService
     public async Task SaveAsync(Alias model)
     {
         // Ensure id
-        if (model.Id == Guid.Empty)
+        if (string.IsNullOrEmpty(model.Id))
         {
-            model.Id = Guid.NewGuid();
+            model.Id = Snowflake.NewId().ToString();
         }
 
         // Validate model
@@ -164,7 +169,9 @@ internal sealed class AliasService : IAliasService
         {
             model.AliasUrl = "/" + model.AliasUrl;
         }
-        if (!model.RedirectUrl.StartsWith("/") && !model.RedirectUrl.StartsWith("http://") && !model.RedirectUrl.StartsWith("https://"))
+
+        if (!model.RedirectUrl.StartsWith("/") && !model.RedirectUrl.StartsWith("http://") &&
+            !model.RedirectUrl.StartsWith("https://"))
         {
             model.RedirectUrl = "/" + model.RedirectUrl;
         }
@@ -189,7 +196,7 @@ internal sealed class AliasService : IAliasService
     /// Deletes the model with the specified id.
     /// </summary>
     /// <param name="id">The unique id</param>
-    public async Task DeleteAsync(Guid id)
+    public async Task DeleteAsync(string id)
     {
         var model = await GetByIdAsync(id).ConfigureAwait(false);
 
@@ -226,7 +233,7 @@ internal sealed class AliasService : IAliasService
 
             if (_cache != null)
             {
-                return _cache.SetAsync(model.Id.ToString(), model);
+                return _cache.SetAsync(model.Id, model);
             }
         }
 
@@ -241,7 +248,7 @@ internal sealed class AliasService : IAliasService
     {
         if (_cache != null)
         {
-            await _cache.RemoveAsync(model.Id.ToString()).ConfigureAwait(false);
+            await _cache.RemoveAsync(model.Id).ConfigureAwait(false);
             await _cache.RemoveAsync($"Piranha_AliasUrls_{model.SiteId}").ConfigureAwait(false);
         }
     }
@@ -249,11 +256,12 @@ internal sealed class AliasService : IAliasService
     /// <summary>
     /// Gets the aliases for the specified site.
     /// </summary>
-    private async Task<IEnumerable<AliasUrlCacheEntry>> GetAliasUrls(Guid siteId)
+    private async Task<IEnumerable<AliasUrlCacheEntry>> GetAliasUrls(string siteId)
     {
         if (_cache != null)
         {
-            var aliasUrls = await _cache.GetAsync<IEnumerable<AliasUrlCacheEntry>>($"Piranha_AliasUrls_{siteId}").ConfigureAwait(false);
+            var aliasUrls = await _cache.GetAsync<IEnumerable<AliasUrlCacheEntry>>($"Piranha_AliasUrls_{siteId}")
+                .ConfigureAwait(false);
 
             if (aliasUrls == null)
             {
@@ -266,9 +274,10 @@ internal sealed class AliasService : IAliasService
 
                 await _cache.SetAsync($"Piranha_AliasUrls_{siteId}", aliasUrls).ConfigureAwait(false);
             }
+
             return aliasUrls;
         }
+
         return null;
     }
-
 }

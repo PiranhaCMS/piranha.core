@@ -16,7 +16,7 @@ public sealed class PageComment : Comment
     /// <summary>
     /// Gets/sets the page id.
     /// </summary>
-    public Guid PageId { get; set; }
+    public string PageId { get; set; }
 
     /// <summary>
     /// Gets/sets the page.

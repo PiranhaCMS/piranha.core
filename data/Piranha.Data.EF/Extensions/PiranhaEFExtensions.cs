@@ -30,8 +30,7 @@ public static class PiranhaEFExtensions
         Action<DbContextOptionsBuilder> dboptions, int poolSize = 128,
         ServiceLifetime scope = ServiceLifetime.Scoped) where T : DbContext, IDb
     {
-       // todo - stitch in ravendb here
-       // serviceBuilder.Services.AddPiranhaStore<T>(dboptions, poolSize, scope);
+        serviceBuilder.Services.AddPiranhaStore<T>(dboptions, scope);
 
         return serviceBuilder;
     }
@@ -42,15 +41,27 @@ public static class PiranhaEFExtensions
     /// </summary>
     /// <param name="services">The current service collection</param>
     /// <param name="dboptions">The DbContext options builder</param>
-    /// <param name="poolSize">The optional connection pool size. Default value is 128</param>
+    /// <param name="scope">The optional lifetime</param>
+    /// <typeparam name="T">The DbContext type</typeparam>
+    /// <returns>The updated service collection</returns>
+    public static IServiceCollection AddPiranhaStore<T>(this IServiceCollection services, Action<DbContextOptionsBuilder> dboptions, ServiceLifetime scope = ServiceLifetime.Scoped)
+        where T : IDb
+    {
+        return services.AddPiranhaStore<T>(scope);
+    }
+
+    /// <summary>
+    /// Adds the DbContext and the default services needed to run
+    /// Piranha over Entity Framework Core.
+    /// </summary>
+    /// <param name="services">The current service collection</param>
     /// <param name="scope">The optional lifetime</param>
     /// <typeparam name="T">The DbContext type</typeparam>
     /// <returns>The updated service collection</returns>
     public static IServiceCollection AddPiranhaStore<T>(this IServiceCollection services, ServiceLifetime scope = ServiceLifetime.Scoped)
         where T : IDb
     {
-        
-        return services;
+        return RegisterServices<T>(services, scope);
     }
 
     /// <summary>
@@ -62,7 +73,7 @@ public static class PiranhaEFExtensions
     /// <typeparam name="T">The DbContext type</typeparam>
     /// <returns>The updated service collection</returns>
     private static IServiceCollection RegisterServices<T>(this IServiceCollection services,
-        ServiceLifetime scope = ServiceLifetime.Scoped) where T : DbContext, IDb
+        ServiceLifetime scope = ServiceLifetime.Scoped) where T : IDb
     {
         // Add the identity module
         App.Modules.Register<Piranha.Data.EF.Module>();

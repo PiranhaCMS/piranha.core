@@ -19,14 +19,14 @@ public interface IPageRepository
     /// </summary>
     /// <param name="siteId">The site id</param>
     /// <returns>The pages</returns>
-    Task<IEnumerable<Guid>> GetAll(Guid siteId);
+    Task<IEnumerable<string>> GetAll(string siteId);
 
     /// <summary>
     /// Gets the available blog pages for the current site.
     /// </summary>
     /// <param name="siteId">The site id</param>
     /// <returns>The pages</returns>
-    Task<IEnumerable<Guid>> GetAllBlogs(Guid siteId);
+    Task<IEnumerable<string>> GetAllBlogs(string siteId);
 
     /// <summary>
     /// Gets the id of all pages that have a draft for
@@ -34,7 +34,7 @@ public interface IPageRepository
     /// </summary>
     /// <param name="siteId">The unique site id</param>
     /// <returns>The pages that have a draft</returns>
-    Task<IEnumerable<Guid>> GetAllDrafts(Guid siteId);
+    Task<IEnumerable<string>> GetAllDrafts(string siteId);
 
     /// <summary>
     /// Gets the comments available for the page with the specified id. If no page id
@@ -45,7 +45,7 @@ public interface IPageRepository
     /// <param name="page">The page number</param>
     /// <param name="pageSize">The page size</param>
     /// <returns>The available comments</returns>
-    Task<IEnumerable<Comment>> GetAllComments(Guid? pageId, bool onlyApproved,
+    Task<IEnumerable<Comment>> GetAllComments(string pageId, bool onlyApproved,
         int page, int pageSize);
 
     /// <summary>
@@ -55,7 +55,7 @@ public interface IPageRepository
     /// <param name="page">The page number</param>
     /// <param name="pageSize">The page size</param>
     /// <returns>The available comments</returns>
-    Task<IEnumerable<Comment>> GetAllPendingComments(Guid? pageId,
+    Task<IEnumerable<Comment>> GetAllPendingComments(string pageId,
         int page, int pageSize);
 
     /// <summary>
@@ -64,7 +64,7 @@ public interface IPageRepository
     /// <typeparam name="T">The model type</typeparam>
     /// <param name="siteId">The site id</param>
     /// <returns>The page model</returns>
-    Task<T> GetStartpage<T>(Guid siteId) where T : PageBase;
+    Task<T> GetStartpage<T>(string siteId) where T : PageBase;
 
     /// <summary>
     /// Gets the page model with the specified id.
@@ -72,7 +72,7 @@ public interface IPageRepository
     /// <typeparam name="T">The model type</typeparam>
     /// <param name="id">The unique id</param>
     /// <returns>The page model</returns>
-    Task<T> GetById<T>(Guid id) where T : PageBase;
+    Task<T> GetById<T>(string id) where T : PageBase;
 
     /// <summary>
     /// Gets the page models with the specified id's.
@@ -80,7 +80,7 @@ public interface IPageRepository
     /// <typeparam name="T">The model type</typeparam>
     /// <param name="ids">The unique id's</param>
     /// <returns>The page models</returns>
-    Task<IEnumerable<T>> GetByIds<T>(params Guid[] ids) where T : PageBase;
+    Task<IEnumerable<T>> GetByIds<T>(params string[] ids) where T : PageBase;
 
     /// <summary>
     /// Gets the page model with the specified slug.
@@ -89,7 +89,7 @@ public interface IPageRepository
     /// <param name="slug">The unique slug</param>
     /// <param name="siteId">The site id</param>
     /// <returns>The page model</returns>
-    Task<T> GetBySlug<T>(string slug, Guid siteId) where T : PageBase;
+    Task<T> GetBySlug<T>(string slug, string siteId) where T : PageBase;
 
     /// <summary>
     /// Gets the draft for the page model with the specified id.
@@ -97,7 +97,7 @@ public interface IPageRepository
     /// <typeparam name="T">The model type</typeparam>
     /// <param name="id">The unique id</param>
     /// <returns>The draft, or null if no draft exists</returns>
-    Task<T> GetDraftById<T>(Guid id) where T : PageBase;
+    Task<T> GetDraftById<T>(string id) where T : PageBase;
 
     /// <summary>
     /// Moves the current page in the structure.
@@ -107,21 +107,21 @@ public interface IPageRepository
     /// <param name="parentId">The new parent id</param>
     /// <param name="sortOrder">The new sort order</param>
     /// <returns>The other pages that were affected by the move</returns>
-    Task<IEnumerable<Guid>> Move<T>(T model, Guid? parentId, int sortOrder) where T : PageBase;
+    Task<IEnumerable<string>> Move<T>(T model, string parentId, int sortOrder) where T : PageBase;
 
     /// <summary>
     /// Gets the comment with the given id.
     /// </summary>
     /// <param name="id">The comment id</param>
     /// <returns>The model</returns>
-    Task<Comment> GetCommentById(Guid id);
+    Task<Comment> GetCommentById(string id);
 
     /// <summary>
     /// Saves the given page model
     /// </summary>
     /// <param name="model">The page model</param>
     /// <returns>The other pages that were affected by the move</returns>
-    Task<IEnumerable<Guid>> Save<T>(T model) where T : PageBase;
+    Task<IEnumerable<string>> Save<T>(T model) where T : PageBase;
 
     /// <summary>
     /// Saves the given model as a draft revision.
@@ -134,7 +134,7 @@ public interface IPageRepository
     /// </summary>
     /// <param name="pageId">The unique page id</param>
     /// <param name="model">The comment model</param>
-    Task SaveComment(Guid pageId, Comment model);
+    Task SaveComment(string pageId, Comment model);
 
     /// <summary>
     /// Creates a revision from the current version
@@ -142,25 +142,25 @@ public interface IPageRepository
     /// </summary>
     /// <param name="id">The unique id</param>
     /// <param name="revisions">The maximum number of revisions that should be stored</param>
-    Task CreateRevision(Guid id, int revisions);
+    Task CreateRevision(string id, int revisions);
 
     /// <summary>
     /// Deletes the model with the specified id.
     /// </summary>
     /// <param name="id">The unique id</param>
     /// <returns>The other pages that were affected by the move</returns>
-    Task<IEnumerable<Guid>> Delete(Guid id);
+    Task<IEnumerable<string>> Delete(string id);
 
     /// <summary>
     /// Deletes the current draft revision for the page
     /// with the given id.
     /// </summary>
     /// <param name="id">The unique id</param>
-    Task DeleteDraft(Guid id);
+    Task DeleteDraft(string id);
 
     /// <summary>
     /// Deletes the comment with the specified id.
     /// </summary>
     /// <param name="id">The unique id</param>
-    Task DeleteComment(Guid id);
+    Task DeleteComment(string id);
 }

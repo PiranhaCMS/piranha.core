@@ -11,13 +11,8 @@
 namespace Piranha.Data;
 
 [Serializable]
-public abstract class TaxonomyBase
+public abstract class TaxonomyBase : Entity
 {
-    /// <summary>
-    /// Gets/sets the unique id.
-    /// </summary>
-    public Guid Id { get; set; }
-
     /// <summary>
     /// Gets/sets the title.
     /// </summary>

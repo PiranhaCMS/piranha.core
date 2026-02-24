@@ -13,7 +13,7 @@ using System.ComponentModel.DataAnnotations;
 namespace Piranha.Models;
 
 [Serializable]
-public sealed class ContentType : ContentTypeBase
+public sealed class AeroContentType : ContentTypeBase
 {
     /// <summary>
     /// Gets/sets the group name of the content type.

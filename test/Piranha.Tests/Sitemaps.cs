@@ -16,8 +16,8 @@ namespace Piranha.Tests;
 public class Sitemaps : BaseTests
 {
     private Sitemap sitemap;
-    private readonly Guid id_1 = Guid.NewGuid();
-    private readonly Guid id_2 = Guid.NewGuid();
+    private readonly string id_1 = Snowflake.NewId();
+    private readonly string id_2 = Snowflake.NewId();
 
     protected override void Init() {
         sitemap = new Sitemap();
@@ -35,7 +35,7 @@ public class Sitemaps : BaseTests
         });
         sitemap[0].Items.Add(new SitemapItem
         {
-            Id = Guid.NewGuid()
+            Id = Snowflake.NewId()
         });
     }
 
@@ -69,7 +69,7 @@ public class Sitemaps : BaseTests
 
     [Fact]
     public void GetPartialMissing() {
-        var partial = sitemap.GetPartial(Guid.NewGuid());
+        var partial = sitemap.GetPartial(Snowflake.NewId());
 
         Assert.Null(partial);
     }
@@ -81,7 +81,7 @@ public class Sitemaps : BaseTests
 
     [Fact]
     public void HasChildMissing() {
-        Assert.False(sitemap[0].HasChild(Guid.NewGuid()));
+        Assert.False(sitemap[0].HasChild(Snowflake.NewId()));
     }
 
     [Fact]
@@ -96,7 +96,7 @@ public class Sitemaps : BaseTests
 
     [Fact]
     public void GetBreadcrumbMissing() {
-        var crumb = sitemap.GetBreadcrumb(Guid.NewGuid());
+        var crumb = sitemap.GetBreadcrumb(Snowflake.NewId());
 
         Assert.Null(crumb);
     }

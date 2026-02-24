@@ -16,13 +16,8 @@ namespace Piranha.Models;
 /// String parameter.
 /// </summary>
 [Serializable]
-public class Param
+public class Param : Entity
 {
-    /// <summary>
-    /// Gets/sets the unique id.
-    /// </summary>
-    public Guid Id { get; set; }
-
     /// <summary>
     /// Gets/sets the unique key.
     /// </summary>

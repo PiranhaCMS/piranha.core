@@ -31,7 +31,8 @@ internal sealed class ContentService : IContentService
     /// <param name="langService">The language service</param>
     /// <param name="cache">The optional cache service</param>
     /// <param name="search">The optional search service</param>
-    public ContentService(IContentRepository repo, IContentFactory factory, ILanguageService langService, ICache cache = null, ISearch search = null)
+    public ContentService(IContentRepository repo, IContentFactory factory, ILanguageService langService,
+        ICache cache = null, ISearch search = null)
     {
         _repo = repo;
         _factory = factory;
@@ -41,6 +42,7 @@ internal sealed class ContentService : IContentService
         {
             _cache = cache;
         }
+
         _search = search;
     }
 
@@ -64,6 +66,7 @@ internal sealed class ContentService : IContentService
 
             return model;
         }
+
         return null;
     }
 
@@ -74,7 +77,7 @@ internal sealed class ContentService : IContentService
     /// <param name="groupId">The optional group id</param>
     /// <param name="languageId">The optional language id</param>
     /// <returns>The available content</returns>
-    public Task<IEnumerable<DynamicContent>> GetAllAsync(string groupId = null, Guid? languageId = null)
+    public Task<IEnumerable<DynamicContent>> GetAllAsync(string groupId = null, string languageId = null)
     {
         return GetAllAsync<DynamicContent>(groupId, languageId);
     }
@@ -87,7 +90,8 @@ internal sealed class ContentService : IContentService
     /// <param name="groupId">The optional group id</param>
     /// <param name="languageId">The optional language id</param>
     /// <returns>The available content</returns>
-    public async Task<IEnumerable<T>> GetAllAsync<T>(string groupId = null, Guid? languageId = null) where T : GenericContent
+    public async Task<IEnumerable<T>> GetAllAsync<T>(string groupId = null, string languageId = null)
+        where T : GenericContent
     {
         var models = new List<T>();
         var all = await _repo.GetAll(groupId).ConfigureAwait(false);
@@ -101,6 +105,7 @@ internal sealed class ContentService : IContentService
                 models.Add(content);
             }
         }
+
         return models;
     }
 
@@ -110,7 +115,7 @@ internal sealed class ContentService : IContentService
     /// <param name="id">The unique id</param>
     /// <param name="languageId">The optional language id</param>
     /// <returns>The content model</returns>
-    public Task<DynamicContent> GetByIdAsync(Guid id, Guid? languageId = null)
+    public Task<DynamicContent> GetByIdAsync(string id, string languageId = null)
     {
         return GetByIdAsync<DynamicContent>(id, languageId);
     }
@@ -122,7 +127,7 @@ internal sealed class ContentService : IContentService
     /// <param name="id">The unique id</param>
     /// <param name="languageId">The optional language id</param>
     /// <returns>The content model</returns>
-    public async Task<T> GetByIdAsync<T>(Guid id, Guid? languageId = null) where T : GenericContent
+    public async Task<T> GetByIdAsync<T>(string id, string languageId = null) where T : GenericContent
     {
         GenericContent model = null;
 
@@ -153,7 +158,8 @@ internal sealed class ContentService : IContentService
         {
             if (model is IDynamicContent dynamicModel)
             {
-                await _factory.InitDynamicAsync(dynamicModel, App.ContentTypes.GetById(model.TypeId)).ConfigureAwait(false);
+                await _factory.InitDynamicAsync(dynamicModel, App.ContentTypes.GetById(model.TypeId))
+                    .ConfigureAwait(false);
             }
             else
             {
@@ -164,9 +170,9 @@ internal sealed class ContentService : IContentService
         // If we don't have a model, get it from the repository
         if (model == null)
         {
-            model = await _repo.GetById<T>(id, languageId.Value).ConfigureAwait(false);
+            model = await _repo.GetById<T>(id, languageId).ConfigureAwait(false);
 
-            await OnLoadAsync(model, languageId.Value).ConfigureAwait(false);
+            await OnLoadAsync(model, languageId).ConfigureAwait(false);
         }
 
         // Check that we got back the requested type from the
@@ -175,6 +181,7 @@ internal sealed class ContentService : IContentService
         {
             return (T)model;
         }
+
         return null;
     }
 
@@ -204,7 +211,7 @@ internal sealed class ContentService : IContentService
     /// </summary>
     /// <param name="contentId">The unique content id</param>
     /// <returns>The translation status</returns>
-    public Task<TranslationStatus> GetTranslationStatusByIdAsync(Guid contentId)
+    public Task<TranslationStatus> GetTranslationStatusByIdAsync(string contentId)
     {
         return _repo.GetTranslationStatusById(contentId);
     }
@@ -225,7 +232,7 @@ internal sealed class ContentService : IContentService
     /// </summary>
     /// <param name="model">The content model</param>
     /// <param name="languageId">The optional language id</param>
-    public async Task SaveAsync<T>(T model, Guid? languageId = null) where T : GenericContent
+    public async Task SaveAsync<T>(T model, string languageId = null) where T : GenericContent
     {
         // Make sure we have valid content type
         var type = App.ContentTypes.GetById(model.TypeId);
@@ -235,9 +242,9 @@ internal sealed class ContentService : IContentService
         }
 
         // Make sure we have an Id
-        if (model.Id == Guid.Empty)
+        if (string.IsNullOrEmpty(model.Id))
         {
-            model.Id = Guid.NewGuid();
+            model.Id = Snowflake.NewId().ToString();
         }
 
         // Make sure we have a language id
@@ -255,7 +262,8 @@ internal sealed class ContentService : IContentService
         {
             if (model is ICategorizedContent categorizedModel)
             {
-                if (categorizedModel.Category == null || (string.IsNullOrWhiteSpace(categorizedModel.Category.Title) && string.IsNullOrWhiteSpace(categorizedModel.Category.Slug)))
+                if (categorizedModel.Category == null || (string.IsNullOrWhiteSpace(categorizedModel.Category.Title) &&
+                                                          string.IsNullOrWhiteSpace(categorizedModel.Category.Slug)))
                 {
                     throw new ValidationException("The Category field is required");
                 }
@@ -264,18 +272,18 @@ internal sealed class ContentService : IContentService
 
         // Call hooks and save
         App.Hooks.OnBeforeSave<GenericContent>(model);
-        await _repo.Save(model, languageId.Value);
+        await _repo.Save(model, languageId);
         App.Hooks.OnAfterSave<GenericContent>(model);
 
         // Remove from cache
-        await RemoveFromCacheAsync(model, languageId.Value).ConfigureAwait(false);
+        await RemoveFromCacheAsync(model, languageId).ConfigureAwait(false);
     }
 
     /// <summary>
     /// Deletes the content model with the specified id.
     /// </summary>
     /// <param name="id">The unique id</param>
-    public async Task DeleteAsync(Guid id)
+    public async Task DeleteAsync(string id)
     {
         var model = await GetByIdAsync<GenericContent>(id).ConfigureAwait(false);
 
@@ -317,7 +325,7 @@ internal sealed class ContentService : IContentService
     /// </summary>
     /// <param name="model">The content model</param>
     /// <param name="languageId">The language of the current model</param>
-    private async Task OnLoadAsync(GenericContent model, Guid languageId)
+    private async Task OnLoadAsync(GenericContent model, string languageId)
     {
         // Make sure we have a model
         if (model == null) return;
@@ -338,7 +346,7 @@ internal sealed class ContentService : IContentService
             model.PrimaryImage = new Extend.Fields.ImageField();
         }
 
-        if (model.PrimaryImage.Id.HasValue)
+        if (!string.IsNullOrEmpty(model.PrimaryImage.Id))
         {
             await _factory.InitFieldAsync(model.PrimaryImage).ConfigureAwait(false);
         }
@@ -366,7 +374,7 @@ internal sealed class ContentService : IContentService
     /// </summary>
     /// <param name="model">The model</param>
     /// <param name="languageId">The language of the current model</param>
-    private async Task RemoveFromCacheAsync(GenericContent model, Guid languageId)
+    private async Task RemoveFromCacheAsync(GenericContent model, string languageId)
     {
         if (_cache != null)
         {

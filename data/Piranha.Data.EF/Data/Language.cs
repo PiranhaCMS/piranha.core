@@ -11,13 +11,8 @@
 namespace Piranha.Data;
 
 [Serializable]
-public sealed class Language
+public sealed class Language : Entity
 {
-    /// <summary>
-    /// Gets/sets the unique id.
-    /// </summary>
-    public Guid Id { get; set; }
-
     /// <summary>
     /// Gets/sets the display title.
     /// </summary>

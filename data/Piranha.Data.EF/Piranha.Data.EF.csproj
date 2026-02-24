@@ -17,6 +17,7 @@
 
   <ItemGroup>
     <PackageReference Include="RavenDB.Client" Version="7.2.0" />
+    <PackageReference Include="RavenDB.Embedded" Version="7.2.0" />
     <ProjectReference Include="..\..\core\Piranha\Piranha.csproj" />
     <PackageReference Include="AutoMapper" Version="12.0.1" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="10.0.3" />

@@ -164,15 +164,14 @@ public class TypeBuilderTests : BaseTestsAsync
         public BodyRegion Content { get; set; }
     }
 
-    public override Task InitializeAsync()
+    public override async Task InitializeAsync()
     {
-        return Task.Run(() =>
+        await base.InitializeAsync();
+
+        using (var api = CreateApi())
         {
-            using (var api = CreateApi())
-            {
-                Piranha.App.Init(api);
-            }
-        });
+            Piranha.App.Init(api);
+        }
     }
 
     public override async Task DisposeAsync()

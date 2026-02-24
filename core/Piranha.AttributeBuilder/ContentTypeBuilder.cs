@@ -29,7 +29,7 @@ public class ContentTypeBuilder
 
     private readonly IApi _api;
     private readonly IList<Type> _contentGroups = new List<Type>();
-    private readonly IList<BuilderItem<ContentType>> _contentTypes = new List<BuilderItem<ContentType>>();
+    private readonly IList<BuilderItem<AeroContentType>> _contentTypes = new List<BuilderItem<AeroContentType>>();
     private readonly IList<BuilderItem<PageType>> _pageTypes = new List<BuilderItem<PageType>>();
     private readonly IList<BuilderItem<PostType>> _postTypes = new List<BuilderItem<PostType>>();
     private readonly IList<BuilderItem<SiteType>> _siteTypes = new List<BuilderItem<SiteType>>();
@@ -77,7 +77,7 @@ public class ContentTypeBuilder
             {
                 if (type.GetCustomAttribute<ContentTypeAttribute>() != null)
                 {
-                    _contentTypes.Add(new BuilderItem<ContentType>
+                    _contentTypes.Add(new BuilderItem<AeroContentType>
                     {
                         Type = type
                     });
@@ -288,7 +288,7 @@ public class ContentTypeBuilder
         return null;
     }
 
-    private ContentType GetContentType(Type type)
+    private AeroContentType GetContentType(Type type)
     {
         var group = type.GetCustomAttribute<ContentGroupAttribute>();
         if (group == null)
@@ -312,7 +312,7 @@ public class ContentTypeBuilder
                 throw new ArgumentException($"[{ type.Name }] Id and Title is mandatory for content types.");
             }
 
-            return new ContentType
+            return new AeroContentType
             {
                 Id = attr.Id,
                 CLRType = type.GetTypeInfo().AssemblyQualifiedName,

@@ -65,13 +65,13 @@ public class PageApiController : Controller
     /// <returns>The list model</returns>
     [Route("sitemap/{siteId?}")]
     [HttpGet]
-    public async Task<SiteListModel> Sitemap(Guid? siteId = null)
+    public async Task<SiteListModel> Sitemap(string? siteId = null)
     {
-        if (!siteId.HasValue || siteId == Guid.Empty)
+        if (string.IsNullOrEmpty(siteId))
         {
             siteId = (await _api.Sites.GetDefaultAsync()).Id;
         }
-        return await _service.GetSiteList(siteId.Value);
+        return await _service.GetSiteList(siteId);
     }
 
     /// <summary>
@@ -80,13 +80,13 @@ public class PageApiController : Controller
     /// <returns>The list model</returns>
     [Route("archives/{siteId?}")]
     [HttpGet]
-    public async Task<SiteListModel> Archives(Guid? siteId = null)
+    public async Task<SiteListModel> Archives(string? siteId = null)
     {
-        if (!siteId.HasValue || siteId == Guid.Empty)
+        if (string.IsNullOrEmpty(siteId))
         {
             siteId = (await _api.Sites.GetDefaultAsync()).Id;
         }
-        return await _service.GetArchiveList(siteId.Value);
+        return await _service.GetArchiveList(siteId);
     }
 
     /// <summary>
@@ -94,10 +94,10 @@ public class PageApiController : Controller
     /// </summary>
     /// <param name="id">The unique id</param>
     /// <returns>The page edit model</returns>
-    [Route("{id:Guid}")]
+    [Route("{id}")]
     [HttpGet]
     [Authorize(Policy = Permission.PagesEdit)]
-    public async Task<PageEditModel> Get(Guid id)
+    public async Task<PageEditModel> Get(string id)
     {
         return await _service.GetById(id);
     }
@@ -111,7 +111,7 @@ public class PageApiController : Controller
     [Route("info/{id}")]
     [HttpGet]
     [Authorize(Policy = Permission.Pages)]
-    public async Task<Piranha.Models.PageInfo> GetInfo(Guid id)
+    public async Task<Piranha.Models.PageInfo> GetInfo(string id)
     {
         return await _api.Pages.GetByIdAsync<Piranha.Models.PageInfo>(id);
     }
@@ -125,7 +125,7 @@ public class PageApiController : Controller
     [Route("create/{siteId}/{typeId}")]
     [HttpGet]
     [Authorize(Policy = Permission.PagesAdd)]
-    public async Task<PageEditModel> Create(Guid siteId, string typeId)
+    public async Task<PageEditModel> Create(string siteId, string typeId)
     {
         return await _service.Create(siteId, typeId);
     }
@@ -140,7 +140,7 @@ public class PageApiController : Controller
     [Route("createrelative/{pageId}/{typeId}/{after}")]
     [HttpGet]
     [Authorize(Policy = Permission.PagesAdd)]
-    public async Task<PageEditModel> CreateRelative(Guid pageId, string typeId, bool after)
+    public async Task<PageEditModel> CreateRelative(string pageId, string typeId, bool after)
     {
         return await _service.CreateRelative(pageId, typeId, after);
     }
@@ -154,7 +154,7 @@ public class PageApiController : Controller
     [Route("copy/{sourceId}/{siteId}")]
     [HttpGet]
     [Authorize(Policy = Permission.PagesAdd)]
-    public async Task<PageEditModel> CopyRelative(Guid sourceId, Guid siteId)
+    public async Task<PageEditModel> CopyRelative(string sourceId, string siteId)
     {
         return await _service.Copy(sourceId, siteId);
     }
@@ -169,7 +169,7 @@ public class PageApiController : Controller
     [Route("copyrelative/{sourceId}/{pageId}/{after}")]
     [HttpGet]
     [Authorize(Policy = Permission.PagesAdd)]
-    public async Task<PageEditModel> CopyRelative(Guid sourceId, Guid pageId, bool after)
+    public async Task<PageEditModel> CopyRelative(string sourceId, string pageId, bool after)
     {
         return await _service.CopyRelative(sourceId, pageId, after);
     }
@@ -182,7 +182,7 @@ public class PageApiController : Controller
     [Route("detach")]
     [HttpPost]
     [Authorize(Policy = Permission.PagesEdit)]
-    public async Task<PageEditModel> Detach([FromBody]Guid pageId)
+    public async Task<PageEditModel> Detach([FromBody]string pageId)
     {
         var model = await _service.Detach(pageId);
 
@@ -258,7 +258,7 @@ public class PageApiController : Controller
     [Route("revert")]
     [HttpPost]
     [Authorize(Policy = Permission.PagesSave)]
-    public async Task<PageEditModel> Revert([FromBody]Guid id)
+    public async Task<PageEditModel> Revert([FromBody]string id)
     {
         var page = await _service.GetById(id, false);
 
@@ -288,7 +288,7 @@ public class PageApiController : Controller
     [Route("delete")]
     [HttpDelete]
     [Authorize(Policy = Permission.PagesDelete)]
-    public async Task<StatusMessage> Delete([FromBody]Guid id)
+    public async Task<StatusMessage> Delete([FromBody]string id)
     {
         try
         {

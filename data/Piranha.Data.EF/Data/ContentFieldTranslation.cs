@@ -16,12 +16,12 @@ public sealed class ContentFieldTranslation
     /// <summary>
     /// Gets/sets the unique id.
     /// </summary>
-    public Guid FieldId { get; set; }
+    public string FieldId { get; set; }
 
     /// <summary>
     /// Gets/sets the language id.
     /// </summary>
-    public Guid LanguageId { get; set; }
+    public string LanguageId { get; set; }
 
     /// <summary>
     /// Gets/sets the serialized value.

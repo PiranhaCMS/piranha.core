@@ -31,7 +31,7 @@ public class CommentService
     /// </summary>
     /// <param name="id">The optional content id</param>
     /// <returns>The model</returns>
-    public async Task<CommentListModel> Get(Guid? id = null)
+    public async Task<CommentListModel> Get(string? id = null)
     {
         var model = new CommentListModel
         {
@@ -86,7 +86,7 @@ public class CommentService
         return model;
     }
 
-    public async Task ApproveAsync(Guid id)
+    public async Task ApproveAsync(string id)
     {
         var comment = await _api.Posts.GetCommentByIdAsync(id);
         if (comment == null)
@@ -109,7 +109,7 @@ public class CommentService
         }
     }
 
-    public async Task UnApproveAsync(Guid id)
+    public async Task UnApproveAsync(string id)
     {
         var comment = await _api.Posts.GetCommentByIdAsync(id);
         if (comment == null)
@@ -132,7 +132,7 @@ public class CommentService
         }
     }
 
-    public async Task DeleteAsync(Guid id)
+    public async Task DeleteAsync(string id)
     {
         var comment = await _api.Posts.GetCommentByIdAsync(id);
 

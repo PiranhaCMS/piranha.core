@@ -58,7 +58,7 @@ public class ModelLoader : IModelLoader
     /// <param name="draft">If a draft should be loaded</param>
     /// <typeparam name="T">The model type</typeparam>
     /// <returns>The page model</returns>
-    public async Task<T> GetPageAsync<T>(Guid id, ClaimsPrincipal user, bool draft = false)
+    public async Task<T> GetPageAsync<T>(string id, ClaimsPrincipal user, bool draft = false)
         where T : PageBase
     {
         T model = null;
@@ -140,7 +140,7 @@ public class ModelLoader : IModelLoader
     /// <param name="draft">If a draft should be loaded</param>
     /// <typeparam name="T">The model type</typeparam>
     /// <returns>The post model</returns>
-    public async Task<T> GetPostAsync<T>(Guid id, ClaimsPrincipal user, bool draft = false)
+    public async Task<T> GetPostAsync<T>(string id, ClaimsPrincipal user, bool draft = false)
         where T : PostBase
     {
         T model = null;

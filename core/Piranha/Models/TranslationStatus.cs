@@ -25,7 +25,7 @@ public class TranslationStatus
         /// <summary>
         /// Gets/sets the languge id.
         /// </summary>
-        public Guid LanguageId { get; set; }
+        public string LanguageId { get; set; }
 
         /// <summary>
         /// Gets/sets the language title.
@@ -42,7 +42,7 @@ public class TranslationStatus
     /// <summary>
     /// Gets/sets the unique content id.
     /// </summary>
-    public Guid ContentId { get; set; }
+    public string ContentId { get; set; }
 
     /// <summary>
     /// Gets/sets if all of the translations is up to date.

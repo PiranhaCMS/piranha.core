@@ -19,12 +19,12 @@ public sealed class ContentTaxonomy
     /// <summary>
     /// Gets/sets the content id.
     /// </summary>
-    public Guid ContentId { get; set; }
+    public string ContentId { get; set; }
 
     /// <summary>
     /// Gets/sets the taxonomy id.
     /// </summary>
-    public Guid TaxonomyId { get; set; }
+    public string TaxonomyId { get; set; }
 
     /// <summary>
     /// Gets/sets the content.

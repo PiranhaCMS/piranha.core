@@ -29,7 +29,7 @@ public interface IModelLoader
     /// <param name="draft">If a draft should be loaded</param>
     /// <typeparam name="T">The model type</typeparam>
     /// <returns>The page model</returns>
-    Task<T> GetPageAsync<T>(Guid id, ClaimsPrincipal user, bool draft = false) where T : PageBase;
+    Task<T> GetPageAsync<T>(string id, ClaimsPrincipal user, bool draft = false) where T : PageBase;
 
     /// <summary>
     /// Gets the specified post model for the given user. If the
@@ -41,5 +41,5 @@ public interface IModelLoader
     /// <param name="draft">If a draft should be loaded</param>
     /// <typeparam name="T">The model type</typeparam>
     /// <returns>The post model</returns>
-    Task<T> GetPostAsync<T>(Guid id, ClaimsPrincipal user, bool draft = false) where T : PostBase;
+    Task<T> GetPostAsync<T>(string id, ClaimsPrincipal user, bool draft = false) where T : PostBase;
 }

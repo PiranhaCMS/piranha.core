@@ -22,7 +22,7 @@ public abstract class PostBase : RoutedContentBase, ICategorizedContent, ITagged
     /// Gets/sets the blog page id.
     /// </summary>
     [Required]
-    public Guid BlogId { get; set; }
+    public string BlogId { get; set; }
 
     /// <summary>
     /// Gets/sets the category.

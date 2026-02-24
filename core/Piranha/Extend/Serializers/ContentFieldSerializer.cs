@@ -32,7 +32,7 @@ public class ContentFieldSerializer : ISerializer
     {
         return new ContentField
         {
-            Id = !string.IsNullOrEmpty(str) ? new Guid(str) : (Guid?)null
+            Id = !string.IsNullOrEmpty(str) ? str : null
         };
     }
 }

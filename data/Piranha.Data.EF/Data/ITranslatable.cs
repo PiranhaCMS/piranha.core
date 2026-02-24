@@ -21,7 +21,7 @@ public interface ITranslatable
     /// <param name="parentId">The parent id</param>
     /// <param name="languageId">The language id</param>
     /// <param name="model">The model</param>
-    void SetTranslation(Guid parentId, Guid languageId, object model);
+    void SetTranslation(string parentId, string languageId, object model);
 
-    object GetTranslation(Guid languageId);
+    object GetTranslation(string languageId);
 }

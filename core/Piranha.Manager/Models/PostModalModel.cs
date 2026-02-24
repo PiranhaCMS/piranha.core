@@ -14,7 +14,7 @@ public class PostModalModel
 {
     public class PostModalItem
     {
-        public Guid Id { get; set; }
+        public string Id { get; set; }
         public string Title { get; set; }
         public string Permalink { get; set; }
         public string Published { get; set; }
@@ -22,13 +22,13 @@ public class PostModalModel
 
     public class SiteItem
     {
-        public Guid Id { get; set; }
+        public string Id { get; set; }
         public string Title { get; set; }
     }
 
     public class ArchiveItem
     {
-        public Guid Id { get; set; }
+        public string Id { get; set; }
         public string Title { get; set; }
         public string Slug { get; set; }
     }
@@ -37,8 +37,8 @@ public class PostModalModel
     public IEnumerable<ArchiveItem> Archives { get; set; } = new List<ArchiveItem>();
     public IEnumerable<PostModalItem> Posts { get; set; } = new List<PostModalItem>();
 
-    public Guid SiteId { get; set; }
-    public Guid ArchiveId { get; set; }
+    public string SiteId { get; set; }
+    public string ArchiveId { get; set; }
 
     public string SiteTitle { get; set; }
     public string ArchiveTitle { get; set; }

@@ -36,7 +36,7 @@ public class StructureModel
     /// <summary>
     /// The id of the item to move.
     /// </summary>
-    public Guid Id { get; set; }
+    public string Id { get; set; }
 
     /// <summary>
     /// Gets/sets the structure items.

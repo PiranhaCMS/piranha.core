@@ -62,7 +62,7 @@ public class UserEditModel
         {
             user = new User
             {
-                Id = User.Id != Guid.Empty ? User.Id : Guid.NewGuid(),
+                Id = User.Id != Guid.Empty ? User.Id : Snowflake.NewId(),
                 UserName = User.UserName,
                 Email = User.Email
             };

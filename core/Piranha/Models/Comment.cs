@@ -16,18 +16,13 @@ namespace Piranha.Models;
 /// Abstract base class for comments.
 /// </summary>
 [Serializable]
-public abstract class Comment
+public abstract class Comment : Entity
 {
-    /// <summary>
-    /// Gets/sets the unique id.
-    /// </summary>
-    public Guid Id { get; set; }
-
     /// <summary>
     /// Gets/sets the id of the content this comment
     /// is in response to.
     /// </summary>
-    public Guid ContentId { get; set; }
+    public string ContentId { get; set; }
 
     /// <summary>
     /// Gets/sets the optional user id.

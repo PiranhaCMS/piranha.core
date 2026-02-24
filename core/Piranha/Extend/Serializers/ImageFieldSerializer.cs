@@ -32,7 +32,7 @@ public class ImageFieldSerializer : ISerializer
     {
         return new ImageField
         {
-            Id = !string.IsNullOrEmpty(str) ? new Guid(str) : (Guid?)null
+            Id = !string.IsNullOrEmpty(str) ? str : null
         };
     }
 }

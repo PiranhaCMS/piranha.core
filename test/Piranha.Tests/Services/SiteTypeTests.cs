@@ -18,20 +18,20 @@ namespace Piranha.Tests.Services;
 [Collection("Integration tests")]
 public class SiteTypeTestsMemoryCache : SiteTypeTests
 {
-    public override Task InitializeAsync()
+    public override async Task InitializeAsync()
     {
+        await base.InitializeAsync();
         _cache = new Cache.MemoryCache((IMemoryCache)_services.GetService(typeof(IMemoryCache)));
-        return base.InitializeAsync();
     }
 }
 
 [Collection("Integration tests")]
 public class SiteTypeTestsDistributedCache : SiteTypeTests
 {
-    public override Task InitializeAsync()
+    public override async Task InitializeAsync()
     {
+        await base.InitializeAsync();
         _cache = new Cache.DistributedCache((IDistributedCache)_services.GetService(typeof(IDistributedCache)));
-        return base.InitializeAsync();
     }
 }
 
@@ -138,6 +138,8 @@ public class SiteTypeTests : BaseTestsAsync
 
     public override async Task InitializeAsync()
     {
+        await base.InitializeAsync();
+
         using (var api = CreateApi())
         {
             await api.SiteTypes.SaveAsync(siteTypes[0]);

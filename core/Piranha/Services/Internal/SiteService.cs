@@ -20,7 +20,7 @@ internal sealed class SiteService : ISiteService
     [Serializable]
     public class SiteMapping
     {
-        public Guid Id { get; set; }
+        public string Id { get; set; }
         public string Hostnames { get; set; }
     }
 
@@ -61,12 +61,13 @@ internal sealed class SiteService : ISiteService
         {
             foreach (var model in models)
             {
-                if (model.Logo != null && model.Logo.Id.HasValue)
+                if (model.Logo != null && !string.IsNullOrEmpty(model.Logo.Id))
                 {
                     await _factory.InitFieldAsync(model.Logo);
                 }
             }
         }
+
         return models;
     }
 
@@ -75,9 +76,9 @@ internal sealed class SiteService : ISiteService
     /// </summary>
     /// <param name="id">The unique id</param>
     /// <returns>The model, or null if it doesn't exist</returns>
-    public async Task<Site> GetByIdAsync(Guid id)
+    public async Task<Site> GetByIdAsync(string id)
     {
-        var model = _cache == null ? null : await _cache.GetAsync<Site>(id.ToString()).ConfigureAwait(false);
+        var model = _cache == null ? null : await _cache.GetAsync<Site>(id).ConfigureAwait(false);
 
         if (model == null)
         {
@@ -86,10 +87,11 @@ internal sealed class SiteService : ISiteService
             await OnLoad(model).ConfigureAwait(false);
         }
 
-        if (model != null && model.Logo != null && model.Logo.Id.HasValue)
+        if (model != null && model.Logo != null && !string.IsNullOrEmpty(model.Logo.Id))
         {
             await _factory.InitFieldAsync(model.Logo);
         }
+
         return model;
     }
 
@@ -100,12 +102,12 @@ internal sealed class SiteService : ISiteService
     /// <returns>The model</returns>
     public async Task<Site> GetByInternalIdAsync(string internalId)
     {
-        var id = _cache == null ? null : await _cache.GetAsync<Guid?>($"SiteId_{internalId}").ConfigureAwait(false);
+        var id = _cache == null ? null : await _cache.GetAsync<string>($"SiteId_{internalId}").ConfigureAwait(false);
         Site model = null;
 
         if (id != null)
         {
-            model = await GetByIdAsync(id.Value).ConfigureAwait(false);
+            model = await GetByIdAsync(id).ConfigureAwait(false);
         }
         else
         {
@@ -114,10 +116,11 @@ internal sealed class SiteService : ISiteService
             await OnLoad(model).ConfigureAwait(false);
         }
 
-        if (model != null && model.Logo != null && model.Logo.Id.HasValue)
+        if (model != null && model.Logo != null && !string.IsNullOrEmpty(model.Logo.Id))
         {
             await _factory.InitFieldAsync(model.Logo);
         }
+
         return model;
     }
 
@@ -171,6 +174,7 @@ internal sealed class SiteService : ISiteService
                 }
             }
         }
+
         return null;
     }
 
@@ -189,10 +193,11 @@ internal sealed class SiteService : ISiteService
             await OnLoad(model).ConfigureAwait(false);
         }
 
-        if (model != null && model.Logo != null && model.Logo.Id.HasValue)
+        if (model != null && model.Logo != null && !string.IsNullOrEmpty(model.Logo.Id))
         {
             await _factory.InitFieldAsync(model.Logo);
         }
+
         return model;
     }
 
@@ -201,7 +206,7 @@ internal sealed class SiteService : ISiteService
     /// </summary>
     /// <param name="id">Site id</param>
     /// <returns>The site content model</returns>
-    public Task<DynamicSiteContent> GetContentByIdAsync(Guid id)
+    public Task<DynamicSiteContent> GetContentByIdAsync(string id)
     {
         return GetContentByIdAsync<DynamicSiteContent>(id);
     }
@@ -212,13 +217,15 @@ internal sealed class SiteService : ISiteService
     /// <param name="id">Site id</param>
     /// <typeparam name="T">The site model type</typeparam>
     /// <returns>The site content model</returns>
-    public async Task<T> GetContentByIdAsync<T>(Guid id) where T : SiteContent<T>
+    public async Task<T> GetContentByIdAsync<T>(string id) where T : SiteContent<T>
     {
         SiteContentBase model = null;
 
         if (!typeof(DynamicSiteContent).IsAssignableFrom(typeof(T)))
         {
-            model = _cache == null ? null : await _cache.GetAsync<SiteContentBase>($"SiteContent_{id}").ConfigureAwait(false);
+            model = _cache == null
+                ? null
+                : await _cache.GetAsync<SiteContentBase>($"SiteContent_{id}").ConfigureAwait(false);
 
             if (model != null)
             {
@@ -237,6 +244,7 @@ internal sealed class SiteService : ISiteService
         {
             return (T)model;
         }
+
         return null;
     }
 
@@ -246,9 +254,9 @@ internal sealed class SiteService : ISiteService
     /// <param name="id">The optional site id</param>
     /// <param name="onlyPublished">If only published items should be included</param>
     /// <returns>The sitemap</returns>
-    public async Task<Sitemap> GetSitemapAsync(Guid? id = null, bool onlyPublished = true)
+    public async Task<Sitemap> GetSitemapAsync(string id = null, bool onlyPublished = true)
     {
-        if (!id.HasValue)
+        if (string.IsNullOrEmpty(id))
         {
             var site = await GetDefaultAsync().ConfigureAwait(false);
 
@@ -258,13 +266,15 @@ internal sealed class SiteService : ISiteService
             }
         }
 
-        if (id != null)
+        if (!string.IsNullOrEmpty(id))
         {
-            var sitemap = onlyPublished && _cache != null ? await _cache.GetAsync<Models.Sitemap>($"Sitemap_{id}").ConfigureAwait(false) : null;
+            var sitemap = onlyPublished && _cache != null
+                ? await _cache.GetAsync<Models.Sitemap>($"Sitemap_{id}").ConfigureAwait(false)
+                : null;
 
             if (sitemap == null)
             {
-                sitemap = await _repo.GetSitemap(id.Value, onlyPublished).ConfigureAwait(false);
+                sitemap = await _repo.GetSitemap(id, onlyPublished).ConfigureAwait(false);
 
                 App.Hooks.OnLoad<Sitemap>(sitemap);
 
@@ -276,8 +286,10 @@ internal sealed class SiteService : ISiteService
                     }
                 }
             }
+
             return sitemap;
         }
+
         return null;
     }
 
@@ -289,15 +301,19 @@ internal sealed class SiteService : ISiteService
     public async Task SaveAsync(Site model)
     {
         // Ensure id
-        if (model.Id == Guid.Empty)
+        if (string.IsNullOrEmpty(model.Id))
         {
-            model.Id = Guid.NewGuid();
+            model.Id = Snowflake.NewId().ToString();
         }
 
         // Ensure language id
-        if (model.LanguageId == Guid.Empty)
+        if (string.IsNullOrEmpty(model.LanguageId))
         {
-            model.LanguageId = (await _langService.GetDefaultAsync()).Id;
+            var defaultLang = await _langService.GetDefaultAsync();
+            if (defaultLang != null)
+            {
+                model.LanguageId = defaultLang.Id;
+            }
         }
 
         // Validate model
@@ -341,6 +357,7 @@ internal sealed class SiteService : ISiteService
                 model.IsDefault = true;
             }
         }
+
         // Call hooks & save
         App.Hooks.OnBeforeSave(model);
         await _repo.Save(model).ConfigureAwait(false);
@@ -357,14 +374,15 @@ internal sealed class SiteService : ISiteService
     /// <param name="siteId">The site id</param>
     /// <param name="model">The site content model</param>
     /// <typeparam name="T">The site content type</typeparam>
-    public async Task SaveContentAsync<T>(Guid siteId, T model) where T : SiteContent<T>
+    public async Task SaveContentAsync<T>(string siteId, T model) where T : SiteContent<T>
     {
         // Ensure id
         if (model.Id != siteId)
         {
             model.Id = siteId;
         }
-        if (model.Id == Guid.Empty)
+
+        if (string.IsNullOrEmpty(model.Id))
         {
             throw new ValidationException($"The Id field is required for this operation");
         }
@@ -399,6 +417,7 @@ internal sealed class SiteService : ISiteService
         {
             return _factory.CreateAsync<T>(type);
         }
+
         return null;
     }
 
@@ -408,7 +427,7 @@ internal sealed class SiteService : ISiteService
     /// </summary>
     /// <param name="id">The site id</param>
     /// <param name="updateLastModified">If the global last modified date should be updated</param>
-    public async Task InvalidateSitemapAsync(Guid id, bool updateLastModified = true)
+    public async Task InvalidateSitemapAsync(string id, bool updateLastModified = true)
     {
         if (updateLastModified)
         {
@@ -420,6 +439,7 @@ internal sealed class SiteService : ISiteService
                 await SaveAsync(site).ConfigureAwait(false);
             }
         }
+
         var sitemap = _cache == null ? null : await _cache.GetAsync<Sitemap>($"Sitemap_{id}").ConfigureAwait(false);
         if (sitemap != null)
         {
@@ -436,7 +456,7 @@ internal sealed class SiteService : ISiteService
     /// Deletes the model with the specified id.
     /// </summary>
     /// <param name="id">The unique id</param>
-    public async Task DeleteAsync(Guid id)
+    public async Task DeleteAsync(string id)
     {
         var model = await GetByIdAsync(id).ConfigureAwait(false);
 
@@ -465,7 +485,7 @@ internal sealed class SiteService : ISiteService
     /// Removes the sitemap from the cache.
     /// </summary>
     /// <param name="id">The unique id</param>
-    public async Task RemoveSitemapFromCacheAsync(Guid id)
+    public async Task RemoveSitemapFromCacheAsync(string id)
     {
         if (_cache != null)
         {
@@ -490,7 +510,7 @@ internal sealed class SiteService : ISiteService
 
             if (_cache != null)
             {
-                await _cache.SetAsync(model.Id.ToString(), model).ConfigureAwait(false);
+                await _cache.SetAsync(model.Id, model).ConfigureAwait(false);
                 await _cache.SetAsync($"SiteId_{model.InternalId}", model.Id).ConfigureAwait(false);
                 if (model.IsDefault)
                 {
@@ -535,13 +555,14 @@ internal sealed class SiteService : ISiteService
     {
         if (_cache != null)
         {
-            await _cache.RemoveAsync(model.Id.ToString()).ConfigureAwait(false);
+            await _cache.RemoveAsync(model.Id).ConfigureAwait(false);
             await _cache.RemoveAsync($"SiteId_{model.InternalId}").ConfigureAwait(false);
 
             if (model.IsDefault)
             {
                 await _cache.RemoveAsync($"Site_{Guid.Empty}").ConfigureAwait(false);
             }
+
             await _cache.RemoveAsync(SITE_MAPPINGS).ConfigureAwait(false);
         }
     }

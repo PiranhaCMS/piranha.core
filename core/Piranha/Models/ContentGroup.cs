@@ -16,15 +16,8 @@ namespace Piranha.Models;
 /// Class for defining a content group.
 /// </summary>
 [Serializable]
-public class ContentGroup : ITypeModel
+public class ContentGroup : Entity, ITypeModel
 {
-    /// <summary>
-    /// Gets/sets the unique id.
-    /// </summary>
-    [Required]
-    [StringLength(64)]
-    public string Id { get; set; }
-
     /// <summary>
     /// Gets/sets the CLR type of the content model.
     /// </summary>

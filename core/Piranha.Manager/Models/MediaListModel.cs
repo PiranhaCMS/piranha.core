@@ -28,7 +28,7 @@ public class MediaListModel
         /// <summary>
         /// Gets/sets the unique id.
         /// </summary>
-        public Guid Id { get; set; }
+        public string Id { get; set; }
 
         /// <summary>
         /// Gets/sets the name.
@@ -49,12 +49,12 @@ public class MediaListModel
         /// <summary>
         /// Gets/sets the unique id.
         /// </summary>
-        public Guid Id { get; set; }
+        public string Id { get; set; }
 
         /// <summary>
         /// Gets/sets the optional folder id.
         /// </summary>
-        public Guid? FolderId { get; set; }
+        public string? FolderId { get; set; }
 
         /// <summary>
         /// Gets/sets the media type.
@@ -135,7 +135,7 @@ public class MediaListModel
     /// <summary>
     /// Gets/sets the optional folder id.
     /// </summary>
-    public Guid? CurrentFolderId { get; set; }
+    public string? CurrentFolderId { get; set; }
 
     /// <summary>
     /// Gets/sets the optional folder name
@@ -145,7 +145,7 @@ public class MediaListModel
     /// <summary>
     /// Gets/sets the optional parent id.
     /// </summary>
-    public Guid? ParentFolderId { get; set; }
+    public string? ParentFolderId { get; set; }
 
     /// <summary>
     /// Gets/sets if the current folder can be deleted.

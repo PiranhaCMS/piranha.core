@@ -26,8 +26,8 @@ public interface IArchiveService
     /// <param name="month">The optional year</param>
     /// <param name="pageSize">The optional page size. If not provided, this will be read from config</param>
     /// <returns>The post archive</returns>
-    Task<PostArchive<DynamicPost>> GetByIdAsync(Guid archiveId, int? currentPage = 1,
-        Guid? categoryId = null, Guid? tagId = null, int? year = null, int? month = null, int? pageSize = null);
+    Task<PostArchive<DynamicPost>> GetByIdAsync(string archiveId, int? currentPage = 1,
+        string categoryId = null, string tagId = null, int? year = null, int? month = null, int? pageSize = null);
 
     /// <summary>
     /// Gets the post archive for the specified archive page
@@ -42,7 +42,7 @@ public interface IArchiveService
     /// <param name="pageSize">The optional page size. If not provided, this will be read from config</param>
     /// <typeparam name="T">The post type</typeparam>
     /// <returns>The post archive</returns>
-    Task<PostArchive<T>> GetByIdAsync<T>(Guid archiveId, int? currentPage = 1,
-        Guid? categoryId = null, Guid? tagId = null, int? year = null, int? month = null, int? pageSize = null)
+    Task<PostArchive<T>> GetByIdAsync<T>(string archiveId, int? currentPage = 1,
+        string categoryId = null, string tagId = null, int? year = null, int? month = null, int? pageSize = null)
         where T : Models.PostBase;
 }

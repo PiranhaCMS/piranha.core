@@ -34,7 +34,8 @@ internal sealed class MediaService : IMediaService
     /// <param name="storage">The current storage manager</param>
     /// <param name="cache">The optional model cache</param>
     /// <param name="processor">The optional image processor</param>
-    public MediaService(IMediaRepository repo, IParamService paramService, IStorage storage, IImageProcessor processor = null, ICache cache = null)
+    public MediaService(IMediaRepository repo, IParamService paramService, IStorage storage,
+        IImageProcessor processor = null, ICache cache = null)
     {
         _repo = repo;
         _paramService = paramService;
@@ -44,22 +45,23 @@ internal sealed class MediaService : IMediaService
     }
 
     //Separated this into its own thing in case it needed to get reused elsewhere.
-    private async Task<IEnumerable<Media>> _getFast(IEnumerable<Guid> ids)
+    private async Task<IEnumerable<Media>> _getFast(IEnumerable<string> ids)
     {
-        var guids = ids as Guid[] ?? ids.ToArray();
+        var strings = ids as string[] ?? ids.ToArray();
 
         var partial = _cache != null
-            ? (await Task.WhenAll(guids.Select(async c => await _cache.GetAsync<Media>(c.ToString())))).Where(c => c != null).ToArray()
+            ? (await Task.WhenAll(strings.Select(async c => await _cache.GetAsync<Media>(c)))).Where(c => c != null)
+            .ToArray()
             : Array.Empty<Media>();
 
-        var missingIds = guids.Except(partial.Select(c => c.Id)).ToArray();
+        var missingIds = strings.Except(partial.Select(c => c.Id)).ToArray();
         var returns = partial
             .Concat(await Task.WhenAll((await _repo.GetById(missingIds))
-            .Select(async c =>
-            {
-                await OnLoad(c).ConfigureAwait(false);
-                return c;
-            })))
+                .Select(async c =>
+                {
+                    await OnLoad(c).ConfigureAwait(false);
+                    return c;
+                })))
             .OrderBy(m => m.Filename)
             .ToArray();
         return returns;
@@ -70,13 +72,14 @@ internal sealed class MediaService : IMediaService
     /// </summary>
     /// <param name="folderId">The optional folder id</param>
     /// <returns>The available media</returns>
-    public Task<IEnumerable<Media>> GetAllByFolderIdAsync(Guid? folderId = null)
+    public Task<IEnumerable<Media>> GetAllByFolderIdAsync(string? folderId = null)
     {
-        return _repo.GetAll(folderId).ContinueWith(t => _getFast(t.Result.ToArray())).Unwrap();
+        return _repo.GetAll(folderId).ContinueWith(t => _getFast(t.Result.Select(g => g.ToString()).ToArray()))
+            .Unwrap();
     }
 
     /// <inheritdoc cref="IMediaService.CountFolderItemsAsync"/>
-    public Task<int> CountFolderItemsAsync(Guid? folderId = null) => _repo.CountAll(folderId);
+    public Task<int> CountFolderItemsAsync(string? folderId = null) => _repo.CountAll(folderId);
 
     /// <summary>
     /// Gets all media folders available in the specified
@@ -84,20 +87,21 @@ internal sealed class MediaService : IMediaService
     /// </summary>
     /// <param name="folderId">The optional folder id</param>
     /// <returns>The available media folders</returns>
-    public async Task<IEnumerable<MediaFolder>> GetAllFoldersAsync(Guid? folderId = null)
+    public async Task<IEnumerable<MediaFolder>> GetAllFoldersAsync(string? folderId = null)
     {
         var models = new List<MediaFolder>();
         var items = await _repo.GetAllFolders(folderId).ConfigureAwait(false);
 
         foreach (var item in items)
         {
-            var folder = await GetFolderByIdAsync(item).ConfigureAwait(false);
+            var folder = await GetFolderByIdAsync(item.ToString()).ConfigureAwait(false);
 
             if (folder != null)
             {
                 models.Add(folder);
             }
         }
+
         return models;
     }
 
@@ -106,15 +110,16 @@ internal sealed class MediaService : IMediaService
     /// </summary>
     /// <param name="id">The unique id</param>
     /// <returns>The media</returns>
-    public async Task<Media> GetByIdAsync(Guid id)
+    public async Task<Media> GetByIdAsync(string id)
     {
-        var model = _cache == null ? null : await _cache.GetAsync<Media>(id.ToString()).ConfigureAwait(false);
+        var model = _cache == null ? null : await _cache.GetAsync<Media>(id).ConfigureAwait(false);
 
         if (model == null)
         {
             model = await _repo.GetById(id).ConfigureAwait(false);
             await OnLoad(model).ConfigureAwait(false);
         }
+
         return model;
     }
 
@@ -123,7 +128,7 @@ internal sealed class MediaService : IMediaService
     /// </summary>
     /// <param name="ids"></param>
     /// <returns></returns>
-    public Task<IEnumerable<Media>> GetByIdAsync(params Guid[] ids)
+    public Task<IEnumerable<Media>> GetByIdAsync(params string[] ids)
     {
         return _repo.GetById(ids);
     }
@@ -133,15 +138,16 @@ internal sealed class MediaService : IMediaService
     /// </summary>
     /// <param name="id">The unique id</param>
     /// <returns>The media folder</returns>
-    public async Task<MediaFolder> GetFolderByIdAsync(Guid id)
+    public async Task<MediaFolder> GetFolderByIdAsync(string id)
     {
-        var model = _cache == null ? null : await _cache.GetAsync<MediaFolder>(id.ToString()).ConfigureAwait(false);
+        var model = _cache == null ? null : await _cache.GetAsync<MediaFolder>(id).ConfigureAwait(false);
 
         if (model == null)
         {
             model = await _repo.GetFolderById(id).ConfigureAwait(false);
             await OnFolderLoad(model).ConfigureAwait(false);
         }
+
         return model;
     }
 
@@ -151,7 +157,9 @@ internal sealed class MediaService : IMediaService
     /// <returns>The media structure</returns>
     public async Task<MediaStructure> GetStructureAsync()
     {
-        var structure = _cache == null ? null : await _cache.GetAsync<MediaStructure>(MEDIA_STRUCTURE).ConfigureAwait(false);
+        var structure = _cache == null
+            ? null
+            : await _cache.GetAsync<MediaStructure>(MEDIA_STRUCTURE).ConfigureAwait(false);
 
         if (structure == null)
         {
@@ -162,6 +170,7 @@ internal sealed class MediaService : IMediaService
                 await _cache.SetAsync(MEDIA_STRUCTURE, structure).ConfigureAwait(false);
             }
         }
+
         return structure;
     }
 
@@ -208,16 +217,16 @@ internal sealed class MediaService : IMediaService
 
         Media model = null;
 
-        if (content.Id.HasValue)
+        if (!string.IsNullOrEmpty(content.Id))
         {
-            model = await GetByIdAsync(content.Id.Value).ConfigureAwait(false);
+            model = await GetByIdAsync(content.Id).ConfigureAwait(false);
         }
 
         if (model == null)
         {
             model = new Media()
             {
-                Id = model != null || content.Id.HasValue ? content.Id.Value : Guid.NewGuid(),
+                Id = !string.IsNullOrEmpty(content.Id) ? content.Id : Snowflake.NewId(),
                 Created = DateTime.Now
             };
             content.Id = model.Id;
@@ -232,8 +241,11 @@ internal sealed class MediaService : IMediaService
                     foreach (var version in model.Versions)
                     {
                         // Delete version from storage
-                        await session.DeleteAsync(model, GetResourceName(model, version.Width, version.Height, version.FileExtension)).ConfigureAwait(false);
+                        await session.DeleteAsync(model,
+                                GetResourceName(model, version.Width, version.Height, version.FileExtension))
+                            .ConfigureAwait(false);
                     }
+
                     model.Versions.Clear();
                 }
 
@@ -299,9 +311,9 @@ internal sealed class MediaService : IMediaService
     public async Task SaveFolderAsync(MediaFolder model)
     {
         // Ensure id
-        if (model.Id == Guid.Empty)
+        if (string.IsNullOrEmpty(model.Id))
         {
-            model.Id = Guid.NewGuid();
+            model.Id = Snowflake.NewId();
         }
 
         // Validate model
@@ -322,7 +334,7 @@ internal sealed class MediaService : IMediaService
     /// </summary>
     /// <param name="model">The model</param>
     /// <param name="folderId">The folder id</param>
-    public async Task MoveAsync(Media model, Guid? folderId)
+    public async Task MoveAsync(Media model, string? folderId)
     {
         await _repo.Move(model, folderId).ConfigureAwait(false);
         await RemoveFromCache(model).ConfigureAwait(false);
@@ -337,7 +349,7 @@ internal sealed class MediaService : IMediaService
     /// <param name="width">The requested width</param>
     /// <param name="height">The optionally requested height</param>
     /// <returns>The public URL</returns>
-    public string EnsureVersion(Guid id, int width, int? height = null)
+    public string EnsureVersion(string id, int width, int? height = null)
     {
         return EnsureVersionAsync(id, width, height).GetAwaiter().GetResult();
     }
@@ -350,7 +362,7 @@ internal sealed class MediaService : IMediaService
     /// <param name="width">The requested width</param>
     /// <param name="height">The optionally requested height</param>
     /// <returns>The public URL</returns>
-    public async Task<string> EnsureVersionAsync(Guid id, int width, int? height = null)
+    public async Task<string> EnsureVersionAsync(string id, int width, int? height = null)
     {
         var media = await GetByIdAsync(id).ConfigureAwait(false);
 
@@ -409,6 +421,7 @@ internal sealed class MediaService : IMediaService
                     {
                         _processor.Scale(stream, output, width);
                     }
+
                     output.Position = 0;
                     bool upload = false;
 
@@ -424,7 +437,7 @@ internal sealed class MediaService : IMediaService
 
                             version = new MediaVersion
                             {
-                                Id = Guid.NewGuid(),
+                                Id = Snowflake.NewId(),
                                 Size = output.Length,
                                 Width = width,
                                 Height = height,
@@ -442,11 +455,12 @@ internal sealed class MediaService : IMediaService
                     if (upload)
                     {
                         await session.PutAsync(media, GetResourceName(media, width, height), media.ContentType,
-                                output).ConfigureAwait(false);
+                            output).ConfigureAwait(false);
 
                         var info = new FileInfo(media.Filename);
                         return GetPublicUrl(media, width, height, info.Extension);
                     }
+
                     //When moving this out of its parent method, realized that if the mutex failed, it would just fall back to the null instead of trying to return the issue.
                     //Added this to ensure that queries didn't just give up if they weren't the first to the party.
                     return GetPublicUrl(media, width, height, version.FileExtension);
@@ -460,7 +474,7 @@ internal sealed class MediaService : IMediaService
     /// Deletes the media with the given id.
     /// </summary>
     /// <param name="id">The unique id</param>
-    public async Task DeleteAsync(Guid id)
+    public async Task DeleteAsync(string id)
     {
         var media = await GetByIdAsync(id).ConfigureAwait(false);
 
@@ -474,7 +488,8 @@ internal sealed class MediaService : IMediaService
                     foreach (var version in media.Versions)
                     {
                         // Delete version from storage
-                        await session.DeleteAsync(media, GetResourceName(media, version.Width, version.Height, version.FileExtension))
+                        await session.DeleteAsync(media,
+                                GetResourceName(media, version.Width, version.Height, version.FileExtension))
                             .ConfigureAwait(false);
                     }
                 }
@@ -485,6 +500,7 @@ internal sealed class MediaService : IMediaService
                 await session.DeleteAsync(media, media.Filename).ConfigureAwait(false);
                 App.Hooks.OnAfterDelete(media);
             }
+
             await RemoveFromCache(media).ConfigureAwait(false);
             await RemoveStructureFromCache().ConfigureAwait(false);
         }
@@ -503,7 +519,7 @@ internal sealed class MediaService : IMediaService
     /// Deletes the media folder with the given id.
     /// </summary>
     /// <param name="id">The unique id</param>
-    public async Task DeleteFolderAsync(Guid id)
+    public async Task DeleteFolderAsync(string id)
     {
         var folder = await GetFolderByIdAsync(id).ConfigureAwait(false);
 
@@ -561,7 +577,7 @@ internal sealed class MediaService : IMediaService
 
             if (_cache != null)
             {
-                await _cache.SetAsync(model.Id.ToString(), model).ConfigureAwait(false);
+                await _cache.SetAsync(model.Id, model).ConfigureAwait(false);
             }
         }
     }
@@ -578,7 +594,7 @@ internal sealed class MediaService : IMediaService
 
             if (_cache != null)
             {
-                await _cache.SetAsync(model.Id.ToString(), model).ConfigureAwait(false);
+                await _cache.SetAsync(model.Id, model).ConfigureAwait(false);
             }
         }
     }
@@ -591,7 +607,7 @@ internal sealed class MediaService : IMediaService
     {
         if (_cache != null)
         {
-            await _cache.RemoveAsync(model.Id.ToString()).ConfigureAwait(false);
+            await _cache.RemoveAsync(model.Id).ConfigureAwait(false);
         }
     }
 
@@ -603,7 +619,7 @@ internal sealed class MediaService : IMediaService
     {
         if (_cache != null)
         {
-            await _cache.RemoveAsync(model.Id.ToString()).ConfigureAwait(false);
+            await _cache.RemoveAsync(model.Id).ConfigureAwait(false);
             await RemoveStructureFromCache().ConfigureAwait(false);
         }
     }
@@ -663,6 +679,7 @@ internal sealed class MediaService : IMediaService
         {
             sb.Append(extension);
         }
+
         return sb.ToString();
     }
 
@@ -686,6 +703,7 @@ internal sealed class MediaService : IMediaService
             {
                 return cdn + _storage.GetResourceName(media, name);
             }
+
             return _storage.GetPublicUrl(media, name);
         }
     }

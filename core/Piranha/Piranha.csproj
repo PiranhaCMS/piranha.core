@@ -16,6 +16,8 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="IdGen" Version="3.0.7" />
+    <PackageReference Include="IdGen.DependencyInjection" Version="3.0.7" />
     <PackageReference Include="Markdig" Version="0.40.0" />
     <PackageReference Include="Microsoft.Extensions.Caching.Hybrid" Version="10.3.0" />
     <PackageReference Include="Microsoft.Extensions.Caching.Memory" Version="10.0.3" />

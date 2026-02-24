@@ -25,7 +25,7 @@ public interface IParamService
     /// </summary>
     /// <param name="id">The unique id</param>
     /// <returns>The model, or null if it doesn't exist</returns>
-    Task<Param> GetByIdAsync(Guid id);
+    Task<Param> GetByIdAsync(string id);
 
     /// <summary>
     /// Gets the model with the given key.
@@ -45,7 +45,7 @@ public interface IParamService
     /// Deletes the model with the specified id.
     /// </summary>
     /// <param name="id">The unique id</param>
-    Task DeleteAsync(Guid id);
+    Task DeleteAsync(string id);
 
     /// <summary>
     /// Deletes the given model.

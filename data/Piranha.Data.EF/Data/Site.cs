@@ -1,4 +1,4 @@
-﻿/*
+/*
  * Copyright (c) .NET Foundation and Contributors
  *
  * This software may be modified and distributed under the terms
@@ -16,7 +16,7 @@ public sealed class Site : ContentBase<SiteField>
     /// <summary>
     /// Gets/sets the language id.
     /// </summary>
-    public Guid? LanguageId { get; set; }
+    public string LanguageId { get; set; }
 
     /// <summary>
     /// Gets/sets the optional site type id.
@@ -36,7 +36,7 @@ public sealed class Site : ContentBase<SiteField>
     /// <summary>
     /// Gets/sets the optional logo image id.
     /// </summary>
-    public Guid? LogoId { get; set; }
+    public string LogoId { get; set; }
 
     /// <summary>
     /// Gets/sets the optional hostnames to bind this site for.

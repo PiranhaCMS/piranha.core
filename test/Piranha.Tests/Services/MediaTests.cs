@@ -18,35 +18,37 @@ namespace Piranha.Tests.Services;
 [Collection("Integration tests")]
 public class MediaTestsMemoryCache: MediaTests
 {
-    public override Task InitializeAsync()
+    public override async Task InitializeAsync()
     {
+        await base.InitializeAsync();
         _cache = new Cache.MemoryCache((IMemoryCache)_services.GetService(typeof(IMemoryCache)));
-        return base.InitializeAsync();
     }
 }
 
 [Collection("Integration tests")]
 public class MediaTestsDistributedCache: MediaTests
 {
-    public override Task InitializeAsync()
+    public override async Task InitializeAsync()
     {
+        await base.InitializeAsync();
         _cache = new Cache.DistributedCache((IDistributedCache)_services.GetService(typeof(IDistributedCache)));
-        return base.InitializeAsync();
     }
 }
 
 [Collection("Integration tests")]
 public class MediaTests : BaseTestsAsync
 {
-    private Guid image1Id;
-    private Guid image2Id;
-    private Guid image3Id;
-    private Guid image4Id;
-    private Guid image5Id;
-    private Guid folder1Id;
+    private string image1Id;
+    private string image2Id;
+    private string image3Id;
+    private string image4Id;
+    private string image5Id;
+    private string folder1Id;
 
     public override async Task InitializeAsync()
     {
+        await base.InitializeAsync();
+
         using (var api = CreateApi())
         {
             Piranha.App.Init(api);
@@ -69,7 +71,7 @@ public class MediaTests : BaseTestsAsync
                 };
                 await api.Media.SaveAsync(image1);
 
-                image1Id = image1.Id.Value;
+                image1Id = image1.Id;
 
                 // Add some additional meta data
                 var image = await api.Media.GetByIdAsync(image1Id);
@@ -91,7 +93,7 @@ public class MediaTests : BaseTestsAsync
                 };
                 await api.Media.SaveAsync(image2);
 
-                image2Id = image2.Id.Value;
+                image2Id = image2.Id;
             }
 
             using (var stream = File.OpenRead("../../../Assets/HLD_Screenshot_01_robot_1080.png"))
@@ -103,7 +105,7 @@ public class MediaTests : BaseTestsAsync
                 };
                 await api.Media.SaveAsync(image3);
 
-                image3Id = image3.Id.Value;
+                image3Id = image3.Id;
             }
 
             using (var stream = File.OpenRead("../../../Assets/HLD Screenshot 01 mech 1080.png"))
@@ -115,7 +117,7 @@ public class MediaTests : BaseTestsAsync
                 };
                 await api.Media.SaveAsync(image5);
 
-                image5Id = image5.Id.Value;
+                image5Id = image5.Id;
             }
         }
     }
@@ -265,7 +267,7 @@ public class MediaTests : BaseTestsAsync
 
             media = await api.Media.GetByIdAsync(image1Id);
             Assert.NotNull(media.FolderId);
-            Assert.Equal(folder1Id, media.FolderId.Value);
+            Assert.Equal(folder1Id, media.FolderId);
 
             await api.Media.MoveAsync(media, null);
         }
@@ -287,7 +289,7 @@ public class MediaTests : BaseTestsAsync
 
                 Assert.NotNull(image.Id);
 
-                image4Id = image.Id.Value;
+                image4Id = image.Id;
             }
         }
     }

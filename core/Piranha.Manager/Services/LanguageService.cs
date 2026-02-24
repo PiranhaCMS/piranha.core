@@ -55,7 +55,7 @@ public class LanguageService
     /// </summary>
     /// <param name="id">The id of the language to delete</param>
     /// <returns>The updated data</returns>
-    public async Task<LanguageEditModel> Delete(Guid id)
+    public async Task<LanguageEditModel> Delete(string id)
     {
         var defaultLanguage = await _api.Languages.GetDefaultAsync();
         var sites = await _api.Sites.GetAllAsync();
@@ -91,9 +91,9 @@ public class LanguageService
         var defaultLanguage = model.Items.Single(i => i.IsDefault);
 
         // First let's save the default language
-        if (defaultLanguage.Id == Guid.Empty)
+        if (defaultLanguage.Id == string.Empty)
         {
-            defaultLanguage.Id = Guid.NewGuid();
+            defaultLanguage.Id = Snowflake.NewId();
         }
         await _api.Languages.SaveAsync(defaultLanguage);
 
