@@ -3,6 +3,8 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
 using Raven.Client.Documents.Session;
 using Moq;
+using Piranha;
+using Piranha.Manager.LocalAuth;
 using Xunit;
 
 namespace Aero.Identity.Tests.Extensions;
@@ -55,5 +57,33 @@ public class RavenIdentityExtensionsTests
         Assert.NotNull(userStore);
         Assert.IsType<RavenUserStore<RavenUser>>(userStore);
         Assert.Null(roleStore);
+    }
+
+    [Fact]
+    public void AddPiranhaRavenDbIdentity_RegistersEverything()
+    {
+        // Arrange
+        var services = new ServiceCollection();
+        var mockStore = new Mock<Raven.Client.Documents.IDocumentStore>();
+        var mockSession = new Mock<IAsyncDocumentSession>();
+        services.AddSingleton(mockStore.Object);
+        services.AddScoped(_ => mockSession.Object);
+
+        // Act
+        services.AddPiranhaRavenDbIdentity();
+
+        var serviceProvider = services.BuildServiceProvider();
+
+        // Assert
+        var userStore = serviceProvider.GetService<IUserStore<RavenUser>>();
+        var security = serviceProvider.GetService<ISecurity>();
+
+        Assert.NotNull(userStore);
+        Assert.IsType<RavenUserStore<RavenUser>>(userStore);
+        Assert.NotNull(security);
+        Assert.IsType<RavenIdentitySecurity>(security);
+
+        // Verify module registration
+        Assert.True(App.Modules.Any(m => m.Instance is RavenIdentityModule));
     }
 }
