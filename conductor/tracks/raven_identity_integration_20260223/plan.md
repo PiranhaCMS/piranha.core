@@ -1,15 +1,15 @@
 # Implementation Plan: RavenDB Identity Integration
 
-## Phase 1: Module and Extensions
-- [ ] Task: Implement `RavenIdentityModule` in `Aero.Identity`
-    - [ ] Define module metadata (Name, Description, etc.)
-    - [ ] Register Manager permissions (Users, Roles CRUD)
-    - [ ] Add Manager menu items for Users and Roles
-- [ ] Task: Create `AddPiranhaRavenDbIdentity` DI extensions
-    - [ ] Implement service registration for stores and managers
-    - [ ] Implement authorization policy configuration
-    - [ ] Implement module registration logic
-- [ ] Task: Conductor - User Manual Verification 'Phase 1: Module and Extensions' (Protocol in workflow.md)
+## Phase 1: Module and Extensions [checkpoint: 77786d8]
+- [x] Task: Implement `RavenIdentityModule` in `Aero.Identity` 7cec895
+    - [x] Define module metadata (Name, Description, etc.)
+    - [x] Register Manager permissions (Users, Roles CRUD)
+    - [x] Add Manager menu items for Users and Roles
+- [x] Task: Create `AddPiranhaRavenDbIdentity` DI extensions 809d24b
+    - [x] Implement service registration for stores and managers
+    - [x] Implement authorization policy configuration
+    - [x] Implement module registration logic
+- [x] Task: Conductor - User Manual Verification 'Phase 1: Module and Extensions' (Protocol in workflow.md) 77786d8
 
 ## Phase 2: TODO Resolution (Solution-Wide)
 - [ ] Task: Scan solution for RavenDB-related `// TODO` items
