@@ -51,315 +51,275 @@ public class AliasTests : BaseTestsAsync
     {
         await base.InitializeAsync();
 
-        using (var api = CreateApi())
+        using var api = CreateApi();
+        // Add site
+        var site = new Site
         {
-            // Add site
-            var site = new Site
-            {
-                Id = SITE_ID,
-                Title = "Alias Site",
-                InternalId = "AliasSite",
-                IsDefault = true
-            };
-            await api.Sites.SaveAsync(site);
+            Id = SITE_ID,
+            Title = "Alias Site",
+            InternalId = "AliasSite",
+            IsDefault = true
+        };
+        await api.Sites.SaveAsync(site);
 
-            // Add aliases
-            await api.Aliases.SaveAsync(new Alias
-            {
-                Id = ALIAS_1_ID,
-                SiteId = SITE_ID,
-                AliasUrl = ALIAS_1,
-                RedirectUrl = "/redirect-1"
-            });
-            await api.Aliases.SaveAsync(new Alias
-            {
-                SiteId = SITE_ID,
-                AliasUrl = ALIAS_4,
-                RedirectUrl = "/redirect-4"
-            });
-            await api.Aliases.SaveAsync(new Alias
-            {
-                SiteId = SITE_ID,
-                AliasUrl = ALIAS_5,
-                RedirectUrl = "/redirect-5"
-            });
-        }
+        // Add aliases
+        await api.Aliases.SaveAsync(new Alias
+        {
+            Id = ALIAS_1_ID,
+            SiteId = SITE_ID,
+            AliasUrl = ALIAS_1,
+            RedirectUrl = "/redirect-1"
+        });
+        await api.Aliases.SaveAsync(new Alias
+        {
+            SiteId = SITE_ID,
+            AliasUrl = ALIAS_4,
+            RedirectUrl = "/redirect-4"
+        });
+        await api.Aliases.SaveAsync(new Alias
+        {
+            SiteId = SITE_ID,
+            AliasUrl = ALIAS_5,
+            RedirectUrl = "/redirect-5"
+        });
     }
 
     public override async Task DisposeAsync()
     {
-        using (var api = CreateApi())
+        using var api = CreateApi();
+        var aliases = await api.Aliases.GetAllAsync();
+        foreach (var a in aliases)
         {
-            var aliases = await api.Aliases.GetAllAsync();
-            foreach (var a in aliases)
-            {
-                await api.Aliases.DeleteAsync(a);
-            }
+            await api.Aliases.DeleteAsync(a);
+        }
 
-            var sites = await api.Sites.GetAllAsync();
-            foreach (var s in sites)
-            {
-                await api.Sites.DeleteAsync(s);
-            }
+        var sites = await api.Sites.GetAllAsync();
+        foreach (var s in sites)
+        {
+            await api.Sites.DeleteAsync(s);
         }
     }
 
     [Fact]
-    public void IsCached() {
-        using (var api = CreateApi()) {
-            Assert.Equal(((Api)api).IsCached,
-                this.GetType() == typeof(AliasTestsMemoryCache) ||
-                this.GetType() == typeof(AliasTestsDistributedCache));
-        }
+    public void IsCached()
+    {
+        using var api = CreateApi();
+        Assert.Equal(((Api)api).IsCached,
+            this.GetType() == typeof(AliasTestsMemoryCache) ||
+            this.GetType() == typeof(AliasTestsDistributedCache));
     }
 
     [Fact]
     public async Task Add()
     {
-        using (var api = CreateApi())
+        using var api = CreateApi();
+        await api.Aliases.SaveAsync(new Alias
         {
-            await api.Aliases.SaveAsync(new Alias
-            {
-                SiteId = SITE_ID,
-                AliasUrl = ALIAS_2,
-                RedirectUrl = "/redirect-2"
-            });
-        }
+            SiteId = SITE_ID,
+            AliasUrl = ALIAS_2,
+            RedirectUrl = "/redirect-2"
+        });
     }
 
     [Fact]
     public async Task AddDuplicateKey()
     {
-        using (var api = CreateApi())
-        {
-            await Assert.ThrowsAnyAsync<Exception>(async () =>
-                await api.Aliases.SaveAsync(new Alias
-                {
-                    SiteId = SITE_ID,
-                    AliasUrl = ALIAS_1,
-                    RedirectUrl = "/duplicate-alias"
-                })
-            );
-        }
+        using var api = CreateApi();
+        await Assert.ThrowsAnyAsync<Exception>(async () =>
+            await api.Aliases.SaveAsync(new Alias
+            {
+                SiteId = SITE_ID,
+                AliasUrl = ALIAS_1,
+                RedirectUrl = "/duplicate-alias"
+            })
+        );
     }
 
     [Fact]
     public async Task GetNoneById()
     {
-        using (var api = CreateApi())
-        {
-            var none = await api.Aliases.GetByIdAsync(Snowflake.NewId());
+        using var api = CreateApi();
+        var none = await api.Aliases.GetByIdAsync(Snowflake.NewId());
 
-            Assert.Null(none);
-        }
+        Assert.Null(none);
     }
 
     [Fact]
     public async Task GetNoneByAliasUrl()
     {
-        using (var api = CreateApi())
-        {
-            var none = await api.Aliases.GetByAliasUrlAsync("/none-existing-alias");
+        using var api = CreateApi();
+        var none = await api.Aliases.GetByAliasUrlAsync("/none-existing-alias");
 
-            Assert.Null(none);
-        }
+        Assert.Null(none);
     }
 
     [Fact]
     public async Task GetNoneByRedirectUrl()
     {
-        using (var api = CreateApi())
-        {
-            var none = await api.Aliases.GetByRedirectUrlAsync("/none-existing-alias");
+        using var api = CreateApi();
+        var none = await api.Aliases.GetByRedirectUrlAsync("/none-existing-alias");
 
-            Assert.Empty(none);
-        }
+        Assert.Empty(none);
     }
 
     [Fact]
     public async Task GetAll()
     {
-        using (var api = CreateApi())
-        {
-            var models = await api.Aliases.GetAllAsync();
+        using var api = CreateApi();
+        var models = await api.Aliases.GetAllAsync();
 
-            Assert.NotNull(models);
-            Assert.NotEmpty(models);
-        }
+        Assert.NotNull(models);
+        Assert.NotEmpty(models);
     }
 
     [Fact]
     public async Task GetById()
     {
-        using (var api = CreateApi())
-        {
-            var model = await api.Aliases.GetByIdAsync(ALIAS_1_ID);
+        using var api = CreateApi();
+        var model = await api.Aliases.GetByIdAsync(ALIAS_1_ID);
 
-            Assert.NotNull(model);
-            Assert.Equal(ALIAS_1, model.AliasUrl);
-        }
+        Assert.NotNull(model);
+        Assert.Equal(ALIAS_1, model.AliasUrl);
     }
 
     [Fact]
     public async Task GetByAliasUrl()
     {
-        using (var api = CreateApi())
-        {
-            var model = await api.Aliases.GetByAliasUrlAsync(ALIAS_1);
+        using var api = CreateApi();
+        var model = await api.Aliases.GetByAliasUrlAsync(ALIAS_1);
 
-            Assert.NotNull(model);
-            Assert.Equal(ALIAS_1, model.AliasUrl);
-        }
+        Assert.NotNull(model);
+        Assert.Equal(ALIAS_1, model.AliasUrl);
     }
 
     [Fact]
     public async Task GetByAliasUrlWithDifferentCase()
     {
-        using (var api = CreateApi())
-        {
-            var model = await api.Aliases.GetByAliasUrlAsync("/Old-URL");
+        using var api = CreateApi();
+        var model = await api.Aliases.GetByAliasUrlAsync("/Old-URL");
 
-            Assert.NotNull(model);
-            Assert.Equal(ALIAS_1, model.AliasUrl);
-        }
+        Assert.NotNull(model);
+        Assert.Equal(ALIAS_1, model.AliasUrl);
     }
 
     [Fact]
     public async Task GetByRedirectUrl()
     {
-        using (var api = CreateApi())
-        {
-            var models = await api.Aliases.GetByRedirectUrlAsync("/redirect-1");
+        using var api = CreateApi();
+        var models = await api.Aliases.GetByRedirectUrlAsync("/redirect-1");
 
-            Assert.Single(models);
-            Assert.Equal(ALIAS_1, models.First().AliasUrl);
-        }
+        Assert.Single(models);
+        Assert.Equal(ALIAS_1, models.First().AliasUrl);
     }
 
     [Fact]
     public async Task GetByRedirectUrlWithDifferentCase()
     {
-        using (var api = CreateApi())
-        {
-            var models = await api.Aliases.GetByRedirectUrlAsync("/ReDiRect-1");
+        using var api = CreateApi();
+        var models = await api.Aliases.GetByRedirectUrlAsync("/ReDiRect-1");
 
-            Assert.Single(models);
-            Assert.Equal(ALIAS_1, models.First().AliasUrl);
-        }
+        Assert.Single(models);
+        Assert.Equal(ALIAS_1, models.First().AliasUrl);
     }
 
     [Fact]
     public async Task Update()
     {
-        using (var api = CreateApi())
-        {
-            var model = await api.Aliases.GetByIdAsync(ALIAS_1_ID);
+        using var api = CreateApi();
+        var model = await api.Aliases.GetByIdAsync(ALIAS_1_ID);
 
-            Assert.Equal("/redirect-1", model.RedirectUrl);
+        Assert.Equal("/redirect-1", model.RedirectUrl);
 
-            model.RedirectUrl = "/redirect-updated";
+        model.RedirectUrl = "/redirect-updated";
 
-            await api.Aliases.SaveAsync(model);
-        }
+        await api.Aliases.SaveAsync(model);
     }
 
     [Fact]
     public async Task FixAliasUrl()
     {
-        using (var api = CreateApi())
+        using var api = CreateApi();
+        var model = new Alias
         {
-            var model = new Alias
-            {
-                SiteId = SITE_ID,
-                AliasUrl = "the-alias-url-1",
-                RedirectUrl = "/the-redirect-1"
-            };
+            SiteId = SITE_ID,
+            AliasUrl = "the-alias-url-1",
+            RedirectUrl = "/the-redirect-1"
+        };
 
-            await api.Aliases.SaveAsync(model);
+        await api.Aliases.SaveAsync(model);
 
-            Assert.Equal("/the-alias-url-1", model.AliasUrl);
-        }
+        Assert.Equal("/the-alias-url-1", model.AliasUrl);
     }
 
     [Fact]
     public async Task FixRedirectUrl()
     {
-        using (var api = CreateApi())
+        using var api = CreateApi();
+        var model = new Alias
         {
-            var model = new Alias
-            {
-                SiteId = SITE_ID,
-                AliasUrl = "/the-alias-url-2",
-                RedirectUrl = "the-redirect-2"
-            };
+            SiteId = SITE_ID,
+            AliasUrl = "/the-alias-url-2",
+            RedirectUrl = "the-redirect-2"
+        };
 
-            await api.Aliases.SaveAsync(model);
+        await api.Aliases.SaveAsync(model);
 
-            Assert.Equal("/the-redirect-2", model.RedirectUrl);
-        }
+        Assert.Equal("/the-redirect-2", model.RedirectUrl);
     }
 
     [Fact]
     public async Task AllowHttpUrl()
     {
-        using (var api = CreateApi())
+        using var api = CreateApi();
+        var model = new Alias
         {
-            var model = new Alias
-            {
-                SiteId = SITE_ID,
-                AliasUrl = "/the-alias-url-3",
-                RedirectUrl = "http://redirect.com"
-            };
+            SiteId = SITE_ID,
+            AliasUrl = "/the-alias-url-3",
+            RedirectUrl = "http://redirect.com"
+        };
 
-            await api.Aliases.SaveAsync(model);
+        await api.Aliases.SaveAsync(model);
 
-            Assert.Equal("http://redirect.com", model.RedirectUrl);
-        }
+        Assert.Equal("http://redirect.com", model.RedirectUrl);
     }
 
     [Fact]
     public async Task AllowHttpsUrl()
     {
-        using (var api = CreateApi())
+        using var api = CreateApi();
+        var model = new Alias
         {
-            var model = new Alias
-            {
-                SiteId = SITE_ID,
-                AliasUrl = "/the-alias-url-4",
-                RedirectUrl = "https://redirect.com"
-            };
+            SiteId = SITE_ID,
+            AliasUrl = "/the-alias-url-4",
+            RedirectUrl = "https://redirect.com"
+        };
 
-            await api.Aliases.SaveAsync(model);
+        await api.Aliases.SaveAsync(model);
 
-            Assert.Equal("https://redirect.com", model.RedirectUrl);
-        }
+        Assert.Equal("https://redirect.com", model.RedirectUrl);
     }
 
     [Fact]
     public async Task Delete()
     {
-        using (var api = CreateApi())
-        {
-            var model = await api.Aliases.GetByAliasUrlAsync(ALIAS_4);
+        using var api = CreateApi();
+        var model = await api.Aliases.GetByAliasUrlAsync(ALIAS_4);
 
-            Assert.NotNull(model);
+        Assert.NotNull(model);
 
-            model = await api.Aliases.GetByAliasUrlAsync(ALIAS_4);
+        model = await api.Aliases.GetByAliasUrlAsync(ALIAS_4);
 
-            await api.Aliases.DeleteAsync(model);
-        }
+        await api.Aliases.DeleteAsync(model);
     }
 
     [Fact]
     public async Task DeleteById()
     {
-        using (var api = CreateApi())
-        {
-            var model = await api.Aliases.GetByAliasUrlAsync(ALIAS_5);
+        using var api = CreateApi();
+        var model = await api.Aliases.GetByAliasUrlAsync(ALIAS_5);
 
-            Assert.NotNull(model);
+        Assert.NotNull(model);
 
-            await api.Aliases.DeleteAsync(model.Id);
-        }
+        await api.Aliases.DeleteAsync(model.Id);
     }
 }

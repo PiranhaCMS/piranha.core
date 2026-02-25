@@ -39,7 +39,8 @@ internal class ContentService<TContent, TField, TModelBase> : IContentService<TC
     }
 
     /// <inheritdoc />
-    public async Task<T> TransformAsync<T>(TContent content, Models.ContentTypeBase type, Func<TContent, T, Task> process = null, string? languageId = null)
+    public async Task<T> TransformAsync<T>(TContent content, Models.ContentTypeBase type,
+        Func<TContent, T, Task> process = null, string? languageId = null)
         where T : Models.ContentBase, TModelBase
     {
         if (content is Content genericContent)
@@ -54,7 +55,8 @@ internal class ContentService<TContent, TField, TModelBase> : IContentService<TC
             // 1: Get the requested model type
             //
             var modelType = typeof(T);
-            if (!typeof(Models.IDynamicContent).IsAssignableFrom(modelType) && !typeof(Models.IContentInfo).IsAssignableFrom(modelType))
+            if (!typeof(Models.IDynamicContent).IsAssignableFrom(modelType) &&
+                !typeof(Models.IContentInfo).IsAssignableFrom(modelType))
             {
                 modelType = Type.GetType(type.CLRType);
 
@@ -87,9 +89,9 @@ internal class ContentService<TContent, TField, TModelBase> : IContentService<TC
             //
             // 5: Map translation
             //
-            if (content is ITranslatable translatableContent && languageId.HasValue)
+            if (content is ITranslatable translatableContent && !string.IsNullOrEmpty(languageId))
             {
-                var translation = translatableContent.GetTranslation(languageId.Value);
+                var translation = translatableContent.GetTranslation(languageId);
 
                 if (translation != null)
                 {
@@ -131,22 +133,26 @@ internal class ContentService<TContent, TField, TModelBase> : IContentService<TC
                     }
                     else
                     {
-                        var fieldCount = content.Fields.Where(f => f.RegionId == regionKey).Select(f => f.SortOrder).DefaultIfEmpty(-1).Max() + 1;
+                        var fieldCount = content.Fields.Where(f => f.RegionId == regionKey).Select(f => f.SortOrder)
+                            .DefaultIfEmpty(-1).Max() + 1;
                         var sortOrder = 0;
 
                         while (fieldCount > sortOrder)
                         {
                             if (region.Fields.Count == 1)
                             {
-                                var field = fields.SingleOrDefault(f => f.FieldId == region.Fields[0].Id && f.SortOrder == sortOrder);
+                                var field = fields.SingleOrDefault(f =>
+                                    f.FieldId == region.Fields[0].Id && f.SortOrder == sortOrder);
                                 if (field != null)
                                     AddSimpleValue(model, regionKey, field, languageId);
                             }
                             else
                             {
-                                await AddComplexValueAsync(model, type, regionKey, fields.Where(f => f.SortOrder == sortOrder).ToList(), languageId)
+                                await AddComplexValueAsync(model, type, regionKey,
+                                        fields.Where(f => f.SortOrder == sortOrder).ToList(), languageId)
                                     .ConfigureAwait(false);
                             }
+
                             sortOrder++;
                         }
                     }
@@ -160,6 +166,7 @@ internal class ContentService<TContent, TField, TModelBase> : IContentService<TC
 
             return model;
         }
+
         return null;
     }
 
@@ -180,6 +187,7 @@ internal class ContentService<TContent, TField, TModelBase> : IContentService<TC
         {
             content.Id = model.Id = Snowflake.NewId();
         }
+
         content.Created = DateTime.Now;
 
         //
@@ -190,9 +198,9 @@ internal class ContentService<TContent, TField, TModelBase> : IContentService<TC
         //
         // 3: Map translation
         //
-        if (content is ITranslatable translatableContent && languageId.HasValue)
+        if (content is ITranslatable translatableContent && !string.IsNullOrEmpty(languageId))
         {
-            translatableContent.SetTranslation(content.Id, languageId.Value, model);
+            translatableContent.SetTranslation(content.Id, languageId, model);
         }
 
         //
@@ -256,6 +264,7 @@ internal class ContentService<TContent, TField, TModelBase> : IContentService<TC
                 }
             }
         }
+
         return content;
     }
 
@@ -294,9 +303,9 @@ internal class ContentService<TContent, TField, TModelBase> : IContentService<TC
                     }
                 }
 
-                if (block.ParentId.HasValue)
+                if (!string.IsNullOrEmpty(block.ParentId))
                 {
-                    var parent = models.FirstOrDefault(m => m.Id == block.ParentId.Value);
+                    var parent = models.FirstOrDefault(m => m.Id == block.ParentId);
 
                     if (parent != null && typeof(Extend.BlockGroup).IsAssignableFrom(parent.GetType()))
                     {
@@ -313,6 +322,7 @@ internal class ContentService<TContent, TField, TModelBase> : IContentService<TC
                 }
             }
         }
+
         return models;
     }
 
@@ -348,9 +358,9 @@ internal class ContentService<TContent, TField, TModelBase> : IContentService<TC
                     }
                 }
 
-                if (block.ParentId.HasValue)
+                if (!string.IsNullOrEmpty(block.ParentId))
                 {
-                    var parent = models.FirstOrDefault(m => m.Id == block.ParentId.Value);
+                    var parent = models.FirstOrDefault(m => m.Id == block.ParentId);
 
                     if (parent != null && typeof(Extend.BlockGroup).IsAssignableFrom(parent.GetType()))
                     {
@@ -367,6 +377,7 @@ internal class ContentService<TContent, TField, TModelBase> : IContentService<TC
                 }
             }
         }
+
         return models;
     }
 
@@ -408,6 +419,7 @@ internal class ContentService<TContent, TField, TModelBase> : IContentService<TC
                             block.Fields.Add(field);
                         }
                     }
+
                     blocks.Add(block);
 
                     if (typeof(Extend.BlockGroup).IsAssignableFrom(models[n].GetType()))
@@ -420,12 +432,14 @@ internal class ContentService<TContent, TField, TModelBase> : IContentService<TC
                             {
                                 item.ParentId = block.Id;
                             }
+
                             blocks.AddRange(blockItems);
                         }
                     }
                 }
             }
         }
+
         return blocks;
     }
 
@@ -485,9 +499,11 @@ internal class ContentService<TContent, TField, TModelBase> : IContentService<TC
                             {
                                 field.Value = App.SerializeObject(blockValue, prop.PropertyType);
                             }
+
                             block.Fields.Add(field);
                         }
                     }
+
                     blocks.Add(block);
 
                     if (typeof(Extend.BlockGroup).IsAssignableFrom(models[n].GetType()))
@@ -500,12 +516,14 @@ internal class ContentService<TContent, TField, TModelBase> : IContentService<TC
                             {
                                 item.ParentId = block.Id;
                             }
+
                             blocks.AddRange(blockItems);
                         }
                     }
                 }
             }
         }
+
         return blocks;
     }
 
@@ -528,6 +546,7 @@ internal class ContentService<TContent, TField, TModelBase> : IContentService<TC
         {
             value = model.GetType().GetProperty(regionId, App.PropertyBindings).GetValue(model);
         }
+
         if (value is IEnumerable)
             return (IEnumerable)value;
         return null;
@@ -580,7 +599,8 @@ internal class ContentService<TContent, TField, TModelBase> : IContentService<TC
     /// <param name="regionId">The region id</param>
     /// <param name="sortOrder">The optional sort order</param>
     /// <param name="languageId">The optional language id</param>
-    private IList<string> MapRegion(TContent content, object region, Models.ContentTypeRegion regionType, string regionId, int sortOrder = 0, string? languageId = null)
+    private IList<string> MapRegion(TContent content, object region, Models.ContentTypeRegion regionType,
+        string regionId, int sortOrder = 0, string? languageId = null)
     {
         var items = new List<string>();
 
@@ -616,7 +636,8 @@ internal class ContentService<TContent, TField, TModelBase> : IContentService<TC
 
                     // Check if we have the current field in the database already
                     var field = content.Fields
-                        .SingleOrDefault(f => f.RegionId == regionId && f.FieldId == fieldDef.Id && f.SortOrder == sortOrder);
+                        .SingleOrDefault(f =>
+                            f.RegionId == regionId && f.FieldId == fieldDef.Id && f.SortOrder == sortOrder);
 
                     // If not, create a new field
                     if (field == null)
@@ -634,20 +655,23 @@ internal class ContentService<TContent, TField, TModelBase> : IContentService<TC
                     field.SortOrder = sortOrder;
 
                     // Update field value
-                    if (fieldValue is Extend.ITranslatable && field is ITranslatable translatableField && languageId.HasValue)
+                    if (fieldValue is Extend.ITranslatable && field is ITranslatable translatableField &&
+                        !string.IsNullOrEmpty(languageId))
                     {
                         // This is a translatable value
-                        translatableField.SetTranslation(field.Id, languageId.Value, fieldValue);
+                        translatableField.SetTranslation(field.Id, languageId, fieldValue);
                     }
                     else
                     {
                         // this is a non translatable valuye
                         field.Value = App.SerializeObject(fieldValue, fieldType.Type);
                     }
+
                     items.Add(field.Id);
                 }
             }
         }
+
         return items;
     }
 
@@ -659,7 +683,8 @@ internal class ContentService<TContent, TField, TModelBase> : IContentService<TC
     /// <param name="regionId">The region id</param>
     /// <param name="field">The field</param>
     /// <param name="languageId">The languageId</param>
-    private void SetSimpleValue<T>(T model, string regionId, TField field, string? languageId) where T : Models.ContentBase
+    private void SetSimpleValue<T>(T model, string regionId, TField field, string? languageId)
+        where T : Models.ContentBase
     {
         if (model is Models.IDynamicContent dynamicModel)
         {
@@ -685,7 +710,8 @@ internal class ContentService<TContent, TField, TModelBase> : IContentService<TC
     /// <param name="regionId">The region id</param>
     /// <param name="field">The field</param>
     /// <param name="languageId">The languageId</param>
-    private void AddSimpleValue<T>(T model, string regionId, TField field, string? languageId) where T : Models.ContentBase
+    private void AddSimpleValue<T>(T model, string regionId, TField field, string? languageId)
+        where T : Models.ContentBase
     {
         if (model is Models.IDynamicContent dynamicModel)
         {
@@ -749,7 +775,8 @@ internal class ContentService<TContent, TField, TModelBase> : IContentService<TC
     /// <param name="regionId">The region id</param>
     /// <param name="fields">The field</param>
     /// <param name="languageId">The languageId</param>
-    private async Task AddComplexValueAsync<T>(T model, Models.ContentTypeBase contentType, string regionId, IList<TField> fields, string? languageId)
+    private async Task AddComplexValueAsync<T>(T model, Models.ContentTypeBase contentType, string regionId,
+        IList<TField> fields, string? languageId)
         where T : Models.ContentBase
     {
         if (fields.Count > 0)
@@ -767,6 +794,7 @@ internal class ContentService<TContent, TField, TModelBase> : IContentService<TC
                             DeserializeValue(field, languageId);
                     }
                 }
+
                 list.Add(obj);
             }
             else
@@ -786,6 +814,7 @@ internal class ContentService<TContent, TField, TModelBase> : IContentService<TC
                             fieldProp.SetValue(obj, DeserializeValue(field, languageId));
                         }
                     }
+
                     list.Add(obj);
                 }
             }
@@ -804,12 +833,15 @@ internal class ContentService<TContent, TField, TModelBase> : IContentService<TC
 
         if (type != null)
         {
-            if (typeof(Extend.ITranslatable).IsAssignableFrom(type.Type) && field is ITranslatable translatable && languageId.HasValue)
+            if (typeof(Extend.ITranslatable).IsAssignableFrom(type.Type) && field is ITranslatable translatable &&
+                !string.IsNullOrEmpty(languageId))
             {
-                return App.DeserializeObject((string)translatable.GetTranslation(languageId.Value), type.Type);
+                return App.DeserializeObject((string)translatable.GetTranslation(languageId), type.Type);
             }
+
             return App.DeserializeObject(field.Value, type.Type);
         }
+
         return null;
     }
 
@@ -825,12 +857,15 @@ internal class ContentService<TContent, TField, TModelBase> : IContentService<TC
 
         if (type != null)
         {
-            if (typeof(Extend.ITranslatable).IsAssignableFrom(type.Type) && field is ITranslatable translatable && languageId.HasValue)
+            if (typeof(Extend.ITranslatable).IsAssignableFrom(type.Type) && field is ITranslatable translatable &&
+                !string.IsNullOrEmpty(languageId))
             {
-                return App.DeserializeObject((string)translatable.GetTranslation(languageId.Value), type.Type);
+                return App.DeserializeObject((string)translatable.GetTranslation(languageId), type.Type);
             }
+
             return App.DeserializeObject(field.Value, type.Type);
         }
+
         return null;
     }
 
@@ -854,6 +889,7 @@ internal class ContentService<TContent, TField, TModelBase> : IContentService<TC
             {
                 return fieldProp.GetValue(region);
             }
+
             return null;
         }
     }

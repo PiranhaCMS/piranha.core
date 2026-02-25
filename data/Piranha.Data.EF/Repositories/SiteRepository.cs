@@ -41,7 +41,6 @@ internal class SiteRepository : ISiteRepository
         Language defaultLanguage = null;
 
         var sites = await _db.Sites
-            
             .OrderBy(s => s.Title)
             .ToListAsync()
             .ConfigureAwait(false);
@@ -50,7 +49,7 @@ internal class SiteRepository : ISiteRepository
 
         foreach (var site in sites)
         {
-            if (string.IsNullOrEmpty(site.LanguageId && defaultLanguage == null))
+            if (string.IsNullOrEmpty(site.LanguageId) && defaultLanguage == null)
             {
                 defaultLanguage = await _db.Languages
                     .FirstOrDefaultAsync(l => l.IsDefault);
@@ -59,12 +58,12 @@ internal class SiteRepository : ISiteRepository
             models.Add(new Models.Site
             {
                 Id = site.Id,
-                LanguageId = string.IsNullOrEmpty(site.LanguageId) ? defaultLanguage.Id,
+                LanguageId = string.IsNullOrEmpty(site.LanguageId) ? defaultLanguage.Id : site.LanguageId,
                 SiteTypeId = site.SiteTypeId,
                 Title = site.Title,
                 InternalId = site.InternalId,
                 Description = site.Description,
-                Logo = string.IsNullOrEmpty(site.LogoId) ?  new ImageField() : site.LogoId,
+                Logo = string.IsNullOrEmpty(site.LogoId) ? new ImageField() : site.LogoId,
                 Hostnames = site.Hostnames,
                 IsDefault = site.IsDefault,
                 ContentLastModified = site.ContentLastModified,
@@ -72,6 +71,7 @@ internal class SiteRepository : ISiteRepository
                 LastModified = site.LastModified
             });
         }
+
         return models;
     }
 
@@ -83,7 +83,6 @@ internal class SiteRepository : ISiteRepository
     public async Task<Models.Site> GetById(string id)
     {
         var site = await _db.Sites
-            
             .FirstOrDefaultAsync(s => s.Id == id);
 
         if (site != null)
@@ -111,6 +110,7 @@ internal class SiteRepository : ISiteRepository
                 LastModified = site.LastModified
             };
         }
+
         return null;
     }
 
@@ -122,7 +122,6 @@ internal class SiteRepository : ISiteRepository
     public async Task<Models.Site> GetByInternalId(string internalId)
     {
         var site = await _db.Sites
-            
             .FirstOrDefaultAsync(s => s.InternalId == internalId);
 
         if (site != null)
@@ -137,12 +136,12 @@ internal class SiteRepository : ISiteRepository
             return new Models.Site
             {
                 Id = site.Id,
-                LanguageId = site.LanguageId.HasValue ? site.LanguageId.Value : defaultLanguage.Id,
+                LanguageId = !string.IsNullOrEmpty(site.LanguageId) ? site.LanguageId : defaultLanguage.Id,
                 SiteTypeId = site.SiteTypeId,
                 Title = site.Title,
                 InternalId = site.InternalId,
                 Description = site.Description,
-                Logo = site.LogoId.HasValue ? site.LogoId.Value : new ImageField(),
+                Logo = !string.IsNullOrEmpty(site.LogoId) ? site.LogoId : new ImageField(),
                 Hostnames = site.Hostnames,
                 IsDefault = site.IsDefault,
                 ContentLastModified = site.ContentLastModified,
@@ -150,6 +149,7 @@ internal class SiteRepository : ISiteRepository
                 LastModified = site.LastModified
             };
         }
+
         return null;
     }
 
@@ -160,13 +160,12 @@ internal class SiteRepository : ISiteRepository
     public async Task<Models.Site> GetDefault()
     {
         var site = await _db.Sites
-            
             .FirstOrDefaultAsync(s => s.IsDefault);
 
         if (site != null)
         {
             Language defaultLanguage = null;
-            if (!site.LanguageId.HasValue)
+            if (string.IsNullOrEmpty(site.LanguageId))
             {
                 defaultLanguage = await _db.Languages
                     .FirstOrDefaultAsync(l => l.IsDefault);
@@ -175,12 +174,12 @@ internal class SiteRepository : ISiteRepository
             return new Models.Site
             {
                 Id = site.Id,
-                LanguageId = site.LanguageId.HasValue ? site.LanguageId.Value : defaultLanguage.Id,
+                LanguageId = !string.IsNullOrEmpty(site.LanguageId) ? site.LanguageId : defaultLanguage.Id,
                 SiteTypeId = site.SiteTypeId,
                 Title = site.Title,
                 InternalId = site.InternalId,
                 Description = site.Description,
-                Logo = site.LogoId.HasValue ? site.LogoId.Value : new ImageField(),
+                Logo = !string.IsNullOrEmpty(site.LogoId) ? site.LogoId : new ImageField(),
                 Hostnames = site.Hostnames,
                 IsDefault = site.IsDefault,
                 ContentLastModified = site.ContentLastModified,
@@ -188,6 +187,7 @@ internal class SiteRepository : ISiteRepository
                 LastModified = site.LastModified
             };
         }
+
         return null;
     }
 
@@ -210,7 +210,6 @@ internal class SiteRepository : ISiteRepository
     public async Task<T> GetContentById<T>(string id) where T : Models.SiteContent<T>
     {
         var site = await _db.Sites
-            
             .Where(s => s.Id == id)
             .FirstOrDefaultAsync()
             .ConfigureAwait(false);
@@ -243,8 +242,6 @@ internal class SiteRepository : ISiteRepository
     public async Task<Models.Sitemap> GetSitemap(string id, bool onlyPublished = true)
     {
         var pages = await _db.Pages
-            
-            
             .Where(p => p.SiteId == id)
             .OrderBy(p => p.ParentId)
             .ThenBy(p => p.SortOrder)
@@ -255,6 +252,7 @@ internal class SiteRepository : ISiteRepository
         {
             pages = pages.Where(p => p.Published.HasValue && p.Published.Value <= DateTime.Now).ToList();
         }
+
         return Sort(pages);
     }
 
@@ -279,6 +277,7 @@ internal class SiteRepository : ISiteRepository
             //await _db.Sites.AddAsync(site).ConfigureAwait(false);
             await _db.session.StoreAsync(site).ConfigureAwait(false);
         }
+
         site.LanguageId = model.LanguageId;
         site.SiteTypeId = model.SiteTypeId;
         site.Title = model.Title;
@@ -303,7 +302,6 @@ internal class SiteRepository : ISiteRepository
     public async Task SaveContent<T>(string siteId, T content) where T : Models.SiteContent<T>
     {
         var site = await _db.Sites
-            
             .FirstOrDefaultAsync(s => s.Id == siteId)
             .ConfigureAwait(false);
 
@@ -389,6 +387,7 @@ internal class SiteRepository : ISiteRepository
 
             result.Add(item);
         }
+
         return result;
     }
 }

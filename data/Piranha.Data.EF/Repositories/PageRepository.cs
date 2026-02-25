@@ -10,7 +10,6 @@
 
 using System.Text.Json;
 using Raven.Client.Documents;
-
 using Piranha.Data;
 using Piranha.Services;
 
@@ -124,6 +123,7 @@ internal class PageRepository : IPageRepository
         {
             return await _contentService.TransformAsync<T>(page, App.PageTypes.GetById(page.PageTypeId), ProcessAsync);
         }
+
         return null;
     }
 
@@ -143,6 +143,7 @@ internal class PageRepository : IPageRepository
         {
             return await _contentService.TransformAsync<T>(page, App.PageTypes.GetById(page.PageTypeId), ProcessAsync);
         }
+
         return null;
     }
 
@@ -162,8 +163,10 @@ internal class PageRepository : IPageRepository
 
         foreach (var page in pages)
         {
-            ret.Add(await _contentService.TransformAsync<T>(page, App.PageTypes.GetById(page.PageTypeId), ProcessAsync).ConfigureAwait(false));
+            ret.Add(await _contentService.TransformAsync<T>(page, App.PageTypes.GetById(page.PageTypeId), ProcessAsync)
+                .ConfigureAwait(false));
         }
+
         return ret;
     }
 
@@ -184,6 +187,7 @@ internal class PageRepository : IPageRepository
         {
             return await _contentService.TransformAsync<T>(page, App.PageTypes.GetById(page.PageTypeId), ProcessAsync);
         }
+
         return null;
     }
 
@@ -212,9 +216,11 @@ internal class PageRepository : IPageRepository
                 // Transform data model
                 var page = JsonSerializer.Deserialize<Page>(draft.Data);
 
-                return await _contentService.TransformAsync<T>(page, App.PageTypes.GetById(page.PageTypeId), ProcessAsync);
+                return await _contentService.TransformAsync<T>(page, App.PageTypes.GetById(page.PageTypeId),
+                    ProcessAsync);
             }
         }
+
         return null;
     }
 
@@ -230,8 +236,11 @@ internal class PageRepository : IPageRepository
     {
         var affected = new List<string>();
 
-        var source = await _db.Pages.Where(p => p.SiteId == model.SiteId && p.ParentId == model.ParentId && p.Id != model.Id).ToListAsync();
-        var dest = model.ParentId == parentId ? source : await _db.Pages.Where(p => p.SiteId == model.SiteId && p.ParentId == parentId).ToListAsync();
+        var source = await _db.Pages
+            .Where(p => p.SiteId == model.SiteId && p.ParentId == model.ParentId && p.Id != model.Id).ToListAsync();
+        var dest = model.ParentId == parentId
+            ? source
+            : await _db.Pages.Where(p => p.SiteId == model.SiteId && p.ParentId == parentId).ToListAsync();
 
         // Remove the old position for the page
         affected.AddRange(MovePages(source, model.Id, model.SiteId, model.SortOrder + 1, false));
@@ -387,7 +396,6 @@ internal class PageRepository : IPageRepository
     public async Task<IEnumerable<string>> Delete(string id)
     {
         var model = await _db.Pages
-            
             .FirstOrDefaultAsync(p => p.Id == id)
             .ConfigureAwait(false);
         var affected = new List<string>();
@@ -423,13 +431,15 @@ internal class PageRepository : IPageRepository
             _db.session.Delete(model);
 
 
-            var siblings = await _db.Pages.Where(p => p.SiteId == model.SiteId && p.ParentId == model.ParentId).ToListAsync();
+            var siblings = await _db.Pages.Where(p => p.SiteId == model.SiteId && p.ParentId == model.ParentId)
+                .ToListAsync();
 
             // Move all remaining pages after this page in the site structure.
             affected.AddRange(MovePages(siblings, id, model.SiteId, model.SortOrder + 1, false));
 
             await _db.SaveChangesAsync().ConfigureAwait(false);
         }
+
         return affected;
     }
 
@@ -498,9 +508,9 @@ internal class PageRepository : IPageRepository
             ;
 
         // Check if only should include a comments for a certain post
-        if (pageId.HasValue)
+        if (!string.IsNullOrEmpty(pageId))
         {
-            query = query.Where(c => c.PageId == pageId.Value);
+            query = query.Where(c => c.PageId == pageId);
         }
 
         // Check if we should only include approved
@@ -557,17 +567,13 @@ internal class PageRepository : IPageRepository
             System.Linq.IQueryable<Page> pageQuery = _db.Pages;
             if (isDraft)
             {
-                pageQuery = pageQuery;
+                // pageQuery = pageQuery;
             }
 
             // FirstOrDefaultAsync(p => p.Id ...
             pageQuery = pageQuery.OrderBy(p => p.Id);
 
             var page = await pageQuery
-                
-                
-                
-                
                 .FirstOrDefaultAsync(p => p.Id == model.Id)
                 .ConfigureAwait(false);
 
@@ -580,9 +586,9 @@ internal class PageRepository : IPageRepository
                 lastModified = page.LastModified;
             }
 
-            if (model.OriginalPageId.HasValue)
+            if (!string.IsNullOrEmpty(model.OriginalPageId))
             {
-                var originalPageIsCopy = (await _db.Pages.FirstOrDefaultAsync())?.OriginalPageId.HasValue ?? false;
+                var originalPageIsCopy = !string.IsNullOrEmpty((await _db.Pages.FirstOrDefaultAsync())?.OriginalPageId);
                 if (originalPageIsCopy)
                 {
                     throw new InvalidOperationException("Can not set copy of a copy");
@@ -609,7 +615,8 @@ internal class PageRepository : IPageRepository
                         await _db.session.StoreAsync(page).ConfigureAwait(false);
 
                         // Make room for the new page
-                        var dest = await _db.Pages.Where(p => p.SiteId == model.SiteId && p.ParentId == model.ParentId).ToListAsync();
+                        var dest = await _db.Pages.Where(p => p.SiteId == model.SiteId && p.ParentId == model.ParentId)
+                            .ToListAsync();
                         affected.AddRange(MovePages(dest, page.Id, model.SiteId, model.SortOrder, true));
                     }
                 }
@@ -618,8 +625,12 @@ internal class PageRepository : IPageRepository
                     // Check if the page has been moved
                     if (!isDraft && (page.ParentId != model.ParentId || page.SortOrder != model.SortOrder))
                     {
-                        var source = await _db.Pages.Where(p => p.SiteId == page.SiteId && p.ParentId == page.ParentId && p.Id != model.Id).ToListAsync();
-                        var dest = page.ParentId == model.ParentId ? source : await _db.Pages.Where(p => p.SiteId == model.SiteId && p.ParentId == model.ParentId).ToListAsync();
+                        var source = await _db.Pages.Where(p =>
+                            p.SiteId == page.SiteId && p.ParentId == page.ParentId && p.Id != model.Id).ToListAsync();
+                        var dest = page.ParentId == model.ParentId
+                            ? source
+                            : await _db.Pages.Where(p => p.SiteId == model.SiteId && p.ParentId == model.ParentId)
+                                .ToListAsync();
 
                         // Remove the old position for the page
                         affected.AddRange(MovePages(source, page.Id, page.SiteId, page.SortOrder + 1, false));
@@ -687,6 +698,7 @@ internal class PageRepository : IPageRepository
 
                     await _db.SaveChangesAsync().ConfigureAwait(false);
                 }
+
                 return affected;
             }
 
@@ -710,7 +722,8 @@ internal class PageRepository : IPageRepository
                     await _db.session.StoreAsync(page).ConfigureAwait(false);
 
                     // Make room for the new page
-                    var dest = await _db.Pages.Where(p => p.SiteId == model.SiteId && p.ParentId == model.ParentId).ToListAsync();
+                    var dest = await _db.Pages.Where(p => p.SiteId == model.SiteId && p.ParentId == model.ParentId)
+                        .ToListAsync();
                     affected.AddRange(MovePages(dest, page.Id, model.SiteId, model.SortOrder, true));
                 }
             }
@@ -719,14 +732,20 @@ internal class PageRepository : IPageRepository
                 // Check if the page has been moved
                 if (!isDraft && (page.ParentId != model.ParentId || page.SortOrder != model.SortOrder))
                 {
-                    var source = await _db.Pages.Where(p => p.SiteId == page.SiteId && p.ParentId == page.ParentId && p.Id != model.Id).ToListAsync();
-                    var dest = page.ParentId == model.ParentId ? source : await _db.Pages.Where(p => p.SiteId == model.SiteId && p.ParentId == model.ParentId).ToListAsync();
+                    var source = await _db.Pages
+                        .Where(p => p.SiteId == page.SiteId && p.ParentId == page.ParentId && p.Id != model.Id)
+                        .ToListAsync();
+                    var dest = page.ParentId == model.ParentId
+                        ? source
+                        : await _db.Pages.Where(p => p.SiteId == model.SiteId && p.ParentId == model.ParentId)
+                            .ToListAsync();
 
                     // Remove the old position for the page
                     affected.AddRange(MovePages(source, page.Id, page.SiteId, page.SortOrder + 1, false));
                     // Add room for the new position of the page
                     affected.AddRange(MovePages(dest, page.Id, model.SiteId, model.SortOrder, true));
                 }
+
                 page.LastModified = DateTime.Now;
             }
 
@@ -782,7 +801,8 @@ internal class PageRepository : IPageRepository
                     .Where(b => !current.Contains(b.BlockId) && !b.Block.IsReusable && b.Block.ParentId == null)
                     .Select(b => b.Block);
                 var removedItems = page.Blocks
-                    .Where(b => !current.Contains(b.BlockId) && b.Block.ParentId != null && removed.Select(p => p.Id).ToList().Contains(b.Block.ParentId.Value))
+                    .Where(b => !current.Contains(b.BlockId) && b.Block.ParentId != null &&
+                                removed.Select(p => p.Id).ToList().Contains(b.Block.ParentId))
                     .Select(b => b.Block);
 
                 if (!isDraft)
@@ -791,7 +811,7 @@ internal class PageRepository : IPageRepository
                     // _db.Blocks.RemoveRange(removedItems);
                     foreach (var item in removed)
                         _db.session.Delete(item);
-                    foreach(var item in removedItems)
+                    foreach (var item in removedItems)
                         _db.session.Delete(removedItems);
                 }
 
@@ -804,11 +824,10 @@ internal class PageRepository : IPageRepository
                     System.Linq.IQueryable<Block> blockQuery = _db.Blocks;
                     if (isDraft)
                     {
-                        blockQuery = blockQuery;
+                        // blockQuery = blockQuery;
                     }
 
                     var block = await blockQuery
-                        
                         .FirstOrDefaultAsync(b => b.Id == blocks[n].Id)
                         .ConfigureAwait(false);
 
@@ -825,6 +844,7 @@ internal class PageRepository : IPageRepository
                             await _db.session.StoreAsync(block).ConfigureAwait(false);
                         }
                     }
+
                     block.ParentId = blocks[n].ParentId;
                     block.CLRType = blocks[n].CLRType;
                     block.IsReusable = blocks[n].IsReusable;
@@ -857,8 +877,10 @@ internal class PageRepository : IPageRepository
                                 //await _db.BlockFields.AddAsync(field).ConfigureAwait(false);
                                 await _db.session.StoreAsync(field).ConfigureAwait(false);
                             }
+
                             block.Fields.Add(field);
                         }
+
                         field.SortOrder = newField.SortOrder;
                         field.CLRType = newField.CLRType;
                         field.Value = newField.Value;
@@ -878,9 +900,11 @@ internal class PageRepository : IPageRepository
                         //await _db.PageBlocks.AddAsync(pageBlock).ConfigureAwait(false);
                         await _db.session.StoreAsync(pageBlock).ConfigureAwait(false);
                     }
+
                     page.Blocks.Add(pageBlock);
                 }
             }
+
             if (!isDraft)
             {
                 await _db.SaveChangesAsync().ConfigureAwait(false);
@@ -910,6 +934,7 @@ internal class PageRepository : IPageRepository
                 await _db.SaveChangesAsync().ConfigureAwait(false);
             }
         }
+
         return affected;
     }
 
@@ -923,7 +948,6 @@ internal class PageRepository : IPageRepository
         var loadRelated = !typeof(Models.IContentInfo).IsAssignableFrom(typeof(T));
 
         System.Linq.IQueryable<Page> query = _db.Pages
-            
             ;
 
         // FirstOrDefaultAsync(p => p.Id ...
@@ -931,11 +955,9 @@ internal class PageRepository : IPageRepository
 
         if (loadRelated)
         {
-            query = query
-                
-                
-                ;
+            // query = query;
         }
+
         return query;
     }
 
@@ -956,8 +978,10 @@ internal class PageRepository : IPageRepository
         model.EnableComments = page.EnableComments;
         if (model.EnableComments)
         {
-            model.CommentCount = await _db.PageComments.CountAsync(c => c.PageId == model.Id && c.IsApproved).ConfigureAwait(false);
+            model.CommentCount = await _db.PageComments.CountAsync(c => c.PageId == model.Id && c.IsApproved)
+                .ConfigureAwait(false);
         }
+
         model.CloseCommentsAfterDays = page.CloseCommentsAfterDays;
 
         // Blocks
@@ -967,16 +991,18 @@ internal class PageRepository : IPageRepository
             {
                 foreach (var pageBlock in page.Blocks.OrderBy(b => b.SortOrder))
                 {
-                    if (pageBlock.Block.ParentId.HasValue)
+                    if (!string.IsNullOrEmpty(pageBlock.Block.ParentId))
                     {
-                        var parent = page.Blocks.FirstOrDefault(b => b.BlockId == pageBlock.Block.ParentId.Value);
+                        var parent = page.Blocks.FirstOrDefault(b => b.BlockId == pageBlock.Block.ParentId);
                         if (parent != null)
                         {
                             pageBlock.Block.ParentId = parent.Block.Id;
                         }
                     }
                 }
-                model.Blocks = _contentService.TransformBlocks(page.Blocks.OrderBy(b => b.SortOrder).Select(b => b.Block));
+
+                model.Blocks =
+                    _contentService.TransformBlocks(page.Blocks.OrderBy(b => b.SortOrder).Select(b => b.Block));
             }
         }
     }
@@ -997,6 +1023,7 @@ internal class PageRepository : IPageRepository
         {
             page.SortOrder = increase ? page.SortOrder + 1 : page.SortOrder - 1;
         }
+
         return affected.Select(p => p.Id).ToList();
     }
 }

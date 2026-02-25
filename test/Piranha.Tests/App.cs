@@ -19,11 +19,11 @@ public class App : BaseTests
     /// <summary>
     /// Sets up & initializes the tests.
     /// </summary>
-    protected override void Init() {
-        using (var api = CreateApi())
-        {
-            Piranha.App.Init(api);
-        }
+    protected override void Init()
+    {
+        Seed.RunAsync(CreateApi()).GetAwaiter().GetResult();
+        using var api = CreateApi();
+        Piranha.App.Init(api);
     }
 
     /// <summary>
@@ -33,11 +33,10 @@ public class App : BaseTests
     protected override void Cleanup() { }
 
     [Fact]
-    public void AppInit() {
-        using (var api = CreateApi())
-        {
-            Piranha.App.Init(api);
-        }
+    public void AppInit()
+    {
+        using var api = CreateApi();
+        Piranha.App.Init(api);
     }
 
     [Fact]
@@ -95,7 +94,7 @@ public class App : BaseTests
             new ContentGroupRepository(db),
             new ContentTypeRepository(db),
             new LanguageRepository(db),
-            new Piranha.Repositories.MediaRepository(db),
+            new MediaRepository(db),
             new PageRepository(db, serviceFactory),
             new PageTypeRepository(db),
             new ParamRepository(db),

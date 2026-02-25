@@ -2,7 +2,7 @@ namespace MvcWeb.Models;
 
 public class SaveCommentModel
 {
-    public Guid Id { get; set; }
+    public string Id { get; set; }
     public string CommentAuthor { get; set; }
     public string CommentEmail { get; set; }
     public string CommentUrl { get; set; }

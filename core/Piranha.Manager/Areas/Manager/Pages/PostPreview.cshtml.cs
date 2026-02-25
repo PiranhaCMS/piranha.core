@@ -18,7 +18,7 @@ namespace Piranha.Manager.Models
     public class PostPreviewModel : PageModel
     {
         private readonly IApi _api;
-        public Guid Id { get; set; }
+        public string Id { get; set; }
         public string Permalink { get; set; }
 
         public PostPreviewModel(IApi api)
@@ -26,7 +26,7 @@ namespace Piranha.Manager.Models
             _api = api;
         }
 
-        public async Task<IActionResult> OnGet(Guid id)
+        public async Task<IActionResult> OnGet(string id)
         {
             var post = await _api.Posts.GetByIdAsync<Piranha.Models.PostInfo>(id);
 

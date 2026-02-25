@@ -10,7 +10,6 @@
 
 using System.Text.Json;
 using Raven.Client.Documents;
-
 using Piranha.Data;
 using Piranha.Services;
 
@@ -43,7 +42,6 @@ internal class PostRepository : IPostRepository
     {
         // Prepare base query
         IQueryable<Data.Post> query = _db.Posts
-            
             .Where(p => p.BlogId == blogId)
             .OrderByDescending(p => p.Published)
             .ThenByDescending(p => p.LastModified)
@@ -72,7 +70,6 @@ internal class PostRepository : IPostRepository
     public async Task<IEnumerable<string>> GetAllBySiteId(string siteId)
     {
         return await _db.Posts
-            
             .Where(p => p.Blog.SiteId == siteId)
             .OrderByDescending(p => p.Published)
             .ThenByDescending(p => p.LastModified)
@@ -90,7 +87,6 @@ internal class PostRepository : IPostRepository
     public async Task<IEnumerable<Models.Taxonomy>> GetAllCategories(string blogId)
     {
         return await _db.Categories
-            
             .Where(c => c.BlogId == blogId)
             .OrderBy(c => c.Title)
             .Select(c => new Models.Taxonomy
@@ -111,7 +107,6 @@ internal class PostRepository : IPostRepository
     public async Task<IEnumerable<Models.Taxonomy>> GetAllTags(string blogId)
     {
         return await _db.Tags
-            
             .Where(c => c.BlogId == blogId)
             .OrderBy(c => c.Title)
             .Select(c => new Models.Taxonomy
@@ -133,7 +128,6 @@ internal class PostRepository : IPostRepository
     public async Task<IEnumerable<string>> GetAllDrafts(string blogId)
     {
         return await _db.PostRevisions
-            
             .Where(r => r.Post.BlogId == blogId && r.Created > r.Post.LastModified)
             .Select(r => r.PostId)
             .Distinct()
@@ -185,6 +179,7 @@ internal class PostRepository : IPostRepository
         {
             return await _contentService.TransformAsync<T>(post, App.PostTypes.GetById(post.PostTypeId), ProcessAsync);
         }
+
         return null;
     }
 
@@ -206,6 +201,7 @@ internal class PostRepository : IPostRepository
         {
             return await _contentService.TransformAsync<T>(post, App.PostTypes.GetById(post.PostTypeId), ProcessAsync);
         }
+
         return null;
     }
 
@@ -234,9 +230,11 @@ internal class PostRepository : IPostRepository
                 // Transform data model
                 var post = JsonSerializer.Deserialize<Post>(draft.Data);
 
-                return await _contentService.TransformAsync<T>(post, App.PostTypes.GetById(post.PostTypeId), ProcessAsync);
+                return await _contentService.TransformAsync<T>(post, App.PostTypes.GetById(post.PostTypeId),
+                    ProcessAsync);
             }
         }
+
         return null;
     }
 
@@ -446,6 +444,7 @@ internal class PostRepository : IPostRepository
                         {
                             _db.session.Delete(rev);
                         }
+
                         await _db.SaveChangesAsync().ConfigureAwait(false);
                     }
                 }
@@ -460,7 +459,6 @@ internal class PostRepository : IPostRepository
     public async Task Delete(string id)
     {
         var model = await _db.Posts
-            
             .FirstOrDefaultAsync(p => p.Id == id)
             .ConfigureAwait(false);
 
@@ -631,6 +629,7 @@ internal class PostRepository : IPostRepository
                         .FirstOrDefaultAsync(c => c.BlogId == model.BlogId && c.Slug == model.Category.Slug)
                         .ConfigureAwait(false);
                 }
+
                 if (category == null && !string.IsNullOrWhiteSpace(model.Category.Title))
                 {
                     category = await _db.Categories
@@ -652,6 +651,7 @@ internal class PostRepository : IPostRepository
                     //await _db.Categories.AddAsync(category).ConfigureAwait(false);
                     await _db.session.StoreAsync(category).ConfigureAwait(false);
                 }
+
                 model.Category.Id = category.Id;
                 model.Category.Title = category.Title;
                 model.Category.Slug = category.Slug;
@@ -672,6 +672,7 @@ internal class PostRepository : IPostRepository
                             .FirstOrDefaultAsync(tg => tg.BlogId == model.BlogId && tg.Slug == t.Slug)
                             .ConfigureAwait(false);
                     }
+
                     if (tag == null && !string.IsNullOrWhiteSpace(t.Title))
                     {
                         tag = await _db.Tags
@@ -693,8 +694,10 @@ internal class PostRepository : IPostRepository
                         //await _db.Tags.AddAsync(tag).ConfigureAwait(false);
                         await _db.session.StoreAsync(tag).ConfigureAwait(false);
                     }
+
                     t.Id = tag.Id;
                 }
+
                 t.Title = tag.Title;
                 t.Slug = tag.Slug;
             }
@@ -712,18 +715,13 @@ internal class PostRepository : IPostRepository
             IQueryable<Post> postQuery = _db.Posts;
             if (isDraft)
             {
-                postQuery = postQuery;
+                // postQuery = postQuery;
             }
 
             // FirstOrDefaultAsync(p => p.Id ...
             postQuery = postQuery.OrderBy(p => p.Id);
 
             var post = await postQuery
-                
-                
-                
-                
-                
                 .FirstOrDefaultAsync(p => p.Id == model.Id)
                 .ConfigureAwait(false);
 
@@ -748,6 +746,7 @@ internal class PostRepository : IPostRepository
             {
                 post.LastModified = DateTime.Now;
             }
+
             post = _contentService.Transform<T>(model, type, post);
 
             // Set if comments should be enabled
@@ -803,7 +802,8 @@ internal class PostRepository : IPostRepository
                     .Where(b => !current.Contains(b.BlockId) && !b.Block.IsReusable && b.Block.ParentId == null)
                     .Select(b => b.Block);
                 var removedItems = post.Blocks
-                    .Where(b => !current.Contains(b.BlockId) && b.Block.ParentId != null && removed.Select(p => p.Id).ToList().Contains(b.Block.ParentId))
+                    .Where(b => !current.Contains(b.BlockId) && b.Block.ParentId != null &&
+                                removed.Select(p => p.Id).ToList().Contains(b.Block.ParentId))
                     .Select(b => b.Block);
 
                 if (!isDraft)
@@ -812,10 +812,9 @@ internal class PostRepository : IPostRepository
                     // _db.Blocks.RemoveRange(removedItems);
                     foreach (var block in removed)
                         _db.session.Delete(block);
-                    
+
                     foreach (var block in removedItems)
                         _db.session.Delete(block);
-                    
                 }
 
                 // Delete the old page blocks
@@ -827,11 +826,10 @@ internal class PostRepository : IPostRepository
                     IQueryable<Block> blockQuery = _db.Blocks;
                     if (isDraft)
                     {
-                        blockQuery = blockQuery;
+                        // blockQuery = blockQuery;
                     }
 
                     var block = blockQuery
-                        
                         .FirstOrDefault(b => b.Id == blocks[n].Id);
 
                     if (block == null)
@@ -847,6 +845,7 @@ internal class PostRepository : IPostRepository
                             await _db.session.StoreAsync(block).ConfigureAwait(false);
                         }
                     }
+
                     block.ParentId = blocks[n].ParentId;
                     block.CLRType = blocks[n].CLRType;
                     block.IsReusable = blocks[n].IsReusable;
@@ -861,7 +860,6 @@ internal class PostRepository : IPostRepository
                         //_db.BlockFields.RemoveRange(removedFields);
                         foreach (var removedField in removedFields)
                             _db.session.Delete(removedField);
-                        
                     }
 
                     foreach (var newField in blocks[n].Fields)
@@ -880,8 +878,10 @@ internal class PostRepository : IPostRepository
                                 //await _db.BlockFields.AddAsync(field).ConfigureAwait(false);
                                 await _db.session.StoreAsync(field).ConfigureAwait(false);
                             }
+
                             block.Fields.Add(field);
                         }
+
                         field.SortOrder = newField.SortOrder;
                         field.CLRType = newField.CLRType;
                         field.Value = newField.Value;
@@ -901,6 +901,7 @@ internal class PostRepository : IPostRepository
                         //await _db.PostBlocks.AddAsync(postBlock).ConfigureAwait(false);
                         await _db.session.StoreAsync(postBlock).ConfigureAwait(false);
                     }
+
                     post.Blocks.Add(postBlock);
                 }
             }
@@ -914,6 +915,7 @@ internal class PostRepository : IPostRepository
                     removedTags.Add(tag);
                 }
             }
+
             foreach (var removed in removedTags)
             {
                 post.Tags.Remove(removed);
@@ -940,6 +942,7 @@ internal class PostRepository : IPostRepository
                             Slug = tag.Slug
                         };
                     }
+
                     post.Tags.Add(postTag);
                 }
             }
@@ -1000,6 +1003,7 @@ internal class PostRepository : IPostRepository
             var post = JsonSerializer.Deserialize<Post>(draft.Data);
             used.Add(post.CategoryId);
         }
+
         used = used.Distinct().ToList();
 
         var unused = await _db.Categories
@@ -1043,6 +1047,7 @@ internal class PostRepository : IPostRepository
                 used.Add(tag.TagId);
             }
         }
+
         used = used.Distinct().ToList();
 
         var unused = await _db.Tags
@@ -1055,7 +1060,7 @@ internal class PostRepository : IPostRepository
             //_db.Tags.RemoveRange(unused);
             foreach (var tag in unused)
                 _db.session.Delete(tag);
-            
+
             await _db.SaveChangesAsync().ConfigureAwait(false);
         }
     }
@@ -1070,16 +1075,11 @@ internal class PostRepository : IPostRepository
         var loadRelated = !typeof(Models.IContentInfo).IsAssignableFrom(typeof(T));
 
         IQueryable<Post> query = _db.Posts
-            
-            
-            
             ;
 
         if (loadRelated)
         {
-            query = query
-                
-                ;
+            // query = query;
         }
 
         query = query.OrderBy(p => p.Created);
@@ -1104,8 +1104,10 @@ internal class PostRepository : IPostRepository
         model.EnableComments = post.EnableComments;
         if (model.EnableComments)
         {
-            model.CommentCount = await _db.PostComments.CountAsync(c => c.PostId == model.Id && c.IsApproved).ConfigureAwait(false);
+            model.CommentCount = await _db.PostComments.CountAsync(c => c.PostId == model.Id && c.IsApproved)
+                .ConfigureAwait(false);
         }
+
         model.CloseCommentsAfterDays = post.CloseCommentsAfterDays;
 
         // Blocks
@@ -1124,7 +1126,9 @@ internal class PostRepository : IPostRepository
                         }
                     }
                 }
-                model.Blocks = _contentService.TransformBlocks(post.Blocks.OrderBy(b => b.SortOrder).Select(b => b.Block));
+
+                model.Blocks =
+                    _contentService.TransformBlocks(post.Blocks.OrderBy(b => b.SortOrder).Select(b => b.Block));
             }
         }
     }

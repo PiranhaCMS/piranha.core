@@ -34,17 +34,10 @@ internal class ContentTypeRepository : IContentTypeRepository
     /// <returns>The available models</returns>
     public async Task<IEnumerable<AeroContentType>> GetAll()
     {
-        var models = new List<AeroContentType>();
-        var types = await _db.ContentTypes
+        return await _db.ContentTypes
             .OrderBy(t => t.Id)
             .ToListAsync()
             .ConfigureAwait(false);
-
-        foreach (var type in types)
-        {
-            models.Add(JsonSerializer.Deserialize<AeroContentType>(type.Body));
-        }
-        return models;
     }
 
     /// <summary>
@@ -54,18 +47,11 @@ internal class ContentTypeRepository : IContentTypeRepository
     /// <returns>The available models</returns>
     public async Task<IEnumerable<AeroContentType>> GetByGroup(string group)
     {
-        var models = new List<AeroContentType>();
-        var types = await _db.ContentTypes
+        return await _db.ContentTypes
             .Where(t => t.Group == group)
             .OrderBy(t => t.Id)
             .ToListAsync()
             .ConfigureAwait(false);
-
-        foreach (var type in types)
-        {
-            models.Add(JsonSerializer.Deserialize<AeroContentType>(type.Body));
-        }
-        return models;
     }
 
     /// <summary>
@@ -75,15 +61,9 @@ internal class ContentTypeRepository : IContentTypeRepository
     /// <returns></returns>
     public async Task<AeroContentType> GetById(string id)
     {
-        var type = await _db.ContentTypes
+        return await _db.ContentTypes
             .FirstOrDefaultAsync(t => t.Id == id)
             .ConfigureAwait(false);
-
-        if (type != null)
-        {
-            return JsonSerializer.Deserialize<AeroContentType>(type.Body);
-        }
-        return null;
     }
 
     /// <summary>
@@ -93,23 +73,7 @@ internal class ContentTypeRepository : IContentTypeRepository
     /// <param name="model">The model</param>
     public async Task Save(AeroContentType model)
     {
-        var type = await _db.ContentTypes
-            .FirstOrDefaultAsync(t => t.Id == model.Id)
-            .ConfigureAwait(false);
-
-        if (type == null) {
-            type = new AeroContentType
-            {
-                Id = model.Id,
-                Group = model.Group,
-                Created = DateTime.Now
-            };
-            //await _db.ContentTypes.AddAsync(type).ConfigureAwait(false);
-            await _db.session.StoreAsync(type).ConfigureAwait(false);
-        }
-        type.Body = JsonSerializer.Serialize(model);
-        type.LastModified = DateTime.Now;
-
+        await _db.session.StoreAsync(model, model.Id).ConfigureAwait(false);
         await _db.SaveChangesAsync().ConfigureAwait(false);
     }
 
@@ -119,13 +83,10 @@ internal class ContentTypeRepository : IContentTypeRepository
     /// <param name="id">The unique id</param>
     public async Task Delete(string id)
     {
-        var type = await _db.ContentTypes
-            .FirstOrDefaultAsync(t => t.Id == id)
-            .ConfigureAwait(false);
+        var type = await GetById(id).ConfigureAwait(false);
 
         if (type != null)
         {
-            //_db.ContentTypes.Remove(type);
             _db.session.Delete(type);
             await _db.SaveChangesAsync().ConfigureAwait(false);
         }

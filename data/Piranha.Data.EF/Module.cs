@@ -83,12 +83,12 @@ public class Module : IModule
                 .ForMember(g => g.Created, o => o.Ignore())
                 .ForMember(g => g.LastModified, o => o.Ignore());
             cfg.CreateMap<Data.ContentTranslation, Models.GenericContent>()
-                .ForMember(c =>  c.Id, o => o.Ignore())
-                .ForMember(c =>  c.TypeId, o => o.Ignore())
-                .ForMember(c =>  c.PrimaryImage, o => o.Ignore())
-                .ForMember(c =>  c.Created, o => o.Ignore())
-                .ForMember(c =>  c.LastModified, o => o.Ignore())
-                .ForMember(c =>  c.Permissions, o => o.Ignore());
+                .ForMember(c => c.Id, o => o.Ignore())
+                .ForMember(c => c.TypeId, o => o.Ignore())
+                .ForMember(c => c.PrimaryImage, o => o.Ignore())
+                .ForMember(c => c.Created, o => o.Ignore())
+                .ForMember(c => c.LastModified, o => o.Ignore())
+                .ForMember(c => c.Permissions, o => o.Ignore());
             cfg.CreateMap<Data.MediaFolder, Data.MediaFolder>()
                 .ForMember(f => f.Id, o => o.Ignore())
                 .ForMember(f => f.Created, o => o.Ignore())
@@ -108,8 +108,9 @@ public class Module : IModule
                 .ForMember(p => p.CommentCount, o => o.Ignore());
             cfg.CreateMap<Models.PageBase, Data.Page>()
                 .ForMember(p => p.ContentType, o => o.Ignore())
-                .ForMember(p => p.PrimaryImageId, o => o.MapFrom(m => m.PrimaryImage != null ? m.PrimaryImage.Id : null ))
-                .ForMember(p => p.OgImageId, o => o.MapFrom(m => m.OgImage != null ? m.OgImage.Id : null ))
+                .ForMember(p => p.PrimaryImageId,
+                    o => o.MapFrom(m => m.PrimaryImage != null ? m.PrimaryImage.Id : null))
+                .ForMember(p => p.OgImageId, o => o.MapFrom(m => m.OgImage != null ? m.OgImage.Id : null))
                 .ForMember(p => p.PageTypeId, o => o.MapFrom(m => m.TypeId))
                 .ForMember(p => p.Blocks, o => o.Ignore())
                 .ForMember(p => p.Fields, o => o.Ignore())
@@ -124,7 +125,8 @@ public class Module : IModule
                 .ForMember(p => p.Level, o => o.Ignore())
                 .ForMember(p => p.Items, o => o.Ignore())
                 .ForMember(p => p.PageTypeName, o => o.Ignore())
-                .ForMember(p => p.Permalink, o => o.MapFrom(d => !d.ParentId.HasValue && d.SortOrder == 0 ? "/" : "/" + d.Slug))
+                .ForMember(p => p.Permalink,
+                    o => o.MapFrom(d => string.IsNullOrEmpty(d.ParentId) && d.SortOrder == 0 ? "/" : "/" + d.Slug))
                 .ForMember(p => p.Permissions, o => o.MapFrom(d => d.Permissions.Select(dp => dp.Permission).ToList()));
             cfg.CreateMap<Data.Param, Data.Param>()
                 .ForMember(p => p.Id, o => o.Ignore())
@@ -145,8 +147,9 @@ public class Module : IModule
             cfg.CreateMap<Models.PostBase, Data.Post>()
                 .ForMember(p => p.PostTypeId, o => o.MapFrom(m => m.TypeId))
                 .ForMember(p => p.CategoryId, o => o.MapFrom(m => m.Category.Id))
-                .ForMember(p => p.PrimaryImageId, o => o.MapFrom(m => m.PrimaryImage != null ? m.PrimaryImage.Id : null ))
-                .ForMember(p => p.OgImageId, o => o.MapFrom(m => m.OgImage != null ? m.OgImage.Id : null ))
+                .ForMember(p => p.PrimaryImageId,
+                    o => o.MapFrom(m => m.PrimaryImage != null ? m.PrimaryImage.Id : null))
+                .ForMember(p => p.OgImageId, o => o.MapFrom(m => m.OgImage != null ? m.OgImage.Id : null))
                 .ForMember(p => p.Blocks, o => o.Ignore())
                 .ForMember(p => p.Fields, o => o.Ignore())
                 .ForMember(p => p.Created, o => o.Ignore())
@@ -190,5 +193,7 @@ public class Module : IModule
     /// <summary>
     /// Initializes the module.
     /// </summary>
-    public void Init() { }
+    public void Init()
+    {
+    }
 }

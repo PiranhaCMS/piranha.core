@@ -66,7 +66,7 @@ public interface IPostService
     /// <param name="slug">The blog slug</param>
     /// <param name="siteId">The optional site id</param>
     /// <returns>The posts</returns>
-    Task<IEnumerable<T>> GetAllAsync<T>(string slug, string siteId = null) where T : PostBase;
+    Task<IEnumerable<T>> GetAllBySlugAsync<T>(string slug, string siteId = null) where T : PostBase;
 
     /// <summary>
     /// Gets all available categories for the specified blog.

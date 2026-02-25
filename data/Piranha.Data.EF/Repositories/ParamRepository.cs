@@ -55,7 +55,7 @@ internal class ParamRepository : IParamRepository
     public Task<Param> GetById(string id)
     {
         return _db.Params
-            
+            .Customize(x => x.WaitForNonStaleResults())
             .Select(p => new Param
             {
                 Id = p.Id,
@@ -76,7 +76,7 @@ internal class ParamRepository : IParamRepository
     public Task<Param> GetByKey(string key)
     {
         return _db.Params
-            
+            .Customize(x => x.WaitForNonStaleResults())
             .Select(p => new Param
             {
                 Id = p.Id,
@@ -97,6 +97,7 @@ internal class ParamRepository : IParamRepository
     public async Task Save(Param model)
     {
         var param = await _db.Params
+            .Customize(x => x.WaitForNonStaleResults())
             .FirstOrDefaultAsync(p => p.Id == model.Id);
 
         if (param == null)
@@ -124,6 +125,7 @@ internal class ParamRepository : IParamRepository
     public async Task Delete(string id)
     {
         var param = await _db.Params
+            .Customize(x => x.WaitForNonStaleResults())
             .FirstOrDefaultAsync(p => p.Id == id);
 
         if (param != null)

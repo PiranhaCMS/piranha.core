@@ -96,7 +96,7 @@ internal sealed class PostService : IPostService
         return await GetAllAsync<DynamicPost>(blogId, index, pageSize);
     }
 
-    
+
     // todo - rename this to GetAllByIdAsync
     /// <summary>
     /// Gets the available post items.
@@ -177,7 +177,7 @@ internal sealed class PostService : IPostService
     /// <returns>The posts</returns>
     public Task<IEnumerable<DynamicPost>> GetDynamicAllAsync(string slug, string siteId = null)
     {
-        return GetAllAsync<DynamicPost>(slug, siteId);
+        return GetAllBySlugAsync<DynamicPost>(slug, siteId);
     }
 
     // todo - rename the method to GetAllBySlugAsync()
@@ -187,7 +187,7 @@ internal sealed class PostService : IPostService
     /// <param name="slug">The blog slug</param>
     /// <param name="siteId">The optional site id</param>
     /// <returns>The posts</returns>
-    public async Task<IEnumerable<T>> GetAllAsync<T>(string slug, string siteId = null) where T : PostBase
+    public async Task<IEnumerable<T>> GetAllBySlugAsync<T>(string slug, string siteId = null) where T : PostBase
     {
         siteId = await EnsureSiteIdAsync(siteId).ConfigureAwait(false);
         var blogId = await _pageService.GetIdBySlugAsync(slug, siteId).ConfigureAwait(false);

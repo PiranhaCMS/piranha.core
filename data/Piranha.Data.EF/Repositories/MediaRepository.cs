@@ -11,6 +11,7 @@
 using Raven.Client.Documents;
 using Piranha.Data;
 using Piranha.Data.EF;
+using Raven.Client.Documents.Linq;
 
 namespace Piranha.Repositories;
 
@@ -74,13 +75,15 @@ internal class MediaRepository : IMediaRepository
     /// </summary>
     /// <param name="ids">One or several media id</param>
     /// <returns>The matching media</returns>
-    public Task<IEnumerable<Models.Media>> GetById(params string[] ids) =>
-        _db.Media
-            
-            .Where(m => ids.Contains(m.Id))
+    public Task<IEnumerable<Models.Media>> GetById(params string[] ids)
+    {
+        var idList = ids.ToList();
+        return _db.Media
+            .Where(m => m.Id.In(idList))
             .OrderBy(m => m.Filename)
             .ToArrayAsync()
             .ContinueWith(t => t.Result.Select(m => (Models.Media) m));
+    }
 
     /// <summary>
     /// Gets the media with the given id.

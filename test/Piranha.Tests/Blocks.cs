@@ -27,25 +27,21 @@ public class Blocks : BaseTestsAsync
     {
         await base.InitializeAsync();
 
-        using (var api = CreateApi())
+        using var api = CreateApi();
+        Piranha.App.Init(api);
+
+        contentService = new ContentService<Page, PageField, Models.PageBase>(new ContentFactory(_services), Piranha.Data.EF.Module.Mapper);
+
+        // Add media
+        using var stream = File.OpenRead("../../../Assets/HLD_Screenshot_01_mech_1080.png");
+        var image1 = new Models.StreamMediaContent
         {
-            Piranha.App.Init(api);
+            Filename = "HLD_Screenshot_01_mech_1080.png",
+            Data = stream
+        };
+        await api.Media.SaveAsync(image1);
 
-            contentService = new ContentService<Page, PageField, Models.PageBase>(new ContentFactory(_services), Piranha.Data.EF.Module.Mapper);
-
-            // Add media
-            using (var stream = File.OpenRead("../../../Assets/HLD_Screenshot_01_mech_1080.png"))
-            {
-                var image1 = new Models.StreamMediaContent
-                {
-                    Filename = "HLD_Screenshot_01_mech_1080.png",
-                    Data = stream
-                };
-                await api.Media.SaveAsync(image1);
-
-                image1Id = image1.Id;
-            }
-        }
+        image1Id = image1.Id;
     }
 
     /// <summary>
@@ -54,14 +50,12 @@ public class Blocks : BaseTestsAsync
     /// </summary>
     public override async Task DisposeAsync()
     {
-        using (var api = CreateApi())
-        {
-            var media = await api.Media.GetAllByFolderIdAsync();
+        using var api = CreateApi();
+        var media = await api.Media.GetAllByFolderIdAsync();
 
-            foreach (var item in media)
-            {
-                await api.Media.DeleteAsync(item);
-            }
+        foreach (var item in media)
+        {
+            await api.Media.DeleteAsync(item);
         }
     }
 
@@ -77,23 +71,21 @@ public class Blocks : BaseTestsAsync
     [Fact]
     public async Task AudioBlockHasTitle()
     {
-        using (var api = CreateApi())
+        using var api = CreateApi();
+        var media = await api.Media.GetByIdAsync(image1Id);
+
+        var block = new AudioBlock()
         {
-            var media = await api.Media.GetByIdAsync(image1Id);
-
-            var block = new AudioBlock()
+            Body = new Extend.Fields.AudioField
             {
-                Body = new Extend.Fields.AudioField
-                {
-                    Id = media.Id
-                }
-            };
-            await block.Body.Init(api);
+                Id = media.Id
+            }
+        };
+        await block.Body.Init(api);
 
-            var title = block.GetTitle();
+        var title = block.GetTitle();
 
-            Assert.Equal("HLD_Screenshot_01_mech_1080.png", title);
-        }
+        Assert.Equal("HLD_Screenshot_01_mech_1080.png", title);
     }
 
     [Fact]
@@ -108,23 +100,21 @@ public class Blocks : BaseTestsAsync
     [Fact]
     public async Task ImageBlockHasTitle()
     {
-        using (var api = CreateApi())
+        using var api = CreateApi();
+        var media = await api.Media.GetByIdAsync(image1Id);
+
+        var block = new ImageBlock()
         {
-            var media = await api.Media.GetByIdAsync(image1Id);
-
-            var block = new ImageBlock()
+            Body = new Extend.Fields.ImageField
             {
-                Body = new Extend.Fields.ImageField
-                {
-                    Id = media.Id
-                }
-            };
-            await block.Body.Init(api);
+                Id = media.Id
+            }
+        };
+        await block.Body.Init(api);
 
-            var title = block.GetTitle();
+        var title = block.GetTitle();
 
-            Assert.Equal("HLD_Screenshot_01_mech_1080.png", title);
-        }
+        Assert.Equal("HLD_Screenshot_01_mech_1080.png", title);
     }
 
     [Fact]

@@ -35,8 +35,15 @@ using Taxonomy = Piranha.Data.Taxonomy;
 
 namespace Piranha;
 
+public class DbRaven : DbRavenBase
+{
+    public DbRaven(IAsyncDocumentSession db) : base(db)
+    {
+    }
+}
+
 /// <inheritdoc />
-public abstract class Db<T> : DbContext, IDb where T : Db<T>
+public abstract class DbRavenBase : IDb 
 {
     private static readonly object _lock = new object();
     private static IDocumentStore _store;
@@ -46,7 +53,7 @@ public abstract class Db<T> : DbContext, IDb where T : Db<T>
     /// Default constructor.
     /// </summary>
     /// <param name="db">The current raven db session</param>
-    protected Db(IAsyncDocumentSession db)
+    protected DbRavenBase(IAsyncDocumentSession db)
     {
         this._session = db;
 
@@ -81,13 +88,13 @@ public abstract class Db<T> : DbContext, IDb where T : Db<T>
     /// The object mutex used for initializing the context.
     /// </summary>
     private static readonly object Mutex = new object();
-    
+
     /// <summary>
     /// Gets the raven db session
     /// </summary>
-    public IAsyncDocumentSession session 
-    { 
-        get 
+    public IAsyncDocumentSession session
+    {
+        get
         {
             if (_session == null)
             {
@@ -105,15 +112,22 @@ public abstract class Db<T> : DbContext, IDb where T : Db<T>
                             if (string.IsNullOrEmpty(url))
                             {
                                 // Fallback to embedded if no URL is provided (test/local dev)
-                                Console.WriteLine("[Db.cs] Session is null and RAVENDB_URL is empty. Falling back to EmbeddedServer.");
-                                try {
+                                Console.WriteLine(
+                                    "[Db.cs] Session is null and RAVENDB_URL is empty. Falling back to EmbeddedServer.");
+                                try
+                                {
                                     EmbeddedServer.Instance.StartServer(new ServerOptions
                                     {
-                                        Licensing = new ServerOptions.LicensingOptions { ThrowOnInvalidOrMissingLicense = false }
+                                        Licensing = new ServerOptions.LicensingOptions
+                                            { ThrowOnInvalidOrMissingLicense = false }
                                     });
-                                } catch (InvalidOperationException) { }
-                                
-                                _store = EmbeddedServer.Instance.GetDocumentStore(new DatabaseOptions(dbName + "-embedded"));
+                                }
+                                catch (InvalidOperationException)
+                                {
+                                }
+
+                                _store = EmbeddedServer.Instance.GetDocumentStore(
+                                    new DatabaseOptions(dbName + "-embedded"));
                             }
                             else
                             {
@@ -131,8 +145,10 @@ public abstract class Db<T> : DbContext, IDb where T : Db<T>
                         }
                     }
                 }
+
                 _session = _store.OpenAsyncSession();
             }
+
             return _session;
         }
     }
@@ -142,12 +158,13 @@ public abstract class Db<T> : DbContext, IDb where T : Db<T>
         return session.Query<T1>();
     }
 
-    public async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default(CancellationToken))
+    public new async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default(CancellationToken))
     {
         if (session != null)
         {
             await session.SaveChangesAsync(cancellationToken);
         }
+
         return 0;
     }
 
@@ -161,7 +178,6 @@ public abstract class Db<T> : DbContext, IDb where T : Db<T>
     public new void Dispose()
     {
         _session?.Dispose();
-        base.Dispose();
     }
 
     public IRavenQueryable<Alias> Aliases => session.Query<Alias>();
@@ -171,9 +187,15 @@ public abstract class Db<T> : DbContext, IDb where T : Db<T>
     public IRavenQueryable<Content> Content => session.Query<Content>();
     public IRavenQueryable<ContentBlock> ContentBlocks => session.Query<ContentBlock>();
     public IRavenQueryable<ContentBlockField> ContentBlockFields => session.Query<ContentBlockField>();
-    public IRavenQueryable<ContentBlockFieldTranslation> ContentBlockFieldTranslations => session.Query<ContentBlockFieldTranslation>();
+
+    public IRavenQueryable<ContentBlockFieldTranslation> ContentBlockFieldTranslations =>
+        session.Query<ContentBlockFieldTranslation>();
+
     public IRavenQueryable<ContentField> ContentFields => session.Query<ContentField>();
-    public IRavenQueryable<ContentFieldTranslation> ContentFieldTranslations => session.Query<ContentFieldTranslation>();
+
+    public IRavenQueryable<ContentFieldTranslation> ContentFieldTranslations =>
+        session.Query<ContentFieldTranslation>();
+
     public IRavenQueryable<ContentTaxonomy> ContentTaxonomies => session.Query<ContentTaxonomy>();
     public IRavenQueryable<ContentTranslation> ContentTranslations => session.Query<ContentTranslation>();
     public IRavenQueryable<ContentGroup> ContentGroups => session.Query<ContentGroup>();

@@ -29,31 +29,27 @@ public class SiteHookTests : BaseTestsAsync
     {
         await base.InitializeAsync();
 
-        using (var api = CreateApi())
-        {
-            // Initialize
-            Piranha.App.Init(api);
+        using var api = CreateApi();
+        // Initialize
+        Piranha.App.Init(api);
 
-            // Create test param
-            await api.Sites.SaveAsync(new Site
-            {
-                Id = ID,
-                Title = TITLE
-            });
-        }
+        // Create test param
+        await api.Sites.SaveAsync(new Site
+        {
+            Id = ID,
+            Title = TITLE
+        });
     }
 
     public override async Task DisposeAsync()
     {
-        using (var api = CreateApi())
-        {
-            // Remove test data
-            var sites = await api.Sites.GetAllAsync();
+        using var api = CreateApi();
+        // Remove test data
+        var sites = await api.Sites.GetAllAsync();
 
-            foreach (var s in sites)
-            {
-                await api.Sites.DeleteAsync(s);
-            }
+        foreach (var s in sites)
+        {
+            await api.Sites.DeleteAsync(s);
         }
     }
 

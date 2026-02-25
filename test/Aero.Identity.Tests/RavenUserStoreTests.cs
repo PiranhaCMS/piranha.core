@@ -22,7 +22,7 @@ public class RavenUserStoreTests : RavenTestBase
 
         // Assert
         Assert.True(result.Succeeded);
-        
+
         using var assertSession = store.OpenAsyncSession();
         var dbUser = await assertSession.LoadAsync<RavenUser>(user.Id);
         Assert.NotNull(dbUser);
@@ -111,7 +111,7 @@ public class RavenUserStoreTests : RavenTestBase
         using var session = store.OpenAsyncSession();
         var userStore = new RavenUserStore<RavenUser>(session);
         var user = new RavenUser();
-        var stamp = Snowflake.NewId().ToString();
+        var stamp = Guid.NewGuid().ToString();
 
         // Act
         await userStore.SetSecurityStampAsync(user, stamp, CancellationToken.None);
@@ -410,7 +410,8 @@ public class RavenUserStoreTests : RavenTestBase
         // Arrange
         using var store = CreateStore();
         using var session = store.OpenAsyncSession();
-        var user = new RavenUser { UserName = "test", Email = "test@example.com", NormalizedEmail = "TEST@EXAMPLE.COM" };
+        var user = new RavenUser
+            { UserName = "test", Email = "test@example.com", NormalizedEmail = "TEST@EXAMPLE.COM" };
         await session.StoreAsync(user);
         await session.SaveChangesAsync();
 
@@ -607,7 +608,11 @@ public class RavenUserStoreTests : RavenTestBase
         using var store = CreateStore();
         using var session = store.OpenAsyncSession();
         var userStore = new RavenUserStore<RavenUser>(session);
-        var user = new RavenUser { UserName = "test", Logins = new List<RavenUserLogin> { new RavenUserLogin { LoginProvider = "Google", ProviderKey = "key1" } } };
+        var user = new RavenUser
+        {
+            UserName = "test",
+            Logins = new List<RavenUserLogin> { new RavenUserLogin { LoginProvider = "Google", ProviderKey = "key1" } }
+        };
 
         // Act
         await userStore.RemoveLoginAsync(user, "Google", "key1", CancellationToken.None);
@@ -623,7 +628,11 @@ public class RavenUserStoreTests : RavenTestBase
         using var store = CreateStore();
         using var session = store.OpenAsyncSession();
         var userStore = new RavenUserStore<RavenUser>(session);
-        var user = new RavenUser { UserName = "test", Logins = new List<RavenUserLogin> { new RavenUserLogin { LoginProvider = "Google", ProviderKey = "key1" } } };
+        var user = new RavenUser
+        {
+            UserName = "test",
+            Logins = new List<RavenUserLogin> { new RavenUserLogin { LoginProvider = "Google", ProviderKey = "key1" } }
+        };
 
         // Act
         var result = await userStore.GetLoginsAsync(user, CancellationToken.None);
@@ -639,7 +648,11 @@ public class RavenUserStoreTests : RavenTestBase
         // Arrange
         using var store = CreateStore();
         using var session = store.OpenAsyncSession();
-        var user = new RavenUser { UserName = "test", Logins = new List<RavenUserLogin> { new RavenUserLogin { LoginProvider = "Google", ProviderKey = "key1" } } };
+        var user = new RavenUser
+        {
+            UserName = "test",
+            Logins = new List<RavenUserLogin> { new RavenUserLogin { LoginProvider = "Google", ProviderKey = "key1" } }
+        };
         await session.StoreAsync(user);
         await session.SaveChangesAsync();
 
@@ -679,7 +692,11 @@ public class RavenUserStoreTests : RavenTestBase
         using var store = CreateStore();
         using var session = store.OpenAsyncSession();
         var userStore = new RavenUserStore<RavenUser>(session);
-        var user = new RavenUser { UserName = "test", Claims = new List<RavenUserClaim> { new RavenUserClaim { ClaimType = "type1", ClaimValue = "value1" } } };
+        var user = new RavenUser
+        {
+            UserName = "test",
+            Claims = new List<RavenUserClaim> { new RavenUserClaim { ClaimType = "type1", ClaimValue = "value1" } }
+        };
 
         // Act
         var result = await userStore.GetClaimsAsync(user, CancellationToken.None);
@@ -697,8 +714,17 @@ public class RavenUserStoreTests : RavenTestBase
         using var store = CreateStore();
         using var session = store.OpenAsyncSession();
         var userStore = new RavenUserStore<RavenUser>(session);
-        var user = new RavenUser { UserName = "test", Claims = new List<RavenUserClaim> { new RavenUserClaim { ClaimType = "type1", ClaimValue = "value1" }, new RavenUserClaim { ClaimType = "type2", ClaimValue = "value2" } } };
-        var claimsToRemove = new List<System.Security.Claims.Claim> { new System.Security.Claims.Claim("type1", "value1") };
+        var user = new RavenUser
+        {
+            UserName = "test",
+            Claims = new List<RavenUserClaim>
+            {
+                new RavenUserClaim { ClaimType = "type1", ClaimValue = "value1" },
+                new RavenUserClaim { ClaimType = "type2", ClaimValue = "value2" }
+            }
+        };
+        var claimsToRemove = new List<System.Security.Claims.Claim>
+            { new System.Security.Claims.Claim("type1", "value1") };
 
         // Act
         await userStore.RemoveClaimsAsync(user, claimsToRemove, CancellationToken.None);
@@ -715,7 +741,11 @@ public class RavenUserStoreTests : RavenTestBase
         using var store = CreateStore();
         using var session = store.OpenAsyncSession();
         var userStore = new RavenUserStore<RavenUser>(session);
-        var user = new RavenUser { UserName = "test", Claims = new List<RavenUserClaim> { new RavenUserClaim { ClaimType = "type1", ClaimValue = "value1" } } };
+        var user = new RavenUser
+        {
+            UserName = "test",
+            Claims = new List<RavenUserClaim> { new RavenUserClaim { ClaimType = "type1", ClaimValue = "value1" } }
+        };
         var oldClaim = new System.Security.Claims.Claim("type1", "value1");
         var newClaim = new System.Security.Claims.Claim("type1", "updated");
 
@@ -733,8 +763,16 @@ public class RavenUserStoreTests : RavenTestBase
         // Arrange
         using var store = CreateStore();
         using var session = store.OpenAsyncSession();
-        var user1 = new RavenUser { UserName = "user1", Claims = new List<RavenUserClaim> { new RavenUserClaim { ClaimType = "type1", ClaimValue = "value1" } } };
-        var user2 = new RavenUser { UserName = "user2", Claims = new List<RavenUserClaim> { new RavenUserClaim { ClaimType = "type2", ClaimValue = "value2" } } };
+        var user1 = new RavenUser
+        {
+            UserName = "user1",
+            Claims = new List<RavenUserClaim> { new RavenUserClaim { ClaimType = "type1", ClaimValue = "value1" } }
+        };
+        var user2 = new RavenUser
+        {
+            UserName = "user2",
+            Claims = new List<RavenUserClaim> { new RavenUserClaim { ClaimType = "type2", ClaimValue = "value2" } }
+        };
         await session.StoreAsync(user1);
         await session.StoreAsync(user2);
         await session.SaveChangesAsync();
@@ -742,7 +780,8 @@ public class RavenUserStoreTests : RavenTestBase
         var userStore = new RavenUserStore<RavenUser>(session);
 
         // Act
-        var result = await userStore.GetUsersForClaimAsync(new System.Security.Claims.Claim("type1", "value1"), CancellationToken.None);
+        var result = await userStore.GetUsersForClaimAsync(new System.Security.Claims.Claim("type1", "value1"),
+            CancellationToken.None);
 
         // Assert
         Assert.Single(result);
@@ -873,7 +912,8 @@ public class RavenUserStoreTests : RavenTestBase
         using var session = store.OpenAsyncSession();
         var userStore = new RavenUserStore<RavenUser>(session);
         var user = new RavenUser();
-        var passkey = new UserPasskeyInfo(new byte[] { 1 }, new byte[] { 2 }, DateTimeOffset.UtcNow, 1, null, false, false, false, new byte[] { 3 }, new byte[] { 4 });
+        var passkey = new UserPasskeyInfo(new byte[] { 1 }, new byte[] { 2 }, DateTimeOffset.UtcNow, 1, null, false,
+            false, false, new byte[] { 3 }, new byte[] { 4 });
 
         // Act
         await userStore.AddOrUpdatePasskeyAsync(user, passkey, CancellationToken.None);
@@ -890,7 +930,17 @@ public class RavenUserStoreTests : RavenTestBase
         using var store = CreateStore();
         using var session = store.OpenAsyncSession();
         var userStore = new RavenUserStore<RavenUser>(session);
-        var user = new RavenUser { Passkeys = new List<PasskeyCredential> { new PasskeyCredential { CredentialId = new byte[] { 1 }, CreatedAt = DateTimeOffset.UtcNow, ClientDataJson = new byte[] { 3 }, AttestationObject = new byte[] { 4 } } } };
+        var user = new RavenUser
+        {
+            Passkeys = new List<PasskeyCredential>
+            {
+                new PasskeyCredential
+                {
+                    CredentialId = new byte[] { 1 }, CreatedAt = DateTimeOffset.UtcNow,
+                    ClientDataJson = new byte[] { 3 }, AttestationObject = new byte[] { 4 }
+                }
+            }
+        };
 
         // Act
         var result = await userStore.GetPasskeysAsync(user, CancellationToken.None);
@@ -907,7 +957,8 @@ public class RavenUserStoreTests : RavenTestBase
         using var store = CreateStore();
         using var session = store.OpenAsyncSession();
         var userStore = new RavenUserStore<RavenUser>(session);
-        var user = new RavenUser { Passkeys = new List<PasskeyCredential> { new PasskeyCredential { CredentialId = new byte[] { 1 } } } };
+        var user = new RavenUser
+            { Passkeys = new List<PasskeyCredential> { new PasskeyCredential { CredentialId = new byte[] { 1 } } } };
 
         // Act
         await userStore.RemovePasskeyAsync(user, new byte[] { 1 }, CancellationToken.None);
@@ -922,7 +973,18 @@ public class RavenUserStoreTests : RavenTestBase
         // Arrange
         using var store = CreateStore();
         using var session = store.OpenAsyncSession();
-        var user = new RavenUser { UserName = "test", Passkeys = new List<PasskeyCredential> { new PasskeyCredential { CredentialId = new byte[] { 1 }, CreatedAt = DateTimeOffset.UtcNow, ClientDataJson = new byte[] { 3 }, AttestationObject = new byte[] { 4 } } } };
+        var user = new RavenUser
+        {
+            UserName = "test",
+            Passkeys = new List<PasskeyCredential>
+            {
+                new PasskeyCredential
+                {
+                    CredentialId = new byte[] { 1 }, CreatedAt = DateTimeOffset.UtcNow,
+                    ClientDataJson = new byte[] { 3 }, AttestationObject = new byte[] { 4 }
+                }
+            }
+        };
         await session.StoreAsync(user);
         await session.SaveChangesAsync();
 
@@ -943,7 +1005,17 @@ public class RavenUserStoreTests : RavenTestBase
         using var store = CreateStore();
         using var session = store.OpenAsyncSession();
         var userStore = new RavenUserStore<RavenUser>(session);
-        var user = new RavenUser { Passkeys = new List<PasskeyCredential> { new PasskeyCredential { CredentialId = new byte[] { 1 }, CreatedAt = DateTimeOffset.UtcNow, ClientDataJson = new byte[] { 3 }, AttestationObject = new byte[] { 4 } } } };
+        var user = new RavenUser
+        {
+            Passkeys = new List<PasskeyCredential>
+            {
+                new PasskeyCredential
+                {
+                    CredentialId = new byte[] { 1 }, CreatedAt = DateTimeOffset.UtcNow,
+                    ClientDataJson = new byte[] { 3 }, AttestationObject = new byte[] { 4 }
+                }
+            }
+        };
 
         // Act
         var result = await userStore.FindPasskeyAsync(user, new byte[] { 1 }, CancellationToken.None);
@@ -974,7 +1046,7 @@ public class RavenUserStoreTests : RavenTestBase
     {
         // Arrange
         using var store = CreateStore();
-        
+
         // Create user
         string userId;
         using (var session = store.OpenAsyncSession())

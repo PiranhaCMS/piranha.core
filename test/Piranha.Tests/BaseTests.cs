@@ -8,7 +8,7 @@
  *
  */
 
-using Microsoft.EntityFrameworkCore;
+
 using Microsoft.Extensions.DependencyInjection;
 using Raven.Client.Documents;
 using Raven.Client.Documents.Session;
@@ -30,7 +30,7 @@ public abstract class BaseTests : RavenTestBase, IDisposable
     /// <summary>
     /// Default constructor.
     /// </summary>
-    public BaseTests() {
+    protected BaseTests() {
         _store = CreateStore();
         _session = _store.OpenAsyncSession();
         Init();
@@ -60,6 +60,6 @@ public abstract class BaseTests : RavenTestBase, IDisposable
     /// Gets the test context.
     /// </summary>
     protected IDb GetDb() {
-        return new SQLiteDb(_session);
+        return new DbRaven(_session);
     }
 }

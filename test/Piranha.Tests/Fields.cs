@@ -39,15 +39,14 @@ public class Fields : BaseTests
     /// <summary>
     /// Sets up & initializes the tests.
     /// </summary>
-    protected override void Init() {
-        using (var api = CreateApi())
-        {
-            Piranha.App.Init(api);
-            Piranha.App.Fields.Register<MyFirstField>();
+    protected override void Init()
+    {
+        using var api = CreateApi();
+        Piranha.App.Init(api);
+        Piranha.App.Fields.Register<MyFirstField>();
 
-            fields.Register<MyFirstField>();
-            fields.Register<MyThirdField>();
-        }
+        fields.Register<MyFirstField>();
+        fields.Register<MyThirdField>();
     }
 
     /// <summary>
@@ -350,16 +349,16 @@ public class Fields : BaseTests
     }
 
     [Fact]
-    public async Task ImageFieldInitMissing() {
-        using (var api = CreateApi()) {
-            var field = new Piranha.Extend.Fields.ImageField {
-                Id = Snowflake.NewId()
-            };
+    public async Task ImageFieldInitMissing()
+    {
+        using var api = CreateApi();
+        var field = new Piranha.Extend.Fields.ImageField {
+            Id = Snowflake.NewId()
+        };
 
-            await field.Init(api);
+        await field.Init(api);
 
-            Assert.Null(field.Id);
-        }
+        Assert.Null(field.Id);
     }
 
     [Fact]
@@ -402,16 +401,16 @@ public class Fields : BaseTests
     }
 
     [Fact]
-    public async Task DocumentFieldInitMissing() {
-        using (var api = CreateApi()) {
-            var field = new Piranha.Extend.Fields.DocumentField {
-                Id = Snowflake.NewId()
-            };
+    public async Task DocumentFieldInitMissing()
+    {
+        using var api = CreateApi();
+        var field = new Piranha.Extend.Fields.DocumentField {
+            Id = Snowflake.NewId()
+        };
 
-            await field.Init(api);
+        await field.Init(api);
 
-            Assert.Null(field.Id);
-        }
+        Assert.Null(field.Id);
     }
 
     [Fact]
@@ -454,16 +453,16 @@ public class Fields : BaseTests
     }
 
     [Fact]
-    public async Task VideoFieldInitMissing() {
-        using (var api = CreateApi()) {
-            var field = new Piranha.Extend.Fields.VideoField {
-                Id = Snowflake.NewId()
-            };
+    public async Task VideoFieldInitMissing()
+    {
+        using var api = CreateApi();
+        var field = new Piranha.Extend.Fields.VideoField {
+            Id = Snowflake.NewId()
+        };
 
-            await field.Init(api);
+        await field.Init(api);
 
-            Assert.Null(field.Id);
-        }
+        Assert.Null(field.Id);
     }
 
     [Fact]
@@ -509,17 +508,15 @@ public class Fields : BaseTests
     [Fact]
     public async Task AudioFieldInitMissing()
     {
-        using (var api = CreateApi())
+        using var api = CreateApi();
+        var field = new Piranha.Extend.Fields.AudioField
         {
-            var field = new Piranha.Extend.Fields.AudioField
-            {
-                Id = Snowflake.NewId()
-            };
+            Id = Snowflake.NewId()
+        };
 
-            await field.Init(api);
+        await field.Init(api);
 
-            Assert.Null(field.Id);
-        }
+        Assert.Null(field.Id);
     }
 
     [Fact]
@@ -568,16 +565,16 @@ public class Fields : BaseTests
     }
 
     [Fact]
-    public async Task MediaFieldInitMissing() {
-        using (var api = CreateApi()) {
-            var field = new Piranha.Extend.Fields.MediaField {
-                Id = Snowflake.NewId()
-            };
+    public async Task MediaFieldInitMissing()
+    {
+        using var api = CreateApi();
+        var field = new Piranha.Extend.Fields.MediaField {
+            Id = Snowflake.NewId()
+        };
 
-            await field.Init(api);
+        await field.Init(api);
 
-            Assert.Null(field.Id);
-        }
+        Assert.Null(field.Id);
     }
 
     [Fact]

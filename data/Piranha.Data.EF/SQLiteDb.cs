@@ -16,7 +16,8 @@ namespace Piranha;
 /// <summary>
 /// The SQLite db context.
 /// </summary>
-public class SQLiteDb : Db<SQLiteDb>
+[Obsolete("SQLite is no longer supported. Please use the RavenDB provider instead.", true)]
+public class SQLiteDb : DbRavenBase
 {
     /// <summary>
     /// Default constructor.

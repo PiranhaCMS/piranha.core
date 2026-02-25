@@ -141,120 +141,100 @@ public class PostTypeTests : BaseTestsAsync
     {
         await base.InitializeAsync();
 
-        using (var api = CreateApi())
-        {
-            await api.PostTypes.SaveAsync(postTypes[0]);
-            await api.PostTypes.SaveAsync(postTypes[3]);
-            await api.PostTypes.SaveAsync(postTypes[4]);
-        }
+        using var api = CreateApi();
+        await api.PostTypes.SaveAsync(postTypes[0]);
+        await api.PostTypes.SaveAsync(postTypes[3]);
+        await api.PostTypes.SaveAsync(postTypes[4]);
     }
 
     public override async Task DisposeAsync()
     {
-        using (var api = CreateApi())
-        {
-            var postTypes = await api.PostTypes.GetAllAsync();
+        using var api = CreateApi();
+        var postTypes = await api.PostTypes.GetAllAsync();
 
-            foreach (var p in postTypes)
-            {
-                await api.PostTypes.DeleteAsync(p);
-            }
+        foreach (var p in postTypes)
+        {
+            await api.PostTypes.DeleteAsync(p);
         }
     }
 
     [Fact]
     public void IsCached()
     {
-        using (var api = CreateApi())
-        {
-            Assert.Equal(((Api)api).IsCached,
-                this.GetType() == typeof(PostTypeTestsMemoryCache) ||
-                this.GetType() == typeof(PostTypeTestsDistributedCache));
-        }
+        using var api = CreateApi();
+        Assert.Equal(((Api)api).IsCached,
+            this.GetType() == typeof(PostTypeTestsMemoryCache) ||
+            this.GetType() == typeof(PostTypeTestsDistributedCache));
     }
 
     [Fact]
     public async Task Add()
     {
-        using (var api = CreateApi())
-        {
-            await api.PostTypes.SaveAsync(postTypes[1]);
-        }
+        using var api = CreateApi();
+        await api.PostTypes.SaveAsync(postTypes[1]);
     }
 
     [Fact]
     public async Task GetAll()
     {
-        using (var api = CreateApi())
-        {
-            var models = await api.PostTypes.GetAllAsync();
+        using var api = CreateApi();
+        var models = await api.PostTypes.GetAllAsync();
 
-            Assert.NotNull(models);
-            Assert.NotEmpty(models);
-        }
+        Assert.NotNull(models);
+        Assert.NotEmpty(models);
     }
 
     [Fact]
     public async Task GetNoneById()
     {
-        using (var api = CreateApi())
-        {
-            var none = await api.PostTypes.GetByIdAsync("none-existing-type");
+        using var api = CreateApi();
+        var none = await api.PostTypes.GetByIdAsync("none-existing-type");
 
-            Assert.Null(none);
-        }
+        Assert.Null(none);
     }
 
     [Fact]
     public async Task GetById()
     {
-        using (var api = CreateApi())
-        {
-            var model = await api.PostTypes.GetByIdAsync(postTypes[0].Id);
+        using var api = CreateApi();
+        var model = await api.PostTypes.GetByIdAsync(postTypes[0].Id);
 
-            Assert.NotNull(model);
-            Assert.Equal(postTypes[0].Regions[0].Fields[0].Id, model.Regions[0].Fields[0].Id);
-        }
+        Assert.NotNull(model);
+        Assert.Equal(postTypes[0].Regions[0].Fields[0].Id, model.Regions[0].Fields[0].Id);
     }
 
     [Fact]
     public async Task Update()
     {
-        using (var api = CreateApi())
-        {
-            var model = await api.PostTypes.GetByIdAsync(postTypes[0].Id);
+        using var api = CreateApi();
+        var model = await api.PostTypes.GetByIdAsync(postTypes[0].Id);
 
-            Assert.Null(model.Title);
+        Assert.Null(model.Title);
 
-            model.Title = "Updated";
+        model.Title = "Updated";
 
-            await api.PostTypes.SaveAsync(model);
-        }
+        await api.PostTypes.SaveAsync(model);
     }
 
     [Fact]
     public async Task Delete()
     {
-        using (var api = CreateApi())
-        {
-            var model = await api.PostTypes.GetByIdAsync(postTypes[3].Id);
+        using var api = CreateApi();
+        var model = await api.PostTypes.GetByIdAsync(postTypes[3].Id);
 
-            Assert.NotNull(model);
+        Assert.NotNull(model);
 
-            await api.PostTypes.DeleteAsync(model);
-        }
+        await api.PostTypes.DeleteAsync(model);
     }
 
     [Fact]
     public async Task DeleteById()
     {
-        using (var api = CreateApi())
-        {
-            var model = await api.PostTypes.GetByIdAsync(postTypes[4].Id);
+        using var api = CreateApi();
+        var model = await api.PostTypes.GetByIdAsync(postTypes[4].Id);
 
-            Assert.NotNull(model);
+        Assert.NotNull(model);
 
-            await api.PostTypes.DeleteAsync(model.Id);
-        }
+        await api.PostTypes.DeleteAsync(model.Id);
     }
 }

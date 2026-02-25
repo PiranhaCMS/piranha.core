@@ -8,7 +8,7 @@
  *
  */
 
-using Microsoft.EntityFrameworkCore;
+
 using Microsoft.Extensions.DependencyInjection;
 using Xunit;
 using Piranha.ImageSharp;
@@ -49,7 +49,7 @@ public abstract class BaseTestsAsync : RavenTestBase, IAsyncLifetime
     {
         return new ServiceCollection()
             .AddScoped(_ => session)
-            .AddPiranhaStore<SQLiteDb>()
+            //.AddPiranhaStore<SQLiteDb>()
             .AddPiranha()
             .AddMemoryCache()
             .AddDistributedMemoryCache()
@@ -59,8 +59,9 @@ public abstract class BaseTestsAsync : RavenTestBase, IAsyncLifetime
     /// <summary>
     /// Gets the test context.
     /// </summary>
-    protected IDb GetDb() {
-        return new SQLiteDb(_session);
+    protected IDb GetDb()
+    {
+        return new DbRaven(_session);
     }
 
     /// <summary>
@@ -73,7 +74,11 @@ public abstract class BaseTestsAsync : RavenTestBase, IAsyncLifetime
 
         var db = GetDb();
 
-        return new Api(
+        var site = db.Sites.FirstOrDefaultAsync(x => x.IsDefault == true)
+            .GetAwaiter()
+            .GetResult();
+
+        var api = new Api(
             factory,
             new AliasRepository(db),
             new ArchiveRepository(db),
@@ -93,5 +98,15 @@ public abstract class BaseTestsAsync : RavenTestBase, IAsyncLifetime
             storage: _storage,
             processor: _processor
         );
+
+        if (site is null)
+            Seed.RunAsync(api).Wait();
+
+        var test = db.Sites
+            .FirstOrDefaultAsync(x => x.IsDefault == true)
+            .GetAwaiter()
+            .GetResult();
+        
+        return api;
     }
 }

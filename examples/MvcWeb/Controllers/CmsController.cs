@@ -33,8 +33,8 @@ public class CmsController : Controller
     /// <param name="tag">The optional tag</param>
     /// <param name="draft">If a draft is requested</param>
     [Route("archive")]
-    public async Task<IActionResult> Archive(Guid id, int? year = null, int? month = null, int? page = null,
-        Guid? category = null, Guid? tag = null, bool draft = false)
+    public async Task<IActionResult> Archive(string id, int? year = null, int? month = null, int? page = null,
+        string category = null, string tag = null, bool draft = false)
     {
         try
         {
@@ -55,7 +55,7 @@ public class CmsController : Controller
     /// <param name="id">The unique page id</param>
     /// <param name="draft">If a draft is requested</param>
     [Route("page")]
-    public async Task<IActionResult> Page(Guid id, bool draft = false)
+    public async Task<IActionResult> Page(string id, bool draft = false)
     {
         try
         {
@@ -75,7 +75,7 @@ public class CmsController : Controller
     /// <param name="id">The unique post id</param>
     /// <param name="draft">If a draft is requested</param>
     [Route("post")]
-    public async Task<IActionResult> Post(Guid id, bool draft = false)
+    public async Task<IActionResult> Post(string id, bool draft = false)
     {
         try
         {
@@ -85,6 +85,7 @@ public class CmsController : Controller
             {
                 model.Comments = await _api.Posts.GetAllCommentsAsync(model.Id, true);
             }
+
             return View(model);
         }
         catch

@@ -30,42 +30,38 @@ public class AliasHookTests : BaseTestsAsync
     {
         await base.InitializeAsync();
 
-        using (var api = CreateApi())
+        using var api = CreateApi();
+        // Initialize
+        Piranha.App.Init(api);
+
+        // Create site
+        await api.Sites.SaveAsync(new Site
         {
-            // Initialize
-            Piranha.App.Init(api);
+            Id = SITE_ID,
+            Title = "Alias Hook Site"
+        });
 
-            // Create site
-            await api.Sites.SaveAsync(new Site
-            {
-                Id = SITE_ID,
-                Title = "Alias Hook Site"
-            });
-
-            // Create test alias
-            await api.Aliases.SaveAsync(new Alias
-            {
-                Id = ID,
-                SiteId = SITE_ID,
-                AliasUrl = ALIAS,
-                RedirectUrl = "/redirect"
-            });
-        }
+        // Create test alias
+        await api.Aliases.SaveAsync(new Alias
+        {
+            Id = ID,
+            SiteId = SITE_ID,
+            AliasUrl = ALIAS,
+            RedirectUrl = "/redirect"
+        });
     }
 
     public override async Task DisposeAsync()
     {
-        using (var api = CreateApi())
-        {
-            // Remove test data
-            var aliases = await api.Aliases.GetAllAsync();
+        using var api = CreateApi();
+        // Remove test data
+        var aliases = await api.Aliases.GetAllAsync();
 
-            foreach (var a in aliases)
-            {
-                await api.Aliases.DeleteAsync(a);
-            }
-            await api.Sites.DeleteAsync(SITE_ID);
+        foreach (var a in aliases)
+        {
+            await api.Aliases.DeleteAsync(a);
         }
+        await api.Sites.DeleteAsync(SITE_ID);
     }
 
     [Fact]

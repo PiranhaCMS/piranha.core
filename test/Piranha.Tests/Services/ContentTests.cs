@@ -61,152 +61,138 @@ public class ContentTests : BaseTestsAsync
 
     public override async Task InitializeAsync()
     {
-        using (var api = CreateApi())
+        using var api = CreateApi();
+        Piranha.App.Init(api);
+
+        // Add the content type
+        var builder = new ContentTypeBuilder(api)
+            .AddType(typeof(MyContent));
+        await builder.BuildAsync();
+
+        // Add a secondary language
+        await api.Languages.SaveAsync(new Language
         {
-            Piranha.App.Init(api);
+            Id = ID_LANG,
+            Title = "Second Language",
+            Culture = "sv-SE"
+        });
 
-            // Add the content type
-            var builder = new ContentTypeBuilder(api)
-                .AddType(typeof(MyContent));
-            await builder.BuildAsync();
+        // Add some default content
+        var content1 = await MyContent.CreateAsync(api);
+        content1.Id = ID_1;
+        content1.Title = "My first content";
+        content1.Excerpt = "My first excerpt";
+        content1.MainDescription = "My first description";
 
-            // Add a secondary language
-            await api.Languages.SaveAsync(new Language
-            {
-                Id = ID_LANG,
-                Title = "Second Language",
-                Culture = "sv-SE"
-            });
+        await api.Content.SaveAsync(content1);
 
-            // Add some default content
-            var content1 = await MyContent.CreateAsync(api);
-            content1.Id = ID_1;
-            content1.Title = "My first content";
-            content1.Excerpt = "My first excerpt";
-            content1.MainDescription = "My first description";
+        var content2 = await MyContent.CreateAsync(api);
+        content2.Id = ID_2;
+        content2.Title = "My second content";
+        content2.Excerpt = "My second excerpt";
+        content2.MainDescription = "My second description";
 
-            await api.Content.SaveAsync(content1);
+        await api.Content.SaveAsync(content2);
 
-            var content2 = await MyContent.CreateAsync(api);
-            content2.Id = ID_2;
-            content2.Title = "My second content";
-            content2.Excerpt = "My second excerpt";
-            content2.MainDescription = "My second description";
+        var content3 = await MyContent.CreateAsync(api);
+        content3.Id = ID_3;
+        content3.Title = "My third content";
+        content3.Excerpt = "My third excerpt";
+        content3.MainDescription = "My third description";
 
-            await api.Content.SaveAsync(content2);
+        await api.Content.SaveAsync(content3);
 
-            var content3 = await MyContent.CreateAsync(api);
-            content3.Id = ID_3;
-            content3.Title = "My third content";
-            content3.Excerpt = "My third excerpt";
-            content3.MainDescription = "My third description";
+        // Now let's translate content 1
+        content1.Title = "Mitt första innehåll";
+        content1.Excerpt = "Min första sammanfattning";
+        content1.MainDescription = "Min första beskrivning";
 
-            await api.Content.SaveAsync(content3);
-
-            // Now let's translate content 1
-            content1.Title = "Mitt första innehåll";
-            content1.Excerpt = "Min första sammanfattning";
-            content1.MainDescription = "Min första beskrivning";
-
-            await api.Content.SaveAsync(content1, ID_LANG);
-        }
+        await api.Content.SaveAsync(content1, ID_LANG);
     }
 
     public override async Task DisposeAsync()
     {
-        using (var api = CreateApi())
+        using var api = CreateApi();
+        // Delete added content
+        var content = await api.Content.GetAllAsync();
+        foreach (var c in content)
         {
-            // Delete added content
-            var content = await api.Content.GetAllAsync();
-            foreach (var c in content)
-            {
-                await api.Content.DeleteAsync(c);
-            }
-
-            // Delete added content groups
-            var groups = await api.ContentGroups.GetAllAsync();
-            foreach (var g in groups)
-            {
-                await api.ContentGroups.DeleteAsync(g);
-            }
-
-            // Delete added language
-            await api.Languages.DeleteAsync(ID_LANG);
+            await api.Content.DeleteAsync(c);
         }
+
+        // Delete added content groups
+        var groups = await api.ContentGroups.GetAllAsync();
+        foreach (var g in groups)
+        {
+            await api.ContentGroups.DeleteAsync(g);
+        }
+
+        // Delete added language
+        await api.Languages.DeleteAsync(ID_LANG);
     }
 
     [Fact]
     public async Task GetById()
     {
-        using (var api = CreateApi())
-        {
-            var content = await api.Content.GetByIdAsync<MyContent>(ID_1);
-            var contentInfo = await api.Content.GetByIdAsync<ContentInfo>(ID_1);
+        using var api = CreateApi();
+        var content = await api.Content.GetByIdAsync<MyContent>(ID_1);
+        var contentInfo = await api.Content.GetByIdAsync<ContentInfo>(ID_1);
 
-            Assert.NotNull(content);
-            Assert.NotNull(contentInfo);
-            Assert.Equal("My first content", content.Title);
-            Assert.Equal(content.Title, contentInfo.Title);
-        }
+        Assert.NotNull(content);
+        Assert.NotNull(contentInfo);
+        Assert.Equal("My first content", content.Title);
+        Assert.Equal(content.Title, contentInfo.Title);
     }
 
     [Fact]
     public async Task GetTranslationById()
     {
-        using (var api = CreateApi())
-        {
-            var content = await api.Content.GetByIdAsync<MyContent>(ID_1, ID_LANG);
-            var contentInfo = await api.Content.GetByIdAsync<ContentInfo>(ID_1, ID_LANG);
+        using var api = CreateApi();
+        var content = await api.Content.GetByIdAsync<MyContent>(ID_1, ID_LANG);
+        var contentInfo = await api.Content.GetByIdAsync<ContentInfo>(ID_1, ID_LANG);
 
-            Assert.NotNull(content);
-            Assert.NotNull(contentInfo);
-            Assert.Equal("Mitt första innehåll", content.Title);
-            Assert.Equal(content.Title, contentInfo.Title);
-        }
+        Assert.NotNull(content);
+        Assert.NotNull(contentInfo);
+        Assert.Equal("Mitt första innehåll", content.Title);
+        Assert.Equal(content.Title, contentInfo.Title);
     }
 
     [Fact]
     public async Task GetTranslatedStatus()
     {
-        using (var api = CreateApi())
-        {
-            var status = await api.Content.GetTranslationStatusByIdAsync(ID_1);
+        using var api = CreateApi();
+        var status = await api.Content.GetTranslationStatusByIdAsync(ID_1);
 
-            Assert.NotNull(status);
+        Assert.NotNull(status);
 
-            Assert.True(status.IsUpToDate);
-            Assert.Equal(1, status.UpToDateCount);
-            Assert.Equal(1, status.TotalCount);
-        }
+        Assert.True(status.IsUpToDate);
+        Assert.Equal(1, status.UpToDateCount);
+        Assert.Equal(1, status.TotalCount);
     }
 
     [Fact]
     public async Task GetUntranslatedStatus()
     {
-        using (var api = CreateApi())
-        {
-            var status = await api.Content.GetTranslationStatusByIdAsync(ID_2);
+        using var api = CreateApi();
+        var status = await api.Content.GetTranslationStatusByIdAsync(ID_2);
 
-            Assert.NotNull(status);
+        Assert.NotNull(status);
 
-            Assert.False(status.IsUpToDate);
-            Assert.Equal(0, status.UpToDateCount);
-            Assert.Equal(1, status.TotalCount);
-        }
+        Assert.False(status.IsUpToDate);
+        Assert.Equal(0, status.UpToDateCount);
+        Assert.Equal(1, status.TotalCount);
     }
 
     [Fact]
     public async Task GetTranslationSummary()
     {
-        using (var api = CreateApi())
-        {
-            var summary = await api.Content.GetTranslationStatusByGroupAsync("MyContentGroup");
+        using var api = CreateApi();
+        var summary = await api.Content.GetTranslationStatusByGroupAsync("MyContentGroup");
 
-            Assert.NotNull(summary);
+        Assert.NotNull(summary);
 
-            Assert.False(summary.IsUpToDate);
-            Assert.Equal(1, summary.UpToDateCount);
-            Assert.Equal(3, summary.TotalCount);
-        }
+        Assert.False(summary.IsUpToDate);
+        Assert.Equal(1, summary.UpToDateCount);
+        Assert.Equal(3, summary.TotalCount);
     }
 }

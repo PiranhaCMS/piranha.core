@@ -47,6 +47,7 @@ public class UserEditModel
             {
                 model.SelectedRoles.Add(model.Roles.Single(r => r.Id == role.RoleId).Name);
             }
+
             return model;
         }
 
@@ -62,14 +63,15 @@ public class UserEditModel
         {
             user = new User
             {
-                Id = User.Id != Guid.Empty ? User.Id : Snowflake.NewId(),
+                Id = User.Id != Guid.Empty ? User.Id : Guid.NewGuid(),
                 UserName = User.UserName,
                 Email = User.Email
             };
             User.Id = user.Id;
 
             result = await userManager.CreateAsync(user, Password);
-            if (!result.Succeeded) {
+            if (!result.Succeeded)
+            {
                 return result;
             }
         }
@@ -113,6 +115,7 @@ public class UserEditModel
             {
                 return result;
             }
+
             result = await userManager.AddPasswordAsync(user, Password);
             if (!result.Succeeded)
             {

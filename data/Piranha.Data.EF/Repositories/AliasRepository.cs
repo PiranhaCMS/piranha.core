@@ -78,10 +78,10 @@ internal class AliasRepository : IAliasRepository
     /// <param name="url">The unique url</param>
     /// <param name="siteId">The site id</param>
     /// <returns>The model</returns>
-    public Task<Alias> GetByAliasUrl(string url, string siteId)
+    public async Task<Alias> GetByAliasUrl(string url, string siteId)
     {
-        return _db.Aliases
-            .Where(a => a.SiteId == siteId && a.AliasUrl.ToLower() == url.ToLower())
+        var aliases = await _db.Aliases
+            .Where(a => a.SiteId == siteId && a.AliasUrl.Equals(url, StringComparison.OrdinalIgnoreCase))
             .Select(a => new Alias
             {
                 Id = a.Id,
@@ -93,6 +93,8 @@ internal class AliasRepository : IAliasRepository
                 LastModified = a.LastModified
             })
             .FirstOrDefaultAsync();
+        
+        return aliases;
     }
 
     /// <summary>

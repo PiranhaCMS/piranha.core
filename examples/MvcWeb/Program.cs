@@ -1,5 +1,5 @@
 using Aero.Identity;
-using Microsoft.EntityFrameworkCore;
+
 using MvcWeb;
 using Piranha;
 using Piranha.AttributeBuilder;
@@ -11,7 +11,7 @@ var builder = WebApplication.CreateBuilder(args);
 // Configure RavenDB
 var ravenStore = new DocumentStore
 {
-    Urls = new[] { builder.Configuration.GetValue<string>("RavenDb:Url") ?? "http://localhost:8080" },
+    Urls = [builder.Configuration.GetValue<string>("RavenDb:Url") ?? "http://localhost:8080"],
     Database = builder.Configuration.GetValue<string>("RavenDb:Database") ?? "piranha"
 }.Initialize();
 

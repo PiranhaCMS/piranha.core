@@ -1,11 +1,10 @@
-using Piranha;
+using MvcWeb.Models;
 using Piranha.Extend;
 using Piranha.Extend.Blocks;
 using Piranha.Extend.Fields;
 using Piranha.Models;
-using MvcWeb.Models;
 
-namespace MvcWeb;
+namespace Piranha.Tests;
 
 /// <summary>
 /// Static helper class for seeding test content.
@@ -268,13 +267,41 @@ public static class Seed
 
         var comment = new Piranha.Models.PostComment
         {
-            Author = "Håkan Edling",
-            Email = "hakan@tidyui.com",
-            Url = "http://piranhacms.org",
+            Author = "Aero User",
+            Email = "aero@aero.com",
+            Url = "http://microbians.io",
             Body =
                 "Awesome to see that the project is up and running! Now maybe it's time to start customizing it to your needs. You can find a lot of information in the official docs.",
             IsApproved = true
         };
         await api.Posts.SaveCommentAsync(post3.Id, comment);
+    }
+
+    /// <summary>
+    /// Retrieves a random image URL from static.photos using arbitrary categories, sizes, and numbers.
+    /// </summary>
+    /// <returns>A random image URL string.</returns>
+    public static string GetImage()
+    {
+        var categories = new[]
+        {
+            "nature", "office", "people", "technology", "minimal", "abstract", "aerial", "blurred", "bokeh", "gradient",
+            "monochrome", "vintage", "white", "black", "blue", "red", "green", "yellow", "cityscape", "workspace",
+            "food", "travel", "textures", "industry", "indoor", "outdoor", "studio", "finance", "medical", 
+            "season", "holiday", "event", "sport", "science", "legal", "estate", "restaurant", "retail", "wellness",
+            "agriculture", "construction", "craft", "cosmetic", "automotive", "gaming", "education"
+        };
+
+        var sizes = new[]
+        {
+            "200x200", "320x240", "640x360", "1024x576", "1200x630"
+        };
+
+        var random = new Random();
+        var category = categories[random.Next(categories.Length)];
+        var size = sizes[random.Next(sizes.Length)];
+        var number = random.Next(1, 150001); // Random number from 1 to 150000
+
+        return $"https://static.photos/{category}/{size}/{number}";
     }
 }

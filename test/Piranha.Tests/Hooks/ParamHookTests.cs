@@ -29,31 +29,27 @@ public class ParamHookTests : BaseTestsAsync
     {
         await base.InitializeAsync();
 
-        using (var api = CreateApi())
-        {
-            // Initialize
-            Piranha.App.Init(api);
+        using var api = CreateApi();
+        // Initialize
+        Piranha.App.Init(api);
 
-            // Create test param
-            await api.Params.SaveAsync(new Param
-            {
-                Id = ID,
-                Key = KEY
-            });
-        }
+        // Create test param
+        await api.Params.SaveAsync(new Param
+        {
+            Id = ID,
+            Key = KEY
+        });
     }
 
     public override async Task DisposeAsync()
     {
-        using (var api = CreateApi())
-        {
-            // Remove test data
-            var param = await api.Params.GetAllAsync();
+        using var api = CreateApi();
+        // Remove test data
+        var param = await api.Params.GetAllAsync();
 
-            foreach (var p in param)
-            {
-                await api.Params.DeleteAsync(p);
-            }
+        foreach (var p in param)
+        {
+            await api.Params.DeleteAsync(p);
         }
     }
 

@@ -19,11 +19,10 @@ public class UI : BaseTests
     /// <summary>
     /// Sets up & initializes the tests.
     /// </summary>
-    protected override void Init() {
-        using (var api = CreateApi())
-        {
-            Piranha.App.Init(api);
-        }
+    protected override void Init()
+    {
+        using var api = CreateApi();
+        Piranha.App.Init(api);
     }
 
     /// <summary>

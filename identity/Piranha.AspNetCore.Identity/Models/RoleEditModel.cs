@@ -39,6 +39,7 @@ public class RoleEditModel
             {
                 model.SelectedClaims.Add(claim.ClaimType);
             }
+
             return model;
         }
 
@@ -59,7 +60,7 @@ public class RoleEditModel
 
         if (role == null)
         {
-            Role.Id = Role.Id != Guid.Empty ? Role.Id : Snowflake.NewId();
+            Role.Id = Role.Id != Guid.Empty ? Role.Id : Guid.NewGuid();
             Role.NormalizedName = !string.IsNullOrEmpty(Role.NormalizedName)
                 ? Role.NormalizedName.ToUpper()
                 : Role.Name.ToUpper();
