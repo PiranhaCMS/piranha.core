@@ -10,7 +10,7 @@
 
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
+
 using Piranha;
 using Piranha.AspNetCore.Identity;
 using Piranha.AspNetCore;
@@ -27,12 +27,12 @@ public static class IdentityStartupExtensions
     /// <typeparam name="T">The DbContext type</typeparam>
     /// <returns>The builder</returns>
     public static PiranhaServiceBuilder UseIdentity<T>(this PiranhaServiceBuilder serviceBuilder,
-        Action<DbContextOptionsBuilder> dbOptions,
+        //Action<DbContextOptionsBuilder> dbOptions,
         Action<IdentityOptions> identityOptions = null,
         Action<CookieAuthenticationOptions> cookieOptions = null)
         where T : Db<T>
     {
-        serviceBuilder.Services.AddPiranhaIdentity<T>(dbOptions, identityOptions, cookieOptions);
+        serviceBuilder.Services.AddPiranhaIdentity<T>(identityOptions, cookieOptions);
 
         return serviceBuilder;
     }
@@ -47,12 +47,12 @@ public static class IdentityStartupExtensions
     /// <typeparam name="T">The DbContext type</typeparam>
     /// <returns>The builder</returns>
     public static PiranhaServiceBuilder UseIdentityWithSeed<T>(this PiranhaServiceBuilder serviceBuilder,
-        Action<DbContextOptionsBuilder> dbOptions,
+        //Action<DbContextOptionsBuilder> dbOptions,
         Action<IdentityOptions> identityOptions = null,
         Action<CookieAuthenticationOptions> cookieOptions = null)
         where T : Db<T>
     {
-        serviceBuilder.Services.AddPiranhaIdentityWithSeed<T>(dbOptions, identityOptions, cookieOptions);
+        serviceBuilder.Services.AddPiranhaIdentityWithSeed<T>(identityOptions, cookieOptions);
 
         return serviceBuilder;
     }
@@ -68,13 +68,13 @@ public static class IdentityStartupExtensions
     /// <typeparam name="TSeed">The seed type</typeparam>
     /// <returns>The builder</returns>
     public static PiranhaServiceBuilder UseIdentityWithSeed<T, TSeed>(this PiranhaServiceBuilder serviceBuilder,
-        Action<DbContextOptionsBuilder> dbOptions,
+        //Action<DbContextOptionsBuilder> dbOptions,
         Action<IdentityOptions> identityOptions = null,
         Action<CookieAuthenticationOptions> cookieOptions = null)
         where T : Db<T>
         where TSeed : class, IIdentitySeed
     {
-        serviceBuilder.Services.AddPiranhaIdentityWithSeed<T, TSeed>(dbOptions, identityOptions, cookieOptions);
+        serviceBuilder.Services.AddPiranhaIdentityWithSeed<T, TSeed>(identityOptions, cookieOptions);
 
         return serviceBuilder;
     }

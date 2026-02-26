@@ -35,9 +35,9 @@ public class RoleController : ManagerController
     }
 
     [HttpGet]
-    [Route("/manager/role/{id:Guid}")]
+    [Route("/manager/role/{id:string}")]
     [Authorize(Policy = Permissions.RolesEdit)]
-    public IActionResult Edit(Guid id)
+    public IActionResult Edit(string id)
     {
         return View("Edit", RoleEditModel.GetById(_db, id));
     }
@@ -68,14 +68,15 @@ public class RoleController : ManagerController
     [HttpPost]
     [Route("/manager/role/delete")]
     [Authorize(Policy = Permissions.RolesDelete)]
-    public IActionResult Delete(Guid id)
+    public IActionResult Delete(string id)
     {
         var role = _db.Roles
             .FirstOrDefault(r => r.Id == id);
 
         if (role != null)
         {
-            _db.Roles.Remove(role);
+            //_db.Roles.Remove(role);
+            _db.session.Delete(role);
             _db.SaveChanges();
 
             SuccessMessage("The role has been deleted.");

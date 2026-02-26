@@ -11,45 +11,47 @@
 using Microsoft.AspNetCore.Identity;
 using Piranha.AspNetCore.Identity.Data;
 using Raven.Client.Documents.Linq;
+using Raven.Client.Documents.Session;
 
 namespace Piranha.AspNetCore.Identity;
 
 public interface IDb
 {
+    IAsyncDocumentSession session { get; }
     /// <summary>
     /// Gets/sets the users set.
     /// </summary>
-    IRavenQueryable<User> Users { get; set; }
+    IRavenQueryable<User> Users { get; }
 
     /// <summary>
     /// Gets/sets the roles set.
     /// </summary>
-    IRavenQueryable<Role> Roles { get; set; }
+    IRavenQueryable<Role> Roles { get; }
 
     /// <summary>
     /// Gets/sets the user claims set.
     /// </summary>
-    IRavenQueryable<IdentityUserClaim<Guid>> UserClaims { get; set; }
+    IRavenQueryable<IdentityUserClaim<string>> UserClaims { get; }
 
     /// <summary>
     /// Gets/sets the user roles set.
     /// </summary>
-    IRavenQueryable<IdentityUserRole<Guid>> UserRoles { get; set; }
+    IRavenQueryable<IdentityUserRole<string>> UserRoles { get; }
 
     /// <summary>
     /// Gets/sets the user roles set.
     /// </summary>
-    IRavenQueryable<IdentityUserLogin<Guid>> UserLogins { get; set; }
+    IRavenQueryable<IdentityUserLogin<string>> UserLogins { get; }
 
     /// <summary>
     /// Gets/sets the roles claims set.
     /// </summary>
-    IRavenQueryable<IdentityRoleClaim<Guid>> RoleClaims { get; set; }
+    IRavenQueryable<IdentityRoleClaim<string>> RoleClaims { get; }
 
     /// <summary>
     /// Gets/sets the user tokes set.
     /// </summary>
-    IRavenQueryable<IdentityUserToken<Guid>> UserTokens { get; set; }
+    IRavenQueryable<IdentityUserToken<string>> UserTokens { get; }
 
     /// <summary>
     /// Saves the changes made to the context.

@@ -8,23 +8,18 @@
  *
  */
 
+using Aero.Identity.Models;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore;
 using Piranha.AspNetCore.Identity.Data;
+using Raven.Client.Documents.Linq;
+using Raven.Client.Documents.Session;
 
 namespace Piranha.AspNetCore.Identity;
 
-public abstract class Db<T> :
-    IdentityDbContext<User, Role, Guid,
-        IdentityUserClaim<Guid>,
-        IdentityUserRole<Guid>,
-        IdentityUserLogin<Guid>,
-        IdentityRoleClaim<Guid>,
-        IdentityUserToken<Guid>>,
-    IDb
-    where T : Db<T>
+public abstract class Db<T> : IDb
 {
+    protected readonly IAsyncDocumentSession db;
+
     /// <summary>
     ///     Gets/sets whether the db context as been initialized. This
     ///     is only performed once in the application lifecycle.
@@ -40,22 +35,16 @@ public abstract class Db<T> :
     ///     Default constructor.
     /// </summary>
     /// <param name="options">Configuration options</param>
-    protected Db(DbContextOptions<T> options) : base(options)
+    protected Db(IAsyncDocumentSession db)
     {
+        this.db = db;
         if (IsInitialized)
-        {
             return;
-        }
 
         lock (Mutex)
         {
             if (IsInitialized)
-            {
                 return;
-            }
-
-            // Migrate database
-            Database.Migrate();
 
             Seed();
 
@@ -67,9 +56,9 @@ public abstract class Db<T> :
     /// <summary>
     /// Seeds the default data.
     /// </summary>
-    private void Seed()
+    private async Task Seed()
     {
-        SaveChanges();
+        await SaveChangesAsync();
 
         // Make sure we have a SysAdmin role
         var role = Roles.FirstOrDefault(r => r.NormalizedName == "SYSADMIN");
@@ -77,11 +66,11 @@ public abstract class Db<T> :
         {
             role = new Role
             {
-                Id = Guid.NewGuid(),
+                Id = Snowflake.NewId(),
                 Name = "SysAdmin",
                 NormalizedName = "SYSADMIN"
             };
-            Roles.Add(role);
+            await db.StoreAsync(role);
         }
 
         // Make sure our SysAdmin role has all of the available claims
@@ -92,15 +81,47 @@ public abstract class Db<T> :
                 c.RoleId == role.Id && c.ClaimType == permission.Name && c.ClaimValue == permission.Name);
             if (roleClaim == null)
             {
-                RoleClaims.Add(new IdentityRoleClaim<Guid>
+                // RoleClaims.Add(new IdentityRoleClaim<string>
+                // {
+                //     RoleId = role.Id,
+                //     ClaimType = permission.Name,
+                //     ClaimValue = permission.Name
+                // });
+                var r = new IdentityRoleClaim<string>
                 {
                     RoleId = role.Id,
                     ClaimType = permission.Name,
                     ClaimValue = permission.Name
-                });
+                };
+                
+                await db.StoreAsync(r);
             }
         }
 
-        SaveChanges();
+        await SaveChangesAsync();
+    }
+
+    public IAsyncDocumentSession session => db;
+    public IRavenQueryable<User> Users => db.Query<User>();
+    public IRavenQueryable<Role> Roles => db.Query<Role>();
+    public IRavenQueryable<IdentityUserClaim<string>> UserClaims => db.Query<IdentityUserClaim<string>>();
+    public IRavenQueryable<IdentityUserRole<string>> UserRoles => db.Query<IdentityUserRole<string>>();
+    public IRavenQueryable<IdentityUserLogin<string>> UserLogins => db.Query<IdentityUserLogin<string>>();
+    public IRavenQueryable<IdentityRoleClaim<string>> RoleClaims => db.Query<IdentityRoleClaim<string>>();
+    public IRavenQueryable<IdentityUserToken<string>> UserTokens => db.Query<IdentityUserToken<string>>();
+
+    public int SaveChanges()
+    {
+        return SaveChangesAsync()
+            .GetAwaiter()
+            .GetResult();
+    }
+
+    public async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default(CancellationToken))
+    {
+        // todo - use raven advanced session features to track changes and only save the ones that have been changed
+        
+        await db.SaveChangesAsync(cancellationToken);
+        return await Task.FromResult(1);
     }
 }

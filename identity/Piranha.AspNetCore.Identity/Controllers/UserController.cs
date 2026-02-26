@@ -11,12 +11,13 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
+
 using Piranha.AspNetCore.Identity.Data;
 using Piranha.AspNetCore.Identity.Models;
 using Piranha.Manager;
 using Piranha.Manager.Controllers;
 using Piranha.Manager.Models;
+using Raven.Client.Documents;
 
 namespace Piranha.AspNetCore.Identity.Controllers;
 
@@ -71,9 +72,9 @@ public class UserController : ManagerController
     /// </summary>
     /// <param name="id">The user id</param>
     [HttpGet]
-    [Route("/manager/user/{id:Guid?}")]
+    [Route("/manager/user/{id}")]
     [Authorize(Policy = Permissions.UsersEdit)]
-    public IActionResult Edit(Guid id)
+    public IActionResult Edit(string id)
     {
         return View(id);
     }
@@ -83,9 +84,9 @@ public class UserController : ManagerController
     /// </summary>
     /// <param name="id">The user id</param>
     [HttpGet]
-    [Route("/manager/user/edit/{id:Guid}")]
+    [Route("/manager/user/edit/{id}")]
     [Authorize(Policy = Permissions.UsersEdit)]
-    public UserEditModel Get(Guid id)
+    public UserEditModel Get(string id)
     {
         return UserEditModel.GetById(_db, id);
     }
@@ -138,7 +139,7 @@ public class UserController : ManagerController
                 return BadRequest(GetErrorMessage(string.Format("{0} {1} - {2}", _localizer.Security["The new passwords does not match."], model.Password, model.PasswordConfirm)));
             }
 
-            if (model.User.Id == Guid.Empty && string.IsNullOrWhiteSpace(model.Password))
+            if (string.IsNullOrEmpty(model.User.Id) && string.IsNullOrWhiteSpace(model.Password))
             {
                 return BadRequest(GetErrorMessage(_localizer.Security["Password is mandatory when creating a new user."]));
             }
@@ -194,7 +195,7 @@ public class UserController : ManagerController
     [HttpDelete]
     [Route("/manager/user/delete")]
     [Authorize(Policy = Permissions.UsersDelete)]
-    public async Task<IActionResult> Delete([FromBody]Guid id)
+    public async Task<IActionResult> Delete([FromBody]string id)
     {
         var user = _db.Users.FirstOrDefault(u => u.Id == id);
 
@@ -206,8 +207,8 @@ public class UserController : ManagerController
                 return BadRequest(GetErrorMessage(_localizer.Security["Can't delete yourself."]));
             }
 
-            _db.Users.Remove(user);
-            _db.SaveChanges();
+            _db.session.Delete(user);
+            await _db.SaveChangesAsync();
 
             return Ok(GetSuccessMessage(_localizer.Security["The user has been deleted."]));
         }

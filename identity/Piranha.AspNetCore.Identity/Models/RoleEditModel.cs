@@ -10,6 +10,7 @@
 
 using Microsoft.AspNetCore.Identity;
 using Piranha.AspNetCore.Identity.Data;
+using Raven.Client.Documents.Linq;
 
 namespace Piranha.AspNetCore.Identity.Models;
 
@@ -23,7 +24,7 @@ public class RoleEditModel
     public Role Role { get; set; }
     public IList<string> SelectedClaims { get; set; }
 
-    public static RoleEditModel GetById(IDb db, Guid id)
+    public static RoleEditModel GetById(IDb db, string id)
     {
         var role = db.Roles.FirstOrDefault(r => r.Id == id);
 
@@ -60,7 +61,7 @@ public class RoleEditModel
 
         if (role == null)
         {
-            Role.Id = Role.Id != Guid.Empty ? Role.Id : Guid.NewGuid();
+            Role.Id = Role.Id != string.Empty ? Role.Id : Snowflake.NewId();
             Role.NormalizedName = !string.IsNullOrEmpty(Role.NormalizedName)
                 ? Role.NormalizedName.ToUpper()
                 : Role.Name.ToUpper();
@@ -69,15 +70,16 @@ public class RoleEditModel
             {
                 Id = Role.Id
             };
-            db.Roles.Add(role);
+            //db.Roles.Add(role);
+            db.session.StoreAsync(role);
         }
 
         role.Name = Role.Name;
         role.NormalizedName = Role.NormalizedName;
 
         var claims = db.RoleClaims.Where(r => r.RoleId == role.Id).ToList();
-        var delete = new List<IdentityRoleClaim<Guid>>();
-        var add = new List<IdentityRoleClaim<Guid>>();
+        var delete = new List<IdentityRoleClaim<string>>();
+        var add = new List<IdentityRoleClaim<string>>();
 
         foreach (var old in claims)
         {
@@ -91,7 +93,7 @@ public class RoleEditModel
         {
             if (!claims.Any(c => c.ClaimType == selected))
             {
-                add.Add(new IdentityRoleClaim<Guid>
+                add.Add(new IdentityRoleClaim<string>
                 {
                     RoleId = role.Id,
                     ClaimType = selected,
@@ -100,8 +102,16 @@ public class RoleEditModel
             }
         }
 
-        db.RoleClaims.RemoveRange(delete);
-        db.RoleClaims.AddRange(add);
+        // db.RoleClaims.RemoveRange(delete);
+        // db.RoleClaims.AddRange(add);
+        foreach (var r in delete)
+        {
+            db.session.Delete(r);
+        }
+        
+        foreach (var r in add)        {
+            db.session.StoreAsync(r);
+        }
 
         db.SaveChanges();
 

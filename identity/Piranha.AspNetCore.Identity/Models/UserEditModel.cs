@@ -30,7 +30,7 @@ public class UserEditModel
         };
     }
 
-    public static UserEditModel GetById(IDb db, Guid id)
+    public static UserEditModel GetById(IDb db, string id)
     {
         var user = db.Users.FirstOrDefault(u => u.Id == id);
 
@@ -63,7 +63,7 @@ public class UserEditModel
         {
             user = new User
             {
-                Id = User.Id != Guid.Empty ? User.Id : Guid.NewGuid(),
+                Id = User.Id != string.Empty ? User.Id : Snowflake.NewId(),
                 UserName = User.UserName,
                 Email = User.Email
             };

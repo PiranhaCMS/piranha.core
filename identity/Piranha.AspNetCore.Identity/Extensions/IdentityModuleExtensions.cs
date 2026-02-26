@@ -8,10 +8,10 @@
  *
  */
 
+using Aero.Identity;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
 using Piranha;
@@ -34,7 +34,7 @@ public static class IdentityModuleExtensions
     /// <param name="cookieOptions">Optional options for cookies</param>
     /// <returns>The services</returns>
     public static IServiceCollection AddPiranhaIdentity<T>(this IServiceCollection services,
-        Action<DbContextOptionsBuilder> dbOptions,
+        //Action<DbContextOptionsBuilder> dbOptions,
         Action<IdentityOptions> identityOptions = null,
         Action<CookieAuthenticationOptions> cookieOptions = null)
         where T : Db<T>
@@ -53,73 +53,74 @@ public static class IdentityModuleExtensions
         services.AddAuthorization(o =>
         {
             // Role policies
-            o.AddPolicy(Permissions.Roles, policy =>
+            o.AddPolicy(Aero.Identity.Permissions.Roles, policy =>
             {
                 policy.RequireClaim(Permission.Admin, Permission.Admin);
-                policy.RequireClaim(Permissions.Roles, Permissions.Roles);
+                policy.RequireClaim(Aero.Identity.Permissions.Roles, Aero.Identity.Permissions.Roles);
             });
-            o.AddPolicy(Permissions.RolesAdd, policy =>
+            o.AddPolicy(Aero.Identity.Permissions.RolesAdd, policy =>
             {
                 policy.RequireClaim(Permission.Admin, Permission.Admin);
-                policy.RequireClaim(Permissions.Roles, Permissions.Roles);
-                policy.RequireClaim(Permissions.RolesAdd, Permissions.RolesAdd);
+                policy.RequireClaim(Aero.Identity.Permissions.Roles, Aero.Identity.Permissions.Roles);
+                policy.RequireClaim(Aero.Identity.Permissions.RolesAdd, Aero.Identity.Permissions.RolesAdd);
             });
-            o.AddPolicy(Permissions.RolesDelete, policy =>
+            o.AddPolicy(Aero.Identity.Permissions.RolesDelete, policy =>
             {
                 policy.RequireClaim(Permission.Admin, Permission.Admin);
-                policy.RequireClaim(Permissions.Roles, Permissions.Roles);
-                policy.RequireClaim(Permissions.RolesDelete, Permissions.RolesDelete);
+                policy.RequireClaim(Aero.Identity.Permissions.Roles, Aero.Identity.Permissions.Roles);
+                policy.RequireClaim(Aero.Identity.Permissions.RolesDelete, Aero.Identity.Permissions.RolesDelete);
             });
-            o.AddPolicy(Permissions.RolesEdit, policy =>
+            o.AddPolicy(Aero.Identity.Permissions.RolesEdit, policy =>
             {
                 policy.RequireClaim(Permission.Admin, Permission.Admin);
-                policy.RequireClaim(Permissions.Roles, Permissions.Roles);
-                policy.RequireClaim(Permissions.RolesEdit, Permissions.RolesEdit);
+                policy.RequireClaim(Aero.Identity.Permissions.Roles, Aero.Identity.Permissions.Roles);
+                policy.RequireClaim(Aero.Identity.Permissions.RolesEdit, Aero.Identity.Permissions.RolesEdit);
             });
-            o.AddPolicy(Permissions.RolesSave, policy =>
+            o.AddPolicy(Aero.Identity.Permissions.RolesSave, policy =>
             {
                 policy.RequireClaim(Permission.Admin, Permission.Admin);
-                policy.RequireClaim(Permissions.Roles, Permissions.Roles);
-                policy.RequireClaim(Permissions.RolesSave, Permissions.RolesSave);
+                policy.RequireClaim(Aero.Identity.Permissions.Roles, Aero.Identity.Permissions.Roles);
+                policy.RequireClaim(Aero.Identity.Permissions.RolesSave, Aero.Identity.Permissions.RolesSave);
             });
 
             // User policies
-            o.AddPolicy(Permissions.Users, policy =>
+            o.AddPolicy(Aero.Identity.Permissions.Users, policy =>
             {
                 policy.RequireClaim(Permission.Admin, Permission.Admin);
-                policy.RequireClaim(Permissions.Users, Permissions.Users);
+                policy.RequireClaim(Aero.Identity.Permissions.Users, Aero.Identity.Permissions.Users);
             });
-            o.AddPolicy(Permissions.UsersAdd, policy =>
+            o.AddPolicy(Aero.Identity.Permissions.UsersAdd, policy =>
             {
                 policy.RequireClaim(Permission.Admin, Permission.Admin);
-                policy.RequireClaim(Permissions.Users, Permissions.Users);
-                policy.RequireClaim(Permissions.UsersAdd, Permissions.UsersAdd);
+                policy.RequireClaim(Aero.Identity.Permissions.Users, Aero.Identity.Permissions.Users);
+                policy.RequireClaim(Aero.Identity.Permissions.UsersAdd, Aero.Identity.Permissions.UsersAdd);
             });
-            o.AddPolicy(Permissions.UsersDelete, policy =>
+            o.AddPolicy(Aero.Identity.Permissions.UsersDelete, policy =>
             {
                 policy.RequireClaim(Permission.Admin, Permission.Admin);
-                policy.RequireClaim(Permissions.Users, Permissions.Users);
-                policy.RequireClaim(Permissions.UsersDelete, Permissions.UsersDelete);
+                policy.RequireClaim(Aero.Identity.Permissions.Users, Aero.Identity.Permissions.Users);
+                policy.RequireClaim(Aero.Identity.Permissions.UsersDelete, Aero.Identity.Permissions.UsersDelete);
             });
-            o.AddPolicy(Permissions.UsersEdit, policy =>
+            o.AddPolicy(Aero.Identity.Permissions.UsersEdit, policy =>
             {
                 policy.RequireClaim(Permission.Admin, Permission.Admin);
-                policy.RequireClaim(Permissions.Users, Permissions.Users);
-                policy.RequireClaim(Permissions.UsersEdit, Permissions.UsersEdit);
+                policy.RequireClaim(Aero.Identity.Permissions.Users, Aero.Identity.Permissions.Users);
+                policy.RequireClaim(Aero.Identity.Permissions.UsersEdit, Aero.Identity.Permissions.UsersEdit);
             });
-            o.AddPolicy(Permissions.UsersSave, policy =>
+            o.AddPolicy(Aero.Identity.Permissions.UsersSave, policy =>
             {
                 policy.RequireClaim(Permission.Admin, Permission.Admin);
-                policy.RequireClaim(Permissions.Users, Permissions.Users);
-                policy.RequireClaim(Permissions.UsersSave, Permissions.UsersSave);
+                policy.RequireClaim(Aero.Identity.Permissions.Users, Aero.Identity.Permissions.Users);
+                policy.RequireClaim(Aero.Identity.Permissions.UsersSave, Aero.Identity.Permissions.UsersSave);
             });
         });
 
-        services.AddDbContext<T>(dbOptions);
+        //services.AddDbContext<T>(dbOptions);
         services.AddScoped<IDb, T>();
         services.AddScoped<T, T>();
         services.AddIdentity<User, Role>()
-            .AddEntityFrameworkStores<T>()
+            //.AddEntityFrameworkStores<T>()
+            .AddRavenDbStores()
             .AddDefaultTokenProviders();
         services.Configure(identityOptions != null ? identityOptions : SetDefaultOptions);
         services.ConfigureApplicationCookie(cookieOptions != null ? cookieOptions : SetDefaultCookieOptions);
@@ -137,13 +138,13 @@ public static class IdentityModuleExtensions
     /// <param name="cookieOptions">Optional options for cookies</param>
     /// <returns>The services</returns>
     public static IServiceCollection AddPiranhaIdentityWithSeed<T, TSeed>(this IServiceCollection services,
-        Action<DbContextOptionsBuilder> dbOptions,
+        //Action<DbContextOptionsBuilder> dbOptions,
         Action<IdentityOptions> identityOptions = null,
         Action<CookieAuthenticationOptions> cookieOptions = null)
         where T : Db<T>
         where TSeed : class, IIdentitySeed
     {
-        services = AddPiranhaIdentity<T>(services, dbOptions, identityOptions, cookieOptions);
+        services = AddPiranhaIdentity<T>(services, identityOptions, cookieOptions);
         services.AddScoped<IIdentitySeed, TSeed>();
 
         return services;
@@ -158,12 +159,12 @@ public static class IdentityModuleExtensions
     /// <param name="cookieOptions">Optional options for cookies</param>
     /// <returns>The services</returns>
     public static IServiceCollection AddPiranhaIdentityWithSeed<T>(this IServiceCollection services,
-        Action<DbContextOptionsBuilder> dbOptions,
+        //Action<DbContextOptionsBuilder> dbOptions,
         Action<IdentityOptions> identityOptions = null,
         Action<CookieAuthenticationOptions> cookieOptions = null)
         where T : Db<T>
     {
-        return AddPiranhaIdentityWithSeed<T, DefaultIdentitySeed>(services, dbOptions, identityOptions, cookieOptions);
+        return AddPiranhaIdentityWithSeed<T, DefaultIdentitySeed>(services, identityOptions, cookieOptions);
     }
 
     /// <summary>

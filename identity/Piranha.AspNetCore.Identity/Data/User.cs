@@ -15,4 +15,4 @@ namespace Piranha.AspNetCore.Identity.Data;
 /// <summary>
 /// The application user.
 /// </summary>
-public sealed class User : IdentityUser<Guid> { }
+public sealed class User : IdentityUser<string> { }

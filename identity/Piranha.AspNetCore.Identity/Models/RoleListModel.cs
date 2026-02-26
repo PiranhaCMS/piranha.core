@@ -8,16 +8,13 @@
  *
  */
 
+using Raven.Client.Documents.Linq;
+
 namespace Piranha.AspNetCore.Identity.Models;
 
 public class RoleListModel
 {
-    public RoleListModel()
-    {
-        Roles = new List<ListItem>();
-    }
-
-    public IList<ListItem> Roles { get; set; }
+    public IList<ListItem> Roles { get; set; } = [];
 
     public static RoleListModel Get(IDb db)
     {
@@ -44,7 +41,7 @@ public class RoleListModel
 
     public class ListItem
     {
-        public Guid Id { get; set; }
+        public string Id { get; set; }
         public string Name { get; set; }
         public string NormalizedName { get; set; }
         public int UserCount { get; set; }
