@@ -6,6 +6,9 @@
 *.user
 *.userosscache
 *.sln.docstates
+.vsode/
+.idea/
+.frolic*.json
 
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs

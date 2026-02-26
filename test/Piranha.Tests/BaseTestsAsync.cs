@@ -50,6 +50,7 @@ public abstract class BaseTestsAsync : RavenTestBase, IAsyncLifetime
         return new ServiceCollection()
             .AddScoped(_ => session)
             //.AddPiranhaStore<SQLiteDb>()
+            .AddPiranhaStore<DbRaven>()
             .AddPiranha()
             .AddMemoryCache()
             .AddDistributedMemoryCache()
