@@ -18,5 +18,5 @@ public abstract class Entity : IEntity
     /// <summary>
     /// Gets/sets the unique id.
     /// </summary>
-    public string Id { get; set; } = string.Empty;
+    public string? Id { get; set; } = null;
 }

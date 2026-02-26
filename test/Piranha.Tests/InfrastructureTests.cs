@@ -39,8 +39,12 @@ public class InfrastructureTests : BaseTestsAsync
     public void ResolveOptionalServicesFromDI()
     {
         // These should be registered in CreateServiceCollection
-        Assert.NotNull(_services.GetService<IStorage>());
-        Assert.NotNull(_services.GetService<IImageProcessor>());
-        Assert.NotNull(_services.GetService<ICache>());
+        var storage = _services.GetService<IStorage>();
+        var processor = _services.GetService<IImageProcessor>();
+        var cache = _services.GetService<ICache>();
+
+        Assert.NotNull(storage);
+        Assert.NotNull(processor);
+        Assert.NotNull(cache);
     }
 }

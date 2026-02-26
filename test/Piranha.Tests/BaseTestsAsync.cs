@@ -81,10 +81,6 @@ public abstract class BaseTestsAsync : RavenTestBase, IAsyncLifetime
 
         var db = GetDb();
 
-        var site = db.Sites.FirstOrDefaultAsync(x => x.IsDefault == true)
-            .GetAwaiter()
-            .GetResult();
-
         var api = new Api(
             factory,
             new AliasRepository(db),
@@ -105,14 +101,6 @@ public abstract class BaseTestsAsync : RavenTestBase, IAsyncLifetime
             storage: _storage,
             processor: _processor
         );
-
-        if (site is null)
-            Seed.RunAsync(api).Wait();
-
-        var test = db.Sites
-            .FirstOrDefaultAsync(x => x.IsDefault == true)
-            .GetAwaiter()
-            .GetResult();
         
         return api;
     }

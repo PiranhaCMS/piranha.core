@@ -23,7 +23,6 @@ public class App : BaseTests
     /// </summary>
     protected override void Init()
     {
-        Seed.RunAsync(CreateApi()).GetAwaiter().GetResult();
         using var api = CreateApi();
         Piranha.App.Init(api);
     }

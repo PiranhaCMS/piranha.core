@@ -11,6 +11,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\Aero.Identity\Aero.Identity.csproj" />
     <ProjectReference Include="..\..\core\Piranha\Piranha.csproj" />
     <ProjectReference Include="..\..\core\Piranha.Manager\Piranha.Manager.csproj" />
     <ProjectReference Include="..\..\core\Piranha.Manager.LocalAuth\Piranha.Manager.LocalAuth.csproj" />
@@ -20,6 +21,7 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="10.0.3" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="10.0.3" PrivateAssets="all" />
+    <PackageReference Include="RavenDB.Client" Version="7.2.0" />
   </ItemGroup>
 
   <ItemGroup>
