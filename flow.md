@@ -204,7 +204,7 @@ Repository (e.g., SiteRepository)
     ├──► Constructor receives: IDb db (DbRaven)
     │
     └──► Uses _db for all EF operations:
-         ├──► _db.Sites (DbSet)
+         ├──► _db.Sites (IDocumentSession)
          ├──► _db.SaveChanges()
          ├──► _db.SaveChangesAsync()
          └──► _db.Set<T>() for generic operations
@@ -310,7 +310,7 @@ Repository (e.g., SiteRepository)
 ```csharp
 // In BaseTestsAsync.CreateServiceCollection()
 return new ServiceCollection()
-.AddScoped(_ => session)
+    .AddScoped(_ => session)
     .AddPiranhaStore<DbRaven>()
     .AddPiranha()
     .AddMemoryCache()

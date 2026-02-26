@@ -57,8 +57,10 @@ public abstract class BaseTestsAsync : RavenTestBase, IAsyncLifetime
             .AddPiranhaStore<DbRaven>()
             .AddPiranha()
             .AddMemoryCache()
+            .AddPiranhaMemoryCache()
             .AddDistributedMemoryCache()
-            .AddPiranhaFileStorage();
+            .AddPiranhaFileStorage()
+            .AddPiranhaImageSharp();
     }
 
     /// <summary>
