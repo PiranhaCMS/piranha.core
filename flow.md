@@ -31,9 +31,9 @@ This document provides a comprehensive overview of how Piranha CMS initializes a
 │  │   └── services.AddScoped<Config>()                                    │  │
 │  └─────────────────────────────────────────────────────────────────────────┘  │
 │  ┌─────────────────────────────────────────────────────────────────────────┐  │
-│  │ PiranhaEFExtensions.UseEF<T>() / AddPiranhaEF<T>()                    │  │
-│  │   ├── services.AddDbContextPool<T>(dboptions, poolSize)               │  │
-│  │   └── Registers 14 Repositories + IDb + ContentServiceFactory          │  │
+│  │ PiranhaRavenDbExtensions.UseRavenDb() / AddPiranhaRavenDb()             │  │
+│  │   ├── services.AddSingleton<IDocumentStore>(store)                      │  │
+│  │   └── Registers 14 Repositories + IAsyncDocumentSession + Factory       │  │
 │  └─────────────────────────────────────────────────────────────────────────┘  │
 └─────────────────────────────────────────────────────────────────────────────┘
                                         │
@@ -73,7 +73,7 @@ builder.AddPiranha(options =>
     options.UseFileStorage();   // File-based media storage
     options.UseImageSharp();    // Image processing
     options.UseMemoryCache();   // Caching
-    options.UseEF<SQLiteDb>(db => db.UseSqlite(connectionString));  // EF Core
+    //options.UseRavenDb(store);   // RavenDB DocumentStore
 });
 ```
 
@@ -86,10 +86,10 @@ PiranhaStartupExtensions.AddPiranha()
     ├──► Registers IContentFactory → ContentFactory (singleton)
     └──► Registers Config (scoped)
 
-PiranhaEFExtensions.UseEF<T>()
+PiranhaRavenDbExtensions.UseRavenDb()
     │
-    ├──► Adds DbContextPool<T> where T : DbContext, IDb
-    └──► RegisterServices<T>()
+    ├──► Adds IDocumentStore (singleton) and IAsyncDocumentSession (scoped)
+    └──► RegisterServices()
           │
           ├──► Registers 14 Repositories (scoped):
           │     ├── IAliasRepository → AliasRepository
@@ -107,7 +107,7 @@ PiranhaEFExtensions.UseEF<T>()
           │     ├── ISiteRepository → SiteRepository
           │     └── ISiteTypeRepository → SiteTypeRepository
           │
-          ├──► Registers IDb → T (scoped)  ← The DbContext
+          ├──► Registers IDb → T (scoped)  ← The RavenDB session (DbRaven)
           └──► Registers IContentServiceFactory → ContentServiceFactory
 ```
 
@@ -158,7 +158,7 @@ App.Init(IApi api)
          │
          └──► For each registered module:
                    module.Instance.Init()
-                   └──► e.g., Piranha.Data.EF.Module.Init()
+                   └──► e.g., Piranha.Data.RavenDb.Module.Init()
                             └──► Registers module with Piranha
 ```
 
@@ -181,10 +181,10 @@ PiranhaApplicationBuilder / PiranhaApplication
          IPageRepository
               │
               ▼
-         IDb (DbContext)  ← Entity Framework Core
+         IDb (DbContext)  ← RavenDB Session
               │
               ▼
-         Database (SQLite/SQL Server/PostgreSQL/MySQL)
+         Database (RavenDB Document Database)
 ```
 
 ### Key Interfaces Summary
@@ -192,7 +192,7 @@ PiranhaApplicationBuilder / PiranhaApplication
 | Interface | Purpose | Implementation |
 |-----------|---------|----------------|
 | `IApi` | Main facade providing access to all CMS services | `Api` class |
-| `IDb` | Database context abstraction | EF Core `DbContext` |
+| `IAsyncDocumentSession` | Database session abstraction | RavenDB `IAsyncDocumentSession` |
 | `IContentFactory` | Factory for creating content models | `ContentFactory` |
 | `IRepository<T>` | Data access patterns | 14 repository implementations |
 
@@ -201,7 +201,7 @@ PiranhaApplicationBuilder / PiranhaApplication
 ```
 Repository (e.g., SiteRepository)
     │
-    ├──► Constructor receives: IDb db
+    ├──► Constructor receives: IDb db (DbRaven)
     │
     └──► Uses _db for all EF operations:
          ├──► _db.Sites (DbSet)
@@ -242,8 +242,8 @@ Repository (e.g., SiteRepository)
 │         │              │              │                                     │
 │         ▼              ▼              ▼                                     │
 │  ┌─────────────────────────────────────────┐                              │
-│  │         SQLite Database                  │                              │
-│  │    (piranha.tests.db)                    │                              │
+│  │         RavenDB TestServer              │                              │
+│  │    (In-Memory Document Store)           │                              │
 │  └─────────────────────────────────────────┘                              │
 └─────────────────────────────────────────────────────────────────────────────┘
 ```
@@ -277,8 +277,8 @@ Repository (e.g., SiteRepository)
 │  │ protected IServiceProvider services                      ││
 │  │ protected IStorage storage                               ││
 │  │                                                            ││
-│  │ GetDb() → IDb (SQLiteDb)                                ││
-│  │   └── Uses: "Filename=./piranha.tests.db"               ││
+│  │ GetSession() → IAsyncDocumentSession                    ││
+│  │   └── Uses: Embedded DocumentStore from Raven TestDriver         ││
 │  └─────────────────────────────────────────────────────────┘│
 └─────────────────────────────────────────────────────────────┘
            │
@@ -291,7 +291,7 @@ Repository (e.g., SiteRepository)
 │  │ protected IServiceProvider _services                    ││
 │  │                                                            ││
 │  │ CreateServiceCollection() → IServiceCollection          ││
-│  │   ├── AddPiranhaEF<SQLiteDb>()                         ││
+│  │   ├── AddPiranhaRavenDb()                              ││
 │  │   ├── AddPiranha()                                      ││
 │  │   ├── AddMemoryCache()                                  ││
 │  │   ├── AddDistributedMemoryCache()                       ││
@@ -310,8 +310,8 @@ Repository (e.g., SiteRepository)
 ```csharp
 // In BaseTestsAsync.CreateServiceCollection()
 return new ServiceCollection()
-    .AddPiranhaEF<SQLiteDb>(db => 
-        db.UseSqlite("Filename=./piranha.tests.db"))  // SQLite In-Memory
+.AddScoped(_ => session)
+    .AddPiranhaStore<DbRaven>()
     .AddPiranha()
     .AddMemoryCache()
     .AddDistributedMemoryCache()
@@ -540,21 +540,20 @@ public class PageTestsDistributedCache : PageTests
 │                                                                     │
 │  BaseTestsAsync.CreateServiceCollection()                           │
 │       │                                                             │
-│       └──► .AddPiranhaEF<SQLiteDb>(db =>                          │
-│                db.UseSqlite("Filename=./piranha.tests.db"))        │
+│       └──► .AddPiranhaRavenDb(store)                              │
 │                    │                                                 │
 │                    ▼                                                │
 │           ┌─────────────────┐                                      │
-│           │ SQLiteDb       │                                      │
+│           │ RavenDb       │                                      │
 │           │ (IDb +         │                                      │
-│           │  DbContext)    │                                      │
+│           │  IAsyncDocumentSession)    │                                      │
 │           └─────────────────┘                                      │
 │                    │                                                 │
 │                    ▼                                                │
-│           ┌─────────────────┐                                      │
-│           │ piranha.tests  │  ← Local SQLite file                   │
-│           │ .db            │    (created in test output dir)        │
-│           └─────────────────┘                                      │
+│           ┌───────────────────────┐                                │
+│           │ RavenDB TestServer    │  ← DocumentStore      │
+│           │                       │    (created by RavenTestDriver) │
+│           └───────────────────────┘                                │
 └─────────────────────────────────────────────────────────────────────┘
 ```
 
@@ -565,7 +564,7 @@ public class PageTestsDistributedCache : PageTests
 | Step | What Happens | Code Location |
 |------|-------------|---------------|
 | 1 | Create ServiceCollection | `BaseTestsAsync.CreateServiceCollection()` |
-| 2 | Add EF + SQLite | `.AddPiranhaEF<SQLiteDb>()` |
+| 2 | Add RavenDB | `.AddRavenStores()` |
 | 3 | Add Piranha services | `.AddPiranha()` |
 | 4 | Add caching | `.AddMemoryCache()`, `.AddDistributedMemoryCache()` |
 | 5 | Create Api manually | `CreateApi()` - constructs with all repositories |
@@ -586,8 +585,8 @@ public class PageTestsDistributedCache : PageTests
 | `core/Piranha/App.cs` | Static singleton for app state |
 | `core/Piranha/IApi.cs` | Main API interface |
 | `core/Piranha/Api.cs` | API implementation |
-| `data/Piranha.Data.EF/IDb.cs` | Database context interface |
-| `data/Piranha.Data.EF/Extensions/PiranhaEFExtensions.cs` | EF registration |
+| `data/Piranha.Data.RavenDb/IDb.cs` | Database context interface |
+| `data/Piranha.Data.RavenDb/Extensions/PiranhaEFExtensions.cs` | Raven registration |
 | `core/Piranha/Extensions/PiranhaStartupExtensions.cs` | DI registration |
 | `core/Piranha/PiranhaServiceBuilder.cs` | Service builder |
 | `examples/MvcWeb/Program.cs` | Example initialization |

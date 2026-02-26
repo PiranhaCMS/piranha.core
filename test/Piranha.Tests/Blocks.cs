@@ -10,6 +10,10 @@
 
 using Xunit;
 using Piranha.Data;
+using Piranha.Data.RavenDb;
+using Piranha.Data.RavenDb.Data;
+using Piranha.Data.RavenDb.Services;
+using Piranha.Data.RavenDb.Services.Internal;
 using Piranha.Extend.Blocks;
 using Piranha.Services;
 
@@ -30,7 +34,7 @@ public class Blocks : BaseTestsAsync
         using var api = CreateApi();
         Piranha.App.Init(api);
 
-        contentService = new ContentService<Page, PageField, Models.PageBase>(new ContentFactory(_services), Piranha.Data.EF.Module.Mapper);
+        contentService = new ContentService<Page, PageField, Models.PageBase>(new ContentFactory(_services), Module.Mapper);
 
         // Add media
         using var stream = File.OpenRead("../../../Assets/HLD_Screenshot_01_mech_1080.png");

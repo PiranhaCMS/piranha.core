@@ -10,6 +10,10 @@
 
 
 using Microsoft.Extensions.DependencyInjection;
+using Piranha.Data.RavenDb;
+using Piranha.Data.RavenDb.Extensions;
+using Piranha.Data.RavenDb.Repositories;
+using Piranha.Data.RavenDb.Services.Internal;
 using Xunit;
 using Piranha.ImageSharp;
 using Piranha.Repositories;

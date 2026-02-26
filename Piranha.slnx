@@ -20,7 +20,7 @@
     <Project Path="core/Piranha/Piranha.csproj" />
   </Folder>
   <Folder Name="/data/">
-    <Project Path="data/Piranha.Data.EF/Piranha.Data.EF.csproj" />
+    <Project Path="D:/proj/microbians/piranha/data/Piranha.Data.RavenDb/Piranha.Data.RavenDb.csproj" />
   </Folder>
   <Folder Name="/examples/">
     <Project Path="examples/MvcWeb/MvcWeb.csproj" />

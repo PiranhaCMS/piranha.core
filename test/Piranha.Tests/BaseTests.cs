@@ -10,6 +10,7 @@
 
 
 using Microsoft.Extensions.DependencyInjection;
+using Piranha.Data.RavenDb;
 using Raven.Client.Documents;
 using Raven.Client.Documents.Session;
 

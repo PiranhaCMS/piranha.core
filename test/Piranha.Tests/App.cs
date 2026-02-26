@@ -8,6 +8,8 @@
  *
  */
 
+using Piranha.Data.RavenDb.Repositories;
+using Piranha.Data.RavenDb.Services.Internal;
 using Xunit;
 using Piranha.Repositories;
 using Piranha.Services;

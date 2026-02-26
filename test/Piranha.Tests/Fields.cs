@@ -9,6 +9,8 @@
  */
 
 using System.Text;
+using Piranha.Data.RavenDb.Repositories;
+using Piranha.Data.RavenDb.Services.Internal;
 using Xunit;
 using Piranha.Extend;
 using Piranha.Models;
@@ -956,7 +958,7 @@ public class Fields : BaseTests
             new ContentGroupRepository(db),
             new ContentTypeRepository(db),
             new LanguageRepository(db),
-            new Piranha.Repositories.MediaRepository(db),
+            new MediaRepository(db),
             new PageRepository(db, serviceFactory),
             new PageTypeRepository(db),
             new ParamRepository(db),

@@ -8,6 +8,8 @@
  *
  */
 
+using Piranha.Data.RavenDb.Repositories;
+using Piranha.Data.RavenDb.Services.Internal;
 using Xunit;
 using Piranha.Repositories;
 using Piranha.Services;
@@ -88,7 +90,7 @@ public class UI : BaseTests
             new ContentGroupRepository(db),
             new ContentTypeRepository(db),
             new LanguageRepository(db),
-            new Piranha.Repositories.MediaRepository(db),
+            new MediaRepository(db),
             new PageRepository(db, serviceFactory),
             new PageTypeRepository(db),
             new ParamRepository(db),
