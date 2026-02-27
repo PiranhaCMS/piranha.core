@@ -19,7 +19,7 @@ public static class RavenIdentityExtensions
     /// <param name="services">The current service collection</param>
     /// <param name="identityOptions">Optional options for identity</param>
     /// <param name="cookieOptions">Optional options for cookies</param>
-    /// <returns>The services</returns>
+    /// <returns>The service collection</returns>
     public static IServiceCollection AddPiranhaRavenDbIdentity(this IServiceCollection services,
         Action<IdentityOptions>? identityOptions = null,
         Action<CookieAuthenticationOptions>? cookieOptions = null)

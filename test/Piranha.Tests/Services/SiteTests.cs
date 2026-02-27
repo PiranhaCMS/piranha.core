@@ -67,6 +67,7 @@ public class SiteTests : BaseTestsAsync
 
     public override async Task InitializeAsync()
     {
+        await base.InitializeAsync();
         using var api = CreateApi();
         Piranha.App.Init(api);
 
@@ -74,6 +75,8 @@ public class SiteTests : BaseTestsAsync
             .AddType(typeof(MyPage))
             .AddType(typeof(MySiteContent))
             .Build();
+
+        var sites = await api.Sites.GetAllAsync();
 
         await api.Sites.SaveAsync(new Site
         {

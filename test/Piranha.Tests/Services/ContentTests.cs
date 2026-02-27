@@ -61,6 +61,7 @@ public class ContentTests : BaseTestsAsync
 
     public override async Task InitializeAsync()
     {
+        await base.InitializeAsync();
         using var api = CreateApi();
         Piranha.App.Init(api);
 

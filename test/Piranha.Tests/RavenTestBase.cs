@@ -3,6 +3,8 @@ using Raven.Embedded;
 using Raven.TestDriver;
 using System.Runtime.CompilerServices;
 using Raven.Client.Documents.Operations.Revisions;
+using Raven.Client.ServerWide;
+using Raven.Client.ServerWide.Operations;
 
 namespace Piranha.Tests;
 
@@ -10,15 +12,13 @@ public class RavenTestBase : RavenTestDriver
 {
     static RavenTestBase()
     {
-        try {
-            EmbeddedServer.Instance.StartServer(new ServerOptions
+        EmbeddedServer.Instance.StartServer(new ServerOptions
+        {
+            Licensing = new ServerOptions.LicensingOptions
             {
-                Licensing = new ServerOptions.LicensingOptions
-                {
-                    ThrowOnInvalidOrMissingLicense = false
-                }
-            });
-        } catch (InvalidOperationException) { }
+                ThrowOnInvalidOrMissingLicense = false
+            }
+        });
 
         ConfigureServer(new TestServerOptions
         {
@@ -31,25 +31,37 @@ public class RavenTestBase : RavenTestDriver
 
     protected override void PreInitialize(IDocumentStore store)
     {
-        store.Conventions.MaxNumberOfRequestsPerSession = 100;
+        store.Conventions.MaxNumberOfRequestsPerSession = 1000;
     }
 
-    protected IDocumentStore CreateStore([CallerMemberName] string database = "aero-test")
+    protected IDocumentStore CreateStore([CallerMemberName] string database = null)
     {
-        return GetDocumentStore(database: database);
+        if (database == null)
+            database = $"aero-cms-test";
+        
+        var store = GetDocumentStore(database: database);
+        
+        // remove old database
+        store.Maintenance.Server.Send(
+            new DeleteDatabasesOperation(
+                databaseName: database,
+                hardDelete: true // permanently remove files
+            ));
+
+        store.Maintenance.Server.Send(
+            new CreateDatabaseOperation(new DatabaseRecord(database)));
+
+        return store;
     }
     
     protected override void SetupDatabase(IDocumentStore documentStore)
     {
-        documentStore.Maintenance.Send(new ConfigureRevisionsOperation(new RevisionsConfiguration
-        {
-            Default = new RevisionsCollectionConfiguration
-            {
-                Disabled = false,
-                PurgeOnDelete = true,
-                MinimumRevisionsToKeep = 1,
-                MinimumRevisionAgeToKeep = TimeSpan.FromDays(14),
-            }
-        }));
+        base.SetupDatabase(documentStore);   
+    }
+    
+    public override void Dispose()
+    {
+        
+        base.Dispose();
     }
 }

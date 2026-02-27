@@ -53,12 +53,36 @@ internal class SiteRepository : ISiteRepository
             {
                 defaultLanguage = await _db.Languages
                     .FirstOrDefaultAsync(l => l.IsDefault);
+                if(defaultLanguage is null) // todo - this check shouldn't be performed here or needed.  temporarily here to fix bugs
+                { 
+                    defaultLanguage = await _db.Languages.FirstOrDefaultAsync(x => x.Culture == "en-US"); 
+                    if(defaultLanguage is null)
+                    {
+                        var languages = await _db.Languages.ToListAsync();
+                        if (languages.Any())
+                        {
+                            defaultLanguage = languages.First();
+                        }
+                        else
+                        {
+                            defaultLanguage = new Language
+                                {
+                                    Id = Snowflake.NewId(),
+                                    Title = "English",
+                                    Culture = "en-US",
+                                    IsDefault = true
+                                };
+                            await _db.session.StoreAsync(defaultLanguage);
+                            await _db.SaveChangesAsync();
+                        }
+                    }
+                }
             }
 
             models.Add(new Models.Site
             {
                 Id = site.Id,
-                LanguageId = string.IsNullOrEmpty(site.LanguageId) ? defaultLanguage.Id : site.LanguageId,
+                LanguageId = string.IsNullOrEmpty(site.LanguageId) ? defaultLanguage?.Id : site.LanguageId, // todo - investigate why defaultLanguage is null
                 SiteTypeId = site.SiteTypeId,
                 Title = site.Title,
                 InternalId = site.InternalId,
@@ -164,17 +188,30 @@ internal class SiteRepository : ISiteRepository
 
         if (site != null)
         {
-            Language defaultLanguage = null;
-            if (string.IsNullOrEmpty(site.LanguageId))
-            {
-                defaultLanguage = await _db.Languages
-                    .FirstOrDefaultAsync(l => l.IsDefault);
-            }
+            var defaultLanguage = await _db.Languages
+                .Where(x => x.Id == site.LanguageId, exact: false)
+                .FirstOrDefaultAsync();
 
-            return new Models.Site
+            if(defaultLanguage is null)
+            {
+                defaultLanguage = await _db.Languages.FirstOrDefaultAsync(l => l.IsDefault);
+                if(defaultLanguage is null)
+                {
+                    defaultLanguage = new Language
+                    {
+                        Id = Snowflake.NewId(),
+                        Title = "English",
+                        Culture = "en-US",
+                        IsDefault = true
+                    };
+                }
+            }
+            
+
+            var s =  new Models.Site
             {
                 Id = site.Id,
-                LanguageId = !string.IsNullOrEmpty(site.LanguageId) ? site.LanguageId : defaultLanguage.Id,
+                LanguageId = !string.IsNullOrEmpty(site.LanguageId) ? site.LanguageId : defaultLanguage?.Id,
                 SiteTypeId = site.SiteTypeId,
                 Title = site.Title,
                 InternalId = site.InternalId,
@@ -186,6 +223,11 @@ internal class SiteRepository : ISiteRepository
                 Created = site.Created,
                 LastModified = site.LastModified
             };
+
+            if(s == null)
+                Console.WriteLine("Site is null");
+
+            return s;
         }
 
         return null;

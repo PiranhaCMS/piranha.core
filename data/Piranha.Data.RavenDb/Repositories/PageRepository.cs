@@ -13,6 +13,7 @@ using Piranha.Data.RavenDb.Data;
 using Piranha.Data.RavenDb.Services;
 using Piranha.Repositories;
 using Raven.Client.Documents;
+using Raven.Client.Documents.Linq;
 
 namespace Piranha.Data.RavenDb.Repositories;
 
@@ -158,7 +159,7 @@ internal class PageRepository : IPageRepository
     {
         var ret = new List<T>();
         var pages = await GetQuery<T>()
-            .Where(p => ids.Contains(p.Id))
+            .Where(p => p.Id.In(ids))
             .ToListAsync()
             .ConfigureAwait(false);
 

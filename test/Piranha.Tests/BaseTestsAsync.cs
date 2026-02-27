@@ -41,6 +41,8 @@ public abstract class BaseTestsAsync : RavenTestBase, IAsyncLifetime
         _store = CreateStore();
         _session = _store.OpenAsyncSession();
         _services = CreateServiceCollection(_session).BuildServiceProvider();
+        
+        //store.Database.d
     }
 
     public virtual async Task DisposeAsync()
@@ -53,7 +55,6 @@ public abstract class BaseTestsAsync : RavenTestBase, IAsyncLifetime
     {
         return new ServiceCollection()
             .AddScoped(_ => session)
-            //.AddPiranhaStore<SQLiteDb>()
             .AddPiranhaStore<DbRaven>()
             .AddPiranha()
             .AddMemoryCache()
@@ -68,7 +69,7 @@ public abstract class BaseTestsAsync : RavenTestBase, IAsyncLifetime
     /// </summary>
     protected IDb GetDb()
     {
-        return new DbRaven(_session);
+        return new DbRaven(_session, _store);
     }
 
     /// <summary>

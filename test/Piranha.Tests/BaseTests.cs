@@ -61,6 +61,6 @@ public abstract class BaseTests : RavenTestBase, IDisposable
     /// Gets the test context.
     /// </summary>
     protected IDb GetDb() {
-        return new DbRaven(_session);
+        return new DbRaven(_session, _store);
     }
 }

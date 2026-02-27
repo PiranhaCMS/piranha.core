@@ -3,6 +3,8 @@ using Aero.Identity;
 using MvcWeb;
 using Piranha;
 using Piranha.AttributeBuilder;
+using Piranha.Data.RavenDb;
+using Piranha.Data.RavenDb.Extensions;
 using Piranha.Manager.Editor;
 using Raven.Client.Documents;
 
@@ -15,9 +17,8 @@ var ravenStore = new DocumentStore
     Database = builder.Configuration.GetValue<string>("RavenDb:Database") ?? "piranha"
 }.Initialize();
 
-builder.Services.AddSingleton<IDocumentStore>(ravenStore);
+builder.Services.AddSingleton(ravenStore);
 builder.Services.AddScoped(s => s.GetRequiredService<IDocumentStore>().OpenAsyncSession());
-
 builder.AddPiranha(options =>
 {
     /**
@@ -30,12 +31,14 @@ builder.AddPiranha(options =>
 
     options.UseCms();
     options.UseManager();
-
+    
     options.UseFileStorage(naming: Piranha.Local.FileStorageNaming.UniqueFolderNames);
     options.UseImageSharp();
     options.UseTinyMCE();
     options.UseMemoryCache();
 
+    // Use RavenDB 
+    builder.Services.AddPiranhaStore<DbRaven>();
     // Use RavenDB Identity
     builder.Services.AddPiranhaRavenDbIdentity();
 

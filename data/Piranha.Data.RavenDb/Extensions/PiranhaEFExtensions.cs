@@ -29,6 +29,7 @@ public static class PiranhaEFExtensions
     public static IServiceCollection AddPiranhaStore<T>(this IServiceCollection services, ServiceLifetime scope = ServiceLifetime.Scoped)
         where T : IDb
     {
+        
         return RegisterServices(services, scope);
     }
 

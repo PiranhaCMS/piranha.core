@@ -107,7 +107,7 @@ internal class AliasRepository : IAliasRepository
     public async Task<IEnumerable<Alias>> GetByRedirectUrl(string url, string siteId)
     {
         return await _db.Aliases
-            .Where(a => a.SiteId == siteId && a.RedirectUrl.ToLower() == url.ToLower())
+            .Where(a => a.SiteId == siteId && a.RedirectUrl == url, exact: false)
             .Select(a => new Alias
             {
                 Id = a.Id,

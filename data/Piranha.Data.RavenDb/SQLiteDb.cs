@@ -22,5 +22,5 @@ public class SQLiteDb : DbRavenBase
     /// Default constructor.
     /// </summary>
     /// <param name="db">The current raven db session</param>
-    public SQLiteDb(IAsyncDocumentSession db) : base(db) { }
+    public SQLiteDb(IAsyncDocumentSession db) : base(db, null) { }
 }

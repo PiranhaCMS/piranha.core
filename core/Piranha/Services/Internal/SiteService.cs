@@ -303,7 +303,7 @@ internal sealed class SiteService : ISiteService
         // Ensure id
         if (string.IsNullOrEmpty(model.Id))
         {
-            model.Id = Snowflake.NewId().ToString();
+            model.Id = Snowflake.NewId();
         }
 
         // Ensure language id
