@@ -41,8 +41,9 @@ public abstract class BaseTestsAsync : RavenTestBase, IAsyncLifetime
         _store = CreateStore();
         _session = _store.OpenAsyncSession();
         _services = CreateServiceCollection(_session).BuildServiceProvider();
-        
-        //store.Database.d
+
+        var api = CreateApi();
+        Piranha.App.Init(api);
     }
 
     public virtual async Task DisposeAsync()
@@ -55,7 +56,7 @@ public abstract class BaseTestsAsync : RavenTestBase, IAsyncLifetime
     {
         return new ServiceCollection()
             .AddScoped(_ => session)
-            .AddPiranhaStore<DbRaven>()
+            .AddAeroStore()
             .AddPiranha()
             .AddMemoryCache()
             .AddPiranhaMemoryCache()

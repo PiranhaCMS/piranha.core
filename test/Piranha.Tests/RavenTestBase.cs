@@ -5,6 +5,7 @@ using System.Runtime.CompilerServices;
 using Raven.Client.Documents.Operations.Revisions;
 using Raven.Client.ServerWide;
 using Raven.Client.ServerWide.Operations;
+using Piranha.Data.RavenDb;
 
 namespace Piranha.Tests;
 
@@ -50,6 +51,9 @@ public class RavenTestBase : RavenTestDriver
 
         store.Maintenance.Server.Send(
             new CreateDatabaseOperation(new DatabaseRecord(database)));
+
+        IndexCreator.CreateIndexes(store);
+
 
         return store;
     }

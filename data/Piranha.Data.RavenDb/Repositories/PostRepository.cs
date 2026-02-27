@@ -8,11 +8,12 @@
  *
  */
 
-using System.Text.Json;
 using Piranha.Data.RavenDb.Data;
+using Piranha.Data.RavenDb.Indexes;
 using Piranha.Data.RavenDb.Services;
 using Piranha.Repositories;
 using Raven.Client.Documents;
+using System.Text.Json;
 
 namespace Piranha.Data.RavenDb.Repositories;
 
@@ -987,6 +988,7 @@ internal class PostRepository : IPostRepository
     /// <param name="blogId">The blog id</param>
     private async Task DeleteUnusedCategories(string blogId)
     {
+        // 1. Collect all category IDs used by published posts
         var used = await _db.Posts
             .Where(p => p.BlogId == blogId)
             .Select(p => p.CategoryId)
@@ -994,12 +996,21 @@ internal class PostRepository : IPostRepository
             .ToListAsync()
             .ConfigureAwait(false);
 
-        var drafts = await _db.PostRevisions
-            .Where(r => r.Post.BlogId == blogId && r.Created > r.Post.LastModified)
+        // 2. Query the index for revisions newer than their posts
+        var draftIds = await _db.session
+            .Query<Revisions_ByIsNewerThanPost.Result, Revisions_ByIsNewerThanPost>()
+            .Where(x => x.BlogId == blogId && x.IsNewer)
+            .Select(x => x.Id)
             .ToListAsync()
             .ConfigureAwait(false);
 
-        foreach (var draft in drafts)
+        // 3. Load the actual revision documents
+        var drafts = await _db.session
+            .LoadAsync<PostRevision>(draftIds)
+            .ConfigureAwait(false);
+
+        // 4. Extract category IDs from draft data
+        foreach (var draft in drafts.Values)
         {
             var post = JsonSerializer.Deserialize<Post>(draft.Data);
             used.Add(post.CategoryId);
@@ -1007,19 +1018,56 @@ internal class PostRepository : IPostRepository
 
         used = used.Distinct().ToList();
 
+        // 5. Find categories not used by published posts or drafts
         var unused = await _db.Categories
             .Where(c => c.BlogId == blogId && !used.Contains(c.Id))
             .ToListAsync()
             .ConfigureAwait(false);
 
+        // 6. Delete unused categories
         if (unused.Count > 0)
         {
-            //_db.Categories.RemoveRange(unused);
             foreach (var item in unused)
                 _db.session.Delete(item);
+
             await _db.SaveChangesAsync().ConfigureAwait(false);
         }
     }
+    //private async Task DeleteUnusedCategories(string blogId)
+    //{
+    //    var used = await _db.Posts
+    //        .Where(p => p.BlogId == blogId)
+    //        .Select(p => p.CategoryId)
+    //        .Distinct()
+    //        .ToListAsync()
+    //        .ConfigureAwait(false);
+    //
+    //    var drafts = await _db.PostRevisions
+    //        .Where(r => r.Post.BlogId == blogId && r.Created > r.Post.LastModified, exact: false)
+    //        .ToListAsync()
+    //        .ConfigureAwait(false);
+    //
+    //    foreach (var draft in drafts)
+    //    {
+    //        var post = JsonSerializer.Deserialize<Post>(draft.Data);
+    //        used.Add(post.CategoryId);
+    //    }
+    //
+    //    used = used.Distinct().ToList();
+    //
+    //    var unused = await _db.Categories
+    //        .Where(c => c.BlogId == blogId && !used.Contains(c.Id))
+    //        .ToListAsync()
+    //        .ConfigureAwait(false);
+
+    //    if (unused.Count > 0)
+    //    {
+    //        //_db.Categories.RemoveRange(unused);
+    //        foreach (var item in unused)
+    //            _db.session.Delete(item);
+    //        await _db.SaveChangesAsync().ConfigureAwait(false);
+    //    }
+    //}
 
     /// <summary>
     /// Deletes all unused tags for the specified blog.

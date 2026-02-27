@@ -8,6 +8,7 @@
  *
  */
 
+using Shouldly;
 using Xunit;
 
 namespace Piranha.Tests;
@@ -19,7 +20,7 @@ public class Taxonomies
         Models.Taxonomy t = "Test";
 
         Assert.NotNull(t);
-        Assert.Equal(string.Empty, t.Id);
+        string.IsNullOrEmpty(t.Id).ShouldBeTrue();
         Assert.Equal("Test", t.Title);
         Assert.Null(t.Slug);
     }

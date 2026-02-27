@@ -1,24 +1,18 @@
 using Aero.Identity;
-
 using MvcWeb;
 using Piranha;
 using Piranha.AttributeBuilder;
-using Piranha.Data.RavenDb;
 using Piranha.Data.RavenDb.Extensions;
 using Piranha.Manager.Editor;
-using Raven.Client.Documents;
 
 var builder = WebApplication.CreateBuilder(args);
+var env = builder.Environment;
+var config = builder.Configuration
+    .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
+    .AddJsonFile($"appsettings.{env}.json", optional: true, reloadOnChange: true)
+    .AddEnvironmentVariables()
+    .Build();
 
-// Configure RavenDB
-var ravenStore = new DocumentStore
-{
-    Urls = [builder.Configuration.GetValue<string>("RavenDb:Url") ?? "http://localhost:8080"],
-    Database = builder.Configuration.GetValue<string>("RavenDb:Database") ?? "piranha"
-}.Initialize();
-
-builder.Services.AddSingleton(ravenStore);
-builder.Services.AddScoped(s => s.GetRequiredService<IDocumentStore>().OpenAsyncSession());
 builder.AddPiranha(options =>
 {
     /**
@@ -31,14 +25,14 @@ builder.AddPiranha(options =>
 
     options.UseCms();
     options.UseManager();
-    
+
     options.UseFileStorage(naming: Piranha.Local.FileStorageNaming.UniqueFolderNames);
     options.UseImageSharp();
     options.UseTinyMCE();
     options.UseMemoryCache();
 
     // Use RavenDB 
-    builder.Services.AddPiranhaStore<DbRaven>();
+    builder.Services.AddAeroStore();
     // Use RavenDB Identity
     builder.Services.AddPiranhaRavenDbIdentity();
 
@@ -85,11 +79,11 @@ try
 
         options.UseManager();
         options.UseTinyMCE();
-        
+
         // Seed data
         Seed.RunAsync(options.Api).GetAwaiter().GetResult();
     });
-    
+
     app.Run();
 }
 catch (Exception ex)
