@@ -18,6 +18,13 @@ namespace Piranha.Extend.Fields;
 [FieldType(Name = "Image", Shorthand = "Image", Component = "image-field")]
 public class ImageField : MediaFieldBase<ImageField>
 {
+    public ImageField(string logoId = null)
+    {
+        LogoId = logoId;
+    }
+
+    public string LogoId { get; }
+
     /// <summary>
     /// Implicit operator for converting a string id to a field.
     /// </summary>

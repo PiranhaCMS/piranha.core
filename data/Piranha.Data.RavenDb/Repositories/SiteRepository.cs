@@ -118,21 +118,27 @@ internal class SiteRepository : ISiteRepository
                     .FirstOrDefaultAsync(l => l.IsDefault);
             }
 
-            return new Models.Site
+
+            var langId = string.IsNullOrEmpty(site.LanguageId) ? defaultLanguage.Id : site.LanguageId;
+            var logo = string.IsNullOrEmpty(site.LogoId) ? new ImageField(site.LogoId) : new ImageField();
+
+            var s = new Models.Site
             {
                 Id = site.Id,
-                LanguageId = string.IsNullOrEmpty(site.LanguageId) ? defaultLanguage.Id : site.LanguageId,
+                LanguageId = langId,
                 SiteTypeId = site.SiteTypeId,
                 Title = site.Title,
                 InternalId = site.InternalId,
                 Description = site.Description,
-                Logo = string.IsNullOrEmpty(site.LogoId) ? new ImageField() : site.LogoId,
+                Logo = logo,
                 Hostnames = site.Hostnames,
                 IsDefault = site.IsDefault,
                 ContentLastModified = site.ContentLastModified,
                 Created = site.Created,
                 LastModified = site.LastModified
             };
+
+            return s;
         }
 
         return null;

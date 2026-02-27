@@ -113,10 +113,13 @@ public class PageTests : BaseTestsAsync
 
     public override async Task InitializeAsync()
     {
-        await base.InitializeAsync();
-        _services = CreateServiceCollection(_session)
-            .AddSingleton<IMyService, MyService>()
+        Func<IServiceCollection, IServiceCollection> registration = sc => sc
+            .AddSingleton<IMyService, MyService>();
+        _services = CreateServiceCollection(_session, registration)
+            //.AddSingleton<IMyService, MyService>()
             .BuildServiceProvider();
+
+        await base.InitializeAsync();
 
         using var api = CreateApi();
         Piranha.App.Init(api);
@@ -649,17 +652,17 @@ public class PageTests : BaseTestsAsync
     [Fact]
     public async Task Add()
     {
-        using var api = CreateApi();
-        var count = (await api.Pages.GetAllAsync(SITE_ID)).Count();
-        var page = await MyPage.CreateAsync(api, "MyPage");
+        
+        var count = (await _api.Pages.GetAllAsync(SITE_ID)).Count();
+        var page = await MyPage.CreateAsync(_api, "MyPage");
         page.SiteId = SITE_ID;
         page.Title = "My fourth page";
         page.Ingress = "My fourth ingress";
         page.Body = "My fourth body";
 
-        await api.Pages.SaveDraftAsync(page);
+        await _api.Pages.SaveDraftAsync(page);
 
-        Assert.Equal(count + 1, (await api.Pages.GetAllAsync(SITE_ID)).Count());
+        Assert.Equal(count + 1, (await _api.Pages.GetAllAsync(SITE_ID)).Count());
     }
 
     [Fact]

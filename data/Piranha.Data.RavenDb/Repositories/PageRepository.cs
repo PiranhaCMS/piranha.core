@@ -823,14 +823,16 @@ internal class PageRepository : IPageRepository
                 // Now map the new block
                 for (var n = 0; n < blocks.Count; n++)
                 {
-                    System.Linq.IQueryable<Block> blockQuery = _db.Blocks;
+                    var blockQuery = _db.Blocks;
                     if (isDraft)
                     {
-                        // blockQuery = blockQuery;
+                        blockQuery = blockQuery.Customize(x => x.NoTracking());
                     }
 
+                    var id = blocks[n].Id;
                     var block = await blockQuery
-                        .FirstOrDefaultAsync(b => b.Id == blocks[n].Id)
+                        .Include(x => x.Fields)
+                        .FirstOrDefaultAsync(b => b.Id == id)
                         .ConfigureAwait(false);
 
                     if (block == null)

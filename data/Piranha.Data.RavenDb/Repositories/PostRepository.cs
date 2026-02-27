@@ -13,6 +13,7 @@ using Piranha.Data.RavenDb.Indexes;
 using Piranha.Data.RavenDb.Services;
 using Piranha.Repositories;
 using Raven.Client.Documents;
+using Raven.Client.Documents.Linq;
 using System.Text.Json;
 
 namespace Piranha.Data.RavenDb.Repositories;
@@ -1020,7 +1021,7 @@ internal class PostRepository : IPostRepository
 
         // 5. Find categories not used by published posts or drafts
         var unused = await _db.Categories
-            .Where(c => c.BlogId == blogId && !used.Contains(c.Id))
+            .Where(c => c.BlogId == blogId && !c.Id.In(used)) // !used.Contains(c.Id))
             .ToListAsync()
             .ConfigureAwait(false);
 
@@ -1082,14 +1083,22 @@ internal class PostRepository : IPostRepository
             .ToListAsync()
             .ConfigureAwait(false);
 
-        var drafts = await _db.PostRevisions
-            .Where(r => r.Post.BlogId == blogId && r.Created > r.Post.LastModified)
-            .ToListAsync()
-            .ConfigureAwait(false);
+        //var drafts = await _db.PostRevisions
+        //    .Where(r => r.Post.BlogId == blogId && r.Created > r.Post.LastModified)
+        //    .ToListAsync()
+        //    .ConfigureAwait(false);
+
+        var draftIds = await _db.session
+            .Query<Revisions_ByIsNewerThanPost.Result, Revisions_ByIsNewerThanPost>()
+            .Where(x => x.BlogId == blogId && x.IsNewer)
+            .Select(x => x.Id)
+            .ToListAsync();
+
+        var drafts = await _db.session.LoadAsync<PostRevision>(draftIds);
 
         foreach (var draft in drafts)
         {
-            var post = JsonSerializer.Deserialize<Post>(draft.Data);
+            var post = JsonSerializer.Deserialize<Post>(draft.Value.Data);
 
             foreach (var tag in post.Tags)
             {
@@ -1100,7 +1109,7 @@ internal class PostRepository : IPostRepository
         used = used.Distinct().ToList();
 
         var unused = await _db.Tags
-            .Where(t => t.BlogId == blogId && !used.Contains(t.Id))
+            .Where(t => t.BlogId == blogId && !t.Id.In(used)) //!used.Contains(t.Id))
             .ToListAsync()
             .ConfigureAwait(false);
 

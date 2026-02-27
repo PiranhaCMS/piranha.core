@@ -32,7 +32,7 @@ public abstract class BaseTestsAsync : RavenTestBase, IAsyncLifetime
     protected IImageProcessor _processor = new ImageSharpProcessor();
     protected IServiceProvider _services;
     protected Cache.ICache _cache;
-
+    protected IApi _api;
     protected IDocumentStore _store;
     protected IAsyncDocumentSession _session;
 
@@ -41,9 +41,9 @@ public abstract class BaseTestsAsync : RavenTestBase, IAsyncLifetime
         _store = CreateStore();
         _session = _store.OpenAsyncSession();
         _services = CreateServiceCollection(_session).BuildServiceProvider();
-
-        var api = CreateApi();
-        Piranha.App.Init(api);
+  
+        _api = CreateApi();
+        Piranha.App.Init(_api);
     }
 
     public virtual async Task DisposeAsync()
@@ -52,9 +52,9 @@ public abstract class BaseTestsAsync : RavenTestBase, IAsyncLifetime
         _store.Dispose();
     }
 
-    protected static IServiceCollection CreateServiceCollection(IAsyncDocumentSession session)
+    protected static IServiceCollection CreateServiceCollection(IAsyncDocumentSession session, Func<IServiceCollection, IServiceCollection> register = null)
     {
-        return new ServiceCollection()
+        var sc = new ServiceCollection()
             .AddScoped(_ => session)
             .AddAeroStore()
             .AddPiranha()
@@ -63,6 +63,11 @@ public abstract class BaseTestsAsync : RavenTestBase, IAsyncLifetime
             .AddDistributedMemoryCache()
             .AddPiranhaFileStorage()
             .AddPiranhaImageSharp();
+
+        if (register is not null)
+            register.Invoke(sc);
+
+        return sc;
     }
 
     /// <summary>
@@ -78,6 +83,9 @@ public abstract class BaseTestsAsync : RavenTestBase, IAsyncLifetime
     /// </summary>
     protected virtual IApi CreateApi()
     {
+        if(_api is not null)
+            return _api;
+
         var factory = new ContentFactory(_services);
         var serviceFactory = new ContentServiceFactory(factory);
 

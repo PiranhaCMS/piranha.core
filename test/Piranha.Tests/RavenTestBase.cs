@@ -13,14 +13,6 @@ public class RavenTestBase : RavenTestDriver
 {
     static RavenTestBase()
     {
-        EmbeddedServer.Instance.StartServer(new ServerOptions
-        {
-            Licensing = new ServerOptions.LicensingOptions
-            {
-                ThrowOnInvalidOrMissingLicense = false
-            }
-        });
-
         ConfigureServer(new TestServerOptions
         {
             Licensing = new ServerOptions.LicensingOptions
