@@ -1,14 +1,4 @@
-﻿/*
- * Copyright (c) .NET Foundation and Contributors
- *
- * This software may be modified and distributed under the terms
- * of the MIT license. See the LICENSE file for details.
- *
- * https://github.com/piranhacms/piranha.core
- *
- */
-
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.DependencyInjection;
@@ -51,10 +41,6 @@ public class PostTests : BaseTestsAsync
     private readonly string POST_3_ID = Snowflake.NewId();
     private readonly string POST_DI_ID = Snowflake.NewId();
 
-    public interface IMyService
-    {
-        string Value { get; }
-    }
 
     public class MyService : IMyService
     {
@@ -104,8 +90,9 @@ public class PostTests : BaseTestsAsync
     public override async Task InitializeAsync()
     {
         await base.InitializeAsync();
+        //Func<IServiceCollection, IServiceCollection> registration = sc => sc.AddSingleton<IMyService, MyService>(); 
+        
         _services = CreateServiceCollection(_session)
-            .AddSingleton<IMyService, MyService>()
             .BuildServiceProvider();
 
         using var api = CreateApi();

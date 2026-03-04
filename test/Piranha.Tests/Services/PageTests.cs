@@ -51,17 +51,7 @@ public class PageTests : BaseTestsAsync
     public readonly string PAGE_7_ID = Snowflake.NewId();
     public readonly string PAGE_8_ID = Snowflake.NewId();
     public readonly string PAGE_DI_ID = Snowflake.NewId();
-
-    public interface IMyService
-    {
-        string Value { get; }
-    }
-
-    public class MyService : IMyService
-    {
-        public string Value { get; private set; } = "My service value";
-    }
-
+    
     [Piranha.Extend.FieldType(Name = "Fourth")]
     public class MyFourthField : Extend.Fields.SimpleField<string>
     {
@@ -113,13 +103,12 @@ public class PageTests : BaseTestsAsync
 
     public override async Task InitializeAsync()
     {
-        Func<IServiceCollection, IServiceCollection> registration = sc => sc
-            .AddSingleton<IMyService, MyService>();
-        _services = CreateServiceCollection(_session, registration)
-            //.AddSingleton<IMyService, MyService>()
-            .BuildServiceProvider();
-
         await base.InitializeAsync();
+        // Func<IServiceCollection, IServiceCollection> registration = sc => sc
+        //     .AddSingleton<IMyService, MyService>();
+        // replace default services w/ custom registrations 
+        _services = CreateServiceCollection(_session)
+            .BuildServiceProvider();
 
         using var api = CreateApi();
         Piranha.App.Init(api);

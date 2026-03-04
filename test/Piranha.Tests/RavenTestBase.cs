@@ -30,19 +30,19 @@ public class RavenTestBase : RavenTestDriver
     protected IDocumentStore CreateStore([CallerMemberName] string database = null)
     {
         if (database == null)
-            database = $"aero-cms-test";
+            database = $"aero-cms-test"; // todo - figure out how to not set a db name (index creation relies on it)
         
-        var store = GetDocumentStore(database: database);
+        var store = GetDocumentStore();
         
         // remove old database
-        store.Maintenance.Server.Send(
-            new DeleteDatabasesOperation(
-                databaseName: database,
-                hardDelete: true // permanently remove files
-            ));
+        //store.Maintenance.Server.Send(
+        //    new DeleteDatabasesOperation(
+        //        databaseName: database,
+        //        hardDelete: true // permanently remove files
+        //    ));
 
-        store.Maintenance.Server.Send(
-            new CreateDatabaseOperation(new DatabaseRecord(database)));
+        //store.Maintenance.Server.Send(
+        //    new CreateDatabaseOperation(new DatabaseRecord(database)));
 
         IndexCreator.CreateIndexes(store);
 

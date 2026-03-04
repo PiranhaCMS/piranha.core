@@ -53,10 +53,10 @@ internal class SiteRepository : ISiteRepository
             {
                 defaultLanguage = await _db.Languages
                     .FirstOrDefaultAsync(l => l.IsDefault);
-                if(defaultLanguage is null) // todo - this check shouldn't be performed here or needed.  temporarily here to fix bugs
-                { 
-                    defaultLanguage = await _db.Languages.FirstOrDefaultAsync(x => x.Culture == "en-US"); 
-                    if(defaultLanguage is null)
+                if (defaultLanguage is null) // todo - this check shouldn't be performed here or needed.  temporarily here to fix bugs
+                {
+                    defaultLanguage = await _db.Languages.FirstOrDefaultAsync(x => x.Culture == "en-US");
+                    if (defaultLanguage is null)
                     {
                         var languages = await _db.Languages.ToListAsync();
                         if (languages.Any())
@@ -66,12 +66,12 @@ internal class SiteRepository : ISiteRepository
                         else
                         {
                             defaultLanguage = new Language
-                                {
-                                    Id = Snowflake.NewId(),
-                                    Title = "English",
-                                    Culture = "en-US",
-                                    IsDefault = true
-                                };
+                            {
+                                Id = Snowflake.NewId(),
+                                Title = "English",
+                                Culture = "en-US",
+                                IsDefault = true
+                            };
                             await _db.session.StoreAsync(defaultLanguage);
                             await _db.SaveChangesAsync();
                         }
@@ -118,29 +118,36 @@ internal class SiteRepository : ISiteRepository
                     .FirstOrDefaultAsync(l => l.IsDefault);
             }
 
-
-            var langId = string.IsNullOrEmpty(site.LanguageId) ? defaultLanguage.Id : site.LanguageId;
-            var logo = string.IsNullOrEmpty(site.LogoId) ? new ImageField(site.LogoId) : new ImageField();
-
-            var s = new Models.Site
+            try
             {
-                Id = site.Id,
-                LanguageId = langId,
-                SiteTypeId = site.SiteTypeId,
-                Title = site.Title,
-                InternalId = site.InternalId,
-                Description = site.Description,
-                Logo = logo,
-                Hostnames = site.Hostnames,
-                IsDefault = site.IsDefault,
-                ContentLastModified = site.ContentLastModified,
-                Created = site.Created,
-                LastModified = site.LastModified
-            };
+                var langId = string.IsNullOrEmpty(site.LanguageId) ? defaultLanguage?.Id : site.LanguageId;
+                var logo = string.IsNullOrEmpty(site.LogoId) ? new ImageField(site.LogoId) : new ImageField();
 
-            return s;
+                var s = new Models.Site
+                {
+                    Id = site.Id,
+                    LanguageId = langId,
+                    SiteTypeId = site.SiteTypeId,
+                    Title = site.Title,
+                    InternalId = site.InternalId,
+                    Description = site.Description,
+                    Logo = logo,
+                    Hostnames = site.Hostnames,
+                    IsDefault = site.IsDefault,
+                    ContentLastModified = site.ContentLastModified,
+                    Created = site.Created,
+                    LastModified = site.LastModified
+                };
+
+                return s;
+            }
+            catch (Exception ex)
+            {
+                // todo - try/catch hotpath for errors after port - remove when resolved
+                Console.WriteLine($"Error mapping site with id {site.Id}: {ex.Message}");
+                return null;
+            }
         }
-
         return null;
     }
 
@@ -166,7 +173,7 @@ internal class SiteRepository : ISiteRepository
             return new Models.Site
             {
                 Id = site.Id,
-                LanguageId = !string.IsNullOrEmpty(site.LanguageId) ? site.LanguageId : defaultLanguage.Id,
+                LanguageId = !string.IsNullOrEmpty(site.LanguageId) ? site.LanguageId : defaultLanguage?.Id,
                 SiteTypeId = site.SiteTypeId,
                 Title = site.Title,
                 InternalId = site.InternalId,
@@ -198,10 +205,10 @@ internal class SiteRepository : ISiteRepository
                 .Where(x => x.Id == site.LanguageId, exact: false)
                 .FirstOrDefaultAsync();
 
-            if(defaultLanguage is null)
+            if (defaultLanguage is null)
             {
                 defaultLanguage = await _db.Languages.FirstOrDefaultAsync(l => l.IsDefault);
-                if(defaultLanguage is null)
+                if (defaultLanguage is null)
                 {
                     defaultLanguage = new Language
                     {
@@ -212,9 +219,9 @@ internal class SiteRepository : ISiteRepository
                     };
                 }
             }
-            
 
-            var s =  new Models.Site
+
+            var s = new Models.Site
             {
                 Id = site.Id,
                 LanguageId = !string.IsNullOrEmpty(site.LanguageId) ? site.LanguageId : defaultLanguage?.Id,
@@ -230,7 +237,7 @@ internal class SiteRepository : ISiteRepository
                 LastModified = site.LastModified
             };
 
-            if(s == null)
+            if (s == null)
                 Console.WriteLine("Site is null");
 
             return s;

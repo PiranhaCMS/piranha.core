@@ -44,7 +44,7 @@ internal class PostRepository : IPostRepository
     public async Task<IEnumerable<string>> GetAll(string blogId, int? index = null, int? pageSize = null)
     {
         // Prepare base query
-        IQueryable<Post> query = _db.Posts
+        IRavenQueryable<Post> query = _db.Posts
             .Where(p => p.BlogId == blogId)
             .OrderByDescending(p => p.Published)
             .ThenByDescending(p => p.LastModified)
@@ -561,7 +561,7 @@ internal class PostRepository : IPostRepository
         bool onlyPending, int page, int pageSize)
     {
         // Create base query
-        IQueryable<PostComment> query = _db.PostComments
+        IRavenQueryable<PostComment> query = _db.PostComments
             ;
 
         // Check if only should include a comments for a certain post
@@ -715,10 +715,10 @@ internal class PostRepository : IPostRepository
                 model.Slug = Utils.GenerateSlug(model.Slug, false);
             }
 
-            IQueryable<Post> postQuery = _db.Posts;
+            IRavenQueryable<Post> postQuery = _db.Posts;
             if (isDraft)
             {
-                // postQuery = postQuery;
+                postQuery = postQuery.Customize(x => x.NoTracking());
             }
 
             // FirstOrDefaultAsync(p => p.Id ...
@@ -826,14 +826,16 @@ internal class PostRepository : IPostRepository
                 // Now map the new block
                 for (var n = 0; n < blocks.Count; n++)
                 {
-                    IQueryable<Block> blockQuery = _db.Blocks;
+                    IRavenQueryable<Block> blockQuery = _db.Blocks;
                     if (isDraft)
                     {
-                        // blockQuery = blockQuery;
+                        blockQuery = blockQuery.Customize(x => x.NoTracking());
                     }
 
-                    var block = blockQuery
-                        .FirstOrDefault(b => b.Id == blocks[n].Id);
+
+                    var id = blocks[n].Id;
+                    var block = await blockQuery
+                        .FirstOrDefaultAsync(b => b.Id == id);
 
                     if (block == null)
                     {
@@ -1128,11 +1130,11 @@ internal class PostRepository : IPostRepository
     /// </summary>
     /// <typeparam name="T">The requested model type</typeparam>
     /// <returns>The queryable</returns>
-    private IQueryable<Post> GetQuery<T>()
+    private IRavenQueryable<Post> GetQuery<T>()
     {
         var loadRelated = !typeof(Models.IContentInfo).IsAssignableFrom(typeof(T));
 
-        IQueryable<Post> query = _db.Posts
+        IRavenQueryable<Post> query = _db.Posts
             ;
 
         if (loadRelated)

@@ -18,6 +18,7 @@ using Xunit;
 using Piranha.ImageSharp;
 using Piranha.Repositories;
 using Piranha.Services;
+using Piranha.Tests.Services;
 using Raven.Client.Documents;
 using Raven.Client.Documents.Session;
 
@@ -64,8 +65,10 @@ public abstract class BaseTestsAsync : RavenTestBase, IAsyncLifetime
             .AddPiranhaFileStorage()
             .AddPiranhaImageSharp();
 
-        if (register is not null)
-            register.Invoke(sc);
+        // todo - figure out where to put this registration to avoid nullref issues
+        sc.AddSingleton<IMyService, MyService>(); // for dynamic region/field testing only
+        // if (register is not null)
+        //     register.Invoke(sc);
 
         return sc;
     }
@@ -83,9 +86,6 @@ public abstract class BaseTestsAsync : RavenTestBase, IAsyncLifetime
     /// </summary>
     protected virtual IApi CreateApi()
     {
-        if(_api is not null)
-            return _api;
-
         var factory = new ContentFactory(_services);
         var serviceFactory = new ContentServiceFactory(factory);
 
