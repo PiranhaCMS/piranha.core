@@ -35,7 +35,6 @@ public class PostTests : BaseTestsAsync
 {
     private readonly string SITE_ID = Snowflake.NewId();
     private readonly string BLOG_ID = Snowflake.NewId();
-    private readonly string CAT_1_ID = Snowflake.NewId();
     private readonly string POST_1_ID = Snowflake.NewId();
     private readonly string POST_2_ID = Snowflake.NewId();
     private readonly string POST_3_ID = Snowflake.NewId();
@@ -92,7 +91,7 @@ public class PostTests : BaseTestsAsync
     {
         await base.InitializeAsync();
         //Func<IServiceCollection, IServiceCollection> registration = sc => sc.AddSingleton<IMyService, MyService>(); 
-        
+
         _services = CreateServiceCollection(_store, _session)
             .BuildServiceProvider();
 
@@ -132,17 +131,11 @@ public class PostTests : BaseTestsAsync
         page.Title = "Blog";
         await api.Pages.SaveAsync(page);
 
-        var category = new Models.Taxonomy
-        {
-            Id = CAT_1_ID,
-            Title = "My category"
-        };
-
         var post1 = await MyPost.CreateAsync(api);
         post1.Id = POST_1_ID;
         post1.BlogId = BLOG_ID;
         post1.SiteId = SITE_ID;
-        post1.Category = category;
+        post1.Category = "My category";
         post1.Title = "My first post";
         post1.Ingress = "My first ingress";
         post1.Body = "My first body";
@@ -160,7 +153,7 @@ public class PostTests : BaseTestsAsync
         post2.Id = POST_2_ID;
         post2.BlogId = BLOG_ID;
         post2.SiteId = SITE_ID;
-        post2.Category = category;
+        post2.Category = "My category";
         post2.Title = "My second post";
         post2.Ingress = "My second ingress";
         post2.Body = "My second body";
@@ -170,7 +163,7 @@ public class PostTests : BaseTestsAsync
         post3.Id = POST_3_ID;
         post3.BlogId = BLOG_ID;
         post3.SiteId = SITE_ID;
-        post3.Category = category;
+        post3.Category = "My category";
         post3.Title = "My third post";
         post3.Ingress = "My third ingress";
         post3.Body = "My third body";
@@ -179,7 +172,7 @@ public class PostTests : BaseTestsAsync
         var post4 = await MyCollectionPost.CreateAsync(api);
         post4.BlogId = BLOG_ID;
         post4.SiteId = SITE_ID;
-        post4.Category = category;
+        post4.Category = "My category";
         post4.Title = "My collection post";
         post4.Texts.Add(new TextField
         {
@@ -199,13 +192,13 @@ public class PostTests : BaseTestsAsync
         post6.Id = POST_DI_ID;
         post6.BlogId = BLOG_ID;
         post6.SiteId = SITE_ID;
-        post6.Category = category;
+        post6.Category = "My category";
         post6.Title = "My Injection Post";
         await api.Posts.SaveAsync(post6);
 
         var posts = await api.Posts.GetAllDynamicAsync(BLOG_ID);
         var posts2 = await api.Posts.GetAllAsync<Models.PostBase>(BLOG_ID);
-        var posts3 = await api.Posts.GetAllBySiteIdAsync(SITE_ID); 
+        var posts3 = await api.Posts.GetAllBySiteIdAsync(SITE_ID);
     }
 
     public override async Task DisposeAsync()
@@ -679,7 +672,24 @@ public class PostTests : BaseTestsAsync
     [Fact]
     public async Task UpdateCollectionPost()
     {
-        using var api = CreateApi();
+        //using var api = CreateApi();
+        //var p = new MyCollectionPost
+        //{
+        //    BlogId = BLOG_ID,
+        //    SiteId = SITE_ID,
+        //    Category = "My category",
+        //    TypeId = "MyCollectionPost",
+        //    Title = "My collection post",
+        //    Texts = new List<TextField>
+        //    {
+        //        new TextField { Value = "First text" },
+        //        new TextField { Value = "Second text" },
+        //        new TextField { Value = "Third text" }
+        //    }
+        //};
+        //await api.Posts.SaveAsync(p);
+        var dynModels = await api.Posts.GetAllAsync<DynamicPost>(BLOG_ID);
+        var models = await api.Posts.GetAllAsync<MyCollectionPost>(BLOG_ID);
         var post = await api.Posts.GetBySlugAsync<MyCollectionPost>("blog", "my-collection-post");
 
         Assert.NotNull(post);

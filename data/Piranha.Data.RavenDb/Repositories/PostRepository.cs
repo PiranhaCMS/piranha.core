@@ -212,6 +212,10 @@ internal class PostRepository : IPostRepository
     /// <returns>The post model</returns>
     public async Task<T> GetBySlug<T>(string blogId, string slug) where T : Models.PostBase
     {
+        var test = await _db.session.Query<Post>()
+            //.Where(p => p.BlogId == blogId && p.Slug == slug)
+            .ToListAsync()
+            ;
         // No cache found, load from database
         var post = await GetQuery<T>()
             .FirstOrDefaultAsync(p => p.BlogId == blogId && p.Slug == slug)
@@ -234,6 +238,7 @@ internal class PostRepository : IPostRepository
     public async Task<T> GetDraftById<T>(string id) where T : Models.PostBase
     {
         DateTime? lastModified = await _db.Posts
+            .Customize(x => x.WaitForNonStaleResults())
             .Where(p => p.Id == id)
             .Select(p => p.LastModified)
             .FirstOrDefaultAsync()
@@ -477,22 +482,13 @@ internal class PostRepository : IPostRepository
     /// <param name="id">The unique id</param>
     public async Task Delete(string id)
     {
-        var model = await _db.Posts
-            .FirstOrDefaultAsync(p => p.Id == id)
-            .ConfigureAwait(false);
+        var model = await _db.session.LoadAsync<Post>(id).ConfigureAwait(false);
 
         if (model != null)
         {
-            // Remove all blocks that are not reusable
-            foreach (var postBlock in model.Blocks)
-            {
-                if (!postBlock.Block.IsReusable)
-                {
-                    //_db.Blocks.Remove(postBlock.Block);
-                    _db.session.Delete(postBlock.Block);
-                }
-            }
-
+            // Blocks are embedded in the Post document, so deleting the Post removes them.
+            // We do not need to explicitly delete non-reusable blocks here.
+            
             //_db.Posts.Remove(model);
             _db.session.Delete(model);
 
@@ -1152,7 +1148,7 @@ internal class PostRepository : IPostRepository
         var loadRelated = !typeof(Models.IContentInfo).IsAssignableFrom(typeof(T));
 
         IRavenQueryable<Post> query = _db.Posts
-            ;
+            .Customize(x => x.WaitForNonStaleResults());
 
         if (loadRelated)
         {
@@ -1171,6 +1167,43 @@ internal class PostRepository : IPostRepository
     /// <param name="model">The targe model</param>
     private async Task ProcessAsync<T>(Post post, T model) where T : Models.PostBase
     {
+        // Category
+        if (model.Category == null && !string.IsNullOrEmpty(post.CategoryId))
+        {
+            var category = await _db.Categories.FirstOrDefaultAsync(c => c.Id == post.CategoryId).ConfigureAwait(false);
+            if (category != null)
+            {
+                model.Category = new Models.Taxonomy
+                {
+                    Id = category.Id,
+                    Title = category.Title,
+                    Slug = category.Slug,
+                    Type = Models.TaxonomyType.Category
+                };
+            }
+        }
+
+        // Tags
+        if (model.Tags.Any(t => string.IsNullOrEmpty(t.Title)))
+        {
+            var tagIds = post.Tags.Select(t => t.TagId).ToList();
+            if (tagIds.Count > 0)
+            {
+                var tags = await _db.Tags.Where(t => t.Id.In(tagIds)).ToListAsync().ConfigureAwait(false);
+                model.Tags.Clear();
+                foreach (var tag in tags)
+                {
+                    model.Tags.Add(new Models.Taxonomy
+                    {
+                        Id = tag.Id,
+                        Title = tag.Title,
+                        Slug = tag.Slug,
+                        Type = Models.TaxonomyType.Tag
+                    });
+                }
+            }
+        }
+
         // Permissions
         foreach (var permission in post.Permissions)
         {

@@ -29,10 +29,23 @@ At present, fetching a single piece of content follows this flow:
 
 By fully committing to RavenDB, Piranha CMS can completely bypass the internal generic data layer. RavenDB thrives on serializing complex, polymorphic, nested aggregates.
 
-### The New Flow
+### The Deprecated Flow (Current Multi-DB Support)
+**Web Page** → **`IApi`** → **`Repositories`** → **`IContentService` (Mapper)** → **`IAsyncDocumentSession` (RavenDB)**
+
+When a Repository requests data in the current setup:
+```csharp
+// 1. RavenDB pulls the raw JSON
+// 2. Deserializes into the lightweight internal entity (e.g., Piranha.Data.RavenDb.Data.Post)
+var entity = await _session.LoadAsync<Piranha.Data.RavenDb.Data.Post>(id);
+
+// 3. Passes the internal entity to the generic ContentService for heavy mapping
+var finalModel = _contentService.Transform<T>(entity);
+```
+
+### The New Flow (RavenDB Native)
 **Web Page** → **`IApi`** → **`Repositories`** → **`IAsyncDocumentSession` (RavenDB)**
 
-When a Repository requests data:
+When a Repository requests data in the new setup:
 ```csharp
 // The Repository directly asks RavenDB to serialize the JSON into the rich Domain Model (T)
 var post = await _session.LoadAsync<T>(id); 

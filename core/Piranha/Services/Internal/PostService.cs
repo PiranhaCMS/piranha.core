@@ -372,6 +372,7 @@ internal sealed class PostService : IPostService
         if (model == null)
         {
             model = await _repo.GetBySlug<T>(blogId, slug).ConfigureAwait(false);
+            var models = await _repo.GetAll(blogId).ConfigureAwait(false);
 
             if (model != null)
             {
