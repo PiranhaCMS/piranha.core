@@ -41,6 +41,7 @@ public class PostTests : BaseTestsAsync
     private readonly string POST_3_ID = Snowflake.NewId();
     private readonly string POST_DI_ID = Snowflake.NewId();
 
+    IApi api;
 
     public class MyService : IMyService
     {
@@ -92,10 +93,11 @@ public class PostTests : BaseTestsAsync
         await base.InitializeAsync();
         //Func<IServiceCollection, IServiceCollection> registration = sc => sc.AddSingleton<IMyService, MyService>(); 
         
-        _services = CreateServiceCollection(_session)
+        _services = CreateServiceCollection(_store, _session)
             .BuildServiceProvider();
 
-        using var api = CreateApi();
+        //using var api = CreateApi();
+        api = CreateApi();
         Piranha.App.Init(api);
 
         Piranha.App.Fields.Register<MyFourthField>();
@@ -108,6 +110,11 @@ public class PostTests : BaseTestsAsync
             .AddType(typeof(MyDIPost))
             .Build();
 
+        await AddSampleData();
+    }
+
+    protected async Task AddSampleData()
+    {
         // Add site
         var site = new Site
         {
@@ -134,6 +141,7 @@ public class PostTests : BaseTestsAsync
         var post1 = await MyPost.CreateAsync(api);
         post1.Id = POST_1_ID;
         post1.BlogId = BLOG_ID;
+        post1.SiteId = SITE_ID;
         post1.Category = category;
         post1.Title = "My first post";
         post1.Ingress = "My first ingress";
@@ -151,6 +159,7 @@ public class PostTests : BaseTestsAsync
         var post2 = await MyPost.CreateAsync(api);
         post2.Id = POST_2_ID;
         post2.BlogId = BLOG_ID;
+        post2.SiteId = SITE_ID;
         post2.Category = category;
         post2.Title = "My second post";
         post2.Ingress = "My second ingress";
@@ -160,6 +169,7 @@ public class PostTests : BaseTestsAsync
         var post3 = await MyPost.CreateAsync(api);
         post3.Id = POST_3_ID;
         post3.BlogId = BLOG_ID;
+        post3.SiteId = SITE_ID;
         post3.Category = category;
         post3.Title = "My third post";
         post3.Ingress = "My third ingress";
@@ -168,6 +178,7 @@ public class PostTests : BaseTestsAsync
 
         var post4 = await MyCollectionPost.CreateAsync(api);
         post4.BlogId = BLOG_ID;
+        post4.SiteId = SITE_ID;
         post4.Category = category;
         post4.Title = "My collection post";
         post4.Texts.Add(new TextField
@@ -187,9 +198,14 @@ public class PostTests : BaseTestsAsync
         var post6 = await MyDIPost.CreateAsync(api);
         post6.Id = POST_DI_ID;
         post6.BlogId = BLOG_ID;
+        post6.SiteId = SITE_ID;
         post6.Category = category;
         post6.Title = "My Injection Post";
         await api.Posts.SaveAsync(post6);
+
+        var posts = await api.Posts.GetAllDynamicAsync(BLOG_ID);
+        var posts2 = await api.Posts.GetAllAsync<Models.PostBase>(BLOG_ID);
+        var posts3 = await api.Posts.GetAllBySiteIdAsync(SITE_ID); 
     }
 
     public override async Task DisposeAsync()
@@ -285,8 +301,12 @@ public class PostTests : BaseTestsAsync
     [Fact]
     public async Task GetAllBaseClass()
     {
-        using var api = CreateApi();
-        var posts = await api.Posts.GetAllBySiteIdAsync<Models.PostBase>();
+        //using var api = CreateApi();
+        var site = await api.Sites.GetByIdAsync(SITE_ID);
+        if (site is null)
+            await AddSampleData();
+
+        var posts = await api.Posts.GetAllBySiteIdAsync<Models.PostBase>(SITE_ID);
 
         Assert.NotNull(posts);
         Assert.NotEmpty(posts);
@@ -593,6 +613,7 @@ public class PostTests : BaseTestsAsync
 
         var post = await MyPost.CreateAsync(api, "MyPost");
         post.BlogId = BLOG_ID;
+        post.SiteId = SITE_ID;
         post.Category = "My category";
         post.Tags.Add("Testing", "Trying", "Adding");
         post.Title = "My fifth post";
@@ -601,9 +622,13 @@ public class PostTests : BaseTestsAsync
 
         await api.Posts.SaveAsync(post);
 
-        Assert.Equal(count + 1, (await api.Posts.GetAllDynamicAsync(BLOG_ID)).Count());
-        Assert.Equal(catCount, (await api.Posts.GetAllCategoriesAsync(BLOG_ID)).Count());
-        Assert.Equal(tagCount + 3, (await api.Posts.GetAllTagsAsync(BLOG_ID)).Count());
+        var allDynamic = (await api.Posts.GetAllDynamicAsync(BLOG_ID)).ToList();
+        var allCategories = (await api.Posts.GetAllCategoriesAsync(BLOG_ID)).ToList();
+        var allTags = (await api.Posts.GetAllTagsAsync(BLOG_ID)).ToList();
+
+        Assert.Equal(count + 1, allDynamic.Count);
+        Assert.Equal(catCount, allCategories.Count);
+        Assert.Equal(tagCount + 3, allTags.Count);
 
         post = await api.Posts.GetBySlugAsync<MyPost>(BLOG_ID, Piranha.Utils.GenerateSlug("My fifth post"));
 

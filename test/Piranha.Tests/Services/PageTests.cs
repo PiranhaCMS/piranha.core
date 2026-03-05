@@ -107,7 +107,7 @@ public class PageTests : BaseTestsAsync
         // Func<IServiceCollection, IServiceCollection> registration = sc => sc
         //     .AddSingleton<IMyService, MyService>();
         // replace default services w/ custom registrations 
-        _services = CreateServiceCollection(_session)
+        _services = CreateServiceCollection(_store, _session)
             .BuildServiceProvider();
 
         using var api = CreateApi();

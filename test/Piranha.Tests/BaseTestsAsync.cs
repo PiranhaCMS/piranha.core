@@ -9,7 +9,9 @@
  */
 
 
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using NSubstitute;
 using Piranha.Data.RavenDb;
 using Piranha.Data.RavenDb.Extensions;
 using Piranha.Data.RavenDb.Repositories;
@@ -41,8 +43,8 @@ public abstract class BaseTestsAsync : RavenTestBase, IAsyncLifetime
     {
         _store = CreateStore();
         _session = _store.OpenAsyncSession();
-        _services = CreateServiceCollection(_session).BuildServiceProvider();
-  
+        _services = CreateServiceCollection(_store, _session).BuildServiceProvider();
+
         _api = CreateApi();
         Piranha.App.Init(_api);
     }
@@ -53,11 +55,29 @@ public abstract class BaseTestsAsync : RavenTestBase, IAsyncLifetime
         _store.Dispose();
     }
 
-    protected static IServiceCollection CreateServiceCollection(IAsyncDocumentSession session, Func<IServiceCollection, IServiceCollection> register = null)
+    /// <summary>
+    /// Creates a fake IConfiguration for test use via NSubstitute.
+    /// Provides default values for the RavenDB config keys that
+    /// AeroDataExtensions expects when resolving IDocumentStore.
+    /// </summary>
+    protected static IConfiguration CreateFakeConfiguration()
+    {
+        var config = Substitute.For<IConfiguration>();
+        config["RAVENDB_URL"].Returns("http://localhost:8080");
+        config["RavenDb:Database"].Returns("aero-cms-test");
+        config["RAVENDB_CERT"].Returns((string)null);
+        return config;
+    }
+
+    protected static IServiceCollection CreateServiceCollection(
+        IDocumentStore store,
+        IAsyncDocumentSession session,
+        Func<IServiceCollection, IServiceCollection> register = null)
     {
         var sc = new ServiceCollection()
+            //.AddSingleton(CreateFakeConfiguration())
             .AddScoped(_ => session)
-            .AddAeroStore()
+            .AddAeroStore(isTesting: true) // don't need this when using RavenTestBase
             .AddPiranha()
             .AddMemoryCache()
             .AddPiranhaMemoryCache()
@@ -69,6 +89,8 @@ public abstract class BaseTestsAsync : RavenTestBase, IAsyncLifetime
         sc.AddSingleton<IMyService, MyService>(); // for dynamic region/field testing only
         // if (register is not null)
         //     register.Invoke(sc);
+        sc.AddSingleton<IDocumentStore>(store);
+        sc.AddScoped<IAsyncDocumentSession>(sc => session);
 
         return sc;
     }
@@ -111,7 +133,7 @@ public abstract class BaseTestsAsync : RavenTestBase, IAsyncLifetime
             storage: _storage,
             processor: _processor
         );
-        
+
         return api;
     }
 }

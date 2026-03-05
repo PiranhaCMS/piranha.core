@@ -1,14 +1,4 @@
-﻿/*
- * Copyright (c) .NET Foundation and Contributors
- *
- * This software may be modified and distributed under the terms
- * of the MIT license. See the LICENSE file for details.
- *
- * https://github.com/piranhacms/piranha.core
- *
- */
-
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace Piranha.Models;
 
@@ -23,6 +13,9 @@ public abstract class PostBase : RoutedContentBase, ICategorizedContent, ITagged
     /// </summary>
     [Required]
     public string BlogId { get; set; }
+
+    //[Required] - // todo - mark required once we get tests passing
+    public string SiteId { get; set; }
 
     /// <summary>
     /// Gets/sets the category.

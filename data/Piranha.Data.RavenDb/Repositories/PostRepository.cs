@@ -72,14 +72,25 @@ internal class PostRepository : IPostRepository
     /// <returns>The posts</returns>
     public async Task<IEnumerable<string>> GetAllBySiteId(string siteId)
     {
-        return await _db.Posts
-            .Where(p => p.Blog.SiteId == siteId)
+        //return await _db.Posts
+        //    .Where(p => p.Blog.SiteId == siteId)
+        //    .OrderByDescending(p => p.Published)
+        //    .ThenByDescending(p => p.LastModified)
+        //    .ThenBy(p => p.Title)
+        //    .Select(p => p.Id)
+        //    .ToListAsync()
+        //    .ConfigureAwait(false);
+
+        var posts = await _db.Posts
+            .Where(p => p.SiteId == siteId)
             .OrderByDescending(p => p.Published)
             .ThenByDescending(p => p.LastModified)
             .ThenBy(p => p.Title)
             .Select(p => p.Id)
             .ToListAsync()
             .ConfigureAwait(false);
+
+        return posts;
     }
 
     /// <summary>
@@ -109,7 +120,7 @@ internal class PostRepository : IPostRepository
     /// <returns>The available tags</returns>
     public async Task<IEnumerable<Models.Taxonomy>> GetAllTags(string blogId)
     {
-        return await _db.Tags
+        var tags = await _db.Tags
             .Where(c => c.BlogId == blogId)
             .OrderBy(c => c.Title)
             .Select(c => new Models.Taxonomy
@@ -120,6 +131,8 @@ internal class PostRepository : IPostRepository
             })
             .ToListAsync()
             .ConfigureAwait(false);
+
+        return tags;
     }
 
     /// <summary>

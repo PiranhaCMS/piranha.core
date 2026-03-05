@@ -21,12 +21,13 @@ public static class AeroDataExtensions
     /// <param name="scope">The optional lifetime</param>
     /// <typeparam name="T">The DbContext type</typeparam>
     /// <returns>The updated service collection</returns>
-    public static IServiceCollection AddAeroStore(this IServiceCollection services, ServiceLifetime scope = ServiceLifetime.Scoped)
+    public static IServiceCollection AddAeroStore(this IServiceCollection services, ServiceLifetime scope = ServiceLifetime.Scoped, bool isTesting = false)
         //where T : IDb
     {
-        return services
-            .AddAeroPersistence(scope)
+        services
+            .AddAeroPersistence(scope, isTesting)
             .RegisterServices(scope);
+        return services;
     }
 
 
@@ -48,18 +49,23 @@ public static class AeroDataExtensions
         return services.RegisterServices();
     }
 
-    private static IServiceCollection AddAeroPersistence(this IServiceCollection services, ServiceLifetime scope = ServiceLifetime.Scoped)
+    private static IServiceCollection AddAeroPersistence(this IServiceCollection services, ServiceLifetime scope = ServiceLifetime.Scoped, bool isTesting = false)
     {
         // Configure RavenDB
         //var ravenUrl = builder.Configuration["RAVENDB_URL"];
         //var c = builder.Configuration["RAVENDB_CERT"];
+        if (isTesting)
+        {
+            // tests will wire up IDocumentStore, etc
+            return services;
+        }
 
         services.AddSingleton<IDocumentStore>(s =>
         {
             var config = s.GetRequiredService<IConfiguration>();
-            var ravenUrl = config["RAVENDB_URL"] ?? throw new InvalidOperationException("RavenDb:Url configuration is required.");
+            var ravenUrl = config["RAVENDB_URL"] ?? "https://localhost:8080/";
             var database = config["RavenDb:Database"] ?? "aero-cms";
-            var certPath = config["RAVENDB_CERT"];
+            var certPath = config["RAVENDB_CERT"] ?? ".";
 
             //if (Environment.GetEnvironmentVariable("RAVENDB_CERT") is { Length: > 0 } certPath)
             //{

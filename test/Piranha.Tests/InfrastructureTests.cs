@@ -3,12 +3,18 @@ using Microsoft.Extensions.DependencyInjection;
 using Piranha;
 using Piranha.Cache;
 using Piranha.Repositories;
+using System.ComponentModel.DataAnnotations;
 using Xunit;
 
 namespace Piranha.Tests;
 
 public class InfrastructureTests : BaseTestsAsync
 {
+    public async override Task InitializeAsync()
+    {
+        await base.InitializeAsync();
+    }
+
     [Fact]
     public void ResolveApiFromDI()
     {

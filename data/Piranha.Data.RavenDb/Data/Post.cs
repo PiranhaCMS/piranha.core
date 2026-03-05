@@ -25,6 +25,11 @@ public sealed class Post : RoutedContentBase<PostField>
     public string BlogId { get; set; }
 
     /// <summary>
+    /// Gets/sets the id of the Site this post belongs to
+    /// </summary>
+    public string SiteId { get; set; }
+
+    /// <summary>
     /// Gets/sets the category id.
     /// </summary>
     public string CategoryId { get; set; }
