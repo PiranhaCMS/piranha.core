@@ -1,5 +1,6 @@
 using System.Text.Json;
 using Piranha.Data.RavenDb.Data;
+using Piranha.Data.RavenDb.Indexes;
 using Piranha.Data.RavenDb.Services;
 using Piranha.Repositories;
 using Raven.Client.Documents;
@@ -63,12 +64,17 @@ internal class PageRepository : IPageRepository
     /// <returns>The pages that have a draft</returns>
     public async Task<IEnumerable<string>> GetAllDrafts(string siteId)
     {
-        return await _db.PageRevisions
-            .Where(r => r.Page.SiteId == siteId && r.Created > r.Page.LastModified)
+        // Use the PageRevisions_BySite index which precomputes IsDraft = Created > PageLastModified.
+        // RavenDB LINQ cannot compare two document fields in a Where clause at query time.
+        var pageIds = await _db.session
+            .Query<PageRevisions_BySite.Result, PageRevisions_BySite>()
+            .Where(r => r.SiteId == siteId && r.IsDraft)
             .Select(r => r.PageId)
             .Distinct()
             .ToListAsync()
             .ConfigureAwait(false);
+
+        return pageIds;
     }
 
     /// <summary>
@@ -127,9 +133,8 @@ internal class PageRepository : IPageRepository
     /// <returns>The page model</returns>
     public async Task<T> GetById<T>(string id) where T : Models.PageBase
     {
-        var page = await GetQuery<T>()
-            .FirstOrDefaultAsync(p => p.Id == id)
-            .ConfigureAwait(false);
+        // Use session.LoadAsync for ID-based lookups — direct storage engine fetch, no index overhead
+        var page = await _db.session.LoadAsync<Page>(id).ConfigureAwait(false);
 
         if (page != null)
         {
@@ -333,25 +338,25 @@ internal class PageRepository : IPageRepository
     /// <param name="revisions">The maximum number of revisions that should be stored</param>
     public async Task CreateRevision(string id, int revisions)
     {
-        var page = await GetQuery<Models.PageBase>()
-            .FirstOrDefaultAsync(p => p.Id == id)
-            .ConfigureAwait(false);
+        // Use session.LoadAsync for ID-based lookup
+        var page = await _db.session.LoadAsync<Page>(id).ConfigureAwait(false);
 
         if (page != null)
         {
-            //await _db.PageRevisions.AddAsync(new PageRevision
             await _db.session.StoreAsync(new PageRevision
             {
                 Id = Snowflake.NewId(),
                 PageId = id,
+                // Populate denormalized fields so GetAllDrafts can filter without cross-collection navigation
+                SiteId = page.SiteId,
+                PageLastModified = page.LastModified,
                 Data = JsonSerializer.Serialize(page),
                 Created = page.LastModified
             }).ConfigureAwait(false);
 
             await _db.SaveChangesAsync().ConfigureAwait(false);
 
-            // Check if we have a limit set on the number of revisions
-            // we want to store.
+            // Trim revisions to the configured maximum
             if (revisions != 0)
             {
                 var existing = await _db.PageRevisions
@@ -369,10 +374,13 @@ internal class PageRepository : IPageRepository
                         .ToListAsync()
                         .ConfigureAwait(false);
 
+                    // Fix: session.Delete() only accepts a single entity or ID — iterate to delete each
+                    foreach (var rev in removed)
+                    {
+                        _db.session.Delete(rev.Id);
+                    }
                     if (removed.Count > 0)
                     {
-                        //_db.PageRevisions.RemoveRange(removed);
-                        _db.session.Delete(removed);
                         await _db.SaveChangesAsync().ConfigureAwait(false);
                     }
                 }
@@ -387,9 +395,8 @@ internal class PageRepository : IPageRepository
     /// <returns>The other pages that were affected by the move</returns>
     public async Task<IEnumerable<string>> Delete(string id)
     {
-        var model = await _db.Pages
-            .FirstOrDefaultAsync(p => p.Id == id)
-            .ConfigureAwait(false);
+        // Use session.LoadAsync for ID-based lookup
+        var model = await _db.session.LoadAsync<Page>(id).ConfigureAwait(false);
         var affected = new List<string>();
 
         if (model != null)
@@ -408,25 +415,28 @@ internal class PageRepository : IPageRepository
                 throw new InvalidOperationException("Can not delete page because it has children");
             }
 
-            // Remove all blocks that are not reusable
-            foreach (var pageBlock in model.Blocks)
+            // Reusable blocks live in the Blocks collection and must be kept;
+            // non-reusable block data is embedded in the Page document and is deleted with it.
+            // Only separately-stored reusable blocks need no explicit action here.
+
+            // Delete all revisions for this page
+            var revisions = await _db.PageRevisions
+                .Where(r => r.PageId == id)
+                .ToListAsync()
+                .ConfigureAwait(false);
+            foreach (var rev in revisions)
             {
-                if (!pageBlock.Block.IsReusable)
-                {
-                    //_db.Blocks.Remove(pageBlock.Block);
-                    _db.session.Delete(pageBlock.Block);
-                }
+                _db.session.Delete(rev.Id);
             }
 
-            // Remove the main page.
-            //_db.Pages.Remove(model);
-            _db.session.Delete(model);
+            // Remove the main page — embedded blocks/fields/permissions are deleted with it
+            _db.session.Delete(model.Id);
 
-
-            var siblings = await _db.Pages.Where(p => p.SiteId == model.SiteId && p.ParentId == model.ParentId)
+            var siblings = await _db.Pages
+                .Where(p => p.SiteId == model.SiteId && p.ParentId == model.ParentId)
                 .ToListAsync();
 
-            // Move all remaining pages after this page in the site structure.
+            // Move all remaining pages after this page in the site structure
             affected.AddRange(MovePages(siblings, id, model.SiteId, model.SortOrder + 1, false));
 
             await _db.SaveChangesAsync().ConfigureAwait(false);
@@ -442,22 +452,25 @@ internal class PageRepository : IPageRepository
     /// <param name="id">The unique id</param>
     public async Task DeleteDraft(string id)
     {
-        var page = await GetQuery<Models.PageInfo>()
-            .FirstOrDefaultAsync(p => p.Id == id)
-            .ConfigureAwait(false);
+        // Use session.LoadAsync for ID-based lookup
+        var page = await _db.session.LoadAsync<Page>(id).ConfigureAwait(false);
 
         if (page != null)
         {
-            var draft = await _db.PageRevisions
-                .Where(r => r.PageId == id && r.Created > page.LastModified)
+            // Use PageRevisions_BySite index to find drafts — avoids field-to-field date comparison
+            var draftRevisionIds = await _db.session
+                .Query<PageRevisions_BySite.Result, PageRevisions_BySite>()
+                .Where(r => r.PageId == id && r.IsDraft)
+                .Select(r => r.Id)
                 .ToListAsync()
                 .ConfigureAwait(false);
 
-            if (draft.Count > 0)
+            foreach (var draftId in draftRevisionIds)
             {
-                //_db.PageRevisions.RemoveRange(draft);
-                _db.session.Delete(draft);
-
+                _db.session.Delete(draftId);
+            }
+            if (draftRevisionIds.Count > 0)
+            {
                 await _db.SaveChangesAsync().ConfigureAwait(false);
             }
         }
@@ -580,14 +593,14 @@ internal class PageRepository : IPageRepository
 
             if (!string.IsNullOrEmpty(model.OriginalPageId))
             {
-                var originalPageIsCopy = !string.IsNullOrEmpty((await _db.Pages.FirstOrDefaultAsync())?.OriginalPageId);
-                if (originalPageIsCopy)
+                // Fix: use session.LoadAsync with the correct original page ID (not a random page)
+                var originalPage = await _db.session.LoadAsync<Page>(model.OriginalPageId).ConfigureAwait(false);
+                if (originalPage != null && !string.IsNullOrEmpty(originalPage.OriginalPageId))
                 {
                     throw new InvalidOperationException("Can not set copy of a copy");
                 }
 
-                var originalPageType = (await _db.Pages.FirstOrDefaultAsync())?.PageTypeId;
-                if (originalPageType != model.TypeId)
+                if (originalPage != null && originalPage.PageTypeId != model.TypeId)
                 {
                     throw new InvalidOperationException("Copy can not have a different content type");
                 }
@@ -766,17 +779,14 @@ internal class PageRepository : IPageRepository
                 });
             }
 
-            // Make sure foreign key is set for fields
-            if (!isDraft)
+            // Set the foreign key on fields — they are embedded in the Page document,
+            // so no separate session.StoreAsync is needed; the page.Fields list is
+            // serialized inline when the Page document is saved.
+            foreach (var field in page.Fields)
             {
-                foreach (var field in page.Fields)
+                if (string.IsNullOrEmpty(field.PageId))
                 {
-                    if (field.PageId == string.Empty)
-                    {
-                        field.PageId = page.Id;
-                        //await _db.PageFields.AddAsync(field).ConfigureAwait(false);
-                        await _db.session.StoreAsync(field).ConfigureAwait(false);
-                    }
+                    field.PageId = page.Id;
                 }
             }
 

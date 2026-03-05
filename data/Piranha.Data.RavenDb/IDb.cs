@@ -18,7 +18,6 @@ using ContentGroup = Piranha.Data.RavenDb.Data.ContentGroup;
 using Language = Piranha.Data.RavenDb.Data.Language;
 using Media = Piranha.Data.RavenDb.Data.Media;
 using MediaFolder = Piranha.Data.RavenDb.Data.MediaFolder;
-using MediaVersion = Piranha.Data.RavenDb.Data.MediaVersion;
 using PageComment = Piranha.Data.RavenDb.Data.PageComment;
 using PageType = Piranha.Data.RavenDb.Data.PageType;
 using Param = Piranha.Data.RavenDb.Data.Param;
@@ -35,210 +34,129 @@ namespace Piranha.Data.RavenDb;
 /// </summary>
 public interface IDb : IDisposable
 {
+    /// <summary>
+    /// Gets the current RavenDB async document session.
+    /// Prefer session.LoadAsync&lt;T&gt;(id) over LINQ queries for ID-based lookups.
+    /// </summary>
     public IAsyncDocumentSession session { get; }
 
-/// <summary>
-    /// Gets/sets the alias set.
-    /// </summary>
-    IRavenQueryable<Alias> Aliases { get => session.Query<Alias>().Customize(x=>x.WaitForNonStaleResults()); }
+    // -------------------------------------------------------------------------
+    // Root document collections — each is an aggregate root in RavenDB.
+    // WaitForNonStaleResults is intentionally NOT applied globally here;
+    // apply it per-query only where write-then-read-immediately is required.
+    // -------------------------------------------------------------------------
+
+    /// <summary>Gets the alias collection.</summary>
+    IRavenQueryable<Alias> Aliases { get => session.Query<Alias>(); }
 
     /// <summary>
-    /// Gets/sets the block set.
+    /// Gets the reusable block collection.
+    /// NOTE: Only reusable blocks (IsReusable = true) are stored here as top-level
+    /// documents. Non-reusable blocks are embedded within their parent Page/Post document.
     /// </summary>
-    IRavenQueryable<Block> Blocks { get => session.Query<Block>().Customize(x=>x.WaitForNonStaleResults()); }
+    IRavenQueryable<Block> Blocks { get => session.Query<Block>(); }
+
+    /// <summary>Gets the category collection.</summary>
+    IRavenQueryable<Category> Categories { get => session.Query<Category>(); }
+
+    /// <summary>Gets the content collection.</summary>
+    IRavenQueryable<Content> Content { get => session.Query<Content>(); }
+
+    /// <summary>Gets the content block collection.</summary>
+    IRavenQueryable<ContentBlock> ContentBlocks { get => session.Query<ContentBlock>(); }
+
+    /// <summary>Gets the content block field collection.</summary>
+    IRavenQueryable<ContentBlockField> ContentBlockFields { get => session.Query<ContentBlockField>(); }
+
+    /// <summary>Gets the content block field translation collection.</summary>
+    IRavenQueryable<ContentBlockFieldTranslation> ContentBlockFieldTranslations { get => session.Query<ContentBlockFieldTranslation>(); }
+
+    /// <summary>Gets the content field collection.</summary>
+    IRavenQueryable<ContentField> ContentFields { get => session.Query<ContentField>(); }
+
+    /// <summary>Gets the content field translation collection.</summary>
+    IRavenQueryable<ContentFieldTranslation> ContentFieldTranslations { get => session.Query<ContentFieldTranslation>(); }
+
+    /// <summary>Gets the content taxonomy collection.</summary>
+    IRavenQueryable<ContentTaxonomy> ContentTaxonomies { get => session.Query<ContentTaxonomy>(); }
+
+    /// <summary>Gets the content translation collection.</summary>
+    IRavenQueryable<ContentTranslation> ContentTranslations { get => session.Query<ContentTranslation>(); }
+
+    /// <summary>Gets the content group collection.</summary>
+    IRavenQueryable<ContentGroup> ContentGroups { get => session.Query<ContentGroup>(); }
+
+    /// <summary>Gets the content type collection.</summary>
+    IRavenQueryable<AeroContentType> ContentTypes { get => session.Query<AeroContentType>(); }
+
+    /// <summary>Gets the language collection.</summary>
+    IRavenQueryable<Language> Languages { get => session.Query<Language>(); }
 
     /// <summary>
-    /// Gets/sets the block field set.
+    /// Gets the media collection.
+    /// MediaVersion objects are embedded within each Media document — not a separate collection.
     /// </summary>
-    IRavenQueryable<BlockField> BlockFields { get => session.Query<BlockField>().Customize(x=>x.WaitForNonStaleResults()); }
+    IRavenQueryable<Media> Media { get => session.Query<Media>(); }
+
+    /// <summary>Gets the media folder collection.</summary>
+    IRavenQueryable<MediaFolder> MediaFolders { get => session.Query<MediaFolder>(); }
 
     /// <summary>
-    /// Gets/sets the category set.
+    /// Gets the page collection.
+    /// PageBlock, PageField, and PagePermission objects are embedded within each Page document.
     /// </summary>
-    IRavenQueryable<Category> Categories { get => session.Query<Category>().Customize(x=>x.WaitForNonStaleResults()); }
+    IRavenQueryable<Page> Pages { get => session.Query<Page>(); }
+
+    /// <summary>Gets the page comment collection.</summary>
+    IRavenQueryable<PageComment> PageComments { get => session.Query<PageComment>(); }
 
     /// <summary>
-    /// Gets/sets the content set.
+    /// Gets the page revision collection.
+    /// Each PageRevision contains SiteId and PageLastModified as denormalized fields.
     /// </summary>
-    IRavenQueryable<Content> Content { get => session.Query<Content>().Customize(x=>x.WaitForNonStaleResults()); }
+    IRavenQueryable<PageRevision> PageRevisions { get => session.Query<PageRevision>(); }
+
+    /// <summary>Gets the page type collection.</summary>
+    IRavenQueryable<PageType> PageTypes { get => session.Query<PageType>(); }
+
+    /// <summary>Gets the param collection.</summary>
+    IRavenQueryable<Param> Params { get => session.Query<Param>(); }
 
     /// <summary>
-    /// Gets/sets the content block set.
+    /// Gets the post collection.
+    /// PostBlock, PostField, PostPermission, and PostTag objects are embedded within each Post document.
     /// </summary>
-    IRavenQueryable<ContentBlock> ContentBlocks { get => session.Query<ContentBlock>().Customize(x=>x.WaitForNonStaleResults()); }
+    IRavenQueryable<Post> Posts { get => session.Query<Post>(); }
+
+    /// <summary>Gets the post comment collection.</summary>
+    IRavenQueryable<PostComment> PostComments { get => session.Query<PostComment>(); }
 
     /// <summary>
-    /// Gets/sets the content block field set.
+    /// Gets the post revision collection.
+    /// Each PostRevision contains BlogId and PostLastModified as denormalized fields.
     /// </summary>
-    IRavenQueryable<ContentBlockField> ContentBlockFields { get  => session.Query<ContentBlockField>().Customize(x=>x.WaitForNonStaleResults()); }
+    IRavenQueryable<PostRevision> PostRevisions { get => session.Query<PostRevision>(); }
+
+    /// <summary>Gets the post type collection.</summary>
+    IRavenQueryable<PostType> PostTypes { get => session.Query<PostType>(); }
 
     /// <summary>
-    /// Gets/sets the content block field translation set.
+    /// Gets the site collection.
+    /// SiteField objects are embedded within each Site document.
     /// </summary>
-    IRavenQueryable<ContentBlockFieldTranslation> ContentBlockFieldTranslations { get => session.Query<ContentBlockFieldTranslation>().Customize(x=>x.WaitForNonStaleResults()); }
+    IRavenQueryable<Site> Sites { get => session.Query<Site>(); }
+
+    /// <summary>Gets the site type collection.</summary>
+    IRavenQueryable<SiteType> SiteTypes { get => session.Query<SiteType>(); }
+
+    /// <summary>Gets the tag collection.</summary>
+    IRavenQueryable<Tag> Tags { get => session.Query<Tag>(); }
+
+    /// <summary>Gets the taxonomy collection.</summary>
+    IRavenQueryable<Taxonomy> Taxonomies { get => session.Query<Taxonomy>(); }
 
     /// <summary>
-    /// Gets/sets the content field set.
+    /// Saves the changes made to the current session.
     /// </summary>
-    IRavenQueryable<ContentField> ContentFields { get  => session.Query<ContentField>().Customize(x=>x.WaitForNonStaleResults()); }
-
-    /// <summary>
-    /// Gets/sets the content field translation set.
-    /// </summary>
-    IRavenQueryable<ContentFieldTranslation> ContentFieldTranslations { get  => session.Query<ContentFieldTranslation>().Customize(x=>x.WaitForNonStaleResults()); }
-
-    /// <summary>
-    /// Gets/sets the content taxonomy set.
-    /// </summary>
-    IRavenQueryable<ContentTaxonomy> ContentTaxonomies { get  => session.Query<ContentTaxonomy>().Customize(x=>x.WaitForNonStaleResults()); }
-
-    /// <summary>
-    /// Gets/sets the content translation set.
-    /// </summary>
-    IRavenQueryable<ContentTranslation> ContentTranslations { get  => session.Query<ContentTranslation>().Customize(x=>x.WaitForNonStaleResults()); }
-
-    /// <summary>
-    /// Gets/sets the content group set.
-    /// </summary>
-    IRavenQueryable<ContentGroup> ContentGroups { get  => session.Query<ContentGroup>().Customize(x=>x.WaitForNonStaleResults()); }
-
-    /// <summary>
-    /// Gets/sets the content type set.
-    /// </summary>
-    IRavenQueryable<AeroContentType> ContentTypes { get => session.Query<AeroContentType>().Customize(x=>x.WaitForNonStaleResults()); }
-
-    /// <summary>
-    /// Gets/sets the language set.
-    /// </summary>
-    IRavenQueryable<Language> Languages { get => session.Query<Language>().Customize(x=>x.WaitForNonStaleResults()); }
-
-    /// <summary>
-    /// Gets/sets the media set.
-    /// </summary>
-    IRavenQueryable<Media> Media { get => session.Query<Media>().Customize(x=>x.WaitForNonStaleResults()); }
-
-    /// <summary>
-    /// Gets/sets the media folder set.
-    /// </summary>
-    IRavenQueryable<MediaFolder> MediaFolders { get => session.Query<MediaFolder>().Customize(x=>x.WaitForNonStaleResults()); }
-
-    /// <summary>
-    /// Gets/sets the media version set.
-    /// </summary>
-    IRavenQueryable<MediaVersion> MediaVersions { get => session.Query<MediaVersion>().Customize(x=>x.WaitForNonStaleResults()); }
-
-    /// <summary>
-    /// Gets/sets the page set.
-    /// </summary>
-    IRavenQueryable<Page> Pages { get => session.Query<Page>().Customize(x=>x.WaitForNonStaleResults()); }
-
-    /// <summary>
-    /// Gets/sets the page block set.
-    /// </summary>
-    IRavenQueryable<PageBlock> PageBlocks { get => session.Query<PageBlock>().Customize(x=>x.WaitForNonStaleResults()); }
-
-    /// <summary>
-    /// Gets/sets the page comments.
-    /// </summary>
-    IRavenQueryable<PageComment> PageComments { get => session.Query<PageComment>().Customize(x=>x.WaitForNonStaleResults()); }
-
-    /// <summary>
-    /// Gets/sets the page field set.
-    /// </summary>
-    IRavenQueryable<PageField> PageFields { get => session.Query<PageField>().Customize(x=>x.WaitForNonStaleResults()); }
-
-    /// <summary>
-    /// Gets/sets the page permission set.
-    /// </summary>
-    IRavenQueryable<PagePermission> PagePermissions { get => session.Query<PagePermission>().Customize(x=>x.WaitForNonStaleResults()); }
-
-    /// <summary>
-    /// Gets/sets the page revision set.
-    /// </summary>
-    IRavenQueryable<PageRevision> PageRevisions { get => session.Query<PageRevision>().Customize(x=>x.WaitForNonStaleResults()); }
-
-    /// <summary>
-    /// Gets/sets the page type set.
-    /// </summary>
-    IRavenQueryable<PageType> PageTypes { get => session.Query<PageType>().Customize(x=>x.WaitForNonStaleResults()); }
-
-    /// <summary>
-    /// Gets/sets the param set.
-    /// </summary>
-    IRavenQueryable<Param> Params { get => session.Query<Param>().Customize(x=>x.WaitForNonStaleResults()); }
-
-    /// <summary>
-    /// Gets/sets the post set.
-    /// </summary>
-    IRavenQueryable<Post> Posts { get => session.Query<Post>().Customize(x=>x.WaitForNonStaleResults()); }
-
-    /// <summary>
-    /// Gets/sets the post block set.
-    /// </summary>
-    IRavenQueryable<PostBlock> PostBlocks { get => session.Query<PostBlock>().Customize(x=>x.WaitForNonStaleResults()); }
-
-    /// <summary>
-    /// Gets/sets the post comments.
-    /// </summary>
-    IRavenQueryable<PostComment> PostComments { get => session.Query<PostComment>().Customize(x=>x.WaitForNonStaleResults()); }
-
-    /// <summary>
-    /// Gets/sets the post field set.
-    /// </summary>
-    IRavenQueryable<PostField> PostFields { get => session.Query<PostField>().Customize(x=>x.WaitForNonStaleResults()); }
-
-    /// <summary>
-    /// Gets/sets the post permission set.
-    /// </summary>
-    IRavenQueryable<PostPermission> PostPermissions { get => session.Query<PostPermission>().Customize(x=>x.WaitForNonStaleResults()); }
-
-    /// <summary>
-    /// Gets/sets the post revision set.
-    /// </summary>
-    IRavenQueryable<PostRevision> PostRevisions { get => session.Query<PostRevision>().Customize(x=>x.WaitForNonStaleResults()); }
-
-    /// <summary>
-    /// Gets/sets the post tag set.
-    /// </summary>
-    IRavenQueryable<PostTag> PostTags { get => session.Query<PostTag>().Customize(x=>x.WaitForNonStaleResults()); }
-
-    /// <summary>
-    /// Gets/sets the post type set.
-    /// </summary>
-    IRavenQueryable<PostType> PostTypes { get => session.Query<PostType>().Customize(x=>x.WaitForNonStaleResults()); }
-
-    /// <summary>
-    /// Gets/sets the site set.
-    /// </summary>
-    IRavenQueryable<Site> Sites { get => session.Query<Site>().Customize(x=>x.WaitForNonStaleResults()); }
-
-    /// <summary>
-    /// Gets/sets the site field set.
-    /// </summary>
-    IRavenQueryable<SiteField> SiteFields { get => session.Query<SiteField>().Customize(x=>x.WaitForNonStaleResults()); }
-
-    /// <summary>
-    /// Gets/sets the site type set.
-    /// </summary>
-    IRavenQueryable<SiteType> SiteTypes { get => session.Query<SiteType>().Customize(x=>x.WaitForNonStaleResults()); }
-
-    /// <summary>
-    /// Gets/sets the tag set.
-    /// </summary>
-    IRavenQueryable<Tag> Tags { get => session.Query<Tag>().Customize(x=>x.WaitForNonStaleResults()); }
-
-    /// <summary>
-    /// Gets/sets the taxonomy set.
-    /// </summary>
-    IRavenQueryable<Taxonomy> Taxonomies { get => session.Query<Taxonomy>().Customize(x=>x.WaitForNonStaleResults()); }
-
-    /// <summary>
-    /// Gets the entity set for the specified type.
-    /// </summary>
-    //IRavenQueryable<T> Set<T>() where T : class;
-
-    /// <summary>
-    /// Saves the changes made to the context.
-    /// </summary>
-    Task<int> SaveChangesAsync(CancellationToken cancellationToken = default(CancellationToken));
+    Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
 }

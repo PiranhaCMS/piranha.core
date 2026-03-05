@@ -1,11 +1,13 @@
 ﻿using Piranha.Data.RavenDb.Data;
 using Raven.Client.Documents.Indexes;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Piranha.Data.RavenDb.Indexes;
 
+/// <summary>
+/// Index for detecting post revisions that are newer than the published post.
+/// Uses denormalized BlogId and PostLastModified fields on PostRevision.
+/// NOTE: This index is still used by DeleteUnusedCategories in PostRepository.
+/// </summary>
 public class Revisions_ByIsNewerThanPost
     : AbstractIndexCreationTask<PostRevision, Revisions_ByIsNewerThanPost.Result>
 {
@@ -21,8 +23,9 @@ public class Revisions_ByIsNewerThanPost
         Map = revisions => from r in revisions
                            select new
                            {
-                               BlogId = r.Post.BlogId,
-                               IsNewer = r.Created > r.Post.LastModified,
+                               // Use denormalized fields \u2014 PostRevision.Post navigation was removed
+                               BlogId = r.BlogId,
+                               IsNewer = r.Created > r.PostLastModified,
                                Id = r.Id
                            };
     }

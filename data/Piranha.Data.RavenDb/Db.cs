@@ -19,7 +19,6 @@ using ContentGroup = Piranha.Data.RavenDb.Data.ContentGroup;
 using Language = Piranha.Data.RavenDb.Data.Language;
 using Media = Piranha.Data.RavenDb.Data.Media;
 using MediaFolder = Piranha.Data.RavenDb.Data.MediaFolder;
-using MediaVersion = Piranha.Data.RavenDb.Data.MediaVersion;
 using PageComment = Piranha.Data.RavenDb.Data.PageComment;
 using PageType = Piranha.Data.RavenDb.Data.PageType;
 using Param = Piranha.Data.RavenDb.Data.Param;
@@ -39,7 +38,7 @@ public class DbRaven : DbRavenBase
 }
 
 /// <inheritdoc />
-public abstract class DbRavenBase : IDb 
+public abstract class DbRavenBase : IDb
 {
     private static readonly object _lock = new object();
     private IDocumentStore _store;
@@ -69,9 +68,8 @@ public abstract class DbRavenBase : IDb
         }
     }
 
-
     /// <summary>
-    /// Gets/sets whether the db context as been initialized. This
+    /// Gets/sets whether the db context has been initialized. This
     /// is only performed once in the application lifecycle.
     /// </summary>
     private static volatile bool IsInitialized = false;
@@ -82,13 +80,14 @@ public abstract class DbRavenBase : IDb
     private static readonly object Mutex = new object();
 
     /// <summary>
-    /// Gets the raven db session
+    /// Gets the raven db session.
     /// </summary>
     public IAsyncDocumentSession session
     {
         get
         {
-            // todo - review this logic. We should ideally be relying on DI to manage the lifecycle of the session/store, and not have this fallback logic in the db context. This is currently here to ensure we have a working session/store for testing and local dev purposes, but it may not be ideal for production scenarios. We should consider refactoring this to be more explicit about how the session/store are managed, and potentially remove this fallback logic in favor of a more robust DI setup.
+            // TODO: Review this logic. We should rely on DI to manage the session/store lifecycle,
+            // not fallback logic in the db context. This is here for testing and local dev stability.
             if (_session == null)
             {
                 if (_store == null)
@@ -97,14 +96,11 @@ public abstract class DbRavenBase : IDb
                     {
                         if (_store == null)
                         {
-                            // TODO: Review this setup. DI should ideally be handling the session/store lifecycle.
-                            // This fallback logic is a temporary measure for test/local environment stability.
                             string url = Environment.GetEnvironmentVariable("RAVENDB_URL");
                             string dbName = Environment.GetEnvironmentVariable("RAVENDB_DATABASE") ?? "piranha";
 
                             if (string.IsNullOrEmpty(url))
                             {
-                                // Fallback to embedded if no URL is provided (test/local dev)
                                 Console.WriteLine(
                                     "[Db.cs] Session is null and RAVENDB_URL is empty. Falling back to EmbeddedServer.");
                                 try
@@ -133,8 +129,6 @@ public abstract class DbRavenBase : IDb
                                 store.Initialize();
                                 _store = store;
                             }
-
-                            //RegisterConventions(_store);
                         }
                     }
                 }
@@ -146,14 +140,15 @@ public abstract class DbRavenBase : IDb
         }
     }
 
-    //public new IRavenQueryable<T1> Set<T1>() where T1 : class
-    //{
-    //    return session.Query<T1>();
-    //}
+    // -------------------------------------------------------------------------
+    // Aggregate root collections (queryable via LINQ / static indexes).
+    // Sub-entity data (blocks, fields, permissions, tags, versions) is embedded
+    // within the parent aggregate document and is NOT queryable as a separate
+    // collection. Use session.LoadAsync<T>(id) for ID-based lookups.
+    // -------------------------------------------------------------------------
 
     public IRavenQueryable<Alias> Aliases => session.Query<Alias>();
     public IRavenQueryable<Block> Blocks => session.Query<Block>();
-    public IRavenQueryable<BlockField> BlockFields => session.Query<BlockField>();
     public IRavenQueryable<Category> Categories => session.Query<Category>();
     public IRavenQueryable<Content> Content => session.Query<Content>();
     public IRavenQueryable<ContentBlock> ContentBlocks => session.Query<ContentBlock>();
@@ -170,30 +165,21 @@ public abstract class DbRavenBase : IDb
     public IRavenQueryable<Language> Languages => session.Query<Language>();
     public IRavenQueryable<Media> Media => session.Query<Media>();
     public IRavenQueryable<MediaFolder> MediaFolders => session.Query<MediaFolder>();
-    public IRavenQueryable<MediaVersion> MediaVersions => session.Query<MediaVersion>();
     public IRavenQueryable<Page> Pages => session.Query<Page>();
-    public IRavenQueryable<PageBlock> PageBlocks => session.Query<PageBlock>();
     public IRavenQueryable<PageComment> PageComments => session.Query<PageComment>();
-    public IRavenQueryable<PageField> PageFields => session.Query<PageField>();
-    public IRavenQueryable<PagePermission> PagePermissions => session.Query<PagePermission>();
     public IRavenQueryable<PageRevision> PageRevisions => session.Query<PageRevision>();
     public IRavenQueryable<PageType> PageTypes => session.Query<PageType>();
     public IRavenQueryable<Param> Params => session.Query<Param>();
     public IRavenQueryable<Post> Posts => session.Query<Post>();
-    public IRavenQueryable<PostBlock> PostBlocks => session.Query<PostBlock>();
     public IRavenQueryable<PostComment> PostComments => session.Query<PostComment>();
-    public IRavenQueryable<PostField> PostFields => session.Query<PostField>();
-    public IRavenQueryable<PostPermission> PostPermissions => session.Query<PostPermission>();
     public IRavenQueryable<PostRevision> PostRevisions => session.Query<PostRevision>();
-    public IRavenQueryable<PostTag> PostTags => session.Query<PostTag>();
     public IRavenQueryable<PostType> PostTypes => session.Query<PostType>();
     public IRavenQueryable<Site> Sites => session.Query<Site>();
-    public IRavenQueryable<SiteField> SiteFields => session.Query<SiteField>();
     public IRavenQueryable<SiteType> SiteTypes => session.Query<SiteType>();
     public IRavenQueryable<Tag> Tags => session.Query<Tag>();
     public IRavenQueryable<Taxonomy> Taxonomies => session.Query<Taxonomy>();
 
-    public async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default(CancellationToken))
+    public async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
     {
         if (session != null)
         {
@@ -203,12 +189,9 @@ public abstract class DbRavenBase : IDb
         return 1;
     }
 
-
-
-
-    // TODO: abstract Seeding data to app setup  -  temp here to ensure we have a default language and site for testing and local dev purposes. This should ideally be handled by the application setup logic, not the db context.
+    // TODO: Abstract seeding to app setup. Temp here for testing and local dev.
     /// <summary>
-    /// Seeds the default data.
+    /// Seeds the default data (default language + site).
     /// </summary>
     private async Task SeedAsync()
     {
@@ -222,7 +205,6 @@ public abstract class DbRavenBase : IDb
         var count = await Languages.CountAsync();
         if (count == 0)
         {
-            //Languages.Add(new Data.Language
             var lang = new Language
             {
                 Id = langId,
@@ -243,8 +225,7 @@ public abstract class DbRavenBase : IDb
         count = await Sites.CountAsync();
         if (count == 0)
         {
-            //Sites.Add(new Data.Site
-            var stie = new Site
+            var site = new Site
             {
                 Id = Snowflake.NewId(),
                 LanguageId = langId,
@@ -254,13 +235,11 @@ public abstract class DbRavenBase : IDb
                 Created = DateTime.UtcNow,
                 LastModified = DateTime.UtcNow
             };
-            await session.StoreAsync(stie);
+            await session.StoreAsync(site);
         }
         else
         {
-            // todo - verify this works correctly being we don't use guids anymore 
-            // When upgrading, make sure we assign the default language id
-            // to already created sites.
+            // Ensure existing sites have a language assigned
             var sites = await Sites.Where(s => s.LanguageId == null).ToListAsync();
             foreach (var site in sites)
             {
@@ -268,48 +247,10 @@ public abstract class DbRavenBase : IDb
             }
         }
 
-        //
-        // Make sure we don't have NULL values in Piranha_MediaVersions.FileExtension
-        //
-        var versions = await MediaVersions
-            .Where(m => m.FileExtension == null)
-            .ToListAsync();
-        foreach (var version in versions)
-            version.FileExtension = ".webp"; // shouldn't this be webp since we're makin use of https://static.photos
-
-        var pageBlocks = await PageBlocks
-            .Where(b => !string.IsNullOrEmpty(b.ParentId))
-            .ToListAsync();
-        var pageBlocksId = pageBlocks.Select(b => b.BlockId).ToList();
-        var blocks = await Blocks
-            .Where(b => b.Id.In(pageBlocksId))
-            .ToListAsync();
-        
-        foreach (var block in blocks)
-        {
-            var pageBlock = pageBlocks.Single(b => b.BlockId == block.Id);
-            block.ParentId = pageBlock.ParentId;
-            pageBlock.ParentId = null;
-        }
-        var postBlocks = await PostBlocks
-            .Where(b => !string.IsNullOrEmpty(b.ParentId))
-            .ToListAsync();
-        var postBlocksId = postBlocks.Select(b => b.BlockId).ToList();
-        blocks = await Blocks
-            .Where(b => b.Id.In(postBlocksId))
-            .ToListAsync();
-        
-        foreach (var block in blocks)
-        {
-            var postBlock = postBlocks.Single(b => b.BlockId == block.Id);
-            block.ParentId = postBlock.ParentId;
-            postBlock.ParentId = null;
-        }
-
         await SaveChangesAsync();
     }
 
-    public new void Dispose()
+    public void Dispose()
     {
         _session?.Dispose();
     }

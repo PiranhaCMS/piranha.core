@@ -143,12 +143,17 @@ internal class PostRepository : IPostRepository
     /// <returns>The posts that have a draft</returns>
     public async Task<IEnumerable<string>> GetAllDrafts(string blogId)
     {
-        return await _db.PostRevisions
-            .Where(r => r.Post.BlogId == blogId && r.Created > r.Post.LastModified)
+        // Use the PostRevisions_ByBlog index which precomputes IsDraft = Created > PostLastModified.
+        // RavenDB LINQ cannot compare two document fields in a Where clause at query time.
+        var postIds = await _db.session
+            .Query<PostRevisions_ByBlog.Result, PostRevisions_ByBlog>()
+            .Where(r => r.BlogId == blogId && r.IsDraft)
             .Select(r => r.PostId)
             .Distinct()
             .ToListAsync()
             .ConfigureAwait(false);
+
+        return postIds;
     }
 
     /// <summary>
@@ -187,9 +192,8 @@ internal class PostRepository : IPostRepository
     /// <returns>The post model</returns>
     public async Task<T> GetById<T>(string id) where T : Models.PostBase
     {
-        var post = await GetQuery<T>()
-            .FirstOrDefaultAsync(p => p.Id == id)
-            .ConfigureAwait(false);
+        // Use session.LoadAsync for ID-based lookups — direct storage engine fetch, no index overhead
+        var post = await _db.session.LoadAsync<Post>(id).ConfigureAwait(false);
 
         if (post != null)
         {
@@ -417,25 +421,25 @@ internal class PostRepository : IPostRepository
     /// <param name="revisions">The maximum number of revisions that should be stored</param>
     public async Task CreateRevision(string id, int revisions)
     {
-        var post = await GetQuery<Models.PostBase>()
-            .FirstOrDefaultAsync(p => p.Id == id)
-            .ConfigureAwait(false);
+        // Use session.LoadAsync for ID-based lookup
+        var post = await _db.session.LoadAsync<Post>(id).ConfigureAwait(false);
 
         if (post != null)
         {
-            //await _db.PostRevisions.AddAsync(new PostRevision
-            await _db.session.StoreAsync(new PostRevision()
+            await _db.session.StoreAsync(new PostRevision
             {
                 Id = Snowflake.NewId(),
                 PostId = id,
+                // Populate denormalized fields so GetAllDrafts can filter without cross-collection navigation
+                BlogId = post.BlogId,
+                PostLastModified = post.LastModified,
                 Data = JsonSerializer.Serialize(post),
                 Created = post.LastModified
             }).ConfigureAwait(false);
 
             await _db.SaveChangesAsync().ConfigureAwait(false);
 
-            // Check if we have a limit set on the number of revisions
-            // we want to store.
+            // Trim revisions to the configured maximum
             if (revisions != 0)
             {
                 var existing = await _db.PostRevisions
@@ -453,14 +457,13 @@ internal class PostRepository : IPostRepository
                         .ToListAsync()
                         .ConfigureAwait(false);
 
+                    // Fix: session.Delete() only accepts a single entity or ID — iterate to delete each
+                    foreach (var rev in removed)
+                    {
+                        _db.session.Delete(rev.Id);
+                    }
                     if (removed.Count > 0)
                     {
-                        //_db.PostRevisions.RemoveRange(removed);
-                        foreach (var rev in removed)
-                        {
-                            _db.session.Delete(rev);
-                        }
-
                         await _db.SaveChangesAsync().ConfigureAwait(false);
                     }
                 }
@@ -517,25 +520,25 @@ internal class PostRepository : IPostRepository
     /// <param name="id">The unique id</param>
     public async Task DeleteDraft(string id)
     {
-        var post = await GetQuery<Models.PostInfo>()
-            .FirstOrDefaultAsync(p => p.Id == id)
-            .ConfigureAwait(false);
+        // Use session.LoadAsync for ID-based lookup
+        var post = await _db.session.LoadAsync<Post>(id).ConfigureAwait(false);
 
         if (post != null)
         {
-            var draft = await _db.PostRevisions
-                .Where(r => r.PostId == id && r.Created > post.LastModified)
+            // Use PostRevisions_ByBlog index to find drafts — avoids field-to-field date comparison
+            var draftRevisionIds = await _db.session
+                .Query<PostRevisions_ByBlog.Result, PostRevisions_ByBlog>()
+                .Where(r => r.PostId == id && r.IsDraft)
+                .Select(r => r.Id)
                 .ToListAsync()
                 .ConfigureAwait(false);
 
-            if (draft.Count > 0)
+            foreach (var draftId in draftRevisionIds)
             {
-                //_db.PostRevisions.RemoveRange(draft);
-                foreach (var rev in draft)
-                {
-                    _db.session.Delete(rev);
-                }
-
+                _db.session.Delete(draftId);
+            }
+            if (draftRevisionIds.Count > 0)
+            {
                 await _db.SaveChangesAsync().ConfigureAwait(false);
             }
         }
@@ -780,17 +783,13 @@ internal class PostRepository : IPostRepository
                 });
             }
 
-            // Make sure foreign key is set for fields
-            if (!isDraft)
+            // Set the foreign key on fields — they are embedded in the Post document,
+            // so no separate session.StoreAsync is needed.
+            foreach (var field in post.Fields)
             {
-                foreach (var field in post.Fields)
+                if (string.IsNullOrEmpty(field.PostId))
                 {
-                    if (field.PostId == string.Empty)
-                    {
-                        field.PostId = post.Id;
-                        //await _db.PostFields.AddAsync(field).ConfigureAwait(false);
-                        await _db.session.StoreAsync(field).ConfigureAwait(false);
-                    }
+                    field.PostId = post.Id;
                 }
             }
 
@@ -813,25 +812,19 @@ internal class PostRepository : IPostRepository
                 var blocks = _contentService.TransformBlocks(blockModels);
                 var current = blocks.Select(b => b.Id).ToArray();
 
-                // Delete removed blocks
-                var removed = post.Blocks
+                // Delete removed non-reusable blocks from the embedded list
+                // (they have no separate document — just removing from post.Blocks is sufficient)
+                // For reusable blocks, also delete the Block document only if truly removing from all posts
+                var removedFromEmbed = post.Blocks
                     .Where(b => !current.Contains(b.BlockId) && !b.Block.IsReusable && b.Block.ParentId == null)
                     .Select(b => b.Block);
-                var removedItems = post.Blocks
+                var removedItemsFromEmbed = post.Blocks
                     .Where(b => !current.Contains(b.BlockId) && b.Block.ParentId != null &&
-                                removed.Select(p => p.Id).ToList().Contains(b.Block.ParentId))
+                                removedFromEmbed.Select(p => p.Id).ToList().Contains(b.Block.ParentId))
                     .Select(b => b.Block);
 
-                if (!isDraft)
-                {
-                    // _db.Blocks.RemoveRange(removed);
-                    // _db.Blocks.RemoveRange(removedItems);
-                    foreach (var block in removed)
-                        _db.session.Delete(block);
-
-                    foreach (var block in removedItems)
-                        _db.session.Delete(block);
-                }
+                // No session.Delete needed for non-reusable blocks — deleting the embedding list entry
+                // removes them when the Post document is saved.
 
                 // Delete the old page blocks
                 post.Blocks.Clear();
@@ -847,8 +840,13 @@ internal class PostRepository : IPostRepository
 
 
                     var id = blocks[n].Id;
-                    var block = await blockQuery
-                        .FirstOrDefaultAsync(b => b.Id == id);
+                    // Use session.LoadAsync for reusable blocks (standalone documents);
+                    // non-reusable blocks are created fresh each time as embedded objects
+                    Block block = null;
+                    if (!string.IsNullOrEmpty(id) && blocks[n].IsReusable)
+                    {
+                        block = await _db.session.LoadAsync<Block>(id).ConfigureAwait(false);
+                    }
 
                     if (block == null)
                     {
@@ -857,9 +855,9 @@ internal class PostRepository : IPostRepository
                             Id = !string.IsNullOrEmpty(blocks[n].Id) ? blocks[n].Id : Snowflake.NewId(),
                             Created = DateTime.Now
                         };
-                        if (!isDraft)
+                        if (!isDraft && blocks[n].IsReusable)
                         {
-                            //await _db.Blocks.AddAsync(block).ConfigureAwait(false);
+                            // Only store reusable blocks as separate documents
                             await _db.session.StoreAsync(block).ConfigureAwait(false);
                         }
                     }
@@ -873,11 +871,11 @@ internal class PostRepository : IPostRepository
                     var currentFields = blocks[n].Fields.Select(f => f.FieldId).Distinct();
                     var removedFields = block.Fields.Where(f => !currentFields.Contains(f.FieldId));
 
-                    if (!isDraft)
+                    if (!isDraft && blocks[n].IsReusable)
                     {
-                        //_db.BlockFields.RemoveRange(removedFields);
+                        // Only individually-stored reusable block fields should be deleted
                         foreach (var removedField in removedFields)
-                            _db.session.Delete(removedField);
+                            _db.session.Delete(removedField.Id);
                     }
 
                     foreach (var newField in blocks[n].Fields)
@@ -891,9 +889,10 @@ internal class PostRepository : IPostRepository
                                 BlockId = block.Id,
                                 FieldId = newField.FieldId
                             };
-                            if (!isDraft)
+                            // BlockFields are embedded in the Block object (not separate documents)
+                            // Only store separately for reusable blocks
+                            if (!isDraft && blocks[n].IsReusable)
                             {
-                                //await _db.BlockFields.AddAsync(field).ConfigureAwait(false);
                                 await _db.session.StoreAsync(field).ConfigureAwait(false);
                             }
 
@@ -905,7 +904,7 @@ internal class PostRepository : IPostRepository
                         field.Value = newField.Value;
                     }
 
-                    // Create the post block
+                    // PostBlock is embedded in post.Blocks — do NOT call session.StoreAsync
                     var postBlock = new PostBlock
                     {
                         Id = Snowflake.NewId(),
@@ -914,11 +913,6 @@ internal class PostRepository : IPostRepository
                         PostId = post.Id,
                         SortOrder = n
                     };
-                    if (!isDraft)
-                    {
-                        //await _db.PostBlocks.AddAsync(postBlock).ConfigureAwait(false);
-                        await _db.session.StoreAsync(postBlock).ConfigureAwait(false);
-                    }
 
                     post.Blocks.Add(postBlock);
                 }
@@ -982,11 +976,11 @@ internal class PostRepository : IPostRepository
                     draft = new PostRevision
                     {
                         Id = Snowflake.NewId(),
-                        PostId = post.Id
+                        PostId = post.Id,
+                        // Populate denormalized fields for draft detection
+                        BlogId = post.BlogId,
+                        PostLastModified = post.LastModified
                     };
-                    // await _db.PostRevisions
-                    //     .AddAsync(draft)
-                    //     .ConfigureAwait(false);
                     await _db.session.StoreAsync(draft).ConfigureAwait(false);
                 }
 
@@ -1006,6 +1000,7 @@ internal class PostRepository : IPostRepository
     {
         // 1. Collect all category IDs used by published posts
         var used = await _db.Posts
+            .Customize(x => x.WaitForNonStaleResults())
             .Where(p => p.BlogId == blogId)
             .Select(p => p.CategoryId)
             .Distinct()
@@ -1015,6 +1010,7 @@ internal class PostRepository : IPostRepository
         // 2. Query the index for revisions newer than their posts
         var draftIds = await _db.session
             .Query<Revisions_ByIsNewerThanPost.Result, Revisions_ByIsNewerThanPost>()
+            .Customize(x => x.WaitForNonStaleResults())
             .Where(x => x.BlogId == blogId && x.IsNewer)
             .Select(x => x.Id)
             .ToListAsync()
@@ -1036,6 +1032,7 @@ internal class PostRepository : IPostRepository
 
         // 5. Find categories not used by published posts or drafts
         var unused = await _db.Categories
+            .Customize(x => x.WaitForNonStaleResults())
             .Where(c => c.BlogId == blogId && !c.Id.In(used)) // !used.Contains(c.Id))
             .ToListAsync()
             .ConfigureAwait(false);
@@ -1091,46 +1088,53 @@ internal class PostRepository : IPostRepository
     /// <param name="blogId">The blog id</param>
     private async Task DeleteUnusedTags(string blogId)
     {
-        var used = await _db.PostTags
-            .Where(t => t.Post.BlogId == blogId)
-            .Select(t => t.TagId)
-            .Distinct()
+        // Tags are embedded within Post documents (post.Tags) — no separate PostTags collection.
+        // Collect all tag IDs currently referenced by any post in this blog.
+        var allPosts = await _db.Posts
+            .Customize(x => x.WaitForNonStaleResults())
+            .Where(p => p.BlogId == blogId)
             .ToListAsync()
             .ConfigureAwait(false);
 
-        //var drafts = await _db.PostRevisions
-        //    .Where(r => r.Post.BlogId == blogId && r.Created > r.Post.LastModified)
-        //    .ToListAsync()
-        //    .ConfigureAwait(false);
+        var used = allPosts
+            .SelectMany(p => p.Tags.Select(t => t.TagId))
+            .Distinct()
+            .ToList();
 
+        // Also collect tag IDs referenced by draft revisions
         var draftIds = await _db.session
-            .Query<Revisions_ByIsNewerThanPost.Result, Revisions_ByIsNewerThanPost>()
-            .Where(x => x.BlogId == blogId && x.IsNewer)
-            .Select(x => x.Id)
-            .ToListAsync();
+            .Query<PostRevisions_ByBlog.Result, PostRevisions_ByBlog>()
+            .Customize(x => x.WaitForNonStaleResults())
+            .Where(r => r.BlogId == blogId && r.IsDraft)
+            .Select(r => r.Id)
+            .ToListAsync()
+            .ConfigureAwait(false);
 
-        var drafts = await _db.session.LoadAsync<PostRevision>(draftIds);
-
-        foreach (var draft in drafts)
+        if (draftIds.Count > 0)
         {
-            var post = JsonSerializer.Deserialize<Post>(draft.Value.Data);
-
-            foreach (var tag in post.Tags)
+            var drafts = await _db.session.LoadAsync<PostRevision>(draftIds).ConfigureAwait(false);
+            foreach (var draft in drafts.Values.Where(d => d != null))
             {
-                used.Add(tag.TagId);
+                var draftPost = JsonSerializer.Deserialize<Post>(draft.Data);
+                if (draftPost?.Tags != null)
+                {
+                    foreach (var tag in draftPost.Tags)
+                    {
+                        used.Add(tag.TagId);
+                    }
+                }
             }
+            used = used.Distinct().ToList();
         }
 
-        used = used.Distinct().ToList();
-
         var unused = await _db.Tags
-            .Where(t => t.BlogId == blogId && !t.Id.In(used)) //!used.Contains(t.Id))
+            .Customize(x => x.WaitForNonStaleResults())
+            .Where(t => t.BlogId == blogId && !t.Id.In(used))
             .ToListAsync()
             .ConfigureAwait(false);
 
         if (unused.Count > 0)
         {
-            //_db.Tags.RemoveRange(unused);
             foreach (var tag in unused)
                 _db.session.Delete(tag);
 
