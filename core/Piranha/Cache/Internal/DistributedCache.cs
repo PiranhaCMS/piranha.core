@@ -28,6 +28,10 @@ internal sealed class DistributedCache : ICache
         _cache = cache;
         _jsonSettings = new JsonSerializerOptions()
         {
+            IncludeFields = true,
+            PropertyNameCaseInsensitive = true
+        };
+        {
             //TypeNameHandling = TypeNameHandling.All
         };
     }

@@ -7,12 +7,26 @@
  * https://github.com/piranhacms/piranha.core
  *
  */
+using System.Text.Json.Serialization;
 
 namespace Piranha.Extend;
 
 /// <summary>
 /// Base class for blocks.
 /// </summary>
+[JsonDerivedType(typeof(Piranha.Extend.Blocks.TextBlock), typeDiscriminator: "TextBlock")]
+[JsonDerivedType(typeof(Piranha.Extend.Blocks.HtmlBlock), typeDiscriminator: "HtmlBlock")]
+[JsonDerivedType(typeof(Piranha.Extend.Blocks.ImageBlock), typeDiscriminator: "ImageBlock")]
+[JsonDerivedType(typeof(Piranha.Extend.Blocks.QuoteBlock), typeDiscriminator: "QuoteBlock")]
+[JsonDerivedType(typeof(Piranha.Extend.Blocks.MarkdownBlock), typeDiscriminator: "MarkdownBlock")]
+[JsonDerivedType(typeof(Piranha.Extend.Blocks.SeparatorBlock), typeDiscriminator: "SeparatorBlock")]
+[JsonDerivedType(typeof(Piranha.Extend.Blocks.AudioBlock), typeDiscriminator: "AudioBlock")]
+[JsonDerivedType(typeof(Piranha.Extend.Blocks.VideoBlock), typeDiscriminator: "VideoBlock")]
+[JsonDerivedType(typeof(Piranha.Extend.Blocks.PageBlock), typeDiscriminator: "PageBlock")]
+[JsonDerivedType(typeof(Piranha.Extend.Blocks.PostBlock), typeDiscriminator: "PostBlock")]
+[JsonDerivedType(typeof(Piranha.Extend.Blocks.ContentBlock), typeDiscriminator: "ContentBlock")]
+[JsonDerivedType(typeof(Piranha.Extend.Blocks.ColumnBlock), typeDiscriminator: "ColumnBlock")]
+[JsonDerivedType(typeof(Piranha.Extend.Blocks.ImageGalleryBlock), typeDiscriminator: "ImageGalleryBlock")]
 public abstract class Block : Entity
 {
     /// <summary>

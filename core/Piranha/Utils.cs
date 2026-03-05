@@ -891,6 +891,10 @@ public static class Utils
 
         var settings = new JsonSerializerOptions()
         {
+            IncludeFields = true,
+            PropertyNameCaseInsensitive = true
+        };
+        {
             //TypeNameHandling = TypeNameHandling.All
         };
         var json = JsonSerializer.Serialize(obj, settings);
