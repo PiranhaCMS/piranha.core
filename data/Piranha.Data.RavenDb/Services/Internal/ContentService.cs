@@ -212,6 +212,14 @@ internal class ContentService<TContent, TField, TModelBase> : IContentService<TC
         //
         _mapper.Map<TModelBase, TContent>(model, content);
 
+        //
+        // 3b: Map translation BEFORE restoring original title
+        //
+        if (content is ITranslatable translatableContent && !string.IsNullOrEmpty(languageId))
+        {
+            translatableContent.SetTranslation(content.Id, languageId, model);
+        }
+
         // Restore original Title for translations
         if (isTranslation && originalTitle != null)
         {
@@ -220,14 +228,6 @@ internal class ContentService<TContent, TField, TModelBase> : IContentService<TC
             {
                 contentWithExcerptRestore.Excerpt = originalExcerpt;
             }
-        }
-
-        //
-        // 4: Map translation
-        //
-        if (content is ITranslatable translatableContent && !string.IsNullOrEmpty(languageId))
-        {
-            translatableContent.SetTranslation(content.Id, languageId, model);
         }
         //
         // 4: Map category
