@@ -131,7 +131,10 @@ internal sealed class ContentService : IContentService
     {
         GenericContent model = null;
 
-        // Make sure we have a language id
+        // Track if user requested original content (null) vs a specific translation
+        var requestedLanguageId = languageId;
+
+        // For caching purposes, use default language if none specified
         if (languageId == null)
         {
             languageId = (await _langService.GetDefaultAsync())?.Id;
@@ -170,7 +173,9 @@ internal sealed class ContentService : IContentService
         // If we don't have a model, get it from the repository
         if (model == null)
         {
-            model = await _repo.GetById<T>(id, languageId).ConfigureAwait(false);
+            // Only pass languageId to repository if user explicitly requested a translation
+            // If user requested original content (null), pass null to get original
+            model = await _repo.GetById<T>(id, requestedLanguageId).ConfigureAwait(false);
 
             await OnLoadAsync(model, languageId).ConfigureAwait(false);
         }
@@ -184,6 +189,7 @@ internal sealed class ContentService : IContentService
 
         return null;
     }
+
 
     /// <summary>
     /// Gets all available categories for the specified group.

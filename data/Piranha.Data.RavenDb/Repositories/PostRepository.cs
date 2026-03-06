@@ -361,7 +361,7 @@ internal class PostRepository : IPostRepository
                 Url = c.Url,
                 IsApproved = c.IsApproved,
                 Body = c.Body,
-                Created = c.Created
+                Created = c.Created.DateTime
             }).FirstOrDefaultAsync();
     }
 
@@ -612,7 +612,7 @@ internal class PostRepository : IPostRepository
                 Url = c.Url,
                 IsApproved = c.IsApproved,
                 Body = c.Body,
-                Created = c.Created
+                Created = c.Created.DateTime
             }).ToListAsync();
     }
 

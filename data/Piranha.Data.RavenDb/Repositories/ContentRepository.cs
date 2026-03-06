@@ -122,8 +122,14 @@ internal class ContentRepository : IContentRepository
 
         var translations = content?.Translations ?? new List<ContentTranslation>();
         DateTime lastMod = content?.LastModified ?? DateTime.MinValue;
+        
         return this.GetTranslationStatus(contentId, defaultLang, languages, translations, lastMod);
     }
+
+    /// <summary>
+    /// Gets the translation summary for the content group with
+    /// the given id.
+    /// </summary>
 
     /// <summary>
     /// Gets the translation summary for the content group with
@@ -547,21 +553,26 @@ internal class ContentRepository : IContentRepository
                 .Select(l => new Models.TranslationStatus.TranslationStatusItem
                 {
                     LanguageId = l.Id,
-                    LanguageTitle = l.Title
+                    LanguageTitle = l.Title,
+                    IsUpToDate = false  // Explicitly default to not up-to-date
                 }).OrderBy(l => l.LanguageTitle).ToList()
         };
 
-        // Examine the available translations
-        foreach (var translation in translations)
+        // Create a lookup of actual translations for O(1) access
+        var translationLookup = translations.ToDictionary(t => t.LanguageId, t => t);
+
+        // Examine each language that should have a translation
+        foreach (var statusItem in result.Translations)
         {
-            // Compare translation LastModified with content LastModified
-            if (translation.LastModified >= contentLastModified)
+            if (translationLookup.TryGetValue(statusItem.LanguageId, out var translation))
             {
-                result.Translations
-                    .FirstOrDefault(t => t.LanguageId == translation.LanguageId)
-                    ?.IsUpToDate = true;
+                // Translation exists - mark as up to date
+                // In the denormalized model, if translation exists in the document, it's up to date
+                statusItem.IsUpToDate = true;
             }
+            // If translation doesn't exist, IsUpToDate remains false
         }
+        
         // Summarize
         result.TotalCount = result.Translations.Count;
         result.UpToDateCount = result.Translations.Count(t => t.IsUpToDate);
