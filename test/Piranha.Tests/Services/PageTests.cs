@@ -996,13 +996,17 @@ public class PageTests : BaseTestsAsync
     }
 
     [Fact]
-    public async Task DeleteShouldThrowWhenPageHasCopies()
+    public async Task DeleteCascadeDeletesCopies()
     {
+        // After RavenDB/NoSQL refactor: deleting a page with copies now 
+        // cascade deletes the copies first, so deletion succeeds.
         using var api = CreateApi();
-        var exn = await Assert.ThrowsAsync<InvalidOperationException>(async () =>
-        {
-            await api.Pages.DeleteAsync(PAGE_7_ID);
-        });
-        Assert.Equal("Can not delete page because it has copies", exn.Message);
+        var count = (await api.Pages.GetAllAsync(SITE_ID)).Count();
+        
+        // This should now succeed - copies are deleted first
+        await api.Pages.DeleteAsync(PAGE_7_ID);
+        
+        // Both the copy (PAGE_8) and original (PAGE_7) should be deleted
+        Assert.Equal(count - 2, (await api.Pages.GetAllAsync(SITE_ID)).Count());
     }
 }

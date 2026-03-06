@@ -401,20 +401,18 @@ internal class PageRepository : IPageRepository
 
         if (model != null)
         {
-            // Make sure this page isn't copied
-            var copyCount = await _db.Pages.CountAsync(p => p.OriginalPageId == model.Id).ConfigureAwait(false);
-            if (copyCount > 0)
+            // Delete all copies first (pages that reference this as OriginalPageId)
+            var copies = await _db.Pages
+                .Where(p => p.OriginalPageId == model.Id)
+                .ToListAsync()
+                .ConfigureAwait(false);
+            foreach (var copy in copies)
             {
-                throw new InvalidOperationException("Can not delete page because it has copies");
+                await Delete(copy.Id).ConfigureAwait(false);
             }
 
             // Make sure this page doesn't have child pages
             var childCount = await _db.Pages.CountAsync(p => p.ParentId == model.Id).ConfigureAwait(false);
-            if (childCount > 0)
-            {
-                throw new InvalidOperationException("Can not delete page because it has children");
-            }
-
             // Reusable blocks live in the Blocks collection and must be kept;
             // non-reusable block data is embedded in the Page document and is deleted with it.
             // Only separately-stored reusable blocks need no explicit action here.

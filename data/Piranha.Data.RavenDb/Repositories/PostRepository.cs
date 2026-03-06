@@ -626,6 +626,13 @@ internal class PostRepository : IPostRepository
     /// <param name="isDraft">If the model should be saved as a draft</param>
     private async Task Save<T>(T model, bool isDraft) where T : Models.PostBase
     {
+        // Clone the model when saving as draft to avoid modifying the original object
+        if (isDraft)
+        {
+            var json = JsonSerializer.Serialize(model);
+            model = JsonSerializer.Deserialize<T>(json);
+        }
+
         var type = App.PostTypes.GetById(model.TypeId);
         var lastModified = DateTime.MinValue;
 
@@ -740,6 +747,12 @@ internal class PostRepository : IPostRepository
                 .FirstOrDefaultAsync(p => p.Id == model.Id)
                 .ConfigureAwait(false);
 
+            // Clone the post entity when saving as draft to avoid modifying the original in DB
+            if (isDraft && post != null)
+            {
+                var json = JsonSerializer.Serialize(post);
+                post = JsonSerializer.Deserialize<Post>(json);
+            }
             // If not, create a new post
             if (post == null)
             {
