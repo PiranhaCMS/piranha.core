@@ -1,0 +1,457 @@
+Test run for C:\Users\bbqch\proj\microbians\piranha\test\Piranha.Tests\bin\Debug\net10.0\Piranha.Tests.dll (.NETCoreApp,Version=v10.0)
+VSTest version 18.0.1 (x64)
+
+Starting test execution, please wait...
+A total of 1 test files matched the specified pattern.
+[xUnit.net 00:01:12.27]     Piranha.Tests.Sitemaps.GetPartial [FAIL]
+[xUnit.net 00:01:12.29]     Piranha.Tests.App.MarkdownNullString [FAIL]
+[xUnit.net 00:01:12.31]     Piranha.Tests.Config.CommentsApprove [FAIL]
+[xUnit.net 00:01:12.34]     Piranha.Tests.Blocks.DeserializeTextBlock [FAIL]
+  Failed Piranha.Tests.Sitemaps.GetPartial [1 ms]
+  Error Message:
+   Raven.Client.Exceptions.Documents.Indexes.IndexCreationException : Raven.Client.Exceptions.Documents.Indexes.IndexCreationException: Failed to create indexes. Operation timed out after: 00:00:15.
+Static: Posts/ByBlog
+Node A state is Leader, I'm the only one in the cluster, so I'm the leader (at 03/06/2026 05:31:45)
+
+ ---> System.TimeoutException: Waited for 00:00:15 but didn't get an index notification for 125. Last commit index is: 121. Number of errors is: 0.
+Index: 106. Exception: 
+Index: 106. Exception: 
+Index: 121. Exception: 
+
+   at Raven.Server.ServerWide.AbstractRaftIndexNotifications`1.ThrowTimeoutException(TimeSpan value, Int64 index, Int64 lastModifiedIndex, Boolean isExecution) in /_/72003/src/Raven.Server/ServerWide/AbstractRaftIndexNotifications.cs:line 132
+   at Raven.Server.ServerWide.AbstractRaftIndexNotifications`1.WaitForIndexNotification(Int64 index, TimeSpan timeout) in /_/72003/src/Raven.Server/ServerWide/AbstractRaftIndexNotifications.cs:line 62
+   at Raven.Server.Documents.Indexes.DatabaseIndexCreateController.WaitForIndexNotificationAsync(Int64 index, Nullable`1 timeout) in /_/72003/src/Raven.Server/Documents/Indexes/DatabaseIndexCreateController.cs:line 57
+   at Raven.Server.Documents.Indexes.AbstractIndexCreateController.IndexBatchScope.SaveAsync() in /_/72003/src/Raven.Server/Documents/Indexes/AbstractIndexCreateController.cs:line 382
+   --- End of inner exception stack trace ---
+   at Raven.Server.Documents.Indexes.AbstractIndexCreateController.IndexBatchScope.ThrowIndexCreationException(Exception exception, String reason) in /_/72003/src/Raven.Server/Documents/Indexes/AbstractIndexCreateController.cs:line 412
+   at Raven.Server.Documents.Indexes.AbstractIndexCreateController.IndexBatchScope.SaveAsync() in /_/72003/src/Raven.Server/Documents/Indexes/AbstractIndexCreateController.cs:line 386
+   at Raven.Server.Documents.Handlers.Admin.Processors.Indexes.AbstractAdminIndexHandlerProcessorForPut`2.ExecuteAsync() in /_/72003/src/Raven.Server/Documents/Handlers/Admin/Processors/Indexes/AbstractAdminIndexHandlerProcessorForPut.cs:line 111
+   at Raven.Server.Documents.Handlers.Admin.AdminIndexHandler.Put() in /_/72003/src/Raven.Server/Documents/Handlers/Admin/AdminIndexHandler.cs:line 25
+   at Raven.Server.Routing.RequestRouter.HandlePath(RequestHandlerContext reqCtx) in /_/72003/src/Raven.Server/Routing/RequestRouter.cs:line 419
+   at Raven.Server.RavenServerStartup.RequestHandler(HttpContext context) in /_/72003/src/Raven.Server/RavenServerStartup.cs:line 185
+  Stack Trace:
+     at Raven.Client.Exceptions.ExceptionDispatcher.Throw(JsonOperationContext context, HttpResponseMessage response, CommandUnsuccessfulResponseBehavior unsuccessfulResponseBehavior)
+   at Raven.Client.Exceptions.ExceptionDispatcher.Throw(JsonOperationContext context, HttpResponseMessage response, CommandUnsuccessfulResponseBehavior unsuccessfulResponseBehavior)
+   at Raven.Client.Http.Behaviors.DefaultCommandResponseBehavior.TryHandleUnsuccessfulResponseAsync[TResult](JsonOperationContext context, RavenCommand`1 command, HttpResponseMessage response, CommandUnsuccessfulResponseBehavior unsuccessfulResponseBehavior)
+   at Raven.Client.Http.RequestExecutor.HandleUnsuccessfulResponse[TResult](ServerNode chosenNode, Nullable`1 nodeIndex, JsonOperationContext context, RavenCommand`1 command, HttpRequestMessage request, HttpResponseMessage response, String url, SessionInfo sessionInfo, Boolean shouldRetry, CancellationToken token)
+   at Raven.Client.Http.RequestExecutor.ExecuteAsync[TResult](ServerNode chosenNode, Nullable`1 nodeIndex, JsonOperationContext context, RavenCommand`1 command, Boolean shouldRetry, SessionInfo sessionInfo, CancellationToken token)
+   at Raven.Client.Http.RequestExecutor.ExecuteAsync[TResult](ServerNode chosenNode, Nullable`1 nodeIndex, JsonOperationContext context, RavenCommand`1 command, Boolean shouldRetry, SessionInfo sessionInfo, CancellationToken token)
+   at Raven.Client.Documents.Operations.MaintenanceOperationExecutor.SendAsync[TResult](IMaintenanceOperation`1 operation, CancellationToken token)
+   at Raven.Client.Util.AsyncHelpers.<>c__DisplayClass3_0.<<RunSync>b__0>d.MoveNext()
+--- End of stack trace from previous location ---
+   at Raven.Client.Util.AsyncHelpers.HandleException(AggregateException ex, Stopwatch sw)
+   at Raven.Client.Util.AsyncHelpers.RunSync(Func`1 task)
+   at Raven.Client.Documents.Indexes.AbstractIndexCreationTaskBase`1.Execute(IDocumentStore store, DocumentConventions conventions, String database)
+   at Piranha.Data.RavenDb.IndexCreator.CreateIndexes(IDocumentStore store) in D:\proj\microbians\piranha\data\Piranha.Data.RavenDb\IndexCreator.cs:line 19
+   at Piranha.Tests.RavenTestBase.CreateStore(String database) in D:\proj\microbians\piranha\test\Piranha.Tests\RavenTestBase.cs:line 47
+   at Piranha.Tests.BaseTests..ctor() in D:\proj\microbians\piranha\test\Piranha.Tests\BaseTests.cs:line 35
+   at Piranha.Tests.Sitemaps..ctor() in D:\proj\microbians\piranha\test\Piranha.Tests\Sitemaps.cs:line 20
+   at System.RuntimeType.CreateInstanceDefaultCtor(Boolean publicOnly, Boolean wrapExceptions)
+  Failed Piranha.Tests.App.MarkdownNullString [1 ms]
+  Error Message:
+   Raven.Client.Exceptions.Documents.Indexes.IndexCreationException : Raven.Client.Exceptions.Documents.Indexes.IndexCreationException: Failed to create indexes. Operation timed out after: 00:00:15.
+Static: Pages/BySite
+Node A state is Leader, I'm the only one in the cluster, so I'm the leader (at 03/06/2026 05:31:45)
+
+ ---> System.TimeoutException: Waited for 00:00:15 but didn't get an index notification for 131. Last commit index is: 112. Number of errors is: 0.
+Index: 112. Exception: 
+Index: 112. Exception: 
+
+   at Raven.Server.ServerWide.AbstractRaftIndexNotifications`1.ThrowTimeoutException(TimeSpan value, Int64 index, Int64 lastModifiedIndex, Boolean isExecution) in /_/72003/src/Raven.Server/ServerWide/AbstractRaftIndexNotifications.cs:line 132
+   at Raven.Server.ServerWide.AbstractRaftIndexNotifications`1.WaitForIndexNotification(Int64 index, TimeSpan timeout) in /_/72003/src/Raven.Server/ServerWide/AbstractRaftIndexNotifications.cs:line 62
+   at Raven.Server.Documents.Indexes.DatabaseIndexCreateController.WaitForIndexNotificationAsync(Int64 index, Nullable`1 timeout) in /_/72003/src/Raven.Server/Documents/Indexes/DatabaseIndexCreateController.cs:line 57
+   at Raven.Server.Documents.Indexes.AbstractIndexCreateController.IndexBatchScope.SaveAsync() in /_/72003/src/Raven.Server/Documents/Indexes/AbstractIndexCreateController.cs:line 382
+   --- End of inner exception stack trace ---
+   at Raven.Server.Documents.Indexes.AbstractIndexCreateController.IndexBatchScope.ThrowIndexCreationException(Exception exception, String reason) in /_/72003/src/Raven.Server/Documents/Indexes/AbstractIndexCreateController.cs:line 412
+   at Raven.Server.Documents.Indexes.AbstractIndexCreateController.IndexBatchScope.SaveAsync() in /_/72003/src/Raven.Server/Documents/Indexes/AbstractIndexCreateController.cs:line 386
+   at Raven.Server.Documents.Handlers.Admin.Processors.Indexes.AbstractAdminIndexHandlerProcessorForPut`2.ExecuteAsync() in /_/72003/src/Raven.Server/Documents/Handlers/Admin/Processors/Indexes/AbstractAdminIndexHandlerProcessorForPut.cs:line 111
+   at Raven.Server.Documents.Handlers.Admin.AdminIndexHandler.Put() in /_/72003/src/Raven.Server/Documents/Handlers/Admin/AdminIndexHandler.cs:line 25
+   at Raven.Server.Routing.RequestRouter.HandlePath(RequestHandlerContext reqCtx) in /_/72003/src/Raven.Server/Routing/RequestRouter.cs:line 419
+   at Raven.Server.RavenServerStartup.RequestHandler(HttpContext context) in /_/72003/src/Raven.Server/RavenServerStartup.cs:line 185
+  Stack Trace:
+     at Raven.Client.Exceptions.ExceptionDispatcher.Throw(JsonOperationContext context, HttpResponseMessage response, CommandUnsuccessfulResponseBehavior unsuccessfulResponseBehavior)
+   at Raven.Client.Exceptions.ExceptionDispatcher.Throw(JsonOperationContext context, HttpResponseMessage response, CommandUnsuccessfulResponseBehavior unsuccessfulResponseBehavior)
+   at Raven.Client.Http.Behaviors.DefaultCommandResponseBehavior.TryHandleUnsuccessfulResponseAsync[TResult](JsonOperationContext context, RavenCommand`1 command, HttpResponseMessage response, CommandUnsuccessfulResponseBehavior unsuccessfulResponseBehavior)
+   at Raven.Client.Http.RequestExecutor.HandleUnsuccessfulResponse[TResult](ServerNode chosenNode, Nullable`1 nodeIndex, JsonOperationContext context, RavenCommand`1 command, HttpRequestMessage request, HttpResponseMessage response, String url, SessionInfo sessionInfo, Boolean shouldRetry, CancellationToken token)
+   at Raven.Client.Http.RequestExecutor.ExecuteAsync[TResult](ServerNode chosenNode, Nullable`1 nodeIndex, JsonOperationContext context, RavenCommand`1 command, Boolean shouldRetry, SessionInfo sessionInfo, CancellationToken token)
+   at Raven.Client.Http.RequestExecutor.ExecuteAsync[TResult](ServerNode chosenNode, Nullable`1 nodeIndex, JsonOperationContext context, RavenCommand`1 command, Boolean shouldRetry, SessionInfo sessionInfo, CancellationToken token)
+   at Raven.Client.Http.RequestExecutor.UnlikelyExecuteAsync[TResult](RavenCommand`1 command, JsonOperationContext context, Task topologyUpdate, SessionInfo sessionInfo, CancellationToken token)
+   at Raven.Client.Documents.Operations.MaintenanceOperationExecutor.SendAsync[TResult](IMaintenanceOperation`1 operation, CancellationToken token)
+   at Raven.Client.Util.AsyncHelpers.<>c__DisplayClass3_0.<<RunSync>b__0>d.MoveNext()
+--- End of stack trace from previous location ---
+   at Raven.Client.Util.AsyncHelpers.HandleException(AggregateException ex, Stopwatch sw)
+   at Raven.Client.Util.AsyncHelpers.RunSync(Func`1 task)
+   at Raven.Client.Documents.Indexes.AbstractIndexCreationTaskBase`1.Execute(IDocumentStore store, DocumentConventions conventions, String database)
+   at Piranha.Data.RavenDb.IndexCreator.CreateIndexes(IDocumentStore store) in D:\proj\microbians\piranha\data\Piranha.Data.RavenDb\IndexCreator.cs:line 18
+   at Piranha.Tests.RavenTestBase.CreateStore(String database) in D:\proj\microbians\piranha\test\Piranha.Tests\RavenTestBase.cs:line 47
+   at Piranha.Tests.BaseTests..ctor() in D:\proj\microbians\piranha\test\Piranha.Tests\BaseTests.cs:line 35
+   at Piranha.Tests.App..ctor()
+   at System.RuntimeType.CreateInstanceDefaultCtor(Boolean publicOnly, Boolean wrapExceptions)
+  Failed Piranha.Tests.Config.CommentsApprove [57 s]
+  Error Message:
+   System.AggregateException : One or more errors occurred. (System.TimeoutException: Waited for 00:00:15 for task with index 129 to complete. Last commit index is: 135. Number of errors is: 0.
+   at Raven.Server.ServerWide.AbstractRaftIndexNotifications`1.ThrowTimeoutException(TimeSpan value, Int64 index, Int64 lastModifiedIndex, Boolean isExecution) in /_/72003/src/Raven.Server/ServerWide/AbstractRaftIndexNotifications.cs:line 132
+   at Raven.Server.ServerWide.AbstractRaftIndexNotifications`1.WaitForIndexNotification(Int64 index, TimeSpan timeout) in /_/72003/src/Raven.Server/ServerWide/AbstractRaftIndexNotifications.cs:line 68
+   at Raven.Server.ServerWide.ClusterStateMachine.WaitForIndexNotification(Int64 index, Nullable`1 timeout) in /_/72003/src/Raven.Server/ServerWide/ClusterStateMachine.cs:line 1551
+   at Raven.Server.Web.System.AdminDatabasesHandler.WaitForDeletionToComplete(TransactionOperationContext context, Parameters parameters, Int64 index, IList`1 waitOnDeletion) in /_/72003/src/Raven.Server/Web/System/AdminDatabasesHandler.cs:line 760
+   at Raven.Server.Web.System.AdminDatabasesHandler.Delete() in /_/72003/src/Raven.Server/Web/System/AdminDatabasesHandler.cs:line 740
+   at Raven.Server.Routing.RequestRouter.HandlePath(RequestHandlerContext reqCtx) in /_/72003/src/Raven.Server/Routing/RequestRouter.cs:line 424
+   at Raven.Server.RavenServerStartup.RequestHandler(HttpContext context) in /_/72003/src/Raven.Server/RavenServerStartup.cs:line 185
+The server at /admin/databases?raft-request-id=a878e1ad-d4ea-4140-b32e-314c2a521ddb responded with status code: RequestTimeout.)
+---- Raven.Client.Exceptions.RavenException : System.TimeoutException: Waited for 00:00:15 for task with index 129 to complete. Last commit index is: 135. Number of errors is: 0.
+   at Raven.Server.ServerWide.AbstractRaftIndexNotifications`1.ThrowTimeoutException(TimeSpan value, Int64 index, Int64 lastModifiedIndex, Boolean isExecution) in /_/72003/src/Raven.Server/ServerWide/AbstractRaftIndexNotifications.cs:line 132
+   at Raven.Server.ServerWide.AbstractRaftIndexNotifications`1.WaitForIndexNotification(Int64 index, TimeSpan timeout) in /_/72003/src/Raven.Server/ServerWide/AbstractRaftIndexNotifications.cs:line 68
+   at Raven.Server.ServerWide.ClusterStateMachine.WaitForIndexNotification(Int64 index, Nullable`1 timeout) in /_/72003/src/Raven.Server/ServerWide/ClusterStateMachine.cs:line 1551
+   at Raven.Server.Web.System.AdminDatabasesHandler.WaitForDeletionToComplete(TransactionOperationContext context, Parameters parameters, Int64 index, IList`1 waitOnDeletion) in /_/72003/src/Raven.Server/Web/System/AdminDatabasesHandler.cs:line 760
+   at Raven.Server.Web.System.AdminDatabasesHandler.Delete() in /_/72003/src/Raven.Server/Web/System/AdminDatabasesHandler.cs:line 740
+   at Raven.Server.Routing.RequestRouter.HandlePath(RequestHandlerContext reqCtx) in /_/72003/src/Raven.Server/Routing/RequestRouter.cs:line 424
+   at Raven.Server.RavenServerStartup.RequestHandler(HttpContext context) in /_/72003/src/Raven.Server/RavenServerStartup.cs:line 185
+The server at /admin/databases?raft-request-id=a878e1ad-d4ea-4140-b32e-314c2a521ddb responded with status code: RequestTimeout.
+-------- System.TimeoutException : System.TimeoutException: Waited for 00:00:15 for task with index 129 to complete. Last commit index is: 135. Number of errors is: 0.
+   at Raven.Server.ServerWide.AbstractRaftIndexNotifications`1.ThrowTimeoutException(TimeSpan value, Int64 index, Int64 lastModifiedIndex, Boolean isExecution) in /_/72003/src/Raven.Server/ServerWide/AbstractRaftIndexNotifications.cs:line 132
+   at Raven.Server.ServerWide.AbstractRaftIndexNotifications`1.WaitForIndexNotification(Int64 index, TimeSpan timeout) in /_/72003/src/Raven.Server/ServerWide/AbstractRaftIndexNotifications.cs:line 68
+   at Raven.Server.ServerWide.ClusterStateMachine.WaitForIndexNotification(Int64 index, Nullable`1 timeout) in /_/72003/src/Raven.Server/ServerWide/ClusterStateMachine.cs:line 1551
+   at Raven.Server.Web.System.AdminDatabasesHandler.WaitForDeletionToComplete(TransactionOperationContext context, Parameters parameters, Int64 index, IList`1 waitOnDeletion) in /_/72003/src/Raven.Server/Web/System/AdminDatabasesHandler.cs:line 760
+   at Raven.Server.Web.System.AdminDatabasesHandler.Delete() in /_/72003/src/Raven.Server/Web/System/AdminDatabasesHandler.cs:line 740
+   at Raven.Server.Routing.RequestRouter.HandlePath(RequestHandlerContext reqCtx) in /_/72003/src/Raven.Server/Routing/RequestRouter.cs:line 424
+   at Raven.Server.RavenServerStartup.RequestHandler(HttpContext context) in /_/72003/src/Raven.Server/RavenServerStartup.cs:line 185
+The server at /admin/databases?raft-request-id=a878e1ad-d4ea-4140-b32e-314c2a521ddb responded with status code: RequestTimeout.
+  Stack Trace:
+     at Raven.TestDriver.RavenTestDriver.Dispose()
+   at Piranha.Tests.RavenTestBase.Dispose() in D:\proj\microbians\piranha\test\Piranha.Tests\RavenTestBase.cs:line 61
+   at ReflectionAbstractionExtensions.DisposeTestClass(ITest test, Object testClass, IMessageBus messageBus, ExecutionTimer timer, CancellationTokenSource cancellationTokenSource) in /_/src/xunit.execution/Extensions/ReflectionAbstractionExtensions.cs:line 79
+----- Inner Stack Trace -----
+   at Raven.Client.Http.RequestExecutor.ThrowFailedToContactAllNodes[TResult](RavenCommand`1 command, HttpRequestMessage request)
+   at Raven.Client.Http.RequestExecutor.ExecuteAsync[TResult](ServerNode chosenNode, Nullable`1 nodeIndex, JsonOperationContext context, RavenCommand`1 command, Boolean shouldRetry, SessionInfo sessionInfo, CancellationToken token)
+   at Raven.Client.Http.RequestExecutor.ExecuteAsync[TResult](ServerNode chosenNode, Nullable`1 nodeIndex, JsonOperationContext context, RavenCommand`1 command, Boolean shouldRetry, SessionInfo sessionInfo, CancellationToken token)
+   at Raven.Client.Http.RequestExecutor.UnlikelyExecuteAsync[TResult](RavenCommand`1 command, JsonOperationContext context, Task topologyUpdate, SessionInfo sessionInfo, CancellationToken token)
+   at Raven.Client.ServerWide.Operations.ServerOperationExecutor.SendAsync[TResult](IServerOperation`1 operation, CancellationToken token)
+   at Raven.Client.Util.AsyncHelpers.<>c__DisplayClass4_0`1.<<RunSync>b__0>d.MoveNext()
+--- End of stack trace from previous location ---
+   at Raven.Client.Util.AsyncHelpers.HandleException(AggregateException ex, Stopwatch sw)
+   at Raven.Client.Util.AsyncHelpers.RunSync[T](Func`1 task)
+   at Raven.Client.ServerWide.Operations.ServerOperationExecutor.Send[TResult](IServerOperation`1 operation)
+   at Raven.TestDriver.RavenTestDriver.<>c__DisplayClass22_0.<GetDocumentStore>b__0(Object sender, EventArgs args)
+   at Raven.Client.Documents.DocumentStore.Dispose()
+   at Raven.TestDriver.RavenTestDriver.Dispose()
+----- Inner Stack Trace -----
+
+  Failed Piranha.Tests.Blocks.DeserializeTextBlock [1 ms]
+  Error Message:
+   Raven.Client.Exceptions.RavenException : System.TimeoutException: Waited for 00:00:15 but didn't get an index notification for 136. Last commit index is: 135. Number of errors is: 0.
+Index: 88. Type: PutAutoIndexCommand. ExecutionTime: 00:00:00.0036055. Term: 1. LeaderErrorCount: 0. LeaderShipDuration: 7218. Exception: 
+Index: 89. Type: PutIndexesCommand. ExecutionTime: 00:00:00.0017735. Term: 1. LeaderErrorCount: 0. LeaderShipDuration: 7237. Exception: 
+Index: 90. Type: PutIndexesCommand. ExecutionTime: 00:00:00.0027960. Term: 1. LeaderErrorCount: 0. LeaderShipDuration: 7275. Exception: 
+Index: 91. Type: RemoveNodeFromDatabaseCommand. ExecutionTime: 00:00:00.0013799. Term: 1. LeaderErrorCount: 0. LeaderShipDuration: 7353. Exception: 
+Index: 92. Type: PutIndexesCommand. ExecutionTime: 00:00:00.0018222. Term: 1. LeaderErrorCount: 0. LeaderShipDuration: 7354. Exception: 
+Index: 93. Type: PutIndexesCommand. ExecutionTime: 00:00:00.0031914. Term: 1. LeaderErrorCount: 0. LeaderShipDuration: 7372. Exception: 
+Index: 94. Type: RemoveNodeFromDatabaseCommand. ExecutionTime: 00:00:00.0016721. Term: 1. LeaderErrorCount: 0. LeaderShipDuration: 7390. Exception: 
+Index: 95. Type: RemoveNodeFromDatabaseCommand. ExecutionTime: 00:00:00.0014468. Term: 1. LeaderErrorCount: 0. LeaderShipDuration: 7393. Exception: 
+Index: 96. Type: DeleteDatabaseCommand. ExecutionTime: 00:00:00.0031609. Term: 1. LeaderErrorCount: 0. LeaderShipDuration: 7431. Exception: 
+Index: 97. Type: PutIndexesCommand. ExecutionTime: 00:00:00.0025802. Term: 1. LeaderErrorCount: 0. LeaderShipDuration: 7440. Exception: 
+Index: 98. Type: RemoveNodeFromDatabaseCommand. ExecutionTime: 00:00:00.0014907. Term: 1. LeaderErrorCount: 0. LeaderShipDuration: 7441. Exception: 
+Index: 99. Type: AddDatabaseCommand. ExecutionTime: 00:00:00.0016444. Term: 1. LeaderErrorCount: 0. LeaderShipDuration: 7460. Exception: 
+Index: 100. Type: RemoveNodeFromDatabaseCommand. ExecutionTime: 00:00:00.0012176. Term: 1. LeaderErrorCount: 0. LeaderShipDuration: 7490. Exception: 
+Index: 101. Type: AddDatabaseCommand. ExecutionTime: 00:00:00.0009478. Term: 1. LeaderErrorCount: 0. LeaderShipDuration: 7491. Exception: 
+Index: 102. Type: AddDatabaseCommand. ExecutionTime: 00:00:00.0008950. Term: 1. LeaderErrorCount: 0. LeaderShipDuration: 7492. Exception: 
+Index: 103. Type: AddDatabaseCommand. ExecutionTime: 00:00:00.0007214. Term: 1. LeaderErrorCount: 0. LeaderShipDuration: 7492. Exception: 
+Index: 104. Type: PutIndexesCommand. ExecutionTime: 00:00:00.0035242. Term: 1. LeaderErrorCount: 0. LeaderShipDuration: 7528. Exception: 
+Index: 105. Type: RemoveNodeFromDatabaseCommand. ExecutionTime: 00:00:00.0016129. Term: 1. LeaderErrorCount: 0. LeaderShipDuration: 7577. Exception: 
+Index: 106. Type: AddDatabaseCommand. ExecutionTime: 00:00:00.0014221. Term: 1. LeaderErrorCount: 0. LeaderShipDuration: 7611. Exception: 
+Index: 107. Type: PutIndexesCommand. ExecutionTime: 00:00:00.0015613. Term: 1. LeaderErrorCount: 0. LeaderShipDuration: 7635. Exception: 
+Index: 108. Type: PutAutoIndexCommand. ExecutionTime: 00:00:00.0035819. Term: 1. LeaderErrorCount: 0. LeaderShipDuration: 7638. Exception: 
+Index: 109. Type: PutIndexesCommand. ExecutionTime: 00:00:00.0029197. Term: 1. LeaderErrorCount: 0. LeaderShipDuration: 7641. Exception: 
+Index: 110. Type: PutIndexesCommand. ExecutionTime: 00:00:00.0015564. Term: 1. LeaderErrorCount: 0. LeaderShipDuration: 7659. Exception: 
+Index: 111. Type: PutIndexesCommand. ExecutionTime: 00:00:00.0006721. Term: 1. LeaderErrorCount: 0. LeaderShipDuration: 7660. Exception: 
+Index: 112. Type: AddDatabaseCommand. ExecutionTime: 00:00:00.0017106. Term: 1. LeaderErrorCount: 0. LeaderShipDuration: 7698. Exception: 
+Index: 113. Type: PutIndexesCommand. ExecutionTime: 00:00:00.0022230. Term: 1. LeaderErrorCount: 0. LeaderShipDuration: 7717. Exception: 
+Index: 114. Type: PutIndexesCommand. ExecutionTime: 00:00:00.0009848. Term: 1. LeaderErrorCount: 0. LeaderShipDuration: 7718. Exception: 
+Index: 115. Type: DeleteDatabaseCommand. ExecutionTime: 00:00:00.0037805. Term: 1. LeaderErrorCount: 0. LeaderShipDuration: 7761. Exception: 
+Index: 116. Type: PutIndexesCommand. ExecutionTime: 00:00:00.0016796. Term: 1. LeaderErrorCount: 0. LeaderShipDuration: 7763. Exception: 
+Index: 117. Type: DeleteDatabaseCommand. ExecutionTime: 00:00:00.0037119. Term: 1. LeaderErrorCount: 0. LeaderShipDuration: 7820. Exception: 
+Index: 118. Type: PutIndexesCommand. ExecutionTime: 00:00:00.0015986. Term: 1. LeaderErrorCount: 0. LeaderShipDuration: 7821. Exception: 
+Index: 119. Type: PutIndexesCommand. ExecutionTime: 00:00:00.0021646. Term: 1. LeaderErrorCount: 0. LeaderShipDuration: 7850. Exception: 
+Index: 120. Type: PutIndexesCommand. ExecutionTime: 00:00:00.0015183. Term: 1. LeaderErrorCount: 0. LeaderShipDuration: 7852. Exception: 
+Index: 121. Type: PutIndexesCommand. ExecutionTime: 00:00:00.0018525. Term: 1. LeaderErrorCount: 0. LeaderShipDuration: 7883. Exception: 
+Index: 122. Type: PutIndexesCommand. ExecutionTime: 00:00:00.0025956. Term: 1. LeaderErrorCount: 0. LeaderShipDuration: 7958. Exception: 
+Index: 123. Type: PutIndexesCommand. ExecutionTime: 00:00:00.0022263. Term: 1. LeaderErrorCount: 0. LeaderShipDuration: 7960. Exception: 
+Index: 124. Type: PutIndexesCommand. ExecutionTime: 00:00:00.0015470. Term: 1. LeaderErrorCount: 0. LeaderShipDuration: 7962. Exception: 
+Index: 125. Type: PutIndexesCommand. ExecutionTime: 00:00:00.0018890. Term: 1. LeaderErrorCount: 0. LeaderShipDuration: 7998. Exception: 
+Index: 126. Type: PutIndexesCommand. ExecutionTime: 00:00:00.0027560. Term: 1. LeaderErrorCount: 0. LeaderShipDuration: 8049. Exception: 
+Index: 127. Type: PutIndexesCommand. ExecutionTime: 00:00:00.0016719. Term: 1. LeaderErrorCount: 0. LeaderShipDuration: 8050. Exception: 
+Index: 128. Type: RemoveNodeFromDatabaseCommand. ExecutionTime: 00:00:00.0015707. Term: 1. LeaderErrorCount: 0. LeaderShipDuration: 8136. Exception: 
+Index: 129. Type: DeleteDatabaseCommand. ExecutionTime: 00:00:00.0037399. Term: 1. LeaderErrorCount: 0. LeaderShipDuration: 8153. Exception: 
+Index: 130. Type: PutIndexesCommand. ExecutionTime: 00:00:00.0040764. Term: 1. LeaderErrorCount: 0. LeaderShipDuration: 8157. Exception: 
+Index: 131. Type: PutIndexesCommand. ExecutionTime: 00:00:00.0020539. Term: 1. LeaderErrorCount: 0. LeaderShipDuration: 8209. Exception: 
+Index: 132. Type: PutIndexesCommand. ExecutionTime: 00:00:00.0022893. Term: 1. LeaderErrorCount: 0. LeaderShipDuration: 8211. Exception: 
+Index: 133. Type: PutIndexesCommand. ExecutionTime: 00:00:00.0030675. Term: 1. LeaderErrorCount: 0. LeaderShipDuration: 8214. Exception: 
+Index: 134. Type: PutIndexesCommand. ExecutionTime: 00:00:00.0017948. Term: 1. LeaderErrorCount: 0. LeaderShipDuration: 8216. Exception: 
+Index: 135. Type: RemoveNodeFromDatabaseCommand. ExecutionTime: 00:00:00.0017989. Term: 1. LeaderErrorCount: 0. LeaderShipDuration: 8249. Exception: 
+Index: 136. Type: AddDatabaseCommand. ExecutionTime: 00:00:00.0027510. Term: 1. LeaderErrorCount: 0. LeaderShipDuration: 8267. Exception: 
+Index: 137. Type: PutIndexesCommand. ExecutionTime: 00:00:57.3594960. Term: 1. LeaderErrorCount: 0. LeaderShipDuration: 65635. Exception: 
+
+   at Raven.Server.ServerWide.AbstractRaftIndexNotifications`1.ThrowTimeoutException(TimeSpan value, Int64 index, Int64 lastModifiedIndex, Boolean isExecution) in /_/72003/src/Raven.Server/ServerWide/AbstractRaftIndexNotifications.cs:line 132
+   at Raven.Server.ServerWide.AbstractRaftIndexNotifications`1.WaitForIndexNotification(Int64 index, TimeSpan timeout) in /_/72003/src/Raven.Server/ServerWide/AbstractRaftIndexNotifications.cs:line 62
+   at Raven.Server.ServerWide.ClusterStateMachine.WaitForIndexNotification(Int64 index, Nullable`1 timeout) in /_/72003/src/Raven.Server/ServerWide/ClusterStateMachine.cs:line 1551
+   at Raven.Server.ServerWide.ServerStore.WaitForExecutionOnRelevantNodesAsync(JsonOperationContext context, List`1 members, Int64 index) in /_/72003/src/Raven.Server/ServerWide/ServerStore.cs:line 3529
+   at Raven.Server.Web.System.AdminDatabasesHandler.CreateDatabase(String name, DatabaseRecord databaseRecord, TransactionOperationContext context, Int32 replicationFactor, Nullable`1 index, String raftRequestId) in /_/72003/src/Raven.Server/Web/System/AdminDatabasesHandler.cs:line 459
+   at Raven.Server.Web.System.AdminDatabasesHandler.Put() in /_/72003/src/Raven.Server/Web/System/AdminDatabasesHandler.cs:line 295
+   at Raven.Server.Routing.RequestRouter.HandlePath(RequestHandlerContext reqCtx) in /_/72003/src/Raven.Server/Routing/RequestRouter.cs:line 424
+   at Raven.Server.RavenServerStartup.RequestHandler(HttpContext context) in /_/72003/src/Raven.Server/RavenServerStartup.cs:line 185
+The server at /admin/databases?name=CreateStore_18&replicationFactor=1&raft-request-id=883a08f4-9cf5-450f-aa6f-0c1fbdbc167c responded with status code: RequestTimeout.
+---- System.TimeoutException : System.TimeoutException: Waited for 00:00:15 but didn't get an index notification for 136. Last commit index is: 135. Number of errors is: 0.
+Index: 88. Type: PutAutoIndexCommand. ExecutionTime: 00:00:00.0036055. Term: 1. LeaderErrorCount: 0. LeaderShipDuration: 7218. Exception: 
+Index: 89. Type: PutIndexesCommand. ExecutionTime: 00:00:00.0017735. Term: 1. LeaderErrorCount: 0. LeaderShipDuration: 7237. Exception: 
+Index: 90. Type: PutIndexesCommand. ExecutionTime: 00:00:00.0027960. Term: 1. LeaderErrorCount: 0. LeaderShipDuration: 7275. Exception: 
+Index: 91. Type: RemoveNodeFromDatabaseCommand. ExecutionTime: 00:00:00.0013799. Term: 1. LeaderErrorCount: 0. LeaderShipDuration: 7353. Exception: 
+Index: 92. Type: PutIndexesCommand. ExecutionTime: 00:00:00.0018222. Term: 1. LeaderErrorCount: 0. LeaderShipDuration: 7354. Exception: 
+Index: 93. Type: PutIndexesCommand. ExecutionTime: 00:00:00.0031914. Term: 1. LeaderErrorCount: 0. LeaderShipDuration: 7372. Exception: 
+Index: 94. Type: RemoveNodeFromDatabaseCommand. ExecutionTime: 00:00:00.0016721. Term: 1. LeaderErrorCount: 0. LeaderShipDuration: 7390. Exception: 
+Index: 95. Type: RemoveNodeFromDatabaseCommand. ExecutionTime: 00:00:00.0014468. Term: 1. LeaderErrorCount: 0. LeaderShipDuration: 7393. Exception: 
+Index: 96. Type: DeleteDatabaseCommand. ExecutionTime: 00:00:00.0031609. Term: 1. LeaderErrorCount: 0. LeaderShipDuration: 7431. Exception: 
+Index: 97. Type: PutIndexesCommand. ExecutionTime: 00:00:00.0025802. Term: 1. LeaderErrorCount: 0. LeaderShipDuration: 7440. Exception: 
+Index: 98. Type: RemoveNodeFromDatabaseCommand. ExecutionTime: 00:00:00.0014907. Term: 1. LeaderErrorCount: 0. LeaderShipDuration: 7441. Exception: 
+Index: 99. Type: AddDatabaseCommand. ExecutionTime: 00:00:00.0016444. Term: 1. LeaderErrorCount: 0. LeaderShipDuration: 7460. Exception: 
+Index: 100. Type: RemoveNodeFromDatabaseCommand. ExecutionTime: 00:00:00.0012176. Term: 1. LeaderErrorCount: 0. LeaderShipDuration: 7490. Exception: 
+Index: 101. Type: AddDatabaseCommand. ExecutionTime: 00:00:00.0009478. Term: 1. LeaderErrorCount: 0. LeaderShipDuration: 7491. Exception: 
+Index: 102. Type: AddDatabaseCommand. ExecutionTime: 00:00:00.0008950. Term: 1. LeaderErrorCount: 0. LeaderShipDuration: 7492. Exception: 
+Index: 103. Type: AddDatabaseCommand. ExecutionTime: 00:00:00.0007214. Term: 1. LeaderErrorCount: 0. LeaderShipDuration: 7492. Exception: 
+Index: 104. Type: PutIndexesCommand. ExecutionTime: 00:00:00.0035242. Term: 1. LeaderErrorCount: 0. LeaderShipDuration: 7528. Exception: 
+Index: 105. Type: RemoveNodeFromDatabaseCommand. ExecutionTime: 00:00:00.0016129. Term: 1. LeaderErrorCount: 0. LeaderShipDuration: 7577. Exception: 
+Index: 106. Type: AddDatabaseCommand. ExecutionTime: 00:00:00.0014221. Term: 1. LeaderErrorCount: 0. LeaderShipDuration: 7611. Exception: 
+Index: 107. Type: PutIndexesCommand. ExecutionTime: 00:00:00.0015613. Term: 1. LeaderErrorCount: 0. LeaderShipDuration: 7635. Exception: 
+Index: 108. Type: PutAutoIndexCommand. ExecutionTime: 00:00:00.0035819. Term: 1. LeaderErrorCount: 0. LeaderShipDuration: 7638. Exception: 
+Index: 109. Type: PutIndexesCommand. ExecutionTime: 00:00:00.0029197. Term: 1. LeaderErrorCount: 0. LeaderShipDuration: 7641. Exception: 
+Index: 110. Type: PutIndexesCommand. ExecutionTime: 00:00:00.0015564. Term: 1. LeaderErrorCount: 0. LeaderShipDuration: 7659. Exception: 
+Index: 111. Type: PutIndexesCommand. ExecutionTime: 00:00:00.0006721. Term: 1. LeaderErrorCount: 0. LeaderShipDuration: 7660. Exception: 
+Index: 112. Type: AddDatabaseCommand. ExecutionTime: 00:00:00.0017106. Term: 1. LeaderErrorCount: 0. LeaderShipDuration: 7698. Exception: 
+Index: 113. Type: PutIndexesCommand. ExecutionTime: 00:00:00.0022230. Term: 1. LeaderErrorCount: 0. LeaderShipDuration: 7717. Exception: 
+Index: 114. Type: PutIndexesCommand. ExecutionTime: 00:00:00.0009848. Term: 1. LeaderErrorCount: 0. LeaderShipDuration: 7718. Exception: 
+Index: 115. Type: DeleteDatabaseCommand. ExecutionTime: 00:00:00.0037805. Term: 1. LeaderErrorCount: 0. LeaderShipDuration: 7761. Exception: 
+Index: 116. Type: PutIndexesCommand. ExecutionTime: 00:00:00.0016796. Term: 1. LeaderErrorCount: 0. LeaderShipDuration: 7763. Exception: 
+Index: 117. Type: DeleteDatabaseCommand. ExecutionTime: 00:00:00.0037119. Term: 1. LeaderErrorCount: 0. LeaderShipDuration: 7820. Exception: 
+Index: 118. Type: PutIndexesCommand. ExecutionTime: 00:00:00.0015986. Term: 1. LeaderErrorCount: 0. LeaderShipDuration: 7821. Exception: 
+Index: 119. Type: PutIndexesCommand. ExecutionTime: 00:00:00.0021646. Term: 1. LeaderErrorCount: 0. LeaderShipDuration: 7850. Exception: 
+Index: 120. Type: PutIndexesCommand. ExecutionTime: 00:00:00.0015183. Term: 1. LeaderErrorCount: 0. LeaderShipDuration: 7852. Exception: 
+Index: 121. Type: PutIndexesCommand. ExecutionTime: 00:00:00.0018525. Term: 1. LeaderErrorCount: 0. LeaderShipDuration: 7883. Exception: 
+Index: 122. Type: PutIndexesCommand. ExecutionTime: 00:00:00.0025956. Term: 1. LeaderErrorCount: 0. LeaderShipDuration: 7958. Exception: 
+Index: 123. Type: PutIndexesCommand. ExecutionTime: 00:00:00.0022263. Term: 1. LeaderErrorCount: 0. LeaderShipDuration: 7960. Exception: 
+Index: 124. Type: PutIndexesCommand. ExecutionTime: 00:00:00.0015470. Term: 1. LeaderErrorCount: 0. LeaderShipDuration: 7962. Exception: 
+Index: 125. Type: PutIndexesCommand. ExecutionTime: 00:00:00.0018890. Term: 1. LeaderErrorCount: 0. LeaderShipDuration: 7998. Exception: 
+Index: 126. Type: PutIndexesCommand. ExecutionTime: 00:00:00.0027560. Term: 1. LeaderErrorCount: 0. LeaderShipDuration: 8049. Exception: 
+Index: 127. Type: PutIndexesCommand. ExecutionTime: 00:00:00.0016719. Term: 1. LeaderErrorCount: 0. LeaderShipDuration: 8050. Exception: 
+Index: 128. Type: RemoveNodeFromDatabaseCommand. ExecutionTime: 00:00:00.0015707. Term: 1. LeaderErrorCount: 0. LeaderShipDuration: 8136. Exception: 
+Index: 129. Type: DeleteDatabaseCommand. ExecutionTime: 00:00:00.0037399. Term: 1. LeaderErrorCount: 0. LeaderShipDuration: 8153. Exception: 
+Index: 130. Type: PutIndexesCommand. ExecutionTime: 00:00:00.0040764. Term: 1. LeaderErrorCount: 0. LeaderShipDuration: 8157. Exception: 
+Index: 131. Type: PutIndexesCommand. ExecutionTime: 00:00:00.0020539. Term: 1. LeaderErrorCount: 0. LeaderShipDuration: 8209. Exception: 
+Index: 132. Type: PutIndexesCommand. ExecutionTime: 00:00:00.0022893. Term: 1. LeaderErrorCount: 0. LeaderShipDuration: 8211. Exception: 
+Index: 133. Type: PutIndexesCommand. ExecutionTime: 00:00:00.0030675. Term: 1. LeaderErrorCount: 0. LeaderShipDuration: 8214. Exception: 
+Index: 134. Type: PutIndexesCommand. ExecutionTime: 00:00:00.0017948. Term: 1. LeaderErrorCount: 0. LeaderShipDuration: 8216. Exception: 
+Index: 135. Type: RemoveNodeFromDatabaseCommand. ExecutionTime: 00:00:00.0017989. Term: 1. LeaderErrorCount: 0. LeaderShipDuration: 8249. Exception: 
+Index: 136. Type: AddDatabaseCommand. ExecutionTime: 00:00:00.0027510. Term: 1. LeaderErrorCount: 0. LeaderShipDuration: 8267. Exception: 
+Index: 137. Type: PutIndexesCommand. ExecutionTime: 00:00:57.3594960. Term: 1. LeaderErrorCount: 0. LeaderShipDuration: 65635. Exception: 
+
+   at Raven.Server.ServerWide.AbstractRaftIndexNotifications`1.ThrowTimeoutException(TimeSpan value, Int64 index, Int64 lastModifiedIndex, Boolean isExecution) in /_/72003/src/Raven.Server/ServerWide/AbstractRaftIndexNotifications.cs:line 132
+   at Raven.Server.ServerWide.AbstractRaftIndexNotifications`1.WaitForIndexNotification(Int64 index, TimeSpan timeout) in /_/72003/src/Raven.Server/ServerWide/AbstractRaftIndexNotifications.cs:line 62
+   at Raven.Server.ServerWide.ClusterStateMachine.WaitForIndexNotification(Int64 index, Nullable`1 timeout) in /_/72003/src/Raven.Server/ServerWide/ClusterStateMachine.cs:line 1551
+   at Raven.Server.ServerWide.ServerStore.WaitForExecutionOnRelevantNodesAsync(JsonOperationContext context, List`1 members, Int64 index) in /_/72003/src/Raven.Server/ServerWide/ServerStore.cs:line 3529
+   at Raven.Server.Web.System.AdminDatabasesHandler.CreateDatabase(String name, DatabaseRecord databaseRecord, TransactionOperationContext context, Int32 replicationFactor, Nullable`1 index, String raftRequestId) in /_/72003/src/Raven.Server/Web/System/AdminDatabasesHandler.cs:line 459
+   at Raven.Server.Web.System.AdminDatabasesHandler.Put() in /_/72003/src/Raven.Server/Web/System/AdminDatabasesHandler.cs:line 295
+   at Raven.Server.Routing.RequestRouter.HandlePath(RequestHandlerContext reqCtx) in /_/72003/src/Raven.Server/Routing/RequestRouter.cs:line 424
+   at Raven.Server.RavenServerStartup.RequestHandler(HttpContext context) in /_/72003/src/Raven.Server/RavenServerStartup.cs:line 185
+The server at /admin/databases?name=CreateStore_18&replicationFactor=1&raft-request-id=883a08f4-9cf5-450f-aa6f-0c1fbdbc167c responded with status code: RequestTimeout.
+  Stack Trace:
+     at Raven.Client.Http.RequestExecutor.ThrowFailedToContactAllNodes[TResult](RavenCommand`1 command, HttpRequestMessage request)
+   at Raven.Client.Http.RequestExecutor.ExecuteAsync[TResult](ServerNode chosenNode, Nullable`1 nodeIndex, JsonOperationContext context, RavenCommand`1 command, Boolean shouldRetry, SessionInfo sessionInfo, CancellationToken token)
+   at Raven.Client.Http.RequestExecutor.ExecuteAsync[TResult](ServerNode chosenNode, Nullable`1 nodeIndex, JsonOperationContext context, RavenCommand`1 command, Boolean shouldRetry, SessionInfo sessionInfo, CancellationToken token)
+   at Raven.Client.ServerWide.Operations.ServerOperationExecutor.SendAsync[TResult](IServerOperation`1 operation, CancellationToken token)
+   at Raven.Client.Util.AsyncHelpers.<>c__DisplayClass4_0`1.<<RunSync>b__0>d.MoveNext()
+--- End of stack trace from previous location ---
+   at Raven.Client.Util.AsyncHelpers.HandleException(AggregateException ex, Stopwatch sw)
+   at Raven.Client.Util.AsyncHelpers.RunSync[T](Func`1 task)
+   at Raven.Client.ServerWide.Operations.ServerOperationExecutor.Send[TResult](IServerOperation`1 operation)
+   at Raven.TestDriver.RavenTestDriver.GetDocumentStore(GetDocumentStoreOptions options, String database)
+   at Piranha.Tests.RavenTestBase.CreateStore(String database) in D:\proj\microbians\piranha\test\Piranha.Tests\RavenTestBase.cs:line 35
+   at Piranha.Tests.BaseTestsAsync.InitializeAsync() in D:\proj\microbians\piranha\test\Piranha.Tests\BaseTestsAsync.cs:line 44
+   at Piranha.Tests.Blocks.InitializeAsync() in D:\proj\microbians\piranha\test\Piranha.Tests\Blocks.cs:line 32
+----- Inner Stack Trace -----
+
+[xUnit.net 00:01:15.13]     Piranha.Tests.MemCache.AddEntry [FAIL]
+  Failed Piranha.Tests.MemCache.AddEntry [1 ms]
+  Error Message:
+   Raven.Client.Exceptions.Documents.Indexes.IndexCreationException : Raven.Client.Exceptions.Documents.Indexes.IndexCreationException: Failed to create indexes. Operation timed out after: 00:00:15.
+Static: Posts/ByTag
+Node A state is Leader, I'm the only one in the cluster, so I'm the leader (at 03/06/2026 05:31:45)
+
+ ---> System.TimeoutException: Waited for 00:00:15 but didn't get an index notification for 134. Last commit index is: 118. Number of errors is: 0.
+Index: 103. Exception: 
+Index: 103. Exception: 
+Index: 114. Exception: 
+Index: 118. Exception: 
+
+   at Raven.Server.ServerWide.AbstractRaftIndexNotifications`1.ThrowTimeoutException(TimeSpan value, Int64 index, Int64 lastModifiedIndex, Boolean isExecution) in /_/72003/src/Raven.Server/ServerWide/AbstractRaftIndexNotifications.cs:line 132
+   at Raven.Server.ServerWide.AbstractRaftIndexNotifications`1.WaitForIndexNotification(Int64 index, TimeSpan timeout) in /_/72003/src/Raven.Server/ServerWide/AbstractRaftIndexNotifications.cs:line 62
+   at Raven.Server.Documents.Indexes.DatabaseIndexCreateController.WaitForIndexNotificationAsync(Int64 index, Nullable`1 timeout) in /_/72003/src/Raven.Server/Documents/Indexes/DatabaseIndexCreateController.cs:line 57
+   at Raven.Server.Documents.Indexes.AbstractIndexCreateController.IndexBatchScope.SaveAsync() in /_/72003/src/Raven.Server/Documents/Indexes/AbstractIndexCreateController.cs:line 382
+   --- End of inner exception stack trace ---
+   at Raven.Server.Documents.Indexes.AbstractIndexCreateController.IndexBatchScope.ThrowIndexCreationException(Exception exception, String reason) in /_/72003/src/Raven.Server/Documents/Indexes/AbstractIndexCreateController.cs:line 412
+   at Raven.Server.Documents.Indexes.AbstractIndexCreateController.IndexBatchScope.SaveAsync() in /_/72003/src/Raven.Server/Documents/Indexes/AbstractIndexCreateController.cs:line 386
+   at Raven.Server.Documents.Handlers.Admin.Processors.Indexes.AbstractAdminIndexHandlerProcessorForPut`2.ExecuteAsync() in /_/72003/src/Raven.Server/Documents/Handlers/Admin/Processors/Indexes/AbstractAdminIndexHandlerProcessorForPut.cs:line 111
+   at Raven.Server.Documents.Handlers.Admin.AdminIndexHandler.Put() in /_/72003/src/Raven.Server/Documents/Handlers/Admin/AdminIndexHandler.cs:line 25
+   at Raven.Server.Routing.RequestRouter.HandlePath(RequestHandlerContext reqCtx) in /_/72003/src/Raven.Server/Routing/RequestRouter.cs:line 419
+   at Raven.Server.RavenServerStartup.RequestHandler(HttpContext context) in /_/72003/src/Raven.Server/RavenServerStartup.cs:line 185
+  Stack Trace:
+     at Raven.Client.Exceptions.ExceptionDispatcher.Throw(JsonOperationContext context, HttpResponseMessage response, CommandUnsuccessfulResponseBehavior unsuccessfulResponseBehavior)
+   at Raven.Client.Exceptions.ExceptionDispatcher.Throw(JsonOperationContext context, HttpResponseMessage response, CommandUnsuccessfulResponseBehavior unsuccessfulResponseBehavior)
+   at Raven.Client.Http.Behaviors.DefaultCommandResponseBehavior.TryHandleUnsuccessfulResponseAsync[TResult](JsonOperationContext context, RavenCommand`1 command, HttpResponseMessage response, CommandUnsuccessfulResponseBehavior unsuccessfulResponseBehavior)
+   at Raven.Client.Http.RequestExecutor.HandleUnsuccessfulResponse[TResult](ServerNode chosenNode, Nullable`1 nodeIndex, JsonOperationContext context, RavenCommand`1 command, HttpRequestMessage request, HttpResponseMessage response, String url, SessionInfo sessionInfo, Boolean shouldRetry, CancellationToken token)
+   at Raven.Client.Http.RequestExecutor.ExecuteAsync[TResult](ServerNode chosenNode, Nullable`1 nodeIndex, JsonOperationContext context, RavenCommand`1 command, Boolean shouldRetry, SessionInfo sessionInfo, CancellationToken token)
+   at Raven.Client.Http.RequestExecutor.ExecuteAsync[TResult](ServerNode chosenNode, Nullable`1 nodeIndex, JsonOperationContext context, RavenCommand`1 command, Boolean shouldRetry, SessionInfo sessionInfo, CancellationToken token)
+   at Raven.Client.Documents.Operations.MaintenanceOperationExecutor.SendAsync[TResult](IMaintenanceOperation`1 operation, CancellationToken token)
+   at Raven.Client.Util.AsyncHelpers.<>c__DisplayClass3_0.<<RunSync>b__0>d.MoveNext()
+--- End of stack trace from previous location ---
+   at Raven.Client.Util.AsyncHelpers.HandleException(AggregateException ex, Stopwatch sw)
+   at Raven.Client.Util.AsyncHelpers.RunSync(Func`1 task)
+   at Raven.Client.Documents.Indexes.AbstractIndexCreationTaskBase`1.Execute(IDocumentStore store, DocumentConventions conventions, String database)
+   at Piranha.Data.RavenDb.IndexCreator.CreateIndexes(IDocumentStore store) in D:\proj\microbians\piranha\data\Piranha.Data.RavenDb\IndexCreator.cs:line 20
+   at Piranha.Tests.RavenTestBase.CreateStore(String database) in D:\proj\microbians\piranha\test\Piranha.Tests\RavenTestBase.cs:line 47
+   at Piranha.Tests.BaseTestsAsync.InitializeAsync() in D:\proj\microbians\piranha\test\Piranha.Tests\BaseTestsAsync.cs:line 44
+   at Piranha.Tests.MemCache.InitializeAsync() in D:\proj\microbians\piranha\test\Piranha.Tests\MemCache.cs:line 28
+[xUnit.net 00:02:48.16]     Piranha.Tests.Fields.NumberFieldConversions [FAIL]
+  Failed Piranha.Tests.Fields.NumberFieldConversions [1 m 6 s]
+  Error Message:
+   Raven.Client.Exceptions.RavenException : System.TimeoutException: Waited for 00:00:15 but didn't get an index notification for 969. Last commit index is: 968. Number of errors is: 0.
+Index: 921. Type: PutIndexesCommand. ExecutionTime: 00:00:00.0007419. Term: 1. LeaderErrorCount: 0. LeaderShipDuration: 94361. Exception: 
+Index: 922. Type: PutIndexesCommand. ExecutionTime: 00:00:00.0007675. Term: 1. LeaderErrorCount: 0. LeaderShipDuration: 94372. Exception: 
+Index: 923. Type: PutIndexesCommand. ExecutionTime: 00:00:00.0008161. Term: 1. LeaderErrorCount: 0. LeaderShipDuration: 94396. Exception: 
+Index: 924. Type: PutIndexesCommand. ExecutionTime: 00:00:00.0007772. Term: 1. LeaderErrorCount: 0. LeaderShipDuration: 94424. Exception: 
+Index: 925. Type: PutIndexesCommand. ExecutionTime: 00:00:00.0007337. Term: 1. LeaderErrorCount: 0. LeaderShipDuration: 94463. Exception: 
+Index: 926. Type: PutAutoIndexCommand. ExecutionTime: 00:00:00.0009303. Term: 1. LeaderErrorCount: 0. LeaderShipDuration: 94478. Exception: 
+Index: 927. Type: PutIndexesCommand. ExecutionTime: 00:00:00.0008437. Term: 1. LeaderErrorCount: 0. LeaderShipDuration: 94499. Exception: 
+Index: 928. Type: DeleteDatabaseCommand. ExecutionTime: 00:00:00.0009551. Term: 1. LeaderErrorCount: 0. LeaderShipDuration: 94589. Exception: 
+Index: 929. Type: RemoveNodeFromDatabaseCommand. ExecutionTime: 00:00:00.0004254. Term: 1. LeaderErrorCount: 0. LeaderShipDuration: 94595. Exception: 
+Index: 930. Type: PutAutoIndexCommand. ExecutionTime: 00:00:00.0010471. Term: 1. LeaderErrorCount: 0. LeaderShipDuration: 94661. Exception: 
+Index: 931. Type: RemoveNodeFromDatabaseCommand. ExecutionTime: 00:00:00.0004476. Term: 1. LeaderErrorCount: 0. LeaderShipDuration: 94664. Exception: 
+Index: 932. Type: AddDatabaseCommand. ExecutionTime: 00:00:00.0006955. Term: 1. LeaderErrorCount: 0. LeaderShipDuration: 94672. Exception: 
+Index: 933. Type: AddDatabaseCommand. ExecutionTime: 00:00:00.0009200. Term: 1. LeaderErrorCount: 0. LeaderShipDuration: 94686. Exception: 
+Index: 934. Type: PutAutoIndexCommand. ExecutionTime: 00:00:00.0009065. Term: 1. LeaderErrorCount: 0. LeaderShipDuration: 94732. Exception: 
+Index: 935. Type: PutIndexesCommand. ExecutionTime: 00:00:00.0006140. Term: 1. LeaderErrorCount: 0. LeaderShipDuration: 94748. Exception: 
+Index: 936. Type: PutIndexesCommand. ExecutionTime: 00:00:00.0006603. Term: 1. LeaderErrorCount: 0. LeaderShipDuration: 94762. Exception: 
+Index: 937. Type: PutIndexesCommand. ExecutionTime: 00:00:00.0006568. Term: 1. LeaderErrorCount: 0. LeaderShipDuration: 94780. Exception: 
+Index: 938. Type: PutIndexesCommand. ExecutionTime: 00:00:00.0009713. Term: 1. LeaderErrorCount: 0. LeaderShipDuration: 94817. Exception: 
+Index: 939. Type: PutIndexesCommand. ExecutionTime: 00:00:00.0007983. Term: 1. LeaderErrorCount: 0. LeaderShipDuration: 94829. Exception: 
+Index: 940. Type: PutIndexesCommand. ExecutionTime: 00:00:00.0006965. Term: 1. LeaderErrorCount: 0. LeaderShipDuration: 94863. Exception: 
+Index: 941. Type: PutIndexesCommand. ExecutionTime: 00:00:00.0009119. Term: 1. LeaderErrorCount: 0. LeaderShipDuration: 94872. Exception: 
+Index: 942. Type: PutIndexesCommand. ExecutionTime: 00:00:00.0007916. Term: 1. LeaderErrorCount: 0. LeaderShipDuration: 94901. Exception: 
+Index: 943. Type: PutIndexesCommand. ExecutionTime: 00:00:00.0007741. Term: 1. LeaderErrorCount: 0. LeaderShipDuration: 94934. Exception: 
+Index: 944. Type: DeleteDatabaseCommand. ExecutionTime: 00:00:00.0009525. Term: 1. LeaderErrorCount: 0. LeaderShipDuration: 94942. Exception: 
+Index: 945. Type: PutIndexesCommand. ExecutionTime: 00:00:00.0022190. Term: 1. LeaderErrorCount: 0. LeaderShipDuration: 95146. Exception: 
+Index: 946. Type: PutIndexesCommand. ExecutionTime: 00:00:00.0008032. Term: 1. LeaderErrorCount: 0. LeaderShipDuration: 95152. Exception: 
+Index: 947. Type: DeleteDatabaseCommand. ExecutionTime: 00:00:00.0008981. Term: 1. LeaderErrorCount: 0. LeaderShipDuration: 95193. Exception: 
+Index: 948. Type: PutIndexesCommand. ExecutionTime: 00:00:00.0008384. Term: 1. LeaderErrorCount: 0. LeaderShipDuration: 95229. Exception: 
+Index: 949. Type: RemoveNodeFromDatabaseCommand. ExecutionTime: 00:00:00.0004336. Term: 1. LeaderErrorCount: 0. LeaderShipDuration: 95277. Exception: 
+Index: 950. Type: RemoveNodeFromDatabaseCommand. ExecutionTime: 00:00:00.0004179. Term: 1. LeaderErrorCount: 0. LeaderShipDuration: 95316. Exception: 
+Index: 951. Type: AddDatabaseCommand. ExecutionTime: 00:00:00.0006722. Term: 1. LeaderErrorCount: 0. LeaderShipDuration: 95316. Exception: 
+Index: 952. Type: PutAutoIndexCommand. ExecutionTime: 00:00:00.0007663. Term: 1. LeaderErrorCount: 0. LeaderShipDuration: 95328. Exception: 
+Index: 953. Type: AddDatabaseCommand. ExecutionTime: 00:00:00.0007996. Term: 1. LeaderErrorCount: 0. LeaderShipDuration: 95334. Exception: 
+Index: 954. Type: PutIndexesCommand. ExecutionTime: 00:00:00.0004940. Term: 1. LeaderErrorCount: 0. LeaderShipDuration: 95383. Exception: 
+Index: 955. Type: DeleteDatabaseCommand. ExecutionTime: 00:00:00.0007586. Term: 1. LeaderErrorCount: 0. LeaderShipDuration: 95415. Exception: 
+Index: 956. Type: PutIndexesCommand. ExecutionTime: 00:00:00.0005589. Term: 1. LeaderErrorCount: 0. LeaderShipDuration: 95421. Exception: 
+Index: 957. Type: PutIndexesCommand. ExecutionTime: 00:00:00.0003391. Term: 1. LeaderErrorCount: 0. LeaderShipDuration: 95422. Exception: 
+Index: 958. Type: PutIndexesCommand. ExecutionTime: 00:00:00.0006598. Term: 1. LeaderErrorCount: 0. LeaderShipDuration: 95471. Exception: 
+Index: 959. Type: PutIndexesCommand. ExecutionTime: 00:00:00.0007121. Term: 1. LeaderErrorCount: 0. LeaderShipDuration: 95484. Exception: 
+Index: 960. Type: PutIndexesCommand. ExecutionTime: 00:00:00.0009467. Term: 1. LeaderErrorCount: 0. LeaderShipDuration: 95506. Exception: 
+Index: 961. Type: PutIndexesCommand. ExecutionTime: 00:00:00.0007870. Term: 1. LeaderErrorCount: 0. LeaderShipDuration: 95536. Exception: 
+Index: 962. Type: PutIndexesCommand. ExecutionTime: 00:00:00.0007145. Term: 1. LeaderErrorCount: 0. LeaderShipDuration: 95557. Exception: 
+Index: 963. Type: PutIndexesCommand. ExecutionTime: 00:00:00.0007512. Term: 1. LeaderErrorCount: 0. LeaderShipDuration: 95591. Exception: 
+Index: 964. Type: PutIndexesCommand. ExecutionTime: 00:00:00.0006631. Term: 1. LeaderErrorCount: 0. LeaderShipDuration: 95599. Exception: 
+Index: 965. Type: RemoveNodeFromDatabaseCommand. ExecutionTime: 00:00:00.0005127. Term: 1. LeaderErrorCount: 0. LeaderShipDuration: 95633. Exception: 
+Index: 966. Type: PutIndexesCommand. ExecutionTime: 00:00:00.0007644. Term: 1. LeaderErrorCount: 0. LeaderShipDuration: 95637. Exception: 
+Index: 967. Type: AddDatabaseCommand. ExecutionTime: 00:00:00.0013820. Term: 1. LeaderErrorCount: 0. LeaderShipDuration: 95645. Exception: 
+Index: 968. Type: PutIndexesCommand. ExecutionTime: 00:00:00.0008172. Term: 1. LeaderErrorCount: 0. LeaderShipDuration: 95669. Exception: 
+Index: 969. Type: DeleteDatabaseCommand. ExecutionTime: 00:00:00.0007503. Term: 1. LeaderErrorCount: 0. LeaderShipDuration: 95693. Exception: 
+Index: 970. Type: UpdateTopologyCommand. ExecutionTime: 00:00:00.0003382. Term: 1. LeaderErrorCount: 0. LeaderShipDuration: 161578. Exception: 
+
+   at Raven.Server.ServerWide.AbstractRaftIndexNotifications`1.ThrowTimeoutException(TimeSpan value, Int64 index, Int64 lastModifiedIndex, Boolean isExecution) in /_/72003/src/Raven.Server/ServerWide/AbstractRaftIndexNotifications.cs:line 132
+   at Raven.Server.ServerWide.AbstractRaftIndexNotifications`1.WaitForIndexNotification(Int64 index, TimeSpan timeout)
+   at Raven.Server.ServerWide.ClusterStateMachine.WaitForIndexNotification(Int64 index, Nullable`1 timeout) in /_/72003/src/Raven.Server/ServerWide/ClusterStateMachine.cs:line 1551
+   at Raven.Server.Web.System.AdminDatabasesHandler.WaitForDeletionToComplete(TransactionOperationContext context, Parameters parameters, Int64 index, IList`1 waitOnDeletion) in /_/72003/src/Raven.Server/Web/System/AdminDatabasesHandler.cs:line 760
+   at Raven.Server.Web.System.AdminDatabasesHandler.Delete() in /_/72003/src/Raven.Server/Web/System/AdminDatabasesHandler.cs:line 740
+   at Raven.Server.Routing.RequestRouter.HandlePath(RequestHandlerContext reqCtx) in /_/72003/src/Raven.Server/Routing/RequestRouter.cs:line 424
+   at Raven.Server.RavenServerStartup.RequestHandler(HttpContext context) in /_/72003/src/Raven.Server/RavenServerStartup.cs:line 185
+The server at /admin/databases?raft-request-id=89bd9643-f707-47ba-89ed-40f1da0cd839 responded with status code: RequestTimeout.
+---- System.TimeoutException : System.TimeoutException: Waited for 00:00:15 but didn't get an index notification for 969. Last commit index is: 968. Number of errors is: 0.
+Index: 921. Type: PutIndexesCommand. ExecutionTime: 00:00:00.0007419. Term: 1. LeaderErrorCount: 0. LeaderShipDuration: 94361. Exception: 
+Index: 922. Type: PutIndexesCommand. ExecutionTime: 00:00:00.0007675. Term: 1. LeaderErrorCount: 0. LeaderShipDuration: 94372. Exception: 
+Index: 923. Type: PutIndexesCommand. ExecutionTime: 00:00:00.0008161. Term: 1. LeaderErrorCount: 0. LeaderShipDuration: 94396. Exception: 
+Index: 924. Type: PutIndexesCommand. ExecutionTime: 00:00:00.0007772. Term: 1. LeaderErrorCount: 0. LeaderShipDuration: 94424. Exception: 
+Index: 925. Type: PutIndexesCommand. ExecutionTime: 00:00:00.0007337. Term: 1. LeaderErrorCount: 0. LeaderShipDuration: 94463. Exception: 
+Index: 926. Type: PutAutoIndexCommand. ExecutionTime: 00:00:00.0009303. Term: 1. LeaderErrorCount: 0. LeaderShipDuration: 94478. Exception: 
+Index: 927. Type: PutIndexesCommand. ExecutionTime: 00:00:00.0008437. Term: 1. LeaderErrorCount: 0. LeaderShipDuration: 94499. Exception: 
+Index: 928. Type: DeleteDatabaseCommand. ExecutionTime: 00:00:00.0009551. Term: 1. LeaderErrorCount: 0. LeaderShipDuration: 94589. Exception: 
+Index: 929. Type: RemoveNodeFromDatabaseCommand. ExecutionTime: 00:00:00.0004254. Term: 1. LeaderErrorCount: 0. LeaderShipDuration: 94595. Exception: 
+Index: 930. Type: PutAutoIndexCommand. ExecutionTime: 00:00:00.0010471. Term: 1. LeaderErrorCount: 0. LeaderShipDuration: 94661. Exception: 
+Index: 931. Type: RemoveNodeFromDatabaseCommand. ExecutionTime: 00:00:00.0004476. Term: 1. LeaderErrorCount: 0. LeaderShipDuration: 94664. Exception: 
+Index: 932. Type: AddDatabaseCommand. ExecutionTime: 00:00:00.0006955. Term: 1. LeaderErrorCount: 0. LeaderShipDuration: 94672. Exception: 
+Index: 933. Type: AddDatabaseCommand. ExecutionTime: 00:00:00.0009200. Term: 1. LeaderErrorCount: 0. LeaderShipDuration: 94686. Exception: 
+Index: 934. Type: PutAutoIndexCommand. ExecutionTime: 00:00:00.0009065. Term: 1. LeaderErrorCount: 0. LeaderShipDuration: 94732. Exception: 
+Index: 935. Type: PutIndexesCommand. ExecutionTime: 00:00:00.0006140. Term: 1. LeaderErrorCount: 0. LeaderShipDuration: 94748. Exception: 
+Index: 936. Type: PutIndexesCommand. ExecutionTime: 00:00:00.0006603. Term: 1. LeaderErrorCount: 0. LeaderShipDuration: 94762. Exception: 
+Index: 937. Type: PutIndexesCommand. ExecutionTime: 00:00:00.0006568. Term: 1. LeaderErrorCount: 0. LeaderShipDuration: 94780. Exception: 
+Index: 938. Type: PutIndexesCommand. ExecutionTime: 00:00:00.0009713. Term: 1. LeaderErrorCount: 0. LeaderShipDuration: 94817. Exception: 
+Index: 939. Type: PutIndexesCommand. ExecutionTime: 00:00:00.0007983. Term: 1. LeaderErrorCount: 0. LeaderShipDuration: 94829. Exception: 
+Index: 940. Type: PutIndexesCommand. ExecutionTime: 00:00:00.0006965. Term: 1. LeaderErrorCount: 0. LeaderShipDuration: 94863. Exception: 
+Index: 941. Type: PutIndexesCommand. ExecutionTime: 00:00:00.0009119. Term: 1. LeaderErrorCount: 0. LeaderShipDuration: 94872. Exception: 
+Index: 942. Type: PutIndexesCommand. ExecutionTime: 00:00:00.0007916. Term: 1. LeaderErrorCount: 0. LeaderShipDuration: 94901. Exception: 
+Index: 943. Type: PutIndexesCommand. ExecutionTime: 00:00:00.0007741. Term: 1. LeaderErrorCount: 0. LeaderShipDuration: 94934. Exception: 
+Index: 944. Type: DeleteDatabaseCommand. ExecutionTime: 00:00:00.0009525. Term: 1. LeaderErrorCount: 0. LeaderShipDuration: 94942. Exception: 
+Index: 945. Type: PutIndexesCommand. ExecutionTime: 00:00:00.0022190. Term: 1. LeaderErrorCount: 0. LeaderShipDuration: 95146. Exception: 
+Index: 946. Type: PutIndexesCommand. ExecutionTime: 00:00:00.0008032. Term: 1. LeaderErrorCount: 0. LeaderShipDuration: 95152. Exception: 
+Index: 947. Type: DeleteDatabaseCommand. ExecutionTime: 00:00:00.0008981. Term: 1. LeaderErrorCount: 0. LeaderShipDuration: 95193. Exception: 
+Index: 948. Type: PutIndexesCommand. ExecutionTime: 00:00:00.0008384. Term: 1. LeaderErrorCount: 0. LeaderShipDuration: 95229. Exception: 
+Index: 949. Type: RemoveNodeFromDatabaseCommand. ExecutionTime: 00:00:00.0004336. Term: 1. LeaderErrorCount: 0. LeaderShipDuration: 95277. Exception: 
+Index: 950. Type: RemoveNodeFromDatabaseCommand. ExecutionTime: 00:00:00.0004179. Term: 1. LeaderErrorCount: 0. LeaderShipDuration: 95316. Exception: 
+Index: 951. Type: AddDatabaseCommand. ExecutionTime: 00:00:00.0006722. Term: 1. LeaderErrorCount: 0. LeaderShipDuration: 95316. Exception: 
+Index: 952. Type: PutAutoIndexCommand. ExecutionTime: 00:00:00.0007663. Term: 1. LeaderErrorCount: 0. LeaderShipDuration: 95328. Exception: 
+Index: 953. Type: AddDatabaseCommand. ExecutionTime: 00:00:00.0007996. Term: 1. LeaderErrorCount: 0. LeaderShipDuration: 95334. Exception: 
+Index: 954. Type: PutIndexesCommand. ExecutionTime: 00:00:00.0004940. Term: 1. LeaderErrorCount: 0. LeaderShipDuration: 95383. Exception: 
+Index: 955. Type: DeleteDatabaseCommand. ExecutionTime: 00:00:00.0007586. Term: 1. LeaderErrorCount: 0. LeaderShipDuration: 95415. Exception: 
+Index: 956. Type: PutIndexesCommand. ExecutionTime: 00:00:00.0005589. Term: 1. LeaderErrorCount: 0. LeaderShipDuration: 95421. Exception: 
+Index: 957. Type: PutIndexesCommand. ExecutionTime: 00:00:00.0003391. Term: 1. LeaderErrorCount: 0. LeaderShipDuration: 95422. Exception: 
+Index: 958. Type: PutIndexesCommand. ExecutionTime: 00:00:00.0006598. Term: 1. LeaderErrorCount: 0. LeaderShipDuration: 95471. Exception: 
+Index: 959. Type: PutIndexesCommand. ExecutionTime: 00:00:00.0007121. Term: 1. LeaderErrorCount: 0. LeaderShipDuration: 95484. Exception: 
+Index: 960. Type: PutIndexesCommand. ExecutionTime: 00:00:00.0009467. Term: 1. LeaderErrorCount: 0. LeaderShipDuration: 95506. Exception: 
+Index: 961. Type: PutIndexesCommand. ExecutionTime: 00:00:00.0007870. Term: 1. LeaderErrorCount: 0. LeaderShipDuration: 95536. Exception: 
+Index: 962. Type: PutIndexesCommand. ExecutionTime: 00:00:00.0007145. Term: 1. LeaderErrorCount: 0. LeaderShipDuration: 95557. Exception: 
+Index: 963. Type: PutIndexesCommand. ExecutionTime: 00:00:00.0007512. Term: 1. LeaderErrorCount: 0. LeaderShipDuration: 95591. Exception: 
+Index: 964. Type: PutIndexesCommand. ExecutionTime: 00:00:00.0006631. Term: 1. LeaderErrorCount: 0. LeaderShipDuration: 95599. Exception: 
+Index: 965. Type: RemoveNodeFromDatabaseCommand. ExecutionTime: 00:00:00.0005127. Term: 1. LeaderErrorCount: 0. LeaderShipDuration: 95633. Exception: 
+Index: 966. Type: PutIndexesCommand. ExecutionTime: 00:00:00.0007644. Term: 1. LeaderErrorCount: 0. LeaderShipDuration: 95637. Exception: 
+Index: 967. Type: AddDatabaseCommand. ExecutionTime: 00:00:00.0013820. Term: 1. LeaderErrorCount: 0. LeaderShipDuration: 95645. Exception: 
+Index: 968. Type: PutIndexesCommand. ExecutionTime: 00:00:00.0008172. Term: 1. LeaderErrorCount: 0. LeaderShipDuration: 95669. Exception: 
+Index: 969. Type: DeleteDatabaseCommand. ExecutionTime: 00:00:00.0007503. Term: 1. LeaderErrorCount: 0. LeaderShipDuration: 95693. Exception: 
+Index: 970. Type: UpdateTopologyCommand. ExecutionTime: 00:00:00.0003382. Term: 1. LeaderErrorCount: 0. LeaderShipDuration: 161578. Exception: 
+
+   at Raven.Server.ServerWide.AbstractRaftIndexNotifications`1.ThrowTimeoutException(TimeSpan value, Int64 index, Int64 lastModifiedIndex, Boolean isExecution) in /_/72003/src/Raven.Server/ServerWide/AbstractRaftIndexNotifications.cs:line 132
+   at Raven.Server.ServerWide.AbstractRaftIndexNotifications`1.WaitForIndexNotification(Int64 index, TimeSpan timeout)
+   at Raven.Server.ServerWide.ClusterStateMachine.WaitForIndexNotification(Int64 index, Nullable`1 timeout) in /_/72003/src/Raven.Server/ServerWide/ClusterStateMachine.cs:line 1551
+   at Raven.Server.Web.System.AdminDatabasesHandler.WaitForDeletionToComplete(TransactionOperationContext context, Parameters parameters, Int64 index, IList`1 waitOnDeletion) in /_/72003/src/Raven.Server/Web/System/AdminDatabasesHandler.cs:line 760
+   at Raven.Server.Web.System.AdminDatabasesHandler.Delete() in /_/72003/src/Raven.Server/Web/System/AdminDatabasesHandler.cs:line 740
+   at Raven.Server.Routing.RequestRouter.HandlePath(RequestHandlerContext reqCtx) in /_/72003/src/Raven.Server/Routing/RequestRouter.cs:line 424
+   at Raven.Server.RavenServerStartup.RequestHandler(HttpContext context) in /_/72003/src/Raven.Server/RavenServerStartup.cs:line 185
+The server at /admin/databases?raft-request-id=89bd9643-f707-47ba-89ed-40f1da0cd839 responded with status code: RequestTimeout.
+  Stack Trace:
+     at Raven.Client.Http.RequestExecutor.ThrowFailedToContactAllNodes[TResult](RavenCommand`1 command, HttpRequestMessage request)
+   at Raven.Client.Http.RequestExecutor.ExecuteAsync[TResult](ServerNode chosenNode, Nullable`1 nodeIndex, JsonOperationContext context, RavenCommand`1 command, Boolean shouldRetry, SessionInfo sessionInfo, CancellationToken token)
+   at Raven.Client.Http.RequestExecutor.ExecuteAsync[TResult](ServerNode chosenNode, Nullable`1 nodeIndex, JsonOperationContext context, RavenCommand`1 command, Boolean shouldRetry, SessionInfo sessionInfo, CancellationToken token)
+   at Raven.Client.Http.RequestExecutor.UnlikelyExecuteAsync[TResult](RavenCommand`1 command, JsonOperationContext context, Task topologyUpdate, SessionInfo sessionInfo, CancellationToken token)
+   at Raven.Client.ServerWide.Operations.ServerOperationExecutor.SendAsync[TResult](IServerOperation`1 operation, CancellationToken token)
+   at Raven.Client.Util.AsyncHelpers.<>c__DisplayClass4_0`1.<<RunSync>b__0>d.MoveNext()
+--- End of stack trace from previous location ---
+   at Raven.Client.Util.AsyncHelpers.HandleException(AggregateException ex, Stopwatch sw)
+   at Raven.Client.Util.AsyncHelpers.RunSync[T](Func`1 task)
+   at Raven.TestDriver.RavenTestDriver.<>c__DisplayClass22_0.<GetDocumentStore>b__0(Object sender, EventArgs args)
+   at Raven.Client.Documents.DocumentStore.Dispose()
+   at Piranha.Tests.BaseTests.Dispose() in D:\proj\microbians\piranha\test\Piranha.Tests\BaseTests.cs:line 45
+----- Inner Stack Trace -----
+

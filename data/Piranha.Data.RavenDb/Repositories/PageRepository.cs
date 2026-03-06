@@ -993,7 +993,9 @@ internal class PageRepository : IPageRepository
         model.EnableComments = page.EnableComments;
         if (model.EnableComments)
         {
-            model.CommentCount = await _db.PageComments.CountAsync(c => c.PageId == model.Id && c.IsApproved)
+            model.CommentCount = await _db.PageComments
+                .Customize(x => x.WaitForNonStaleResults())
+                .CountAsync(c => c.PageId == model.Id && c.IsApproved)
                 .ConfigureAwait(false);
         }
 

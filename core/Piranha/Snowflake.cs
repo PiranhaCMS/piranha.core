@@ -4,11 +4,14 @@ namespace Piranha;
 
 public static class Snowflake
 {
-    // todo - move to aero.core
+    private static readonly IdGenerator _idGenerator = new(Random.Shared.Next(1022));
+    private static readonly object _lock = new();
+
     public static string NewId()
     {
-        var idgen = new IdGenerator(Random.Shared.Next(1022));
-        var id = idgen.CreateId().ToString();
-        return id;
+        lock (_lock)
+        {
+            return _idGenerator.CreateId().ToString();
+        }
     }
 }

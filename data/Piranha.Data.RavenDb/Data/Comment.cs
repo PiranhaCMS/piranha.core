@@ -48,5 +48,5 @@ public class Comment : Entity
     /// <summary>
     /// Gets/sets the created date.
     /// </summary>
-    public DateTime Created { get; set; }
+    public DateTimeOffset Created { get; set; }
 }

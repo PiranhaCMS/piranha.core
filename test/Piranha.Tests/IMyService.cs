@@ -8,5 +8,5 @@ public interface IMyService
 
 public class MyService : IMyService
 {
-    public string Value => "MyCustomServiceValue";
+    public string Value => "My service value";
 }

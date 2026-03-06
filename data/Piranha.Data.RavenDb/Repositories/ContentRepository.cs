@@ -103,7 +103,9 @@ internal class ContentRepository : IContentRepository
     /// <returns>The translation status</returns>
     public async Task<Models.TranslationStatus> GetTranslationStatusById(string contentId)
     {
-        var allLanguages = await _db.Languages.OrderBy(l => l.Title)
+        var allLanguages = await _db.Languages
+            .Customize(x => x.WaitForNonStaleResults())
+            .OrderBy(l => l.Title)
             .ToListAsync();
 
         var defaultLang = allLanguages
@@ -114,6 +116,7 @@ internal class ContentRepository : IContentRepository
 
         // Query the content with embedded translations
         var content = await _db.Content
+            .Customize(x => x.WaitForNonStaleResults())
             .Where(c => c.Id == contentId)
             .FirstOrDefaultAsync();
 
@@ -146,6 +149,7 @@ internal class ContentRepository : IContentRepository
 
         // Query content with embedded translations by group
         var contents = await _db.Content
+            .Customize(x => x.WaitForNonStaleResults())
             .Where(c => c.Type.Group == groupId)
             .ToListAsync();
 
@@ -558,7 +562,6 @@ internal class ContentRepository : IContentRepository
                     ?.IsUpToDate = true;
             }
         }
-
         // Summarize
         result.TotalCount = result.Translations.Count;
         result.UpToDateCount = result.Translations.Count(t => t.IsUpToDate);

@@ -11,6 +11,7 @@
 using Piranha.Data.RavenDb.Data;
 using Piranha.Data.RavenDb.Indexes;
 using Piranha.Data.RavenDb.Services;
+using Piranha.Models;
 using Piranha.Repositories;
 using Raven.Client.Documents;
 using Raven.Client.Documents.Linq;
@@ -212,10 +213,6 @@ internal class PostRepository : IPostRepository
     /// <returns>The post model</returns>
     public async Task<T> GetBySlug<T>(string blogId, string slug) where T : Models.PostBase
     {
-        var test = await _db.session.Query<Post>()
-            //.Where(p => p.BlogId == blogId && p.Slug == slug)
-            .ToListAsync()
-            ;
         // No cache found, load from database
         var post = await GetQuery<T>()
             .FirstOrDefaultAsync(p => p.BlogId == blogId && p.Slug == slug)
@@ -398,7 +395,7 @@ internal class PostRepository : IPostRepository
 
         if (comment == null)
         {
-            comment = new PostComment
+            comment = new Data.PostComment
             {
                 Id = model.Id
             };
@@ -573,7 +570,7 @@ internal class PostRepository : IPostRepository
         bool onlyPending, int page, int pageSize)
     {
         // Create base query
-        IRavenQueryable<PostComment> query = _db.PostComments
+        IRavenQueryable<Data.PostComment> query = _db.PostComments
             ;
 
         // Check if only should include a comments for a certain post
@@ -1227,7 +1224,9 @@ internal class PostRepository : IPostRepository
         model.EnableComments = post.EnableComments;
         if (model.EnableComments)
         {
-            model.CommentCount = await _db.PostComments.CountAsync(c => c.PostId == model.Id && c.IsApproved)
+            model.CommentCount = await _db.PostComments
+                .Customize(x => x.WaitForNonStaleResults())
+                .CountAsync(c => c.PostId == model.Id && c.IsApproved)
                 .ConfigureAwait(false);
         }
 
