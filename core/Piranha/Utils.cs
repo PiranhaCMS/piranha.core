@@ -869,11 +869,6 @@ public static class Utils
         return version.Contains("alpha") || version.Contains("beta");
     }
 
-    /// <summary>
-    /// Clones the entire given object into a new instance.
-    /// </summary>
-    /// <param name="obj">The object to clone</param>
-    /// <typeparam name="T">The object type</typeparam>
     /// <returns>The cloned instance</returns>
     public static T DeepClone<T>(T obj)
     {
@@ -893,9 +888,6 @@ public static class Utils
         {
             IncludeFields = true,
             PropertyNameCaseInsensitive = true
-        };
-        {
-            //TypeNameHandling = TypeNameHandling.All
         };
         var json = JsonSerializer.Serialize(obj, settings);
 

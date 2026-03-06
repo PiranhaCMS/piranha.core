@@ -326,11 +326,11 @@ internal sealed class PageService : IPageService
                     model = await _cache.GetAsync<PageInfo>($"PageInfo_{id}").ConfigureAwait(false);
                 }
             }
-            else if (!typeof(DynamicPage).IsAssignableFrom(typeof(T)))
+            else if (!typeof(DynamicPage).IsAssignableFrom(typeof(T)) && !typeof(T).IsAbstract)
             {
                 if (_cache != null)
                 {
-                    model = await _cache.GetAsync<PageBase>(id).ConfigureAwait(false);
+                    model = await _cache.GetAsync<T>(id).ConfigureAwait(false);
                 }
 
                 if (model != null)
@@ -937,12 +937,22 @@ internal sealed class PageService : IPageService
 
         if (original != null)
         {
-            T copy = null;
+T copy = null;
 
             if (model is DynamicPage)
             {
-                // No need to clone as we don't cache dynamic models
+                // No need to clone for dynamic models
                 copy = original;
+            }
+            else if (typeof(T).IsAbstract)
+            {
+                // For abstract types, use reflection to call DeepClone with the concrete runtime type
+                var deepCloneMethod = typeof(Utils).GetMethod(nameof(Utils.DeepClone));
+                var genericMethod = deepCloneMethod.MakeGenericMethod(original.GetType());
+                copy = (T)genericMethod.Invoke(null, new object[] { original });
+
+                // Initialize all blocks & regions
+                await _factory.InitAsync(copy, App.PageTypes.GetById(copy.TypeId)).ConfigureAwait(false);
             }
             else
             {
@@ -953,7 +963,6 @@ internal sealed class PageService : IPageService
                 // Initialize all blocks & regions
                 await _factory.InitAsync(copy, App.PageTypes.GetById(copy.TypeId)).ConfigureAwait(false);
             }
-
             // Now let's move over the fields we want to the
             // soft copy.
             copy.Id = model.Id;

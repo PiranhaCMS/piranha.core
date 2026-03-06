@@ -9,6 +9,7 @@
  */
 
 using Microsoft.Extensions.Caching.Distributed;
+using System.Text.Json.Serialization;
 
 
 namespace Piranha.Cache;
@@ -26,13 +27,10 @@ internal sealed class DistributedCache : ICache
     public DistributedCache(IDistributedCache cache)
     {
         _cache = cache;
-        _jsonSettings = new JsonSerializerOptions()
+_jsonSettings = new JsonSerializerOptions()
         {
             IncludeFields = true,
             PropertyNameCaseInsensitive = true
-        };
-        {
-            //TypeNameHandling = TypeNameHandling.All
         };
     }
 

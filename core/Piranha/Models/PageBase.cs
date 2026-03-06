@@ -1,4 +1,4 @@
-﻿/*
+/*
  * Copyright (c) .NET Foundation and Contributors
  *
  * This software may be modified and distributed under the terms
@@ -9,6 +9,7 @@
  */
 
 using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 namespace Piranha.Models;
 
@@ -16,6 +17,9 @@ namespace Piranha.Models;
 /// Base class for page models.
 /// </summary>
 [Serializable]
+[JsonPolymorphic(UnknownDerivedTypeHandling = JsonUnknownDerivedTypeHandling.FallBackToNearestAncestor)]
+[JsonDerivedType(typeof(DynamicPage), typeDiscriminator: "DynamicPage")]
+[JsonDerivedType(typeof(PageInfo), typeDiscriminator: "PageInfo")]
 public abstract class PageBase : RoutedContentBase
 {
     /// <summary>
