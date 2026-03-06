@@ -582,9 +582,6 @@ internal class PageRepository : IPageRepository
                 pageQuery = pageQuery.Customize(x => x.NoTracking());
             }
 
-            // FirstOrDefaultAsync(p => p.Id ...
-            pageQuery = pageQuery.OrderBy(p => p.Id);
-
             var page = await pageQuery
                 .FirstOrDefaultAsync(p => p.Id == model.Id)
                 .ConfigureAwait(false);
@@ -595,6 +592,8 @@ internal class PageRepository : IPageRepository
                 var json = JsonSerializer.Serialize(page);
                 page = JsonSerializer.Deserialize<Page>(json);
             }
+
+            if (page == null)
 
             if (page == null)
             {

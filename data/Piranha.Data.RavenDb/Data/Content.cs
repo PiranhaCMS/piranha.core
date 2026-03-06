@@ -13,7 +13,7 @@ using Piranha.Models;
 namespace Piranha.Data.RavenDb.Data;
 
 [Serializable]
-public sealed class Content : ContentBase<ContentField>, ICategorized, ITranslatable
+public sealed class Content : ContentBase<ContentField>, ICategorized, ITranslatable, IExcerpt
 {
     /// <summary>
     /// The currently selected language id. This is only used for

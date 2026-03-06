@@ -112,10 +112,14 @@ internal class ContentRepository : IContentRepository
             .Where(l => !l.IsDefault)
             .ToList();
 
-        var translations = await _db.ContentTranslations.Where(t => t.ContentId == contentId)
-            .ToListAsync();
+        // Query the content with embedded translations
+        var content = await _db.Content
+            .Where(c => c.Id == contentId)
+            .FirstOrDefaultAsync();
 
-        return GetTranslationStatus(contentId, defaultLang, languages, translations);
+        var translations = content?.Translations ?? new List<ContentTranslation>();
+        DateTime lastMod = content?.LastModified ?? DateTime.MinValue;
+        return this.GetTranslationStatus(contentId, defaultLang, languages, translations, lastMod);
     }
 
     /// <summary>
@@ -140,24 +144,22 @@ internal class ContentRepository : IContentRepository
             .Where(l => !l.IsDefault)
             .ToList();
 
-        var translations = await _db.ContentTranslations
-            .Where(t => t.Content.Type.Group == groupId).OrderBy(t => t.ContentId)
+        // Query content with embedded translations by group
+        var contents = await _db.Content
+            .Where(c => c.Type.Group == groupId)
             .ToListAsync();
-
-        var contentIds = translations
-            .Select(t => t.ContentId)
-            .Distinct()
-            .ToList();
 
         // Get the translation status for each of the
         // content models.
-        foreach (var contentId in contentIds)
+        foreach (var content in contents)
         {
-            var status = GetTranslationStatus(contentId,
+            var translations = content?.Translations ?? new List<ContentTranslation>();
+            var contentLastModified = content?.LastModified ?? DateTime.MinValue;
+            var status = GetTranslationStatus(content.Id,
                 defaultLang,
                 languages,
-                translations.Where(t => t.ContentId == contentId));
-
+                translations,
+                contentLastModified);
             if (status != null)
             {
                 // Summarize content status
@@ -525,48 +527,44 @@ internal class ContentRepository : IContentRepository
         string contentId,
         Language defaultLanguage,
         IEnumerable<Language> languages,
-        IEnumerable<ContentTranslation> translations)
+        IEnumerable<ContentTranslation> translations,
+        DateTime contentLastModified)
     {
-        var defaultTranslation = translations
-            .FirstOrDefault(t => t.LanguageId == defaultLanguage.Id);
+        // In the embedded model, the default language content is stored in the Content itself.
+        // Translations collection only contains non-default language translations.
+        // Use contentLastModified as the reference for the default language.
 
-        if (defaultTranslation != null)
+        // Create the result object
+        var result = new Models.TranslationStatus
         {
-            // Create the result object
-            var result = new Models.TranslationStatus
-            {
-                ContentId = contentId,
-                Translations = languages
-                    .Where(l => !l.IsDefault)
-                    .Select(l => new Models.TranslationStatus.TranslationStatusItem
-                    {
-                        LanguageId = l.Id,
-                        LanguageTitle = l.Title
-                    }).OrderBy(l => l.LanguageTitle).ToList()
-            };
-
-            // Examine the available translations
-            foreach (var translation in translations.Where(t => t.LanguageId != defaultLanguage.Id))
-            {
-                if (translation.LastModified >= defaultTranslation.LastModified)
+            ContentId = contentId,
+            Translations = languages
+                .Where(l => !l.IsDefault)
+                .Select(l => new Models.TranslationStatus.TranslationStatusItem
                 {
-                    result.Translations
-                        .FirstOrDefault(t => t.LanguageId == translation.LanguageId)
-                        .IsUpToDate = true;
-                }
+                    LanguageId = l.Id,
+                    LanguageTitle = l.Title
+                }).OrderBy(l => l.LanguageTitle).ToList()
+        };
+
+        // Examine the available translations
+        foreach (var translation in translations)
+        {
+            // Compare translation LastModified with content LastModified
+            if (translation.LastModified >= contentLastModified)
+            {
+                result.Translations
+                    .FirstOrDefault(t => t.LanguageId == translation.LanguageId)
+                    ?.IsUpToDate = true;
             }
-
-            // Summarize
-            result.TotalCount = result.Translations.Count;
-            result.UpToDateCount = result.Translations.Count(t => t.IsUpToDate);
-            result.IsUpToDate = result.UpToDateCount == result.TotalCount;
-
-            return result;
         }
 
-        // The content model wasn't available in the default language
-        // which means we can't decide if the translations are up to date.
-        return null;
+        // Summarize
+        result.TotalCount = result.Translations.Count;
+        result.UpToDateCount = result.Translations.Count(t => t.IsUpToDate);
+        result.IsUpToDate = result.UpToDateCount == result.TotalCount;
+
+        return result;
     }
 
     /// <summary>

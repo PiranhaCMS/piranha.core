@@ -192,18 +192,43 @@ internal class ContentService<TContent, TField, TModelBase> : IContentService<TC
         content.Created = DateTime.Now;
 
         //
-        // 2: Map basic fields
+        // 2: Preserve original Title when saving a translation
+        //
+        string originalTitle = null;
+        string originalExcerpt = null;
+        var isTranslation = !string.IsNullOrEmpty(languageId) && content is ITranslatable;
+        if (isTranslation && dest != null)
+        {
+            // Save original title/excerpt before mapping
+            originalTitle = content.Title;
+            if (content is IExcerpt contentWithExcerpt)
+            {
+                originalExcerpt = contentWithExcerpt.Excerpt;
+            }
+        }
+
+        //
+        // 3: Map basic fields
         //
         _mapper.Map<TModelBase, TContent>(model, content);
 
+        // Restore original Title for translations
+        if (isTranslation && originalTitle != null)
+        {
+            content.Title = originalTitle;
+            if (content is IExcerpt contentWithExcerptRestore)
+            {
+                contentWithExcerptRestore.Excerpt = originalExcerpt;
+            }
+        }
+
         //
-        // 3: Map translation
+        // 4: Map translation
         //
         if (content is ITranslatable translatableContent && !string.IsNullOrEmpty(languageId))
         {
             translatableContent.SetTranslation(content.Id, languageId, model);
         }
-
         //
         // 4: Map category
         //
