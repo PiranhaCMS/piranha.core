@@ -476,6 +476,11 @@ internal sealed class MediaService : IMediaService
     /// <param name="id">The unique id</param>
     public async Task DeleteAsync(string id)
     {
+        if (string.IsNullOrEmpty(id))
+        {
+            return;
+        }
+
         var media = await GetByIdAsync(id).ConfigureAwait(false);
 
         if (media != null)
