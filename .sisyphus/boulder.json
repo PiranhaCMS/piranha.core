@@ -1,9 +1,9 @@
 {
-  "active_plan": "C:\\Users\\bbqch\\proj\\microbians\\piranha\\.sisyphus\\plans\\fix-all-ravendb-tests.md",
-  "started_at": "2026-03-06T00:08:14.101Z",
+  "active_plan": "C:\\Users\\bbqch\\proj\\microbians\\piranha\\.sisyphus\\plans\\fix-remaining-30-tests.md",
+  "started_at": "2026-03-06T14:50:31.916Z",
   "session_ids": [
     "ses_3404c34c7ffeviTJ0gs4hBYc4E"
   ],
-  "plan_name": "fix-all-ravendb-tests",
+  "plan_name": "fix-remaining-30-tests",
   "agent": "atlas"
 }

@@ -197,8 +197,8 @@ internal class SiteRepository : ISiteRepository
     public async Task<Models.Site> GetDefault()
     {
         var site = await _db.Sites
+            .Customize(x => x.WaitForNonStaleResults())
             .FirstOrDefaultAsync(s => s.IsDefault);
-
         if (site != null)
         {
             var defaultLanguage = await _db.Languages
