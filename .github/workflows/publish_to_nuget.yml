@@ -33,7 +33,7 @@ jobs:
 
     # Build and pack
     - name: Build solution and generate NuGet package
-      run:
+      run: |
         dotnet restore
         dotnet clean
         dotnet build -c Release
@@ -67,7 +67,7 @@ jobs:
 
     # Login to Azure using a ServicePrincipal configured to authenticate agaist a GitHub Action
     - name: 'Az CLI login'
-      uses: azure/login@v1
+      uses: azure/login@v2
       with:
         allow-no-subscriptions: true
         client-id: ${{ secrets.AZURE_CLIENT_ID }}
