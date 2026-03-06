@@ -4,7 +4,7 @@ on:
 
 jobs:
   build:
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
     name: Publish NuGet Packages
     permissions:
       id-token: write # Required for requesting the JWT
@@ -32,71 +32,7 @@ jobs:
 
     # Build and pack
     - name: Build solution and generate NuGet package
-      run:
-        dotnet restore
-        dotnet clean
-        dotnet build -c Release
-
-        dotnet pack core/Piranha/Piranha.csproj --no-build -c Release -o ./artifacts
-        dotnet pack core/Piranha.AspNetCore/Piranha.AspNetCore.csproj --no-build -c Release -o ./artifacts
-        dotnet pack core/Piranha.AspNetCore.Hosting/Piranha.AspNetCore.Hosting.csproj --no-build -c Release -o ./artifacts
-        dotnet pack core/Piranha.AttributeBuilder/Piranha.AttributeBuilder.csproj --no-build -c Release -o ./artifacts
-        dotnet pack core/Piranha.Azure.BlobStorage/Piranha.Azure.BlobStorage.csproj --no-build -c Release -o ./artifacts
-        dotnet pack core/Piranha.ImageSharp/Piranha.ImageSharp.csproj --no-build -c Release -o ./artifacts
-        dotnet pack core/Piranha.Local.FileStorage/Piranha.Local.FileStorage.csproj --no-build -c Release -o ./artifacts
-        dotnet pack core/Piranha.Manager/Piranha.Manager.csproj --no-build -c Release -o ./artifacts
-        dotnet pack core/Piranha.Manager.LocalAuth/Piranha.Manager.LocalAuth.csproj --no-build -c Release -o ./artifacts
-        dotnet pack core/Piranha.Manager.Localization/Piranha.Manager.Localization.csproj --no-build -c Release -o ./artifacts
-        dotnet pack core/Piranha.Manager.TinyMCE/Piranha.Manager.TinyMCE.csproj --no-build -c Release -o ./artifacts
-        dotnet pack core/Piranha.WebApi/Piranha.WebApi.csproj --no-build -c Release -o ./artifacts
-        dotnet pack data/Piranha.Data.EF/Piranha.Data.EF.csproj --no-build -c Release -o ./artifacts
-        dotnet pack data/Piranha.Data.EF.MySql/Piranha.Data.EF.MySql.csproj --no-build -c Release -o ./artifacts
-        dotnet pack data/Piranha.Data.EF.PostgreSql/Piranha.Data.EF.PostgreSql.csproj --no-build -c Release -o ./artifacts
-        dotnet pack data/Piranha.Data.EF.SQLite/Piranha.Data.EF.SQLite.csproj --no-build -c Release -o ./artifacts
-        dotnet pack data/Piranha.Data.EF.SQLServer/Piranha.Data.EF.SQLServer.csproj --no-build -c Release -o ./artifacts
-        dotnet pack identity/Piranha.AspNetCore.Identity/Piranha.AspNetCore.Identity.csproj --no-build -c Release -o ./artifacts
-        dotnet pack identity/Piranha.AspNetCore.Identity.MySQL/Piranha.AspNetCore.Identity.MySQL.csproj --no-build -c Release -o ./artifacts
-        dotnet pack identity/Piranha.AspNetCore.Identity.PostgreSQL/Piranha.AspNetCore.Identity.PostgreSQL.csproj --no-build -c Release -o ./artifacts
-        dotnet pack identity/Piranha.AspNetCore.Identity.SQLite/Piranha.AspNetCore.Identity.SQLite.csproj --no-build -c Release -o ./artifacts
-        dotnet pack identity/Piranha.AspNetCore.Identity.SQLServer/Piranha.AspNetCore.Identity.SQLServer.csproj --no-build -c Release -o ./artifacts
-
-    # Install SignClient
-    - name: Install sign
-      run: dotnet tool install --tool-path . --prerelease sign
-
-    # Login to Azure using a ServicePrincipal configured to authenticate agaist a GitHub Action
-    - name: 'Az CLI login'
-      uses: azure/login@v1
-      with:
-        allow-no-subscriptions: true
-        client-id: ${{ secrets.AZURE_CLIENT_ID }}
-        tenant-id: ${{ secrets.AZURE_TENANT_ID }}
-
-    # Sign packages
-    - name: Sign packages
-      shell: pwsh
-      run: >
-        ./sign code azure-key-vault
-        artifacts/*.nupkg
-        --publisher-name "Piranha CMS"
-        --description "Piranha CMS"
-        --description-url "https://github.com/piranhacms/piranha.core"
-        --azure-credential-type "azure-cli"
-        --azure-key-vault-url "${{ secrets.KEY_VAULT_URL }}" # This does not need to be a secret and is just a placeholder
-        --azure-key-vault-certificate "${{ secrets.KEY_VAULT_CERTIFICATE_ID }}" # This does not need to be a secret and is just a placeholder
-
-    # Sign symbol packages
-    - name: Sign symbol packages
-      shell: pwsh
-      run: >
-        ./sign code azure-key-vault
-        artifacts/*.snupkg
-        --publisher-name "Piranha CMS"
-        --description "Piranha CMS"
-        --description-url "https://github.com/piranhacms/piranha.core"
-        --azure-credential-type "azure-cli"
-        --azure-key-vault-url "${{ secrets.KEY_VAULT_URL }}" # This does not need to be a secret and is just a placeholder
-        --azure-key-vault-certificate "${{ secrets.KEY_VAULT_CERTIFICATE_ID }}" # This does not need to be a secret and is just a placeholder
+      run: ./pack.sh
 
     # Push to NuGet
     - name: Push generated package to GitHub registry
