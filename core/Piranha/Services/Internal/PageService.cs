@@ -464,21 +464,29 @@ internal sealed class PageService : IPageService
     public async Task<string> GetIdBySlugAsync(string slug, string siteId = null)
     {
         siteId = await EnsureSiteIdAsync(siteId).ConfigureAwait(false);
+        
+        Console.WriteLine($"[DEBUG] PageService.GetIdBySlugAsync: slug={slug}, siteId={siteId}");
 
         // Lets see if we can resolve the slug from cache
         var pageId = _cache == null
             ? null
             : await _cache.GetAsync<string>($"PageId_{siteId}_{slug}").ConfigureAwait(false);
 
+        Console.WriteLine($"[DEBUG] PageService.GetIdBySlugAsync: cached pageId = {pageId ?? "null"}");
+
         if (string.IsNullOrEmpty(pageId))
         {
             var info = await _repo.GetBySlug<PageInfo>(slug, siteId).ConfigureAwait(false);
+
+            Console.WriteLine($"[DEBUG] PageService.GetIdBySlugAsync: repo returned info = {info != null}");
 
             if (info != null)
             {
                 pageId = info.Id;
             }
         }
+
+        Console.WriteLine($"[DEBUG] PageService.GetIdBySlugAsync: returning pageId = {pageId ?? "null"}");
 
         return pageId;
     }

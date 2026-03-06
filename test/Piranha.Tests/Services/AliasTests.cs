@@ -70,6 +70,7 @@ public class AliasTests : BaseTestsAsync
             AliasUrl = ALIAS_1,
             RedirectUrl = "/redirect-1"
         });
+        //WaitForUserToContinueTheTest(_store);
         await api.Aliases.SaveAsync(new Alias
         {
             SiteId = SITE_ID,
@@ -82,6 +83,9 @@ public class AliasTests : BaseTestsAsync
             AliasUrl = ALIAS_5,
             RedirectUrl = "/redirect-5"
         });
+
+        // make sure we give some time for the indexes to update before we start running tests
+        WaitForIndexing(_store);
     }
 
     public override async Task DisposeAsync()

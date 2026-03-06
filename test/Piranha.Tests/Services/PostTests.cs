@@ -110,6 +110,9 @@ public class PostTests : BaseTestsAsync
             .Build();
 
         await AddSampleData();
+
+        // Ensure RavenDB indexes are up-to-date before running tests
+        WaitForIndexing(_store);
     }
 
     protected async Task AddSampleData()
@@ -199,6 +202,15 @@ public class PostTests : BaseTestsAsync
         var posts = await api.Posts.GetAllDynamicAsync(BLOG_ID);
         var posts2 = await api.Posts.GetAllAsync<Models.PostBase>(BLOG_ID);
         var posts3 = await api.Posts.GetAllBySiteIdAsync(SITE_ID);
+        
+        // DEBUG: Output saved data details
+        Console.WriteLine($"[DEBUG] AddSampleData - SiteId: {SITE_ID}");
+        Console.WriteLine($"[DEBUG] AddSampleData - BlogId: {BLOG_ID}");
+        Console.WriteLine($"[DEBUG] AddSampleData - Posts saved: {posts.Count()}");
+        foreach (var post in posts)
+        {
+            Console.WriteLine($"[DEBUG]   Post: Id={post.Id}, Slug={post.Slug}, BlogId={post.BlogId}");
+        }
     }
 
     public override async Task DisposeAsync()
@@ -466,8 +478,23 @@ public class PostTests : BaseTestsAsync
     [Fact]
     public async Task GetGenericBySlug()
     {
+        Console.WriteLine("[DEBUG] GetGenericBySlug: Starting test");
         using var api = CreateApi();
+        
+        // First, verify the blog page exists
+        Console.WriteLine("[DEBUG] GetGenericBySlug: Looking up blog page by slug 'blog'");
+        var blogPage = await api.Pages.GetBySlugAsync("blog");
+        Console.WriteLine($"[DEBUG] GetGenericBySlug: blogPage = {blogPage != null}");
+        if (blogPage != null)
+        {
+            Console.WriteLine($"[DEBUG] GetGenericBySlug: blogPage.Id = {blogPage.Id}");
+            Console.WriteLine($"[DEBUG] GetGenericBySlug: BLOG_ID = {BLOG_ID}");
+        }
+        
+        // Try to get the post by slug
+        Console.WriteLine("[DEBUG] GetGenericBySlug: Calling GetBySlugAsync for post");
         var model = await api.Posts.GetBySlugAsync<MyPost>("blog", "my-first-post");
+        Console.WriteLine($"[DEBUG] GetGenericBySlug: model = {model != null}");
 
         Assert.NotNull(model);
         Assert.Equal("my-first-post", model.Slug);

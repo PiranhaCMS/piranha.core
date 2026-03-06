@@ -236,7 +236,7 @@ internal class ContentService<TContent, TField, TModelBase> : IContentService<TC
         {
             if (content is ICategorized categorizedContent)
             {
-                if (type is Models.AeroContentType contentType)
+                if (type is Models.ContentType contentType)
                 {
                     if (contentType.UseCategory)
                     {

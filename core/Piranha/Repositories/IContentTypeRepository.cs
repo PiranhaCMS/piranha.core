@@ -18,28 +18,28 @@ public interface IContentTypeRepository
     /// Gets all available models.
     /// </summary>
     /// <returns>The available models</returns>
-    Task<IEnumerable<AeroContentType>> GetAll();
+    Task<IEnumerable<ContentType>> GetAll();
 
     /// <summary>
     /// Gets all available models from the specified group.
     /// </summary>
     /// <param name="group">The content group</param>
     /// <returns>The available models</returns>
-    Task<IEnumerable<AeroContentType>> GetByGroup(string group);
+    Task<IEnumerable<ContentType>> GetByGroup(string group);
 
     /// <summary>
     /// Gets the model with the specified id.
     /// </summary>
     /// <param name="id">The unique i</param>
     /// <returns></returns>
-    Task<AeroContentType> GetById(string id);
+    Task<ContentType> GetById(string id);
 
     /// <summary>
     /// Adds or updates the given model in the database
     /// depending on its state.
     /// </summary>
     /// <param name="model">The model</param>
-    Task Save(AeroContentType model);
+    Task Save(ContentType model);
 
     /// <summary>
     /// Deletes the model with the specified id.

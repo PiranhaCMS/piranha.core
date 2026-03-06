@@ -34,7 +34,7 @@ public static class PiranhaExtensions
     /// </summary>
     /// <param name="list">The list</param>
     /// <param name="contentGroupId">Content group type id</param>
-    public static IList<AeroContentType> GetByGroupId(this CachedList<AeroContentType> list, string contentGroupId)
+    public static IList<ContentType> GetByGroupId(this CachedList<ContentType> list, string contentGroupId)
     {
         return Piranha.App.ContentTypes.Where(ct => string.Equals(ct.Group, contentGroupId, StringComparison.OrdinalIgnoreCase)).ToList();
     }

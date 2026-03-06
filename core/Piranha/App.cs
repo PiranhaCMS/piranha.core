@@ -89,7 +89,7 @@ public sealed class App
     /// <summary>
     /// The currently available content types.
     /// </summary>
-    private readonly CachedList<Models.AeroContentType> _contentTypes;
+    private readonly CachedList<Models.ContentType> _contentTypes;
 
     /// <summary>
     /// The currently available page types.
@@ -170,7 +170,7 @@ public sealed class App
     /// <summary>
     /// Gets the currently available content types.
     /// </summary>
-    public static CachedList<Models.AeroContentType> ContentTypes => Instance._contentTypes;
+    public static CachedList<Models.ContentType> ContentTypes => Instance._contentTypes;
 
     /// <summary>
     /// Gets the currently available page types.

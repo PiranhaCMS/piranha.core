@@ -161,7 +161,7 @@ public abstract class DbRavenBase : IDb
     public IRavenQueryable<ContentTaxonomy> ContentTaxonomies => session.Query<ContentTaxonomy>();
     public IRavenQueryable<ContentTranslation> ContentTranslations => session.Query<ContentTranslation>();
     public IRavenQueryable<ContentGroup> ContentGroups => session.Query<ContentGroup>();
-    public IRavenQueryable<AeroContentType> ContentTypes => session.Query<AeroContentType>();
+    public IRavenQueryable<ContentType> ContentTypes => session.Query<ContentType>();
     public IRavenQueryable<Language> Languages => session.Query<Language>();
     public IRavenQueryable<Media> Media => session.Query<Media>();
     public IRavenQueryable<MediaFolder> MediaFolders => session.Query<MediaFolder>();

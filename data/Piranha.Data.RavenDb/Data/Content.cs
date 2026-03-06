@@ -64,7 +64,7 @@ public sealed class Content : ContentBase<ContentField>, ICategorized, ITranslat
     /// <summary>
     /// Gets/sets the content type.
     /// </summary>
-    public AeroContentType Type { get; set; }
+    public ContentType Type { get; set; }
 
     /// <summary>
     /// Sets the translation for the specified language.

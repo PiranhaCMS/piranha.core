@@ -87,7 +87,7 @@ public interface IDb : IDisposable
     IRavenQueryable<ContentGroup> ContentGroups { get => session.Query<ContentGroup>(); }
 
     /// <summary>Gets the content type collection.</summary>
-    IRavenQueryable<AeroContentType> ContentTypes { get => session.Query<AeroContentType>(); }
+    IRavenQueryable<ContentType> ContentTypes { get => session.Query<ContentType>(); }
 
     /// <summary>Gets the language collection.</summary>
     IRavenQueryable<Language> Languages { get => session.Query<Language>(); }

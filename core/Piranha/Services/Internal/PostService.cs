@@ -312,9 +312,12 @@ internal sealed class PostService : IPostService
     /// <returns>The post model</returns>
     public async Task<T> GetBySlugAsync<T>(string blog, string slug, string siteId = null) where T : PostBase
     {
+        Console.WriteLine($"[DEBUG] PostService.GetBySlugAsync: blog={blog}, slug={slug}, siteId={siteId ?? "null"}");
         siteId = await EnsureSiteIdAsync(siteId).ConfigureAwait(false);
+        Console.WriteLine($"[DEBUG] PostService.GetBySlugAsync: ensured siteId={siteId}");
 
         var blogId = await _pageService.GetIdBySlugAsync(blog, siteId).ConfigureAwait(false);
+        Console.WriteLine($"[DEBUG] PostService.GetBySlugAsync: blogId={blogId ?? "null"}");
 
         if (!string.IsNullOrEmpty(blogId))
         {

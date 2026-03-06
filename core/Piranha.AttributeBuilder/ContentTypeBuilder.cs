@@ -23,13 +23,13 @@ public class ContentTypeBuilder
 {
     private class BuilderItem<T> where T : ContentTypeBase
     {
-        public Type Type { get; set; }
+        public Type BclType { get; set; }
         public T ContentType { get; set; }
     }
 
     private readonly IApi _api;
     private readonly IList<Type> _contentGroups = new List<Type>();
-    private readonly IList<BuilderItem<AeroContentType>> _contentTypes = new List<BuilderItem<AeroContentType>>();
+    private readonly IList<BuilderItem<ContentType>> _contentTypes = new List<BuilderItem<ContentType>>();
     private readonly IList<BuilderItem<PageType>> _pageTypes = new List<BuilderItem<PageType>>();
     private readonly IList<BuilderItem<PostType>> _postTypes = new List<BuilderItem<PostType>>();
     private readonly IList<BuilderItem<SiteType>> _siteTypes = new List<BuilderItem<SiteType>>();
@@ -77,9 +77,9 @@ public class ContentTypeBuilder
             {
                 if (type.GetCustomAttribute<ContentTypeAttribute>() != null)
                 {
-                    _contentTypes.Add(new BuilderItem<AeroContentType>
+                    _contentTypes.Add(new BuilderItem<ContentType>
                     {
-                        Type = type
+                        BclType = type
                     });
 
                     // Make sure we add the content group for this type as well
@@ -99,7 +99,7 @@ public class ContentTypeBuilder
                 {
                     _pageTypes.Add(new BuilderItem<PageType>
                     {
-                        Type = type
+                        BclType = type
                     });
                 }
             }
@@ -109,7 +109,7 @@ public class ContentTypeBuilder
                 {
                     _postTypes.Add(new BuilderItem<PostType>
                     {
-                        Type = type
+                        BclType = type
                     });
                 }
             }
@@ -119,7 +119,7 @@ public class ContentTypeBuilder
                 {
                     _siteTypes.Add(new BuilderItem<SiteType>
                     {
-                        Type = type
+                        BclType = type
                     });
                 }
             }
@@ -157,7 +157,7 @@ public class ContentTypeBuilder
         // Build content types
         foreach (var t in _contentTypes)
         {
-            var type = GetContentType(t.Type);
+            var type = GetContentType(t.BclType);
             if (type != null)
             {
                 type.Ensure();
@@ -169,7 +169,7 @@ public class ContentTypeBuilder
         // Build page types
         foreach (var t in _pageTypes)
         {
-            var type = GetPageType(t.Type);
+            var type = GetPageType(t.BclType);
             if (type != null)
             {
                 type.Ensure();
@@ -181,7 +181,7 @@ public class ContentTypeBuilder
         // Build post types
         foreach (var t in _postTypes)
         {
-            var type = GetPostType(t.Type);
+            var type = GetPostType(t.BclType);
             if (type != null)
             {
                 type.Ensure();
@@ -193,7 +193,7 @@ public class ContentTypeBuilder
         // Build site types
         foreach (var t in _siteTypes)
         {
-            var type = GetSiteType(t.Type);
+            var type = GetSiteType(t.BclType);
             if (type != null)
             {
                 type.Ensure();
@@ -288,7 +288,7 @@ public class ContentTypeBuilder
         return null;
     }
 
-    private AeroContentType GetContentType(Type type)
+    private ContentType GetContentType(Type type)
     {
         var group = type.GetCustomAttribute<ContentGroupAttribute>();
         if (group == null)
@@ -312,7 +312,7 @@ public class ContentTypeBuilder
                 throw new ArgumentException($"[{ type.Name }] Id and Title is mandatory for content types.");
             }
 
-            return new AeroContentType
+            var ctype = new ContentType
             {
                 Id = attr.Id,
                 CLRType = type.GetTypeInfo().AssemblyQualifiedName,
@@ -326,6 +326,8 @@ public class ContentTypeBuilder
                 CustomEditors = GetEditors(type),
                 Regions = GetRegions(type)
             };
+
+            return ctype;
         }
         return null;
     }

@@ -31,7 +31,7 @@ internal class ContentTypeRepository : IContentTypeRepository
     /// Gets all available models.
     /// </summary>
     /// <returns>The available models</returns>
-    public async Task<IEnumerable<AeroContentType>> GetAll()
+    public async Task<IEnumerable<ContentType>> GetAll()
     {
         return await _db.ContentTypes
             .OrderBy(t => t.Id)
@@ -44,7 +44,7 @@ internal class ContentTypeRepository : IContentTypeRepository
     /// </summary>
     /// <param name="group">The content group</param>
     /// <returns>The available models</returns>
-    public async Task<IEnumerable<AeroContentType>> GetByGroup(string group)
+    public async Task<IEnumerable<ContentType>> GetByGroup(string group)
     {
         return await _db.ContentTypes
             .Where(t => t.Group == group)
@@ -58,7 +58,7 @@ internal class ContentTypeRepository : IContentTypeRepository
     /// </summary>
     /// <param name="id">The unique id</param>
     /// <returns></returns>
-    public async Task<AeroContentType> GetById(string id)
+    public async Task<ContentType> GetById(string id)
     {
         return await _db.ContentTypes
             .FirstOrDefaultAsync(t => t.Id == id)
@@ -70,7 +70,7 @@ internal class ContentTypeRepository : IContentTypeRepository
     /// depending on its state.
     /// </summary>
     /// <param name="model">The model</param>
-    public async Task Save(AeroContentType model)
+    public async Task Save(ContentType model)
     {
         await _db.session.StoreAsync(model, model.Id).ConfigureAwait(false);
         await _db.SaveChangesAsync().ConfigureAwait(false);

@@ -188,6 +188,8 @@ public class ContentTests : BaseTestsAsync
     public async Task GetTranslationSummary()
     {
         using var api = CreateApi();
+        var test = await api.Content.GetAllAsync();
+
         var summary = await api.Content.GetTranslationStatusByGroupAsync("MyContentGroup");
 
         Assert.NotNull(summary);

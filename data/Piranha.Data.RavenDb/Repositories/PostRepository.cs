@@ -214,9 +214,25 @@ internal class PostRepository : IPostRepository
     public async Task<T> GetBySlug<T>(string blogId, string slug) where T : Models.PostBase
     {
         // No cache found, load from database
-        var post = await GetQuery<T>()
+        Console.WriteLine($"[DEBUG] GetBySlug: blogId={blogId}, slug={slug}");
+        
+        var query = GetQuery<T>();
+        var post = await query
             .FirstOrDefaultAsync(p => p.BlogId == blogId && p.Slug == slug)
             .ConfigureAwait(false);
+        
+        Console.WriteLine($"[DEBUG] GetBySlug: post found = {post != null}");
+
+        if (post == null)
+        {
+            // Debug: list all posts for this blog
+            var allPosts = await query.Where(p => p.BlogId == blogId).ToListAsync();
+            Console.WriteLine($"[DEBUG] GetBySlug: All posts for blog {blogId}: {allPosts.Count}");
+            foreach (var p in allPosts)
+            {
+                Console.WriteLine($"[DEBUG]   Post: Id={p.Id}, Slug={p.Slug}");
+            }
+        }
 
         if (post != null)
         {

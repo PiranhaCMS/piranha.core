@@ -15,6 +15,7 @@ public class RavenTestBase : RavenTestDriver
     {
         ConfigureServer(new TestServerOptions
         {
+            ServerUrl = "http://localhost:5150",
             Licensing = new ServerOptions.LicensingOptions
             {
                 ThrowOnInvalidOrMissingLicense = false

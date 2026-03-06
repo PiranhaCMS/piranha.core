@@ -81,6 +81,7 @@ internal class AliasRepository : IAliasRepository
     /// <returns>The model</returns>
     public async Task<Alias> GetByAliasUrl(string url, string siteId)
     {
+        var test = await _db.Aliases.ToListAsync();
         var aliases = await _db.Aliases
             .Where(a => a.SiteId == siteId && a.AliasUrl.Equals(url, StringComparison.OrdinalIgnoreCase))
             .Select(a => new Alias

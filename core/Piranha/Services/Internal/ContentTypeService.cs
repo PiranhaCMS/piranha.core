@@ -40,7 +40,7 @@ internal sealed class ContentTypeService : IContentTypeService
     /// Gets all available models.
     /// </summary>
     /// <returns>The available models</returns>
-    public async Task<IEnumerable<AeroContentType>> GetAllAsync()
+    public async Task<IEnumerable<ContentType>> GetAllAsync()
     {
         var types = await GetTypes().ConfigureAwait(false);
         return types ?? await _repo.GetAll().ConfigureAwait(false);
@@ -51,7 +51,7 @@ internal sealed class ContentTypeService : IContentTypeService
     /// </summary>
     /// <param name="group">The content group</param>
     /// <returns>The available models</returns>
-    public async Task<IEnumerable<AeroContentType>> GetByGroupAsync(string group)
+    public async Task<IEnumerable<ContentType>> GetByGroupAsync(string group)
     {
         var types = await GetTypes().ConfigureAwait(false);
 
@@ -67,7 +67,7 @@ internal sealed class ContentTypeService : IContentTypeService
     /// </summary>
     /// <param name="id">The unique id</param>
     /// <returns>The model</returns>
-    public async Task<AeroContentType> GetByIdAsync(string id)
+    public async Task<ContentType> GetByIdAsync(string id)
     {
         var types = await GetTypes().ConfigureAwait(false);
 
@@ -83,7 +83,7 @@ internal sealed class ContentTypeService : IContentTypeService
     /// depending on its state.
     /// </summary>
     /// <param name="model">The model</param>
-    public async Task SaveAsync(AeroContentType model)
+    public async Task SaveAsync(ContentType model)
     {
         // Validate model
         var context = new ValidationContext(model);
@@ -133,7 +133,7 @@ internal sealed class ContentTypeService : IContentTypeService
     /// Deletes the given model.
     /// </summary>
     /// <param name="model">The model</param>
-    public async Task DeleteAsync(AeroContentType model)
+    public async Task DeleteAsync(ContentType model)
     {
         // Call hooks & delete
         App.Hooks.OnBeforeDelete(model);
@@ -151,7 +151,7 @@ internal sealed class ContentTypeService : IContentTypeService
     /// Deletes the given models.
     /// </summary>
     /// <param name="models">The models</param>
-    public async Task DeleteAsync(IEnumerable<AeroContentType> models)
+    public async Task DeleteAsync(IEnumerable<ContentType> models)
     {
         if (models != null && models.Count() > 0)
         {
@@ -173,11 +173,11 @@ internal sealed class ContentTypeService : IContentTypeService
     /// <summary>
     /// Gets the content types from the database.
     /// </summary>
-    private async Task<IEnumerable<AeroContentType>> GetTypes()
+    private async Task<IEnumerable<ContentType>> GetTypes()
     {
         if (_cache != null)
         {
-            var types = await _cache.GetAsync<IEnumerable<AeroContentType>>(CacheKey).ConfigureAwait(false);
+            var types = await _cache.GetAsync<IEnumerable<ContentType>>(CacheKey).ConfigureAwait(false);
 
             if (types == null)
             {
