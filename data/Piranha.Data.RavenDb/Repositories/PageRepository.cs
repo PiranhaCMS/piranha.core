@@ -562,6 +562,13 @@ internal class PageRepository : IPageRepository
     /// <param name="isDraft">If the model should be saved as a draft</param>
     private async Task<IEnumerable<string>> Save<T>(T model, bool isDraft) where T : Models.PageBase
     {
+        // Clone the model when saving as draft to avoid modifying the original object
+        if (isDraft)
+        {
+            var json = JsonSerializer.Serialize(model);
+            model = JsonSerializer.Deserialize<T>(json);
+        }
+
         var type = App.PageTypes.GetById(model.TypeId);
         var affected = new List<string>();
         var isNew = false;
@@ -581,6 +588,13 @@ internal class PageRepository : IPageRepository
             var page = await pageQuery
                 .FirstOrDefaultAsync(p => p.Id == model.Id)
                 .ConfigureAwait(false);
+
+            // Clone the page entity when saving as draft to avoid modifying the original in DB
+            if (isDraft && page != null)
+            {
+                var json = JsonSerializer.Serialize(page);
+                page = JsonSerializer.Deserialize<Page>(json);
+            }
 
             if (page == null)
             {
