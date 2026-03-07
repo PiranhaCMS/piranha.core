@@ -160,8 +160,10 @@ internal class ContentRepository : IContentRepository
         //    .Where(c => c.Type.Group == groupId)
         //    .ToListAsync();
 
-        var contents = await _db.session.Query<Content, Content_ByTypeGroup>()
-            .Where(c => c.Type.Group == groupId)
+        var contents = await _db.session.Query<Content_ByTypeGroup.IndexEntry, Content_ByTypeGroup>()
+            .Customize(x => x.WaitForNonStaleResults())
+            .Where(c => c.Group == groupId)
+            .OfType<Content>()
             .ToListAsync();
 
         // Get the translation status for each of the

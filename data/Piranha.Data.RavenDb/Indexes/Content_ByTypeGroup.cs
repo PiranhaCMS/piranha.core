@@ -8,18 +8,22 @@ namespace Piranha.Data.RavenDb.Indexes;
 
 public class Content_ByTypeGroup : AbstractIndexCreationTask<Content>
 {
+    public class IndexEntry
+    {
+        public string Group { get; set; }
+        public bool UseBlocks { get; set; }
+        public bool UseCategory { get; set; }
+    }
+
     public Content_ByTypeGroup()
     {
         Map = contents => from c in contents
-                          select new
+                          let type = LoadDocument<Piranha.Models.ContentType>(c.TypeId)
+                          select new IndexEntry
                           {
-                              c.Id,
-                              Type_Group = c.Type.Group,
-                              Type_UseBlocks = c.Type.UseBlocks,
-                              Type_UseCategory = c.Type.UseCategory
+                              Group = type != null ? type.Group : null,
+                              UseBlocks = type != null ? type.UseBlocks : false,
+                              UseCategory = type != null ? type.UseCategory : false
                           };
-
-        // Optional: store fields to avoid extra document fetch
-        Store(x => x.Id, FieldStorage.Yes);
     }
 }

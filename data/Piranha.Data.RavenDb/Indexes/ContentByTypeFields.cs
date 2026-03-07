@@ -28,12 +28,13 @@ public class Content_ByTypeFields : AbstractIndexCreationTask<Content>
     public Content_ByTypeFields()
     {
         Map = contents => from c in contents
+                          let type = LoadDocument<Piranha.Models.ContentType>(c.TypeId)
                           select new IndexEntry
                           {
-                              Group = c.Type.Group,
-                              UseBlocks = c.Type.UseBlocks,
-                              UseCategory = c.Type.UseCategory,
-                              UseTags = c.Type.UseTags
+                              Group = type != null ? type.Group : null,
+                              UseBlocks = type != null ? type.UseBlocks : false,
+                              UseCategory = type != null ? type.UseCategory : false,
+                              UseTags = type != null ? type.UseTags : false
                           };
     }
 }

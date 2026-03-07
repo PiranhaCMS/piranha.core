@@ -991,7 +991,7 @@ public class PageTests : BaseTestsAsync
         await api.Pages.SaveAsync(originalPage);
 
         var p = await api.Pages.GetByIdAsync<MyPage>(PAGE_8_ID);
-        Assert.Equal("body to be copied", p.Body.Value);
+            Assert.Equal("body to be copied", p.Body.Value);
         Assert.Equal("ingress to be copied", p.Ingress.Value);
     }
 

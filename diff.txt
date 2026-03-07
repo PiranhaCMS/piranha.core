@@ -1,0 +1,21 @@
+diff --git a/data/Piranha.Data.RavenDb/Indexes/Content_ByTypeGroup.cs b/data/Piranha.Data.RavenDb/Indexes/Content_ByTypeGroup.cs
+index 9350778c..55a536b4 100644
+--- a/data/Piranha.Data.RavenDb/Indexes/Content_ByTypeGroup.cs
++++ b/data/Piranha.Data.RavenDb/Indexes/Content_ByTypeGroup.cs
+@@ -11,12 +11,13 @@ public class Content_ByTypeGroup : AbstractIndexCreationTask<Content>
+     public Content_ByTypeGroup()
+     {
+         Map = contents => from c in contents
++                          let type = LoadDocument<Piranha.Models.ContentType>(c.TypeId)
+                           select new
+                           {
+                               c.Id,
+-                              Type_Group = c.Type.Group,
+-                              Type_UseBlocks = c.Type.UseBlocks,
+-                              Type_UseCategory = c.Type.UseCategory
++                              Type_Group = type != null ? type.Group : null,
++                              Type_UseBlocks = type != null ? type.UseBlocks : false,
++                              Type_UseCategory = type != null ? type.UseCategory : false
+                           };
+ 
+         // Optional: store fields to avoid extra document fetch

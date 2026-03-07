@@ -158,6 +158,9 @@ internal class PageRepository : IPageRepository
             .ToListAsync()
             .ConfigureAwait(false);
 
+        // todo - consider using session.LoadAsync for each ID if the number of IDs is small, to avoid index overhead; or use session.LoadAsync with multiple IDs if supported by RavenDB client
+        //var p = await _db.session.LoadAsync<T>(ids);
+
         foreach (var page in pages)
         {
             ret.Add(await _contentService.TransformAsync<T>(page, App.PageTypes.GetById(page.PageTypeId), ProcessAsync)
