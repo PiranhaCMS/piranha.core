@@ -18,7 +18,7 @@ public static class PiranhaExtensions
     /// </summary>
     /// <param name="list">The list</param>
     /// <param name="titles">The taxonomies</param>
-    public static void Add(this IList<Taxonomy> list, params string[] titles)
+    public static void Add(this List<Taxonomy> list, params string[] titles)
     {
         foreach (var title in titles)
         {
@@ -34,7 +34,7 @@ public static class PiranhaExtensions
     /// </summary>
     /// <param name="list">The list</param>
     /// <param name="contentGroupId">Content group type id</param>
-    public static IList<ContentType> GetByGroupId(this CachedList<ContentType> list, string contentGroupId)
+    public static List<ContentType> GetByGroupId(this CachedList<ContentType> list, string contentGroupId)
     {
         return Piranha.App.ContentTypes.Where(ct => string.Equals(ct.Group, contentGroupId, StringComparison.OrdinalIgnoreCase)).ToList();
     }

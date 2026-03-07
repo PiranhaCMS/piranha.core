@@ -34,7 +34,7 @@ public class CommentListModel
     /// <summary>
     /// Gets/sets the available comments.
     /// </summary>
-    public IList<CommentItem> Comments { get; set; } = new List<CommentItem>();
+    public List<CommentItem> Comments { get; set; } = new List<CommentItem>();
 
     /// <summary>
     /// Gets/sets the optional status message from the last operation.

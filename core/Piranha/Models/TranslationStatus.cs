@@ -62,5 +62,5 @@ public class TranslationStatus
     /// <summary>
     /// Gets/sets the status items for the available languages.
     /// </summary>
-    public IList<TranslationStatusItem> Translations { get; set; } = new List<TranslationStatusItem>();
+    public List<TranslationStatusItem> Translations { get; set; } = new List<TranslationStatusItem>();
 }

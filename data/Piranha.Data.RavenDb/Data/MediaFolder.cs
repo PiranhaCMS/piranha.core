@@ -16,5 +16,5 @@ public sealed class MediaFolder : Models.MediaFolder
     /// <summary>
     /// Gets/sets the available media.
     /// </summary>
-    public IList<Media> Media { get; set; } = new List<Media>();
+    public List<Media> Media { get; set; } = new List<Media>();
 }

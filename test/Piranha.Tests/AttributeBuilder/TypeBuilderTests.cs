@@ -39,7 +39,7 @@ public class TypeBuilderTests : BaseTestsAsync
     [ContentType(Id = "Tagged", Title = "Tagged Content Type")]
     public class TaggedContentType : MyContent<TaggedContentType>, ITaggedContent
     {
-        public IList<Taxonomy> Tags { get; set; }
+        public List<Taxonomy> Tags { get; set; }
     }
 
     [ContentType(Id = "Complex", Title = "Complex Content Type", UseExcerpt = false, UsePrimaryImage = false)]
@@ -57,7 +57,7 @@ public class TypeBuilderTests : BaseTestsAsync
         }
 
         [Region(Title = "Intro", ListTitle = "Default", ListPlaceholder = "Add new item", ListExpand = false, Icon = "fa fas-fish")]
-        public IList<Extend.Fields.TextField> Slider { get; set; }
+        public List<Extend.Fields.TextField> Slider { get; set; }
 
         [Region(Title = "Main content", Description = "This is where you enter the main content")]
         public BodyRegion Content { get; set; }
@@ -98,7 +98,7 @@ public class TypeBuilderTests : BaseTestsAsync
         }
 
         [Region(Title = "Intro", ListTitle = "Default", ListPlaceholder = "Add new item", ListExpand = false, Icon = "fa fas-fish")]
-        public IList<Extend.Fields.TextField> Slider { get; set; }
+        public List<Extend.Fields.TextField> Slider { get; set; }
 
         [Region(Title = "Main content", Description = "This is where you enter the main content")]
         public BodyRegion Content { get; set; }
@@ -133,7 +133,7 @@ public class TypeBuilderTests : BaseTestsAsync
         }
 
         [Region(Title = "Intro")]
-        public IList<Extend.Fields.TextField> Slider { get; set; }
+        public List<Extend.Fields.TextField> Slider { get; set; }
 
         [Region(Title = "Main content")]
         public BodyRegion Content { get; set; }
@@ -158,7 +158,7 @@ public class TypeBuilderTests : BaseTestsAsync
         }
 
         [Region(Title = "Intro")]
-        public IList<Extend.Fields.TextField> Slider { get; set; }
+        public List<Extend.Fields.TextField> Slider { get; set; }
 
         [Region(Title = "Main content")]
         public BodyRegion Content { get; set; }

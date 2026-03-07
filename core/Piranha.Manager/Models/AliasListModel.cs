@@ -65,12 +65,12 @@ public class AliasListModel
     /// <summary>
     /// Gets/sets the available sites.
     /// </summary>
-    public IList<AliasSite> Sites { get; set; } = new List<AliasSite>();
+    public List<AliasSite> Sites { get; set; } = new List<AliasSite>();
 
     /// <summary>
     /// Gets/set the available items.
     /// </summary>
-    public IList<AliasItem> Items { get; set; } = new List<AliasItem>();
+    public List<AliasItem> Items { get; set; } = new List<AliasItem>();
 
     /// <summary>
     /// Gets/sets the optional status message from the last operation.

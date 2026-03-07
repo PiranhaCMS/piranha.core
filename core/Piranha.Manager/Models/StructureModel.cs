@@ -22,7 +22,7 @@ public class StructureModel
         /// <summary>
         /// Gets/sets the available children.
         /// </summary>
-        public IList<StructureItem> Children { get; set; }
+        public List<StructureItem> Children { get; set; }
 
         /// <summary>
         /// Default constructor.
@@ -41,5 +41,5 @@ public class StructureModel
     /// <summary>
     /// Gets/sets the structure items.
     /// </summary>
-    public IList<StructureItem> Items { get; set; } = new List<StructureItem>();
+    public List<StructureItem> Items { get; set; } = new List<StructureItem>();
 }

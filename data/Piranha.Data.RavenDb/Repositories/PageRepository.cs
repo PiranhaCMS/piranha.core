@@ -1032,7 +1032,7 @@ internal class PageRepository : IPageRepository
     /// <param name="siteId">The site id</param>
     /// <param name="sortOrder">The sort order</param>
     /// <param name="increase">If sort order should be increase or decreased</param>
-    private IEnumerable<string> MovePages(IList<Page> pages, string pageId, string siteId, int sortOrder, bool increase)
+    private IEnumerable<string> MovePages(List<Page> pages, string pageId, string siteId, int sortOrder, bool increase)
     {
         var affected = pages.Where(p => p.SortOrder >= sortOrder).ToList();
 

@@ -898,7 +898,7 @@ internal sealed class PostService : IPostService
     /// <param name="id">The unique id</param>
     /// <param name="blogPages">The blog pages</param>
     /// <returns>The post model</returns>
-    private async Task<T> GetByIdAsync<T>(string id, IList<PageInfo> blogPages) where T : PostBase
+    private async Task<T> GetByIdAsync<T>(string id, List<PageInfo> blogPages) where T : PostBase
     {
         PostBase model = null;
 

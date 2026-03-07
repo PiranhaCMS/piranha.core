@@ -548,7 +548,7 @@ public class PageService
         return false;
     }
 
-    private Tuple<string?,int> GetPosition(string id, IList<StructureModel.StructureItem> items, string? parentId = null)
+    private Tuple<string?,int> GetPosition(string id, List<StructureModel.StructureItem> items, string? parentId = null)
     {
         for (var n = 0; n < items.Count; n++)
         {

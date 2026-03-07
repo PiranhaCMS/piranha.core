@@ -157,12 +157,12 @@ public class PostEditModel : Content.ContentEditModel
     /// <summary>
     /// Gets/sets the currently selected permissions.
     /// </summary>
-    public IList<string> SelectedPermissions { get; set; } = new List<string>();
+    public List<string> SelectedPermissions { get; set; } = new List<string>();
 
     /// <summary>
     /// Gets/sets all of the available permissions.
     /// </summary>
-    public IList<KeyValuePair<string, string>> Permissions { get; set; } = new List<KeyValuePair<string, string>>();
+    public List<KeyValuePair<string, string>> Permissions { get; set; } = new List<KeyValuePair<string, string>>();
 
     /// <summary>
     /// Gets/sets if primary image should be used for the

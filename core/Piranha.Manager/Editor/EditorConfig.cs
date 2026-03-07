@@ -48,7 +48,7 @@ public class EditorConfig
     /// <summary>
     /// Gets/sets the configured editor styles.
     /// </summary>
-    public IList<EditorStyle> StyleFormats { get; set; } = new List<EditorStyle>();
+    public List<EditorStyle> StyleFormats { get; set; } = new List<EditorStyle>();
 
     /// <summary>
     /// Configures the editor from the given json file.

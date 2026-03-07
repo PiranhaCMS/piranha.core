@@ -69,5 +69,5 @@ public sealed class ContentTypeRegion
     /// <summary>
     /// Gets/sets the available fields.
     /// </summary>
-    public IList<ContentTypeField> Fields { get; set; } = new List<ContentTypeField>();
+    public List<ContentTypeField> Fields { get; set; } = new List<ContentTypeField>();
 }

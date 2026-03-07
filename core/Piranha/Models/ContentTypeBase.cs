@@ -44,15 +44,15 @@ public abstract class ContentTypeBase : ITypeModel
     /// <summary>
     /// Gets/sets the available regions.
     /// </summary>
-    public IList<ContentTypeRegion> Regions { get; set; } = new List<ContentTypeRegion>();
+    public List<ContentTypeRegion> Regions { get; set; } = new List<ContentTypeRegion>();
 
     /// <summary>
     /// Gets/sets the optional routes.
     /// </summary>
-    public IList<ContentTypeRoute> Routes { get; set; } = new List<ContentTypeRoute>();
+    public List<ContentTypeRoute> Routes { get; set; } = new List<ContentTypeRoute>();
 
     /// <summary>
     /// Gets/sets the optional custom editors.
     /// </summary>
-    public IList<ContentTypeEditor> CustomEditors { get; set; } = new List<ContentTypeEditor>();
+    public List<ContentTypeEditor> CustomEditors { get; set; } = new List<ContentTypeEditor>();
 }

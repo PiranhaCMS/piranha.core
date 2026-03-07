@@ -49,22 +49,22 @@ public sealed class Content : ContentBase<ContentField>, ICategorized, ITranslat
     /// <summary>
     /// Gets/sets the available blocks.
     /// </summary>
-    public IList<ContentBlock> Blocks { get; set; } = new List<ContentBlock>();
+    public List<ContentBlock> Blocks { get; set; } = new List<ContentBlock>();
 
     /// <summary>
     /// Gets/sets the available tags.
     /// </summary>
-    public IList<ContentTaxonomy> Tags { get; set; } = new List<ContentTaxonomy>();
+    public List<ContentTaxonomy> Tags { get; set; } = new List<ContentTaxonomy>();
 
     /// <summary>
     /// Gets/sets the available translations.
     /// </summary>
-    public IList<ContentTranslation> Translations { get; set; } = new List<ContentTranslation>();
+    public List<ContentTranslation> Translations { get; set; } = new List<ContentTranslation>();
 
     /// <summary>
     /// Gets/sets the content type.
     /// </summary>
-    public ContentType Type { get; set; }
+    public Models.ContentType Type { get; set; }
 
     /// <summary>
     /// Sets the translation for the specified language.

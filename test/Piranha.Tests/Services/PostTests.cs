@@ -78,7 +78,7 @@ public class PostTests : BaseTestsAsync
     [PostType(Title = "My CollectionPost")]
     public class MyCollectionPost : Models.Post<MyCollectionPost>
     {
-        [Region] public IList<TextField> Texts { get; set; } = new List<TextField>();
+        [Region] public List<TextField> Texts { get; set; } = new List<TextField>();
     }
 
     [PostType(Title = "Injection PostType")]

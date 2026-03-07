@@ -43,15 +43,15 @@ public abstract class ContentEditModel : AsyncResult, IEntity
     /// <summary>
     /// Gets/sets the available blocks.
     /// </summary>
-    public IList<BlockModel> Blocks { get; set; } = new List<BlockModel>();
+    public List<BlockModel> Blocks { get; set; } = new List<BlockModel>();
 
     /// <summary>
     /// Gets/sets the available regions.
     /// </summary>
-    public IList<RegionModel> Regions { get; set; } = new List<RegionModel>();
+    public List<RegionModel> Regions { get; set; } = new List<RegionModel>();
 
     /// <summary>
     /// Gets/sets the available custom editors.
     /// </summary>
-    public IList<EditorModel> Editors { get; set; } = new List<EditorModel>();
+    public List<EditorModel> Editors { get; set; } = new List<EditorModel>();
 }

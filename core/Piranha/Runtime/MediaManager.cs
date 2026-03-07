@@ -106,7 +106,7 @@ public class MediaManager
     /// <summary>
     /// Gets/sets the currently registered meta properties for media.
     /// </summary>
-    public IList<string> MetaProperties { get; set; } = new List<string>();
+    public List<string> MetaProperties { get; set; } = new List<string>();
 
     /// <summary>
     /// Checks if the given filename has a supported extension.

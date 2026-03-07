@@ -31,10 +31,10 @@ public class DynamicContent : Content<DynamicContent>, IDynamicContent, ICategor
     /// <summary>
     /// Gets/sets the available tags.
     /// </summary>
-    public IList<Taxonomy> Tags { get; set; } = new List<Taxonomy>();
+    public List<Taxonomy> Tags { get; set; } = new List<Taxonomy>();
 
     /// <summary>
     /// Gets/sets the blocks.
     /// </summary>
-    public IList<Extend.Block> Blocks { get; set; } = new List<Extend.Block>();
+    public List<Extend.Block> Blocks { get; set; } = new List<Extend.Block>();
 }

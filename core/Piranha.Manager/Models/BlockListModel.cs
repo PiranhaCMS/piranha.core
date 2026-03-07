@@ -28,7 +28,7 @@ public class BlockListModel
         /// <summary>
         /// Gets/sets the available block types for the category.
         /// </summary>
-        public IList<BlockItem> Items { get; set; } = new List<BlockItem>();
+        public List<BlockItem> Items { get; set; } = new List<BlockItem>();
     }
 
     /// <summary>
@@ -55,7 +55,7 @@ public class BlockListModel
     /// <summary>
     /// Gets/sets the available block categories.
     /// </summary>
-    public IList<ListCategory> Categories { get; set; } = new List<ListCategory>();
+    public List<ListCategory> Categories { get; set; } = new List<ListCategory>();
 
     /// <summary>
     /// Gets/sets the total number of block types.

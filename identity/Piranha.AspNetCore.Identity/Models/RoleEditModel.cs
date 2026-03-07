@@ -22,7 +22,7 @@ public class RoleEditModel
     }
 
     public Role Role { get; set; }
-    public IList<string> SelectedClaims { get; set; }
+    public List<string> SelectedClaims { get; set; }
 
     public static RoleEditModel GetById(IDb db, string id)
     {

@@ -39,5 +39,5 @@ public class TranslationSummary
     /// <summary>
     /// Gets/sets the translation status items.
     /// </summary>
-    public IList<TranslationStatus> Content { get; set; } = new List<TranslationStatus>();
+    public List<TranslationStatus> Content { get; set; } = new List<TranslationStatus>();
 }

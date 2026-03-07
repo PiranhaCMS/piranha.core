@@ -131,11 +131,11 @@ internal sealed class SiteService : ISiteService
     /// <returns>The model</returns>
     public async Task<Site> GetByHostnameAsync(string hostname)
     {
-        IList<SiteMapping> mappings;
+        List<SiteMapping> mappings;
 
         if (_cache != null)
         {
-            mappings = await _cache.GetAsync<IList<SiteMapping>>(SITE_MAPPINGS).ConfigureAwait(false);
+            mappings = await _cache.GetAsync<List<SiteMapping>>(SITE_MAPPINGS).ConfigureAwait(false);
 
             if (mappings == null)
             {

@@ -31,6 +31,6 @@ public class ContentListModel
     public ContentGroup Group { get; set; }
     public IEnumerable<ContentGroup> Groups { get; set; } = new List<ContentGroup>();
     public IEnumerable<ContentItem> Items { get; set; } = new List<ContentItem>();
-    public IList<ContentTypeModel> Types { get; set; } = new List<ContentTypeModel>();
+    public List<ContentTypeModel> Types { get; set; } = new List<ContentTypeModel>();
     public StatusMessage Status { get; set; }
 }

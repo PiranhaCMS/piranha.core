@@ -16,8 +16,8 @@ namespace Piranha.AspNetCore.Identity.Models;
 public class UserEditModel
 {
     public User User { get; set; }
-    public IList<Role> Roles { get; set; } = new List<Role>();
-    public IList<string> SelectedRoles { get; set; } = new List<string>();
+    public List<Role> Roles { get; set; } = new List<Role>();
+    public List<string> SelectedRoles { get; set; } = new List<string>();
     public string Password { get; set; }
     public string PasswordConfirm { get; set; }
 

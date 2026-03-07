@@ -30,5 +30,5 @@ public class BlockGenericModel : BlockModel
     /// <summary>
     /// Gets/sets the global fields.
     /// </summary>
-    public IList<FieldModel> Model { get; set; } = new List<FieldModel>();
+    public List<FieldModel> Model { get; set; } = new List<FieldModel>();
 }

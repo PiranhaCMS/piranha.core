@@ -104,12 +104,12 @@ public sealed class Page : RoutedContentBase<PageField>
     /// <summary>
     /// Gets/sets the available page blocks.
     /// </summary>
-    public IList<PageBlock> Blocks { get; set; } = new List<PageBlock>();
+    public List<PageBlock> Blocks { get; set; } = new List<PageBlock>();
 
     /// <summary>
     /// Gets/sets the available permissions.
     /// </summary>
-    public IList<PagePermission> Permissions { get; set; } = new List<PagePermission>();
+    public List<PagePermission> Permissions { get; set; } = new List<PagePermission>();
 
     /// <summary>
     /// Gets/sets the optional page this page is a copy of

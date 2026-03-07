@@ -60,7 +60,7 @@ public sealed class AppBlock : AppDataItem
     /// <summary>
     /// Gets/sets the specified item types.
     /// </summary>
-    public IList<Type> ItemTypes { get; set; } = new List<Type>();
+    public List<Type> ItemTypes { get; set; } = new List<Type>();
 
     /// <summary>
     /// Gets/sets the optional init methods.

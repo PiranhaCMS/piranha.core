@@ -23,7 +23,7 @@ public static class ContentUtils
     /// </summary>
     /// <param name="block">The block</param>
     /// <returns>The available fields</returns>
-    public static IList<FieldModel> GetBlockFields(Block block)
+    public static List<FieldModel> GetBlockFields(Block block)
     {
         var fields = new List<FieldModel>();
 

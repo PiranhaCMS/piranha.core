@@ -91,8 +91,8 @@ public class PageTests : BaseTestsAsync
     [PageType(Title = "My CollectionPage")]
     public class MyCollectionPage : Models.Page<MyCollectionPage>
     {
-        [Region] public IList<TextField> Texts { get; set; } = new List<TextField>();
-        [Region] public IList<ComplexRegion> Teasers { get; set; } = new List<ComplexRegion>();
+        [Region] public List<TextField> Texts { get; set; } = new List<TextField>();
+        [Region] public List<ComplexRegion> Teasers { get; set; } = new List<ComplexRegion>();
     }
 
     [PageType(Title = "Injection PageType")]

@@ -107,17 +107,17 @@ public class ContentEditModel : AsyncResult
     /// <summary>
     /// Gets/sets the available blocks.
     /// </summary>
-    public IList<Content.BlockModel> Blocks { get; set; } = new List<Content.BlockModel>();
+    public List<Content.BlockModel> Blocks { get; set; } = new List<Content.BlockModel>();
 
     /// <summary>
     /// Gets/sets the available regions.
     /// </summary>
-    public IList<Content.RegionModel> Regions { get; set; } = new List<Content.RegionModel>();
+    public List<Content.RegionModel> Regions { get; set; } = new List<Content.RegionModel>();
 
     /// <summary>
     /// Gets/sets the available custom editors.
     /// </summary>
-    public IList<Content.EditorModel> Editors { get; set; } = new List<Content.EditorModel>();
+    public List<Content.EditorModel> Editors { get; set; } = new List<Content.EditorModel>();
 
     /// <summary>
     /// Gets/sets the available languages.

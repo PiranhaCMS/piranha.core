@@ -35,5 +35,5 @@ public abstract class BlockBase<T> where T : BlockFieldBase
     /// <summary>
     /// Gets/sets the available fields.
     /// </summary>
-    public IList<T> Fields { get; set; } = new List<T>();
+    public List<T> Fields { get; set; } = new List<T>();
 }

@@ -28,11 +28,11 @@ public class ContentTypeBuilder
     }
 
     private readonly IApi _api;
-    private readonly IList<Type> _contentGroups = new List<Type>();
-    private readonly IList<BuilderItem<ContentType>> _contentTypes = new List<BuilderItem<ContentType>>();
-    private readonly IList<BuilderItem<PageType>> _pageTypes = new List<BuilderItem<PageType>>();
-    private readonly IList<BuilderItem<PostType>> _postTypes = new List<BuilderItem<PostType>>();
-    private readonly IList<BuilderItem<SiteType>> _siteTypes = new List<BuilderItem<SiteType>>();
+    private readonly List<Type> _contentGroups = new List<Type>();
+    private readonly List<BuilderItem<ContentType>> _contentTypes = new List<BuilderItem<ContentType>>();
+    private readonly List<BuilderItem<PageType>> _pageTypes = new List<BuilderItem<PageType>>();
+    private readonly List<BuilderItem<PostType>> _postTypes = new List<BuilderItem<PostType>>();
+    private readonly List<BuilderItem<SiteType>> _siteTypes = new List<BuilderItem<SiteType>>();
 
     /// <summary>
     /// Default constructor.
@@ -482,7 +482,7 @@ public class ContentTypeBuilder
         return null;
     }
 
-    private IList<ContentTypeRoute> GetRoutes(Type type)
+    private List<ContentTypeRoute> GetRoutes(Type type)
     {
         var routes = new List<ContentTypeRoute>();
 
@@ -508,7 +508,7 @@ public class ContentTypeBuilder
         return routes;
     }
 
-    private IList<ContentTypeEditor> GetEditors(Type type)
+    private List<ContentTypeEditor> GetEditors(Type type)
     {
         var editors = new List<ContentTypeEditor>();
 
@@ -542,7 +542,7 @@ public class ContentTypeBuilder
         return editors;
     }
 
-    private IList<ContentTypeRegion> GetRegions(Type type)
+    private List<ContentTypeRegion> GetRegions(Type type)
     {
         var regions = new List<ContentTypeRegion>();
 

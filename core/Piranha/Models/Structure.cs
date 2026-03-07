@@ -37,7 +37,7 @@ public abstract class Structure<TThis, T> : List<T> where T : StructureItem<TThi
     /// </summary>
     /// <param name="id">The unique id</param>
     /// <returns>The breadcrumb</returns>
-    public IList<T> GetBreadcrumb(string? id)
+    public List<T> GetBreadcrumb(string? id)
     {
         if (!string.IsNullOrEmpty(id))
         {
@@ -54,7 +54,7 @@ public abstract class Structure<TThis, T> : List<T> where T : StructureItem<TThi
     /// <param name="id">The unique id</param>
     /// <param name="includeRootNode">If the root node should be included</param>
     /// <returns>The partial structure if found</returns>
-    private TThis GetPartialRecursive(IList<T> items, string id, bool includeRootNode)
+    private TThis GetPartialRecursive(List<T> items, string id, bool includeRootNode)
     {
         foreach (var item in items)
         {
@@ -90,7 +90,7 @@ public abstract class Structure<TThis, T> : List<T> where T : StructureItem<TThi
     /// <param name="items">The items</param>
     /// <param name="id">The unique id</param>
     /// <returns>The breadcrumb items</returns>
-    private IList<T> GetBreadcrumbRecursive(IList<T> items, string id)
+    private List<T> GetBreadcrumbRecursive(List<T> items, string id)
     {
         foreach (var item in items)
         {

@@ -86,15 +86,15 @@ public sealed class Post : RoutedContentBase<PostField>
     /// <summary>
     /// Gets/sets the available tags.
     /// </summary>
-    public IList<PostTag> Tags { get; set; } = new List<PostTag>();
+    public List<PostTag> Tags { get; set; } = new List<PostTag>();
 
     /// <summary>
     /// Gets/sets the available post blocks.
     /// </summary>
-    public IList<PostBlock> Blocks { get; set; } = new List<PostBlock>();
+    public List<PostBlock> Blocks { get; set; } = new List<PostBlock>();
 
     /// <summary>
     /// Gets/sets the available permissions.
     /// </summary>
-    public IList<PostPermission> Permissions { get; set; } = new List<PostPermission>();
+    public List<PostPermission> Permissions { get; set; } = new List<PostPermission>();
 }

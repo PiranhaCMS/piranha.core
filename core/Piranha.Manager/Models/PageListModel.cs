@@ -48,7 +48,7 @@ public class PageListModel
         public List<PageItem> Items { get; set; } = new List<PageItem>();
     }
 
-    public IList<PageSite> Sites { get; set; } = new List<PageSite>();
-    public IList<ContentTypeModel> PageTypes { get; set; } = new List<ContentTypeModel>();
+    public List<PageSite> Sites { get; set; } = new List<PageSite>();
+    public List<ContentTypeModel> PageTypes { get; set; } = new List<ContentTypeModel>();
     public StatusMessage Status { get; set; }
 }

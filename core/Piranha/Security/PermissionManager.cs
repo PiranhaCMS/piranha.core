@@ -15,12 +15,12 @@ namespace Piranha.Security;
 /// </summary>
 public class PermissionManager
 {
-    private readonly Dictionary<string, IList<PermissionItem>> _modules = new Dictionary<string, IList<PermissionItem>>();
+    private readonly Dictionary<string, List<PermissionItem>> _modules = new Dictionary<string, List<PermissionItem>>();
 
     /// <summary>
     /// Gets the permission items for the given module.
     /// </summary>
-    public IList<PermissionItem> this[string module]
+    public List<PermissionItem> this[string module]
     {
         get
         {
@@ -36,7 +36,7 @@ public class PermissionManager
     /// Gets the registered permission modules.
     /// </summary>
     /// <returns>The module names</returns>
-    public IList<string> GetModules()
+    public List<string> GetModules()
     {
         return _modules.Keys.OrderBy(k => k).ToList();
     }
@@ -46,7 +46,7 @@ public class PermissionManager
     /// </summary>
     /// <param name="module">The module name</param>
     /// <returns>The available permissions</returns>
-    public IList<PermissionItem> GetPermissions(string module)
+    public List<PermissionItem> GetPermissions(string module)
     {
         return this[module].OrderBy(p => p.Name).ToList();
     }
@@ -55,7 +55,7 @@ public class PermissionManager
     /// Gets all of the available permissions.
     /// </summary>
     /// <returns>The available permissions</returns>
-    public IList<PermissionItem> GetPermissions()
+    public List<PermissionItem> GetPermissions()
     {
         var all = new Dictionary<string, PermissionItem>();
 
@@ -73,7 +73,7 @@ public class PermissionManager
     /// Gets all of available permissions that is not internal.
     /// </summary>
     /// <returns>The available permissions</returns>
-    public IList<PermissionItem> GetPublicPermissions()
+    public List<PermissionItem> GetPublicPermissions()
     {
         var all = new Dictionary<string, PermissionItem>();
 

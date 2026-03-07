@@ -300,7 +300,7 @@ internal class MediaRepository : IMediaRepository
     /// <param name="parentId">The current parent id</param>
     /// <param name="level">The current level in the structure</param>
     /// <returns>The structure</returns>
-    private Models.MediaStructure Sort(IEnumerable<MediaFolder> folders, IList<FolderCount> count, string? parentId = null, int level = 0)
+    private Models.MediaStructure Sort(IEnumerable<MediaFolder> folders, List<FolderCount> count, string? parentId = null, int level = 0)
     {
         var rootCount = count.FirstOrDefault(c => c.FolderId == null)?.Count;
         var totalCount = count.Sum(c => c.Count);

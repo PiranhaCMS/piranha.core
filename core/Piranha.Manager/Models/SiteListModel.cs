@@ -28,10 +28,10 @@ public class SiteListModel
     /// <summary>
     /// Gets/sets the available sites.
     /// </summary>
-    public IList<PageListModel.PageSite> Sites { get; set; } = new List<PageListModel.PageSite>();
+    public List<PageListModel.PageSite> Sites { get; set; } = new List<PageListModel.PageSite>();
 
     /// <summary>
     /// Gets/sets the items in the currently selected site.
     /// </summary>
-    public IList<PageListModel.PageItem> Items { get; set; } = new List<PageListModel.PageItem>();
+    public List<PageListModel.PageItem> Items { get; set; } = new List<PageListModel.PageItem>();
 }

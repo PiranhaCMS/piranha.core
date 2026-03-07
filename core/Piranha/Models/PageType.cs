@@ -41,13 +41,13 @@ public sealed class PageType : ContentTypeBase
     /// Page. If the collection is empty all Post Types should
     /// be considered to be allowed.
     /// </summary>
-    public IList<string> ArchiveItemTypes { get; set; } = new List<string>();
+    public List<string> ArchiveItemTypes { get; set; } = new List<string>();
 
     /// <summary>
     /// Gets/sets the allowed block types. An empty collection means
     /// that all types are allowed.
     /// </summary>
-    public IList<string> BlockItemTypes { get; set; } = new List<string>();
+    public List<string> BlockItemTypes { get; set; } = new List<string>();
 
     /// <summary>
     /// Validates that the page type is correctly defined.

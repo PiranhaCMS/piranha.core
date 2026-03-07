@@ -98,7 +98,7 @@ public class SitemapItem : StructureItem<Sitemap, SitemapItem>
     /// <summary>
     /// Gets/sets the permissions needed to access the page.
     /// </summary>
-    public IList<string> Permissions { get; set; } = new List<string>();
+    public List<string> Permissions { get; set; } = new List<string>();
 
     /// <summary>
     /// Default constructor.

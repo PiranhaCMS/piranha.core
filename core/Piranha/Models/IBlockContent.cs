@@ -15,5 +15,5 @@ public interface IBlockContent
     /// <summary>
     /// Gets/sets the blocks.
     /// </summary>
-    IList<Extend.Block> Blocks { get; set; }
+    List<Extend.Block> Blocks { get; set; }
 }

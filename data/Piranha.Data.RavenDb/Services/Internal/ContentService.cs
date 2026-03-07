@@ -295,7 +295,7 @@ internal class ContentService<TContent, TField, TModelBase> : IContentService<TC
     }
 
     /// <inheritdoc />
-    public IList<Extend.Block> TransformBlocks(IEnumerable<Block> blocks)
+    public List<Extend.Block> TransformBlocks(IEnumerable<Block> blocks)
     {
         var models = new List<Extend.Block>();
 
@@ -353,7 +353,7 @@ internal class ContentService<TContent, TField, TModelBase> : IContentService<TC
     }
 
     /// <inheritdoc />
-    public IList<Extend.Block> TransformBlocks(IEnumerable<ContentBlock> blocks, string? languageId)
+    public List<Extend.Block> TransformBlocks(IEnumerable<ContentBlock> blocks, string? languageId)
     {
         var models = new List<Extend.Block>();
 
@@ -408,7 +408,7 @@ internal class ContentService<TContent, TField, TModelBase> : IContentService<TC
     }
 
     /// <inheritdoc />
-    public IList<Block> TransformBlocks(IList<Extend.Block> models)
+    public List<Block> TransformBlocks(List<Extend.Block> models)
     {
         var blocks = new List<Block>();
 
@@ -470,7 +470,7 @@ internal class ContentService<TContent, TField, TModelBase> : IContentService<TC
     }
 
     /// <inheritdoc />
-    public IList<ContentBlock> TransformContentBlocks(IList<Extend.Block> models, string languageId)
+    public List<ContentBlock> TransformContentBlocks(List<Extend.Block> models, string languageId)
     {
         var blocks = new List<ContentBlock>();
 
@@ -625,7 +625,7 @@ internal class ContentService<TContent, TField, TModelBase> : IContentService<TC
     /// <param name="regionId">The region id</param>
     /// <param name="sortOrder">The optional sort order</param>
     /// <param name="languageId">The optional language id</param>
-    private IList<string> MapRegion(TContent content, object region, Models.ContentTypeRegion regionType,
+    private List<string> MapRegion(TContent content, object region, Models.ContentTypeRegion regionType,
         string regionId, int sortOrder = 0, string? languageId = null)
     {
         var items = new List<string>();
@@ -802,7 +802,7 @@ internal class ContentService<TContent, TField, TModelBase> : IContentService<TC
     /// <param name="fields">The field</param>
     /// <param name="languageId">The languageId</param>
     private async Task AddComplexValueAsync<T>(T model, Models.ContentTypeBase contentType, string regionId,
-        IList<TField> fields, string? languageId)
+        List<TField> fields, string? languageId)
         where T : Models.ContentBase
     {
         if (fields.Count > 0)

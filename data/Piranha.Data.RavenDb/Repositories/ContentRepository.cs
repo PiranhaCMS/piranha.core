@@ -9,6 +9,7 @@
  */
 
 using Piranha.Data.RavenDb.Data;
+using Piranha.Data.RavenDb.Indexes;
 using Piranha.Data.RavenDb.Services;
 using Piranha.Repositories;
 using Raven.Client.Documents;
@@ -154,8 +155,12 @@ internal class ContentRepository : IContentRepository
             .ToList();
 
         // Query content with embedded translations by group
-        var contents = await _db.Content
-            .Customize(x => x.WaitForNonStaleResults())
+        //var contents = await _db.Content
+        //    .Customize(x => x.WaitForNonStaleResults())
+        //    .Where(c => c.Type.Group == groupId)
+        //    .ToListAsync();
+
+        var contents = await _db.session.Query<Content, Content_ByTypeGroup>()
             .Where(c => c.Type.Group == groupId)
             .ToListAsync();
 

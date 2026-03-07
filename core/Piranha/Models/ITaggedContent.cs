@@ -18,5 +18,5 @@ public interface ITaggedContent
     /// <summary>
     /// Gets/sets the available tags.
     /// </summary>
-    IList<Taxonomy> Tags { get; set; }
+    List<Taxonomy> Tags { get; set; }
 }

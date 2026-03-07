@@ -110,7 +110,7 @@ public abstract class RoutedContentBase : ContentBase, IBlockContent, IMeta, ICo
     /// <summary>
     /// Gets/sets the available blocks.
     /// </summary>
-    public IList<Extend.Block> Blocks { get; set; } = new List<Extend.Block>();
+    public List<Extend.Block> Blocks { get; set; } = new List<Extend.Block>();
 
     /// <summary>
     /// Gets/sets if comments should be enabled.

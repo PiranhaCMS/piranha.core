@@ -23,10 +23,10 @@ public class BlockGroupModel : BlockModel
     /// <summary>
     /// Gets/sets the available child items in the group.
     /// </summary>
-    public IList<BlockModel> Items { get; set; } = new List<BlockModel>();
+    public List<BlockModel> Items { get; set; } = new List<BlockModel>();
 
     /// <summary>
     /// Gets/sets the available global group fields.
     /// </summary>
-    public IList<FieldModel> Fields { get; set; } = new List<FieldModel>();
+    public List<FieldModel> Fields { get; set; } = new List<FieldModel>();
 }

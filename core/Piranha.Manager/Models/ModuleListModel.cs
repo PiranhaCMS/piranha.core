@@ -31,5 +31,5 @@ public class ModuleListModel
     /// <summary>
     /// Gets/set the available items.
     /// </summary>
-    public IList<ModuleItem> Items { get; set; } = new List<ModuleItem>();
+    public List<ModuleItem> Items { get; set; } = new List<ModuleItem>();
 }

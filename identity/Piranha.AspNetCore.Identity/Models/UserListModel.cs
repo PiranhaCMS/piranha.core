@@ -12,7 +12,7 @@ namespace Piranha.AspNetCore.Identity.Models;
 
 public class UserListModel
 {
-    public IList<ListItem> Users { get; set; } = new List<ListItem>();
+    public List<ListItem> Users { get; set; } = new List<ListItem>();
 
     public static UserListModel Get(IDb db)
     {
@@ -56,7 +56,7 @@ public class UserListModel
         public string Id { get; set; }
         public string UserName { get; set; }
         public string Email { get; set; }
-        public IList<string> Roles { get; set; } = new List<string>();
+        public List<string> Roles { get; set; } = new List<string>();
 
         public string GravatarUrl { get; set; }
     }

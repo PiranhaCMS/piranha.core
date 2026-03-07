@@ -29,7 +29,7 @@ public sealed class ContentField : ContentFieldBase, ITranslatable
     /// <summary>
     /// Gets/sets the available translations.
     /// </summary>
-    public IList<ContentFieldTranslation> Translations { get; set; } = new List<ContentFieldTranslation>();
+    public List<ContentFieldTranslation> Translations { get; set; } = new List<ContentFieldTranslation>();
 
     /// <summary>
     /// Sets the translation for the specified language.

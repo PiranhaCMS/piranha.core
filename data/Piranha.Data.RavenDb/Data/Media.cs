@@ -28,7 +28,7 @@ public sealed class Media : Models.MediaBase
     /// <summary>
     /// Gets/sets the available versions.
     /// </summary>
-    public IList<MediaVersion> Versions { get; set; } = new List<MediaVersion>();
+    public List<MediaVersion> Versions { get; set; } = new List<MediaVersion>();
 
     public static implicit operator Models.Media(Media m)
     {

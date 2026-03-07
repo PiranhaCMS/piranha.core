@@ -89,7 +89,7 @@ public class MediaListModel
         /// <summary>
         /// Gets/sets the optional properties.
         /// </summary>
-        public IList<KeyValuePair<string, string>> Properties { get; set; } = new List<KeyValuePair<string, string>>();
+        public List<KeyValuePair<string, string>> Properties { get; set; } = new List<KeyValuePair<string, string>>();
 
         /// <summary>
         /// Gets/sets the public url used to access the uploaded media.
@@ -125,12 +125,12 @@ public class MediaListModel
     /// <summary>
     /// Gets/sets the available folders.
     /// </summary>
-    public IList<FolderItem> Folders { get; set; } = new List<FolderItem>();
+    public List<FolderItem> Folders { get; set; } = new List<FolderItem>();
 
     /// <summary>
     /// Gets/sets the available media items.
     /// </summary>
-    public IList<MediaItem> Media { get; set; } = new List<MediaItem>();
+    public List<MediaItem> Media { get; set; } = new List<MediaItem>();
 
     /// <summary>
     /// Gets/sets the optional folder id.

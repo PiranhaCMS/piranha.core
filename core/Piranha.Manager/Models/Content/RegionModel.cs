@@ -19,7 +19,7 @@ public class RegionModel
     /// Gets/sets the available items. A region collection can have several items,
     /// a regular region will only have one item in the collection.
     /// </summary>
-    public IList<RegionItemModel> Items { get; set; } = new List<RegionItemModel>();
+    public List<RegionItemModel> Items { get; set; } = new List<RegionItemModel>();
 
     /// <summary>
     /// Gets/sets the meta information.

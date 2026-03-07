@@ -33,5 +33,5 @@ public class RegionItemModel
     /// <summary>
     /// Gets/sets the available fields.
     /// </summary>
-    public IList<FieldModel> Fields { get; set; } = new List<FieldModel>();
+    public List<FieldModel> Fields { get; set; } = new List<FieldModel>();
 }

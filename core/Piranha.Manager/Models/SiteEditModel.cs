@@ -57,7 +57,7 @@ public class SiteEditModel : Content.ContentEditModel
     /// <summary>
     /// Gets/sets the available site types.
     /// </summary>
-    public IList<ContentTypeModel> SiteTypes { get; set; } = new List<ContentTypeModel>();
+    public List<ContentTypeModel> SiteTypes { get; set; } = new List<ContentTypeModel>();
 
     /// <summary>
     /// Gets/sets the available languages.

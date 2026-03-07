@@ -40,9 +40,9 @@ public class PostListModel
         public string Title { get; set; }
     }
 
-    public IList<PostItem> Posts { get; set; } = new List<PostItem>();
-    public IList<PostTypeItem> PostTypes { get; set; } = new List<PostTypeItem>();
-    public IList<CategoryItem> Categories { get; set; } = new List<CategoryItem>();
+    public List<PostItem> Posts { get; set; } = new List<PostItem>();
+    public List<PostTypeItem> PostTypes { get; set; } = new List<PostTypeItem>();
+    public List<CategoryItem> Categories { get; set; } = new List<CategoryItem>();
     public int TotalPosts { get; set; }
     public int TotalPages { get; set; }
     public int Index { get; set; }

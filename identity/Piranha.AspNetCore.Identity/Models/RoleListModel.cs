@@ -14,7 +14,7 @@ namespace Piranha.AspNetCore.Identity.Models;
 
 public class RoleListModel
 {
-    public IList<ListItem> Roles { get; set; } = [];
+    public List<ListItem> Roles { get; set; } = [];
 
     public static RoleListModel Get(IDb db)
     {

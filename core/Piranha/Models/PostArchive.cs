@@ -54,5 +54,5 @@ public class PostArchive<T> where T : PostBase
     /// <summary>
     /// Gets/sets the available posts.
     /// </summary>
-    public IList<T> Posts { get; set; } = new List<T>();
+    public List<T> Posts { get; set; } = new List<T>();
 }

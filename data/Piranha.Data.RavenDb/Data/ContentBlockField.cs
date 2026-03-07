@@ -27,7 +27,7 @@ public class ContentBlockField : BlockFieldBase, ITranslatable
     /// <summary>
     /// Gets/sets the available translations.
     /// </summary>
-    public IList<ContentBlockFieldTranslation> Translations { get; set; } = new List<ContentBlockFieldTranslation>();
+    public List<ContentBlockFieldTranslation> Translations { get; set; } = new List<ContentBlockFieldTranslation>();
 
     /// <summary>
     /// Sets the translation for the specified language.

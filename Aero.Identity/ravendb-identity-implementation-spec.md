@@ -37,7 +37,7 @@ ASP.NET Core 10 introduced **passkeys** to support **FIDO2/WebAuthn**.
 
 ```csharp
 Task AddPasskeyAsync(TUser user, PasskeyCredential passkey, CancellationToken cancellationToken);
-Task<IList<PasskeyCredential>> GetPasskeysAsync(TUser user, CancellationToken cancellationToken);
+Task<List<PasskeyCredential>> GetPasskeysAsync(TUser user, CancellationToken cancellationToken);
 Task RemovePasskeyAsync(TUser user, string credentialId, CancellationToken cancellationToken);
 ```
 

@@ -28,7 +28,7 @@ public sealed class AppMethod
     /// <summary>
     /// Gets/sets the parameter types.
     /// </summary>
-    public IList<Type> ParameterTypes { get; set; } = new List<Type>();
+    public List<Type> ParameterTypes { get; set; } = new List<Type>();
 
     /// <summary>
     /// Invokes the current method on the given instance.

@@ -21,5 +21,6 @@ public static class IndexCreator
         new PostRevisions_ByBlog().Execute(store);
         new PageRevisions_BySite().Execute(store);
         new Revisions_ByIsNewerThanPost().Execute(store);
+        new Content_ByTypeGroup().Execute(store);
     }
 }
