@@ -61,7 +61,7 @@ public class MediaTests : BaseTestsAsync
         folder1Id = folder1.Id;
 
         // Add media
-        using (var stream = File.OpenRead("../../../Assets/HLD_Screenshot_01_mech_1080.png"))
+        using (var stream = File.OpenRead("Assets/HLD_Screenshot_01_mech_1080.png"))
         {
             var image1 = new Models.StreamMediaContent
             {
@@ -82,7 +82,7 @@ public class MediaTests : BaseTestsAsync
             await api.Media.SaveAsync(image);
         }
 
-        using (var stream = File.OpenRead("../../../Assets/HLD_Screenshot_01_rise_1080.png"))
+        using (var stream = File.OpenRead("Assets/HLD_Screenshot_01_rise_1080.png"))
         {
             var image2 = new Models.StreamMediaContent
             {
@@ -95,7 +95,7 @@ public class MediaTests : BaseTestsAsync
             image2Id = image2.Id;
         }
 
-        using (var stream = File.OpenRead("../../../Assets/HLD_Screenshot_01_robot_1080.png"))
+        using (var stream = File.OpenRead("Assets/HLD_Screenshot_01_robot_1080.png"))
         {
             var image3 = new Models.StreamMediaContent
             {
@@ -107,7 +107,7 @@ public class MediaTests : BaseTestsAsync
             image3Id = image3.Id;
         }
 
-        using (var stream = File.OpenRead("../../../Assets/HLD Screenshot 01 mech 1080.png"))
+        using (var stream = File.OpenRead("Assets/HLD Screenshot 01 mech 1080.png"))
         {
             var image5 = new Models.StreamMediaContent
             {
@@ -253,7 +253,7 @@ public class MediaTests : BaseTestsAsync
     public async Task Insert()
     {
         using var api = CreateApi();
-        using var stream = File.OpenRead("../../../Assets/HLD_Screenshot_BETA_entrance.png");
+        using var stream = File.OpenRead("Assets/HLD_Screenshot_BETA_entrance.png");
         var image = new Models.StreamMediaContent
         {
             Filename = "HLD_Screenshot_BETA_entrance.png",

@@ -37,7 +37,7 @@ public class Blocks : BaseTestsAsync
         contentService = new ContentService<Page, PageField, Models.PageBase>(new ContentFactory(_services), Module.Mapper);
 
         // Add media
-        using var stream = File.OpenRead("../../../Assets/HLD_Screenshot_01_mech_1080.png");
+        using var stream = File.OpenRead("Assets/HLD_Screenshot_01_mech_1080.png");
         var image1 = new Models.StreamMediaContent
         {
             Filename = "HLD_Screenshot_01_mech_1080.png",

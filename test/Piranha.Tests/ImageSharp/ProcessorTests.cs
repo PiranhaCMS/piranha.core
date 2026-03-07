@@ -18,7 +18,7 @@ public class ProcessorTests
     [Fact]
     public void GetSizeStream()
     {
-        using var file = File.OpenRead("../../../Assets/HLD_Screenshot_01_mech_1080.png");
+        using var file = File.OpenRead("Assets/HLD_Screenshot_01_mech_1080.png");
         var processor = new ImageSharpProcessor();
 
         processor.GetSize(file, out var width, out var height);
@@ -30,7 +30,7 @@ public class ProcessorTests
     [Fact]
     public void GetSizeBytes()
     {
-        using var file = File.OpenRead("../../../Assets/HLD_Screenshot_01_mech_1080.png");
+        using var file = File.OpenRead("Assets/HLD_Screenshot_01_mech_1080.png");
         using var reader = new BinaryReader(file);
         var bytes = reader.ReadBytes((int) file.Length);
 
@@ -45,7 +45,7 @@ public class ProcessorTests
     [Fact]
     public void Crop()
     {
-        using var file = File.OpenRead("../../../Assets/HLD_Screenshot_01_mech_1080.png");
+        using var file = File.OpenRead("Assets/HLD_Screenshot_01_mech_1080.png");
         var processor = new ImageSharpProcessor();
 
         using var outStream = new MemoryStream();
@@ -62,7 +62,7 @@ public class ProcessorTests
     [Fact]
     public void Scale()
     {
-        using var file = File.OpenRead("../../../Assets/HLD_Screenshot_01_mech_1080.png");
+        using var file = File.OpenRead("Assets/HLD_Screenshot_01_mech_1080.png");
         var processor = new ImageSharpProcessor();
 
         using var outStream = new MemoryStream();
@@ -79,7 +79,7 @@ public class ProcessorTests
     [Fact]
     public void CropScale()
     {
-        using var file = File.OpenRead("../../../Assets/HLD_Screenshot_01_mech_1080.png");
+        using var file = File.OpenRead("Assets/HLD_Screenshot_01_mech_1080.png");
         var processor = new ImageSharpProcessor();
 
         using var outStream = new MemoryStream();

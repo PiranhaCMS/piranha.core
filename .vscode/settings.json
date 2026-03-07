@@ -26,5 +26,6 @@
     "d:\\proj\\microbians\\piranha\\test\\Piranha.Tests\\Piranha.Tests.csproj",
     "d:\\proj\\microbians\\piranha\\core\\Piranha.WebApi\\Piranha.WebApi.csproj",
     "d:\\proj\\microbians\\piranha\\examples\\RazorWeb\\RazorWeb.csproj"
-  ]
+  ],
+  "bevel.java": "java"
 }

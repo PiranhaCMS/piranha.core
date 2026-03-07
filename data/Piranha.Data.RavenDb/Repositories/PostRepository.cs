@@ -218,6 +218,7 @@ internal class PostRepository : IPostRepository
         
         var query = GetQuery<T>();
         var post = await query
+            .Customize(x => x.WaitForNonStaleResults())
             .FirstOrDefaultAsync(p => p.BlogId == blogId && p.Slug == slug)
             .ConfigureAwait(false);
         

@@ -138,7 +138,45 @@ internal class PageRepository : IPageRepository
 
         if (page != null)
         {
-            return await _contentService.TransformAsync<T>(page, App.PageTypes.GetById(page.PageTypeId), ProcessAsync);
+            var model = await _contentService.TransformAsync<T>(page, App.PageTypes.GetById(page.PageTypeId), ProcessAsync);
+
+            if (!string.IsNullOrEmpty(page.OriginalPageId))
+            {
+                var originalPage = await _db.session.LoadAsync<Page>(page.OriginalPageId).ConfigureAwait(false);
+                if (originalPage != null)
+                {
+                    var originalModel = await _contentService.TransformAsync<T>(originalPage, App.PageTypes.GetById(originalPage.PageTypeId), ProcessAsync);
+
+                    if (model is Models.IDynamicContent dynamicModel && originalModel is Models.IDynamicContent dynamicOriginalModel)
+                    {
+                        var modelRegions = (IDictionary<string, object>)dynamicModel.Regions;
+                        var originalRegions = (IDictionary<string, object>)dynamicOriginalModel.Regions;
+
+                        // Merge regions from original page if not present in the copy
+                        foreach (var region in originalRegions)
+                        {
+                            if (modelRegions.ContainsKey(region.Key))
+                            {
+                                var modelValue = modelRegions[region.Key];
+                                if (modelValue == null || (modelValue is Piranha.Extend.IField field && field.GetType().GetProperty("Value")?.GetValue(field) == null))
+                                {
+                                    modelRegions[region.Key] = region.Value;
+                                }
+                            }
+                            else
+                            {
+                                modelRegions.Add(region.Key, region.Value);
+                            }
+                        }
+                    }
+
+                    if (model.Blocks.Count == 0)
+                    {
+                        model.Blocks = originalModel.Blocks;
+                    }
+                }
+            }
+            return model;
         }
 
         return null;
@@ -163,8 +201,7 @@ internal class PageRepository : IPageRepository
 
         foreach (var page in pages)
         {
-            ret.Add(await _contentService.TransformAsync<T>(page, App.PageTypes.GetById(page.PageTypeId), ProcessAsync)
-                .ConfigureAwait(false));
+            ret.Add(await GetById<T>(page.Id).ConfigureAwait(false));
         }
 
         return ret;
@@ -185,7 +222,7 @@ internal class PageRepository : IPageRepository
 
         if (page != null)
         {
-            return await _contentService.TransformAsync<T>(page, App.PageTypes.GetById(page.PageTypeId), ProcessAsync);
+            return await GetById<T>(page.Id).ConfigureAwait(false);
         }
 
         return null;
@@ -961,12 +998,12 @@ internal class PageRepository : IPageRepository
     /// </summary>
     /// <typeparam name="T">The requested model type</typeparam>
     /// <returns>The queryable</returns>
-    private System.Linq.IQueryable<Page> GetQuery<T>()
+    private IRavenQueryable<Page> GetQuery<T>()
     {
         var loadRelated = !typeof(Models.IContentInfo).IsAssignableFrom(typeof(T));
 
-        System.Linq.IQueryable<Page> query = _db.Pages
-            ;
+        IRavenQueryable<Page> query = _db.Pages
+            .Customize(x => x.WaitForNonStaleResults());
 
         // FirstOrDefaultAsync(p => p.Id ...
         query = query.OrderBy(p => p.Id);

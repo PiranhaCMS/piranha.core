@@ -681,8 +681,7 @@ internal class ContentService<TContent, TField, TModelBase> : IContentService<TC
                     field.SortOrder = sortOrder;
 
                     // Update field value
-                    if (fieldValue is Extend.ITranslatable && field is ITranslatable translatableField &&
-                        !string.IsNullOrEmpty(languageId))
+                    if (field is ITranslatable translatableField && !string.IsNullOrEmpty(languageId))
                     {
                         // This is a translatable value
                         translatableField.SetTranslation(field.Id, languageId, fieldValue);

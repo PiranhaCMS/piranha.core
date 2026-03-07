@@ -594,7 +594,8 @@ internal class ContentRepository : IContentRepository
     /// <returns>The queryable</returns>
     private IRavenQueryable<Content> GetQuery()
     {
-        return _db.Content;
+        return _db.Content
+            .Customize(x => x.WaitForNonStaleResults());
     }
 
     /// <summary>

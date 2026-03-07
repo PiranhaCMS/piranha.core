@@ -46,4 +46,10 @@
     <ProjectReference Include="D:\proj\microbians\piranha\data\Piranha.Data.RavenDb\Piranha.Data.RavenDb.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="Assets\**">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>

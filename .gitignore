@@ -9,6 +9,10 @@
 .vsode/
 .idea/
 .frolic*.json
+.bevel/
+publish/
+pub_test/ 
+pub_test_final/
 
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs
@@ -267,3 +271,5 @@ _Pvt_Extensions
 
 # Rider generated files
 .idea
+.vscode/settings.json
+.vscode/settings.json
