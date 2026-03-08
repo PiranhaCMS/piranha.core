@@ -1,3 +1,4 @@
+using System.Reflection;
 using System.Text.Json;
 using Piranha.Data.RavenDb.Data;
 using Piranha.Data.RavenDb.Indexes;
@@ -166,6 +167,27 @@ internal class PageRepository : IPageRepository
                             else
                             {
                                 modelRegions.Add(region.Key, region.Value);
+                            }
+                        }
+                    }
+                    else
+                    {
+                        // Copy regions from original model for strongly typed pages
+                        var pageType = App.PageTypes.GetById(page.PageTypeId);
+                        foreach (var regionType in pageType.Regions)
+                        {
+                            var prop = model.GetType().GetProperty(regionType.Id, App.PropertyBindings);
+                            if (prop != null)
+                            {
+                                var modelValue = prop.GetValue(model);
+                                if (modelValue == null || (modelValue is Piranha.Extend.IField field && field.GetType().GetProperty("Value")?.GetValue(field) == null))
+                                {
+                                    var originalProp = originalModel.GetType().GetProperty(regionType.Id, App.PropertyBindings);
+                                    if (originalProp != null)
+                                    {
+                                        prop.SetValue(model, originalProp.GetValue(originalModel));
+                                    }
+                                }
                             }
                         }
                     }

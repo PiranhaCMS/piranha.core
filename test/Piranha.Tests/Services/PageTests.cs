@@ -51,7 +51,7 @@ public class PageTests : BaseTestsAsync
     public readonly string PAGE_7_ID = Snowflake.NewId();
     public readonly string PAGE_8_ID = Snowflake.NewId();
     public readonly string PAGE_DI_ID = Snowflake.NewId();
-    
+
     [Piranha.Extend.FieldType(Name = "Fourth")]
     public class MyFourthField : Extend.Fields.SimpleField<string>
     {
@@ -641,7 +641,6 @@ public class PageTests : BaseTestsAsync
     [Fact]
     public async Task Add()
     {
-        
         var count = (await _api.Pages.GetAllAsync(SITE_ID)).Count();
         var page = await MyPage.CreateAsync(_api, "MyPage");
         page.SiteId = SITE_ID;
@@ -923,10 +922,7 @@ public class PageTests : BaseTestsAsync
         page.Title = "New title";
         page.OriginalPageId = PAGE_8_ID; // PAGE_8 is an copy of PAGE_7
 
-        var exn = await Assert.ThrowsAsync<InvalidOperationException>(async () =>
-        {
-            await api.Pages.SaveAsync(page);
-        });
+        var exn = await Assert.ThrowsAsync<InvalidOperationException>(async () => { await api.Pages.SaveAsync(page); });
 
         Assert.Equal("Can not set copy of a copy", exn.Message);
     }
@@ -939,10 +935,7 @@ public class PageTests : BaseTestsAsync
         page.Title = "New title";
         page.OriginalPageId = PAGE_7_ID;
 
-        var exn = await Assert.ThrowsAsync<InvalidOperationException>(async () =>
-        {
-            await api.Pages.SaveAsync(page);
-        });
+        var exn = await Assert.ThrowsAsync<InvalidOperationException>(async () => { await api.Pages.SaveAsync(page); });
 
         Assert.Equal("Copy can not have a different content type", exn.Message);
     }
@@ -991,7 +984,15 @@ public class PageTests : BaseTestsAsync
         await api.Pages.SaveAsync(originalPage);
 
         var p = await api.Pages.GetByIdAsync<MyPage>(PAGE_8_ID);
-            Assert.Equal("body to be copied", p.Body.Value);
+        // Wait, IDb is not public or accessible easily. Let's just serialize `p` to throw it in the error message.
+        if (p.Body == null)
+        {
+            throw new Exception("p.Body is null! Serialized p: " + System.Text.Json.JsonSerializer.Serialize(p));
+        }
+
+        Assert.NotNull(p);
+        Assert.NotNull(p.Body);
+        Assert.Equal("body to be copied", p.Body.Value);
         Assert.Equal("ingress to be copied", p.Ingress.Value);
     }
 
@@ -1002,10 +1003,10 @@ public class PageTests : BaseTestsAsync
         // cascade deletes the copies first, so deletion succeeds.
         using var api = CreateApi();
         var count = (await api.Pages.GetAllAsync(SITE_ID)).Count();
-        
+
         // This should now succeed - copies are deleted first
         await api.Pages.DeleteAsync(PAGE_7_ID);
-        
+
         // Both the copy (PAGE_8) and original (PAGE_7) should be deleted
         Assert.Equal(count - 2, (await api.Pages.GetAllAsync(SITE_ID)).Count());
     }
