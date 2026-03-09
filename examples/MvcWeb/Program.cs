@@ -6,6 +6,7 @@ using Piranha.Data.RavenDb;
 using Piranha.Data.RavenDb.Extensions;
 using Piranha.Manager.Editor;
 using Piranha.AspNetCore.Identity.Extensions;
+using Piranha.AspNetCore.Identity;
 
 var builder = WebApplication.CreateBuilder(args);
 var env = builder.Environment;
@@ -31,7 +32,7 @@ builder.AddPiranha(options =>
     options.UseImageSharp();
     options.UseTinyMCE();
     options.UseMemoryCache();
-    options.UseIdentity<DbRaven>();
+    options.UseIdentityWithSeed<RavenIdentityDb>();
 
     // Use RavenDB 
     builder.Services.AddAeroStore();

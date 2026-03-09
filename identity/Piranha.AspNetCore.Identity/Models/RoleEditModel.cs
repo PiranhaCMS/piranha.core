@@ -24,7 +24,7 @@ public class RoleEditModel
     public Role Role { get; set; }
     public List<string> SelectedClaims { get; set; }
 
-    public static RoleEditModel GetById(IDb db, string id)
+    public static RoleEditModel GetById(IIdentityDb db, string id)
     {
         var role = db.Roles.FirstOrDefault(r => r.Id == id);
 
@@ -55,7 +55,7 @@ public class RoleEditModel
         };
     }
 
-    public bool Save(IDb db)
+    public bool Save(IIdentityDb db)
     {
         var role = db.Roles.FirstOrDefault(r => r.Id == Role.Id);
 

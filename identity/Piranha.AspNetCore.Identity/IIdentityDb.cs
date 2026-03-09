@@ -15,7 +15,7 @@ using Raven.Client.Documents.Session;
 
 namespace Piranha.AspNetCore.Identity;
 
-public interface IDb
+public interface IIdentityDb
 {
     IAsyncDocumentSession session { get; }
     /// <summary>

@@ -19,9 +19,9 @@ namespace Piranha.AspNetCore.Identity.Controllers;
 [AutoValidateAntiforgeryToken]
 public class RoleController : ManagerController
 {
-    private readonly IDb _db;
+    private readonly IIdentityDb _db;
 
-    public RoleController(IDb db)
+    public RoleController(IIdentityDb db)
     {
         _db = db;
     }

@@ -16,7 +16,7 @@ public class RoleListModel
 {
     public List<ListItem> Roles { get; set; } = [];
 
-    public static RoleListModel Get(IDb db)
+    public static RoleListModel Get(IIdentityDb db)
     {
         var model = new RoleListModel
         {

@@ -21,7 +21,7 @@ public class DefaultIdentitySeed : IIdentitySeed
     /// <summary>
     /// The private DbContext.
     /// </summary>
-    private readonly IDb _db;
+    private readonly IIdentityDb _db;
 
     /// <summary>
     /// The private user manager.
@@ -33,7 +33,7 @@ public class DefaultIdentitySeed : IIdentitySeed
     /// </summary>
     /// <param name="db">The current DbContext</param>
     /// <param name="userManager">The current UserManager</param>
-    public DefaultIdentitySeed(IDb db, UserManager<User> userManager)
+    public DefaultIdentitySeed(IIdentityDb db, UserManager<User> userManager)
     {
         _db = db;
         _userManager = userManager;

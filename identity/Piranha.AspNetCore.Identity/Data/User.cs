@@ -8,6 +8,7 @@
  *
  */
 
+using Aero.Identity.Models;
 using Microsoft.AspNetCore.Identity;
 
 namespace Piranha.AspNetCore.Identity.Data;
@@ -15,4 +16,4 @@ namespace Piranha.AspNetCore.Identity.Data;
 /// <summary>
 /// The application user.
 /// </summary>
-public sealed class User : IdentityUser<string> { }
+public sealed class User : RavenUser { }

@@ -20,7 +20,7 @@ using Piranha.AspNetCore.Identity.Data;
 using Piranha.Manager;
 using Piranha.Manager.LocalAuth;
 
-using IDb = Piranha.AspNetCore.Identity.IDb;
+using IIdentityDb = Piranha.AspNetCore.Identity.IIdentityDb;
 using Module = Piranha.AspNetCore.Identity.Module;
 
 public static class IdentityModuleExtensions
@@ -37,7 +37,7 @@ public static class IdentityModuleExtensions
         //Action<DbContextOptionsBuilder> dbOptions,
         Action<IdentityOptions> identityOptions = null,
         Action<CookieAuthenticationOptions> cookieOptions = null)
-        where T : Db<T>
+        where T : IdentityDb<T>
     {
         services
             .AddRazorPages()
@@ -116,7 +116,7 @@ public static class IdentityModuleExtensions
         });
 
         //services.AddDbContext<T>(dbOptions);
-        services.AddScoped<IDb, T>();
+        services.AddScoped<IIdentityDb, T>();
         services.AddScoped<T, T>();
         services.AddIdentity<User, Role>()
             //.AddEntityFrameworkStores<T>()
@@ -141,7 +141,7 @@ public static class IdentityModuleExtensions
         //Action<DbContextOptionsBuilder> dbOptions,
         Action<IdentityOptions> identityOptions = null,
         Action<CookieAuthenticationOptions> cookieOptions = null)
-        where T : Db<T>
+        where T : IdentityDb<T>
         where TSeed : class, IIdentitySeed
     {
         services = AddPiranhaIdentity<T>(services, identityOptions, cookieOptions);
@@ -162,7 +162,7 @@ public static class IdentityModuleExtensions
         //Action<DbContextOptionsBuilder> dbOptions,
         Action<IdentityOptions> identityOptions = null,
         Action<CookieAuthenticationOptions> cookieOptions = null)
-        where T : Db<T>
+        where T : IdentityDb<T>
     {
         return AddPiranhaIdentityWithSeed<T, DefaultIdentitySeed>(services, identityOptions, cookieOptions);
     }

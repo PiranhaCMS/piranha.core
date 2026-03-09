@@ -14,7 +14,7 @@ public class UserListModel
 {
     public List<ListItem> Users { get; set; } = new List<ListItem>();
 
-    public static UserListModel Get(IDb db)
+    public static UserListModel Get(IIdentityDb db)
     {
         var model = new UserListModel
         {

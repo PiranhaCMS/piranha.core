@@ -21,7 +21,7 @@ public class UserEditModel
     public string Password { get; set; }
     public string PasswordConfirm { get; set; }
 
-    public static UserEditModel Create(IDb db)
+    public static UserEditModel Create(IIdentityDb db)
     {
         return new UserEditModel
         {
@@ -30,7 +30,7 @@ public class UserEditModel
         };
     }
 
-    public static UserEditModel GetById(IDb db, string id)
+    public static UserEditModel GetById(IIdentityDb db, string id)
     {
         var user = db.Users.FirstOrDefault(u => u.Id == id);
 

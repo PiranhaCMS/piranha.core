@@ -8,6 +8,7 @@
  *
  */
 
+using Aero.Identity.Models;
 using Microsoft.AspNetCore.Identity;
 
 namespace Piranha.AspNetCore.Identity.Data;
@@ -15,4 +16,4 @@ namespace Piranha.AspNetCore.Identity.Data;
 /// <summary>
 /// Application role.
 /// </summary>
-public sealed class Role : IdentityRole<string> { }
+public sealed class Role : RavenRole { }

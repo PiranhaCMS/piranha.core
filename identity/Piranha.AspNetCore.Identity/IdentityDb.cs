@@ -16,7 +16,14 @@ using Raven.Client.Documents.Session;
 
 namespace Piranha.AspNetCore.Identity;
 
-public abstract class Db<T> : IDb
+public class RavenIdentityDb : IdentityDb<RavenIdentityDb>
+{
+    public RavenIdentityDb(IAsyncDocumentSession db) : base(db)
+    {
+    }
+}
+
+public abstract class IdentityDb<T> : IIdentityDb
 {
     protected readonly IAsyncDocumentSession db;
 
@@ -35,7 +42,7 @@ public abstract class Db<T> : IDb
     ///     Default constructor.
     /// </summary>
     /// <param name="options">Configuration options</param>
-    protected Db(IAsyncDocumentSession db)
+    protected IdentityDb(IAsyncDocumentSession db)
     {
         this.db = db;
         if (IsInitialized)

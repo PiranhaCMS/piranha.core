@@ -21,7 +21,7 @@ public static class IdentityStartupExtensions
         //Action<DbContextOptionsBuilder> dbOptions,
         Action<IdentityOptions> identityOptions = null,
         Action<CookieAuthenticationOptions> cookieOptions = null)
-        where T : Db<T>
+        where T : IdentityDb<T>
     {
         serviceBuilder.Services.AddPiranhaIdentity<T>(identityOptions, cookieOptions);
 
@@ -41,7 +41,7 @@ public static class IdentityStartupExtensions
         //Action<DbContextOptionsBuilder> dbOptions,
         Action<IdentityOptions> identityOptions = null,
         Action<CookieAuthenticationOptions> cookieOptions = null)
-        where T : Db<T>
+        where T : IdentityDb<T>
     {
         serviceBuilder.Services.AddPiranhaIdentityWithSeed<T>(identityOptions, cookieOptions);
 
@@ -62,7 +62,7 @@ public static class IdentityStartupExtensions
         //Action<DbContextOptionsBuilder> dbOptions,
         Action<IdentityOptions> identityOptions = null,
         Action<CookieAuthenticationOptions> cookieOptions = null)
-        where T : Db<T>
+        where T : IdentityDb<T>
         where TSeed : class, IIdentitySeed
     {
         serviceBuilder.Services.AddPiranhaIdentityWithSeed<T, TSeed>(identityOptions, cookieOptions);

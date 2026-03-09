@@ -28,7 +28,7 @@ namespace Piranha.AspNetCore.Identity.Controllers;
 [AutoValidateAntiforgeryToken]
 public class UserController : ManagerController
 {
-    private readonly IDb _db;
+    private readonly IIdentityDb _db;
     private readonly UserManager<User> _userManager;
     private readonly ManagerLocalizer _localizer;
 
@@ -38,7 +38,7 @@ public class UserController : ManagerController
     /// <param name="db">The current db context</param>
     /// <param name="userManager">The current user manager</param>
     /// <param name="localizer">The manager localizer</param>
-    public UserController(IDb db, UserManager<User> userManager, ManagerLocalizer localizer)
+    public UserController(IIdentityDb db, UserManager<User> userManager, ManagerLocalizer localizer)
     {
         _db = db;
         _userManager = userManager;
