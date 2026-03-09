@@ -34,6 +34,8 @@ public class DbRaven : DbRavenBase
 {
     public DbRaven(IAsyncDocumentSession db, IDocumentStore store) : base(db, store)
     {
+        // todo - drop the max requests limit for RavenDB sessions. This is a safety mechanism to prevent runaway sessions, but it can cause issues if users are not aware of it and have long-running sessions or perform many operations in a single session. We should review this and consider removing it or increasing the limit, especially for local dev and testing scenarios.
+        db.Advanced.MaxNumberOfRequestsPerSession = 1000;
     }
 }
 

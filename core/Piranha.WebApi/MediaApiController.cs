@@ -37,7 +37,7 @@ public class MediaApiController : Controller
     /// <param name="id">The media id</param>
     /// <returns>The media asset</returns>
     [HttpGet]
-    [Route("{id:string}")]
+    [Route("{id}")]
     public virtual async Task<IActionResult> GetById(string id)
     {
         if (!Module.AllowAnonymousAccess)
@@ -47,6 +47,7 @@ public class MediaApiController : Controller
                 return Unauthorized();
             }
         }
+
         return Json(await _api.Media.GetByIdAsync(id));
     }
 
@@ -58,7 +59,7 @@ public class MediaApiController : Controller
     /// <param name="folderId">The optional folder id</param>
     /// <returns></returns>
     [HttpGet]
-    [Route("list/{folderId:string?}")]
+    [Route("list/{folderId?}")]
     public virtual async Task<IActionResult> GetByFolderId(string? folderId = null)
     {
         if (!Module.AllowAnonymousAccess)
@@ -68,6 +69,7 @@ public class MediaApiController : Controller
                 return Unauthorized();
             }
         }
+
         return Json(await _api.Media.GetAllByFolderIdAsync(folderId));
     }
 
@@ -86,6 +88,7 @@ public class MediaApiController : Controller
                 return Unauthorized();
             }
         }
+
         return Json(await _api.Media.GetStructureAsync());
     }
 }

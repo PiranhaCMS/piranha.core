@@ -35,7 +35,7 @@ public class RoleController : ManagerController
     }
 
     [HttpGet]
-    [Route("/manager/role/{id:string}")]
+    [Route("/manager/role/{id}")]
     [Authorize(Policy = Permissions.RolesEdit)]
     public IActionResult Edit(string id)
     {
@@ -58,7 +58,7 @@ public class RoleController : ManagerController
         if (model.Save(_db))
         {
             SuccessMessage("The role has been saved.");
-            return RedirectToAction("Edit", new {id = model.Role.Id});
+            return RedirectToAction("Edit", new { id = model.Role.Id });
         }
 
         ErrorMessage("The role could not be saved.", false);

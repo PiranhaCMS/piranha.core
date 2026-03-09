@@ -7,6 +7,8 @@ using Piranha.Repositories;
 using Raven.Client.Documents;
 using Raven.Client.Documents.Indexes;
 using Raven.Client.Documents.Session;
+using Raven.Client.ServerWide;
+using Raven.Client.ServerWide.Operations;
 using System.Security.Cryptography.X509Certificates;
 
 namespace Piranha.Data.RavenDb.Extensions;
@@ -21,7 +23,8 @@ public static class AeroDataExtensions
     /// <param name="scope">The optional lifetime</param>
     /// <typeparam name="T">The DbContext type</typeparam>
     /// <returns>The updated service collection</returns>
-    public static IServiceCollection AddAeroStore(this IServiceCollection services, ServiceLifetime scope = ServiceLifetime.Scoped, bool isTesting = false)
+    public static IServiceCollection AddAeroStore(this IServiceCollection services,
+            ServiceLifetime scope = ServiceLifetime.Scoped, bool isTesting = false)
         //where T : IDb
     {
         services
@@ -40,16 +43,19 @@ public static class AeroDataExtensions
             var database = config["RavenDb:Database"] ?? "aero-cms";
 
             var store = Raven.Embedded.EmbeddedServer.Instance.GetDocumentStore(path);
+            store.Conventions.MaxNumberOfRequestsPerSession = 500;
+            store.Database = database;
             store.Initialize();
-            
+
             IndexCreator.CreateIndexes(store);
             return store;
-        } );
+        });
         services.AddScoped(s => s.GetRequiredService<IDocumentStore>().OpenAsyncSession());
         return services.RegisterServices();
     }
 
-    private static IServiceCollection AddAeroPersistence(this IServiceCollection services, ServiceLifetime scope = ServiceLifetime.Scoped, bool isTesting = false)
+    private static IServiceCollection AddAeroPersistence(this IServiceCollection services,
+        ServiceLifetime scope = ServiceLifetime.Scoped, bool isTesting = false)
     {
         // Configure RavenDB
         //var ravenUrl = builder.Configuration["RAVENDB_URL"];
@@ -63,28 +69,54 @@ public static class AeroDataExtensions
         services.AddSingleton<IDocumentStore>(s =>
         {
             var config = s.GetRequiredService<IConfiguration>();
-            var ravenUrl = config["RAVENDB_URL"] ?? "https://localhost:8080/";
-            var database = config["RavenDb:Database"] ?? "aero-cms";
-            var certPath = config["RAVENDB_CERT"] ?? ".";
+            var ravenUrl = config["RAVENDB_URL"] ?? config["RavenDb:Urls"] ?? "https://localhost:8080/";
+            var database = config["RAVENDB_DATABASE"] ?? config["RavenDb:Database"] ?? "AeroCMS";
+            var certPath = config["RAVENDB_CERT"] ?? config["RavenDb:CertificatePath"];
 
-            //if (Environment.GetEnvironmentVariable("RAVENDB_CERT") is { Length: > 0 } certPath)
-            //{
-                var cert = X509CertificateLoader.LoadPkcs12FromFile(certPath, null);
-                //ravenStore.Certificate = cert;
+            X509Certificate2 cert = null;
+            if (!string.IsNullOrEmpty(certPath) && File.Exists(certPath))
+            {
+                try
+                {
+                    cert = X509CertificateLoader.LoadPkcs12FromFile(certPath, null);
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"[RavenDB] Failed to load certificate from {certPath}: {ex.Message}");
+                }
+            }
+
+            //    var cert = X509CertificateLoader.LoadPkcs12FromFile(certPath, null);
+            //    //ravenStore.Certificate = cert;
             //}
             var store = new DocumentStore
             {
                 Urls = [ravenUrl],
-                Database = config["RavenDb:Database"] ?? "aero-cms",
-                Certificate = certPath != null ? X509CertificateLoader.LoadPkcs12FromFile(certPath, null) : null
+                Database = database,
+                Certificate = cert
             };
 
             store.Initialize();
-            
+
+            // Ensure database exists
+            try
+            {
+                var databaseNames = store.Maintenance.Server.Send(new GetDatabaseNamesOperation(0, 100));
+                if (!databaseNames.Contains(database, StringComparer.OrdinalIgnoreCase))
+                {
+                    store.Maintenance.Server.Send(new CreateDatabaseOperation(new DatabaseRecord(database)));
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"[RavenDB] Failed to ensure database '{database}' exists: {ex.Message}");
+                // We continue as Initialize succeeded, but operations might fail later if the database is truly missing
+            }
+
             IndexCreator.CreateIndexes(store);
 
             return store;
-        } );
+        });
 
         services.AddScoped<IAsyncDocumentSession>(s => s.GetRequiredService<IDocumentStore>().OpenAsyncSession());
 

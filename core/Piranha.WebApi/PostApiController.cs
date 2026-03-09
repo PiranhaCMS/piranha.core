@@ -38,8 +38,7 @@ public class PostApiController : Controller
     /// </summary>
     /// <param name="id">The post id</param>
     /// <returns>The post model</returns>
-    [HttpGet]
-    [Route("{id:string}")]
+    [Route("{id}")]
     public virtual async Task<IActionResult> GetById(string id)
     {
         if (!Module.AllowAnonymousAccess)
@@ -49,6 +48,7 @@ public class PostApiController : Controller
                 return Unauthorized();
             }
         }
+
         return Json(await _api.Posts.GetByIdAsync<PostBase>(id));
     }
 
@@ -70,6 +70,7 @@ public class PostApiController : Controller
                 return Unauthorized();
             }
         }
+
         return Json(await _api.Posts.GetBySlugAsync<PostBase>(archiveId, slug));
     }
 
@@ -80,7 +81,7 @@ public class PostApiController : Controller
     /// <param name="id">The post id</param>
     /// <returns>The post model</returns>
     [HttpGet]
-    [Route("info/{id:string}")]
+    [Route("info/{id}")]
     public virtual async Task<IActionResult> GetInfoById(string id)
     {
         if (!Module.AllowAnonymousAccess)
@@ -90,6 +91,7 @@ public class PostApiController : Controller
                 return Unauthorized();
             }
         }
+
         return Json(await _api.Posts.GetByIdAsync<PostInfo>(id));
     }
 
@@ -111,6 +113,7 @@ public class PostApiController : Controller
                 return Unauthorized();
             }
         }
+
         return Json(await _api.Posts.GetBySlugAsync<PostInfo>(archiveId, slug));
     }
 }

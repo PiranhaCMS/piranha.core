@@ -74,6 +74,7 @@ public class MediaApiController : Controller
             {
                 return Redirect(media.PublicUrl);
             }
+
             return NotFound();
         }
         else
@@ -86,9 +87,10 @@ public class MediaApiController : Controller
     /// Gets the list model.
     /// </summary>
     /// <returns>The list model</returns>
-    [Route("list/{folderId:string?}")]
+    [Route("list/{folderId?}")]
     [HttpGet]
-    public async Task<MediaListModel> List(string? folderId = null, [FromQuery]MediaType? filter = null, [FromQuery] int? width = null, [FromQuery] int? height = null)
+    public async Task<MediaListModel> List(string? folderId = null, [FromQuery] MediaType? filter = null,
+        [FromQuery] int? width = null, [FromQuery] int? height = null)
     {
         return await _service.GetList(folderId, filter, width, height);
     }
@@ -153,7 +155,7 @@ public class MediaApiController : Controller
     [Route("folder/delete")]
     [HttpDelete]
     [Authorize(Policy = Permission.MediaDeleteFolder)]
-    public async Task<IActionResult> DeleteFolder([FromBody]string id)
+    public async Task<IActionResult> DeleteFolder([FromBody] string id)
     {
         try
         {
@@ -222,7 +224,8 @@ public class MediaApiController : Controller
                 return Ok(new StatusMessage
                 {
                     Type = StatusMessage.Information,
-                    Body = String.Format(_localizer.Media["Uploaded {0} of {1} media assets"], uploaded, model.Uploads.Count())
+                    Body = String.Format(_localizer.Media["Uploaded {0} of {1} media assets"], uploaded,
+                        model.Uploads.Count())
                 });
             }
         }
@@ -303,7 +306,7 @@ public class MediaApiController : Controller
     {
         try
         {
-            foreach(var id in items)
+            foreach (var id in items)
             {
                 await _service.DeleteMedia(id);
             }

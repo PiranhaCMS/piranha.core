@@ -39,7 +39,7 @@ public class PageApiController : Controller
     /// <param name="id">The page id</param>
     /// <returns>The page model</returns>
     [HttpGet]
-    [Route("{id:string}")]
+    [Route("{id}")]
     public virtual async Task<IActionResult> GetById(string id)
     {
         if (!Module.AllowAnonymousAccess)
@@ -49,6 +49,7 @@ public class PageApiController : Controller
                 return Unauthorized();
             }
         }
+
         return Json(await _api.Pages.GetByIdAsync<PageBase>(id));
     }
 
@@ -69,6 +70,7 @@ public class PageApiController : Controller
                 return Unauthorized();
             }
         }
+
         return Json(await _api.Pages.GetBySlugAsync<PageBase>(slug));
     }
 
@@ -90,6 +92,7 @@ public class PageApiController : Controller
                 return Unauthorized();
             }
         }
+
         return Json(await _api.Pages.GetBySlugAsync<PageBase>(slug, siteId));
     }
 
@@ -100,7 +103,7 @@ public class PageApiController : Controller
     /// <param name="id">The page id</param>
     /// <returns>The page model</returns>
     [HttpGet]
-    [Route("info/{id:string}")]
+    [Route("info/{id}")]
     public virtual async Task<IActionResult> GetInfoById(string id)
     {
         if (!Module.AllowAnonymousAccess)
@@ -110,6 +113,7 @@ public class PageApiController : Controller
                 return Unauthorized();
             }
         }
+
         return Json(await _api.Pages.GetByIdAsync<PageInfo>(id));
     }
 
@@ -130,6 +134,7 @@ public class PageApiController : Controller
                 return Unauthorized();
             }
         }
+
         return Json(await _api.Pages.GetBySlugAsync<PageInfo>(slug));
     }
 
@@ -151,6 +156,7 @@ public class PageApiController : Controller
                 return Unauthorized();
             }
         }
+
         return Json(await _api.Pages.GetBySlugAsync<PageInfo>(slug, siteId));
     }
 }

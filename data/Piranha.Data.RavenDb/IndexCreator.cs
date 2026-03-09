@@ -15,12 +15,13 @@ public static class IndexCreator
     /// </summary>
     public static void CreateIndexes(IDocumentStore store)
     {
-        new Pages_BySite().Execute(store);
-        new Posts_ByBlog().Execute(store);
-        new Posts_ByTag().Execute(store);
-        new PostRevisions_ByBlog().Execute(store);
-        new PageRevisions_BySite().Execute(store);
-        new Revisions_ByIsNewerThanPost().Execute(store);
-        new Content_ByTypeGroup().Execute(store);
+        IndexCreation.CreateIndexes(typeof(Pages_BySite).Assembly, store);
+        //new Pages_BySite().Execute(store);
+        //new Posts_ByBlog().Execute(store);
+        //new Posts_ByTag().Execute(store);
+        //new PostRevisions_ByBlog().Execute(store);
+        //new PageRevisions_BySite().Execute(store);
+        //new Revisions_ByIsNewerThanPost().Execute(store);
+        //new Content_ByTypeGroup().Execute(store);
     }
 }
