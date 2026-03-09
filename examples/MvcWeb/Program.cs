@@ -2,8 +2,10 @@ using Aero.Identity;
 using MvcWeb;
 using Piranha;
 using Piranha.AttributeBuilder;
+using Piranha.Data.RavenDb;
 using Piranha.Data.RavenDb.Extensions;
 using Piranha.Manager.Editor;
+using Piranha.AspNetCore.Identity.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 var env = builder.Environment;
@@ -25,11 +27,11 @@ builder.AddPiranha(options =>
 
     options.UseCms();
     options.UseManager();
-
     options.UseFileStorage(naming: Piranha.Local.FileStorageNaming.UniqueFolderNames);
     options.UseImageSharp();
     options.UseTinyMCE();
     options.UseMemoryCache();
+    options.UseIdentity<DbRaven>();
 
     // Use RavenDB 
     builder.Services.AddAeroStore();

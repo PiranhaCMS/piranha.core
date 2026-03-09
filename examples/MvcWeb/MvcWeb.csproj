@@ -16,6 +16,7 @@
     <ProjectReference Include="..\..\core\Piranha.Manager.TinyMCE\Piranha.Manager.TinyMCE.csproj" />
     <ProjectReference Include="..\..\Aero.Identity\Aero.Identity.csproj" />
     <ProjectReference Include="..\..\data\Piranha.Data.RavenDb\Piranha.Data.RavenDb.csproj" />
+    <ProjectReference Include="..\..\identity\Piranha.AspNetCore.Identity\Piranha.AspNetCore.Identity.csproj" />
   </ItemGroup>
 
   <ItemGroup>

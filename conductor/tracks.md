@@ -9,7 +9,7 @@ This file tracks all major tracks for the project. Each track has its own detail
 
 ---
 
-- [~] **Track: Resolve Failing Unit Tests**
+- [x] **Track: Resolve Failing Unit Tests**
   *Link: [./tracks/resolve_failing_unit_tests_20260224/](./tracks/resolve_failing_unit_tests_20260224/)*
 
 ---
