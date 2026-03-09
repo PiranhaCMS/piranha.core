@@ -2,7 +2,7 @@
     <div class="block-body has-media-picker rounded clearfix" :class="{ empty: isEmpty }">
         <div>
             <div class="page-image" :style="'background-image:url(' + contentImage + ')'">
-                <img :src="piranha.utils.formatUrl('~/manager/assets/img/primaryimage-placeholder.png')">
+                <img :src="Aero.utils.formatUrl('~/manager/assets/img/primaryimage-placeholder.png')">
             </div>
             <h3 :class="{ 'text-light': !hasContentTitle }">{{ contentTitle }}</h3>
             <p :class="{ 'text-light': !hasContentExcerpt }" v-html="contentExcerpt"></p>
@@ -21,7 +21,7 @@
                     &nbsp;
                 </div>
                 <div class="card-body" v-else>
-                    <a :href="piranha.baseUrl + 'manager/content/edit/' + model.body.content.typeId + '/' + model.body.content.id" target="_blank">{{ model.body.content.title }}</a>
+                    <a :href="Aero.baseUrl + 'manager/content/edit/' + model.body.content.typeId + '/' + model.body.content.id" target="_blank">{{ model.body.content.title }}</a>
                 </div>
             </div>
         </div>
@@ -33,7 +33,7 @@ export default {
     props: ["uid", "model"],
     methods: {
         select: function () {
-            piranha.contentpicker.open(null, this.update);
+            Aero.contentpicker.open(null, this.update);
         },
         remove: function () {
             this.model.body.id = null;
@@ -43,7 +43,7 @@ export default {
             if (content !== null) {
                 var self = this;
 
-                fetch(piranha.baseUrl + "manager/api/content/info/" + content.id)
+                fetch(Aero.baseUrl + "manager/api/content/info/" + content.id)
                     .then(function (response) { return response.json(); })
                     .then(function (result) {
                         self.model.body.id = result.id;
@@ -67,9 +67,9 @@ export default {
         },
         contentImage: function () {
             if (this.hasContentImage) {
-                return piranha.baseUrl + "manager/api/media/url/" + this.model.body.content.primaryImage.id + "/446/220";
+                return Aero.baseUrl + "manager/api/media/url/" + this.model.body.content.primaryImage.id + "/446/220";
             } else {
-                return piranha.utils.formatUrl("~/manager/assets/img/empty-image.png");
+                return Aero.utils.formatUrl("~/manager/assets/img/empty-image.png");
             }
         },
         hasContentImage: function () {

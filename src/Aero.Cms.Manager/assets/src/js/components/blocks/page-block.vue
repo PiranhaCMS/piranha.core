@@ -2,7 +2,7 @@
     <div class="block-body has-media-picker rounded clearfix" :class="{ empty: isEmpty }">
         <div>
             <div class="page-image" :style="'background-image:url(' + pageImage + ')'">
-                <img :src="piranha.utils.formatUrl('~/manager/assets/img/primaryimage-placeholder.png')">
+                <img :src="Aero.utils.formatUrl('~/manager/assets/img/primaryimage-placeholder.png')">
             </div>
             <h3 :class="{ 'text-light': !hasPageTitle }">{{ pageTitle }}</h3>
             <p :class="{ 'text-light': !hasPageExcerpt }" v-html="pageExcerpt"></p>
@@ -21,7 +21,7 @@
                     &nbsp;
                 </div>
                 <div class="card-body" v-else>
-                    <a :href="piranha.baseUrl + 'manager/page/edit/' + model.body.page.id" target="_blank">{{ model.body.page.title }}</a>
+                    <a :href="Aero.baseUrl + 'manager/page/edit/' + model.body.page.id" target="_blank">{{ model.body.page.title }}</a>
                 </div>
             </div>
         </div>
@@ -33,7 +33,7 @@ export default {
     props: ["uid", "model"],
     methods: {
         select: function () {
-            piranha.pagepicker.open(this.update);
+            Aero.pagepicker.open(this.update);
         },
         remove: function () {
             this.model.body.id = null;
@@ -43,7 +43,7 @@ export default {
             if (page !== null) {
                 var self = this;
 
-                fetch(piranha.baseUrl + "manager/api/page/info/" + page.id)
+                fetch(Aero.baseUrl + "manager/api/page/info/" + page.id)
                     .then(function (response) { return response.json(); })
                     .then(function (result) {
                         self.model.body.id = result.id;
@@ -67,10 +67,10 @@ export default {
         },
         pageImage: function () {
             if (this.hasPageImage) {
-                return piranha.baseUrl + "manager/api/media/url/" + this.model.body.page.primaryImage.id + "/446/220";
-                //return piranha.utils.formatUrl(this.model.body.page.primaryImage.media.publicUrl);
+                return Aero.baseUrl + "manager/api/media/url/" + this.model.body.page.primaryImage.id + "/446/220";
+                //return Aero.utils.formatUrl(this.model.body.page.primaryImage.media.publicUrl);
             } else {
-                return piranha.utils.formatUrl("~/manager/assets/img/empty-image.png");
+                return Aero.utils.formatUrl("~/manager/assets/img/empty-image.png");
             }
         },
         hasPageImage: function () {

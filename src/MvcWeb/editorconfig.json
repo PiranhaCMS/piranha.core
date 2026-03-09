@@ -1,6 +1,6 @@
 {
-  "plugins": "autoresize autolink code hr paste lists piranhalink piranhaimage",
-  "toolbar": "bold italic | bullist numlist hr | alignleft aligncenter alignright | formatselect styleselect | piranhalink piranhaimage",
+  "plugins": "autoresize autolink code hr paste lists Aerolink Aeroimage",
+  "toolbar": "bold italic | bullist numlist hr | alignleft aligncenter alignright | formatselect styleselect | Aerolink Aeroimage",
   "blockformats": "Paragraph=p;Header 1=h1;Header 2=h2;Header 3=h3;Header 4=h4;Code=pre;Quote=blockquote",
   "styleformats": [
     { "title": "Small", "tag": "small", "type": "inline" },

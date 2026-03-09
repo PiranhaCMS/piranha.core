@@ -1,8 +1,8 @@
 /*global
-    piranha
+    Aero
 */
 
-piranha.archivepicker = new Vue({
+Aero.archivepicker = new Vue({
     el: "#archivepicker",
     data: {
         search: '',
@@ -27,7 +27,7 @@ piranha.archivepicker = new Vue({
     },
     methods: {
         load: function (siteId) {
-            var url = piranha.baseUrl + "manager/api/page/archives" + (siteId ? "/" + siteId : "");
+            var url = Aero.baseUrl + "manager/api/page/archives" + (siteId ? "/" + siteId : "");
             var self = this;
 
             fetch(url)
@@ -41,7 +41,7 @@ piranha.archivepicker = new Vue({
                 .catch(function (error) { console.log("error:", error ); });
         },
         refresh: function () {
-            this.load(piranha.archivepicker.currentSiteId);
+            this.load(Aero.archivepicker.currentSiteId);
         },
         open: function (callback, siteId) {
             this.search = '';

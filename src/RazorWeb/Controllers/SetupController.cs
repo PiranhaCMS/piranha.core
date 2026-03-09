@@ -90,9 +90,9 @@ public class SetupController : Controller
         var startPage = await StandardPage.CreateAsync(_api);
         startPage.Id = Snowflake.NewId();
         startPage.SiteId = site.Id;
-        startPage.Title = "Welcome To Aero.Cms CMS";
+        startPage.Title = "Welcome To Aero Cms";
         startPage.NavigationTitle = "Home";
-        startPage.MetaTitle = "Aero.Cms CMS - Open Source, Cross Platform ASP.NET Core CMS";
+        startPage.MetaTitle = "Aero Cms - Open Source, Cross Platform ASP.NET Core CMS";
         startPage.MetaKeywords = "Purus, Amet, Ullamcorper, Fusce";
         startPage.MetaDescription = "Integer posuere erat a ante venenatis dapibus posuere velit aliquet.";
         startPage.PrimaryImage = images["cute-business-kids-working-on-project-together-surfing-3874121.jpg"];

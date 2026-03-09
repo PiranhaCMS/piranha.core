@@ -29,7 +29,7 @@ public sealed class Module : IModule
     /// <summary>
     /// Gets the description
     /// </summary>
-    public string Description => "Tiny MCE WYSIWYG Editor for Aero.Cms CMS.";
+    public string Description => "Tiny MCE WYSIWYG Editor for Aero Cms.";
 
     /// <summary>
     /// Gets the package url.

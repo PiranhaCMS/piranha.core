@@ -9,10 +9,10 @@
 }
 @section script
 {
-    <script src="~/manager/assets/js/piranha.alias.min.js?v=@Aero.Cms.Utils.GetAssemblyVersionHash(typeof(Aero.Cms.Manager.Module).Assembly)"></script>
+    <script src="~/manager/assets/js/Aero.alias.min.js?v=@Aero.Cms.Utils.GetAssemblyVersionHash(typeof(Aero.Cms.Manager.Module).Assembly)"></script>
     <script>
-        piranha.permissions.load(function () {
-            piranha.alias.load();
+        Aero.permissions.load(function () {
+            Aero.alias.load();
         });
     </script>
 }

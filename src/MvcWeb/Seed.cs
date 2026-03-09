@@ -85,9 +85,9 @@ public static class Seed
         var startPage = await StandardPage.CreateAsync(api);
         startPage.Id = Snowflake.NewId();
         startPage.SiteId = site.Id;
-        startPage.Title = "Welcome To Aero.Cms CMS";
+        startPage.Title = "Welcome To Aero Cms";
         startPage.NavigationTitle = "Home";
-        startPage.MetaTitle = "Aero.Cms CMS - Open Source, Cross Platform ASP.NET Core CMS";
+        startPage.MetaTitle = "Aero Cms - Open Source, Cross Platform ASP.NET Core CMS";
         startPage.MetaKeywords = "Purus, Amet, Ullamcorper, Fusce";
         startPage.MetaDescription = "Integer posuere erat a ante venenatis dapibus posuere velit aliquet.";
         startPage.PrimaryImage = images["cute-business-kids-working-on-project-together-surfing-3874121.jpg"];
@@ -245,7 +245,7 @@ public static class Seed
         {
             Id  = Snowflake.NewId(),
             Body =
-                "<p class=\"lead\">Please note that this is a preview version of Aero.Cms CMS.</p>"
+                "<p class=\"lead\">Please note that this is a preview version of Aero Cms.</p>"
         });
         post3.Blocks.Add(new ColumnBlock
         {

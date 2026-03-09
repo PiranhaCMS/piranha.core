@@ -22,14 +22,14 @@ export default {
     },
     computed: {
         isEmpty: function () {
-            return piranha.utils.isEmptyHtml(this.model.body.value);
+            return Aero.utils.isEmptyHtml(this.model.body.value);
         }
     },
     mounted: function () {
-        piranha.editor.addInline(this.uid, this.toolbar, this.onChange);
+        Aero.editor.addInline(this.uid, this.toolbar, this.onChange);
     },
     beforeDestroy: function () {
-        piranha.editor.remove(this.uid);
+        Aero.editor.remove(this.uid);
     }
 }
 </script>

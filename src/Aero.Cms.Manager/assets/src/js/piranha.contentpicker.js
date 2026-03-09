@@ -1,8 +1,8 @@
 /*global
-    piranha
+    Aero
 */
 
-piranha.contentpicker = new Vue({
+Aero.contentpicker = new Vue({
     el: "#contentpicker",
     data: {
         search: '',
@@ -49,7 +49,7 @@ piranha.contentpicker = new Vue({
             }
         },
         load: function (groupId, partial) {
-            var url = piranha.baseUrl + "manager/api/content/" + (groupId ? groupId + "/" : "") + "list";
+            var url = Aero.baseUrl + "manager/api/content/" + (groupId ? groupId + "/" : "") + "list";
             var self = this;
 
             fetch(url)
@@ -63,7 +63,7 @@ piranha.contentpicker = new Vue({
 
         },
         refresh: function () {
-            this.load(piranha.contentpicker.currentGroupId, true);
+            this.load(Aero.contentpicker.currentGroupId, true);
         },
         open: function (groupId, callback) {
             this.search = '';

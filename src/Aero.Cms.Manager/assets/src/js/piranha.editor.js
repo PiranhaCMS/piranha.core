@@ -1,8 +1,8 @@
 /*global
-    piranha, tinymce
+    Aero, tinymce
 */
 
-piranha.editor = {
+Aero.editor = {
     editors:[],
 
     addInline: function (id, toolbarId) {
@@ -21,7 +21,7 @@ piranha.editor = {
                 {
                     name: "image",
                     action: function customFunction(editor) {
-                        piranha.mediapicker.openCurrentFolder(function(media) {
+                        Aero.mediapicker.openCurrentFolder(function(media) {
                             var cm = editor.codemirror;
                             var active = simplemde.getState(cm).image;
 

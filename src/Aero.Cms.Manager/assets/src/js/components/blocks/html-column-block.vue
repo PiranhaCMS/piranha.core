@@ -38,19 +38,19 @@ export default {
     },
     computed: {
         isEmpty1: function () {
-            return piranha.utils.isEmptyHtml(this.model.column1.value);
+            return Aero.utils.isEmptyHtml(this.model.column1.value);
         },
         isEmpty2: function () {
-            return piranha.utils.isEmptyHtml(this.model.column2.value);
+            return Aero.utils.isEmptyHtml(this.model.column2.value);
         }
     },
     mounted: function () {
-        piranha.editor.addInline(this.uid + 1, this.toolbar, this.onChangeCol1);
-        piranha.editor.addInline(this.uid + 2, this.toolbar, this.onChangeCol2);
+        Aero.editor.addInline(this.uid + 1, this.toolbar, this.onChangeCol1);
+        Aero.editor.addInline(this.uid + 2, this.toolbar, this.onChangeCol2);
     },
     beforeDestroy: function () {
-        piranha.editor.remove(this.uid + 1);
-        piranha.editor.remove(this.uid + 2);
+        Aero.editor.remove(this.uid + 1);
+        Aero.editor.remove(this.uid + 2);
     }
 }
 </script>

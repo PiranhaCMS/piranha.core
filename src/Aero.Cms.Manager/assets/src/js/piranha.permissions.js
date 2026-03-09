@@ -1,8 +1,8 @@
 /*global
-    piranha
+    Aero
 */
 
-piranha.permissions = {
+Aero.permissions = {
     loaded: false,
     aliases: {
         edit: false,
@@ -46,7 +46,7 @@ piranha.permissions = {
         var self = this;
 
         if (!this.loaded) {
-            fetch(piranha.baseUrl + "manager/api/permissions")
+            fetch(Aero.baseUrl + "manager/api/permissions")
                 .then(function (response) { return response.json(); })
                 .then(function (result) {
                     self.aliases = result.aliases;

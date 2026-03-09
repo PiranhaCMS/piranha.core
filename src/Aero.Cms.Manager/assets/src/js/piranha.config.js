@@ -1,8 +1,8 @@
 /*global
-    piranha
+    Aero
 */
 
-piranha.config = new Vue({
+Aero.config = new Vue({
     el: "#config",
     data: {
         loading: true,
@@ -29,7 +29,7 @@ piranha.config = new Vue({
         load: function () {
             self = this;
 
-            fetch(piranha.baseUrl + "manager/api/config")
+            fetch(Aero.baseUrl + "manager/api/config")
                 .then(function (response) { return response.json(); })
                 .then(function (result) {
                     self.model.hierarchicalPageSlugs = result.hierarchicalPageSlugs;
@@ -54,9 +54,9 @@ piranha.config = new Vue({
         save: function () {
             self = this;
 
-            fetch(piranha.baseUrl + "manager/api/config/save", {
+            fetch(Aero.baseUrl + "manager/api/config/save", {
                     method: "post",
-                    headers: piranha.utils.antiForgeryHeaders(),
+                    headers: Aero.utils.antiForgeryHeaders(),
                     body: JSON.stringify({
                         hierarchicalPageSlugs: self.model.hierarchicalPageSlugs,
                         expandedSitemapLevels: self.model.expandedSitemapLevels,
@@ -80,10 +80,10 @@ piranha.config = new Vue({
                 .then(function (result) {
                     if (result.status !== 400) {
                         // Push status to notification hub
-                        piranha.notifications.push(result.status);
+                        Aero.notifications.push(result.status);
                     } else {
                         // Unauthorized request
-                        piranha.notifications.unauthorized();
+                        Aero.notifications.unauthorized();
                     }
                 })
                 .catch(function (error) {

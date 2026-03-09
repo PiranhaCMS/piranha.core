@@ -1,8 +1,8 @@
 /*global
-    piranha
+    Aero
 */
 
-piranha.contentlist = new Vue({
+Aero.contentlist = new Vue({
     el: "#contentlist",
     data: {
         loading: true,
@@ -28,8 +28,8 @@ piranha.contentlist = new Vue({
         load: function (group) {
             var self = this;
 
-            piranha.permissions.load(function () {
-                fetch(piranha.baseUrl + "manager/api/content/" + group + "/list")
+            Aero.permissions.load(function () {
+                fetch(Aero.baseUrl + "manager/api/content/" + group + "/list")
                 .then(function (response) { return response.json(); })
                 .then(function (result) {
                     self.bind(result);
@@ -42,21 +42,21 @@ piranha.contentlist = new Vue({
         remove: function (id) {
             var self = this;
 
-            piranha.alert.open({
-                title: piranha.resources.texts.delete,
-                body: piranha.resources.texts.deletePageConfirm,
+            Aero.alert.open({
+                title: Aero.resources.texts.delete,
+                body: Aero.resources.texts.deletePageConfirm,
                 confirmCss: "btn-danger",
                 confirmIcon: "fas fa-trash",
-                confirmText: piranha.resources.texts.delete,
+                confirmText: Aero.resources.texts.delete,
                 onConfirm: function () {
-                    fetch(piranha.baseUrl + "manager/api/content/delete", {
+                    fetch(Aero.baseUrl + "manager/api/content/delete", {
                         method: "delete",
-                        headers: piranha.utils.antiForgeryHeaders(),
+                        headers: Aero.utils.antiForgeryHeaders(),
                         body: JSON.stringify(id)
                     })
                     .then(function (response) { return response.json(); })
                     .then(function (result) {
-                        piranha.notifications.push(result);
+                        Aero.notifications.push(result);
 
                         self.load(self.group.id);
                     })

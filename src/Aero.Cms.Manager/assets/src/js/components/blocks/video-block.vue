@@ -31,9 +31,9 @@ export default {
         },
         select: function () {
             if (this.model.body.media != null) {
-                piranha.mediapicker.open(this.update, "Video", this.model.body.media.folderId);
+                Aero.mediapicker.open(this.update, "Video", this.model.body.media.folderId);
             } else {
-                piranha.mediapicker.openCurrentFolder(this.update, "Video");
+                Aero.mediapicker.openCurrentFolder(this.update, "Video");
             }
         },
         remove: function () {
@@ -68,7 +68,7 @@ export default {
         },
         mediaUrl: function () {
             if (this.model.body.media != null) {
-                return piranha.utils.formatUrl(this.model.body.media.publicUrl);
+                return Aero.utils.formatUrl(this.model.body.media.publicUrl);
             }
         }
     },

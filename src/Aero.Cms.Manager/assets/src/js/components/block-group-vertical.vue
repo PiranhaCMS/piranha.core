@@ -15,13 +15,13 @@
             </div>
         </div>
         <div class="block-group-items">
-            <a href="#" class="block-add unsortable" v-on:click.prevent="piranha.blockpicker.open(addGroupBlock, 0, model.type)">
+            <a href="#" class="block-add unsortable" v-on:click.prevent="Aero.blockpicker.open(addGroupBlock, 0, model.type)">
                 <hr>
                 <i class="fas fa-plus-circle"></i>
             </a>
             <div v-if="model.items.length === 0" class="col">
                 <div class="empty-info unsortable">
-                    <p>{{ piranha.resources.texts.emptyAddAbove }}</p>
+                    <p>{{ Aero.resources.texts.emptyAddAbove }}</p>
                 </div>
             </div>
             <div v-for="(child, index) in model.items" v-bind:key="child.meta.uid">
@@ -45,7 +45,7 @@
                     </div>
                     <component v-bind:is="child.meta.component" v-bind:uid="child.meta.uid" v-bind:toolbar="toolbar" v-bind:model="child.model"></component>
                 </div>
-                <a href="#" class="block-add unsortable" v-on:click.prevent="piranha.blockpicker.open(addGroupBlock, index + 1, model.type)">
+                <a href="#" class="block-add unsortable" v-on:click.prevent="Aero.blockpicker.open(addGroupBlock, index + 1, model.type)">
                     <hr>
                     <i class="fas fa-plus-circle"></i>
                 </a>
@@ -69,7 +69,7 @@ export default {
         addGroupBlock: function (type, pos) {
             var self = this;
 
-            fetch(piranha.baseUrl + "manager/api/content/block/" + type)
+            fetch(Aero.baseUrl + "manager/api/content/block/" + type)
                 .then(function (response) { return response.json(); })
                 .then(function (result) {
                     sortable("#" + self.uid + " .block-group-items", "destroy");

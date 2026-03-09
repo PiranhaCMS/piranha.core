@@ -23,7 +23,7 @@ export default {
     },
     computed: {
         isEmpty: function () {
-            return piranha.utils.isEmptyText(this.model.body.value);
+            return Aero.utils.isEmptyText(this.model.body.value);
         }
     }
 }

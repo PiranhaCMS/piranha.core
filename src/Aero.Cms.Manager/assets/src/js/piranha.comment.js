@@ -1,8 +1,8 @@
 /*global
-    piranha
+    Aero
 */
 
-piranha.comment = new Vue({
+Aero.comment = new Vue({
     el: "#comments",
     data: {
         loading: true,
@@ -33,7 +33,7 @@ piranha.comment = new Vue({
                 id = "";
             }
 
-            fetch(piranha.baseUrl + "manager/api/comment/" + id)
+            fetch(Aero.baseUrl + "manager/api/comment/" + id)
                 .then(function (response) { return response.json(); })
                 .then(function (result) {
                     self.contentId = result.contentId;
@@ -44,9 +44,9 @@ piranha.comment = new Vue({
         approve: function (id) {
             var self = this;
 
-            fetch(piranha.baseUrl + "manager/api/comment/approve", {
+            fetch(Aero.baseUrl + "manager/api/comment/approve", {
                 method: "post",
-                headers: piranha.utils.antiForgeryHeaders(),
+                headers: Aero.utils.antiForgeryHeaders(),
                 body: JSON.stringify({
                     id: id,
                     parentId: self.contentId 
@@ -56,7 +56,7 @@ piranha.comment = new Vue({
             .then(function (result) {
                 if (result.status) {
                     // Push status to notification hub
-                    piranha.notifications.push(result.status);
+                    Aero.notifications.push(result.status);
                 }
                 self.contentId = result.contentId;
                 self.items = result.comments;
@@ -68,9 +68,9 @@ piranha.comment = new Vue({
         unapprove: function (id) {
             var self = this;
 
-            fetch(piranha.baseUrl + "manager/api/comment/unapprove", {
+            fetch(Aero.baseUrl + "manager/api/comment/unapprove", {
                 method: "post",
-                headers: piranha.utils.antiForgeryHeaders(),
+                headers: Aero.utils.antiForgeryHeaders(),
                 body: JSON.stringify({
                     id: id,
                     parentId: self.contentId 
@@ -80,7 +80,7 @@ piranha.comment = new Vue({
             .then(function (result) {
                 if (result.status) {
                     // Push status to notification hub
-                    piranha.notifications.push(result.status);
+                    Aero.notifications.push(result.status);
                 }
                 self.contentId = result.contentId;
                 self.items = result.comments;
@@ -101,15 +101,15 @@ piranha.comment = new Vue({
         remove: function (id) {
             var self = this;
 
-            fetch(piranha.baseUrl + "manager/api/comment/delete", {
+            fetch(Aero.baseUrl + "manager/api/comment/delete", {
                 method: "delete",
-                headers: piranha.utils.antiForgeryHeaders(),
+                headers: Aero.utils.antiForgeryHeaders(),
                 body: JSON.stringify(id)
             })
             .then(function (response) { return response.json(); })
             .then(function (result) {
                 // Push status to notification hub
-                piranha.notifications.push(result);
+                Aero.notifications.push(result);
 
                 // Refresh the list
                 self.load(self.contentId);

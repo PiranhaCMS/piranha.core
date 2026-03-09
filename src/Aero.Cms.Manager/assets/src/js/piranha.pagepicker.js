@@ -1,8 +1,8 @@
 /*global
-    piranha
+    Aero
 */
 
-piranha.pagepicker = new Vue({
+Aero.pagepicker = new Vue({
     el: "#pagepicker",
     data: {
         search: '',
@@ -46,7 +46,7 @@ piranha.pagepicker = new Vue({
     },
     methods: {
         load: function (siteId) {
-            var url = piranha.baseUrl + "manager/api/page/sitemap" + (siteId ? "/" + siteId : "");
+            var url = Aero.baseUrl + "manager/api/page/sitemap" + (siteId ? "/" + siteId : "");
             var self = this;
 
             fetch(url)
@@ -60,7 +60,7 @@ piranha.pagepicker = new Vue({
                 .catch(function (error) { console.log("error:", error ); });
         },
         refresh: function () {
-            this.load(piranha.pagepicker.currentSiteId);
+            this.load(Aero.pagepicker.currentSiteId);
         },
         open: function (callback, siteId) {
             this.search = '';

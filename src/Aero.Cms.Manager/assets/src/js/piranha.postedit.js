@@ -1,8 +1,8 @@
 /*global
-    piranha
+    Aero
 */
 
-piranha.postedit = new Vue({
+Aero.postedit = new Vue({
     el: "#postedit",
     data: {
         loading: true,
@@ -74,22 +74,22 @@ piranha.postedit = new Vue({
         },
         primaryImageUrl: function () {
             if (this.primaryImage.media != null) {
-                return piranha.utils.formatUrl(this.primaryImage.media.publicUrl);
+                return Aero.utils.formatUrl(this.primaryImage.media.publicUrl);
             } else {
-                return piranha.utils.formatUrl("~/manager/assets/img/empty-image.png");
+                return Aero.utils.formatUrl("~/manager/assets/img/empty-image.png");
             }
         },
         isExcerptEmpty: function () {
-            return piranha.utils.isEmptyText(this.excerpt);
+            return Aero.utils.isEmptyText(this.excerpt);
         },
         metaPriorityDescription: function() {
-            var description = piranha.resources.texts.important;
+            var description = Aero.resources.texts.important;
             if (this.metaPriority <= 0.3)
-                description = piranha.resources.texts.low;
+                description = Aero.resources.texts.low;
             else if (this.metaPriority <= 0.6)
-                description =  piranha.resources.texts.medium;
+                description =  Aero.resources.texts.medium;
             else if (this.metaPriority <= 0.9)
-                description =  piranha.resources.texts.high;
+                description =  Aero.resources.texts.high;
 
             return description += " (" + this.metaPriority + ")";
         }
@@ -164,7 +164,7 @@ piranha.postedit = new Vue({
         load: function (id) {
             var self = this;
 
-            fetch(piranha.baseUrl + "manager/api/post/" + id)
+            fetch(Aero.baseUrl + "manager/api/post/" + id)
                 .then(function (response) { return response.json(); })
                 .then(function (result) {
                     self.bind(result);
@@ -175,7 +175,7 @@ piranha.postedit = new Vue({
         create: function (id, postType) {
             var self = this;
 
-            fetch(piranha.baseUrl + "manager/api/post/create/" + id + "/" + postType)
+            fetch(Aero.baseUrl + "manager/api/post/create/" + id + "/" + postType)
                 .then(function (response) { return response.json(); })
                 .then(function (result) {
                     self.bind(result);
@@ -195,17 +195,17 @@ piranha.postedit = new Vue({
         save: function ()
         {
             this.saving = true;
-            this.saveInternal(piranha.baseUrl + "manager/api/post/save");
+            this.saveInternal(Aero.baseUrl + "manager/api/post/save");
         },
         saveDraft: function ()
         {
             this.savingDraft = true;
-            this.saveInternal(piranha.baseUrl + "manager/api/post/save/draft");
+            this.saveInternal(Aero.baseUrl + "manager/api/post/save/draft");
         },
         unpublish: function ()
         {
             this.saving = true;
-            this.saveInternal(piranha.baseUrl + "manager/api/post/save/unpublish");
+            this.saveInternal(Aero.baseUrl + "manager/api/post/save/unpublish");
         },
         saveInternal: function (route) {
             var self = this;
@@ -246,7 +246,7 @@ piranha.postedit = new Vue({
 
             fetch(route, {
                 method: "post",
-                headers: piranha.utils.antiForgeryHeaders(),
+                headers: Aero.utils.antiForgeryHeaders(),
                 body: JSON.stringify(model)
             })
             .then(function (response) { return response.json(); })
@@ -260,9 +260,9 @@ piranha.postedit = new Vue({
                 self.selectedRoute = result.selectedRoute;
 
                 if (oldState === 'new' && result.state !== 'new') {
-                    window.history.replaceState({ state: "created"}, "Edit post", piranha.baseUrl + "manager/post/edit/" + result.id);
+                    window.history.replaceState({ state: "created"}, "Edit post", Aero.baseUrl + "manager/post/edit/" + result.id);
                 }
-                piranha.notifications.push(result.status);
+                Aero.notifications.push(result.status);
 
                 self.saving = false;
                 self.savingDraft = false;
@@ -276,9 +276,9 @@ piranha.postedit = new Vue({
         revert: function () {
             var self = this;
 
-            fetch(piranha.baseUrl + "manager/api/post/revert", {
+            fetch(Aero.baseUrl + "manager/api/post/revert", {
                 method: "post",
-                headers: piranha.utils.antiForgeryHeaders(),
+                headers: Aero.utils.antiForgeryHeaders(),
                 body: JSON.stringify(self.id)
             })
             .then(function (response) { return response.json(); })
@@ -289,16 +289,16 @@ piranha.postedit = new Vue({
                     $("#selectedCategory").select2({
                         tags: true,
                         selectOnClose: true,
-                        placeholder: piranha.resources.texts.addCategory
+                        placeholder: Aero.resources.texts.addCategory
                     });
                     $("#selectedTags").select2({
                         tags: true,
                         selectOnClose: false,
-                        placeholder: piranha.resources.texts.addTags
+                        placeholder: Aero.resources.texts.addTags
                     });
                 });
 
-                piranha.notifications.push(result.status);
+                Aero.notifications.push(result.status);
             })
             .catch(function (error) { 
                 console.log("error:", error );
@@ -307,23 +307,23 @@ piranha.postedit = new Vue({
         remove: function () {
             var self = this;
 
-            piranha.alert.open({
-                title: piranha.resources.texts.delete,
-                body: piranha.resources.texts.deletePostConfirm,
+            Aero.alert.open({
+                title: Aero.resources.texts.delete,
+                body: Aero.resources.texts.deletePostConfirm,
                 confirmCss: "btn-danger",
                 confirmIcon: "fas fa-trash",
-                confirmText: piranha.resources.texts.delete,
+                confirmText: Aero.resources.texts.delete,
                 onConfirm: function () {
-                    fetch(piranha.baseUrl + "manager/api/post/delete", {
+                    fetch(Aero.baseUrl + "manager/api/post/delete", {
                         method: "delete",
-                        headers: piranha.utils.antiForgeryHeaders(),
+                        headers: Aero.utils.antiForgeryHeaders(),
                         body: JSON.stringify(self.id)
                     })
                     .then(function (response) { return response.json(); })
                     .then(function (result) {
-                        piranha.notifications.push(result);
+                        Aero.notifications.push(result);
 
-                        window.location = piranha.baseUrl + "manager/page/edit/" + self.blogId;
+                        window.location = Aero.baseUrl + "manager/page/edit/" + self.blogId;
                     })
                     .catch(function (error) { console.log("error:", error ); });
                 }
@@ -332,7 +332,7 @@ piranha.postedit = new Vue({
         addBlock: function (type, pos) {
             var self = this;
 
-            fetch(piranha.baseUrl + "manager/api/content/block/" + type)
+            fetch(Aero.baseUrl + "manager/api/content/block/" + type)
                 .then(function (response) { return response.json(); })
                 .then(function (result) {
                     self.blocks.splice(pos, 0, result.body);
@@ -381,9 +381,9 @@ piranha.postedit = new Vue({
         },
         selectPrimaryImage: function () {
             if (this.primaryImage.media !== null) {
-                piranha.mediapicker.open(this.updatePrimaryImage, "Image", this.primaryImage.media.folderId);
+                Aero.mediapicker.open(this.updatePrimaryImage, "Image", this.primaryImage.media.folderId);
             } else {
-                piranha.mediapicker.openCurrentFolder(this.updatePrimaryImage, "Image");
+                Aero.mediapicker.openCurrentFolder(this.updatePrimaryImage, "Image");
             }
         },
         removePrimaryImage: function () {
@@ -422,7 +422,7 @@ piranha.postedit = new Vue({
             $("#selectedCategory").select2({
                 tags: true,
                 selectOnClose: true,
-                placeholder: piranha.resources.texts.addCategory
+                placeholder: Aero.resources.texts.addCategory
             });
             $("#selectedCategory").on("change", function() {
                 var item = $(this).find("option:selected").text();
@@ -431,7 +431,7 @@ piranha.postedit = new Vue({
             $("#selectedTags").select2({
                 tags: true,
                 selectOnClose: false,
-                placeholder: piranha.resources.texts.addTags
+                placeholder: Aero.resources.texts.addTags
             });
             $("#selectedTags").on("change", function() {
                 var items = $(this).find("option:selected");
@@ -440,7 +440,7 @@ piranha.postedit = new Vue({
                     self.selectedTags.push(items[n].text);
                 }
             });
-            piranha.editor.addInline('excerpt-body', 'excerpt-toolbar');
+            Aero.editor.addInline('excerpt-body', 'excerpt-toolbar');
         }
         else {
             sortable("#content-blocks", "disable");

@@ -1,13 +1,13 @@
 /*global
-    piranha
+    Aero
 */
 
-piranha.utils = {
+Aero.utils = {
     getOrigin() {
         return window.location.origin;
     },
     formatUrl: function (str) {
-        return str.replace("~/", piranha.baseUrl);
+        return str.replace("~/", Aero.baseUrl);
     },
     isEmptyHtml: function (str) {
         return str == null || str.replace(/(<([^>]+)>)/ig,"").replace(/\s/g, "") == "" && str.indexOf("<img") === -1;
@@ -22,7 +22,7 @@ piranha.utils = {
         const cookies = document.cookie.split(";");
         for (let i = 0; i < cookies.length; i++) {
             let c = cookies[i].trim().split("=");
-            if (c[0] === piranha.antiForgery.cookieName) {
+            if (c[0] === Aero.antiForgery.cookieName) {
                 return c[1];
             }
         }
@@ -35,7 +35,7 @@ piranha.utils = {
         {
             headers["Content-Type"] = "application/json";
         }
-        headers[piranha.antiForgery.headerName] = piranha.utils.antiForgery();
+        headers[Aero.antiForgery.headerName] = Aero.utils.antiForgery();
 
         return headers;
     }    

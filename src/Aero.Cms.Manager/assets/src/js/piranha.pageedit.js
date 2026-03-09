@@ -1,8 +1,8 @@
 /*global
-    piranha
+    Aero
 */
 
-piranha.pageedit = new Vue({
+Aero.pageedit = new Vue({
     el: "#pageedit",
     data: {
         loading: true,
@@ -77,23 +77,23 @@ piranha.pageedit = new Vue({
         },
         primaryImageUrl: function () {
             if (this.primaryImage.media != null) {
-                return piranha.utils.formatUrl("~/manager/api/media/url/" + this.primaryImage.id + "/448/200");
-                //return piranha.utils.formatUrl(this.primaryImage.media.publicUrl);
+                return Aero.utils.formatUrl("~/manager/api/media/url/" + this.primaryImage.id + "/448/200");
+                //return Aero.utils.formatUrl(this.primaryImage.media.publicUrl);
             } else {
-                return piranha.utils.formatUrl("~/manager/assets/img/empty-image.png");
+                return Aero.utils.formatUrl("~/manager/assets/img/empty-image.png");
             }
         },
         isExcerptEmpty: function () {
-            return piranha.utils.isEmptyText(this.excerpt);
+            return Aero.utils.isEmptyText(this.excerpt);
         },
         metaPriorityDescription: function() {
-            var description = piranha.resources.texts.important;
+            var description = Aero.resources.texts.important;
             if (this.metaPriority <= 0.3)
-                description = piranha.resources.texts.low;
+                description = Aero.resources.texts.low;
             else if (this.metaPriority <= 0.6)
-                description =  piranha.resources.texts.medium;
+                description =  Aero.resources.texts.medium;
             else if (this.metaPriority <= 0.9)
-                description =  piranha.resources.texts.high;
+                description =  Aero.resources.texts.high;
 
             return description += " (" + this.metaPriority + ")";
         }
@@ -171,7 +171,7 @@ piranha.pageedit = new Vue({
         load: function (id) {
             var self = this;
 
-            fetch(piranha.baseUrl + "manager/api/page/" + id)
+            fetch(Aero.baseUrl + "manager/api/page/" + id)
                 .then(function (response) { return response.json(); })
                 .then(function (result) {
                     self.bind(result);
@@ -182,7 +182,7 @@ piranha.pageedit = new Vue({
         create: function (id, pageType) {
             var self = this;
 
-            fetch(piranha.baseUrl + "manager/api/page/create/" + id + "/" + pageType)
+            fetch(Aero.baseUrl + "manager/api/page/create/" + id + "/" + pageType)
                 .then(function (response) { return response.json(); })
                 .then(function (result) {
                     self.bind(result);
@@ -193,7 +193,7 @@ piranha.pageedit = new Vue({
         createrelative: function (id, pageType, after) {
             var self = this;
 
-            fetch(piranha.baseUrl + "manager/api/page/createrelative/" + id + "/" + pageType + "/" + after)
+            fetch(Aero.baseUrl + "manager/api/page/createrelative/" + id + "/" + pageType + "/" + after)
                 .then(function (response) { return response.json(); })
                 .then(function (result) {
                     self.bind(result);
@@ -204,7 +204,7 @@ piranha.pageedit = new Vue({
         copy: function (source, siteId) {
             var self = this;
 
-            fetch(piranha.baseUrl + "manager/api/page/copy/" + source + "/" + siteId)
+            fetch(Aero.baseUrl + "manager/api/page/copy/" + source + "/" + siteId)
                 .then(function (response) { return response.json(); })
                 .then(function (result) {
                     self.bind(result);
@@ -215,7 +215,7 @@ piranha.pageedit = new Vue({
         copyrelative: function (source, id, after) {
             var self = this;
 
-            fetch(piranha.baseUrl + "manager/api/page/copyrelative/" + source + "/" + id + "/" + after)
+            fetch(Aero.baseUrl + "manager/api/page/copyrelative/" + source + "/" + id + "/" + after)
                 .then(function (response) { return response.json(); })
                 .then(function (result) {
                     self.bind(result);
@@ -235,17 +235,17 @@ piranha.pageedit = new Vue({
         save: function ()
         {
             this.saving = true;
-            this.saveInternal(piranha.baseUrl + "manager/api/page/save");
+            this.saveInternal(Aero.baseUrl + "manager/api/page/save");
         },
         saveDraft: function ()
         {
             this.savingDraft = true;
-            this.saveInternal(piranha.baseUrl + "manager/api/page/save/draft");
+            this.saveInternal(Aero.baseUrl + "manager/api/page/save/draft");
         },
         unpublish: function ()
         {
             this.saving = true;
-            this.saveInternal(piranha.baseUrl + "manager/api/page/save/unpublish");
+            this.saveInternal(Aero.baseUrl + "manager/api/page/save/unpublish");
         },
         saveInternal: function (route) {
             var self = this;
@@ -291,7 +291,7 @@ piranha.pageedit = new Vue({
 
             fetch(route, {
                 method: "post",
-                headers: piranha.utils.antiForgeryHeaders(),
+                headers: Aero.utils.antiForgeryHeaders(),
                 body: JSON.stringify(model)
             })
             .then(function (response) { return response.json(); })
@@ -307,9 +307,9 @@ piranha.pageedit = new Vue({
                 self.selectedRoute = result.selectedRoute;
 
                 if (oldState === 'new' && result.state !== 'new') {
-                    window.history.replaceState({ state: "created"}, "Edit page", piranha.baseUrl + "manager/page/edit/" + result.id);
+                    window.history.replaceState({ state: "created"}, "Edit page", Aero.baseUrl + "manager/page/edit/" + result.id);
                 }
-                piranha.notifications.push(result.status);
+                Aero.notifications.push(result.status);
 
                 self.saving = false;
                 self.savingDraft = false;
@@ -323,16 +323,16 @@ piranha.pageedit = new Vue({
         revert: function () {
             var self = this;
 
-            fetch(piranha.baseUrl + "manager/api/page/revert", {
+            fetch(Aero.baseUrl + "manager/api/page/revert", {
                 method: "post",
-                headers: piranha.utils.antiForgeryHeaders(),
+                headers: Aero.utils.antiForgeryHeaders(),
                 body: JSON.stringify(self.id)
             })
             .then(function (response) { return response.json(); })
             .then(function (result) {
                 self.bind(result);
 
-                piranha.notifications.push(result.status);
+                Aero.notifications.push(result.status);
             })
             .catch(function (error) { 
                 console.log("error:", error );
@@ -341,16 +341,16 @@ piranha.pageedit = new Vue({
         detach: function () {
             var self = this;
 
-            fetch(piranha.baseUrl + "manager/api/page/detach", {
+            fetch(Aero.baseUrl + "manager/api/page/detach", {
                 method: "post",
-                headers: piranha.utils.antiForgeryHeaders(),
+                headers: Aero.utils.antiForgeryHeaders(),
                 body: JSON.stringify(self.id)
             })
             .then(function (response) { return response.json(); })
             .then(function (result) {
                 self.bind(result);
 
-                piranha.notifications.push(result.status);
+                Aero.notifications.push(result.status);
             })
             .catch(function (error) { 
                 console.log("error:", error );
@@ -359,33 +359,33 @@ piranha.pageedit = new Vue({
         remove: function () {
             var self = this;
 
-            piranha.alert.open({
-                title: piranha.resources.texts.delete,
-                body: piranha.resources.texts.deletePageConfirm,
+            Aero.alert.open({
+                title: Aero.resources.texts.delete,
+                body: Aero.resources.texts.deletePageConfirm,
                 confirmCss: "btn-danger",
                 confirmIcon: "fas fa-trash",
-                confirmText: piranha.resources.texts.delete,
+                confirmText: Aero.resources.texts.delete,
                 onConfirm: function () {
-                    fetch(piranha.baseUrl + "manager/api/page/delete", {
+                    fetch(Aero.baseUrl + "manager/api/page/delete", {
                         method: "delete",
-                        headers: piranha.utils.antiForgeryHeaders(),
+                        headers: Aero.utils.antiForgeryHeaders(),
                         body: JSON.stringify(self.id)
                     })
                     .then(function (response) { return response.json(); })
                     .then(function (result) {
-                        piranha.notifications.push(result);
+                        Aero.notifications.push(result);
 
-                        window.location = piranha.baseUrl + "manager/pages";
+                        window.location = Aero.baseUrl + "manager/pages";
                     })
                     .catch(function (error) { console.log("error:", error ); });
                 }
             });
         },
         addBlock: function (type, pos) {
-            fetch(piranha.baseUrl + "manager/api/content/block/" + type)
+            fetch(Aero.baseUrl + "manager/api/content/block/" + type)
                 .then(function (response) { return response.json(); })
                 .then(function (result) {
-                    piranha.pageedit.blocks.splice(pos, 0, result.body);
+                    Aero.pageedit.blocks.splice(pos, 0, result.body);
                 })
                 .catch(function (error) { console.log("error:", error );
             });
@@ -414,13 +414,13 @@ piranha.pageedit = new Vue({
         selectRegion: function (region) {
             this.selectedRegion = region;
             Vue.nextTick(function () {
-                piranha.editor.refreshMarkdown();
+                Aero.editor.refreshMarkdown();
             });
         },
         selectSetting: function (uid) {
             this.selectedSetting = uid;
             Vue.nextTick(function () {
-                piranha.editor.refreshMarkdown();
+                Aero.editor.refreshMarkdown();
             });
         },
         isCommentsOpen: function () {
@@ -437,9 +437,9 @@ piranha.pageedit = new Vue({
         },
         selectPrimaryImage: function () {
             if (this.primaryImage.media !== null) {
-                piranha.mediapicker.open(this.updatePrimaryImage, "Image", this.primaryImage.media.folderId);
+                Aero.mediapicker.open(this.updatePrimaryImage, "Image", this.primaryImage.media.folderId);
             } else {
-                piranha.mediapicker.openCurrentFolder(this.updatePrimaryImage, "Image");
+                Aero.mediapicker.openCurrentFolder(this.updatePrimaryImage, "Image");
             }
         },
         removePrimaryImage: function () {
@@ -471,9 +471,9 @@ piranha.pageedit = new Vue({
                 handle: ".handle",
                 items: ":not(.unsortable)"
             })[0].addEventListener("sortupdate", function (e) {
-                piranha.pageedit.moveBlock(e.detail.origin.index, e.detail.destination.index);
+                Aero.pageedit.moveBlock(e.detail.origin.index, e.detail.destination.index);
             });
-            piranha.editor.addInline('excerpt-body', 'excerpt-toolbar');
+            Aero.editor.addInline('excerpt-body', 'excerpt-toolbar');
         }
         else {
             sortable("#content-blocks", "disable");

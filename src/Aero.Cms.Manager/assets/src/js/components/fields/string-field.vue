@@ -4,7 +4,7 @@
             <input class="form-control" type="text" :maxlength="maxLength()" :required="isRequired()" :placeholder="meta.placeholder" v-model="model.value" v-on:change="update()">
             <div class="input-group-append">
                 <div class="input-group-text text-muted">
-                    {{ piranha.utils.strLength(model.value) + "/" + maxLength() }}
+                    {{ Aero.utils.strLength(model.value) + "/" + maxLength() }}
                 </div>
             </div>
         </div>

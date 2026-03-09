@@ -13,10 +13,10 @@
 {
     <script src="@Url.Content(Aero.Cms.Manager.Editor.EditorScripts.MainScriptUrl)"></script>
     <script src="@Url.Content(Aero.Cms.Manager.Editor.EditorScripts.EditorScriptUrl)"></script>
-    <script src="~/manager/assets/js/piranha.contentlist.min.js?v=@Aero.Cms.Utils.GetAssemblyVersionHash(typeof(Aero.Cms.Manager.Module).Assembly)"></script>
+    <script src="~/manager/assets/js/Aero.contentlist.min.js?v=@Aero.Cms.Utils.GetAssemblyVersionHash(typeof(Aero.Cms.Manager.Module).Assembly)"></script>
 
     <script type="text/javascript">
-        piranha.contentlist.load('@contentGroup');
+        Aero.contentlist.load('@contentGroup');
     </script>
 }
 
@@ -42,7 +42,7 @@
                         @Localizer.Page["Add"]
                     </button>
                     <div class="dropdown-menu dropdown-menu-right" aria-labelledby="addContent">
-                        <a class="dropdown-item" :href="piranha.baseUrl + 'manager/content/add/' + type.id" v-for="type in types">{{ type.title }}</a>
+                        <a class="dropdown-item" :href="Aero.baseUrl + 'manager/content/add/' + type.id" v-for="type in types">{{ type.title }}</a>
                     </div>
                 </div>
             </div>
@@ -62,7 +62,7 @@
             <tbody>
                 <tr v-for="item in items">
                     <td>
-                        <a :href="piranha.baseUrl + 'manager/content/edit/' + item.typeId +  '/' + item.id">{{ item.title }}</a>
+                        <a :href="Aero.baseUrl + 'manager/content/edit/' + item.typeId +  '/' + item.id">{{ item.title }}</a>
                     </td>
                     <td>
                         {{ item.type }}

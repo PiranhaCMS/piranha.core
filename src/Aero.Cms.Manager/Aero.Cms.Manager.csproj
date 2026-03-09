@@ -3,7 +3,7 @@
     <PropertyGroup>
         <AddRazorSupportForMvc>true</AddRazorSupportForMvc>
         <NoWarn>$(NoWarn);1591</NoWarn>
-        <Description>Manager panel for Piranha CMS for AspNetCore</Description>
+        <Description>Manager panel for Aero CMS for AspNetCore</Description>
     </PropertyGroup>
 
     <PropertyGroup Condition="'$(GITHUB_ACTIONS)' == 'true'">

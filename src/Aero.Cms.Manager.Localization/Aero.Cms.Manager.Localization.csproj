@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <NoWarn>$(NoWarn);1591</NoWarn>
-    <Description>Localization for the Piranha CMS manager panel</Description>
+    <Description>Localization for the Aero CMS manager panel</Description>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(GITHUB_ACTIONS)' == 'true'">

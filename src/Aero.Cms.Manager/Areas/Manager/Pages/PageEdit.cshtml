@@ -12,14 +12,14 @@
 {
     <script src="@Url.Content(Aero.Cms.Manager.Editor.EditorScripts.MainScriptUrl)"></script>
     <script src="@Url.Content(Aero.Cms.Manager.Editor.EditorScripts.EditorScriptUrl)"></script>
-    <script src="~/manager/assets/js/piranha.components.min.js?v=@Aero.Cms.Utils.GetAssemblyVersionHash(typeof(Aero.Cms.Manager.Module).Assembly)"></script>
-    <script src="~/manager/assets/js/piranha.pageedit.min.js?v=@Aero.Cms.Utils.GetAssemblyVersionHash(typeof(Aero.Cms.Manager.Module).Assembly)"></script>
+    <script src="~/manager/assets/js/Aero.components.min.js?v=@Aero.Cms.Utils.GetAssemblyVersionHash(typeof(Aero.Cms.Manager.Module).Assembly)"></script>
+    <script src="~/manager/assets/js/Aero.pageedit.min.js?v=@Aero.Cms.Utils.GetAssemblyVersionHash(typeof(Aero.Cms.Manager.Module).Assembly)"></script>
 
     @if (action == "edit")
     {
         <script>
-            piranha.permissions.load(function () {
-                piranha.pageedit.load("@RouteData.Values["id"]");
+            Aero.permissions.load(function () {
+                Aero.pageedit.load("@RouteData.Values["id"]");
                 $(".title input").focus();
             });
         </script>
@@ -27,8 +27,8 @@
     else if (action == "add")
     {
         <script>
-            piranha.permissions.load(function () {
-                piranha.pageedit.create("@RouteData.Values["id"]", "@RouteData.Values["pageType"]");
+            Aero.permissions.load(function () {
+                Aero.pageedit.create("@RouteData.Values["id"]", "@RouteData.Values["pageType"]");
                 $(".title input").focus();
             });
         </script>
@@ -36,8 +36,8 @@
     else if (action == "addrelative")
     {
         <script>
-            piranha.permissions.load(function () {
-                piranha.pageedit.createrelative("@RouteData.Values["id"]", "@RouteData.Values["pageType"]", "@RouteData.Values["after"]");
+            Aero.permissions.load(function () {
+                Aero.pageedit.createrelative("@RouteData.Values["id"]", "@RouteData.Values["pageType"]", "@RouteData.Values["after"]");
                 $(".title input").focus();
             });
         </script>
@@ -45,8 +45,8 @@
     else if (action == "copy")
     {
         <script>
-            piranha.permissions.load(function () {
-                piranha.pageedit.copy("@RouteData.Values["id"]", "@RouteData.Values["pageType"]");
+            Aero.permissions.load(function () {
+                Aero.pageedit.copy("@RouteData.Values["id"]", "@RouteData.Values["pageType"]");
                 $(".title input").focus();
             });
         </script>
@@ -54,8 +54,8 @@
     else if (action == "copyrelative")
     {
         <script>
-            piranha.permissions.load(function () {
-                piranha.pageedit.copyrelative("@RouteData.Values["id"]", "@RouteData.Values["pageType"]", "@RouteData.Values["after"]");
+            Aero.permissions.load(function () {
+                Aero.pageedit.copyrelative("@RouteData.Values["id"]", "@RouteData.Values["pageType"]", "@RouteData.Values["after"]");
                 $(".title input").focus();
             });
         </script>
@@ -97,7 +97,7 @@
                             </p>
                             <p class="text-right">
                                 <a v-if="state !== 'new'" v-on:click.prevent="detach()" href="#" class="btn btn-primary btn-labeled"><i class="fas fa-cut"></i> @Localizer.Page["Detach page"]</a>
-                                <a :href="piranha.baseUrl + 'manager/page/edit/' + originalId" class="btn btn-primary btn-labeled"><i class="fas fa-pen"></i> @Localizer.Page["Edit original"]</a>
+                                <a :href="Aero.baseUrl + 'manager/page/edit/' + originalId" class="btn btn-primary btn-labeled"><i class="fas fa-pen"></i> @Localizer.Page["Edit original"]</a>
                             </p>
                         </div>
                     </div>
@@ -123,7 +123,7 @@
                 </a>
             </li>
             <li v-if="enableComments && (commentCount > 0 || pendingCommentCount > 0)" class="nav-item">
-                <a :href="piranha.baseUrl + 'manager/comments/' + id" target="comments" class="nav-link">
+                <a :href="Aero.baseUrl + 'manager/comments/' + id" target="comments" class="nav-link">
                     <i class="fas fa-comments"></i>@Localizer.General["Comments"]
                     <span v-if="pendingCommentCount > 0" class="badge badge-danger">{{ pendingCommentCount }}</span>
                 </a>
@@ -147,7 +147,7 @@
         <div class="card" :class="{ 'd-none': selectedRegion.uid != 'uid-blocks' }">
             <div class="card-body" v-bind:class="{ readonly: isCopy }">
                 <div id="content-blocks" class="blocks@(Config.ManagerOutlined ? " blocks-outline" : "")">
-                    <a v-if="!isCopy" href="#" class="block-add unsortable" v-on:click.prevent="piranha.blockpicker.open(piranha.pageedit.addBlock, 0)">
+                    <a v-if="!isCopy" href="#" class="block-add unsortable" v-on:click.prevent="Aero.blockpicker.open(Aero.pageedit.addBlock, 0)">
                         <hr>
                         <i class="fas fa-plus-circle"></i>
                     </a>
@@ -176,7 +176,7 @@
                             <component v-if="block.meta.isGroup" v-bind:is="block.meta.component" v-bind:uid="block.meta.uid" v-bind:toolbar="'tb-' + block.meta.uid" v-bind:model="block"></component>
                             <div class="content-blocker"></div>
                         </div>
-                        <a v-if="!isCopy" href="#" class="block-add" v-on:click.prevent="piranha.blockpicker.open(piranha.pageedit.addBlock, index + 1)">
+                        <a v-if="!isCopy" href="#" class="block-add" v-on:click.prevent="Aero.blockpicker.open(Aero.pageedit.addBlock, index + 1)">
                             <hr>
                             <i class="fas fa-plus-circle"></i>
                         </a>

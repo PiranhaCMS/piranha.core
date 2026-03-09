@@ -43,7 +43,7 @@ public class Module : IModule
     /// <summary>
     /// Gets the description
     /// </summary>
-    public string Description => "Security module for Aero.Cms CMS using AspNetCore Identity.";
+    public string Description => "Security module for Aero Cms using AspNetCore Identity.";
 
     /// <summary>
     /// Gets the package url.

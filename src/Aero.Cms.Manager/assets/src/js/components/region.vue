@@ -50,7 +50,7 @@
             <i class="fas fa-plus-circle"></i>
         </a>
         <div v-if="model.items.length === 0" class="empty-info unsortable">
-            <p>{{ piranha.resources.texts.emptyAddAbove }}</p>
+            <p>{{ Aero.resources.texts.emptyAddAbove }}</p>
         </div>
     </div>
 </template>
@@ -70,7 +70,7 @@ export default {
         addItem: function () {
             var self = this;
 
-            fetch(piranha.baseUrl + "manager/api/content/region/" + this.content + "/" + this.type + "/" + this.model.meta.id)
+            fetch(Aero.baseUrl + "manager/api/content/region/" + this.content + "/" + this.type + "/" + this.model.meta.id)
                 .then(function (response) { return response.json(); })
                 .then(function (result) {
                     self.model.items.push(result);

@@ -9,10 +9,10 @@
 }
 @section script
 {
-    <script src="~/manager/assets/js/piranha.comment.min.js?v=@Aero.Cms.Utils.GetAssemblyVersionHash(typeof(Aero.Cms.Manager.Module).Assembly)"></script>
+    <script src="~/manager/assets/js/Aero.comment.min.js?v=@Aero.Cms.Utils.GetAssemblyVersionHash(typeof(Aero.Cms.Manager.Module).Assembly)"></script>
     <script>
-        piranha.permissions.load(function () {
-            piranha.comment.load("@RouteData.Values["id"]");
+        Aero.permissions.load(function () {
+            Aero.comment.load("@RouteData.Values["id"]");
         });
     </script>
 }
@@ -64,14 +64,14 @@
                                 </td>
                                 <td>{{ comment.body }}</td>
                                 <td class="align-middle">
-                                    <a v-if="comment.articleTitle" class="author" :href="piranha.baseUrl + comment.articleUrl" target="_blank">{{ comment.articleTitle }}</a>
+                                    <a v-if="comment.articleTitle" class="author" :href="Aero.baseUrl + comment.articleUrl" target="_blank">{{ comment.articleTitle }}</a>
                                 </td>
                                 <td class="text-center text-success align-middle">
                                     <button v-on:click.prevent="toggleApproved(comment)" class="switch" :aria-pressed="comment.isApproved"><span></span></button>
                                 </td>
                                 <td class="align-middle">{{ comment.created }}</td>
                                 <td class="actions one align-middle">
-                                    <a v-if="piranha.permissions.comments.delete" v-on:click.prevent="remove(comment.id)" href="#" title="@Localizer.General["Delete"]" class="danger"><i class="fas fa-trash"></i></a>
+                                    <a v-if="Aero.permissions.comments.delete" v-on:click.prevent="remove(comment.id)" href="#" title="@Localizer.General["Delete"]" class="danger"><i class="fas fa-trash"></i></a>
                                 </td>
                             </tr>
                         </tbody>

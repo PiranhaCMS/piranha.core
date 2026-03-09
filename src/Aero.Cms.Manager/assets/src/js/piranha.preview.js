@@ -1,8 +1,8 @@
 /*global
-    piranha
+    Aero
 */
 
-piranha.preview = new Vue({
+Aero.preview = new Vue({
     el: "#previewModal",
     data: {
         empty: {
@@ -23,18 +23,18 @@ piranha.preview = new Vue({
     },
     methods: {
         openItem: function (media) {
-            piranha.preview.media = media;
-            piranha.preview.show();
+            Aero.preview.media = media;
+            Aero.preview.show();
         },
         //TODO: Rename loadAndOpen?
         open: function (mediaId) {
-            piranha.preview.load(mediaId);
-            piranha.preview.show();
+            Aero.preview.load(mediaId);
+            Aero.preview.show();
         },
         load: function (mediaId) {
             var self = this;
 
-            fetch(piranha.baseUrl + "manager/api/media/" + mediaId)
+            fetch(Aero.baseUrl + "manager/api/media/" + mediaId)
                 .then(function (response) { return response.json(); })
                 .then(function (result) {
                     self.media = result;
@@ -52,14 +52,14 @@ piranha.preview = new Vue({
                 properties: media.properties
             };
 
-            fetch(piranha.baseUrl + "manager/api/media/meta/save", {
+            fetch(Aero.baseUrl + "manager/api/media/meta/save", {
                 method: "post",
-                headers: piranha.utils.antiForgeryHeaders(),
+                headers: Aero.utils.antiForgeryHeaders(),
                 body: JSON.stringify(model)
             })
             .then(function (response) { return response.json(); })
             .then(function (result) {
-                piranha.notifications.push(result);
+                Aero.notifications.push(result);
 
                 if (result.type === "success") {
                     self.close();
@@ -75,7 +75,7 @@ piranha.preview = new Vue({
         close: function () {
             $("#previewModal").modal("hide");
             setTimeout(function () {
-                piranha.preview.clear();
+                Aero.preview.clear();
             }, 300)
         },
         clear: function () {
@@ -86,17 +86,17 @@ piranha.preview = new Vue({
         this.clear();
     },
     mounted: function () {
-        this.dropzone = piranha.dropzone.init("#media-update-container", {
+        this.dropzone = Aero.dropzone.init("#media-update-container", {
             uploadMultiple: false
         });
         this.dropzone.on("complete", function (file) {
             setTimeout(function () {
-                piranha.preview.dropzone.removeFile(file);
+                Aero.preview.dropzone.removeFile(file);
             }, 3000)
         })
         this.dropzone.on("queuecomplete", function () {
-            piranha.preview.load(piranha.preview.media.id);
-            piranha.media.refresh();
+            Aero.preview.load(Aero.preview.media.id);
+            Aero.media.refresh();
         })
     }
 });

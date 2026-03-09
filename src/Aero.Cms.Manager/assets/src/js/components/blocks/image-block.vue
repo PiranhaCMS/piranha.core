@@ -8,22 +8,22 @@
                     <img v-else :src="iconUrl">
                 </button>
                 <div class="dropdown-menu aspect-menu" :aria-labelledby="uid + '-aspect'">
-                    <label class="mb-0">{{ piranha.resources.texts.aspectLabel }}</label>
+                    <label class="mb-0">{{ Aero.resources.texts.aspectLabel }}</label>
                     <div class="dropdown-divider"></div>
                     <a v-on:click.prevent="selectAspect(0)" class="dropdown-item" :class="{ active: isAspectSelected(0) }" href="#">
-                        <img :src="piranha.utils.formatUrl('~/manager/assets/img/icons/img-original.svg')"><span>{{ piranha.resources.texts.aspectOriginal }}</span>
+                        <img :src="Aero.utils.formatUrl('~/manager/assets/img/icons/img-original.svg')"><span>{{ Aero.resources.texts.aspectOriginal }}</span>
                     </a>
                     <a v-on:click.prevent="selectAspect(1)" class="dropdown-item" :class="{ active: isAspectSelected(1) }" href="#">
-                        <img :src="piranha.utils.formatUrl('~/manager/assets/img/icons/img-landscape.svg')"><span>{{ piranha.resources.texts.aspectLandscape }}</span>
+                        <img :src="Aero.utils.formatUrl('~/manager/assets/img/icons/img-landscape.svg')"><span>{{ Aero.resources.texts.aspectLandscape }}</span>
                     </a>
                     <a v-on:click.prevent="selectAspect(2)" class="dropdown-item" :class="{ active: isAspectSelected(2) }" href="#">
-                        <img :src="piranha.utils.formatUrl('~/manager/assets/img/icons/img-portrait.svg')"><span>{{ piranha.resources.texts.aspectPortrait }}</span>
+                        <img :src="Aero.utils.formatUrl('~/manager/assets/img/icons/img-portrait.svg')"><span>{{ Aero.resources.texts.aspectPortrait }}</span>
                     </a>
                     <a v-on:click.prevent="selectAspect(3)" class="dropdown-item" :class="{ active: isAspectSelected(3) }" href="#">
-                        <img :src="piranha.utils.formatUrl('~/manager/assets/img/icons/img-landscape.svg')"><span>{{ piranha.resources.texts.aspectWidescreen }}</span>
+                        <img :src="Aero.utils.formatUrl('~/manager/assets/img/icons/img-landscape.svg')"><span>{{ Aero.resources.texts.aspectWidescreen }}</span>
                     </a>
                     <a v-on:click.prevent="selectAspect(4)" class="dropdown-item" :class="{ active: isAspectSelected(4) }" href="#">
-                        <img :src="piranha.utils.formatUrl('~/manager/assets/img/icons/img-square.svg')"><span>{{ piranha.resources.texts.aspectSquare }}</span>
+                        <img :src="Aero.utils.formatUrl('~/manager/assets/img/icons/img-square.svg')"><span>{{ Aero.resources.texts.aspectSquare }}</span>
                     </a>
                 </div>
                 <button v-on:click.prevent="select" class="btn btn-primary text-center">
@@ -54,9 +54,9 @@ export default {
         },
         select: function () {
             if (this.model.body.media != null) {
-                piranha.mediapicker.open(this.update, "Image", this.model.body.media.folderId);
+                Aero.mediapicker.open(this.update, "Image", this.model.body.media.folderId);
             } else {
-                piranha.mediapicker.openCurrentFolder(this.update, "Image");
+                Aero.mediapicker.openCurrentFolder(this.update, "Image");
             }
         },
         remove: function () {
@@ -97,19 +97,19 @@ export default {
         },
         mediaUrl: function () {
             if (this.model.body.media != null) {
-                return piranha.utils.formatUrl(this.model.body.media.publicUrl);
+                return Aero.utils.formatUrl(this.model.body.media.publicUrl);
             } else {
-                return piranha.utils.formatUrl("~/manager/assets/img/empty-image.png");
+                return Aero.utils.formatUrl("~/manager/assets/img/empty-image.png");
             }
         },
         iconUrl: function () {
             if (this.model.aspect.value > 0) {
                 if (this.model.aspect.value === 1 || this.model.aspect.value === 3) {
-                    return piranha.utils.formatUrl("~/manager/assets/img/icons/img-landscape.svg");
+                    return Aero.utils.formatUrl("~/manager/assets/img/icons/img-landscape.svg");
                 } else if (this.model.aspect.value == 2) {
-                    return piranha.utils.formatUrl("~/manager/assets/img/icons/img-portrait.svg");
+                    return Aero.utils.formatUrl("~/manager/assets/img/icons/img-portrait.svg");
                 } else if (this.model.aspect.value == 4) {
-                    return piranha.utils.formatUrl("~/manager/assets/img/icons/img-square.svg");
+                    return Aero.utils.formatUrl("~/manager/assets/img/icons/img-square.svg");
                 }
             }
             return null;

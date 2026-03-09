@@ -11,7 +11,7 @@ Vue.component("region", {
     },
     addItem: function () {
       var self = this;
-      fetch(piranha.baseUrl + "manager/api/content/region/" + this.content + "/" + this.type + "/" + this.model.meta.id).then(function (response) {
+      fetch(Aero.baseUrl + "manager/api/content/region/" + this.content + "/" + this.type + "/" + this.model.meta.id).then(function (response) {
         return response.json();
       }).then(function (result) {
         self.model.items.push(result);
@@ -65,7 +65,7 @@ Vue.component("region", {
       this.itemAdded = false;
     }
   },
-  template: "\n<div class=\"row\" v-if=\"!model.meta.isCollection\">\n    <div class=\"col-sm-12\" v-if=\"model.meta.description != null\">\n        <div class=\"alert alert-info\" v-html=\"model.meta.description\"></div>\n    </div>\n    <div class=\"form-group\" :class=\"{ 'col-sm-6': field.meta.isHalfWidth, 'col-sm-12': !field.meta.isHalfWidth }\" v-bind:key=\"'field' + field.meta.uid\" v-for=\"field in model.items[0].fields\">\n        <label v-if=\"model.items[0].fields.length > 1\">{{ field.meta.name }}</label>\n        <div v-if=\"field.meta.description != null\" v-html=\"field.meta.description\" class=\"field-description small text-muted\"></div>\n        <div class=\"field-body\">\n            <div :id=\"'tb-' + field.meta.uid\" class=\"component-toolbar\"></div>\n            <component v-if=\"field.model != null\" v-bind:is=\"field.meta.component\" v-bind:uid=\"field.meta.uid\" v-bind:meta=\"field.meta\" v-bind:toolbar=\"'tb-' + field.meta.uid\" v-bind:model=\"field.model\"></component>\n        </div>\n    </div>\n</div>\n<div v-else>\n    <div v-if=\"model.meta.description != null\">\n        <div class=\"alert alert-info\" v-html=\"model.meta.description\"></div>\n    </div>\n    <div :id=\"model.meta.uid\" class=\"accordion sortable\" :class=\"model.items.length !== 0 ? 'mb-3' : ''\">\n        <div class=\"card\" :key=\"item.uid\" v-for=\"(item) in model.items\">\n            <div class=\"card-header\">\n                <a href=\"#\" :data-toggle=\"!model.meta.expanded ? 'collapse' : false\" :data-target=\"'#body' + item.uid\">\n                    <div class=\"handle\">\n                        <i class=\"fas fa-ellipsis-v\"></i>\n                    </div>\n                    {{ item.title }}\n                </a>\n                <span class=\"actions float-right\">\n                    <a v-on:click.prevent=\"removeItem(item)\" href=\"#\" class=\"danger\"><i class=\"fas fa-trash\"></i></a>\n                </span>\n            </div>\n            <div :id=\"'body' + item.uid\" :class=\"{ 'collapse' : !model.meta.expanded }\" :data-parent=\"'#' + model.meta.uid\">\n                <div class=\"card-body\">\n                    <div class=\"row\">\n                        <div class=\"form-group\" :class=\"{ 'col-sm-6': field.meta.isHalfWidth, 'col-sm-12': !field.meta.isHalfWidth }\" v-bind:key=\"field.meta.uid\" v-for=\"field in item.fields\">\n                            <label v-if=\"item.fields.length > 1 || field.meta.id !== 'Default'\">{{ field.meta.name }}</label>\n                            <div v-if=\"field.meta.description != null\" v-html=\"field.meta.description\" class=\"field-description small text-muted\"></div>\n                            <div class=\"field-body\">\n                                <div :id=\"'tb-' + field.meta.uid\" class=\"component-toolbar\"></div>\n                                <component v-if=\"field.model != null\" v-bind:is=\"field.meta.component\" v-bind:uid=\"field.meta.uid\" v-bind:meta=\"field.meta\" v-bind:toolbar=\"'tb-' + field.meta.uid\" v-bind:model=\"field.model\" v-on:update-title=\"updateTitle($event)\"></component>\n                            </div>\n                        </div>\n                    </div>\n                </div>\n            </div>\n        </div>\n    </div>\n    <a href=\"#\" class=\"block-add\" v-on:click.prevent=\"addItem()\">\n        <hr>\n        <i class=\"fas fa-plus-circle\"></i>\n    </a>\n    <div v-if=\"model.items.length === 0\" class=\"empty-info unsortable\">\n        <p>{{ piranha.resources.texts.emptyAddAbove }}</p>\n    </div>\n</div>\n"
+  template: "\n<div class=\"row\" v-if=\"!model.meta.isCollection\">\n    <div class=\"col-sm-12\" v-if=\"model.meta.description != null\">\n        <div class=\"alert alert-info\" v-html=\"model.meta.description\"></div>\n    </div>\n    <div class=\"form-group\" :class=\"{ 'col-sm-6': field.meta.isHalfWidth, 'col-sm-12': !field.meta.isHalfWidth }\" v-bind:key=\"'field' + field.meta.uid\" v-for=\"field in model.items[0].fields\">\n        <label v-if=\"model.items[0].fields.length > 1\">{{ field.meta.name }}</label>\n        <div v-if=\"field.meta.description != null\" v-html=\"field.meta.description\" class=\"field-description small text-muted\"></div>\n        <div class=\"field-body\">\n            <div :id=\"'tb-' + field.meta.uid\" class=\"component-toolbar\"></div>\n            <component v-if=\"field.model != null\" v-bind:is=\"field.meta.component\" v-bind:uid=\"field.meta.uid\" v-bind:meta=\"field.meta\" v-bind:toolbar=\"'tb-' + field.meta.uid\" v-bind:model=\"field.model\"></component>\n        </div>\n    </div>\n</div>\n<div v-else>\n    <div v-if=\"model.meta.description != null\">\n        <div class=\"alert alert-info\" v-html=\"model.meta.description\"></div>\n    </div>\n    <div :id=\"model.meta.uid\" class=\"accordion sortable\" :class=\"model.items.length !== 0 ? 'mb-3' : ''\">\n        <div class=\"card\" :key=\"item.uid\" v-for=\"(item) in model.items\">\n            <div class=\"card-header\">\n                <a href=\"#\" :data-toggle=\"!model.meta.expanded ? 'collapse' : false\" :data-target=\"'#body' + item.uid\">\n                    <div class=\"handle\">\n                        <i class=\"fas fa-ellipsis-v\"></i>\n                    </div>\n                    {{ item.title }}\n                </a>\n                <span class=\"actions float-right\">\n                    <a v-on:click.prevent=\"removeItem(item)\" href=\"#\" class=\"danger\"><i class=\"fas fa-trash\"></i></a>\n                </span>\n            </div>\n            <div :id=\"'body' + item.uid\" :class=\"{ 'collapse' : !model.meta.expanded }\" :data-parent=\"'#' + model.meta.uid\">\n                <div class=\"card-body\">\n                    <div class=\"row\">\n                        <div class=\"form-group\" :class=\"{ 'col-sm-6': field.meta.isHalfWidth, 'col-sm-12': !field.meta.isHalfWidth }\" v-bind:key=\"field.meta.uid\" v-for=\"field in item.fields\">\n                            <label v-if=\"item.fields.length > 1 || field.meta.id !== 'Default'\">{{ field.meta.name }}</label>\n                            <div v-if=\"field.meta.description != null\" v-html=\"field.meta.description\" class=\"field-description small text-muted\"></div>\n                            <div class=\"field-body\">\n                                <div :id=\"'tb-' + field.meta.uid\" class=\"component-toolbar\"></div>\n                                <component v-if=\"field.model != null\" v-bind:is=\"field.meta.component\" v-bind:uid=\"field.meta.uid\" v-bind:meta=\"field.meta\" v-bind:toolbar=\"'tb-' + field.meta.uid\" v-bind:model=\"field.model\" v-on:update-title=\"updateTitle($event)\"></component>\n                            </div>\n                        </div>\n                    </div>\n                </div>\n            </div>\n        </div>\n    </div>\n    <a href=\"#\" class=\"block-add\" v-on:click.prevent=\"addItem()\">\n        <hr>\n        <i class=\"fas fa-plus-circle\"></i>\n    </a>\n    <div v-if=\"model.items.length === 0\" class=\"empty-info unsortable\">\n        <p>{{ Aero.resources.texts.emptyAddAbove }}</p>\n    </div>\n</div>\n"
 });
 Vue.component("post-archive", {
   props: ["uid", "id"],
@@ -78,7 +78,7 @@ Vue.component("post-archive", {
       totalPages: 0,
       index: 0,
       status: "all",
-      category: piranha.resources.texts.allCategories
+      category: Aero.resources.texts.allCategories
     };
   },
   methods: {
@@ -89,7 +89,7 @@ Vue.component("post-archive", {
         index = 0;
       }
 
-      fetch(piranha.baseUrl + "manager/api/post/list/" + self.id + "/" + index).then(function (response) {
+      fetch(Aero.baseUrl + "manager/api/post/list/" + self.id + "/" + index).then(function (response) {
         return response.json();
       }).then(function (result) {
         self.items = result.posts;
@@ -104,21 +104,21 @@ Vue.component("post-archive", {
     },
     remove: function (postId) {
       var self = this;
-      piranha.alert.open({
-        title: piranha.resources.texts.delete,
-        body: piranha.resources.texts.deletePostConfirm,
+      Aero.alert.open({
+        title: Aero.resources.texts.delete,
+        body: Aero.resources.texts.deletePostConfirm,
         confirmCss: "btn-danger",
         confirmIcon: "fas fa-trash",
-        confirmText: piranha.resources.texts.delete,
+        confirmText: Aero.resources.texts.delete,
         onConfirm: function () {
-          fetch(piranha.baseUrl + "manager/api/post/delete", {
+          fetch(Aero.baseUrl + "manager/api/post/delete", {
             method: "delete",
-            headers: piranha.utils.antiForgeryHeaders(),
+            headers: Aero.utils.antiForgeryHeaders(),
             body: JSON.stringify(postId)
           }).then(function (response) {
             return response.json();
           }).then(function (result) {
-            piranha.notifications.push(result);
+            Aero.notifications.push(result);
             self.load();
           }).catch(function (error) {
             console.log("error:", error);
@@ -154,7 +154,7 @@ Vue.component("post-archive", {
     },
     isSelected: function (item) {
       // Check category
-      if (this.category !== piranha.resources.texts.allCategories && item.category !== this.category) {
+      if (this.category !== Aero.resources.texts.allCategories && item.category !== this.category) {
         return false;
       } // Check status
 
@@ -193,7 +193,7 @@ Vue.component("post-archive", {
   beforeDestroy: function () {
     this.eventBus.$off("onSaved");
   },
-  template: "\n<div :id=\"uid\">\n    <div class=\"mb-2\">\n        <div class=\"btn-group\" role=\"group\">\n            <button v-on:click=\"selectStatus('all')\" class=\"btn btn-sm\" :class=\"status === 'all' ? 'btn-primary' : 'btn-light'\" href=\"#\">{{ piranha.resources.texts.all }}</button>\n            <button v-on:click=\"selectStatus('draft')\" class=\"btn btn-sm\" :class=\"status === 'draft' ? 'btn-primary' : 'btn-light'\" href=\"#\">{{ piranha.resources.texts.drafts }}</button>\n            <button v-on:click=\"selectStatus('scheduled')\" class=\"btn btn-sm\" :class=\"status === 'scheduled' ? 'btn-primary' : 'btn-light'\" href=\"#\">{{ piranha.resources.texts.scheduled }}</button>\n        </div>\n        <div v-if=\"postTypes.length > 1\" class=\"btn-group\" role=\"group\">\n            <button type=\"button\" class=\"btn btn-sm btn-light dropdown-toggle\" data-toggle=\"dropdown\" aria-haspopup=\"true\" aria-expanded=\"false\">\n                {{ piranha.resources.texts.all }}\n            </button>\n            <div class=\"dropdown-menu dropdown-menu-right\">\n                <a v-for=\"type in postTypes\" v-bind:key=\"type.id\" href=\"#\" class=\"dropdown-item\">{{ type.title }}</a>\n            </div>\n        </div>\n        <div v-if=\"categories.length > 1\" class=\"btn-group\" role=\"group\">\n            <button type=\"button\" class=\"btn btn-sm dropdown-toggle\" :class=\"category === piranha.resources.texts.allCategories ? 'btn-light' : 'btn-primary'\" data-toggle=\"dropdown\" aria-haspopup=\"true\" aria-expanded=\"false\">\n                {{ category }}\n            </button>\n            <div class=\"dropdown-menu dropdown-menu-right\">\n                <a v-on:click.prevent=\"selectCategory(piranha.resources.texts.allCategories)\" href=\"#\" class=\"dropdown-item\">{{ piranha.resources.texts.allCategories }}</a>\n                <a v-on:click.prevent=\"selectCategory(category.title)\" v-for=\"category in categories\" v-bind:key=\"category.slug\" href=\"#\" class=\"dropdown-item\">{{ category.title }}</a>\n            </div>\n        </div>\n        <div v-if=\"postTypes.length > 1 && piranha.permissions.posts.add\" class=\"btn-group float-right\">\n            <button id=\"addPostGroup\" class=\"btn btn-sm btn-primary btn-labeled dropdown-toggle\" data-toggle=\"dropdown\" aria-haspopup=\"true\" aria-expanded=\"false\"><i class=\"fas fa-plus\"></i>{{ piranha.resources.texts.add }}</button>\n            <div class=\"dropdown-menu dropdown-menu-right\" aria-labelledby=\"addPostGroup\">\n                <a class=\"dropdown-item\" :href=\"piranha.baseUrl + type.addUrl + id + '/' + type.id\" v-bind:key=\"'add-' + type.id\" v-for=\"type in postTypes\">{{ type.title }}</a>\n            </div>\n        </div>\n        <a v-if=\"postTypes.length === 1 && piranha.permissions.posts.add\" :href=\"piranha.baseUrl + postTypes[0].addUrl + id + '/' + postTypes[0].id\" class=\"btn btn-sm btn-primary btn-labeled float-right\"><i class=\"fas fa-plus\"></i>{{ piranha.resources.texts.add }}</a>\n    </div>\n    <table v-if=\"items.length > 0\" class=\"table\">\n        <tbody>\n            <tr v-bind:key=\"post.id\" v-for=\"post in selectedPosts\" :class=\"{ unpublished: post.status === 'unpublished' || post.isScheduled }\">\n                <td>\n                    <a :href=\"piranha.baseUrl + post.editUrl + post.id\">{{ post.title }}</a>\n                    <small v-if=\"post.status === 'published' || post.status === 'draft'\" class=\"text-muted\">| {{ post.published }}</small>\n                    <small v-else-if=\"post.status === 'unpublished'\" class=\"text-muted\">| Unpublished</small>\n                    <span v-if=\"post.status === 'draft'\" class=\"badge badge-info float-right\">{{ piranha.resources.texts.draft }}</span>\n                    <span v-if=\"post.isScheduled\" class=\"badge badge-info float-right\">{{ piranha.resources.texts.scheduled }}</span>\n                </td>\n                <td>\n                    {{ post.typeName }}\n                </td>\n                <td>\n                    {{ post.category }}\n                </td>\n                <td class=\"actions one\">\n                    <a v-if=\"piranha.permissions.posts.delete\" v-on:click.prevent=\"remove(post.id)\" class=\"danger\"><i class=\"fas fa-trash\"></i></a>\n                </td>\n            </tr>\n        </tbody>\n    </table>\n    <div v-else class=\"empty-info\">\n        <p>Looks like there's no posts here. Click on the Add button above to get started!</p>\n    </div>\n    <nav v-if=\"totalPages > 1\">\n        <ul class=\"pagination justify-content-center\">\n            <li class=\"page-item\" :class=\"{ disabled: !hasPrev() }\"><button v-on:click.prevent=\"first()\" :disabled=\"!hasPrev()\" class=\"page-link\" href=\"#\"><i class=\"fas fa-angle-double-left\"></i></button></li>\n            <li class=\"page-item\" :class=\"{ disabled: !hasPrev() }\"><button v-on:click.prevent=\"prev()\" :disabled=\"!hasPrev()\" class=\"page-link\" href=\"#\"><i class=\"fas fa-chevron-left\"></i></button></li>\n            <li class=\"page-item disabled\"><span class=\"page-link\">{{ index + 1}} / {{ totalPages }}</span></li>\n            <li class=\"page-item\" :class=\"{ disabled: !hasNext() }\"><button v-on:click.prevent=\"next()\" :disabled=\"!hasNext()\" class=\"page-link\" href=\"#\"><i class=\"fas fa-chevron-right\"></i></button></li>\n            <li class=\"page-item\" :class=\"{ disabled: !hasNext() }\"><button v-on:click.prevent=\"last()\" :disabled=\"!hasNext()\" class=\"page-link\" href=\"#\"><i class=\"fas fa-angle-double-right\"></i></button></li>\n        </ul>\n    </nav>\n</div>\n"
+  template: "\n<div :id=\"uid\">\n    <div class=\"mb-2\">\n        <div class=\"btn-group\" role=\"group\">\n            <button v-on:click=\"selectStatus('all')\" class=\"btn btn-sm\" :class=\"status === 'all' ? 'btn-primary' : 'btn-light'\" href=\"#\">{{ Aero.resources.texts.all }}</button>\n            <button v-on:click=\"selectStatus('draft')\" class=\"btn btn-sm\" :class=\"status === 'draft' ? 'btn-primary' : 'btn-light'\" href=\"#\">{{ Aero.resources.texts.drafts }}</button>\n            <button v-on:click=\"selectStatus('scheduled')\" class=\"btn btn-sm\" :class=\"status === 'scheduled' ? 'btn-primary' : 'btn-light'\" href=\"#\">{{ Aero.resources.texts.scheduled }}</button>\n        </div>\n        <div v-if=\"postTypes.length > 1\" class=\"btn-group\" role=\"group\">\n            <button type=\"button\" class=\"btn btn-sm btn-light dropdown-toggle\" data-toggle=\"dropdown\" aria-haspopup=\"true\" aria-expanded=\"false\">\n                {{ Aero.resources.texts.all }}\n            </button>\n            <div class=\"dropdown-menu dropdown-menu-right\">\n                <a v-for=\"type in postTypes\" v-bind:key=\"type.id\" href=\"#\" class=\"dropdown-item\">{{ type.title }}</a>\n            </div>\n        </div>\n        <div v-if=\"categories.length > 1\" class=\"btn-group\" role=\"group\">\n            <button type=\"button\" class=\"btn btn-sm dropdown-toggle\" :class=\"category === Aero.resources.texts.allCategories ? 'btn-light' : 'btn-primary'\" data-toggle=\"dropdown\" aria-haspopup=\"true\" aria-expanded=\"false\">\n                {{ category }}\n            </button>\n            <div class=\"dropdown-menu dropdown-menu-right\">\n                <a v-on:click.prevent=\"selectCategory(Aero.resources.texts.allCategories)\" href=\"#\" class=\"dropdown-item\">{{ Aero.resources.texts.allCategories }}</a>\n                <a v-on:click.prevent=\"selectCategory(category.title)\" v-for=\"category in categories\" v-bind:key=\"category.slug\" href=\"#\" class=\"dropdown-item\">{{ category.title }}</a>\n            </div>\n        </div>\n        <div v-if=\"postTypes.length > 1 && Aero.permissions.posts.add\" class=\"btn-group float-right\">\n            <button id=\"addPostGroup\" class=\"btn btn-sm btn-primary btn-labeled dropdown-toggle\" data-toggle=\"dropdown\" aria-haspopup=\"true\" aria-expanded=\"false\"><i class=\"fas fa-plus\"></i>{{ Aero.resources.texts.add }}</button>\n            <div class=\"dropdown-menu dropdown-menu-right\" aria-labelledby=\"addPostGroup\">\n                <a class=\"dropdown-item\" :href=\"Aero.baseUrl + type.addUrl + id + '/' + type.id\" v-bind:key=\"'add-' + type.id\" v-for=\"type in postTypes\">{{ type.title }}</a>\n            </div>\n        </div>\n        <a v-if=\"postTypes.length === 1 && Aero.permissions.posts.add\" :href=\"Aero.baseUrl + postTypes[0].addUrl + id + '/' + postTypes[0].id\" class=\"btn btn-sm btn-primary btn-labeled float-right\"><i class=\"fas fa-plus\"></i>{{ Aero.resources.texts.add }}</a>\n    </div>\n    <table v-if=\"items.length > 0\" class=\"table\">\n        <tbody>\n            <tr v-bind:key=\"post.id\" v-for=\"post in selectedPosts\" :class=\"{ unpublished: post.status === 'unpublished' || post.isScheduled }\">\n                <td>\n                    <a :href=\"Aero.baseUrl + post.editUrl + post.id\">{{ post.title }}</a>\n                    <small v-if=\"post.status === 'published' || post.status === 'draft'\" class=\"text-muted\">| {{ post.published }}</small>\n                    <small v-else-if=\"post.status === 'unpublished'\" class=\"text-muted\">| Unpublished</small>\n                    <span v-if=\"post.status === 'draft'\" class=\"badge badge-info float-right\">{{ Aero.resources.texts.draft }}</span>\n                    <span v-if=\"post.isScheduled\" class=\"badge badge-info float-right\">{{ Aero.resources.texts.scheduled }}</span>\n                </td>\n                <td>\n                    {{ post.typeName }}\n                </td>\n                <td>\n                    {{ post.category }}\n                </td>\n                <td class=\"actions one\">\n                    <a v-if=\"Aero.permissions.posts.delete\" v-on:click.prevent=\"remove(post.id)\" class=\"danger\"><i class=\"fas fa-trash\"></i></a>\n                </td>\n            </tr>\n        </tbody>\n    </table>\n    <div v-else class=\"empty-info\">\n        <p>Looks like there's no posts here. Click on the Add button above to get started!</p>\n    </div>\n    <nav v-if=\"totalPages > 1\">\n        <ul class=\"pagination justify-content-center\">\n            <li class=\"page-item\" :class=\"{ disabled: !hasPrev() }\"><button v-on:click.prevent=\"first()\" :disabled=\"!hasPrev()\" class=\"page-link\" href=\"#\"><i class=\"fas fa-angle-double-left\"></i></button></li>\n            <li class=\"page-item\" :class=\"{ disabled: !hasPrev() }\"><button v-on:click.prevent=\"prev()\" :disabled=\"!hasPrev()\" class=\"page-link\" href=\"#\"><i class=\"fas fa-chevron-left\"></i></button></li>\n            <li class=\"page-item disabled\"><span class=\"page-link\">{{ index + 1}} / {{ totalPages }}</span></li>\n            <li class=\"page-item\" :class=\"{ disabled: !hasNext() }\"><button v-on:click.prevent=\"next()\" :disabled=\"!hasNext()\" class=\"page-link\" href=\"#\"><i class=\"fas fa-chevron-right\"></i></button></li>\n            <li class=\"page-item\" :class=\"{ disabled: !hasNext() }\"><button v-on:click.prevent=\"last()\" :disabled=\"!hasNext()\" class=\"page-link\" href=\"#\"><i class=\"fas fa-angle-double-right\"></i></button></li>\n        </ul>\n    </nav>\n</div>\n"
 });
 Vue.component("block-group", {
   props: ["uid", "toolbar", "model"],
@@ -218,7 +218,7 @@ Vue.component("block-group", {
     },
     addGroupBlock: function (type, pos) {
       var self = this;
-      fetch(piranha.baseUrl + "manager/api/content/block/" + type).then(function (response) {
+      fetch(Aero.baseUrl + "manager/api/content/block/" + type).then(function (response) {
         return response.json();
       }).then(function (result) {
         self.model.items.push(result.body);
@@ -250,7 +250,7 @@ Vue.component("block-group", {
       self.moveItem(e.detail.origin.index, e.detail.destination.index);
     });
   },
-  template: "\n<div :id=\"uid\" class=\"block-group\">\n    <div v-if=\"model.fields.length > 0\" class=\"actions block-group-actions\">\n        <button v-on:click.prevent=\"toggleHeader()\" class=\"btn btn-sm\" :class=\"{ selected: model.meta.showHeader }\">\n            <i class=\"fas fa-list\"></i>\n        </button>\n    </div>\n    <div class=\"block-group-header\">\n        <div v-if=\"model.meta.showHeader\" class=\"row\">\n            <div class=\"form-group\" :class=\"{ 'col-sm-6': field.meta.isHalfWidth, 'col-sm-12': !field.meta.isHalfWidth }\" v-bind:key=\"field.meta.id\" v-for=\"field in model.fields\">\n                <label>{{ field.meta.name }}</label>\n                <div v-if=\"field.meta.description != null\" v-html=\"field.meta.description\" class=\"field-description small text-muted\"></div>\n                <component v-bind:is=\"field.meta.component\" v-bind:uid=\"field.meta.uid\" v-bind:meta=\"field.meta\" v-bind:toolbar=\"toolbar\" v-bind:model=\"field.model\"></component>\n            </div>\n        </div>\n    </div>\n    <div class=\"row\">\n        <div class=\"col-md-4\">\n            <div class=\"list-group list-group-flush\">\n                <div class=\"list-group-item\" :class=\"{ active: child.isActive }\" v-for=\"child in model.items\" v-bind:key=\"child.meta.uid\">\n                    <a href=\"#\" v-on:click.prevent=\"selectItem(child)\">\n                        <div class=\"handle\">\n                            <i class=\"fas fa-ellipsis-v\"></i>\n                        </div>\n                        {{ child.meta.title }}\n                    </a>\n                    <span class='actions'>\n                        <a v-on:click.prevent=\"removeItem(child)\" href=\"#\" class=\"danger\"><i class=\"fas fa-trash\"></i></a>\n                    </span>\n                </div>\n            </div>\n            <button v-on:click.prevent=\"piranha.blockpicker.open(addGroupBlock, 0, model.type)\" class=\"btn btn-sm btn-primary btn-labeled mt-3\">\n                <i class=\"fas fa-plus\"></i>{{ piranha.resources.texts.add }}\n            </button>\n        </div>\n        <div class='col-md-8'>\n            <div v-if=\"model.items.length === 0\" class=\"empty-info unsortable\">\n                <p>{{ piranha.resources.texts.emptyAddLeft }}</p>\n            </div>\n            <template v-for=\"child in model.items\">\n                <div class=\"block\" :class=\"child.meta.component\" v-if=\"child.isActive\" v-bind:key=\"'details-' + child.meta.uid\">\n                    <component v-bind:is=\"child.meta.component\" v-bind:uid=\"child.meta.uid\" v-bind:toolbar=\"toolbar\" v-bind:model=\"child.model\" v-on:update-title=\"updateTitle($event)\"></component>\n                </div>\n            </template>\n        </div>\n    </div>\n</div>\n"
+  template: "\n<div :id=\"uid\" class=\"block-group\">\n    <div v-if=\"model.fields.length > 0\" class=\"actions block-group-actions\">\n        <button v-on:click.prevent=\"toggleHeader()\" class=\"btn btn-sm\" :class=\"{ selected: model.meta.showHeader }\">\n            <i class=\"fas fa-list\"></i>\n        </button>\n    </div>\n    <div class=\"block-group-header\">\n        <div v-if=\"model.meta.showHeader\" class=\"row\">\n            <div class=\"form-group\" :class=\"{ 'col-sm-6': field.meta.isHalfWidth, 'col-sm-12': !field.meta.isHalfWidth }\" v-bind:key=\"field.meta.id\" v-for=\"field in model.fields\">\n                <label>{{ field.meta.name }}</label>\n                <div v-if=\"field.meta.description != null\" v-html=\"field.meta.description\" class=\"field-description small text-muted\"></div>\n                <component v-bind:is=\"field.meta.component\" v-bind:uid=\"field.meta.uid\" v-bind:meta=\"field.meta\" v-bind:toolbar=\"toolbar\" v-bind:model=\"field.model\"></component>\n            </div>\n        </div>\n    </div>\n    <div class=\"row\">\n        <div class=\"col-md-4\">\n            <div class=\"list-group list-group-flush\">\n                <div class=\"list-group-item\" :class=\"{ active: child.isActive }\" v-for=\"child in model.items\" v-bind:key=\"child.meta.uid\">\n                    <a href=\"#\" v-on:click.prevent=\"selectItem(child)\">\n                        <div class=\"handle\">\n                            <i class=\"fas fa-ellipsis-v\"></i>\n                        </div>\n                        {{ child.meta.title }}\n                    </a>\n                    <span class='actions'>\n                        <a v-on:click.prevent=\"removeItem(child)\" href=\"#\" class=\"danger\"><i class=\"fas fa-trash\"></i></a>\n                    </span>\n                </div>\n            </div>\n            <button v-on:click.prevent=\"Aero.blockpicker.open(addGroupBlock, 0, model.type)\" class=\"btn btn-sm btn-primary btn-labeled mt-3\">\n                <i class=\"fas fa-plus\"></i>{{ Aero.resources.texts.add }}\n            </button>\n        </div>\n        <div class='col-md-8'>\n            <div v-if=\"model.items.length === 0\" class=\"empty-info unsortable\">\n                <p>{{ Aero.resources.texts.emptyAddLeft }}</p>\n            </div>\n            <template v-for=\"child in model.items\">\n                <div class=\"block\" :class=\"child.meta.component\" v-if=\"child.isActive\" v-bind:key=\"'details-' + child.meta.uid\">\n                    <component v-bind:is=\"child.meta.component\" v-bind:uid=\"child.meta.uid\" v-bind:toolbar=\"toolbar\" v-bind:model=\"child.model\" v-on:update-title=\"updateTitle($event)\"></component>\n                </div>\n            </template>\n        </div>\n    </div>\n</div>\n"
 });
 Vue.component("block-group-horizontal", {
   props: ["uid", "toolbar", "model"],
@@ -261,7 +261,7 @@ Vue.component("block-group-horizontal", {
     },
     addGroupBlock: function (type, pos) {
       var self = this;
-      fetch(piranha.baseUrl + "manager/api/content/block/" + type).then(function (response) {
+      fetch(Aero.baseUrl + "manager/api/content/block/" + type).then(function (response) {
         return response.json();
       }).then(function (result) {
         sortable("#" + self.uid + " .block-group-items", "destroy");
@@ -296,7 +296,7 @@ Vue.component("block-group-horizontal", {
       self.moveItem(e.detail.origin.index, e.detail.destination.index);
     });
   },
-  template: "\n<div :id=\"uid\" class=\"block-group\">\n    <div class=\"actions block-group-actions\">\n        <button v-on:click.prevent=\"piranha.blockpicker.open(addGroupBlock, 0, model.type)\" class=\"btn btn-sm add\">\n            <i class=\"fas fa-plus\"></i>\n        </button>\n        <button v-on:click.prevent='toggleHeader()' v-if='model.fields.length > 0' class='btn btn-sm' :class='{ selected: model.meta.showHeader }'>\n            <i class=\"fas fa-list\"></i>\n        </button>\n    </div>\n    <div v-if=\"model.meta.showHeader && model.fields.length > 0\" class=\"block-group-header\">\n        <div class=\"row\">\n            <div class=\"form-group\" :class=\"{ 'col-sm-6': field.meta.isHalfWidth, 'col-sm-12': !field.meta.isHalfWidth }\" v-bind:key=\"field.meta.id\" v-for=\"field in model.fields\">\n                <label>{{ field.meta.name }}</label>\n                <div v-if=\"field.meta.description != null\" v-html=\"field.meta.description\" class=\"field-description small text-muted\"></div>\n                <component v-bind:is='field.meta.component' v-bind:uid='field.meta.uid' v-bind:meta='field.meta' v-bind:toolbar='toolbar' v-bind:model='field.model'></component>\n            </div>\n        </div>\n    </div>\n    <div class=\"row block-group-items\">\n        <div v-if=\"model.items.length === 0\" class=\"col\">\n            <div class=\"empty-info unsortable\">\n                <p>{{ piranha.resources.texts.emptyAddAbove }}</p>\n            </div>\n        </div>\n        <div v-for=\"child in model.items\" v-bind:key=\"child.meta.uid\" class=\"col\">\n            <div class=\"block\" :class=\"child.meta.component\">\n                <div class=\"block-header\">\n                    <div class=\"title\">\n                        <i :class=\"child.meta.icon\"></i><strong>{{ child.meta.name }}</strong>\n                    </div>\n                    <div class=\"actions\">\n                        <span class=\"btn btn-sm handle\">\n                            <i class=\"fas fa-ellipsis-v\"></i>\n                        </span>\n                        <button v-on:click.prevent=\"removeItem(child)\" class=\"btn btn-sm danger\" tabindex=\"-1\">\n                            <i class=\"fas fa-trash\"></i>\n                        </button>\n                    </div>\n                </div>\n                <component v-bind:is=\"child.meta.component\" v-bind:uid=\"child.meta.uid\" v-bind:toolbar=\"toolbar\" v-bind:model=\"child.model\"></component>\n            </div>\n        </div>\n    </div>\n</div>\n"
+  template: "\n<div :id=\"uid\" class=\"block-group\">\n    <div class=\"actions block-group-actions\">\n        <button v-on:click.prevent=\"Aero.blockpicker.open(addGroupBlock, 0, model.type)\" class=\"btn btn-sm add\">\n            <i class=\"fas fa-plus\"></i>\n        </button>\n        <button v-on:click.prevent='toggleHeader()' v-if='model.fields.length > 0' class='btn btn-sm' :class='{ selected: model.meta.showHeader }'>\n            <i class=\"fas fa-list\"></i>\n        </button>\n    </div>\n    <div v-if=\"model.meta.showHeader && model.fields.length > 0\" class=\"block-group-header\">\n        <div class=\"row\">\n            <div class=\"form-group\" :class=\"{ 'col-sm-6': field.meta.isHalfWidth, 'col-sm-12': !field.meta.isHalfWidth }\" v-bind:key=\"field.meta.id\" v-for=\"field in model.fields\">\n                <label>{{ field.meta.name }}</label>\n                <div v-if=\"field.meta.description != null\" v-html=\"field.meta.description\" class=\"field-description small text-muted\"></div>\n                <component v-bind:is='field.meta.component' v-bind:uid='field.meta.uid' v-bind:meta='field.meta' v-bind:toolbar='toolbar' v-bind:model='field.model'></component>\n            </div>\n        </div>\n    </div>\n    <div class=\"row block-group-items\">\n        <div v-if=\"model.items.length === 0\" class=\"col\">\n            <div class=\"empty-info unsortable\">\n                <p>{{ Aero.resources.texts.emptyAddAbove }}</p>\n            </div>\n        </div>\n        <div v-for=\"child in model.items\" v-bind:key=\"child.meta.uid\" class=\"col\">\n            <div class=\"block\" :class=\"child.meta.component\">\n                <div class=\"block-header\">\n                    <div class=\"title\">\n                        <i :class=\"child.meta.icon\"></i><strong>{{ child.meta.name }}</strong>\n                    </div>\n                    <div class=\"actions\">\n                        <span class=\"btn btn-sm handle\">\n                            <i class=\"fas fa-ellipsis-v\"></i>\n                        </span>\n                        <button v-on:click.prevent=\"removeItem(child)\" class=\"btn btn-sm danger\" tabindex=\"-1\">\n                            <i class=\"fas fa-trash\"></i>\n                        </button>\n                    </div>\n                </div>\n                <component v-bind:is=\"child.meta.component\" v-bind:uid=\"child.meta.uid\" v-bind:toolbar=\"toolbar\" v-bind:model=\"child.model\"></component>\n            </div>\n        </div>\n    </div>\n</div>\n"
 });
 Vue.component("block-group-vertical", {
   props: ["uid", "toolbar", "model"],
@@ -310,7 +310,7 @@ Vue.component("block-group-vertical", {
     },
     addGroupBlock: function (type, pos) {
       var self = this;
-      fetch(piranha.baseUrl + "manager/api/content/block/" + type).then(function (response) {
+      fetch(Aero.baseUrl + "manager/api/content/block/" + type).then(function (response) {
         return response.json();
       }).then(function (result) {
         sortable("#" + self.uid + " .block-group-items", "destroy");
@@ -345,7 +345,7 @@ Vue.component("block-group-vertical", {
       self.moveItem(e.detail.origin.index, e.detail.destination.index);
     });
   },
-  template: "\n<div :id=\"uid\" class=\"block-group\">\n    <div class=\"actions block-group-actions\">\n        <button v-on:click.prevent=\"toggleHeader()\" v-if=\"model.fields.length > 0\" class=\"btn btn-sm\" :class=\"{ selected: model.meta.showHeader }\">\n            <i class=\"fas fa-list\"></i>\n        </button>\n    </div>\n    <div v-if=\"model.meta.showHeader && model.fields.length > 0\" class=\"block-group-header\">\n        <div class=\"row\">\n            <div class=\"form-group\" :class=\"{ 'col-sm-6': field.meta.isHalfWidth, 'col-sm-12': !field.meta.isHalfWidth }\" v-bind:key=\"field.meta.uid\" v-for=\"field in model.fields\">\n                <label>{{ field.meta.name }}</label>\n                <div v-if=\"field.meta.description != null\" v-html=\"field.meta.description\" class=\"field-description small text-muted\"></div>\n                <component v-bind:is=\"field.meta.component\" v-bind:uid=\"field.meta.uid\" v-bind:meta=\"field.meta\" v-bind:toolbar=\"toolbar\" v-bind:model=\"field.model\"></component>\n            </div>\n        </div>\n    </div>\n    <div class=\"block-group-items\">\n        <a href=\"#\" class=\"block-add unsortable\" v-on:click.prevent=\"piranha.blockpicker.open(addGroupBlock, 0, model.type)\">\n            <hr>\n            <i class=\"fas fa-plus-circle\"></i>\n        </a>\n        <div v-if=\"model.items.length === 0\" class=\"col\">\n            <div class=\"empty-info unsortable\">\n                <p>{{ piranha.resources.texts.emptyAddAbove }}</p>\n            </div>\n        </div>\n        <div v-for=\"(child, index) in model.items\" v-bind:key=\"child.meta.uid\">\n            <div class=\"block\" :class=\"child.meta.component + (child.meta.isCollapsed ? ' collapsed' : '')\">\n                <div class=\"block-header\">\n                    <div class=\"title\">\n                        <i :class=\"child.meta.icon\"></i><strong>{{ child.meta.name }}</strong>\n                    </div>\n                    <div class=\"actions\">\n                        <span v-on:click.prevent=\"collapseItem(child)\" class=\"btn btn-sm\">\n                            <i v-if=\"child.meta.isCollapsed\" class=\"fas fa-chevron-down\"></i>\n                            <i v-else class=\"fas fa-chevron-up\"></i>\n                        </span>\n                        <span class=\"btn btn-sm handle\">\n                            <i class=\"fas fa-ellipsis-v\"></i>\n                        </span>\n                        <button v-on:click.prevent=\"removeItem(child)\" class=\"btn btn-sm danger\" tabindex=\"-1\">\n                            <i class=\"fas fa-trash\"></i>\n                        </button>\n                    </div>\n                </div>\n                <component v-bind:is=\"child.meta.component\" v-bind:uid=\"child.meta.uid\" v-bind:toolbar=\"toolbar\" v-bind:model=\"child.model\"></component>\n            </div>\n            <a href=\"#\" class=\"block-add unsortable\" v-on:click.prevent=\"piranha.blockpicker.open(addGroupBlock, index + 1, model.type)\">\n                <hr>\n                <i class=\"fas fa-plus-circle\"></i>\n            </a>\n        </div>\n    </div>\n</div>\n"
+  template: "\n<div :id=\"uid\" class=\"block-group\">\n    <div class=\"actions block-group-actions\">\n        <button v-on:click.prevent=\"toggleHeader()\" v-if=\"model.fields.length > 0\" class=\"btn btn-sm\" :class=\"{ selected: model.meta.showHeader }\">\n            <i class=\"fas fa-list\"></i>\n        </button>\n    </div>\n    <div v-if=\"model.meta.showHeader && model.fields.length > 0\" class=\"block-group-header\">\n        <div class=\"row\">\n            <div class=\"form-group\" :class=\"{ 'col-sm-6': field.meta.isHalfWidth, 'col-sm-12': !field.meta.isHalfWidth }\" v-bind:key=\"field.meta.uid\" v-for=\"field in model.fields\">\n                <label>{{ field.meta.name }}</label>\n                <div v-if=\"field.meta.description != null\" v-html=\"field.meta.description\" class=\"field-description small text-muted\"></div>\n                <component v-bind:is=\"field.meta.component\" v-bind:uid=\"field.meta.uid\" v-bind:meta=\"field.meta\" v-bind:toolbar=\"toolbar\" v-bind:model=\"field.model\"></component>\n            </div>\n        </div>\n    </div>\n    <div class=\"block-group-items\">\n        <a href=\"#\" class=\"block-add unsortable\" v-on:click.prevent=\"Aero.blockpicker.open(addGroupBlock, 0, model.type)\">\n            <hr>\n            <i class=\"fas fa-plus-circle\"></i>\n        </a>\n        <div v-if=\"model.items.length === 0\" class=\"col\">\n            <div class=\"empty-info unsortable\">\n                <p>{{ Aero.resources.texts.emptyAddAbove }}</p>\n            </div>\n        </div>\n        <div v-for=\"(child, index) in model.items\" v-bind:key=\"child.meta.uid\">\n            <div class=\"block\" :class=\"child.meta.component + (child.meta.isCollapsed ? ' collapsed' : '')\">\n                <div class=\"block-header\">\n                    <div class=\"title\">\n                        <i :class=\"child.meta.icon\"></i><strong>{{ child.meta.name }}</strong>\n                    </div>\n                    <div class=\"actions\">\n                        <span v-on:click.prevent=\"collapseItem(child)\" class=\"btn btn-sm\">\n                            <i v-if=\"child.meta.isCollapsed\" class=\"fas fa-chevron-down\"></i>\n                            <i v-else class=\"fas fa-chevron-up\"></i>\n                        </span>\n                        <span class=\"btn btn-sm handle\">\n                            <i class=\"fas fa-ellipsis-v\"></i>\n                        </span>\n                        <button v-on:click.prevent=\"removeItem(child)\" class=\"btn btn-sm danger\" tabindex=\"-1\">\n                            <i class=\"fas fa-trash\"></i>\n                        </button>\n                    </div>\n                </div>\n                <component v-bind:is=\"child.meta.component\" v-bind:uid=\"child.meta.uid\" v-bind:toolbar=\"toolbar\" v-bind:model=\"child.model\"></component>\n            </div>\n            <a href=\"#\" class=\"block-add unsortable\" v-on:click.prevent=\"Aero.blockpicker.open(addGroupBlock, index + 1, model.type)\">\n                <hr>\n                <i class=\"fas fa-plus-circle\"></i>\n            </a>\n        </div>\n    </div>\n</div>\n"
 });
 Vue.component("generic-block", {
   props: ["uid", "toolbar", "model"],
@@ -366,9 +366,9 @@ Vue.component("audio-block", {
     },
     select: function () {
       if (this.model.body.media != null) {
-        piranha.mediapicker.open(this.update, "Audio", this.model.body.media.folderId);
+        Aero.mediapicker.open(this.update, "Audio", this.model.body.media.folderId);
       } else {
-        piranha.mediapicker.openCurrentFolder(this.update, "Audio");
+        Aero.mediapicker.openCurrentFolder(this.update, "Audio");
       }
     },
     remove: function () {
@@ -402,7 +402,7 @@ Vue.component("audio-block", {
     },
     mediaUrl: function () {
       if (this.model.body.media != null) {
-        return piranha.utils.formatUrl(this.model.body.media.publicUrl);
+        return Aero.utils.formatUrl(this.model.body.media.publicUrl);
       }
     }
   },
@@ -421,7 +421,7 @@ Vue.component("content-block", {
   props: ["uid", "model"],
   methods: {
     select: function () {
-      piranha.contentpicker.open(null, this.update);
+      Aero.contentpicker.open(null, this.update);
     },
     remove: function () {
       this.model.body.id = null;
@@ -430,7 +430,7 @@ Vue.component("content-block", {
     update: function (content) {
       if (content !== null) {
         var self = this;
-        fetch(piranha.baseUrl + "manager/api/content/info/" + content.id).then(function (response) {
+        fetch(Aero.baseUrl + "manager/api/content/info/" + content.id).then(function (response) {
           return response.json();
         }).then(function (result) {
           self.model.body.id = result.id;
@@ -454,9 +454,9 @@ Vue.component("content-block", {
     },
     contentImage: function () {
       if (this.hasContentImage) {
-        return piranha.baseUrl + "manager/api/media/url/" + this.model.body.content.primaryImage.id + "/446/220";
+        return Aero.baseUrl + "manager/api/media/url/" + this.model.body.content.primaryImage.id + "/446/220";
       } else {
-        return piranha.utils.formatUrl("~/manager/assets/img/empty-image.png");
+        return Aero.utils.formatUrl("~/manager/assets/img/empty-image.png");
       }
     },
     hasContentImage: function () {
@@ -492,7 +492,7 @@ Vue.component("content-block", {
       }
     };
   },
-  template: "\n<div class=\"block-body has-media-picker rounded clearfix\" :class=\"{ empty: isEmpty }\">\n    <div>\n        <div class=\"page-image\" :style=\"'background-image:url(' + contentImage + ')'\">\n            <img :src=\"piranha.utils.formatUrl('~/manager/assets/img/primaryimage-placeholder.png')\">\n        </div>\n        <h3 :class=\"{ 'text-light': !hasContentTitle }\">{{ contentTitle }}</h3>\n        <p :class=\"{ 'text-light': !hasContentExcerpt }\" v-html=\"contentExcerpt\"></p>\n    </div>\n    <div class=\"media-picker\">\n        <div class=\"btn-group float-right\">\n            <button v-on:click.prevent=\"select\" class=\"btn btn-primary text-center\">\n                <i class=\"fas fa-plus\"></i>\n            </button>\n            <button v-on:click.prevent=\"remove\" class=\"btn btn-danger text-center\">\n                <i class=\"fas fa-times\"></i>\n            </button>\n        </div>\n        <div class=\"card text-left\">\n            <div class=\"card-body\" v-if=\"isEmpty\">\n                &nbsp;\n            </div>\n            <div class=\"card-body\" v-else>\n                <a :href=\"piranha.baseUrl + 'manager/content/edit/' + model.body.content.typeId + '/' + model.body.content.id\" target=\"_blank\">{{ model.body.content.title }}</a>\n            </div>\n        </div>\n    </div>\n</div>\n"
+  template: "\n<div class=\"block-body has-media-picker rounded clearfix\" :class=\"{ empty: isEmpty }\">\n    <div>\n        <div class=\"page-image\" :style=\"'background-image:url(' + contentImage + ')'\">\n            <img :src=\"Aero.utils.formatUrl('~/manager/assets/img/primaryimage-placeholder.png')\">\n        </div>\n        <h3 :class=\"{ 'text-light': !hasContentTitle }\">{{ contentTitle }}</h3>\n        <p :class=\"{ 'text-light': !hasContentExcerpt }\" v-html=\"contentExcerpt\"></p>\n    </div>\n    <div class=\"media-picker\">\n        <div class=\"btn-group float-right\">\n            <button v-on:click.prevent=\"select\" class=\"btn btn-primary text-center\">\n                <i class=\"fas fa-plus\"></i>\n            </button>\n            <button v-on:click.prevent=\"remove\" class=\"btn btn-danger text-center\">\n                <i class=\"fas fa-times\"></i>\n            </button>\n        </div>\n        <div class=\"card text-left\">\n            <div class=\"card-body\" v-if=\"isEmpty\">\n                &nbsp;\n            </div>\n            <div class=\"card-body\" v-else>\n                <a :href=\"Aero.baseUrl + 'manager/content/edit/' + model.body.content.typeId + '/' + model.body.content.id\" target=\"_blank\">{{ model.body.content.title }}</a>\n            </div>\n        </div>\n    </div>\n</div>\n"
 });
 Vue.component("html-block", {
   props: ["uid", "toolbar", "model"],
@@ -511,14 +511,14 @@ Vue.component("html-block", {
   },
   computed: {
     isEmpty: function () {
-      return piranha.utils.isEmptyHtml(this.model.body.value);
+      return Aero.utils.isEmptyHtml(this.model.body.value);
     }
   },
   mounted: function () {
-    piranha.editor.addInline(this.uid, this.toolbar, this.onChange);
+    Aero.editor.addInline(this.uid, this.toolbar, this.onChange);
   },
   beforeDestroy: function () {
-    piranha.editor.remove(this.uid);
+    Aero.editor.remove(this.uid);
   },
   template: "\n<div class=\"block-body\" :class=\"{ empty: isEmpty }\">\n    <div contenteditable=\"true\" :id=\"uid\" v-html=\"body\" v-on:blur=\"onBlur\"></div>\n</div>\n"
 });
@@ -548,19 +548,19 @@ Vue.component("html-column-block", {
   },
   computed: {
     isEmpty1: function () {
-      return piranha.utils.isEmptyHtml(this.model.column1.value);
+      return Aero.utils.isEmptyHtml(this.model.column1.value);
     },
     isEmpty2: function () {
-      return piranha.utils.isEmptyHtml(this.model.column2.value);
+      return Aero.utils.isEmptyHtml(this.model.column2.value);
     }
   },
   mounted: function () {
-    piranha.editor.addInline(this.uid + 1, this.toolbar, this.onChangeCol1);
-    piranha.editor.addInline(this.uid + 2, this.toolbar, this.onChangeCol2);
+    Aero.editor.addInline(this.uid + 1, this.toolbar, this.onChangeCol1);
+    Aero.editor.addInline(this.uid + 2, this.toolbar, this.onChangeCol2);
   },
   beforeDestroy: function () {
-    piranha.editor.remove(this.uid + 1);
-    piranha.editor.remove(this.uid + 2);
+    Aero.editor.remove(this.uid + 1);
+    Aero.editor.remove(this.uid + 2);
   },
   template: "\n<div class=\"row block-body\">\n    <div class=\"col-md-6\">\n        <div :class=\"{ empty: isEmpty1 }\">\n            <div :id=\"uid + 1\" contenteditable=\"true\" v-html=\"column1\" v-on:blur=\"onBlurCol1\"></div>\n        </div>\n    </div>\n    <div class='col-md-6'>\n        <div :class='{ empty: isEmpty2 }'>\n            <div :id=\"uid + 2\" contenteditable=\"true\" v-html=\"column2\" v-on:blur=\"onBlurCol2\"></div>\n        </div>\n    </div>\n</div>\n"
 });
@@ -571,9 +571,9 @@ Vue.component("image-block", {
     },
     select: function () {
       if (this.model.body.media != null) {
-        piranha.mediapicker.open(this.update, "Image", this.model.body.media.folderId);
+        Aero.mediapicker.open(this.update, "Image", this.model.body.media.folderId);
       } else {
-        piranha.mediapicker.openCurrentFolder(this.update, "Image");
+        Aero.mediapicker.openCurrentFolder(this.update, "Image");
       }
     },
     remove: function () {
@@ -615,19 +615,19 @@ Vue.component("image-block", {
     },
     mediaUrl: function () {
       if (this.model.body.media != null) {
-        return piranha.utils.formatUrl(this.model.body.media.publicUrl);
+        return Aero.utils.formatUrl(this.model.body.media.publicUrl);
       } else {
-        return piranha.utils.formatUrl("~/manager/assets/img/empty-image.png");
+        return Aero.utils.formatUrl("~/manager/assets/img/empty-image.png");
       }
     },
     iconUrl: function () {
       if (this.model.aspect.value > 0) {
         if (this.model.aspect.value === 1 || this.model.aspect.value === 3) {
-          return piranha.utils.formatUrl("~/manager/assets/img/icons/img-landscape.svg");
+          return Aero.utils.formatUrl("~/manager/assets/img/icons/img-landscape.svg");
         } else if (this.model.aspect.value == 2) {
-          return piranha.utils.formatUrl("~/manager/assets/img/icons/img-portrait.svg");
+          return Aero.utils.formatUrl("~/manager/assets/img/icons/img-portrait.svg");
         } else if (this.model.aspect.value == 4) {
-          return piranha.utils.formatUrl("~/manager/assets/img/icons/img-square.svg");
+          return Aero.utils.formatUrl("~/manager/assets/img/icons/img-square.svg");
         }
       }
 
@@ -643,7 +643,7 @@ Vue.component("image-block", {
       }
     };
   },
-  template: "\n<div class=\"block-body has-media-picker rounded\" :class=\"{ empty: isEmpty }\">\n    <img class=\"rounded\" :src=\"mediaUrl\">\n    <div class=\"media-picker\">\n        <div class=\"btn-group float-right\">\n            <button :id=\"uid + '-aspect'\" class=\"btn btn-info btn-aspect text-center\" data-toggle=\"dropdown\" aria-haspopup=\"true\" aria-expanded=\"false\">\n                <i v-if=\"model.aspect.value === 0\" class=\"fas fa-cog\"></i>\n                <img v-else :src=\"iconUrl\">\n            </button>\n            <div class=\"dropdown-menu aspect-menu\" :aria-labelledby=\"uid + '-aspect'\">\n                <label class=\"mb-0\">{{ piranha.resources.texts.aspectLabel }}</label>\n                <div class=\"dropdown-divider\"></div>\n                <a v-on:click.prevent=\"selectAspect(0)\" class=\"dropdown-item\" :class=\"{ active: isAspectSelected(0) }\" href=\"#\">\n                    <img :src=\"piranha.utils.formatUrl('~/manager/assets/img/icons/img-original.svg')\"><span>{{ piranha.resources.texts.aspectOriginal }}</span>\n                </a>\n                <a v-on:click.prevent=\"selectAspect(1)\" class=\"dropdown-item\" :class=\"{ active: isAspectSelected(1) }\" href=\"#\">\n                    <img :src=\"piranha.utils.formatUrl('~/manager/assets/img/icons/img-landscape.svg')\"><span>{{ piranha.resources.texts.aspectLandscape }}</span>\n                </a>\n                <a v-on:click.prevent=\"selectAspect(2)\" class=\"dropdown-item\" :class=\"{ active: isAspectSelected(2) }\" href=\"#\">\n                    <img :src=\"piranha.utils.formatUrl('~/manager/assets/img/icons/img-portrait.svg')\"><span>{{ piranha.resources.texts.aspectPortrait }}</span>\n                </a>\n                <a v-on:click.prevent=\"selectAspect(3)\" class=\"dropdown-item\" :class=\"{ active: isAspectSelected(3) }\" href=\"#\">\n                    <img :src=\"piranha.utils.formatUrl('~/manager/assets/img/icons/img-landscape.svg')\"><span>{{ piranha.resources.texts.aspectWidescreen }}</span>\n                </a>\n                <a v-on:click.prevent=\"selectAspect(4)\" class=\"dropdown-item\" :class=\"{ active: isAspectSelected(4) }\" href=\"#\">\n                    <img :src=\"piranha.utils.formatUrl('~/manager/assets/img/icons/img-square.svg')\"><span>{{ piranha.resources.texts.aspectSquare }}</span>\n                </a>\n            </div>\n            <button v-on:click.prevent=\"select\" class=\"btn btn-primary text-center\">\n                <i class=\"fas fa-plus\"></i>\n            </button>\n            <button v-on:click.prevent=\"remove\" class=\"btn btn-danger text-center\">\n                <i class=\"fas fa-times\"></i>\n            </button>\n        </div>\n        <div class=\"card text-left\">\n            <div class=\"card-body\" v-if=\"isEmpty\">\n                &nbsp;\n            </div>\n            <div class=\"card-body\" v-else>\n                {{ model.body.media.filename }}\n            </div>\n        </div>\n    </div>\n</div>\n"
+  template: "\n<div class=\"block-body has-media-picker rounded\" :class=\"{ empty: isEmpty }\">\n    <img class=\"rounded\" :src=\"mediaUrl\">\n    <div class=\"media-picker\">\n        <div class=\"btn-group float-right\">\n            <button :id=\"uid + '-aspect'\" class=\"btn btn-info btn-aspect text-center\" data-toggle=\"dropdown\" aria-haspopup=\"true\" aria-expanded=\"false\">\n                <i v-if=\"model.aspect.value === 0\" class=\"fas fa-cog\"></i>\n                <img v-else :src=\"iconUrl\">\n            </button>\n            <div class=\"dropdown-menu aspect-menu\" :aria-labelledby=\"uid + '-aspect'\">\n                <label class=\"mb-0\">{{ Aero.resources.texts.aspectLabel }}</label>\n                <div class=\"dropdown-divider\"></div>\n                <a v-on:click.prevent=\"selectAspect(0)\" class=\"dropdown-item\" :class=\"{ active: isAspectSelected(0) }\" href=\"#\">\n                    <img :src=\"Aero.utils.formatUrl('~/manager/assets/img/icons/img-original.svg')\"><span>{{ Aero.resources.texts.aspectOriginal }}</span>\n                </a>\n                <a v-on:click.prevent=\"selectAspect(1)\" class=\"dropdown-item\" :class=\"{ active: isAspectSelected(1) }\" href=\"#\">\n                    <img :src=\"Aero.utils.formatUrl('~/manager/assets/img/icons/img-landscape.svg')\"><span>{{ Aero.resources.texts.aspectLandscape }}</span>\n                </a>\n                <a v-on:click.prevent=\"selectAspect(2)\" class=\"dropdown-item\" :class=\"{ active: isAspectSelected(2) }\" href=\"#\">\n                    <img :src=\"Aero.utils.formatUrl('~/manager/assets/img/icons/img-portrait.svg')\"><span>{{ Aero.resources.texts.aspectPortrait }}</span>\n                </a>\n                <a v-on:click.prevent=\"selectAspect(3)\" class=\"dropdown-item\" :class=\"{ active: isAspectSelected(3) }\" href=\"#\">\n                    <img :src=\"Aero.utils.formatUrl('~/manager/assets/img/icons/img-landscape.svg')\"><span>{{ Aero.resources.texts.aspectWidescreen }}</span>\n                </a>\n                <a v-on:click.prevent=\"selectAspect(4)\" class=\"dropdown-item\" :class=\"{ active: isAspectSelected(4) }\" href=\"#\">\n                    <img :src=\"Aero.utils.formatUrl('~/manager/assets/img/icons/img-square.svg')\"><span>{{ Aero.resources.texts.aspectSquare }}</span>\n                </a>\n            </div>\n            <button v-on:click.prevent=\"select\" class=\"btn btn-primary text-center\">\n                <i class=\"fas fa-plus\"></i>\n            </button>\n            <button v-on:click.prevent=\"remove\" class=\"btn btn-danger text-center\">\n                <i class=\"fas fa-times\"></i>\n            </button>\n        </div>\n        <div class=\"card text-left\">\n            <div class=\"card-body\" v-if=\"isEmpty\">\n                &nbsp;\n            </div>\n            <div class=\"card-body\" v-else>\n                {{ model.body.media.filename }}\n            </div>\n        </div>\n    </div>\n</div>\n"
 });
 Vue.component("markdown-block", {
   props: ["uid", "model"],
@@ -664,7 +664,7 @@ Vue.component("markdown-block", {
   },
   computed: {
     isEmpty: function () {
-      return piranha.utils.isEmptyText(this.model.body.value);
+      return Aero.utils.isEmptyText(this.model.body.value);
     }
   },
   template: "\n<div class=\"block-body\" :class=\"{ empty: isEmpty }\">\n    <markdown-field :uid=\"uid\" :model=\"model.body\" />\n</div>\n"
@@ -677,7 +677,7 @@ Vue.component("page-block", {
   props: ["uid", "model"],
   methods: {
     select: function () {
-      piranha.pagepicker.open(this.update);
+      Aero.pagepicker.open(this.update);
     },
     remove: function () {
       this.model.body.id = null;
@@ -686,7 +686,7 @@ Vue.component("page-block", {
     update: function (page) {
       if (page !== null) {
         var self = this;
-        fetch(piranha.baseUrl + "manager/api/page/info/" + page.id).then(function (response) {
+        fetch(Aero.baseUrl + "manager/api/page/info/" + page.id).then(function (response) {
           return response.json();
         }).then(function (result) {
           self.model.body.id = result.id;
@@ -710,9 +710,9 @@ Vue.component("page-block", {
     },
     pageImage: function () {
       if (this.hasPageImage) {
-        return piranha.baseUrl + "manager/api/media/url/" + this.model.body.page.primaryImage.id + "/446/220"; //return piranha.utils.formatUrl(this.model.body.page.primaryImage.media.publicUrl);
+        return Aero.baseUrl + "manager/api/media/url/" + this.model.body.page.primaryImage.id + "/446/220"; //return Aero.utils.formatUrl(this.model.body.page.primaryImage.media.publicUrl);
       } else {
-        return piranha.utils.formatUrl("~/manager/assets/img/empty-image.png");
+        return Aero.utils.formatUrl("~/manager/assets/img/empty-image.png");
       }
     },
     hasPageImage: function () {
@@ -748,13 +748,13 @@ Vue.component("page-block", {
       }
     };
   },
-  template: "\n<div class=\"block-body has-media-picker rounded clearfix\" :class=\"{ empty: isEmpty }\">\n    <div>\n        <div class=\"page-image\" :style=\"'background-image:url(' + pageImage + ')'\">\n            <img :src=\"piranha.utils.formatUrl('~/manager/assets/img/primaryimage-placeholder.png')\">\n        </div>\n        <h3 :class=\"{ 'text-light': !hasPageTitle }\">{{ pageTitle }}</h3>\n        <p :class=\"{ 'text-light': !hasPageExcerpt }\" v-html=\"pageExcerpt\"></p>\n    </div>\n    <div class=\"media-picker\">\n        <div class=\"btn-group float-right\">\n            <button v-on:click.prevent=\"select\" class=\"btn btn-primary text-center\">\n                <i class=\"fas fa-plus\"></i>\n            </button>\n            <button v-on:click.prevent=\"remove\" class=\"btn btn-danger text-center\">\n                <i class=\"fas fa-times\"></i>\n            </button>\n        </div>\n        <div class=\"card text-left\">\n            <div class=\"card-body\" v-if=\"isEmpty\">\n                &nbsp;\n            </div>\n            <div class=\"card-body\" v-else>\n                <a :href=\"piranha.baseUrl + 'manager/page/edit/' + model.body.page.id\" target=\"_blank\">{{ model.body.page.title }}</a>\n            </div>\n        </div>\n    </div>\n</div>\n"
+  template: "\n<div class=\"block-body has-media-picker rounded clearfix\" :class=\"{ empty: isEmpty }\">\n    <div>\n        <div class=\"page-image\" :style=\"'background-image:url(' + pageImage + ')'\">\n            <img :src=\"Aero.utils.formatUrl('~/manager/assets/img/primaryimage-placeholder.png')\">\n        </div>\n        <h3 :class=\"{ 'text-light': !hasPageTitle }\">{{ pageTitle }}</h3>\n        <p :class=\"{ 'text-light': !hasPageExcerpt }\" v-html=\"pageExcerpt\"></p>\n    </div>\n    <div class=\"media-picker\">\n        <div class=\"btn-group float-right\">\n            <button v-on:click.prevent=\"select\" class=\"btn btn-primary text-center\">\n                <i class=\"fas fa-plus\"></i>\n            </button>\n            <button v-on:click.prevent=\"remove\" class=\"btn btn-danger text-center\">\n                <i class=\"fas fa-times\"></i>\n            </button>\n        </div>\n        <div class=\"card text-left\">\n            <div class=\"card-body\" v-if=\"isEmpty\">\n                &nbsp;\n            </div>\n            <div class=\"card-body\" v-else>\n                <a :href=\"Aero.baseUrl + 'manager/page/edit/' + model.body.page.id\" target=\"_blank\">{{ model.body.page.title }}</a>\n            </div>\n        </div>\n    </div>\n</div>\n"
 });
 Vue.component("post-block", {
   props: ["uid", "model"],
   methods: {
     select: function () {
-      piranha.postpicker.open(this.update);
+      Aero.postpicker.open(this.update);
     },
     remove: function () {
       this.model.body.id = null;
@@ -763,7 +763,7 @@ Vue.component("post-block", {
     update: function (post) {
       if (post !== null) {
         var self = this;
-        fetch(piranha.baseUrl + "manager/api/post/info/" + post.id).then(function (response) {
+        fetch(Aero.baseUrl + "manager/api/post/info/" + post.id).then(function (response) {
           return response.json();
         }).then(function (result) {
           self.model.body.id = result.id;
@@ -787,9 +787,9 @@ Vue.component("post-block", {
     },
     postImage: function () {
       if (this.hasPostImage) {
-        return piranha.baseUrl + "manager/api/media/url/" + this.model.body.post.primaryImage.id + "/446/220";
+        return Aero.baseUrl + "manager/api/media/url/" + this.model.body.post.primaryImage.id + "/446/220";
       } else {
-        return piranha.utils.formatUrl("~/manager/assets/img/empty-image.png");
+        return Aero.utils.formatUrl("~/manager/assets/img/empty-image.png");
       }
     },
     hasPostImage: function () {
@@ -825,7 +825,7 @@ Vue.component("post-block", {
       }
     };
   },
-  template: "\n<div class=\"block-body has-media-picker rounded clearfix\" :class=\"{ empty: isEmpty }\">\n    <div>\n        <div class=\"page-image\" :style=\"'background-image:url(' + postImage + ')'\">\n            <img :src=\"piranha.utils.formatUrl('~/manager/assets/img/primaryimage-placeholder.png')\">\n        </div>\n        <h3 :class=\"{ 'text-light': !hasPostTitle }\">{{ postTitle }}</h3>\n        <p :class=\"{ 'text-light': !hasPostExcerpt }\" v-html=\"postExcerpt\"></p>\n    </div>\n    <div class=\"media-picker\">\n        <div class=\"btn-group float-right\">\n            <button v-on:click.prevent=\"select\" class=\"btn btn-primary text-center\">\n                <i class=\"fas fa-plus\"></i>\n            </button>\n            <button v-on:click.prevent=\"remove\" class=\"btn btn-danger text-center\">\n                <i class=\"fas fa-times\"></i>\n            </button>\n        </div>\n        <div class=\"card text-left\">\n            <div class=\"card-body\" v-if=\"isEmpty\">\n                &nbsp;\n            </div>\n            <div class=\"card-body\" v-else>\n                <a :href=\"piranha.baseUrl + 'manager/post/edit/' + model.body.post.id\" target=\"_blank\">{{ model.body.post.title }}</a>\n            </div>\n        </div>\n    </div>\n</div>\n"
+  template: "\n<div class=\"block-body has-media-picker rounded clearfix\" :class=\"{ empty: isEmpty }\">\n    <div>\n        <div class=\"page-image\" :style=\"'background-image:url(' + postImage + ')'\">\n            <img :src=\"Aero.utils.formatUrl('~/manager/assets/img/primaryimage-placeholder.png')\">\n        </div>\n        <h3 :class=\"{ 'text-light': !hasPostTitle }\">{{ postTitle }}</h3>\n        <p :class=\"{ 'text-light': !hasPostExcerpt }\" v-html=\"postExcerpt\"></p>\n    </div>\n    <div class=\"media-picker\">\n        <div class=\"btn-group float-right\">\n            <button v-on:click.prevent=\"select\" class=\"btn btn-primary text-center\">\n                <i class=\"fas fa-plus\"></i>\n            </button>\n            <button v-on:click.prevent=\"remove\" class=\"btn btn-danger text-center\">\n                <i class=\"fas fa-times\"></i>\n            </button>\n        </div>\n        <div class=\"card text-left\">\n            <div class=\"card-body\" v-if=\"isEmpty\">\n                &nbsp;\n            </div>\n            <div class=\"card-body\" v-else>\n                <a :href=\"Aero.baseUrl + 'manager/post/edit/' + model.body.post.id\" target=\"_blank\">{{ model.body.post.title }}</a>\n            </div>\n        </div>\n    </div>\n</div>\n"
 });
 Vue.component("quote-block", {
   props: ["uid", "model"],
@@ -922,7 +922,7 @@ Vue.component("text-block", {
   },
   computed: {
     isEmpty: function () {
-      return piranha.utils.isEmptyText(this.model.body.value);
+      return Aero.utils.isEmptyText(this.model.body.value);
     }
   },
   template: "\n<div class=\"block-body\" :class=\"{ empty: isEmpty }\">\n    <pre class=\"invisible\" v-html=\"model.body.value\"></pre>\n    <textarea v-text=\"model.body.value\" v-on:change=\"onChange\" v-on:blur=\"onBlur\"></textarea>\n</div>\n"
@@ -934,9 +934,9 @@ Vue.component("video-block", {
     },
     select: function () {
       if (this.model.body.media != null) {
-        piranha.mediapicker.open(this.update, "Video", this.model.body.media.folderId);
+        Aero.mediapicker.open(this.update, "Video", this.model.body.media.folderId);
       } else {
-        piranha.mediapicker.openCurrentFolder(this.update, "Video");
+        Aero.mediapicker.openCurrentFolder(this.update, "Video");
       }
     },
     remove: function () {
@@ -970,7 +970,7 @@ Vue.component("video-block", {
     },
     mediaUrl: function () {
       if (this.model.body.media != null) {
-        return piranha.utils.formatUrl(this.model.body.media.publicUrl);
+        return Aero.utils.formatUrl(this.model.body.media.publicUrl);
       }
     }
   },
@@ -993,11 +993,11 @@ Vue.component("archivepage-field", {
 
       if (this.model.page) {
         siteId = this.model.page.siteId;
-      } else if (piranha.pageedit) {
-        siteId = piranha.pageedit.siteId;
+      } else if (Aero.pageedit) {
+        siteId = Aero.pageedit.siteId;
       }
 
-      piranha.archivepicker.open(this.update, siteId);
+      Aero.archivepicker.open(this.update, siteId);
     },
     remove: function () {
       this.model.id = null;
@@ -1029,16 +1029,16 @@ Vue.component("archivepage-field", {
       }
     };
   },
-  template: "\n<div class=\"media-field\" :class=\"{ empty: isEmpty }\">\n    <div class=\"media-picker\">\n        <div class=\"btn-group float-right\">\n            <button v-on:click.prevent=\"select\" class=\"btn btn-primary text-center\">\n                <i class=\"fas fa-plus\"></i>\n            </button>\n            <button v-on:click.prevent=\"remove\" class=\"btn btn-danger text-center\">\n                <i class=\"fas fa-times\"></i>\n            </button>\n        </div>\n        <div class=\"card text-left\">\n            <div class=\"card-body\" v-if=\"isEmpty\">\n                <span v-if=\"meta.placeholder != null\" class=\"text-secondary\">{{ meta.placeholder }}</span>\n                <span v-if=\"meta.placeholder == null\" class=\"text-secondary\">&nbsp;</span>\n            </div>\n            <div class=\"card-body\" v-else>\n                <a :href=\"piranha.baseUrl + 'manager/page/edit/' + model.page.id\" target=\"_blank\">{{ model.page.title }}</a>\n            </div>\n        </div>\n    </div>\n</div>\n"
+  template: "\n<div class=\"media-field\" :class=\"{ empty: isEmpty }\">\n    <div class=\"media-picker\">\n        <div class=\"btn-group float-right\">\n            <button v-on:click.prevent=\"select\" class=\"btn btn-primary text-center\">\n                <i class=\"fas fa-plus\"></i>\n            </button>\n            <button v-on:click.prevent=\"remove\" class=\"btn btn-danger text-center\">\n                <i class=\"fas fa-times\"></i>\n            </button>\n        </div>\n        <div class=\"card text-left\">\n            <div class=\"card-body\" v-if=\"isEmpty\">\n                <span v-if=\"meta.placeholder != null\" class=\"text-secondary\">{{ meta.placeholder }}</span>\n                <span v-if=\"meta.placeholder == null\" class=\"text-secondary\">&nbsp;</span>\n            </div>\n            <div class=\"card-body\" v-else>\n                <a :href=\"Aero.baseUrl + 'manager/page/edit/' + model.page.id\" target=\"_blank\">{{ model.page.title }}</a>\n            </div>\n        </div>\n    </div>\n</div>\n"
 });
 Vue.component("audio-field", {
   props: ["uid", "model", "meta"],
   methods: {
     select: function () {
       if (this.model.media != null) {
-        piranha.mediapicker.open(this.update, "Audio", this.model.media.folderId);
+        Aero.mediapicker.open(this.update, "Audio", this.model.media.folderId);
       } else {
-        piranha.mediapicker.openCurrentFolder(this.update, "Audio");
+        Aero.mediapicker.openCurrentFolder(this.update, "Audio");
       }
     },
     remove: function () {
@@ -1083,7 +1083,7 @@ Vue.component("audio-field", {
       }
     };
   },
-  template: "\n<div class=\"media-field\" :class=\"{ empty: isEmpty }\">\n    <div class=\"media-picker\">\n        <div class=\"btn-group float-right\">\n            <button v-on:click.prevent=\"select\" class=\"btn btn-primary text-center\">\n                <i class=\"fas fa-plus\"></i>\n            </button>\n            <button v-on:click.prevent=\"remove\" class=\"btn btn-danger text-center\">\n                <i class=\"fas fa-times\"></i>\n            </button>\n        </div>\n        <div class=\"card text-left\">\n            <div class=\"card-body\" v-if=\"isEmpty\">\n                <span v-if=\"meta.placeholder != null\" class=\"text-secondary\">{{ meta.placeholder }}</span>\n                <span v-if=\"meta.placeholder == null\" class=\"text-secondary\">&nbsp;</span>\n            </div>\n            <div class=\"card-body\" v-else-if=\"model.media.title != null\">\n                <a href=\"#\" v-on:click.prevent=\"piranha.preview.open(model.id)\">{{ model.media.title }} ({{ model.media.filename }})</a>\n            </div>\n            <div class=\"card-body\" v-else>\n                <a href=\"#\" v-on:click.prevent=\"piranha.preview.open(model.id)\">{{ model.media.filename }}</a>\n            </div>\n        </div>\n    </div>\n</div>\n"
+  template: "\n<div class=\"media-field\" :class=\"{ empty: isEmpty }\">\n    <div class=\"media-picker\">\n        <div class=\"btn-group float-right\">\n            <button v-on:click.prevent=\"select\" class=\"btn btn-primary text-center\">\n                <i class=\"fas fa-plus\"></i>\n            </button>\n            <button v-on:click.prevent=\"remove\" class=\"btn btn-danger text-center\">\n                <i class=\"fas fa-times\"></i>\n            </button>\n        </div>\n        <div class=\"card text-left\">\n            <div class=\"card-body\" v-if=\"isEmpty\">\n                <span v-if=\"meta.placeholder != null\" class=\"text-secondary\">{{ meta.placeholder }}</span>\n                <span v-if=\"meta.placeholder == null\" class=\"text-secondary\">&nbsp;</span>\n            </div>\n            <div class=\"card-body\" v-else-if=\"model.media.title != null\">\n                <a href=\"#\" v-on:click.prevent=\"Aero.preview.open(model.id)\">{{ model.media.title }} ({{ model.media.filename }})</a>\n            </div>\n            <div class=\"card-body\" v-else>\n                <a href=\"#\" v-on:click.prevent=\"Aero.preview.open(model.id)\">{{ model.media.filename }}</a>\n            </div>\n        </div>\n    </div>\n</div>\n"
 });
 Vue.component("checkbox-field", {
   props: ["uid", "model", "meta"],
@@ -1111,7 +1111,7 @@ Vue.component("content-field", {
   props: ["uid", "model", "meta"],
   methods: {
     select: function () {
-      piranha.contentpicker.open(this.meta.settings.Group, this.update);
+      Aero.contentpicker.open(this.meta.settings.Group, this.update);
     },
     remove: function () {
       this.model.id = null;
@@ -1143,7 +1143,7 @@ Vue.component("content-field", {
       }
     };
   },
-  template: "\n<div class=\"media-field\" :class=\"{ empty: isEmpty }\">\n    <div class=\"media-picker\">\n        <div class=\"btn-group float-right\">\n            <button v-on:click.prevent=\"select\" class=\"btn btn-primary text-center\">\n                <i class=\"fas fa-plus\"></i>\n            </button>\n            <button v-on:click.prevent=\"remove\" class=\"btn btn-danger text-center\">\n                <i class=\"fas fa-times\"></i>\n            </button>\n        </div>\n        <div class=\"card text-left\">\n            <div class=\"card-body\" v-if=\"isEmpty\">\n                <span v-if=\"meta.placeholder != null\" class=\"text-secondary\">{{ meta.placeholder }}</span>\n                <span v-if=\"meta.placeholder == null\" class=\"text-secondary\">&nbsp;</span>\n            </div>\n            <div class=\"card-body\" v-else>\n                <a :href=\"piranha.baseUrl + 'manager/content/edit/' + model.content.typeId + '/' + model.content.id\" target=\"_blank\">{{ model.content.title }}</a>\n            </div>\n        </div>\n    </div>\n</div>\n"
+  template: "\n<div class=\"media-field\" :class=\"{ empty: isEmpty }\">\n    <div class=\"media-picker\">\n        <div class=\"btn-group float-right\">\n            <button v-on:click.prevent=\"select\" class=\"btn btn-primary text-center\">\n                <i class=\"fas fa-plus\"></i>\n            </button>\n            <button v-on:click.prevent=\"remove\" class=\"btn btn-danger text-center\">\n                <i class=\"fas fa-times\"></i>\n            </button>\n        </div>\n        <div class=\"card text-left\">\n            <div class=\"card-body\" v-if=\"isEmpty\">\n                <span v-if=\"meta.placeholder != null\" class=\"text-secondary\">{{ meta.placeholder }}</span>\n                <span v-if=\"meta.placeholder == null\" class=\"text-secondary\">&nbsp;</span>\n            </div>\n            <div class=\"card-body\" v-else>\n                <a :href=\"Aero.baseUrl + 'manager/content/edit/' + model.content.typeId + '/' + model.content.id\" target=\"_blank\">{{ model.content.title }}</a>\n            </div>\n        </div>\n    </div>\n</div>\n"
 });
 Vue.component("data-select-field", {
   props: ["uid", "model", "meta"],
@@ -1194,9 +1194,9 @@ Vue.component("document-field", {
   methods: {
     select: function () {
       if (this.model.media != null) {
-        piranha.mediapicker.open(this.update, "Document", this.model.media.folderId);
+        Aero.mediapicker.open(this.update, "Document", this.model.media.folderId);
       } else {
-        piranha.mediapicker.openCurrentFolder(this.update, "Document");
+        Aero.mediapicker.openCurrentFolder(this.update, "Document");
       }
     },
     remove: function () {
@@ -1241,7 +1241,7 @@ Vue.component("document-field", {
       }
     };
   },
-  template: "\n<div class=\"media-field\" :class=\"{ empty: isEmpty }\">\n    <div class=\"media-picker\">\n        <div class=\"btn-group float-right\">\n            <button v-on:click.prevent=\"select\" class=\"btn btn-primary text-center\">\n                <i class=\"fas fa-plus\"></i>\n            </button>\n            <button v-on:click.prevent=\"remove\" class=\"btn btn-danger text-center\">\n                <i class=\"fas fa-times\"></i>\n            </button>\n        </div>\n        <div class=\"card text-left\">\n            <div class=\"card-body\" v-if=\"isEmpty\">\n                <span v-if=\"meta.placeholder != null\" class=\"text-secondary\">{{ meta.placeholder }}</span>\n                <span v-if=\"meta.placeholder == null\" class=\"text-secondary\">&nbsp;</span>\n            </div>\n            <div class=\"card-body\" v-else-if=\"model.media.title != null\">\n                <a href=\"#\" v-on:click.prevent=\"piranha.preview.open(model.id)\">{{ model.media.title }} ({{ model.media.filename }})</a>\n            </div>\n            <div class=\"card-body\" v-else>\n                <a href=\"#\" v-on:click.prevent=\"piranha.preview.open(model.id)\">{{ model.media.filename }}</a>\n            </div>\n        </div>\n    </div>\n</div>\n"
+  template: "\n<div class=\"media-field\" :class=\"{ empty: isEmpty }\">\n    <div class=\"media-picker\">\n        <div class=\"btn-group float-right\">\n            <button v-on:click.prevent=\"select\" class=\"btn btn-primary text-center\">\n                <i class=\"fas fa-plus\"></i>\n            </button>\n            <button v-on:click.prevent=\"remove\" class=\"btn btn-danger text-center\">\n                <i class=\"fas fa-times\"></i>\n            </button>\n        </div>\n        <div class=\"card text-left\">\n            <div class=\"card-body\" v-if=\"isEmpty\">\n                <span v-if=\"meta.placeholder != null\" class=\"text-secondary\">{{ meta.placeholder }}</span>\n                <span v-if=\"meta.placeholder == null\" class=\"text-secondary\">&nbsp;</span>\n            </div>\n            <div class=\"card-body\" v-else-if=\"model.media.title != null\">\n                <a href=\"#\" v-on:click.prevent=\"Aero.preview.open(model.id)\">{{ model.media.title }} ({{ model.media.filename }})</a>\n            </div>\n            <div class=\"card-body\" v-else>\n                <a href=\"#\" v-on:click.prevent=\"Aero.preview.open(model.id)\">{{ model.media.filename }}</a>\n            </div>\n        </div>\n    </div>\n</div>\n"
 });
 Vue.component("html-field", {
   props: ["uid", "toolbar", "model", "meta"],
@@ -1288,14 +1288,14 @@ Vue.component("html-field", {
   },
   computed: {
     isEmpty: function () {
-      return piranha.utils.isEmptyHtml(this.model.value);
+      return Aero.utils.isEmptyHtml(this.model.value);
     }
   },
   mounted: function () {
-    piranha.editor.addInline(this.uid, this.toolbar, this.onChange);
+    Aero.editor.addInline(this.uid, this.toolbar, this.onChange);
   },
   beforeDestroy: function () {
-    piranha.editor.remove(this.uid);
+    Aero.editor.remove(this.uid);
   },
   template: "\n<div class=\"field html-field\" :class=\"{ empty: isEmpty }\">\n    <div contenteditable=\"true\" :id=\"uid\" v-html=\"body\" v-on:blur=\"onBlur\"></div>\n</div>\n"
 });
@@ -1304,9 +1304,9 @@ Vue.component("image-field", {
   methods: {
     select: function () {
       if (this.model.media != null) {
-        piranha.mediapicker.open(this.update, "Image", this.model.media.folderId);
+        Aero.mediapicker.open(this.update, "Image", this.model.media.folderId);
       } else {
-        piranha.mediapicker.openCurrentFolder(this.update, "Image");
+        Aero.mediapicker.openCurrentFolder(this.update, "Image");
       }
     },
     remove: function () {
@@ -1351,7 +1351,7 @@ Vue.component("image-field", {
       }
     };
   },
-  template: "\n<div class=\"media-field\" :class=\"{ empty: isEmpty }\">\n    <div class=\"media-picker\">\n        <div class=\"btn-group float-right\">\n            <button v-on:click.prevent=\"select\" class=\"btn btn-primary text-center\">\n                <i class=\"fas fa-plus\"></i>\n            </button>\n            <button v-on:click.prevent=\"remove\" class=\"btn btn-danger text-center\">\n                <i class=\"fas fa-times\"></i>\n            </button>\n        </div>\n        <div class=\"card text-left\">\n            <div class=\"card-body\" v-if=\"isEmpty\">\n                <span v-if=\"meta.placeholder != null\" class=\"text-secondary\">{{ meta.placeholder }}</span>\n                <span v-if=\"meta.placeholder == null\" class=\"text-secondary\">&nbsp;</span>\n            </div>\n            <div class=\"card-body\" v-else-if=\"model.media.title != null\">\n                <a href=\"#\" v-on:click.prevent=\"piranha.preview.open(model.id)\">{{ model.media.title }} ({{ model.media.filename }})</a>\n            </div>\n            <div class=\"card-body\" v-else>\n                <a href=\"#\" v-on:click.prevent=\"piranha.preview.open(model.id)\">{{ model.media.filename }}</a>\n            </div>\n        </div>\n    </div>\n</div>\n"
+  template: "\n<div class=\"media-field\" :class=\"{ empty: isEmpty }\">\n    <div class=\"media-picker\">\n        <div class=\"btn-group float-right\">\n            <button v-on:click.prevent=\"select\" class=\"btn btn-primary text-center\">\n                <i class=\"fas fa-plus\"></i>\n            </button>\n            <button v-on:click.prevent=\"remove\" class=\"btn btn-danger text-center\">\n                <i class=\"fas fa-times\"></i>\n            </button>\n        </div>\n        <div class=\"card text-left\">\n            <div class=\"card-body\" v-if=\"isEmpty\">\n                <span v-if=\"meta.placeholder != null\" class=\"text-secondary\">{{ meta.placeholder }}</span>\n                <span v-if=\"meta.placeholder == null\" class=\"text-secondary\">&nbsp;</span>\n            </div>\n            <div class=\"card-body\" v-else-if=\"model.media.title != null\">\n                <a href=\"#\" v-on:click.prevent=\"Aero.preview.open(model.id)\">{{ model.media.title }} ({{ model.media.filename }})</a>\n            </div>\n            <div class=\"card-body\" v-else>\n                <a href=\"#\" v-on:click.prevent=\"Aero.preview.open(model.id)\">{{ model.media.filename }}</a>\n            </div>\n        </div>\n    </div>\n</div>\n"
 });
 Vue.component("markdown-field", {
   props: ["uid", "model", "meta"],
@@ -1385,10 +1385,10 @@ Vue.component("markdown-field", {
   },
   mounted: function () {
     var self = this;
-    piranha.editor.addInlineMarkdown(self.uid, self.model.value, self.update);
+    Aero.editor.addInlineMarkdown(self.uid, self.model.value, self.update);
   },
   beforeDestroy: function () {
-    piranha.editor.remove(this.uid);
+    Aero.editor.remove(this.uid);
   },
   template: "\n<div class=\"markdown-field\" :class=\"{ empty: isEmpty }\">\n    <textarea :id=\"uid\" v-html=\"model.value\"></textarea>\n    <div class=\"markdown-preview\"></div>\n</div>\n"
 });
@@ -1397,9 +1397,9 @@ Vue.component("media-field", {
   methods: {
     select: function () {
       if (this.model.media != null) {
-        piranha.mediapicker.open(this.update, null, this.model.media.folderId);
+        Aero.mediapicker.open(this.update, null, this.model.media.folderId);
       } else {
-        piranha.mediapicker.openCurrentFolder(this.update, null);
+        Aero.mediapicker.openCurrentFolder(this.update, null);
       }
     },
     remove: function () {
@@ -1440,7 +1440,7 @@ Vue.component("media-field", {
       }
     };
   },
-  template: "\n<div class=\"media-field\" :class=\"{ empty: isEmpty }\">\n    <div class=\"media-picker\">\n        <div class=\"btn-group float-right\">\n            <button v-on:click.prevent=\"select\" class=\"btn btn-primary text-center\">\n                <i class=\"fas fa-plus\"></i>\n            </button>\n            <button v-on:click.prevent=\"remove\" class=\"btn btn-danger text-center\">\n                <i class=\"fas fa-times\"></i>\n            </button>\n        </div>\n        <div class=\"card text-left\">\n            <div class=\"card-body\" v-if=\"isEmpty\">\n                <span v-if=\"meta.placeholder != null\" class=\"text-secondary\">{{ meta.placeholder }}</span>\n                <span v-if=\"meta.placeholder == null\" class=\"text-secondary\">&nbsp;</span>\n            </div>\n            <div class=\"card-body\" v-else-if=\"model.media.title != null\">\n                <a href=\"#\" v-on:click.prevent=\"piranha.preview.open(model.id)\">{{ model.media.title }} ({{ model.media.filename }})</a>\n            </div>\n            <div class=\"card-body\" v-else>\n                <a href=\"#\" v-on:click.prevent=\"piranha.preview.open(model.id)\">{{ model.media.filename }}</a>\n            </div>\n        </div>\n    </div>\n</div>\n"
+  template: "\n<div class=\"media-field\" :class=\"{ empty: isEmpty }\">\n    <div class=\"media-picker\">\n        <div class=\"btn-group float-right\">\n            <button v-on:click.prevent=\"select\" class=\"btn btn-primary text-center\">\n                <i class=\"fas fa-plus\"></i>\n            </button>\n            <button v-on:click.prevent=\"remove\" class=\"btn btn-danger text-center\">\n                <i class=\"fas fa-times\"></i>\n            </button>\n        </div>\n        <div class=\"card text-left\">\n            <div class=\"card-body\" v-if=\"isEmpty\">\n                <span v-if=\"meta.placeholder != null\" class=\"text-secondary\">{{ meta.placeholder }}</span>\n                <span v-if=\"meta.placeholder == null\" class=\"text-secondary\">&nbsp;</span>\n            </div>\n            <div class=\"card-body\" v-else-if=\"model.media.title != null\">\n                <a href=\"#\" v-on:click.prevent=\"Aero.preview.open(model.id)\">{{ model.media.title }} ({{ model.media.filename }})</a>\n            </div>\n            <div class=\"card-body\" v-else>\n                <a href=\"#\" v-on:click.prevent=\"Aero.preview.open(model.id)\">{{ model.media.filename }}</a>\n            </div>\n        </div>\n    </div>\n</div>\n"
 });
 Vue.component("missing-field", {
   props: ["meta", "model"],
@@ -1458,11 +1458,11 @@ Vue.component("page-field", {
 
       if (this.model.page) {
         siteId = this.model.page.siteId;
-      } else if (piranha.pageedit) {
-        siteId = piranha.pageedit.siteId;
+      } else if (Aero.pageedit) {
+        siteId = Aero.pageedit.siteId;
       }
 
-      piranha.pagepicker.open(this.update, siteId);
+      Aero.pagepicker.open(this.update, siteId);
     },
     remove: function () {
       this.model.id = null;
@@ -1494,13 +1494,13 @@ Vue.component("page-field", {
       }
     };
   },
-  template: "\n<div class=\"media-field\" :class=\"{ empty: isEmpty }\">\n    <div class=\"media-picker\">\n        <div class=\"btn-group float-right\">\n            <button v-on:click.prevent=\"select\" class=\"btn btn-primary text-center\">\n                <i class=\"fas fa-plus\"></i>\n            </button>\n            <button v-on:click.prevent=\"remove\" class=\"btn btn-danger text-center\">\n                <i class=\"fas fa-times\"></i>\n            </button>\n        </div>\n        <div class=\"card text-left\">\n            <div class=\"card-body\" v-if=\"isEmpty\">\n                <span v-if=\"meta.placeholder != null\" class=\"text-secondary\">{{ meta.placeholder }}</span>\n                <span v-if=\"meta.placeholder == null\" class=\"text-secondary\">&nbsp;</span>\n            </div>\n            <div class=\"card-body\" v-else>\n                <a :href=\"piranha.baseUrl + 'manager/page/edit/' + model.page.id\" target=\"_blank\">{{ model.page.title }}</a>\n            </div>\n        </div>\n    </div>\n</div>\n"
+  template: "\n<div class=\"media-field\" :class=\"{ empty: isEmpty }\">\n    <div class=\"media-picker\">\n        <div class=\"btn-group float-right\">\n            <button v-on:click.prevent=\"select\" class=\"btn btn-primary text-center\">\n                <i class=\"fas fa-plus\"></i>\n            </button>\n            <button v-on:click.prevent=\"remove\" class=\"btn btn-danger text-center\">\n                <i class=\"fas fa-times\"></i>\n            </button>\n        </div>\n        <div class=\"card text-left\">\n            <div class=\"card-body\" v-if=\"isEmpty\">\n                <span v-if=\"meta.placeholder != null\" class=\"text-secondary\">{{ meta.placeholder }}</span>\n                <span v-if=\"meta.placeholder == null\" class=\"text-secondary\">&nbsp;</span>\n            </div>\n            <div class=\"card-body\" v-else>\n                <a :href=\"Aero.baseUrl + 'manager/page/edit/' + model.page.id\" target=\"_blank\">{{ model.page.title }}</a>\n            </div>\n        </div>\n    </div>\n</div>\n"
 });
 Vue.component("post-field", {
   props: ["uid", "model", "meta"],
   methods: {
     select: function () {
-      piranha.postpicker.open(this.update);
+      Aero.postpicker.open(this.update);
     },
     remove: function () {
       this.model.id = null;
@@ -1532,7 +1532,7 @@ Vue.component("post-field", {
       }
     };
   },
-  template: "\n<div class=\"media-field\" :class=\"{ empty: isEmpty }\">\n    <div class=\"media-picker\">\n        <div class=\"btn-group float-right\">\n            <button v-on:click.prevent=\"select\" class=\"btn btn-primary text-center\">\n                <i class=\"fas fa-plus\"></i>\n            </button>\n            <button v-on:click.prevent=\"remove\" class=\"btn btn-danger text-center\">\n                <i class=\"fas fa-times\"></i>\n            </button>\n        </div>\n        <div class=\"card text-left\">\n            <div class=\"card-body\" v-if=\"isEmpty\">\n                <span v-if=\"meta.placeholder != null\" class=\"text-secondary\">{{ meta.placeholder }}</span>\n                <span v-if=\"meta.placeholder == null\" class=\"text-secondary\">&nbsp;</span>\n            </div>\n            <div class=\"card-body\" v-else>\n                <a :href=\"piranha.baseUrl + 'manager/post/edit/' + model.post.id\" target=\"_blank\">{{ model.post.title }}</a>\n            </div>\n        </div>\n    </div>\n</div>\n"
+  template: "\n<div class=\"media-field\" :class=\"{ empty: isEmpty }\">\n    <div class=\"media-picker\">\n        <div class=\"btn-group float-right\">\n            <button v-on:click.prevent=\"select\" class=\"btn btn-primary text-center\">\n                <i class=\"fas fa-plus\"></i>\n            </button>\n            <button v-on:click.prevent=\"remove\" class=\"btn btn-danger text-center\">\n                <i class=\"fas fa-times\"></i>\n            </button>\n        </div>\n        <div class=\"card text-left\">\n            <div class=\"card-body\" v-if=\"isEmpty\">\n                <span v-if=\"meta.placeholder != null\" class=\"text-secondary\">{{ meta.placeholder }}</span>\n                <span v-if=\"meta.placeholder == null\" class=\"text-secondary\">&nbsp;</span>\n            </div>\n            <div class=\"card-body\" v-else>\n                <a :href=\"Aero.baseUrl + 'manager/post/edit/' + model.post.id\" target=\"_blank\">{{ model.post.title }}</a>\n            </div>\n        </div>\n    </div>\n</div>\n"
 });
 Vue.component("readonly-field", {
   props: ["uid", "model", "meta"],
@@ -1572,7 +1572,7 @@ Vue.component("string-field", {
       return false; //return this.meta.settings.IsRequired != null && this.meta.settings.IsRequired;
     }
   },
-  template: "\n<div>\n    <div v-if=\"maxLength() > 0\" class=\"input-group\">\n        <input class=\"form-control\" type=\"text\" :maxlength=\"maxLength()\" :required=\"isRequired()\" :placeholder=\"meta.placeholder\" v-model=\"model.value\" v-on:change=\"update()\">\n        <div class=\"input-group-append\">\n            <div class=\"input-group-text text-muted\">\n                {{ piranha.utils.strLength(model.value) + \"/\" + maxLength() }}\n            </div>\n        </div>\n    </div>\n    <input v-else class=\"form-control\" type=\"text\" :maxlength=\"maxLength()\" :required=\"isRequired()\" :placeholder=\"meta.placeholder\" v-model=\"model.value\" v-on:change=\"update()\">\n</div>\n"
+  template: "\n<div>\n    <div v-if=\"maxLength() > 0\" class=\"input-group\">\n        <input class=\"form-control\" type=\"text\" :maxlength=\"maxLength()\" :required=\"isRequired()\" :placeholder=\"meta.placeholder\" v-model=\"model.value\" v-on:change=\"update()\">\n        <div class=\"input-group-append\">\n            <div class=\"input-group-text text-muted\">\n                {{ Aero.utils.strLength(model.value) + \"/\" + maxLength() }}\n            </div>\n        </div>\n    </div>\n    <input v-else class=\"form-control\" type=\"text\" :maxlength=\"maxLength()\" :required=\"isRequired()\" :placeholder=\"meta.placeholder\" v-model=\"model.value\" v-on:change=\"update()\">\n</div>\n"
 });
 Vue.component("text-field", {
   props: ["uid", "model", "meta"],
@@ -1599,7 +1599,7 @@ Vue.component("text-field", {
       return false; //return this.meta.settings.IsRequired != null && this.meta.settings.IsRequired;
     }
   },
-  template: "\n<div>\n    <div v-if=\"maxLength() > 0\" class=\"input-group\">\n        <textarea class=\"form-control\" rows=\"4\" :maxlength=\"maxLength()\" :required=\"isRequired()\" :placeholder=\"meta.placeholder\" v-model=\"model.value\" v-on:change=\"update()\"></textarea>\n        <div class=\"input-group-append\">\n            <div class=\"input-group-text text-muted\">\n                {{ piranha.utils.strLength(model.value) + \"/\" + maxLength() }}\n            </div>\n        </div>\n    </div>\n    <textarea v-else class=\"form-control\" rows=\"4\" :maxlength=\"maxLength()\" :required=\"isRequired()\" :placeholder=\"meta.placeholder\" v-model=\"model.value\" v-on:change=\"update()\"></textarea>\n</div>\n"
+  template: "\n<div>\n    <div v-if=\"maxLength() > 0\" class=\"input-group\">\n        <textarea class=\"form-control\" rows=\"4\" :maxlength=\"maxLength()\" :required=\"isRequired()\" :placeholder=\"meta.placeholder\" v-model=\"model.value\" v-on:change=\"update()\"></textarea>\n        <div class=\"input-group-append\">\n            <div class=\"input-group-text text-muted\">\n                {{ Aero.utils.strLength(model.value) + \"/\" + maxLength() }}\n            </div>\n        </div>\n    </div>\n    <textarea v-else class=\"form-control\" rows=\"4\" :maxlength=\"maxLength()\" :required=\"isRequired()\" :placeholder=\"meta.placeholder\" v-model=\"model.value\" v-on:change=\"update()\"></textarea>\n</div>\n"
 });
 Vue.component("video-field", {
   props: ["uid", "model", "meta"],
@@ -1608,9 +1608,9 @@ Vue.component("video-field", {
     },
     select: function () {
       if (this.model.media != null) {
-        piranha.mediapicker.open(this.update, "Video", this.model.media.folderId);
+        Aero.mediapicker.open(this.update, "Video", this.model.media.folderId);
       } else {
-        piranha.mediapicker.openCurrentFolder(this.update, "Video");
+        Aero.mediapicker.openCurrentFolder(this.update, "Video");
       }
     },
     remove: function () {
@@ -1655,5 +1655,5 @@ Vue.component("video-field", {
       }
     };
   },
-  template: "\n<div class=\"media-field\" :class=\"{ empty: isEmpty }\">\n    <div class=\"media-picker\">\n        <div class=\"btn-group float-right\">\n            <button v-on:click.prevent=\"select\" class=\"btn btn-primary text-center\">\n                <i class=\"fas fa-plus\"></i>\n            </button>\n            <button v-on:click.prevent=\"remove\" class=\"btn btn-danger text-center\">\n                <i class=\"fas fa-times\"></i>\n            </button>\n        </div>\n        <div class=\"card text-left\">\n            <div class=\"card-body\" v-if=\"isEmpty\">\n                <span v-if=\"meta.placeholder != null\" class=\"text-secondary\">{{ meta.placeholder }}</span>\n                <span v-if=\"meta.placeholder == null\" class=\"text-secondary\">&nbsp;</span>\n            </div>\n            <div class=\"card-body\" v-else-if=\"model.media.title != null\">\n                <a href=\"#\" v-on:click.prevent=\"piranha.preview.open(model.id)\">{{ model.media.title }} ({{ model.media.filename }})</a>\n            </div>\n            <div class=\"card-body\" v-else>\n                <a href=\"#\" v-on:click.prevent=\"piranha.preview.open(model.id)\">{{ model.media.filename }}</a>\n            </div>\n        </div>\n    </div>\n</div>\n"
+  template: "\n<div class=\"media-field\" :class=\"{ empty: isEmpty }\">\n    <div class=\"media-picker\">\n        <div class=\"btn-group float-right\">\n            <button v-on:click.prevent=\"select\" class=\"btn btn-primary text-center\">\n                <i class=\"fas fa-plus\"></i>\n            </button>\n            <button v-on:click.prevent=\"remove\" class=\"btn btn-danger text-center\">\n                <i class=\"fas fa-times\"></i>\n            </button>\n        </div>\n        <div class=\"card text-left\">\n            <div class=\"card-body\" v-if=\"isEmpty\">\n                <span v-if=\"meta.placeholder != null\" class=\"text-secondary\">{{ meta.placeholder }}</span>\n                <span v-if=\"meta.placeholder == null\" class=\"text-secondary\">&nbsp;</span>\n            </div>\n            <div class=\"card-body\" v-else-if=\"model.media.title != null\">\n                <a href=\"#\" v-on:click.prevent=\"Aero.preview.open(model.id)\">{{ model.media.title }} ({{ model.media.filename }})</a>\n            </div>\n            <div class=\"card-body\" v-else>\n                <a href=\"#\" v-on:click.prevent=\"Aero.preview.open(model.id)\">{{ model.media.filename }}</a>\n            </div>\n        </div>\n    </div>\n</div>\n"
 });

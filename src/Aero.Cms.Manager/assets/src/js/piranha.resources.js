@@ -1,8 +1,8 @@
 /*global
-    piranha
+    Aero
 */
 
-piranha.resources = new function() {
+Aero.resources = new function() {
     "use strict";
 
     var self = this;

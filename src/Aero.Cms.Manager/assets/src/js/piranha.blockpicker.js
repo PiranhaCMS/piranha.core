@@ -1,8 +1,8 @@
 /*global
-    piranha
+    Aero
 */
 
-piranha.blockpicker = new Vue({
+Aero.blockpicker = new Vue({
     el: "#blockpicker",
     data: {
         filter: "",
@@ -27,15 +27,15 @@ piranha.blockpicker = new Vue({
         open: function (callback, index, parentType) {
             var self = this;
 
-            var url = piranha.baseUrl + "manager/api/content/blocktypes";
+            var url = Aero.baseUrl + "manager/api/content/blocktypes";
 
-            if (piranha.pageedit)
+            if (Aero.pageedit)
             {
-                url += "/page/" + piranha.pageedit.typeId;
+                url += "/page/" + Aero.pageedit.typeId;
             }
-            else if (piranha.postedit)
+            else if (Aero.postedit)
             {
-                url += "/post/" + piranha.postedit.typeId;
+                url += "/post/" + Aero.postedit.typeId;
             }
 
             fetch(url + (parentType != null ? "/" + parentType : ""))

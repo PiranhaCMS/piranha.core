@@ -1,8 +1,8 @@
 /*global
-    piranha
+    Aero
 */
 
-piranha.mediapicker = new Vue({
+Aero.mediapicker = new Vue({
     el: "#mediapicker",
     data: {
         search: '',
@@ -29,16 +29,16 @@ piranha.mediapicker = new Vue({
     computed: {
         filteredFolders: function () {
             return this.folders.filter(function (item) {
-                if (piranha.mediapicker.search.length > 0) {
-                    return item.name.toLowerCase().indexOf(piranha.mediapicker.search.toLowerCase()) > -1
+                if (Aero.mediapicker.search.length > 0) {
+                    return item.name.toLowerCase().indexOf(Aero.mediapicker.search.toLowerCase()) > -1
                 }
                 return true;
             });
         },
         filteredItems: function () {
             return this.items.filter(function (item) {
-                if (piranha.mediapicker.search.length > 0) {
-                    return item.filename.toLowerCase().indexOf(piranha.mediapicker.search.toLowerCase()) > -1
+                if (Aero.mediapicker.search.length > 0) {
+                    return item.filename.toLowerCase().indexOf(Aero.mediapicker.search.toLowerCase()) > -1
                 }
                 return true;
             });
@@ -51,7 +51,7 @@ piranha.mediapicker = new Vue({
         load: function (id) {
             var self = this;
 
-            var url = piranha.baseUrl + "manager/api/media/list" + (id ? "/" + id : "")+"/?width=210&height=160";
+            var url = Aero.baseUrl + "manager/api/media/list" + (id ? "/" + id : "")+"/?width=210&height=160";
             if (self.filter) {
                 url += "&filter=" + self.filter;
             }
@@ -88,10 +88,10 @@ piranha.mediapicker = new Vue({
                 .catch(function (error) { console.log("error:", error ); });
         },
         getThumbnailUrl: function (item) {
-            return item.altVersionUrl !== null ? item.altVersionUrl : piranha.baseUrl + "manager/api/media/url/" + item.id + "/210/160";
+            return item.altVersionUrl !== null ? item.altVersionUrl : Aero.baseUrl + "manager/api/media/url/" + item.id + "/210/160";
         },
         refresh: function () {
-            piranha.mediapicker.load(piranha.mediapicker.currentFolderId);
+            Aero.mediapicker.load(Aero.mediapicker.currentFolderId);
         },
         open: function (callback, filter, folderId) {
             this.search = '';
@@ -146,9 +146,9 @@ piranha.mediapicker = new Vue({
             var self = this;
 
             if (self.folderName !== "") {
-                fetch(piranha.baseUrl + "manager/api/media/folder/save" + (self.filter ? "?filter=" + self.filter : ""), {
+                fetch(Aero.baseUrl + "manager/api/media/folder/save" + (self.filter ? "?filter=" + self.filter : ""), {
                     method: "post",
-                    headers: piranha.utils.antiForgeryHeaders(),
+                    headers: Aero.utils.antiForgeryHeaders(),
                     body: JSON.stringify({
                         parentId: self.currentFolderId,
                         name: self.folderName
@@ -167,10 +167,10 @@ piranha.mediapicker = new Vue({
 
                     if (result.status !== 400) {
                         // Push status to notification hub
-                        piranha.notifications.push(result.status);
+                        Aero.notifications.push(result.status);
                     } else {
                         // Unauthorized request
-                        piranha.notifications.unauthorized();
+                        Aero.notifications.unauthorized();
                     }
                 })
                 .catch(function (error) {
@@ -181,9 +181,9 @@ piranha.mediapicker = new Vue({
     },
     mounted: function () {
         var self = this;
-        piranha.permissions.load(function () {
-            if (piranha.permissions.media.add) {
-                self.dropzone = piranha.dropzone.init("#mediapicker-upload-container");
+        Aero.permissions.load(function () {
+            if (Aero.permissions.media.add) {
+                self.dropzone = Aero.dropzone.init("#mediapicker-upload-container");
                 self.dropzone.on("complete", function (file) {
                     if (file.status === "success") {
                         setTimeout(function () {
@@ -192,7 +192,7 @@ piranha.mediapicker = new Vue({
                     }
                 });
                 self.dropzone.on("queuecomplete", function () {
-                    piranha.mediapicker.refresh();
+                    Aero.mediapicker.refresh();
                 });
             }
         });

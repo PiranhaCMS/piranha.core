@@ -1,8 +1,8 @@
 /*global
-    piranha
+    Aero
 */
 
-piranha.languageedit = new Vue({
+Aero.languageedit = new Vue({
     el: "#languageedit",
     data: {
         loading: true,
@@ -34,7 +34,7 @@ piranha.languageedit = new Vue({
             var self = this;
 
             self.loading = true;
-            fetch(piranha.baseUrl + "manager/api/language")
+            fetch(Aero.baseUrl + "manager/api/language")
                 .then(function (response) { return response.json(); })
                 .then(function (result) {
                     self.bind(result);
@@ -50,9 +50,9 @@ piranha.languageedit = new Vue({
                 var self = this;
 
                 self.loading = true;
-                fetch(piranha.baseUrl + "manager/api/language", {
+                fetch(Aero.baseUrl + "manager/api/language", {
                     method: "post",
-                    headers: piranha.utils.antiForgeryHeaders(),
+                    headers: Aero.utils.antiForgeryHeaders(),
                     body: JSON.stringify({
                         items: JSON.parse(JSON.stringify(self.items))
                     })
@@ -67,10 +67,10 @@ piranha.languageedit = new Vue({
                         // Refresh language list
                         self.refreshLanguageList();
                         // Push status to notification hub
-                        piranha.notifications.push(result.status);
+                        Aero.notifications.push(result.status);
                     } else {
                         // Unauthorized request
-                        piranha.notifications.unauthorized();
+                        Aero.notifications.unauthorized();
                         self.loading = false;
                     }
                 })
@@ -83,9 +83,9 @@ piranha.languageedit = new Vue({
             var self = this;
 
             self.loading = true;
-            fetch(piranha.baseUrl + "manager/api/language/" + item.id, {
+            fetch(Aero.baseUrl + "manager/api/language/" + item.id, {
                 method: "delete",
-                headers: piranha.utils.antiForgeryHeaders(),
+                headers: Aero.utils.antiForgeryHeaders(),
                 body: JSON.stringify(item)
             })
             .then(function (response) { return response.json(); })
@@ -98,10 +98,10 @@ piranha.languageedit = new Vue({
                     // Refresh language list
                     self.refreshLanguageList();
                     // Push status to notification hub
-                    piranha.notifications.push(result.status);
+                    Aero.notifications.push(result.status);
                 } else {
                     // Unauthorized request
-                    piranha.notifications.unauthorized();
+                    Aero.notifications.unauthorized();
                     self.loading = false;
                 }
             })
@@ -175,8 +175,8 @@ piranha.languageedit = new Vue({
             return isValid;
         },
         refreshLanguageList() {
-            if (piranha.siteedit) {
-                piranha.siteedit.refreshLanguageList();
+            if (Aero.siteedit) {
+                Aero.siteedit.refreshLanguageList();
             }
         }
     }

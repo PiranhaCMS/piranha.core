@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <RootNamespace>Piranha.Azure</RootNamespace>
+    <RootNamespace>Aero.Azure</RootNamespace>
     <NoWarn>$(NoWarn);1591</NoWarn>
     <Description>Package for storing uploaded media assets on Azure Blob Storage</Description>
   </PropertyGroup>

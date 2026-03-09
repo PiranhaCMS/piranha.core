@@ -16,21 +16,21 @@
 {
     <script src="@Url.Content(Aero.Cms.Manager.Editor.EditorScripts.MainScriptUrl)"></script>
     <script src="@Url.Content(Aero.Cms.Manager.Editor.EditorScripts.EditorScriptUrl)"></script>
-    <script src="~/manager/assets/js/piranha.components.min.js?v=@Aero.Cms.Utils.GetAssemblyVersionHash(typeof(Aero.Cms.Manager.Module).Assembly)"></script>
-    <script src="~/manager/assets/js/piranha.contentedit.min.js?v=@Aero.Cms.Utils.GetAssemblyVersionHash(typeof(Aero.Cms.Manager.Module).Assembly)"></script>
+    <script src="~/manager/assets/js/Aero.components.min.js?v=@Aero.Cms.Utils.GetAssemblyVersionHash(typeof(Aero.Cms.Manager.Module).Assembly)"></script>
+    <script src="~/manager/assets/js/Aero.contentedit.min.js?v=@Aero.Cms.Utils.GetAssemblyVersionHash(typeof(Aero.Cms.Manager.Module).Assembly)"></script>
 
     @if (action == "edit")
     {
         <script>
-            piranha.permissions.load(function () {
+            Aero.permissions.load(function () {
                 @if (languageId != null)
                 {
-<text>                piranha.contentedit.load("@contentId", "@languageId");
+<text>                Aero.contentedit.load("@contentId", "@languageId");
 </text>
                 }
                 else
                 {
-<text>                piranha.contentedit.load("@contentId", null);
+<text>                Aero.contentedit.load("@contentId", null);
 </text>
                 }
                 $(".title input").focus();
@@ -40,8 +40,8 @@
     else if (action == "add")
     {
         <script>
-            piranha.permissions.load(function () {
-                piranha.contentedit.create("@RouteData.Values["contentType"]");
+            Aero.permissions.load(function () {
+                Aero.contentedit.create("@RouteData.Values["contentType"]");
                 $(".title input").focus();
             });
         </script>
@@ -58,7 +58,7 @@
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb app" :class="{ ready: !loading }">
                 <li class="breadcrumb-item">@Localizer.Menu["Content"]</li>
-                <li class="breadcrumb-item"><a :href="piranha.baseUrl + 'manager/content/' + groupId">{{ groupTitle }}</a></li>
+                <li class="breadcrumb-item"><a :href="Aero.baseUrl + 'manager/content/' + groupId">{{ groupTitle }}</a></li>
                 <li class="breadcrumb-item">{{ typeTitle }}</li>
                 <li v-if="state !== 'new'" class="breadcrumb-item active" aria-current="page">@Localizer.General["Edit"]</li>
             </ol>
@@ -172,7 +172,7 @@
         <div class="card" :class="{ 'd-none': selectedRegion.uid != 'uid-blocks' }">
             <div class="card-body">
                 <div id="content-blocks" class="blocks@(Config.ManagerOutlined ? " blocks-outline" : "")">
-                    <a href="#" class="block-add unsortable" v-on:click.prevent="piranha.blockpicker.open(piranha.contentedit.addBlock, 0)">
+                    <a href="#" class="block-add unsortable" v-on:click.prevent="Aero.blockpicker.open(Aero.contentedit.addBlock, 0)">
                         <hr>
                         <i class="fas fa-plus-circle"></i>
                     </a>
@@ -200,7 +200,7 @@
                             <component v-if="block.meta.isGroup" v-bind:is="block.meta.component" v-bind:uid="block.meta.uid" v-bind:toolbar="'tb-' + block.meta.uid" v-bind:model="block"></component>
                             <div class="content-blocker"></div>
                         </div>
-                        <a href="#" class="block-add" v-on:click.prevent="piranha.blockpicker.open(piranha.contentedit.addBlock, index + 1)">
+                        <a href="#" class="block-add" v-on:click.prevent="Aero.blockpicker.open(Aero.contentedit.addBlock, index + 1)">
                             <hr>
                             <i class="fas fa-plus-circle"></i>
                         </a>

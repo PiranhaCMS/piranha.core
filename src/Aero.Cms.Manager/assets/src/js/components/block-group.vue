@@ -29,13 +29,13 @@
                         </span>
                     </div>
                 </div>
-                <button v-on:click.prevent="piranha.blockpicker.open(addGroupBlock, 0, model.type)" class="btn btn-sm btn-primary btn-labeled mt-3">
-                    <i class="fas fa-plus"></i>{{ piranha.resources.texts.add }}
+                <button v-on:click.prevent="Aero.blockpicker.open(addGroupBlock, 0, model.type)" class="btn btn-sm btn-primary btn-labeled mt-3">
+                    <i class="fas fa-plus"></i>{{ Aero.resources.texts.add }}
                 </button>
             </div>
             <div class='col-md-8'>
                 <div v-if="model.items.length === 0" class="empty-info unsortable">
-                    <p>{{ piranha.resources.texts.emptyAddLeft }}</p>
+                    <p>{{ Aero.resources.texts.emptyAddLeft }}</p>
                 </div>
                 <template v-for="child in model.items">
                     <div class="block" :class="child.meta.component" v-if="child.isActive" v-bind:key="'details-' + child.meta.uid">
@@ -73,7 +73,7 @@ export default {
         addGroupBlock: function (type, pos) {
             var self = this;
 
-            fetch(piranha.baseUrl + "manager/api/content/block/" + type)
+            fetch(Aero.baseUrl + "manager/api/content/block/" + type)
                 .then(function (response) { return response.json(); })
                 .then(function (result) {
                     self.model.items.push(result.body);

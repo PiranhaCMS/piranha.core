@@ -10,12 +10,12 @@
 {
     <script src="@Url.Content(Aero.Cms.Manager.Editor.EditorScripts.MainScriptUrl)"></script>
     <script src="@Url.Content(Aero.Cms.Manager.Editor.EditorScripts.EditorScriptUrl)"></script>
-    <script src="~/manager/assets/js/piranha.components.min.js?v=@Aero.Cms.Utils.GetAssemblyVersionHash(typeof(Aero.Cms.Manager.Module).Assembly)"></script>
-    <script src="~/manager/assets/js/piranha.pagelist.min.js?v=@Aero.Cms.Utils.GetAssemblyVersionHash(typeof(Aero.Cms.Manager.Module).Assembly)"></script>
-    <script src="~/manager/assets/js/piranha.siteedit.min.js?v=@Aero.Cms.Utils.GetAssemblyVersionHash(typeof(Aero.Cms.Manager.Module).Assembly)"></script>
+    <script src="~/manager/assets/js/Aero.components.min.js?v=@Aero.Cms.Utils.GetAssemblyVersionHash(typeof(Aero.Cms.Manager.Module).Assembly)"></script>
+    <script src="~/manager/assets/js/Aero.pagelist.min.js?v=@Aero.Cms.Utils.GetAssemblyVersionHash(typeof(Aero.Cms.Manager.Module).Assembly)"></script>
+    <script src="~/manager/assets/js/Aero.siteedit.min.js?v=@Aero.Cms.Utils.GetAssemblyVersionHash(typeof(Aero.Cms.Manager.Module).Assembly)"></script>
 
     <script type="text/javascript">
-        piranha.pagelist.load();
+        Aero.pagelist.load();
     </script>
 }
 @section partials
@@ -57,11 +57,11 @@
                             <div class="sitemap-item" v-bind:key="site.id">
                                 <div class="handle"><i class="fas fa-globe"></i></div>
                                 <div class="link">
-                                    <a v-if="piranha.permissions.sites.edit" v-on:click.prevent="piranha.siteedit.open(site.id, load)" href="#">{{ site.title }} <small style="display:none">(<code>{{ site.slug }}</code>)</small></a>
+                                    <a v-if="Aero.permissions.sites.edit" v-on:click.prevent="Aero.siteedit.open(site.id, load)" href="#">{{ site.title }} <small style="display:none">(<code>{{ site.slug }}</code>)</small></a>
                                     <span v-else class="title">{{ site.title }} <small style="display:none">(<code>{{ site.slug }}</code>)</small></span>
                                 </div>
                                 <div>
-                                    <button v-if="piranha.permissions.pages.add" id="pageGroup" type="button" v-on:click.prevent="piranha.pagelist.add(site.id, null, false)" class="btn btn-sm btn-primary btn-labeled">
+                                    <button v-if="Aero.permissions.pages.add" id="pageGroup" type="button" v-on:click.prevent="Aero.pagelist.add(site.id, null, false)" class="btn btn-sm btn-primary btn-labeled">
                                         <i class="fas fa-plus"></i>
                                         @Localizer.Page["Add page"]
                                     </button>

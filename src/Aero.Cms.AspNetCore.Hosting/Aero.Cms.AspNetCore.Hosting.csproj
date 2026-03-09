@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <Description>Basic tools for hosting Piranha CMS in an AspNetCore application</Description>
+    <Description>Basic tools for hosting Aero CMS in an AspNetCore application</Description>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(GITHUB_ACTIONS)' == 'true'">

@@ -39,10 +39,10 @@ export default {
     mounted: function () {
         var self = this;
 
-        piranha.editor.addInlineMarkdown(self.uid, self.model.value, self.update);
+        Aero.editor.addInlineMarkdown(self.uid, self.model.value, self.update);
     },
     beforeDestroy: function () {
-        piranha.editor.remove(this.uid);
+        Aero.editor.remove(this.uid);
     }
 }
 </script>

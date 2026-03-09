@@ -15,7 +15,7 @@
                     <span v-if="meta.placeholder == null" class="text-secondary">&nbsp;</span>
                 </div>
                 <div class="card-body" v-else>
-                    <a :href="piranha.baseUrl + 'manager/post/edit/' + model.post.id" target="_blank">{{ model.post.title }}</a>
+                    <a :href="Aero.baseUrl + 'manager/post/edit/' + model.post.id" target="_blank">{{ model.post.title }}</a>
                 </div>
             </div>
         </div>
@@ -27,7 +27,7 @@ export default {
     props: ["uid", "model", "meta"],
     methods: {
         select: function () {
-            piranha.postpicker.open(this.update);
+            Aero.postpicker.open(this.update);
         },
         remove: function () {
             this.model.id = null;

@@ -15,10 +15,10 @@
                     <span v-if="meta.placeholder == null" class="text-secondary">&nbsp;</span>
                 </div>
                 <div class="card-body" v-else-if="model.media.title != null">
-                    <a href="#" v-on:click.prevent="piranha.preview.open(model.id)">{{ model.media.title }} ({{ model.media.filename }})</a>
+                    <a href="#" v-on:click.prevent="Aero.preview.open(model.id)">{{ model.media.title }} ({{ model.media.filename }})</a>
                 </div>
                 <div class="card-body" v-else>
-                    <a href="#" v-on:click.prevent="piranha.preview.open(model.id)">{{ model.media.filename }}</a>
+                    <a href="#" v-on:click.prevent="Aero.preview.open(model.id)">{{ model.media.filename }}</a>
                 </div>
             </div>
         </div>
@@ -31,9 +31,9 @@ export default {
     methods: {
         select: function () {
             if (this.model.media != null) {
-                piranha.mediapicker.open(this.update, "Image", this.model.media.folderId);
+                Aero.mediapicker.open(this.update, "Image", this.model.media.folderId);
             } else {
-                piranha.mediapicker.openCurrentFolder(this.update, "Image");
+                Aero.mediapicker.openCurrentFolder(this.update, "Image");
             }
         },
         remove: function () {

@@ -2,7 +2,7 @@
     <div class="block-body has-media-picker rounded clearfix" :class="{ empty: isEmpty }">
         <div>
             <div class="page-image" :style="'background-image:url(' + postImage + ')'">
-                <img :src="piranha.utils.formatUrl('~/manager/assets/img/primaryimage-placeholder.png')">
+                <img :src="Aero.utils.formatUrl('~/manager/assets/img/primaryimage-placeholder.png')">
             </div>
             <h3 :class="{ 'text-light': !hasPostTitle }">{{ postTitle }}</h3>
             <p :class="{ 'text-light': !hasPostExcerpt }" v-html="postExcerpt"></p>
@@ -21,7 +21,7 @@
                     &nbsp;
                 </div>
                 <div class="card-body" v-else>
-                    <a :href="piranha.baseUrl + 'manager/post/edit/' + model.body.post.id" target="_blank">{{ model.body.post.title }}</a>
+                    <a :href="Aero.baseUrl + 'manager/post/edit/' + model.body.post.id" target="_blank">{{ model.body.post.title }}</a>
                 </div>
             </div>
         </div>
@@ -33,7 +33,7 @@ export default {
     props: ["uid", "model"],
     methods: {
         select: function () {
-            piranha.postpicker.open(this.update);
+            Aero.postpicker.open(this.update);
         },
         remove: function () {
             this.model.body.id = null;
@@ -43,7 +43,7 @@ export default {
             if (post !== null) {
                 var self = this;
 
-                fetch(piranha.baseUrl + "manager/api/post/info/" + post.id)
+                fetch(Aero.baseUrl + "manager/api/post/info/" + post.id)
                     .then(function (response) { return response.json(); })
                     .then(function (result) {
                         self.model.body.id = result.id;
@@ -67,9 +67,9 @@ export default {
         },
         postImage: function () {
             if (this.hasPostImage) {
-                return piranha.baseUrl + "manager/api/media/url/" + this.model.body.post.primaryImage.id + "/446/220";
+                return Aero.baseUrl + "manager/api/media/url/" + this.model.body.post.primaryImage.id + "/446/220";
             } else {
-                return piranha.utils.formatUrl("~/manager/assets/img/empty-image.png");
+                return Aero.utils.formatUrl("~/manager/assets/img/empty-image.png");
             }
         },
         hasPostImage: function () {

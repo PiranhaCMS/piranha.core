@@ -8,13 +8,13 @@
     var userIsDelete = Context.Request.Query["d"] == "1";
 }
 @section script { 
-    <script src="~/manager/identity/piranha.userlist.js"></script>
+    <script src="~/manager/identity/Aero.userlist.js"></script>
     <script type="text/javascript">
-        piranha.userlist.currentUserName = "@User.Identity.Name";
-        piranha.userlist.load();
+        Aero.userlist.currentUserName = "@User.Identity.Name";
+        Aero.userlist.load();
         @if (userIsDelete) { 
             <text>
-            piranha.notifications.push({
+            Aero.notifications.push({
                 body: "@Localizer.Security["The user has been deleted."]",
                 type: "success",
                 hide: true

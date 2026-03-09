@@ -15,7 +15,7 @@
                     <span v-if="meta.placeholder == null" class="text-secondary">&nbsp;</span>
                 </div>
                 <div class="card-body" v-else>
-                    <a :href="piranha.baseUrl + 'manager/content/edit/' + model.content.typeId + '/' + model.content.id" target="_blank">{{ model.content.title }}</a>
+                    <a :href="Aero.baseUrl + 'manager/content/edit/' + model.content.typeId + '/' + model.content.id" target="_blank">{{ model.content.title }}</a>
                 </div>
             </div>
         </div>
@@ -27,7 +27,7 @@ export default {
     props: ["uid", "model", "meta"],
     methods: {
         select: function () {
-            piranha.contentpicker.open(this.meta.settings.Group, this.update);
+            Aero.contentpicker.open(this.meta.settings.Group, this.update);
         },
         remove: function () {
             this.model.id = null;

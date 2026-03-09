@@ -1,8 +1,8 @@
 /*global
-    piranha
+    Aero
 */
 
-piranha.pagelist = new Vue({
+Aero.pagelist = new Vue({
     el: "#pagelist",
     data: {
         loading: true,
@@ -19,8 +19,8 @@ piranha.pagelist = new Vue({
     methods: {
         load: function () {
             var self = this;
-            piranha.permissions.load(function () {
-                fetch(piranha.baseUrl + "manager/api/page/list")
+            Aero.permissions.load(function () {
+                fetch(Aero.baseUrl + "manager/api/page/list")
                 .then(function (response) { return response.json(); })
                 .then(function (result) {
                     self.sites = result.sites;
@@ -33,21 +33,21 @@ piranha.pagelist = new Vue({
         remove: function (id) {
             var self = this;
 
-            piranha.alert.open({
-                title: piranha.resources.texts.delete,
-                body: piranha.resources.texts.deletePageConfirm,
+            Aero.alert.open({
+                title: Aero.resources.texts.delete,
+                body: Aero.resources.texts.deletePageConfirm,
                 confirmCss: "btn-danger",
                 confirmIcon: "fas fa-trash",
-                confirmText: piranha.resources.texts.delete,
+                confirmText: Aero.resources.texts.delete,
                 onConfirm: function () {
-                    fetch(piranha.baseUrl + "manager/api/page/delete", {
+                    fetch(Aero.baseUrl + "manager/api/page/delete", {
                         method: "delete",
-                        headers: piranha.utils.antiForgeryHeaders(),
+                        headers: Aero.utils.antiForgeryHeaders(),
                         body: JSON.stringify(id)
                     })
                     .then(function (response) { return response.json(); })
                     .then(function (result) {
-                        piranha.notifications.push(result);
+                        Aero.notifications.push(result);
 
                         self.load();
                     })
@@ -63,9 +63,9 @@ piranha.pagelist = new Vue({
                     maxDepth: 100,
                     group: i,
                     callback: function (l, e) {
-                        fetch(piranha.baseUrl + "manager/api/page/move", {
+                        fetch(Aero.baseUrl + "manager/api/page/move", {
                             method: "post",
-                            headers: piranha.utils.antiForgeryHeaders(),
+                            headers: Aero.utils.antiForgeryHeaders(),
                             body: JSON.stringify({
                                 id: $(e).attr("data-id"),
                                 items: $(l).nestable("serialize")
@@ -73,7 +73,7 @@ piranha.pagelist = new Vue({
                         })
                         .then(function (response) { return response.json(); })
                         .then(function (result) {
-                            piranha.notifications.push(result.status);
+                            Aero.notifications.push(result.status);
 
                             if (result.status.type === "success") {
                                 $('.sitemap-container').nestable('destroy');

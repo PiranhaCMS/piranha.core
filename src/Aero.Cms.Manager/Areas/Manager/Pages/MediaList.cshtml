@@ -9,11 +9,11 @@
 }
 @section script
 {
-    <script src="~/manager/assets/js/piranha.media.min.js?v=@Aero.Cms.Utils.GetAssemblyVersionHash(typeof(Aero.Cms.Manager.Module).Assembly)"></script>
+    <script src="~/manager/assets/js/Aero.media.min.js?v=@Aero.Cms.Utils.GetAssemblyVersionHash(typeof(Aero.Cms.Manager.Module).Assembly)"></script>
 
     <script>
-        piranha.permissions.load(function () {
-            piranha.media.load("@folderId", true);
+        Aero.permissions.load(function () {
+            Aero.media.load("@folderId", true);
         });
     </script>
 }

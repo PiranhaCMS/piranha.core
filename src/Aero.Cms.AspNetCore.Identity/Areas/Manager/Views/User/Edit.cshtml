@@ -17,10 +17,10 @@
     ViewBag.MenuItem = "Users";
 }
 @section script {
-    <script src="~/manager/identity/piranha.useredit.js"></script>
+    <script src="~/manager/identity/Aero.useredit.js"></script>
     <script type="text/javascript">
-        piranha.useredit.currentUserName = "@User.Identity.Name";
-        piranha.useredit.load("@userId", @(isNewUser ? 1 : 0));
+        Aero.useredit.currentUserName = "@User.Identity.Name";
+        Aero.useredit.load("@userId", @(isNewUser ? 1 : 0));
     </script>
 }
 <form id="usereditForm" class="form validate" novalidate>

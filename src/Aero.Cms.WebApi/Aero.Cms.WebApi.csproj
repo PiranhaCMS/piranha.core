@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <NoWarn>$(NoWarn);1591</NoWarn>
-    <Description>Web Api module for Piranha CMS</Description>
+    <Description>Web Api module for Aero CMS</Description>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(GITHUB_ACTIONS)' == 'true'">

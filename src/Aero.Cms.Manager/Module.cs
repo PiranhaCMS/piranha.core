@@ -108,7 +108,7 @@ public sealed class Module : IModule
     /// <summary>
     /// Gets the description
     /// </summary>
-    public string Description => "Manager panel for Aero.Cms CMS for AspNetCore.";
+    public string Description => "Manager panel for Aero Cms for AspNetCore.";
 
     /// <summary>
     /// Gets the package url.

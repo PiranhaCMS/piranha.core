@@ -1,9 +1,9 @@
 {
   "name": "razorweb",
   "version": "8.3.0",
-  "description": "Piranha CMS Web Template For Razor Pages",
+  "description": "Aero CMS Web Template For Razor Pages",
   "main": "index.js",
-  "author": "Piranha CMS",
+  "author": "Aero CMS",
   "license": "MIT",
   "devDependencies": {
     "gulp": "^4.0.2",

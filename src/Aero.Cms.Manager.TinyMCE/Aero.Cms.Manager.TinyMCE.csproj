@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <AddRazorSupportForMvc>true</AddRazorSupportForMvc>
-    <Description>TinyMCE WYSIWYG Editor for Piranha CMS</Description>
+    <Description>TinyMCE WYSIWYG Editor for Aero CMS</Description>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(GITHUB_ACTIONS)' == 'true'">

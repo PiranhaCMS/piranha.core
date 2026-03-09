@@ -56,7 +56,7 @@
                                         @if ((await Auth.AuthorizeAsync(User, Permission.Language)).Succeeded)
                                         {
                                             <div class="input-group-append">
-                                                <button v-on:click.prevent="piranha.languageedit.open()" type="button" class="btn btn-icon btn-primary rounded ml-3" title="@Localizer.General["Configure languages"]">
+                                                <button v-on:click.prevent="Aero.languageedit.open()" type="button" class="btn btn-icon btn-primary rounded ml-3" title="@Localizer.General["Configure languages"]">
                                                     <i class="fas fa-cog"></i>
                                                 </button>
                                             </div>
@@ -124,10 +124,10 @@
 
             <!-- Footer -->
             <div class="modal-footer">
-                <button v-if="piranha.permissions.sites.delete && !isConfirm && !isNew " v-on:click.prevent="confirm" :disabled="isConfirm" class="btn btn-labeled btn-danger">
+                <button v-if="Aero.permissions.sites.delete && !isConfirm && !isNew " v-on:click.prevent="confirm" :disabled="isConfirm" class="btn btn-labeled btn-danger">
                     <i class="fas fa-trash"></i>@Localizer.General["Delete"]
                 </button>
-                <button v-if="piranha.permissions.sites.save && !isConfirm" form="siteForm" class="btn btn-labeled btn-success">
+                <button v-if="Aero.permissions.sites.save && !isConfirm" form="siteForm" class="btn btn-labeled btn-success">
                     <i class="fas fa-check"></i>@Localizer.General["Save"]
                 </button>
                 <div v-if="isConfirm" class="alert alert-danger w-100" role="alert">

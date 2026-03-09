@@ -66,12 +66,12 @@
                             <input v-model="slug" type="text" maxlength="128" class="form-control">
                             <div class="input-group-append">
                                 <div class="input-group-text text-muted">
-                                    {{ piranha.utils.strLength(slug) + "/128" }}
+                                    {{ Aero.utils.strLength(slug) + "/128" }}
                                 </div>
                             </div>
                         </div>
                         <span class="field-description small text-muted">
-                            {{ piranha.utils.getOrigin() + "/" }}<span v-text="slug"></span>
+                            {{ Aero.utils.getOrigin() + "/" }}<span v-text="slug"></span>
                         </span>
                     </div>
                     <div class="form-group">
@@ -94,7 +94,7 @@
                             <textarea v-model="excerpt" rows="5" maxlength="1000" class="form-control"></textarea>
                             <div class="input-group-append">
                                 <div class="input-group-text text-muted">
-                                    {{ piranha.utils.strLength(excerpt) + "/1000" }}
+                                    {{ Aero.utils.strLength(excerpt) + "/1000" }}
                                 </div>
                             </div>
                         </div>
@@ -108,7 +108,7 @@
                             <input v-model="metaTitle" type="text" maxlength="128" class="form-control" :placeholder="title">
                             <div class="input-group-append">
                                 <div class="input-group-text text-muted">
-                                    {{ piranha.utils.strLength(metaTitle) + "/128" }}
+                                    {{ Aero.utils.strLength(metaTitle) + "/128" }}
                                 </div>
                             </div>
                         </div>
@@ -119,7 +119,7 @@
                             <input v-model="metaKeywords" type="text" maxlength="128" class="form-control">
                             <div class="input-group-append">
                                 <div class="input-group-text text-muted">
-                                    {{ piranha.utils.strLength(metaKeywords) + "/128" }}
+                                    {{ Aero.utils.strLength(metaKeywords) + "/128" }}
                                 </div>
                             </div>
                         </div>
@@ -130,7 +130,7 @@
                             <textarea v-model="metaDescription" rows="5" maxlength="255" class="form-control"></textarea>
                             <div class="input-group-append">
                                 <div class="input-group-text text-muted">
-                                    {{ piranha.utils.strLength(metaDescription) + "/255" }}
+                                    {{ Aero.utils.strLength(metaDescription) + "/255" }}
                                 </div>
                             </div>
                         </div>
@@ -166,7 +166,7 @@
                             <input v-model="ogTitle" type="text" maxlength="128" class="form-control" :placeholder="metaTitle !== null && metaTitle !== '' ? metaTitle : title">
                             <div class="input-group-append">
                                 <div class="input-group-text text-muted">
-                                    {{ piranha.utils.strLength(ogTitle) + "/128" }}
+                                    {{ Aero.utils.strLength(ogTitle) + "/128" }}
                                 </div>
                             </div>
                         </div>
@@ -181,7 +181,7 @@
                             <textarea v-model="ogDescription" rows="5" maxlength="255" class="form-control" :placeholder="metaDescription"></textarea>
                             <div class="input-group-append">
                                 <div class="input-group-text text-muted">
-                                    {{ piranha.utils.strLength(ogDescription) + "/255" }}
+                                    {{ Aero.utils.strLength(ogDescription) + "/255" }}
                                 </div>
                             </div>
                         </div>
@@ -224,7 +224,7 @@
                             <input v-model="redirectUrl" type="text" maxlength="256" class="form-control">
                             <div class="input-group-append">
                                 <div class="input-group-text text-muted">
-                                    {{ piranha.utils.strLength(redirectUrl) + "/256" }}
+                                    {{ Aero.utils.strLength(redirectUrl) + "/256" }}
                                 </div>
                             </div>
                         </div>

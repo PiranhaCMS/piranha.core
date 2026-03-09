@@ -1,8 +1,8 @@
 /*global
-    piranha
+    Aero
 */
 
-piranha.media = new Vue({
+Aero.media = new Vue({
     el: "#media",
     data: {
         loading: true,
@@ -113,23 +113,23 @@ piranha.media = new Vue({
                 selections.push(dropped);
             }
 
-            fetch(piranha.baseUrl + "manager/api/media/move/" + (folderId || ""), {
+            fetch(Aero.baseUrl + "manager/api/media/move/" + (folderId || ""), {
                 method: "POST",
-                headers: piranha.utils.antiForgeryHeaders(),
+                headers: Aero.utils.antiForgeryHeaders(),
                 body: JSON.stringify(selections)
             })
             .then(function (response) { return response.json(); })
             .then(function (result) {
                 if (result.type === "success") {
-                    piranha.media.refresh();
+                    Aero.media.refresh();
                 }
 
                 if (result.status !== 400) {
                     // Push status to notification hub
-                    piranha.notifications.push(result.status);
+                    Aero.notifications.push(result.status);
                 } else {
                     // Unauthorized request
-                    piranha.notifications.unauthorized();
+                    Aero.notifications.unauthorized();
                 }
             })
             .catch(function (error) { console.log("error:", error); });
@@ -138,7 +138,7 @@ piranha.media = new Vue({
             if (event.shiftKey) {
                 media.selected = !media.selected;
             } else {
-                piranha.preview.openItem(media);
+                Aero.preview.openItem(media);
             }
         },
         showList: function () {
@@ -151,10 +151,10 @@ piranha.media = new Vue({
             var self = this;
 
             if (!skipState) {
-                history.pushState({ folderId: id }, "", piranha.baseUrl + "manager/media" + (id ? "/" + id : ""));
+                history.pushState({ folderId: id }, "", Aero.baseUrl + "manager/media" + (id ? "/" + id : ""));
             }
 
-            fetch(piranha.baseUrl + "manager/api/media/list" + (id ? "/" + id : "") + "/?width=210&height=160")
+            fetch(Aero.baseUrl + "manager/api/media/list" + (id ? "/" + id : "") + "/?width=210&height=160")
                 .then(function (response) { return response.json(); })
                 .then(function (result) {
                     self.bind(result);
@@ -164,10 +164,10 @@ piranha.media = new Vue({
                 .catch(function (error) { console.log("error:", error ); });
         },
         getThumbnailUrl: function (item) {
-            return item.altVersionUrl !== null ? item.altVersionUrl : piranha.baseUrl + "manager/api/media/url/" + item.id + "/210/160";
+            return item.altVersionUrl !== null ? item.altVersionUrl : Aero.baseUrl + "manager/api/media/url/" + item.id + "/210/160";
         },
         refresh: function () {
-            piranha.media.load(piranha.media.currentFolderId);
+            Aero.media.load(Aero.media.currentFolderId);
         },
         addFolder: function () {
             this.saveFolder(null, null, {
@@ -194,9 +194,9 @@ piranha.media = new Vue({
                 }
             }
 
-            fetch(piranha.baseUrl + "manager/api/media/folder/save", {
+            fetch(Aero.baseUrl + "manager/api/media/folder/save", {
                 method: "post",
-                headers: piranha.utils.antiForgeryHeaders(),
+                headers: Aero.utils.antiForgeryHeaders(),
                 body: JSON.stringify(folder)
             })
             .then(function (response) { return response.json(); })
@@ -218,10 +218,10 @@ piranha.media = new Vue({
 
                 if (result.status !== 400) {
                     // Push status to notification hub
-                    piranha.notifications.push(result.status);
+                    Aero.notifications.push(result.status);
                 } else {
                     // Unauthorized request
-                    piranha.notifications.unauthorized();
+                    Aero.notifications.unauthorized();
                 }
             })
             .catch(function (error) {
@@ -231,16 +231,16 @@ piranha.media = new Vue({
         remove: function (id) {
             var self = this;
 
-            piranha.alert.open({
-                title: piranha.resources.texts.delete,
-                body: piranha.resources.texts.deleteMediaSelectionConfirm,
+            Aero.alert.open({
+                title: Aero.resources.texts.delete,
+                body: Aero.resources.texts.deleteMediaSelectionConfirm,
                 confirmCss: "btn-danger",
                 confirmIcon: "fas fa-trash",
-                confirmText: piranha.resources.texts.delete,
+                confirmText: Aero.resources.texts.delete,
                 onConfirm: function () {
-                    fetch(piranha.baseUrl + "manager/api/media/delete", {
+                    fetch(Aero.baseUrl + "manager/api/media/delete", {
                         method: "delete",
-                        headers: piranha.utils.antiForgeryHeaders(),
+                        headers: Aero.utils.antiForgeryHeaders(),
                         body: JSON.stringify([id])
                     })
                     .then(function (response) { return response.json(); })
@@ -250,10 +250,10 @@ piranha.media = new Vue({
 
                         if (result.status !== 400) {
                             // Push status to notification hub
-                            piranha.notifications.push(result);
+                            Aero.notifications.push(result);
                         } else {
                             // Unauthorized request
-                            piranha.notifications.unauthorized();
+                            Aero.notifications.unauthorized();
                         }
                     })
                     .catch(function (error) { console.log("error:", error); });
@@ -264,16 +264,16 @@ piranha.media = new Vue({
             var self = this;
             var selections = this.items.filter(i => i.selected).map(i => i.id);
 
-            piranha.alert.open({
-                title: piranha.resources.texts.delete,
-                body: piranha.resources.texts.deleteMediaSelectionConfirm,
+            Aero.alert.open({
+                title: Aero.resources.texts.delete,
+                body: Aero.resources.texts.deleteMediaSelectionConfirm,
                 confirmCss: "btn-danger",
                 confirmIcon: "fas fa-trash",
-                confirmText: piranha.resources.texts.delete,
+                confirmText: Aero.resources.texts.delete,
                 onConfirm: function () {
-                    fetch(piranha.baseUrl + "manager/api/media/delete", {
+                    fetch(Aero.baseUrl + "manager/api/media/delete", {
                         method: "delete",
-                        headers: piranha.utils.antiForgeryHeaders(),
+                        headers: Aero.utils.antiForgeryHeaders(),
                         body: JSON.stringify(selections)
                     })
                     .then(function (response) { return response.json(); })
@@ -283,10 +283,10 @@ piranha.media = new Vue({
 
                         if (result.status !== 400) {
                             // Push status to notification hub
-                            piranha.notifications.push(result.status);
+                            Aero.notifications.push(result.status);
                         } else {
                             // Unauthorized request
-                            piranha.notifications.unauthorized();
+                            Aero.notifications.unauthorized();
                         }
                     })
                     .catch(function (error) { console.log("error:", error); });
@@ -296,31 +296,31 @@ piranha.media = new Vue({
         removeFolder: function (id) {
             var self = this;
 
-            piranha.alert.open({
-                title: piranha.resources.texts.delete,
-                body: piranha.resources.texts.deleteMediaSelectionConfirm,
+            Aero.alert.open({
+                title: Aero.resources.texts.delete,
+                body: Aero.resources.texts.deleteMediaSelectionConfirm,
                 confirmCss: "btn-danger",
                 confirmIcon: "fas fa-trash",
-                confirmText: piranha.resources.texts.delete,
+                confirmText: Aero.resources.texts.delete,
                 onConfirm: function () {
-                    fetch(piranha.baseUrl + "manager/api/media/folder/delete", {
+                    fetch(Aero.baseUrl + "manager/api/media/folder/delete", {
                         method: "delete",
-                        headers: piranha.utils.antiForgeryHeaders(),
+                        headers: Aero.utils.antiForgeryHeaders(),
                         body: JSON.stringify(id)
                     })
                         .then(function (response) { return response.json(); })
                         .then(function (result) {
                             self.bind(result);
 
-                            history.pushState({ folderId: id }, "", piranha.baseUrl + "manager/media" + (id ? "/" + id : ""));
+                            history.pushState({ folderId: id }, "", Aero.baseUrl + "manager/media" + (id ? "/" + id : ""));
                             document.title = result.currentFolderName ? result.currentFolderName : "Media";
 
                             if (result.status !== 400) {
                                 // Push status to notification hub
-                                piranha.notifications.push(result.status);
+                                Aero.notifications.push(result.status);
                             } else {
                                 // Unauthorized request
-                                piranha.notifications.unauthorized();
+                                Aero.notifications.unauthorized();
                             }
                         })
                         .catch(function (error) { console.log("error:", error); });
@@ -337,19 +337,19 @@ piranha.media = new Vue({
     },
     updated: function () {
         if (this.loading) {
-            if (piranha.permissions.media.add) {
-                this.dropzone = piranha.dropzone.init("#media-upload-container", {
+            if (Aero.permissions.media.add) {
+                this.dropzone = Aero.dropzone.init("#media-upload-container", {
                     uploadMultiple: false
                 });
                 this.dropzone.on("complete", function (file) {
                     if (file.status === "success") {
                         setTimeout(function () {
-                            piranha.media.dropzone.removeFile(file);
+                            Aero.media.dropzone.removeFile(file);
                         }, 3000)
                     }
                 });
                 this.dropzone.on("queuecomplete", function () {
-                    piranha.media.refresh();
+                    Aero.media.refresh();
                 });
             }
 

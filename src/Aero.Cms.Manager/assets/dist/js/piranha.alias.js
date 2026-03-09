@@ -1,8 +1,8 @@
 /*global
-    piranha
+    Aero
 */
 
- piranha.alias = new Vue({
+ Aero.alias = new Vue({
     el: "#alias",
     data: {
         loading: true,
@@ -25,7 +25,7 @@
                 siteId = "";
             }
 
-            fetch(piranha.baseUrl + "manager/api/alias/list/" + siteId)
+            fetch(Aero.baseUrl + "manager/api/alias/list/" + siteId)
                 .then(function (response) { return response.json(); })
                 .then(function (result) {
                     self.siteId = result.siteId;
@@ -43,15 +43,15 @@
                 return;
             }
 
-            fetch(piranha.baseUrl + "manager/api/alias/save", {
+            fetch(Aero.baseUrl + "manager/api/alias/save", {
                 method: "post",
-                headers: piranha.utils.antiForgeryHeaders(),
+                headers: Aero.utils.antiForgeryHeaders(),
                 body: JSON.stringify({
-                    id: piranha.alias.model.id,
-                    siteId: piranha.alias.siteId,
-                    aliasUrl: piranha.alias.model.aliasUrl,
-                    redirectUrl: piranha.alias.model.redirectUrl,
-                    isPermanent: piranha.alias.model.isPermanent != null ? piranha.alias.model.isPermanent : false
+                    id: Aero.alias.model.id,
+                    siteId: Aero.alias.siteId,
+                    aliasUrl: Aero.alias.model.aliasUrl,
+                    redirectUrl: Aero.alias.model.redirectUrl,
+                    isPermanent: Aero.alias.model.isPermanent != null ? Aero.alias.model.isPermanent : false
                 })
             })
             .then(function (response) { return response.json(); })
@@ -64,20 +64,20 @@
                     $("#aliasModal").modal("hide");
 
                     // Clear modal
-                    piranha.alias.model.id = null;
-                    piranha.alias.model.aliasUrl = null;
-                    piranha.alias.model.redirectUrl = null;
-                    piranha.alias.model.isPermanent = true;
+                    Aero.alias.model.id = null;
+                    Aero.alias.model.aliasUrl = null;
+                    Aero.alias.model.redirectUrl = null;
+                    Aero.alias.model.isPermanent = true;
 
-                    piranha.alias.items = result.items;
+                    Aero.alias.items = result.items;
                 }
 
                 if (result.status !== 400) {
                     // Push status to notification hub
-                    piranha.notifications.push(result.status);
+                    Aero.notifications.push(result.status);
                 } else {
                     // Unauthorized request
-                    piranha.notifications.unauthorized();
+                    Aero.notifications.unauthorized();
                 }
             })
             .catch(function (error) {
@@ -87,16 +87,16 @@
         remove: function (id) {
             var self = this;
 
-            piranha.alert.open({
-                title: piranha.resources.texts.delete,
-                body: piranha.resources.texts.deleteAliasConfirm,
+            Aero.alert.open({
+                title: Aero.resources.texts.delete,
+                body: Aero.resources.texts.deleteAliasConfirm,
                 confirmCss: "btn-danger",
                 confirmIcon: "fas fa-trash",
-                confirmText: piranha.resources.texts.delete,
+                confirmText: Aero.resources.texts.delete,
                 onConfirm: function () {
-                    fetch(piranha.baseUrl + "manager/api/alias/delete", {
+                    fetch(Aero.baseUrl + "manager/api/alias/delete", {
                         method: "delete",
-                        headers: piranha.utils.antiForgeryHeaders(),
+                        headers: Aero.utils.antiForgeryHeaders(),
                         body: JSON.stringify(id)
                     })
                     .then(function (response) { return response.json(); })
@@ -107,10 +107,10 @@
 
                         if (result.status !== 400) {
                             // Push status to notification hub
-                            piranha.notifications.push(result.status);
+                            Aero.notifications.push(result.status);
                         } else {
                             // Unauthorized request
-                            piranha.notifications.unauthorized();
+                            Aero.notifications.unauthorized();
                         }
                     })
                     .catch(function (error) { console.log("error:", error ); });

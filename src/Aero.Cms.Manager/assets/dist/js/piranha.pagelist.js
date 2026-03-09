@@ -5,7 +5,7 @@ Vue.component("pagecopy-item", {
       item.isExpanded = !item.isExpanded;
     }
   },
-  template: "\n<li class=\"dd-item\" :class=\"{ expanded: item.isExpanded || item.items.length === 0 }\">\n    <div class=\"sitemap-item expanded\">\n        <div class=\"link\" :class=\"{ readonly: item.isCopy }\">\n            <a v-if=\"!item.isCopy && piranha.pagelist.addPageId !== null\" :href=\"piranha.baseUrl + 'manager/page/copyrelative/' + item.id + '/' + piranha.pagelist.addPageId + '/' + piranha.pagelist.addAfter\">\n                {{ item.title }}\n            </a>\n            <a v-else-if=\"!item.isCopy && piranha.pagelist.addPageId === null\" :href=\"piranha.baseUrl + 'manager/page/copy/' + item.id + '/' + piranha.pagelist.addToSiteId\">\n                {{ item.title }}\n            </a>\n            <a href=\"#\" v-else>\n                {{ item.title }}\n                <span v-if=\"item.isCopy\" class=\"badge badge-warning\">{{ piranha.resources.texts.copy }}</span>\n            </a>\n            <div class=\"content-blocker\"></div>\n        </div>\n        <div class=\"type d-none d-md-block\">\n            {{ item.typeName }}\n        </div>\n    </div>\n    <ol class=\"dd-list\" v-if=\"item.items.length > 0\">\n        <pagecopy-item v-for=\"child in item.items\" v-bind:key=\"child.id\" v-bind:item=\"child\"></pagecopy-item>\n    </ol>\n</li>\n"
+  template: "\n<li class=\"dd-item\" :class=\"{ expanded: item.isExpanded || item.items.length === 0 }\">\n    <div class=\"sitemap-item expanded\">\n        <div class=\"link\" :class=\"{ readonly: item.isCopy }\">\n            <a v-if=\"!item.isCopy && Aero.pagelist.addPageId !== null\" :href=\"Aero.baseUrl + 'manager/page/copyrelative/' + item.id + '/' + Aero.pagelist.addPageId + '/' + Aero.pagelist.addAfter\">\n                {{ item.title }}\n            </a>\n            <a v-else-if=\"!item.isCopy && Aero.pagelist.addPageId === null\" :href=\"Aero.baseUrl + 'manager/page/copy/' + item.id + '/' + Aero.pagelist.addToSiteId\">\n                {{ item.title }}\n            </a>\n            <a href=\"#\" v-else>\n                {{ item.title }}\n                <span v-if=\"item.isCopy\" class=\"badge badge-warning\">{{ Aero.resources.texts.copy }}</span>\n            </a>\n            <div class=\"content-blocker\"></div>\n        </div>\n        <div class=\"type d-none d-md-block\">\n            {{ item.typeName }}\n        </div>\n    </div>\n    <ol class=\"dd-list\" v-if=\"item.items.length > 0\">\n        <pagecopy-item v-for=\"child in item.items\" v-bind:key=\"child.id\" v-bind:item=\"child\"></pagecopy-item>\n    </ol>\n</li>\n"
 });
 Vue.component("sitemap-item", {
   props: ["item"],
@@ -14,13 +14,13 @@ Vue.component("sitemap-item", {
       item.isExpanded = !item.isExpanded;
     }
   },
-  template: "\n<li class=\"dd-item\" :class=\"{ expanded: item.isExpanded || item.items.length === 0 }\" :data-id=\"item.id\">\n    <div class=\"sitemap-item\" :class=\"{ dimmed: item.isUnpublished || item.isScheduled }\">\n        <div class=\"handle dd-handle\"><i class=\"fas fa-ellipsis-v\"></i></div>\n        <div class=\"link\">\n            <span class=\"actions\">\n                <a v-if=\"item.items.length > 0 && item.isExpanded\" v-on:click.prevent=\"toggleItem(item)\" class=\"expand\" href=\"#\"><i class=\"fas fa-minus\"></i></a>\n                <a v-if=\"item.items.length > 0 && !item.isExpanded\" v-on:click.prevent=\"toggleItem(item)\" class=\"expand\" href=\"#\"><i class=\"fas fa-plus\"></i></a>\n            </span>\n            <a v-if=\"piranha.permissions.pages.edit\" :href=\"piranha.baseUrl + item.editUrl + item.id\">\n                <span>{{ item.title }}</span>\n                <span v-if=\"item.isRestricted\" class=\"icon-restricted text-secondary small\"><i class=\"fas fa-lock\"></i></span>\n                <span v-if=\"item.status\" class=\"badge badge-info\">{{ item.status }}</span>\n                <span v-if=\"item.isScheduled\" class=\"badge badge-info\">{{ piranha.resources.texts.scheduled }}</span>\n                <span v-if=\"item.isCopy\" class=\"badge badge-warning\">{{ piranha.resources.texts.copy }}</span>\n            </a>\n            <span v-else class=\"title\">\n                <span>{{ item.title }}</span>\n                <span v-if=\"item.isRestricted\" class=\"icon-restricted text-secondary small\"><i class=\"fas fa-lock\"></i></span>\n                <span v-if=\"item.status\" class=\"badge badge-info\">{{ item.status }}</span>\n                <span v-if=\"item.isScheduled\" class=\"badge badge-info\">{{ piranha.resources.texts.scheduled }}</span>\n                <span v-if=\"item.isCopy\" class=\"badge badge-warning\">{{ piranha.resources.texts.copy }}</span>\n            </span>\n        </div>\n        <div class=\"type d-none d-md-block\">{{ item.typeName }}</div>\n        <div class=\"date d-none d-lg-block\">{{ item.published }}</div>\n        <div class=\"actions\">\n            <a v-if=\"piranha.permissions.pages.add\" href=\"#\" v-on:click.prevent=\"piranha.pagelist.add(item.siteId, item.id, true)\"><i class=\"fas fa-angle-down\"></i></a>\n            <a v-if=\"piranha.permissions.pages.add\" href=\"#\" v-on:click.prevent=\"piranha.pagelist.add(item.siteId, item.id, false)\"><i class=\"fas fa-angle-right\"></i></a>\n            <a v-if=\"piranha.permissions.pages.delete && item.items.length === 0\" v-on:click.prevent=\"piranha.pagelist.remove(item.id)\" class=\"danger\" href=\"#\"><i class=\"fas fa-trash\"></i></a>\n        </div>\n    </div>\n    <ol v-if=\"item.items.length > 0\" class=\"dd-list\">\n        <sitemap-item v-for=\"child in item.items\" v-bind:key=\"child.id\" v-bind:item=\"child\">\n        </sitemap-item>\n    </ol>\n</li>\n"
+  template: "\n<li class=\"dd-item\" :class=\"{ expanded: item.isExpanded || item.items.length === 0 }\" :data-id=\"item.id\">\n    <div class=\"sitemap-item\" :class=\"{ dimmed: item.isUnpublished || item.isScheduled }\">\n        <div class=\"handle dd-handle\"><i class=\"fas fa-ellipsis-v\"></i></div>\n        <div class=\"link\">\n            <span class=\"actions\">\n                <a v-if=\"item.items.length > 0 && item.isExpanded\" v-on:click.prevent=\"toggleItem(item)\" class=\"expand\" href=\"#\"><i class=\"fas fa-minus\"></i></a>\n                <a v-if=\"item.items.length > 0 && !item.isExpanded\" v-on:click.prevent=\"toggleItem(item)\" class=\"expand\" href=\"#\"><i class=\"fas fa-plus\"></i></a>\n            </span>\n            <a v-if=\"Aero.permissions.pages.edit\" :href=\"Aero.baseUrl + item.editUrl + item.id\">\n                <span>{{ item.title }}</span>\n                <span v-if=\"item.isRestricted\" class=\"icon-restricted text-secondary small\"><i class=\"fas fa-lock\"></i></span>\n                <span v-if=\"item.status\" class=\"badge badge-info\">{{ item.status }}</span>\n                <span v-if=\"item.isScheduled\" class=\"badge badge-info\">{{ Aero.resources.texts.scheduled }}</span>\n                <span v-if=\"item.isCopy\" class=\"badge badge-warning\">{{ Aero.resources.texts.copy }}</span>\n            </a>\n            <span v-else class=\"title\">\n                <span>{{ item.title }}</span>\n                <span v-if=\"item.isRestricted\" class=\"icon-restricted text-secondary small\"><i class=\"fas fa-lock\"></i></span>\n                <span v-if=\"item.status\" class=\"badge badge-info\">{{ item.status }}</span>\n                <span v-if=\"item.isScheduled\" class=\"badge badge-info\">{{ Aero.resources.texts.scheduled }}</span>\n                <span v-if=\"item.isCopy\" class=\"badge badge-warning\">{{ Aero.resources.texts.copy }}</span>\n            </span>\n        </div>\n        <div class=\"type d-none d-md-block\">{{ item.typeName }}</div>\n        <div class=\"date d-none d-lg-block\">{{ item.published }}</div>\n        <div class=\"actions\">\n            <a v-if=\"Aero.permissions.pages.add\" href=\"#\" v-on:click.prevent=\"Aero.pagelist.add(item.siteId, item.id, true)\"><i class=\"fas fa-angle-down\"></i></a>\n            <a v-if=\"Aero.permissions.pages.add\" href=\"#\" v-on:click.prevent=\"Aero.pagelist.add(item.siteId, item.id, false)\"><i class=\"fas fa-angle-right\"></i></a>\n            <a v-if=\"Aero.permissions.pages.delete && item.items.length === 0\" v-on:click.prevent=\"Aero.pagelist.remove(item.id)\" class=\"danger\" href=\"#\"><i class=\"fas fa-trash\"></i></a>\n        </div>\n    </div>\n    <ol v-if=\"item.items.length > 0\" class=\"dd-list\">\n        <sitemap-item v-for=\"child in item.items\" v-bind:key=\"child.id\" v-bind:item=\"child\">\n        </sitemap-item>\n    </ol>\n</li>\n"
 });
 /*global
-    piranha
+    Aero
 */
 
-piranha.pagelist = new Vue({
+Aero.pagelist = new Vue({
     el: "#pagelist",
     data: {
         loading: true,
@@ -37,8 +37,8 @@ piranha.pagelist = new Vue({
     methods: {
         load: function () {
             var self = this;
-            piranha.permissions.load(function () {
-                fetch(piranha.baseUrl + "manager/api/page/list")
+            Aero.permissions.load(function () {
+                fetch(Aero.baseUrl + "manager/api/page/list")
                 .then(function (response) { return response.json(); })
                 .then(function (result) {
                     self.sites = result.sites;
@@ -51,21 +51,21 @@ piranha.pagelist = new Vue({
         remove: function (id) {
             var self = this;
 
-            piranha.alert.open({
-                title: piranha.resources.texts.delete,
-                body: piranha.resources.texts.deletePageConfirm,
+            Aero.alert.open({
+                title: Aero.resources.texts.delete,
+                body: Aero.resources.texts.deletePageConfirm,
                 confirmCss: "btn-danger",
                 confirmIcon: "fas fa-trash",
-                confirmText: piranha.resources.texts.delete,
+                confirmText: Aero.resources.texts.delete,
                 onConfirm: function () {
-                    fetch(piranha.baseUrl + "manager/api/page/delete", {
+                    fetch(Aero.baseUrl + "manager/api/page/delete", {
                         method: "delete",
-                        headers: piranha.utils.antiForgeryHeaders(),
+                        headers: Aero.utils.antiForgeryHeaders(),
                         body: JSON.stringify(id)
                     })
                     .then(function (response) { return response.json(); })
                     .then(function (result) {
-                        piranha.notifications.push(result);
+                        Aero.notifications.push(result);
 
                         self.load();
                     })
@@ -81,9 +81,9 @@ piranha.pagelist = new Vue({
                     maxDepth: 100,
                     group: i,
                     callback: function (l, e) {
-                        fetch(piranha.baseUrl + "manager/api/page/move", {
+                        fetch(Aero.baseUrl + "manager/api/page/move", {
                             method: "post",
-                            headers: piranha.utils.antiForgeryHeaders(),
+                            headers: Aero.utils.antiForgeryHeaders(),
                             body: JSON.stringify({
                                 id: $(e).attr("data-id"),
                                 items: $(l).nestable("serialize")
@@ -91,7 +91,7 @@ piranha.pagelist = new Vue({
                         })
                         .then(function (response) { return response.json(); })
                         .then(function (result) {
-                            piranha.notifications.push(result.status);
+                            Aero.notifications.push(result.status);
 
                             if (result.status.type === "success") {
                                 $('.sitemap-container').nestable('destroy');

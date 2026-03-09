@@ -5,7 +5,7 @@
  * This software may be modified and distributed under the terms
  * of the MIT license. See the LICENSE file for details.
  *
- * https://github.com/piranhacms/piranha.core
+ * https://github.com/Aerocms/Aero.core
  *
  */
 // Gulp task to compile .vue files into Vue.Components(...)
@@ -112,7 +112,7 @@ var fonts = [
 
 var js = [
     {
-        name: "piranha-deps-dev.js",
+        name: "Aero-deps-dev.js",
         items: [
             "node_modules/jquery/dist/jquery.js",
             "node_modules/popper.js/dist/umd/popper.js",
@@ -128,7 +128,7 @@ var js = [
         ]
     },
     {
-        name: "piranha-deps.js",
+        name: "Aero-deps.js",
         items: [
             "node_modules/jquery/dist/jquery.js",
             "node_modules/popper.js/dist/umd/popper.js",
@@ -144,61 +144,61 @@ var js = [
         ]
     },
     {
-        name: "piranha.js",
+        name: "Aero.js",
         items: [
-            "assets/src/js/piranha.eventbus.js",
-            "assets/src/js/piranha.accessibility.js",
-            "assets/src/js/piranha.alert.js",
-            "assets/src/js/piranha.archivepicker.js",
-            "assets/src/js/piranha.dropzone.js",
-            "assets/src/js/piranha.permissions.js",
-            "assets/src/js/piranha.utils.js",
-            "assets/src/js/piranha.blockpicker.js",
-            "assets/src/js/piranha.notifications.js",
-            "assets/src/js/piranha.contentpicker.js",
-            "assets/src/js/piranha.mediapicker.js",
-            "assets/src/js/piranha.pagepicker.js",
-            "assets/src/js/piranha.postpicker.js",
-            "assets/src/js/piranha.preview.js",
-            "assets/src/js/piranha.languageedit.js",
-            "assets/src/js/piranha.resources.js",
-            "assets/src/js/piranha.editor.js",
+            "assets/src/js/Aero.eventbus.js",
+            "assets/src/js/Aero.accessibility.js",
+            "assets/src/js/Aero.alert.js",
+            "assets/src/js/Aero.archivepicker.js",
+            "assets/src/js/Aero.dropzone.js",
+            "assets/src/js/Aero.permissions.js",
+            "assets/src/js/Aero.utils.js",
+            "assets/src/js/Aero.blockpicker.js",
+            "assets/src/js/Aero.notifications.js",
+            "assets/src/js/Aero.contentpicker.js",
+            "assets/src/js/Aero.mediapicker.js",
+            "assets/src/js/Aero.pagepicker.js",
+            "assets/src/js/Aero.postpicker.js",
+            "assets/src/js/Aero.preview.js",
+            "assets/src/js/Aero.languageedit.js",
+            "assets/src/js/Aero.resources.js",
+            "assets/src/js/Aero.editor.js",
             "assets/src/js/components/page-item.vue"
         ]
     },
     {
-        name: "piranha.alias.js",
+        name: "Aero.alias.js",
         items: [
-            "assets/src/js/piranha.alias.js"
+            "assets/src/js/Aero.alias.js"
         ]
     },
     {
-        name: "piranha.comment.js",
+        name: "Aero.comment.js",
         items: [
-            "assets/src/js/piranha.comment.js"
+            "assets/src/js/Aero.comment.js"
         ]
     },
     {
-        name: "piranha.config.js",
+        name: "Aero.config.js",
         items: [
-            "assets/src/js/piranha.config.js"
+            "assets/src/js/Aero.config.js"
         ]
     },
     {
-        name: "piranha.media.js",
+        name: "Aero.media.js",
         items: [
             "assets/src/js/components/folder-item.vue",
-            "assets/src/js/piranha.media.js"
+            "assets/src/js/Aero.media.js"
         ]
     },
     {
-        name: "piranha.module.js",
+        name: "Aero.module.js",
         items: [
-            "assets/src/js/piranha.module.js"
+            "assets/src/js/Aero.module.js"
         ]
     },
     {
-        name: "piranha.components.js",
+        name: "Aero.components.js",
         items: [
             "assets/src/js/components/region.vue",
             "assets/src/js/components/post-archive.vue",
@@ -245,41 +245,41 @@ var js = [
         ]
     },
     {
-        name: "piranha.contentlist.js",
+        name: "Aero.contentlist.js",
         items: [
-            "assets/src/js/piranha.contentlist.js"
+            "assets/src/js/Aero.contentlist.js"
         ]
     },
     {
-        name: "piranha.contentedit.js",
+        name: "Aero.contentedit.js",
         items: [
-            "assets/src/js/piranha.contentedit.js"
+            "assets/src/js/Aero.contentedit.js"
         ]
     },
     {
-        name: "piranha.pageedit.js",
+        name: "Aero.pageedit.js",
         items: [
-            "assets/src/js/piranha.pageedit.js"
+            "assets/src/js/Aero.pageedit.js"
         ]
     },
     {
-        name: "piranha.pagelist.js",
+        name: "Aero.pagelist.js",
         items: [
             "assets/src/js/components/pagecopy-item.vue",
             "assets/src/js/components/sitemap-item.vue",
-            "assets/src/js/piranha.pagelist.js"
+            "assets/src/js/Aero.pagelist.js"
         ]
     },
     {
-        name: "piranha.postedit.js",
+        name: "Aero.postedit.js",
         items: [
-            "assets/src/js/piranha.postedit.js"
+            "assets/src/js/Aero.postedit.js"
         ]
     },
     {
-        name: "piranha.siteedit.js",
+        name: "Aero.siteedit.js",
         items: [
-            "assets/src/js/piranha.siteedit.js"
+            "assets/src/js/Aero.siteedit.js"
         ]
     },
     {

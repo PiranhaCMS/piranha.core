@@ -16,4 +16,10 @@
     <ProjectReference Include="..\Aero.Cms.Manager.TinyMCE\Aero.Cms.Manager.TinyMCE.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="admin.client.certificate.bbqchickenrobot.pfx">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>

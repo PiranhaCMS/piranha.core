@@ -1,8 +1,8 @@
 /*global
-    piranha
+    Aero
 */
 
-piranha.postpicker = new Vue({
+Aero.postpicker = new Vue({
     el: "#postpicker",
     data: {
         search: '',
@@ -19,8 +19,8 @@ piranha.postpicker = new Vue({
     computed: {
         filteredPosts: function () {
             return this.posts.filter(function (post) {
-                if (piranha.postpicker.search.length > 0) {
-                    return post.title.toLowerCase().indexOf(piranha.postpicker.search.toLowerCase()) > -1
+                if (Aero.postpicker.search.length > 0) {
+                    return post.title.toLowerCase().indexOf(Aero.postpicker.search.toLowerCase()) > -1
                 }
                 return true;
             });
@@ -28,7 +28,7 @@ piranha.postpicker = new Vue({
     },
     methods: {
         load: function (siteId, archiveId) {
-            var url = piranha.baseUrl + "manager/api/post/modal";
+            var url = Aero.baseUrl + "manager/api/post/modal";
 
             if (siteId) {
                 url += "?siteId=" + siteId;
@@ -40,15 +40,15 @@ piranha.postpicker = new Vue({
             fetch(url)
                 .then(function (response) { return response.json(); })
                 .then(function (result) {
-                    piranha.postpicker.sites = result.sites;
-                    piranha.postpicker.archives = result.archives;
-                    piranha.postpicker.posts = result.posts;
+                    Aero.postpicker.sites = result.sites;
+                    Aero.postpicker.archives = result.archives;
+                    Aero.postpicker.posts = result.posts;
 
-                    piranha.postpicker.currentSiteId = result.siteId;
-                    piranha.postpicker.currentArchiveId = result.archiveId;
+                    Aero.postpicker.currentSiteId = result.siteId;
+                    Aero.postpicker.currentArchiveId = result.archiveId;
 
-                    piranha.postpicker.currentSiteTitle = result.siteTitle;
-                    piranha.postpicker.currentArchiveTitle = result.archiveTitle;
+                    Aero.postpicker.currentSiteTitle = result.siteTitle;
+                    Aero.postpicker.currentArchiveTitle = result.archiveTitle;
                 })
                 .catch(function (error) { console.log("error:", error ); });
         },

@@ -6,7 +6,7 @@
                     <a v-if="item.items.length > 0 && item.isExpanded" v-on:click.prevent="toggleItem(item)" class="expand" href="#"><i class="fas fa-minus"></i></a>
                     <a v-if="item.items.length > 0 && !item.isExpanded" v-on:click.prevent="toggleItem(item)" class="expand" href="#"><i class="fas fa-plus"></i></a>
                 </span>
-                <a href="#" v-on:click.prevent="piranha.pagepicker.select(item)">
+                <a href="#" v-on:click.prevent="Aero.pagepicker.select(item)">
                     {{ item.title }}
                 </a>
             </div>

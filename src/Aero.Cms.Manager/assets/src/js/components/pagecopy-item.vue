@@ -2,15 +2,15 @@
     <li class="dd-item" :class="{ expanded: item.isExpanded || item.items.length === 0 }">
         <div class="sitemap-item expanded">
             <div class="link" :class="{ readonly: item.isCopy }">
-                <a v-if="!item.isCopy && piranha.pagelist.addPageId !== null" :href="piranha.baseUrl + 'manager/page/copyrelative/' + item.id + '/' + piranha.pagelist.addPageId + '/' + piranha.pagelist.addAfter">
+                <a v-if="!item.isCopy && Aero.pagelist.addPageId !== null" :href="Aero.baseUrl + 'manager/page/copyrelative/' + item.id + '/' + Aero.pagelist.addPageId + '/' + Aero.pagelist.addAfter">
                     {{ item.title }}
                 </a>
-                <a v-else-if="!item.isCopy && piranha.pagelist.addPageId === null" :href="piranha.baseUrl + 'manager/page/copy/' + item.id + '/' + piranha.pagelist.addToSiteId">
+                <a v-else-if="!item.isCopy && Aero.pagelist.addPageId === null" :href="Aero.baseUrl + 'manager/page/copy/' + item.id + '/' + Aero.pagelist.addToSiteId">
                     {{ item.title }}
                 </a>
                 <a href="#" v-else>
                     {{ item.title }}
-                    <span v-if="item.isCopy" class="badge badge-warning">{{ piranha.resources.texts.copy }}</span>
+                    <span v-if="item.isCopy" class="badge badge-warning">{{ Aero.resources.texts.copy }}</span>
                 </a>
                 <div class="content-blocker"></div>
             </div>

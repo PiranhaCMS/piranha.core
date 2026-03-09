@@ -1,8 +1,8 @@
 /*global
-    piranha
+    Aero
 */
 
-piranha.accessibility = new function () {
+Aero.accessibility = new function () {
     "use strict";
 
     var self = this;

@@ -1,8 +1,8 @@
 /*global
-    piranha
+    Aero
 */
 
-piranha.notifications = new Vue({
+Aero.notifications = new Vue({
     el: "#notification-hub",
     data: {
         items: [],
@@ -25,7 +25,7 @@ piranha.notifications = new Vue({
                 'notification-warning': notification.type === "warning"
             };
 
-            piranha.notifications.items.push(notification);
+            Aero.notifications.items.push(notification);
 
             setTimeout(function () {
                 notification.style.visible = true;
@@ -36,7 +36,7 @@ piranha.notifications = new Vue({
                         notification.style.visible = false;
 
                         setTimeout(function () {
-                            piranha.notifications.items.shift();
+                            Aero.notifications.items.shift();
                         }, 200);
                     }, 5000);
                 }

@@ -3,7 +3,7 @@
   <PropertyGroup>
     <NoWarn>$(NoWarn);1591</NoWarn>
     <AddRazorSupportForMvc>true</AddRazorSupportForMvc>
-    <Description>Piranha CMS security provider for AspNetCore Identity</Description>
+    <Description>Aero CMS security provider for AspNetCore Identity</Description>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(GITHUB_ACTIONS)' == 'true'">
@@ -27,7 +27,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Remove="assets\piranha.useredit.js" />
+    <None Remove="assets\Aero.useredit.js" />
   </ItemGroup>
 
 </Project>

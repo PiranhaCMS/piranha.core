@@ -13,16 +13,16 @@ namespace Aero.Cms.RavenDb.Services.Internal;
  * This software may be modified and distributed under the terms
  * of the MIT license. See the LICENSE file for details.
  *
- * https://github.com/piranhacms/piranha.core
+ * https://github.com/Aerocms/Aero.core
  *
  */
 
 using System.Collections;
 using System.Dynamic;
 using AutoMapper;
-// using Piranha.Data.RavenDb.Data;
-// using Piranha.Models;
-// using Piranha.Services;
+// using Aero.Data.RavenDb.Data;
+// using Aero.Models;
+// using Aero.Services;
 
 
 

@@ -2,12 +2,12 @@
 
   <PropertyGroup>
     <NoWarn>$(NoWarn);1591</NoWarn>
-    <Description>Core package for Piranha CMS for .NET Core</Description>
+    <Description>Core package for Aero CMS for .NET Core</Description>
   </PropertyGroup>
 
   <ItemGroup>
     <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleToAttribute">
-    <_Parameter1>Piranha.Tests</_Parameter1>
+    <_Parameter1>Aero.Tests</_Parameter1>
     </AssemblyAttribute>
   </ItemGroup>
 

@@ -1,8 +1,8 @@
 /*global
-    piranha userlist
+    Aero userlist
 */
 
-piranha.userlist = new Vue({
+Aero.userlist = new Vue({
     el: "#userlist",
     data: {
         loading: true,
@@ -17,8 +17,8 @@ piranha.userlist = new Vue({
         },
         load: function () {
             var self = this;
-            piranha.permissions.load(function () {
-                fetch(piranha.baseUrl + "manager/users/list")
+            Aero.permissions.load(function () {
+                fetch(Aero.baseUrl + "manager/users/list")
                     .then(function (response) { return response.json(); })
                     .then(function (result) {
                         self.bind(result);
@@ -41,28 +41,28 @@ piranha.userlist = new Vue({
                 return;
             }
 
-            piranha.alert.open({
-                title: piranha.resources.texts.delete,
-                body: piranha.resources.texts.deleteUserConfirm + userInfo,
+            Aero.alert.open({
+                title: Aero.resources.texts.delete,
+                body: Aero.resources.texts.deleteUserConfirm + userInfo,
                 confirmCss: "btn-danger",
                 confirmIcon: "fas fa-trash",
-                confirmText: piranha.resources.texts.delete,
+                confirmText: Aero.resources.texts.delete,
                 onConfirm: function () {
-                    fetch(piranha.baseUrl + "manager/user/delete", {
+                    fetch(Aero.baseUrl + "manager/user/delete", {
                         method: "delete",
-                        headers: piranha.utils.antiForgeryHeaders(),
+                        headers: Aero.utils.antiForgeryHeaders(),
                         body: JSON.stringify(user.id)
                     })
                     .then(function (response) { return response.json(); })
                     .then(function (result) {
-                        piranha.notifications.push(result.status);
+                        Aero.notifications.push(result.status);
 
                         self.load();
                     })
                     .catch(function (error) {
                         console.log("error:", error);
 
-                        piranha.notifications.push({
+                        Aero.notifications.push({
                             body: error,
                             type: "danger",
                             hide: true

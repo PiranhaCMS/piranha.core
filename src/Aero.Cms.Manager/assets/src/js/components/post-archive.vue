@@ -2,44 +2,44 @@
     <div :id="uid">
         <div class="mb-2">
             <div class="btn-group" role="group">
-                <button v-on:click="selectStatus('all')" class="btn btn-sm" :class="status === 'all' ? 'btn-primary' : 'btn-light'" href="#">{{ piranha.resources.texts.all }}</button>
-                <button v-on:click="selectStatus('draft')" class="btn btn-sm" :class="status === 'draft' ? 'btn-primary' : 'btn-light'" href="#">{{ piranha.resources.texts.drafts }}</button>
-                <button v-on:click="selectStatus('scheduled')" class="btn btn-sm" :class="status === 'scheduled' ? 'btn-primary' : 'btn-light'" href="#">{{ piranha.resources.texts.scheduled }}</button>
+                <button v-on:click="selectStatus('all')" class="btn btn-sm" :class="status === 'all' ? 'btn-primary' : 'btn-light'" href="#">{{ Aero.resources.texts.all }}</button>
+                <button v-on:click="selectStatus('draft')" class="btn btn-sm" :class="status === 'draft' ? 'btn-primary' : 'btn-light'" href="#">{{ Aero.resources.texts.drafts }}</button>
+                <button v-on:click="selectStatus('scheduled')" class="btn btn-sm" :class="status === 'scheduled' ? 'btn-primary' : 'btn-light'" href="#">{{ Aero.resources.texts.scheduled }}</button>
             </div>
             <div v-if="postTypes.length > 1" class="btn-group" role="group">
                 <button type="button" class="btn btn-sm btn-light dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    {{ piranha.resources.texts.all }}
+                    {{ Aero.resources.texts.all }}
                 </button>
                 <div class="dropdown-menu dropdown-menu-right">
                     <a v-for="type in postTypes" v-bind:key="type.id" href="#" class="dropdown-item">{{ type.title }}</a>
                 </div>
             </div>
             <div v-if="categories.length > 1" class="btn-group" role="group">
-                <button type="button" class="btn btn-sm dropdown-toggle" :class="category === piranha.resources.texts.allCategories ? 'btn-light' : 'btn-primary'" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <button type="button" class="btn btn-sm dropdown-toggle" :class="category === Aero.resources.texts.allCategories ? 'btn-light' : 'btn-primary'" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     {{ category }}
                 </button>
                 <div class="dropdown-menu dropdown-menu-right">
-                    <a v-on:click.prevent="selectCategory(piranha.resources.texts.allCategories)" href="#" class="dropdown-item">{{ piranha.resources.texts.allCategories }}</a>
+                    <a v-on:click.prevent="selectCategory(Aero.resources.texts.allCategories)" href="#" class="dropdown-item">{{ Aero.resources.texts.allCategories }}</a>
                     <a v-on:click.prevent="selectCategory(category.title)" v-for="category in categories" v-bind:key="category.slug" href="#" class="dropdown-item">{{ category.title }}</a>
                 </div>
             </div>
-            <div v-if="postTypes.length > 1 && piranha.permissions.posts.add" class="btn-group float-right">
-                <button id="addPostGroup" class="btn btn-sm btn-primary btn-labeled dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fas fa-plus"></i>{{ piranha.resources.texts.add }}</button>
+            <div v-if="postTypes.length > 1 && Aero.permissions.posts.add" class="btn-group float-right">
+                <button id="addPostGroup" class="btn btn-sm btn-primary btn-labeled dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fas fa-plus"></i>{{ Aero.resources.texts.add }}</button>
                 <div class="dropdown-menu dropdown-menu-right" aria-labelledby="addPostGroup">
-                    <a class="dropdown-item" :href="piranha.baseUrl + type.addUrl + id + '/' + type.id" v-bind:key="'add-' + type.id" v-for="type in postTypes">{{ type.title }}</a>
+                    <a class="dropdown-item" :href="Aero.baseUrl + type.addUrl + id + '/' + type.id" v-bind:key="'add-' + type.id" v-for="type in postTypes">{{ type.title }}</a>
                 </div>
             </div>
-            <a v-if="postTypes.length === 1 && piranha.permissions.posts.add" :href="piranha.baseUrl + postTypes[0].addUrl + id + '/' + postTypes[0].id" class="btn btn-sm btn-primary btn-labeled float-right"><i class="fas fa-plus"></i>{{ piranha.resources.texts.add }}</a>
+            <a v-if="postTypes.length === 1 && Aero.permissions.posts.add" :href="Aero.baseUrl + postTypes[0].addUrl + id + '/' + postTypes[0].id" class="btn btn-sm btn-primary btn-labeled float-right"><i class="fas fa-plus"></i>{{ Aero.resources.texts.add }}</a>
         </div>
         <table v-if="items.length > 0" class="table">
             <tbody>
                 <tr v-bind:key="post.id" v-for="post in selectedPosts" :class="{ unpublished: post.status === 'unpublished' || post.isScheduled }">
                     <td>
-                        <a :href="piranha.baseUrl + post.editUrl + post.id">{{ post.title }}</a>
+                        <a :href="Aero.baseUrl + post.editUrl + post.id">{{ post.title }}</a>
                         <small v-if="post.status === 'published' || post.status === 'draft'" class="text-muted">| {{ post.published }}</small>
                         <small v-else-if="post.status === 'unpublished'" class="text-muted">| Unpublished</small>
-                        <span v-if="post.status === 'draft'" class="badge badge-info float-right">{{ piranha.resources.texts.draft }}</span>
-                        <span v-if="post.isScheduled" class="badge badge-info float-right">{{ piranha.resources.texts.scheduled }}</span>
+                        <span v-if="post.status === 'draft'" class="badge badge-info float-right">{{ Aero.resources.texts.draft }}</span>
+                        <span v-if="post.isScheduled" class="badge badge-info float-right">{{ Aero.resources.texts.scheduled }}</span>
                     </td>
                     <td>
                         {{ post.typeName }}
@@ -48,7 +48,7 @@
                         {{ post.category }}
                     </td>
                     <td class="actions one">
-                        <a v-if="piranha.permissions.posts.delete" v-on:click.prevent="remove(post.id)" class="danger"><i class="fas fa-trash"></i></a>
+                        <a v-if="Aero.permissions.posts.delete" v-on:click.prevent="remove(post.id)" class="danger"><i class="fas fa-trash"></i></a>
                     </td>
                 </tr>
             </tbody>
@@ -80,7 +80,7 @@ export default {
             totalPages: 0,
             index: 0,
             status: "all",
-            category: piranha.resources.texts.allCategories
+            category: Aero.resources.texts.allCategories
         }
     },
     methods: {
@@ -91,7 +91,7 @@ export default {
                 index = 0;
             }
 
-            fetch(piranha.baseUrl + "manager/api/post/list/" + self.id + "/" + index)
+            fetch(Aero.baseUrl + "manager/api/post/list/" + self.id + "/" + index)
                 .then(function (response) { return response.json(); })
                 .then(function (result) {
                     self.items = result.posts;
@@ -106,21 +106,21 @@ export default {
         remove: function (postId) {
             var self = this;
 
-            piranha.alert.open({
-                title: piranha.resources.texts.delete,
-                body: piranha.resources.texts.deletePostConfirm,
+            Aero.alert.open({
+                title: Aero.resources.texts.delete,
+                body: Aero.resources.texts.deletePostConfirm,
                 confirmCss: "btn-danger",
                 confirmIcon: "fas fa-trash",
-                confirmText: piranha.resources.texts.delete,
+                confirmText: Aero.resources.texts.delete,
                 onConfirm: function () {
-                    fetch(piranha.baseUrl + "manager/api/post/delete", {
+                    fetch(Aero.baseUrl + "manager/api/post/delete", {
                         method: "delete",
-                        headers: piranha.utils.antiForgeryHeaders(),
+                        headers: Aero.utils.antiForgeryHeaders(),
                         body: JSON.stringify(postId)
                     })
                     .then(function (response) { return response.json(); })
                     .then(function (result) {
-                        piranha.notifications.push(result);
+                        Aero.notifications.push(result);
 
                         self.load();
                     })
@@ -156,7 +156,7 @@ export default {
         },
         isSelected: function (item) {
             // Check category
-            if (this.category !== piranha.resources.texts.allCategories && item.category !== this.category) {
+            if (this.category !== Aero.resources.texts.allCategories && item.category !== this.category) {
                 return false;
             }
 

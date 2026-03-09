@@ -54,7 +54,7 @@ public static class AeroHtmlExtensions
         if (generator)
         {
             // Generate generator tag
-            sb.AppendLine($"<meta name=\"generator\" content=\"Aero.Cms CMS { Aero.Cms.Utils.GetAssemblyVersion(typeof(Aero.Cms.App).Assembly) }\">");
+            sb.AppendLine($"<meta name=\"generator\" content=\"Aero Cms { Aero.Cms.Utils.GetAssemblyVersion(typeof(Aero.Cms.App).Assembly) }\">");
         }
 
         if (opengraph)

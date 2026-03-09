@@ -1,8 +1,8 @@
 /*global
-    piranha
+    Aero
 */
 
-piranha.contentedit = new Vue({
+Aero.contentedit = new Vue({
     el: "#contentedit",
     data: {
         loading: true,
@@ -53,13 +53,13 @@ piranha.contentedit = new Vue({
         },
         primaryImageUrl: function () {
             if (this.primaryImage.media != null) {
-                return piranha.utils.formatUrl("~/manager/api/media/url/" + this.primaryImage.id + "/448/200");
+                return Aero.utils.formatUrl("~/manager/api/media/url/" + this.primaryImage.id + "/448/200");
             } else {
-                return piranha.utils.formatUrl("~/manager/assets/img/empty-image.png");
+                return Aero.utils.formatUrl("~/manager/assets/img/empty-image.png");
             }
         },
         isExcerptEmpty: function () {
-            return piranha.utils.isEmptyText(this.excerpt);
+            return Aero.utils.isEmptyText(this.excerpt);
         },
         currentLanguage: function () {
             if (this.languages === null)
@@ -145,7 +145,7 @@ piranha.contentedit = new Vue({
         load: function (id, languageId) {
             var self = this;
 
-            var url = piranha.baseUrl + "manager/api/content/" + id;
+            var url = Aero.baseUrl + "manager/api/content/" + id;
             if (languageId != null) {
                 url += "/" + languageId;
             }
@@ -161,7 +161,7 @@ piranha.contentedit = new Vue({
         create: function (contentType) {
             var self = this;
 
-            fetch(piranha.baseUrl + "manager/api/content/create/" + contentType)
+            fetch(Aero.baseUrl + "manager/api/content/create/" + contentType)
                 .then(function (response) { return response.json(); })
                 .then(function (result) {
                     self.bind(result);
@@ -181,7 +181,7 @@ piranha.contentedit = new Vue({
         save: function ()
         {
             this.saving = true;
-            this.saveInternal(piranha.baseUrl + "manager/api/content/save");
+            this.saveInternal(Aero.baseUrl + "manager/api/content/save");
         },
         saveInternal: function (route) {
             var self = this;
@@ -205,7 +205,7 @@ piranha.contentedit = new Vue({
 
             fetch(route, {
                 method: "post",
-                headers: piranha.utils.antiForgeryHeaders(),
+                headers: Aero.utils.antiForgeryHeaders(),
                 body: JSON.stringify(model)
             })
             .then(function (response) { return response.json(); })
@@ -217,9 +217,9 @@ piranha.contentedit = new Vue({
                 self.selectedRoute = result.selectedRoute;
 
                 if (oldState === 'new' && result.state !== 'new') {
-                    window.history.replaceState({ state: "created"}, "Edit content", piranha.baseUrl + "manager/content/edit/" + result.typeId + "/" + result.id);
+                    window.history.replaceState({ state: "created"}, "Edit content", Aero.baseUrl + "manager/content/edit/" + result.typeId + "/" + result.id);
                 }
-                piranha.notifications.push(result.status);
+                Aero.notifications.push(result.status);
 
                 self.saving = false;
 
@@ -232,35 +232,35 @@ piranha.contentedit = new Vue({
         remove: function () {
             var self = this;
 
-            piranha.alert.open({
-                title: piranha.resources.texts.delete,
-                body: piranha.resources.texts.deletePageConfirm,
+            Aero.alert.open({
+                title: Aero.resources.texts.delete,
+                body: Aero.resources.texts.deletePageConfirm,
                 confirmCss: "btn-danger",
                 confirmIcon: "fas fa-trash",
-                confirmText: piranha.resources.texts.delete,
+                confirmText: Aero.resources.texts.delete,
                 onConfirm: function () {
                     var groupId = self.groupId;
 
-                    fetch(piranha.baseUrl + "manager/api/content/delete", {
+                    fetch(Aero.baseUrl + "manager/api/content/delete", {
                         method: "delete",
-                        headers: piranha.utils.antiForgeryHeaders(),
+                        headers: Aero.utils.antiForgeryHeaders(),
                         body: JSON.stringify(self.id)
                     })
                     .then(function (response) { return response.json(); })
                     .then(function (result) {
-                        piranha.notifications.push(result);
+                        Aero.notifications.push(result);
 
-                        window.location = piranha.baseUrl + "manager/content/" + groupId;
+                        window.location = Aero.baseUrl + "manager/content/" + groupId;
                     })
                     .catch(function (error) { console.log("error:", error ); });
                 }
             });
         },
         addBlock: function (type, pos) {
-            fetch(piranha.baseUrl + "manager/api/content/block/" + type)
+            fetch(Aero.baseUrl + "manager/api/content/block/" + type)
                 .then(function (response) { return response.json(); })
                 .then(function (result) {
-                    piranha.contentedit.blocks.splice(pos, 0, result.body);
+                    Aero.contentedit.blocks.splice(pos, 0, result.body);
                 })
                 .catch(function (error) { console.log("error:", error );
             });
@@ -289,20 +289,20 @@ piranha.contentedit = new Vue({
         selectRegion: function (region) {
             this.selectedRegion = region;
             Vue.nextTick(function () {
-                piranha.editor.refreshMarkdown();
+                Aero.editor.refreshMarkdown();
             });
         },
         selectSetting: function (uid) {
             this.selectedSetting = uid;
             Vue.nextTick(function () {
-                piranha.editor.refreshMarkdown();
+                Aero.editor.refreshMarkdown();
             });
         },
         selectPrimaryImage: function () {
             if (this.primaryImage.media !== null) {
-                piranha.mediapicker.open(this.updatePrimaryImage, "Image", this.primaryImage.media.folderId);
+                Aero.mediapicker.open(this.updatePrimaryImage, "Image", this.primaryImage.media.folderId);
             } else {
-                piranha.mediapicker.openCurrentFolder(this.updatePrimaryImage, "Image");
+                Aero.mediapicker.openCurrentFolder(this.updatePrimaryImage, "Image");
             }
         },
         removePrimaryImage: function () {
@@ -346,7 +346,7 @@ piranha.contentedit = new Vue({
                 $("#selectedCategory").select2({
                     tags: true,
                     selectOnClose: true,
-                    placeholder: piranha.resources.texts.addCategory
+                    placeholder: Aero.resources.texts.addCategory
                 });
                 $("#selectedCategory").on("change", function() {
                     var item = $(this).find("option:selected").text();
@@ -358,7 +358,7 @@ piranha.contentedit = new Vue({
                 $("#selectedTags").select2({
                     tags: true,
                     selectOnClose: false,
-                    placeholder: piranha.resources.texts.addTags
+                    placeholder: Aero.resources.texts.addTags
                 });
                 $("#selectedTags").on("change", function() {
                     var items = $(this).find("option:selected");

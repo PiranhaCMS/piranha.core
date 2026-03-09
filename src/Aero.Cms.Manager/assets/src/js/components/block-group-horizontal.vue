@@ -1,7 +1,7 @@
 <template>
     <div :id="uid" class="block-group">
         <div class="actions block-group-actions">
-            <button v-on:click.prevent="piranha.blockpicker.open(addGroupBlock, 0, model.type)" class="btn btn-sm add">
+            <button v-on:click.prevent="Aero.blockpicker.open(addGroupBlock, 0, model.type)" class="btn btn-sm add">
                 <i class="fas fa-plus"></i>
             </button>
             <button v-on:click.prevent='toggleHeader()' v-if='model.fields.length > 0' class='btn btn-sm' :class='{ selected: model.meta.showHeader }'>
@@ -20,7 +20,7 @@
         <div class="row block-group-items">
             <div v-if="model.items.length === 0" class="col">
                 <div class="empty-info unsortable">
-                    <p>{{ piranha.resources.texts.emptyAddAbove }}</p>
+                    <p>{{ Aero.resources.texts.emptyAddAbove }}</p>
                 </div>
             </div>
             <div v-for="child in model.items" v-bind:key="child.meta.uid" class="col">
@@ -57,7 +57,7 @@ export default {
         addGroupBlock: function (type, pos) {
             var self = this;
 
-            fetch(piranha.baseUrl + "manager/api/content/block/" + type)
+            fetch(Aero.baseUrl + "manager/api/content/block/" + type)
                 .then(function (response) { return response.json(); })
                 .then(function (result) {
                     sortable("#" + self.uid + " .block-group-items", "destroy");

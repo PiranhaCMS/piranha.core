@@ -1,14 +1,14 @@
 
 //
 // Setting up a common event bus
-// for all Vue apps in Piranha
+// for all Vue apps in Aero
 //
 Vue.prototype.eventBus = new Vue();
 /*global
-    piranha
+    Aero
 */
 
-piranha.accessibility = new function () {
+Aero.accessibility = new function () {
     "use strict";
 
     var self = this;
@@ -74,10 +74,10 @@ piranha.accessibility = new function () {
 }
 
 /*global
-    piranha
+    Aero
 */
 
-piranha.alert = new Vue({
+Aero.alert = new Vue({
     el: "#alert",
     data: {
         title: null,
@@ -102,10 +102,10 @@ piranha.alert = new Vue({
                 this.body = options.body;
                 this.confirmCss = options.confirmCss ? options.confirmCss : "btn-success";
                 this.confirmIcon = options.confirmIcon;
-                this.confirmText = options.confirmText ? options.confirmText : piranha.resources.texts.ok;
+                this.confirmText = options.confirmText ? options.confirmText : Aero.resources.texts.ok;
                 this.cancelCss = options.cancelCss ? options.cancelCss : "btn-secondary";
                 this.cancelIcon = options.cancelIcon;
-                this.cancelText = options.cancelText ? options.cancelText : piranha.resources.texts.cancel;
+                this.cancelText = options.cancelText ? options.cancelText : Aero.resources.texts.cancel;
                 this.onConfirm = options.onConfirm;
                 this.onCancel = options.onCancel;
                 this.verifyPhrase = options.verifyPhrase;
@@ -140,10 +140,10 @@ piranha.alert = new Vue({
     }
 });
 /*global
-    piranha
+    Aero
 */
 
-piranha.archivepicker = new Vue({
+Aero.archivepicker = new Vue({
     el: "#archivepicker",
     data: {
         search: '',
@@ -168,7 +168,7 @@ piranha.archivepicker = new Vue({
     },
     methods: {
         load: function (siteId) {
-            var url = piranha.baseUrl + "manager/api/page/archives" + (siteId ? "/" + siteId : "");
+            var url = Aero.baseUrl + "manager/api/page/archives" + (siteId ? "/" + siteId : "");
             var self = this;
 
             fetch(url)
@@ -182,7 +182,7 @@ piranha.archivepicker = new Vue({
                 .catch(function (error) { console.log("error:", error ); });
         },
         refresh: function () {
-            this.load(piranha.archivepicker.currentSiteId);
+            this.load(Aero.archivepicker.currentSiteId);
         },
         open: function (callback, siteId) {
             this.search = '';
@@ -216,10 +216,10 @@ $(document).ready(function() {
 Dropzone.autoDiscover = false;
 
 /*global
-    piranha
+    Aero
 */
 
-piranha.dropzone = new function () {
+Aero.dropzone = new function () {
     var self = this;
 
     self.init = function (selector, options) {
@@ -227,14 +227,14 @@ piranha.dropzone = new function () {
 
         var defaultOptions = {
             paramName: 'Uploads',
-            url: piranha.baseUrl + "manager/api/media/upload",
-            headers: piranha.utils.antiForgeryHeaders(false),
+            url: Aero.baseUrl + "manager/api/media/upload",
+            headers: Aero.utils.antiForgeryHeaders(false),
             thumbnailWidth: 70,
             thumbnailHeight: 70,
             previewsContainer: selector + " .media-list",
             previewTemplate: document.querySelector( "#media-upload-template").innerHTML,
             uploadMultiple: true,
-            timeout: piranha.xhrTimeout * 1000,
+            timeout: Aero.xhrTimeout * 1000,
             init: function () {
                 var self = this;
 
@@ -282,10 +282,10 @@ piranha.dropzone = new function () {
     }
 };
 /*global
-    piranha
+    Aero
 */
 
-piranha.permissions = {
+Aero.permissions = {
     loaded: false,
     aliases: {
         edit: false,
@@ -329,7 +329,7 @@ piranha.permissions = {
         var self = this;
 
         if (!this.loaded) {
-            fetch(piranha.baseUrl + "manager/api/permissions")
+            fetch(Aero.baseUrl + "manager/api/permissions")
                 .then(function (response) { return response.json(); })
                 .then(function (result) {
                     self.aliases = result.aliases;
@@ -356,15 +356,15 @@ piranha.permissions = {
     }
 };
 /*global
-    piranha
+    Aero
 */
 
-piranha.utils = {
+Aero.utils = {
     getOrigin() {
         return window.location.origin;
     },
     formatUrl: function (str) {
-        return str.replace("~/", piranha.baseUrl);
+        return str.replace("~/", Aero.baseUrl);
     },
     isEmptyHtml: function (str) {
         return str == null || str.replace(/(<([^>]+)>)/ig,"").replace(/\s/g, "") == "" && str.indexOf("<img") === -1;
@@ -379,7 +379,7 @@ piranha.utils = {
         const cookies = document.cookie.split(";");
         for (let i = 0; i < cookies.length; i++) {
             let c = cookies[i].trim().split("=");
-            if (c[0] === piranha.antiForgery.cookieName) {
+            if (c[0] === Aero.antiForgery.cookieName) {
                 return c[1];
             }
         }
@@ -392,7 +392,7 @@ piranha.utils = {
         {
             headers["Content-Type"] = "application/json";
         }
-        headers[piranha.antiForgery.headerName] = piranha.utils.antiForgery();
+        headers[Aero.antiForgery.headerName] = Aero.utils.antiForgery();
 
         return headers;
     }    
@@ -475,10 +475,10 @@ $(window).scroll(function () {
     });
 });
 /*global
-    piranha
+    Aero
 */
 
-piranha.blockpicker = new Vue({
+Aero.blockpicker = new Vue({
     el: "#blockpicker",
     data: {
         filter: "",
@@ -503,15 +503,15 @@ piranha.blockpicker = new Vue({
         open: function (callback, index, parentType) {
             var self = this;
 
-            var url = piranha.baseUrl + "manager/api/content/blocktypes";
+            var url = Aero.baseUrl + "manager/api/content/blocktypes";
 
-            if (piranha.pageedit)
+            if (Aero.pageedit)
             {
-                url += "/page/" + piranha.pageedit.typeId;
+                url += "/page/" + Aero.pageedit.typeId;
             }
-            else if (piranha.postedit)
+            else if (Aero.postedit)
             {
-                url += "/post/" + piranha.postedit.typeId;
+                url += "/post/" + Aero.postedit.typeId;
             }
 
             fetch(url + (parentType != null ? "/" + parentType : ""))
@@ -569,10 +569,10 @@ $(document).ready(function() {
     });
 });
 /*global
-    piranha
+    Aero
 */
 
-piranha.notifications = new Vue({
+Aero.notifications = new Vue({
     el: "#notification-hub",
     data: {
         items: [],
@@ -595,7 +595,7 @@ piranha.notifications = new Vue({
                 'notification-warning': notification.type === "warning"
             };
 
-            piranha.notifications.items.push(notification);
+            Aero.notifications.items.push(notification);
 
             setTimeout(function () {
                 notification.style.visible = true;
@@ -606,7 +606,7 @@ piranha.notifications = new Vue({
                         notification.style.visible = false;
 
                         setTimeout(function () {
-                            piranha.notifications.items.shift();
+                            Aero.notifications.items.shift();
                         }, 200);
                     }, 5000);
                 }
@@ -615,10 +615,10 @@ piranha.notifications = new Vue({
     }
 });
 /*global
-    piranha
+    Aero
 */
 
-piranha.contentpicker = new Vue({
+Aero.contentpicker = new Vue({
     el: "#contentpicker",
     data: {
         search: '',
@@ -665,7 +665,7 @@ piranha.contentpicker = new Vue({
             }
         },
         load: function (groupId, partial) {
-            var url = piranha.baseUrl + "manager/api/content/" + (groupId ? groupId + "/" : "") + "list";
+            var url = Aero.baseUrl + "manager/api/content/" + (groupId ? groupId + "/" : "") + "list";
             var self = this;
 
             fetch(url)
@@ -679,7 +679,7 @@ piranha.contentpicker = new Vue({
 
         },
         refresh: function () {
-            this.load(piranha.contentpicker.currentGroupId, true);
+            this.load(Aero.contentpicker.currentGroupId, true);
         },
         open: function (groupId, callback) {
             this.search = '';
@@ -710,10 +710,10 @@ $(document).ready(function() {
     });
 });
 /*global
-    piranha
+    Aero
 */
 
-piranha.mediapicker = new Vue({
+Aero.mediapicker = new Vue({
     el: "#mediapicker",
     data: {
         search: '',
@@ -740,16 +740,16 @@ piranha.mediapicker = new Vue({
     computed: {
         filteredFolders: function () {
             return this.folders.filter(function (item) {
-                if (piranha.mediapicker.search.length > 0) {
-                    return item.name.toLowerCase().indexOf(piranha.mediapicker.search.toLowerCase()) > -1
+                if (Aero.mediapicker.search.length > 0) {
+                    return item.name.toLowerCase().indexOf(Aero.mediapicker.search.toLowerCase()) > -1
                 }
                 return true;
             });
         },
         filteredItems: function () {
             return this.items.filter(function (item) {
-                if (piranha.mediapicker.search.length > 0) {
-                    return item.filename.toLowerCase().indexOf(piranha.mediapicker.search.toLowerCase()) > -1
+                if (Aero.mediapicker.search.length > 0) {
+                    return item.filename.toLowerCase().indexOf(Aero.mediapicker.search.toLowerCase()) > -1
                 }
                 return true;
             });
@@ -762,7 +762,7 @@ piranha.mediapicker = new Vue({
         load: function (id) {
             var self = this;
 
-            var url = piranha.baseUrl + "manager/api/media/list" + (id ? "/" + id : "")+"/?width=210&height=160";
+            var url = Aero.baseUrl + "manager/api/media/list" + (id ? "/" + id : "")+"/?width=210&height=160";
             if (self.filter) {
                 url += "&filter=" + self.filter;
             }
@@ -799,10 +799,10 @@ piranha.mediapicker = new Vue({
                 .catch(function (error) { console.log("error:", error ); });
         },
         getThumbnailUrl: function (item) {
-            return item.altVersionUrl !== null ? item.altVersionUrl : piranha.baseUrl + "manager/api/media/url/" + item.id + "/210/160";
+            return item.altVersionUrl !== null ? item.altVersionUrl : Aero.baseUrl + "manager/api/media/url/" + item.id + "/210/160";
         },
         refresh: function () {
-            piranha.mediapicker.load(piranha.mediapicker.currentFolderId);
+            Aero.mediapicker.load(Aero.mediapicker.currentFolderId);
         },
         open: function (callback, filter, folderId) {
             this.search = '';
@@ -857,9 +857,9 @@ piranha.mediapicker = new Vue({
             var self = this;
 
             if (self.folderName !== "") {
-                fetch(piranha.baseUrl + "manager/api/media/folder/save" + (self.filter ? "?filter=" + self.filter : ""), {
+                fetch(Aero.baseUrl + "manager/api/media/folder/save" + (self.filter ? "?filter=" + self.filter : ""), {
                     method: "post",
-                    headers: piranha.utils.antiForgeryHeaders(),
+                    headers: Aero.utils.antiForgeryHeaders(),
                     body: JSON.stringify({
                         parentId: self.currentFolderId,
                         name: self.folderName
@@ -878,10 +878,10 @@ piranha.mediapicker = new Vue({
 
                     if (result.status !== 400) {
                         // Push status to notification hub
-                        piranha.notifications.push(result.status);
+                        Aero.notifications.push(result.status);
                     } else {
                         // Unauthorized request
-                        piranha.notifications.unauthorized();
+                        Aero.notifications.unauthorized();
                     }
                 })
                 .catch(function (error) {
@@ -892,9 +892,9 @@ piranha.mediapicker = new Vue({
     },
     mounted: function () {
         var self = this;
-        piranha.permissions.load(function () {
-            if (piranha.permissions.media.add) {
-                self.dropzone = piranha.dropzone.init("#mediapicker-upload-container");
+        Aero.permissions.load(function () {
+            if (Aero.permissions.media.add) {
+                self.dropzone = Aero.dropzone.init("#mediapicker-upload-container");
                 self.dropzone.on("complete", function (file) {
                     if (file.status === "success") {
                         setTimeout(function () {
@@ -903,7 +903,7 @@ piranha.mediapicker = new Vue({
                     }
                 });
                 self.dropzone.on("queuecomplete", function () {
-                    piranha.mediapicker.refresh();
+                    Aero.mediapicker.refresh();
                 });
             }
         });
@@ -916,10 +916,10 @@ $(document).ready(function() {
     });
 });
 /*global
-    piranha
+    Aero
 */
 
-piranha.pagepicker = new Vue({
+Aero.pagepicker = new Vue({
     el: "#pagepicker",
     data: {
         search: '',
@@ -963,7 +963,7 @@ piranha.pagepicker = new Vue({
     },
     methods: {
         load: function (siteId) {
-            var url = piranha.baseUrl + "manager/api/page/sitemap" + (siteId ? "/" + siteId : "");
+            var url = Aero.baseUrl + "manager/api/page/sitemap" + (siteId ? "/" + siteId : "");
             var self = this;
 
             fetch(url)
@@ -977,7 +977,7 @@ piranha.pagepicker = new Vue({
                 .catch(function (error) { console.log("error:", error ); });
         },
         refresh: function () {
-            this.load(piranha.pagepicker.currentSiteId);
+            this.load(Aero.pagepicker.currentSiteId);
         },
         open: function (callback, siteId) {
             this.search = '';
@@ -1008,10 +1008,10 @@ $(document).ready(function() {
     });
 });
 /*global
-    piranha
+    Aero
 */
 
-piranha.postpicker = new Vue({
+Aero.postpicker = new Vue({
     el: "#postpicker",
     data: {
         search: '',
@@ -1028,8 +1028,8 @@ piranha.postpicker = new Vue({
     computed: {
         filteredPosts: function () {
             return this.posts.filter(function (post) {
-                if (piranha.postpicker.search.length > 0) {
-                    return post.title.toLowerCase().indexOf(piranha.postpicker.search.toLowerCase()) > -1
+                if (Aero.postpicker.search.length > 0) {
+                    return post.title.toLowerCase().indexOf(Aero.postpicker.search.toLowerCase()) > -1
                 }
                 return true;
             });
@@ -1037,7 +1037,7 @@ piranha.postpicker = new Vue({
     },
     methods: {
         load: function (siteId, archiveId) {
-            var url = piranha.baseUrl + "manager/api/post/modal";
+            var url = Aero.baseUrl + "manager/api/post/modal";
 
             if (siteId) {
                 url += "?siteId=" + siteId;
@@ -1049,15 +1049,15 @@ piranha.postpicker = new Vue({
             fetch(url)
                 .then(function (response) { return response.json(); })
                 .then(function (result) {
-                    piranha.postpicker.sites = result.sites;
-                    piranha.postpicker.archives = result.archives;
-                    piranha.postpicker.posts = result.posts;
+                    Aero.postpicker.sites = result.sites;
+                    Aero.postpicker.archives = result.archives;
+                    Aero.postpicker.posts = result.posts;
 
-                    piranha.postpicker.currentSiteId = result.siteId;
-                    piranha.postpicker.currentArchiveId = result.archiveId;
+                    Aero.postpicker.currentSiteId = result.siteId;
+                    Aero.postpicker.currentArchiveId = result.archiveId;
 
-                    piranha.postpicker.currentSiteTitle = result.siteTitle;
-                    piranha.postpicker.currentArchiveTitle = result.archiveTitle;
+                    Aero.postpicker.currentSiteTitle = result.siteTitle;
+                    Aero.postpicker.currentArchiveTitle = result.archiveTitle;
                 })
                 .catch(function (error) { console.log("error:", error ); });
         },
@@ -1093,10 +1093,10 @@ $(document).ready(function() {
     });
 });
 /*global
-    piranha
+    Aero
 */
 
-piranha.preview = new Vue({
+Aero.preview = new Vue({
     el: "#previewModal",
     data: {
         empty: {
@@ -1117,18 +1117,18 @@ piranha.preview = new Vue({
     },
     methods: {
         openItem: function (media) {
-            piranha.preview.media = media;
-            piranha.preview.show();
+            Aero.preview.media = media;
+            Aero.preview.show();
         },
         //TODO: Rename loadAndOpen?
         open: function (mediaId) {
-            piranha.preview.load(mediaId);
-            piranha.preview.show();
+            Aero.preview.load(mediaId);
+            Aero.preview.show();
         },
         load: function (mediaId) {
             var self = this;
 
-            fetch(piranha.baseUrl + "manager/api/media/" + mediaId)
+            fetch(Aero.baseUrl + "manager/api/media/" + mediaId)
                 .then(function (response) { return response.json(); })
                 .then(function (result) {
                     self.media = result;
@@ -1146,14 +1146,14 @@ piranha.preview = new Vue({
                 properties: media.properties
             };
 
-            fetch(piranha.baseUrl + "manager/api/media/meta/save", {
+            fetch(Aero.baseUrl + "manager/api/media/meta/save", {
                 method: "post",
-                headers: piranha.utils.antiForgeryHeaders(),
+                headers: Aero.utils.antiForgeryHeaders(),
                 body: JSON.stringify(model)
             })
             .then(function (response) { return response.json(); })
             .then(function (result) {
-                piranha.notifications.push(result);
+                Aero.notifications.push(result);
 
                 if (result.type === "success") {
                     self.close();
@@ -1169,7 +1169,7 @@ piranha.preview = new Vue({
         close: function () {
             $("#previewModal").modal("hide");
             setTimeout(function () {
-                piranha.preview.clear();
+                Aero.preview.clear();
             }, 300)
         },
         clear: function () {
@@ -1180,26 +1180,26 @@ piranha.preview = new Vue({
         this.clear();
     },
     mounted: function () {
-        this.dropzone = piranha.dropzone.init("#media-update-container", {
+        this.dropzone = Aero.dropzone.init("#media-update-container", {
             uploadMultiple: false
         });
         this.dropzone.on("complete", function (file) {
             setTimeout(function () {
-                piranha.preview.dropzone.removeFile(file);
+                Aero.preview.dropzone.removeFile(file);
             }, 3000)
         })
         this.dropzone.on("queuecomplete", function () {
-            piranha.preview.load(piranha.preview.media.id);
-            piranha.media.refresh();
+            Aero.preview.load(Aero.preview.media.id);
+            Aero.media.refresh();
         })
     }
 });
 
 /*global
-    piranha
+    Aero
 */
 
-piranha.languageedit = new Vue({
+Aero.languageedit = new Vue({
     el: "#languageedit",
     data: {
         loading: true,
@@ -1231,7 +1231,7 @@ piranha.languageedit = new Vue({
             var self = this;
 
             self.loading = true;
-            fetch(piranha.baseUrl + "manager/api/language")
+            fetch(Aero.baseUrl + "manager/api/language")
                 .then(function (response) { return response.json(); })
                 .then(function (result) {
                     self.bind(result);
@@ -1247,9 +1247,9 @@ piranha.languageedit = new Vue({
                 var self = this;
 
                 self.loading = true;
-                fetch(piranha.baseUrl + "manager/api/language", {
+                fetch(Aero.baseUrl + "manager/api/language", {
                     method: "post",
-                    headers: piranha.utils.antiForgeryHeaders(),
+                    headers: Aero.utils.antiForgeryHeaders(),
                     body: JSON.stringify({
                         items: JSON.parse(JSON.stringify(self.items))
                     })
@@ -1264,10 +1264,10 @@ piranha.languageedit = new Vue({
                         // Refresh language list
                         self.refreshLanguageList();
                         // Push status to notification hub
-                        piranha.notifications.push(result.status);
+                        Aero.notifications.push(result.status);
                     } else {
                         // Unauthorized request
-                        piranha.notifications.unauthorized();
+                        Aero.notifications.unauthorized();
                         self.loading = false;
                     }
                 })
@@ -1280,9 +1280,9 @@ piranha.languageedit = new Vue({
             var self = this;
 
             self.loading = true;
-            fetch(piranha.baseUrl + "manager/api/language/" + item.id, {
+            fetch(Aero.baseUrl + "manager/api/language/" + item.id, {
                 method: "delete",
-                headers: piranha.utils.antiForgeryHeaders(),
+                headers: Aero.utils.antiForgeryHeaders(),
                 body: JSON.stringify(item)
             })
             .then(function (response) { return response.json(); })
@@ -1295,10 +1295,10 @@ piranha.languageedit = new Vue({
                     // Refresh language list
                     self.refreshLanguageList();
                     // Push status to notification hub
-                    piranha.notifications.push(result.status);
+                    Aero.notifications.push(result.status);
                 } else {
                     // Unauthorized request
-                    piranha.notifications.unauthorized();
+                    Aero.notifications.unauthorized();
                     self.loading = false;
                 }
             })
@@ -1372,17 +1372,17 @@ piranha.languageedit = new Vue({
             return isValid;
         },
         refreshLanguageList() {
-            if (piranha.siteedit) {
-                piranha.siteedit.refreshLanguageList();
+            if (Aero.siteedit) {
+                Aero.siteedit.refreshLanguageList();
             }
         }
     }
 });
 /*global
-    piranha
+    Aero
 */
 
-piranha.resources = new function() {
+Aero.resources = new function() {
     "use strict";
 
     var self = this;
@@ -1395,10 +1395,10 @@ piranha.resources = new function() {
     };
 };
 /*global
-    piranha, tinymce
+    Aero, tinymce
 */
 
-piranha.editor = {
+Aero.editor = {
     editors:[],
 
     addInline: function (id, toolbarId) {
@@ -1417,7 +1417,7 @@ piranha.editor = {
                 {
                     name: "image",
                     action: function customFunction(editor) {
-                        piranha.mediapicker.openCurrentFolder(function(media) {
+                        Aero.mediapicker.openCurrentFolder(function(media) {
                             var cm = editor.codemirror;
                             var active = simplemde.getState(cm).image;
 
@@ -1492,5 +1492,5 @@ Vue.component("page-item", {
       item.isExpanded = !item.isExpanded;
     }
   },
-  template: "\n<li :data-id=\"item.id\" class=\"dd-item\" :class=\"{ expanded: item.isExpanded || item.items.length === 0 }\">\n    <div class=\"sitemap-item expanded\">\n        <div class=\"link\">\n            <span class=\"actions\">\n                <a v-if=\"item.items.length > 0 && item.isExpanded\" v-on:click.prevent=\"toggleItem(item)\" class=\"expand\" href=\"#\"><i class=\"fas fa-minus\"></i></a>\n                <a v-if=\"item.items.length > 0 && !item.isExpanded\" v-on:click.prevent=\"toggleItem(item)\" class=\"expand\" href=\"#\"><i class=\"fas fa-plus\"></i></a>\n            </span>\n            <a href=\"#\" v-on:click.prevent=\"piranha.pagepicker.select(item)\">\n                {{ item.title }}\n            </a>\n        </div>\n        <div class=\"type d-none d-md-block\">\n            {{ item.typeName }}\n        </div>\n    </div>\n    <ol class=\"dd-list\" v-if=\"item.items.length > 0\">\n        <page-item v-for=\"child in item.items\" v-bind:key=\"child.id\" v-bind:item=\"child\">\n        </page-item>\n    </ol>\n</li>\n"
+  template: "\n<li :data-id=\"item.id\" class=\"dd-item\" :class=\"{ expanded: item.isExpanded || item.items.length === 0 }\">\n    <div class=\"sitemap-item expanded\">\n        <div class=\"link\">\n            <span class=\"actions\">\n                <a v-if=\"item.items.length > 0 && item.isExpanded\" v-on:click.prevent=\"toggleItem(item)\" class=\"expand\" href=\"#\"><i class=\"fas fa-minus\"></i></a>\n                <a v-if=\"item.items.length > 0 && !item.isExpanded\" v-on:click.prevent=\"toggleItem(item)\" class=\"expand\" href=\"#\"><i class=\"fas fa-plus\"></i></a>\n            </span>\n            <a href=\"#\" v-on:click.prevent=\"Aero.pagepicker.select(item)\">\n                {{ item.title }}\n            </a>\n        </div>\n        <div class=\"type d-none d-md-block\">\n            {{ item.typeName }}\n        </div>\n    </div>\n    <ol class=\"dd-list\" v-if=\"item.items.length > 0\">\n        <page-item v-for=\"child in item.items\" v-bind:key=\"child.id\" v-bind:item=\"child\">\n        </page-item>\n    </ol>\n</li>\n"
 });

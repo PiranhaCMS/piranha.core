@@ -15,7 +15,7 @@
                     <span v-if="meta.placeholder == null" class="text-secondary">&nbsp;</span>
                 </div>
                 <div class="card-body" v-else>
-                    <a :href="piranha.baseUrl + 'manager/page/edit/' + model.page.id" target="_blank">{{ model.page.title }}</a>
+                    <a :href="Aero.baseUrl + 'manager/page/edit/' + model.page.id" target="_blank">{{ model.page.title }}</a>
                 </div>
             </div>
         </div>
@@ -31,10 +31,10 @@ export default {
 
             if (this.model.page) {
                 siteId = this.model.page.siteId;
-            } else if (piranha.pageedit) {
-                siteId = piranha.pageedit.siteId;
+            } else if (Aero.pageedit) {
+                siteId = Aero.pageedit.siteId;
             }
-            piranha.archivepicker.open(this.update, siteId);
+            Aero.archivepicker.open(this.update, siteId);
         },
         remove: function () {
             this.model.id = null;

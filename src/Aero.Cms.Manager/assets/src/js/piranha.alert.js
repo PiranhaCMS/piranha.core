@@ -1,8 +1,8 @@
 /*global
-    piranha
+    Aero
 */
 
-piranha.alert = new Vue({
+Aero.alert = new Vue({
     el: "#alert",
     data: {
         title: null,
@@ -27,10 +27,10 @@ piranha.alert = new Vue({
                 this.body = options.body;
                 this.confirmCss = options.confirmCss ? options.confirmCss : "btn-success";
                 this.confirmIcon = options.confirmIcon;
-                this.confirmText = options.confirmText ? options.confirmText : piranha.resources.texts.ok;
+                this.confirmText = options.confirmText ? options.confirmText : Aero.resources.texts.ok;
                 this.cancelCss = options.cancelCss ? options.cancelCss : "btn-secondary";
                 this.cancelIcon = options.cancelIcon;
-                this.cancelText = options.cancelText ? options.cancelText : piranha.resources.texts.cancel;
+                this.cancelText = options.cancelText ? options.cancelText : Aero.resources.texts.cancel;
                 this.onConfirm = options.onConfirm;
                 this.onCancel = options.onCancel;
                 this.verifyPhrase = options.verifyPhrase;
