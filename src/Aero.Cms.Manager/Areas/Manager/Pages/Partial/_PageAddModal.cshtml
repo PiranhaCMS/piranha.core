@@ -1,0 +1,66 @@
+@using Aero.Manager
+@inject ManagerLocalizer Localizer
+
+<div id="pageAddModal" class="modal modal-panel" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <!-- Modal header -->
+            <div class="modal-header border-bottom-0">
+                <h5 class="modal-title"><i class="fas fa-file"></i> @Localizer.Page["Add page"]</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <!-- Tabs -->
+            <ul class="nav nav-tabs" id="pageAddTabs" role="tablist">
+                <li class="nav-item">
+                    <a href="#pageAddNew" data-toggle="tab" class="nav-link active"><i class="fas fa-plus"></i> @Localizer.General["Empty"]</a>
+                </li>
+                <li class="nav-item">
+                    <a href="#pageAddCopy" data-toggle="tab" class="nav-link"><i class="fas fa-copy"></i> @Localizer.General["Copy"]</a>
+                </li>
+            </ul>
+
+            <!-- Modal body -->
+            <div class="modal-body bg-light">
+                <!-- Tab content -->
+                <div id="pageAddTabsContent" class="tab-content">
+                    <div id="pageAddNew" class="tab-pane show active" role="tabpanel">
+                        <table class="table">
+                            <tbody>
+                                <tr v-for="(type) in pageTypes">
+                                    <td>
+                                        <a v-if="addPageId !== null" :href="piranha.baseUrl + 'manager/page/addrelative/' + addPageId + '/' + type.id + '/' + addAfter">{{ type.title }}</a>
+                                        <a v-else :href="piranha.baseUrl + type.addUrl + addToSiteId + '/' + type.id">{{ type.title }}</a>
+                                        <span v-if="type.description !== null" class="d-block dimmed">{{ type.description }}</span>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div id="pageAddCopy" class="tab-pane" role="tabpanel">
+                        <div v-if="sites.length > 1" class="form-group d-flex justify-content-center">
+                            <div class="dropdown">
+                                <button class="btn btn-primary btn-labeled dropdown-toggle" type="button" data-toggle="dropdown">
+                                    <span class="btn-label">
+                                        <i class="fas fa-globe"></i>
+                                    </span>
+                                    {{ addSiteTitle }}
+                                </button>
+                                <div class="dropdown-menu">
+                                    <a class="dropdown-item" href="#" li v-for="site in sites" v-on:click.prevent="selectSite(site.id)">{{ site.title }}</a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="sitemap sitemap-container">
+                            <ol v-if="site.id === addSiteId" v-for="site in sites">
+                                <pagecopy-item v-for="item in site.pages" v-bind:key="item.id" v-bind:item="item"></pagecopy-item>
+                            </ol>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

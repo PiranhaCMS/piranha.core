@@ -1,0 +1,21 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net10.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <PackageReference Include="IdGen" Version="3.0.7" />
+      <PackageReference Include="Microsoft.Extensions.Identity.Core" Version="10.0.3" />
+      <PackageReference Include="RavenDB.Client" Version="7.2.0" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\Aero.Cms.Manager.LocalAuth\Aero.Cms.Manager.LocalAuth.csproj" />
+      <ProjectReference Include="..\Aero.Cms.Manager\Aero.Cms.Manager.csproj" />
+      <ProjectReference Include="..\Aero.Cms.AspNetCore\Aero.Cms.AspNetCore.csproj" />
+    </ItemGroup>
+
+</Project>

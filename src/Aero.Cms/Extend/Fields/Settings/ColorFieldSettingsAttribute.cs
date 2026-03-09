@@ -1,0 +1,20 @@
+
+
+namespace Aero.Cms.Extend.Fields.Settings;
+
+/// <summary>
+/// Base class for field settings.
+/// </summary>
+[AttributeUsage(AttributeTargets.Property)]
+public class ColorFieldSettingsAttribute : FieldSettingsAttribute
+{
+    /// <summary>
+    /// Gets/sets if disallowing manual input.
+    /// </summary>
+    public bool DisallowInput { get; set; }
+
+    /// <summary>
+    /// Gets/sets the optional default value for field.
+    /// </summary>
+    public string DefaultValue { get; set; }
+}

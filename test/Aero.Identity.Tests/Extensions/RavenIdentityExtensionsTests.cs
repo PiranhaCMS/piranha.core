@@ -1,10 +1,10 @@
+using Aero.Cms;
 using Aero.Identity.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
 using Raven.Client.Documents.Session;
 using Moq;
-using Piranha;
-using Piranha.Manager.LocalAuth;
+using Aero.Cms.Manager.LocalAuth;
 using Xunit;
 
 namespace Aero.Identity.Tests.Extensions;
@@ -60,7 +60,7 @@ public class RavenIdentityExtensionsTests
     }
 
     [Fact]
-    public void AddPiranhaRavenDbIdentity_RegistersEverything()
+    public void AddAeroRavenDbIdentity_RegistersEverything()
     {
         // Arrange
         var services = new ServiceCollection();
@@ -70,7 +70,7 @@ public class RavenIdentityExtensionsTests
         services.AddScoped(_ => mockSession.Object);
 
         // Act
-        services.AddPiranhaRavenDbIdentity();
+        services.AddAeroRavenDbIdentity();
 
         var serviceProvider = services.BuildServiceProvider();
 

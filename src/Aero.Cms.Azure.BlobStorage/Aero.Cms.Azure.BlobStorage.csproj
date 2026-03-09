@@ -1,0 +1,18 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <RootNamespace>Piranha.Azure</RootNamespace>
+    <NoWarn>$(NoWarn);1591</NoWarn>
+    <Description>Package for storing uploaded media assets on Azure Blob Storage</Description>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(GITHUB_ACTIONS)' == 'true'">
+    <ContinuousIntegrationBuild>true</ContinuousIntegrationBuild>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Azure.Storage.Blobs" Version="12.18.0" />
+    <ProjectReference Include="..\Aero.Cms\Aero.Cms.csproj" />
+  </ItemGroup>
+
+</Project>

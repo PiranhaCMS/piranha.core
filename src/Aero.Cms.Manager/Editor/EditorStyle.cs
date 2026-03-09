@@ -1,0 +1,31 @@
+
+
+namespace Aero.Cms.Manager.Editor;
+
+/// <summary>
+/// A editor style item.
+/// </summary>
+public class EditorStyle
+{
+    /// <summary>
+    /// Gets/sets the display title.
+    /// </summary>
+    public string Title { get; set; }
+
+    /// <summary>
+    /// Gets/sets the tag the style should apply for.
+    /// </summary>
+    public string Tag { get; set; }
+
+    /// <summary>
+    /// Gets/sets the element type of the tag.
+    /// </summary>
+    public EditorStyleType Type { get; set; }
+
+    /// <summary>
+    /// Gets/sets the optional css classes that should be applied.
+    /// </summary>
+    public string Classes { get; set; }
+
+    public bool HasClasses { get { return !string.IsNullOrWhiteSpace(Classes); }}
+}

@@ -1,7 +1,6 @@
 using Raven.Client.Documents;
 using Raven.Embedded;
 using Raven.TestDriver;
-using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 
 namespace Aero.Identity.Tests;

@@ -1,0 +1,108 @@
+
+
+using System.Text.Json;
+using Aero.Cms.Models;
+using Aero.Cms.Repositories;
+using Raven.Client.Documents;
+
+namespace Aero.Cms.RavenDb.Repositories;
+
+internal class PageTypeRepository : IPageTypeRepository
+{
+    private readonly IDb _db;
+
+    /// <summary>
+    /// Default constructor.
+    /// </summary>
+    /// <param name="db">The current db connection</param>
+    public PageTypeRepository(IDb db)
+    {
+        _db = db;
+    }
+
+    /// <summary>
+    /// Gets all available models.
+    /// </summary>
+    /// <returns>The available models</returns>
+    public async Task<IEnumerable<PageType>> GetAll()
+    {
+        var models = new List<PageType>();
+        var types = await _db.PageTypes
+            
+            .OrderBy(t => t.Id)
+            .ToListAsync()
+            .ConfigureAwait(false);
+
+        foreach (var type in types)
+        {
+            models.Add(JsonSerializer.Deserialize<PageType>(type.Body));
+        }
+        return models;
+    }
+
+    /// <summary>
+    /// Gets the model with the specified id.
+    /// </summary>
+    /// <param name="id">The unique i</param>
+    /// <returns></returns>
+    public async Task<PageType> GetById(string id)
+    {
+        var type = await _db.PageTypes
+            
+            .FirstOrDefaultAsync(t => t.Id == id)
+            .ConfigureAwait(false);
+
+        if (type != null)
+        {
+            return JsonSerializer.Deserialize<PageType>(type.Body);
+        }
+        return null;
+    }
+
+    /// <summary>
+    /// Adds or updates the given model in the database
+    /// depending on its state.
+    /// </summary>
+    /// <param name="model">The model</param>
+    public async Task Save(PageType model)
+    {
+        var type = await _db.PageTypes
+            .FirstOrDefaultAsync(t => t.Id == model.Id)
+            .ConfigureAwait(false);
+
+        if (type == null) {
+            type = new Data.PageType
+            {
+                Id = model.Id,
+                Created = DateTime.Now
+            };
+            //await _db.PageTypes.AddAsync(type).ConfigureAwait(false);
+            await _db.session.StoreAsync(type).ConfigureAwait(false);
+        }
+        type.CLRType = model.CLRType;
+        type.Body = JsonSerializer.Serialize(model);
+        type.LastModified = DateTime.Now;
+
+        await _db.SaveChangesAsync().ConfigureAwait(false);
+    }
+
+    /// <summary>
+    /// Deletes the model with the specified id.
+    /// </summary>
+    /// <param name="id">The unique id</param>
+    public async Task Delete(string id)
+    {
+        var type = await _db.PageTypes
+            .FirstOrDefaultAsync(t => t.Id == id)
+            .ConfigureAwait(false);
+
+        if (type != null)
+        {
+            //_db.PageTypes.Remove(type);
+            _db.session.Delete(type);
+
+            await _db.SaveChangesAsync().ConfigureAwait(false);
+        }
+    }
+}
+

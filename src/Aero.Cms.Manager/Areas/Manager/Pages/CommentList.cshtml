@@ -1,0 +1,83 @@
+@page "~/manager/comments/{id:Guid?}"
+@using Aero.Manager
+@model CommentListViewModel
+@inject ManagerLocalizer Localizer
+@inject Aero.Cms.IApi Api
+@{
+    ViewBag.Title = Localizer.Alias["Comments"];
+    ViewBag.MenuItem = "Comments";
+}
+@section script
+{
+    <script src="~/manager/assets/js/piranha.comment.min.js?v=@Aero.Cms.Utils.GetAssemblyVersionHash(typeof(Aero.Cms.Manager.Module).Assembly)"></script>
+    <script>
+        piranha.permissions.load(function () {
+            piranha.comment.load("@RouteData.Values["id"]");
+        });
+    </script>
+}
+
+<div id="comments">
+    <div class="top">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item">@Localizer.Menu["Content"]</li>
+                <li class="breadcrumb-item active" aria-current="page">@Localizer.Menu["Comments"]</li>
+            </ol>
+        </nav>
+
+        <div class="container-fluid">
+            <div class="top-nav">
+                @foreach (var action in Aero.Cms.Manager.Actions.Toolbars.CommentList)
+                {
+                    <partial name="@action.ActionView" />
+                }
+            </div>
+        </div>
+    </div>
+
+    <div class="app" :class="{ ready: !loading }">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col">
+                    <div class="btn-group">
+                        <button v-on:click.prevent="setStatus('all')" class="btn btn-sm" :class="{ 'btn-primary': state === 'all', 'btn-light': state !== 'all' }">@Localizer.General["All"]</button>
+                        <button v-on:click.prevent="setStatus('pending')" class="btn btn-sm" :class="{ 'btn-primary': state === 'pending', 'btn-light': state !== 'pending' }">@Localizer.Comment["Pending"]</button>
+                        <button v-on:click.prevent="setStatus('approved')" class="btn btn-sm" :class="{ 'btn-primary': state === 'approved', 'btn-light': state !== 'approved' }">@Localizer.Comment["Approved"]</button>
+                    </div>
+                    <table class="table table-borderless table-comments">
+                        <thead>
+                            <tr>
+                                <th class="w-20">@Localizer.General["Author"]</th>
+                                <th class="w-50">@Localizer.Comment["Comment"]</th>
+                                <th class="text-nowrap">@Localizer.Comment["Response to"]</th>
+                                <th class="text-center">@Localizer.Comment["Approved"]</th>
+                                <th>@Localizer.General["Created"]</th>
+                                <th class="actions one"></th>
+                            </tr>
+                        </thead>
+                        <tbody v-for="comment in filteredItems">
+                            <tr>
+                                <td class="text-nowrap align-middle">
+                                    <img class="rounded mr-2" :src="comment.authorImage" :alt="comment.author">
+                                    <a class="mr-3" :href="'mailto:' + comment.email">{{ comment.author }}</a>
+                                </td>
+                                <td>{{ comment.body }}</td>
+                                <td class="align-middle">
+                                    <a v-if="comment.articleTitle" class="author" :href="piranha.baseUrl + comment.articleUrl" target="_blank">{{ comment.articleTitle }}</a>
+                                </td>
+                                <td class="text-center text-success align-middle">
+                                    <button v-on:click.prevent="toggleApproved(comment)" class="switch" :aria-pressed="comment.isApproved"><span></span></button>
+                                </td>
+                                <td class="align-middle">{{ comment.created }}</td>
+                                <td class="actions one align-middle">
+                                    <a v-if="piranha.permissions.comments.delete" v-on:click.prevent="remove(comment.id)" href="#" title="@Localizer.General["Delete"]" class="danger"><i class="fas fa-trash"></i></a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

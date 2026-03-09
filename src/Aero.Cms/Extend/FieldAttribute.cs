@@ -1,0 +1,38 @@
+﻿
+
+using Aero.Cms.Models;
+
+namespace Aero.Cms.Extend;
+
+/// <summary>
+/// Attribute for marking a property as a field.
+/// </summary>
+[AttributeUsage(AttributeTargets.Property)]
+public class FieldAttribute : Attribute
+{
+    /// <summary>
+    /// Gets/sets the optional title.
+    /// </summary>
+    public string Title { get; set; }
+
+    /// <summary>
+    /// Gets/sets the optional description.
+    /// </summary>
+    public string Description { get; set; }
+
+    /// <summary>
+    /// Gets/sets the field options.
+    /// </summary>
+    public FieldOption Options { get; set; }
+
+    /// <summary>
+    /// Gets/sets the optional placeholder for
+    /// text based fields.
+    /// </summary>
+    public string Placeholder { get; set; }
+
+    /// <summary>
+    /// Gets/sets the optional sort order.
+    /// </summary>
+    public int SortOrder { get; set; } = Int32.MaxValue;
+}

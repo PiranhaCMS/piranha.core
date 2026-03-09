@@ -1,0 +1,371 @@
+
+
+using System.ComponentModel.DataAnnotations;
+using Microsoft.Extensions.Caching.Memory;
+using Microsoft.Extensions.Caching.Distributed;
+using Xunit;
+using Aero.Cms.AttributeBuilder;
+using Aero.Cms.Models;
+
+namespace Aero.Cms.Tests.Services;
+
+[Collection("Integration tests")]
+public class CommentTestsMemoryCache : CommentTests
+{
+    public override async Task InitializeAsync()
+    {
+        await base.InitializeAsync();
+        _cache = new Cache.MemoryCache((IMemoryCache)_services.GetService(typeof(IMemoryCache)));
+    }
+}
+
+[Collection("Integration tests")]
+public class CommentTestsDistributedCache : CommentTests
+{
+    public override async Task InitializeAsync()
+    {
+        await base.InitializeAsync();
+        _cache = new Cache.DistributedCache((IDistributedCache)_services.GetService(typeof(IDistributedCache)));
+    }
+}
+
+[Collection("Integration tests")]
+public class CommentTests : BaseTestsAsync
+{
+    private string SITE_ID = Snowflake.NewId();
+    private string BLOG_ID = Snowflake.NewId();
+    private string NEWS_ID = Snowflake.NewId();
+    private string BLOGPOST_ID = Snowflake.NewId();
+    private string NEWSPOST_ID = Snowflake.NewId();
+
+    [PageType(Title = "Blog Archive", IsArchive = true, UseBlocks = false)]
+    public class BlogArchive : Page<BlogArchive> {}
+
+    [PostType(Title = "Blog Post")]
+    public class BlogPost : Post<BlogPost> {}
+
+    public override async Task InitializeAsync()
+    {
+        await base.InitializeAsync();
+
+        using var api = CreateApi();
+        // Import content types
+        new ContentTypeBuilder(api)
+            .AddType(typeof(BlogArchive))
+            .Build();
+        new ContentTypeBuilder(api)
+            .AddType(typeof(BlogPost))
+            .Build();
+
+        // Add site
+        var site = new Site
+        {
+            Id = SITE_ID,
+            Title = "Comment Site",
+            InternalId = $"CommentSite_{ SITE_ID }",
+            IsDefault = true
+        };
+        await api.Sites.SaveAsync(site);
+
+        // Add archive
+        var blog = await BlogArchive.CreateAsync(api);
+        blog.Id = BLOG_ID;
+        blog.SiteId = SITE_ID;
+        blog.Title = "Blog";
+        blog.EnableComments = true;
+        blog.Published = DateTime.Now;
+        await api.Pages.SaveAsync(blog);
+
+        var news = await BlogArchive.CreateAsync(api);
+        news.Id = NEWS_ID;
+        news.SiteId = SITE_ID;
+        news.Title = "News";
+        blog.EnableComments = true;
+        news.Published = DateTime.Now;
+        await api.Pages.SaveAsync(news);
+
+        // Add posts
+        var blogPost = await BlogPost.CreateAsync(api);
+        blogPost.Id = BLOGPOST_ID;
+        blogPost.BlogId = BLOG_ID;
+        blogPost.Category = "The Category";
+        blogPost.Title = "Welcome To The Blog";
+        blogPost.Published = DateTime.Now;
+        await api.Posts.SaveAsync(blogPost);
+
+        var newsPost = await BlogPost.CreateAsync(api);
+        newsPost.Id = NEWSPOST_ID;
+        newsPost.BlogId = NEWS_ID;
+        newsPost.Category = "The Category";
+        newsPost.Title = "Welcome To The News";
+        newsPost.Published = DateTime.Now;
+        await api.Posts.SaveAsync(newsPost);
+    }
+
+    public override async Task DisposeAsync()
+    {
+        using var api = CreateApi();
+        var posts = await api.Posts.GetAllDynamicAsync(BLOG_ID);
+        foreach (var p in posts)
+        {
+            await api.Posts.DeleteAsync(p);
+        }
+
+        posts = await api.Posts.GetAllDynamicAsync(NEWS_ID);
+        foreach (var p in posts)
+        {
+            await api.Posts.DeleteAsync(p);
+        }
+
+        var pages = await api.Pages.GetAllAsync(SITE_ID);
+        foreach (var p in pages)
+        {
+            await api.Pages.DeleteAsync(p);
+        }
+
+        await api.Sites.DeleteAsync(SITE_ID);
+    }
+
+    [Fact]
+    public void IsCached()
+    {
+        using var api = CreateApi();
+        Assert.Equal(((Api)api).IsCached,
+            this.GetType() == typeof(CommentTestsMemoryCache) ||
+            this.GetType() == typeof(CommentTestsDistributedCache));
+    }
+
+    [Fact]
+    public async Task AddPostComment()
+    {
+        using var api = CreateApi();
+        var count = (await api.Posts.GetByIdAsync(BLOGPOST_ID)).CommentCount;
+
+        await api.Posts.SaveCommentAsync(BLOGPOST_ID, new PostComment
+        {
+            Author = "John Doe",
+            Email = "john@doe.com",
+            Body = "Integer posuere erat a ante venenatis dapibus posuere velit aliquet."
+        });
+
+        var newCount = (await api.Posts.GetByIdAsync(BLOGPOST_ID)).CommentCount;
+
+        Assert.Equal(count + 1, newCount);
+    }
+
+    [Fact]
+    public async Task CheckPostCommentType()
+    {
+        using var api = CreateApi();
+        var comments = await api.Posts.GetAllCommentsAsync(BLOGPOST_ID);
+
+        Assert.True(comments.All(c => c is PostComment));
+    }
+
+    [Fact]
+    public async Task AddPostCommentNoAuthor()
+    {
+        using var api = CreateApi();
+        await Assert.ThrowsAsync<ValidationException>(async () => {
+            await api.Posts.SaveCommentAsync(BLOGPOST_ID, new PostComment
+            {
+                Email = "john@doe.com",
+                Body = "Integer posuere erat a ante venenatis dapibus posuere velit aliquet."
+            });
+        });
+    }
+
+    [Fact]
+    public async Task AddPostCommentNoEmail()
+    {
+        using var api = CreateApi();
+        await Assert.ThrowsAsync<ValidationException>(async () => {
+            await api.Posts.SaveCommentAsync(BLOGPOST_ID, new PostComment
+            {
+                Author = "John Doe",
+                Body = "Integer posuere erat a ante venenatis dapibus posuere velit aliquet."
+            });
+        });
+    }
+
+    [Fact]
+    public async Task AddPostCommentBadEmail()
+    {
+        using var api = CreateApi();
+        await Assert.ThrowsAsync<ValidationException>(async () => {
+            await api.Posts.SaveCommentAsync(BLOGPOST_ID, new PostComment
+            {
+                Author = "John Doe",
+                Email = "ThisIsNotAnEmail",
+                Body = "Integer posuere erat a ante venenatis dapibus posuere velit aliquet."
+            });
+        });
+    }
+
+    [Fact]
+    public async Task AddPostCommentAutoApprove()
+    {
+        using var api = CreateApi();
+        using (var config = new Aero.Cms.Config(api))
+        {
+            config.CommentsApprove = true;
+        }
+
+        var id = Snowflake.NewId();
+
+        await api.Posts.SaveCommentAndVerifyAsync(BLOGPOST_ID, new PostComment
+        {
+            Id = id,
+            Author = "John Doe",
+            Email = "john@doe.com",
+            Body = "Integer posuere erat a ante venenatis dapibus posuere velit aliquet."
+        });
+
+        var comment = await api.Posts.GetCommentByIdAsync(id);
+
+        Assert.NotNull(comment);
+        Assert.True(comment.IsApproved);
+    }
+
+    [Fact]
+    public async Task AddPostCommentAutoUnApprove()
+    {
+        using var api = CreateApi();
+        using (var config = new Aero.Cms.Config(api))
+        {
+            config.CommentsApprove = false;
+        }
+
+        var id = Snowflake.NewId();
+
+        await api.Posts.SaveCommentAndVerifyAsync(BLOGPOST_ID, new PostComment
+        {
+            Id = id,
+            Author = "John Doe",
+            Email = "john@doe.com",
+            Body = "Integer posuere erat a ante venenatis dapibus posuere velit aliquet."
+        });
+
+        var comment = await api.Posts.GetCommentByIdAsync(id);
+
+        Assert.NotNull(comment);
+        Assert.False(comment.IsApproved);
+    }
+
+    [Fact]
+    public async Task AddPageComment()
+    {
+        using var api = CreateApi();
+        var count = (await api.Pages.GetByIdAsync(BLOG_ID)).CommentCount;
+
+        await api.Pages.SaveCommentAsync(BLOG_ID, new PageComment
+        {
+            Author = "John Doe",
+            Email = "john@doe.com",
+            Body = "Integer posuere erat a ante venenatis dapibus posuere velit aliquet."
+        });
+
+        var newCount = (await api.Pages.GetByIdAsync(BLOG_ID)).CommentCount;
+
+        Assert.Equal(count + 1, newCount);
+    }
+
+    [Fact]
+    public async Task CheckPageCommentType()
+    {
+        using var api = CreateApi();
+        var comments = await api.Pages.GetAllCommentsAsync(BLOG_ID);
+
+        Assert.True(comments.All(c => c is PageComment));
+    }
+
+    [Fact]
+    public async Task AddPageCommentNoAuthor()
+    {
+        using var api = CreateApi();
+        await Assert.ThrowsAsync<ValidationException>(async () => {
+            await api.Pages.SaveCommentAsync(BLOG_ID, new PageComment
+            {
+                Email = "john@doe.com",
+                Body = "Integer posuere erat a ante venenatis dapibus posuere velit aliquet."
+            });
+        });
+    }
+
+    [Fact]
+    public async Task AddPageCommentNoEmail()
+    {
+        using var api = CreateApi();
+        await Assert.ThrowsAsync<ValidationException>(async () => {
+            await api.Pages.SaveCommentAsync(BLOG_ID, new PageComment
+            {
+                Author = "John Doe",
+                Body = "Integer posuere erat a ante venenatis dapibus posuere velit aliquet."
+            });
+        });
+    }
+
+    [Fact]
+    public async Task AddPageCommentBadEmail()
+    {
+        using var api = CreateApi();
+        await Assert.ThrowsAsync<ValidationException>(async () => {
+            await api.Pages.SaveCommentAsync(BLOG_ID, new PageComment
+            {
+                Author = "John Doe",
+                Email = "ThisIsNotAnEmail",
+                Body = "Integer posuere erat a ante venenatis dapibus posuere velit aliquet."
+            });
+        });
+    }
+
+    [Fact]
+    public async Task AddPageCommentAutoApprove()
+    {
+        using var api = CreateApi();
+        using (var config = new Aero.Cms.Config(api))
+        {
+            config.CommentsApprove = true;
+        }
+
+        var id = Snowflake.NewId();
+
+        await api.Pages.SaveCommentAndVerifyAsync(BLOG_ID, new PageComment
+        {
+            Id = id,
+            Author = "John Doe",
+            Email = "john@doe.com",
+            Body = "Integer posuere erat a ante venenatis dapibus posuere velit aliquet."
+        });
+
+        var comment = await api.Pages.GetCommentByIdAsync(id);
+
+        Assert.NotNull(comment);
+        Assert.True(comment.IsApproved);
+    }
+
+    [Fact]
+    public async Task AddPageCommentAutoUnApprove()
+    {
+        using var api = CreateApi();
+        using (var config = new Aero.Cms.Config(api))
+        {
+            config.CommentsApprove = false;
+        }
+
+        var id = Snowflake.NewId();
+
+        await api.Pages.SaveCommentAndVerifyAsync(BLOG_ID, new PageComment
+        {
+            Id = id,
+            Author = "John Doe",
+            Email = "john@doe.com",
+            Body = "Integer posuere erat a ante venenatis dapibus posuere velit aliquet."
+        });
+
+        var comment = await api.Pages.GetCommentByIdAsync(id);
+
+        Assert.NotNull(comment);
+        Assert.False(comment.IsApproved);
+    }
+}

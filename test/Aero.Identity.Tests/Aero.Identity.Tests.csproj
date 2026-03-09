@@ -24,7 +24,7 @@
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\..\Aero.Identity\Aero.Identity.csproj" />
+      <ProjectReference Include="..\..\src\Aero.Identity\Aero.Identity.csproj" />
     </ItemGroup>
 
 </Project>

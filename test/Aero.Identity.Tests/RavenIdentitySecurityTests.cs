@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
 using Moq;
-using Piranha.Manager.LocalAuth;
+using Aero.Cms.Manager.LocalAuth;
 using Xunit;
 
 namespace Aero.Identity.Tests;

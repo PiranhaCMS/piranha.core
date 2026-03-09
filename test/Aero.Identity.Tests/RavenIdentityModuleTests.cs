@@ -1,7 +1,5 @@
-using Aero.Identity.Models;
-using Piranha;
-using Piranha.Extend;
-using Piranha.Manager;
+using Aero.Cms;
+using Aero.Cms.Manager;
 using Xunit;
 
 namespace Aero.Identity.Tests;

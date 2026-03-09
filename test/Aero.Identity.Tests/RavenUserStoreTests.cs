@@ -1,6 +1,5 @@
 using Aero.Identity.Models;
 using Microsoft.AspNetCore.Identity;
-using Raven.Client.Documents;
 using Xunit;
 
 namespace Aero.Identity.Tests;
