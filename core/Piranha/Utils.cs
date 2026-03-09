@@ -13,6 +13,8 @@ using System.Globalization;
 using System.Reflection;
 using System.Security.Cryptography;
 using System.Text;
+using System.Text.Json;
+using System.Text.Json.Serialization.Metadata;
 using System.Text.RegularExpressions;
 using Piranha.Extend;
 using Piranha.Runtime;
@@ -884,14 +886,24 @@ public static class Utils
             return obj;
         }
 
+        var typeInfoResolver = new System.Text.Json.Serialization.Metadata.DefaultJsonTypeInfoResolver();
+        typeInfoResolver.Modifiers.Add(info =>
+        {
+            if (typeof(Piranha.Models.PageBase).IsAssignableFrom(info.Type))
+            {
+                info.PolymorphismOptions = null;
+            }
+        });
+
         var settings = new JsonSerializerOptions()
         {
             IncludeFields = true,
-            PropertyNameCaseInsensitive = true
+            PropertyNameCaseInsensitive = true,
+            TypeInfoResolver = typeInfoResolver
         };
-        var json = JsonSerializer.Serialize(obj, settings);
+        var json = JsonSerializer.Serialize((object)obj, settings);
 
-        return JsonSerializer.Deserialize<T>(json, settings);
+        return (T)JsonSerializer.Deserialize(json, obj.GetType(), settings);
     }
 
     /// <summary>

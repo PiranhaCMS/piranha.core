@@ -1,0 +1,27 @@
+
+ Piranha.Tests.Services.PageTestsDistributedCache.DetachShouldCopyRegions
+   Source: PageTests.cs line 970
+   Duration: 424 ms
+
+  Message: 
+Assert.Equal() Failure: Strings differ
+Expected: "body to be copied"
+Actual:   null
+
+  Stack Trace: 
+PageTests.DetachShouldCopyRegions() line 995
+--- End of stack trace from previous location ---
+
+
+---------------
+
+ Piranha.Tests.Services.PageTestsDistributedCache.UpdatingCopyShouldIgnoreBodyAndDate
+   Source: PageTests.cs line 901
+   Duration: 381 ms
+
+  Message: 
+System.NullReferenceException : Object reference not set to an instance of an object.
+
+  Stack Trace: 
+PageTests.UpdatingCopyShouldIgnoreBodyAndDate() line 914
+--- End of stack trace from previous location ---

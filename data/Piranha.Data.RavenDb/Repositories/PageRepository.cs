@@ -141,60 +141,66 @@ internal class PageRepository : IPageRepository
         {
             var model = await _contentService.TransformAsync<T>(page, App.PageTypes.GetById(page.PageTypeId), ProcessAsync);
 
-            if (!string.IsNullOrEmpty(page.OriginalPageId))
+            if (model != null && !string.IsNullOrEmpty(page.OriginalPageId))
             {
                 var originalPage = await _db.session.LoadAsync<Page>(page.OriginalPageId).ConfigureAwait(false);
                 if (originalPage != null)
                 {
                     var originalModel = await _contentService.TransformAsync<T>(originalPage, App.PageTypes.GetById(originalPage.PageTypeId), ProcessAsync);
 
-                    if (model is Models.IDynamicContent dynamicModel && originalModel is Models.IDynamicContent dynamicOriginalModel)
+                    if (originalModel != null)
                     {
-                        var modelRegions = (IDictionary<string, object>)dynamicModel.Regions;
-                        var originalRegions = (IDictionary<string, object>)dynamicOriginalModel.Regions;
-
-                        // Merge regions from original page if not present in the copy
-                        foreach (var region in originalRegions)
+                        if (model is Models.IDynamicContent dynamicModel && originalModel is Models.IDynamicContent dynamicOriginalModel)
                         {
-                            if (modelRegions.ContainsKey(region.Key))
+                            var modelRegions = (IDictionary<string, object>)dynamicModel.Regions;
+                            var originalRegions = (IDictionary<string, object>)dynamicOriginalModel.Regions;
+
+                            // Merge regions from original page if not present in the copy
+                            foreach (var region in originalRegions)
                             {
-                                var modelValue = modelRegions[region.Key];
-                                if (modelValue == null || (modelValue is Piranha.Extend.IField field && field.GetType().GetProperty("Value")?.GetValue(field) == null))
+                                if (modelRegions.ContainsKey(region.Key))
                                 {
-                                    modelRegions[region.Key] = region.Value;
+                                    var modelValue = modelRegions[region.Key];
+                                    if (modelValue == null || (modelValue is Piranha.Extend.IField field && field.GetType().GetProperty("Value")?.GetValue(field) == null))
+                                    {
+                                        modelRegions[region.Key] = region.Value;
+                                    }
+                                }
+                                else
+                                {
+                                    modelRegions.Add(region.Key, region.Value);
                                 }
                             }
-                            else
-                            {
-                                modelRegions.Add(region.Key, region.Value);
-                            }
                         }
-                    }
-                    else
-                    {
-                        // Copy regions from original model for strongly typed pages
-                        var pageType = App.PageTypes.GetById(page.PageTypeId);
-                        foreach (var regionType in pageType.Regions)
+                        else
                         {
-                            var prop = model.GetType().GetProperty(regionType.Id, App.PropertyBindings);
-                            if (prop != null)
+                            // Copy regions from original model for strongly typed pages
+                            var pageType = App.PageTypes.GetById(page.PageTypeId);
+                            if (pageType != null)
                             {
-                                var modelValue = prop.GetValue(model);
-                                if (modelValue == null || (modelValue is Piranha.Extend.IField field && field.GetType().GetProperty("Value")?.GetValue(field) == null))
+                                foreach (var regionType in pageType.Regions)
                                 {
-                                    var originalProp = originalModel.GetType().GetProperty(regionType.Id, App.PropertyBindings);
-                                    if (originalProp != null)
+                                    var prop = model.GetType().GetProperty(regionType.Id, App.PropertyBindings);
+                                    if (prop != null)
                                     {
-                                        prop.SetValue(model, originalProp.GetValue(originalModel));
+                                        var modelValue = prop.GetValue(model);
+                                        if (modelValue == null || (modelValue is Piranha.Extend.IField field && field.GetType().GetProperty("Value")?.GetValue(field) == null))
+                                        {
+                                            var originalProp = originalModel.GetType().GetProperty(regionType.Id, App.PropertyBindings);
+                                            if (originalProp != null)
+                                            {
+                                                prop.SetValue(model, originalProp.GetValue(originalModel));
+                                            }
+                                        }
                                     }
                                 }
                             }
                         }
-                    }
 
-                    if (model.Blocks.Count == 0)
-                    {
-                        model.Blocks = originalModel.Blocks;
+                        if (model.Blocks.Count == 0)
+                        {
+                            model.Blocks = originalModel.Blocks;
+                        }
                     }
                 }
             }
@@ -239,6 +245,7 @@ internal class PageRepository : IPageRepository
     public async Task<T> GetBySlug<T>(string slug, string siteId) where T : Models.PageBase
     {
         var page = await GetQuery<T>()
+            .Customize(x => x.WaitForNonStaleResults())
             .FirstOrDefaultAsync(p => p.SiteId == siteId && p.Slug == slug)
             .ConfigureAwait(false);
 
@@ -259,6 +266,7 @@ internal class PageRepository : IPageRepository
     public async Task<T> GetDraftById<T>(string id) where T : Models.PageBase
     {
         DateTime? lastModified = await _db.Pages
+            .Customize(x => x.WaitForNonStaleResults())
             .Where(p => p.Id == id)
             .Select(p => p.LastModified)
             .FirstOrDefaultAsync()
@@ -267,6 +275,7 @@ internal class PageRepository : IPageRepository
         if (lastModified.HasValue)
         {
             var draft = await _db.PageRevisions
+                .Customize(x => x.WaitForNonStaleResults())
                 .FirstOrDefaultAsync(r => r.PageId == id && r.Created > lastModified)
                 .ConfigureAwait(false);
 
@@ -834,7 +843,18 @@ internal class PageRepository : IPageRepository
                 affected.Add(page.Id);
             }
 
+            page.Title = model.Title;
+            page.NavigationTitle = model.NavigationTitle;
+            page.Slug = model.Slug;
+            page.ParentId = model.ParentId;
+            page.SortOrder = model.SortOrder;
+            page.IsHidden = model.IsHidden;
+            page.Route = model.Route;
+            page.Published = model.Published;
+            page.OriginalPageId = model.OriginalPageId;
+
             page = _contentService.Transform<T>(model, type, page);
+            
             page.ContentType = type.IsArchive ? "Blog" : "Page";
 
             // Set if comments should be enabled

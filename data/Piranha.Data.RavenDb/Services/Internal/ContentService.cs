@@ -175,6 +175,7 @@ internal class ContentService<TContent, TField, TModelBase> : IContentService<TC
     public TContent Transform<T>(T model, Models.ContentTypeBase type, TContent dest = null, string? languageId = null)
         where T : Models.ContentBase, TModelBase
     {
+        Console.Error.WriteLine($"[DEBUG_TRANSFORM] ID: {model.Id}, Type: {type.Id}");
         var content = dest == null ? Activator.CreateInstance<TContent>() : dest;
 
         //

@@ -121,6 +121,21 @@ internal class ContentRepository : IContentRepository
             .Where(c => c.Id == contentId)
             .FirstOrDefaultAsync();
 
+        if (content == null)
+        {
+            Console.WriteLine($"[DEBUG] Content not found for ID: {contentId}");
+        }
+        else
+        {
+            Console.WriteLine($"[DEBUG] Content found: {content.Id}, Title: {content.Title}, Translations: {content.Translations.Count}");
+            foreach (var t in content.Translations)
+            {
+                Console.WriteLine($"[DEBUG] Translation: {t.LanguageId}, Title: {t.Title}");
+            }
+        }
+
+        Console.WriteLine($"[DEBUG] Languages found: {allLanguages.Count}, Default: {defaultLang?.Id}, Others: {string.Join(", ", languages.Select(l => l.Id))}");
+
         var translations = content?.Translations ?? new List<ContentTranslation>();
         DateTime lastMod = content?.LastModified ?? DateTime.MinValue;
         
@@ -165,6 +180,8 @@ internal class ContentRepository : IContentRepository
             .Where(c => c.Group == groupId)
             .OfType<Content>()
             .ToListAsync();
+
+        Console.WriteLine($"[DEBUG] Group search: {groupId}, Contents found: {contents.Count}");
 
         // Get the translation status for each of the
         // content models.

@@ -27,10 +27,21 @@ internal sealed class DistributedCache : ICache
     public DistributedCache(IDistributedCache cache)
     {
         _cache = cache;
-_jsonSettings = new JsonSerializerOptions()
+
+        var typeInfoResolver = new System.Text.Json.Serialization.Metadata.DefaultJsonTypeInfoResolver();
+        typeInfoResolver.Modifiers.Add(info =>
+        {
+            if (typeof(Piranha.Models.PageBase).IsAssignableFrom(info.Type))
+            {
+                info.PolymorphismOptions = null;
+            }
+        });
+
+        _jsonSettings = new JsonSerializerOptions()
         {
             IncludeFields = true,
-            PropertyNameCaseInsensitive = true
+            PropertyNameCaseInsensitive = true,
+            TypeInfoResolver = typeInfoResolver
         };
     }
 
@@ -41,7 +52,7 @@ _jsonSettings = new JsonSerializerOptions()
 
         if (!string.IsNullOrEmpty(json))
         {
-            return JsonSerializer.Deserialize<T>(json, _jsonSettings);
+            return (T)JsonSerializer.Deserialize(json, typeof(T), _jsonSettings);
         }
         return default;
     }
@@ -49,7 +60,7 @@ _jsonSettings = new JsonSerializerOptions()
     /// <inheritdoc />
     public async Task SetAsync<T>(string key, T value, CancellationToken cancellationToken = default)
     {
-        await _cache.SetStringAsync(key, JsonSerializer.Serialize(value, _jsonSettings), cancellationToken).ConfigureAwait(false);
+        await _cache.SetStringAsync(key, JsonSerializer.Serialize((object)value, _jsonSettings), cancellationToken).ConfigureAwait(false);
     }
 
     /// <inheritdoc />

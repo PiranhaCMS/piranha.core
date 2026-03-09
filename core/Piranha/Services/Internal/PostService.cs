@@ -333,9 +333,19 @@ internal sealed class PostService : IPostService
     /// <param name="blogId">The unique blog slug</param>
     /// <param name="slug">The unique slug</param>
     /// <returns>The post model</returns>
-    public Task<DynamicPost> GetBySlugAsync(string blogId, string slug)
+    public async Task<DynamicPost> GetBySlugAsync(string blogId, string slug)
     {
-        return GetBySlugAsync<DynamicPost>(blogId, slug);
+        var post = await GetBySlugAsync<DynamicPost>(blogId, slug).ConfigureAwait(false);
+        if (post == null)
+        {
+            // Try resolving blogId as a slug
+            var resolvedBlogId = await _pageService.GetIdBySlugAsync(blogId).ConfigureAwait(false);
+            if (!string.IsNullOrEmpty(resolvedBlogId) && resolvedBlogId != blogId)
+            {
+                return await GetBySlugAsync<DynamicPost>(resolvedBlogId, slug).ConfigureAwait(false);
+            }
+        }
+        return post;
     }
 
     /// <summary>
@@ -375,7 +385,16 @@ internal sealed class PostService : IPostService
         if (model == null)
         {
             model = await _repo.GetBySlug<T>(blogId, slug).ConfigureAwait(false);
-            var models = await _repo.GetAll(blogId).ConfigureAwait(false);
+
+            if (model == null)
+            {
+                // Try resolving blogId as a slug
+                var resolvedBlogId = await _pageService.GetIdBySlugAsync(blogId).ConfigureAwait(false);
+                if (!string.IsNullOrEmpty(resolvedBlogId) && resolvedBlogId != blogId)
+                {
+                    model = await _repo.GetBySlug<T>(resolvedBlogId, slug).ConfigureAwait(false);
+                }
+            }
 
             if (model != null)
             {

@@ -50,6 +50,11 @@ public abstract class DbRavenBase : IDb
     /// <param name="db">The current raven db session</param>
     protected DbRavenBase(IAsyncDocumentSession db, IDocumentStore store)
     {
+        Console.WriteLine($"[DEBUG] DbRavenBase constructor: db null={db == null}, store null={store == null}");
+        if (store != null)
+        {
+            Console.WriteLine($"[DEBUG] DbRavenBase constructor: Database={store.Database}");
+        }
         this._store = store;
         this._session = db;
 
@@ -72,7 +77,7 @@ public abstract class DbRavenBase : IDb
     /// Gets/sets whether the db context has been initialized. This
     /// is only performed once in the application lifecycle.
     /// </summary>
-    private static volatile bool IsInitialized = false;
+    private bool IsInitialized = false;
 
     /// <summary>
     /// The object mutex used for initializing the context.

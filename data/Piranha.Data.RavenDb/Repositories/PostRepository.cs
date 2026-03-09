@@ -214,7 +214,7 @@ internal class PostRepository : IPostRepository
     public async Task<T> GetBySlug<T>(string blogId, string slug) where T : Models.PostBase
     {
         // No cache found, load from database
-        Console.WriteLine($"[DEBUG] GetBySlug: blogId={blogId}, slug={slug}");
+        Console.WriteLine($"[DEBUG] GetBySlug: blogId={blogId}, slug={slug}, session={_db.session.GetHashCode()}");
         
         var query = GetQuery<T>();
         var post = await query
@@ -226,6 +226,15 @@ internal class PostRepository : IPostRepository
 
         if (post == null)
         {
+            Console.WriteLine($"[DEBUG] GetBySlug: Database: {_db.session.Advanced.DocumentStore.Database}, session={_db.session.GetHashCode()}");
+            // Debug: list all posts in the whole database
+            var allPostsGlobal = await _db.session.Query<Post>().ToListAsync();
+            Console.WriteLine($"[DEBUG] GetBySlug: GLOBAL posts count: {allPostsGlobal.Count}");
+            foreach (var p in allPostsGlobal)
+            {
+                Console.WriteLine($"[DEBUG]   GLOBAL Post: Id={p.Id}, Slug={p.Slug}, BlogId='{p.BlogId}'");
+            }
+
             // Debug: list all posts for this blog
             var allPosts = await query.Where(p => p.BlogId == blogId).ToListAsync();
             Console.WriteLine($"[DEBUG] GetBySlug: All posts for blog {blogId}: {allPosts.Count}");
@@ -788,6 +797,17 @@ internal class PostRepository : IPostRepository
             {
                 post.LastModified = DateTime.Now;
             }
+
+            post.Title = model.Title;
+            post.Slug = model.Slug;
+            post.BlogId = model.BlogId;
+            post.SiteId = model.SiteId;
+            post.CategoryId = model.Category.Id;
+            post.MetaTitle = model.MetaTitle;
+            post.MetaKeywords = model.MetaKeywords;
+            post.MetaDescription = model.MetaDescription;
+            post.Route = model.Route;
+            post.Published = model.Published;
 
             post = _contentService.Transform<T>(model, type, post);
 
