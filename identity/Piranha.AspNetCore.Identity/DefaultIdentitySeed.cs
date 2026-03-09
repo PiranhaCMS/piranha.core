@@ -10,6 +10,7 @@
 
 using Microsoft.AspNetCore.Identity;
 using Piranha.AspNetCore.Identity.Data;
+using Raven.Client.Documents;
 
 namespace Piranha.AspNetCore.Identity;
 
@@ -44,12 +45,13 @@ public class DefaultIdentitySeed : IIdentitySeed
     /// </summary>
     public async Task CreateAsync()
     {
-        if (!_db.Users.Any())
+        if (!await _db.Users.AnyAsync())
         {
             var user = new User
             {
+                Id = Snowflake.NewId(),
                 UserName = "admin",
-                Email = "admin@piranhacms.org",
+                Email = "admin@aero.io",
                 SecurityStamp = Snowflake.NewId()
             };
             var createResult = await _userManager.CreateAsync(user, "password");

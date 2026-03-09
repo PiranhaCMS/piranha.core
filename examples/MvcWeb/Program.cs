@@ -10,7 +10,7 @@ using Piranha.AspNetCore.Identity;
 
 var builder = WebApplication.CreateBuilder(args);
 var env = builder.Environment;
-var config = builder.Configuration
+builder.Configuration
     .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
     .AddJsonFile($"appsettings.{env}.json", optional: true, reloadOnChange: true)
     .AddEnvironmentVariables()
@@ -37,7 +37,7 @@ builder.AddPiranha(options =>
     // Use RavenDB 
     builder.Services.AddAeroStore();
     // Use RavenDB Identity
-    builder.Services.AddPiranhaRavenDbIdentity();
+    // builder.Services.AddPiranhaRavenDbIdentity();
 
     /**
      * Here you can configure the different permissions

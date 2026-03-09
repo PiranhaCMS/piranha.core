@@ -46,6 +46,7 @@ public class RavenUserStore<TUser> :
         if (user == null) throw new ArgumentNullException(nameof(user));
 
         await _session.StoreAsync(user, cancellationToken);
+        await _session.SaveChangesAsync();
         return IdentityResult.Success;
     }
 
