@@ -2,7 +2,7 @@ using Piranha.Data.RavenDb.Data;
 using Piranha.Models;
 using Raven.Client.Documents.Linq;
 using Raven.Client.Documents.Session;
-using Alias = Piranha.Data.RavenDb.Data.Alias;
+using AliasEntity = Piranha.Data.RavenDb.Data.Alias;
 using ContentGroup = Piranha.Data.RavenDb.Data.ContentGroup;
 using Language = Piranha.Data.RavenDb.Data.Language;
 using Media = Piranha.Data.RavenDb.Data.Media;
@@ -36,7 +36,7 @@ public interface IDb : IDisposable
     // -------------------------------------------------------------------------
 
     /// <summary>Gets the alias collection.</summary>
-    IRavenQueryable<Alias> Aliases { get => session.Query<Alias>(); }
+    IRavenQueryable<AliasEntity> Aliases { get => session.Query<AliasEntity>(); }
 
     /// <summary>
     /// Gets the reusable block collection.

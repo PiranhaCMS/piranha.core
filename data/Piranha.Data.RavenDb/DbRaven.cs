@@ -14,7 +14,7 @@ using Raven.Client.Documents;
 using Raven.Client.Documents.Linq;
 using Raven.Client.Documents.Session;
 using Raven.Embedded;
-using Alias = Piranha.Data.RavenDb.Data.Alias;
+using AliasEntity = Piranha.Data.RavenDb.Data.Alias;
 using ContentGroup = Piranha.Data.RavenDb.Data.ContentGroup;
 using Language = Piranha.Data.RavenDb.Data.Language;
 using Media = Piranha.Data.RavenDb.Data.Media;
@@ -154,7 +154,7 @@ public abstract class DbRavenBase : IDb
     // collection. Use session.LoadAsync<T>(id) for ID-based lookups.
     // -------------------------------------------------------------------------
 
-    public IRavenQueryable<Alias> Aliases => session.Query<Alias>();
+    public IRavenQueryable<AliasEntity> Aliases => session.Query<AliasEntity>();
     public IRavenQueryable<Block> Blocks => session.Query<Block>();
     public IRavenQueryable<Category> Categories => session.Query<Category>();
     public IRavenQueryable<Content> Content => session.Query<Content>();

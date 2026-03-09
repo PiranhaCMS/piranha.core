@@ -5,29 +5,9 @@
     <File Path="LICENSE" />
     <File Path="README.md" />
   </Folder>
-  <Folder Name="/core/">
-    <Project Path="core/Piranha.AspNetCore.Hosting/Piranha.AspNetCore.Hosting.csproj" />
-    <Project Path="core/Piranha.AspNetCore/Piranha.AspNetCore.csproj" />
-    <Project Path="core/Piranha.AttributeBuilder/Piranha.AttributeBuilder.csproj" />
-    <Project Path="core/Piranha.Azure.BlobStorage/Piranha.Azure.BlobStorage.csproj" />
-    <Project Path="core/Piranha.ImageSharp/Piranha.ImageSharp.csproj" />
-    <Project Path="core/Piranha.Local.FileStorage/Piranha.Local.FileStorage.csproj" />
-    <Project Path="core/Piranha.Manager.LocalAuth/Piranha.Manager.LocalAuth.csproj" />
-    <Project Path="core/Piranha.Manager.Localization/Piranha.Manager.Localization.csproj" />
-    <Project Path="core/Piranha.Manager.TinyMCE/Piranha.Manager.TinyMCE.csproj" />
-    <Project Path="core/Piranha.Manager/Piranha.Manager.csproj" />
-    <Project Path="core/Piranha.WebApi/Piranha.WebApi.csproj" />
-    <Project Path="core/Piranha/Piranha.csproj" />
-  </Folder>
-  <Folder Name="/data/">
-    <Project Path="data/Piranha.Data.RavenDb/Piranha.Data.RavenDb.csproj" />
-  </Folder>
   <Folder Name="/examples/">
     <Project Path="examples/MvcWeb/MvcWeb.csproj" />
     <Project Path="examples/RazorWeb/RazorWeb.csproj" />
-  </Folder>
-  <Folder Name="/identity/">
-    <Project Path="identity/Piranha.AspNetCore.Identity/Piranha.AspNetCore.Identity.csproj" />
   </Folder>
   <Folder Name="/test/">
     <Project Path="test/Aero.Identity.Tests/Aero.Identity.Tests.csproj" />
@@ -35,4 +15,18 @@
     <Project Path="test/Piranha.Tests/Piranha.Tests.csproj" />
   </Folder>
   <Project Path="Aero.Identity/Aero.Identity.csproj" />
+  <Project Path="core/Piranha.AspNetCore.Hosting/Piranha.AspNetCore.Hosting.csproj" />
+  <Project Path="core/Piranha.AspNetCore/Piranha.AspNetCore.csproj" />
+  <Project Path="core/Piranha.AttributeBuilder/Piranha.AttributeBuilder.csproj" />
+  <Project Path="core/Piranha.Azure.BlobStorage/Piranha.Azure.BlobStorage.csproj" />
+  <Project Path="core/Piranha.ImageSharp/Piranha.ImageSharp.csproj" />
+  <Project Path="core/Piranha.Local.FileStorage/Piranha.Local.FileStorage.csproj" />
+  <Project Path="core/Piranha.Manager.LocalAuth/Piranha.Manager.LocalAuth.csproj" />
+  <Project Path="core/Piranha.Manager.Localization/Piranha.Manager.Localization.csproj" />
+  <Project Path="core/Piranha.Manager.TinyMCE/Piranha.Manager.TinyMCE.csproj" />
+  <Project Path="core/Piranha.Manager/Piranha.Manager.csproj" />
+  <Project Path="core/Piranha.WebApi/Piranha.WebApi.csproj" />
+  <Project Path="core/Piranha/Piranha.csproj" />
+  <Project Path="data/Piranha.Data.RavenDb/Piranha.Data.RavenDb.csproj" />
+  <Project Path="identity/Piranha.AspNetCore.Identity/Piranha.AspNetCore.Identity.csproj" />
 </Solution>
