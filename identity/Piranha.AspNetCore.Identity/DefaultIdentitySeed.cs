@@ -59,6 +59,7 @@ public class DefaultIdentitySeed : IIdentitySeed
             if (createResult.Succeeded)
             {
                 await _userManager.AddToRoleAsync(user, "SysAdmin");
+                await _db.SaveChangesAsync();
             }
         }
     }

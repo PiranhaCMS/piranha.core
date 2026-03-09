@@ -9,9 +9,9 @@ namespace Aero.Identity;
 /// RavenDB store for roles.
 /// </summary>
 /// <typeparam name="TRole">The role type.</typeparam>
-public class RavenRoleStore<TRole> : 
-    IRoleStore<TRole>,
-    IQueryableRoleStore<TRole>
+public class RavenRoleStore<TRole> :
+    IQueryableRoleStore<TRole>,
+    IRoleClaimStore<TRole>
     where TRole : RavenRole, new()
 {
     private readonly IAsyncDocumentSession _session;
@@ -118,6 +118,59 @@ public class RavenRoleStore<TRole> :
         catch (Exception ex)
         {
             return IdentityResult.Failed(new IdentityError { Description = ex.Message });
+        }
+    }
+
+    /// <inheritdoc />
+    public async Task<IList<System.Security.Claims.Claim>> GetClaimsAsync(TRole role,
+        CancellationToken cancellationToken = default)
+    {
+        cancellationToken.ThrowIfCancellationRequested();
+        if (role == null) throw new ArgumentNullException(nameof(role));
+
+        var claims = await _session.Query<IdentityRoleClaim<string>>()
+            .Where(c => c.RoleId == role.Id)
+            .ToListAsync(cancellationToken);
+
+        return claims
+            .Where(c => c.ClaimType != null && c.ClaimValue != null)
+            .Select(c => new System.Security.Claims.Claim(c.ClaimType!, c.ClaimValue!))
+            .ToList();
+    }
+
+    /// <inheritdoc />
+    public async Task AddClaimAsync(TRole role, System.Security.Claims.Claim claim,
+        CancellationToken cancellationToken = default)
+    {
+        cancellationToken.ThrowIfCancellationRequested();
+        if (role == null) throw new ArgumentNullException(nameof(role));
+        if (claim == null) throw new ArgumentNullException(nameof(claim));
+
+        var roleClaim = new IdentityRoleClaim<string>
+        {
+            RoleId = role.Id,
+            ClaimType = claim.Type,
+            ClaimValue = claim.Value
+        };
+
+        await _session.StoreAsync(roleClaim, cancellationToken);
+    }
+
+    /// <inheritdoc />
+    public async Task RemoveClaimAsync(TRole role, System.Security.Claims.Claim claim,
+        CancellationToken cancellationToken = default)
+    {
+        cancellationToken.ThrowIfCancellationRequested();
+        if (role == null) throw new ArgumentNullException(nameof(role));
+        if (claim == null) throw new ArgumentNullException(nameof(claim));
+
+        var claims = await _session.Query<IdentityRoleClaim<string>>()
+            .Where(c => c.RoleId == role.Id && c.ClaimType == claim.Type && c.ClaimValue == claim.Value)
+            .ToListAsync(cancellationToken);
+
+        foreach (var c in claims)
+        {
+            _session.Delete(c);
         }
     }
 

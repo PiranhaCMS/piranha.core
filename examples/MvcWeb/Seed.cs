@@ -97,16 +97,19 @@ public static class Seed
 
         startPage.Blocks.Add(new HtmlBlock
         {
+            Id = Snowflake.NewId(),
             Body =
                 "<h2>Because First Impressions Last</h2>" +
                 "<p class=\"lead\">All pages and posts you create have a primary image and excerpt available that you can use both to create nice looking headers for your content, but also when listing or linking to it on your site. These fields are totally optional and can be disabled for each content type.</p>"
         });
         startPage.Blocks.Add(new ColumnBlock
         {
+            Id = Snowflake.NewId(),
             Items = new List<Block>()
             {
                 new ImageBlock
                 {
+                    Id = Snowflake.NewId(),
                     Aspect = new SelectField<ImageAspect>
                     {
                         Value = ImageAspect.Widescreen
@@ -115,6 +118,7 @@ public static class Seed
                 },
                 new HtmlBlock
                 {
+                    Id = Snowflake.NewId(),
                     Body =
                         "<h3>Add, Edit & Rearrange</h3>" +
                         "<p class=\"lead\">Build your content with our powerful and modular block editor that allows you to add, rearrange and layout your content with ease.</p>" +
@@ -124,44 +128,53 @@ public static class Seed
         });
         startPage.Blocks.Add(new HtmlBlock
         {
+            Id = Snowflake.NewId(),
             Body =
                 "<h3>Cross-Link Your Content</h3>" +
                 "<p>With our new Page and Post Link blocks it's easier than ever to promote, and link to your content across the site. Simple select the content you want to reference and simply use it's basic fields including Primary Image & Excerpt to display it.</p>"
         });
         startPage.Blocks.Add(new ColumnBlock
         {
+            Id = Snowflake.NewId(),
             Items = new List<Block>
             {
                 new PageBlock
                 {
+                    Id = Snowflake.NewId(),
                     Body = blogPage
                 },
                 new PageBlock
                 {
+                    Id = Snowflake.NewId(),
                     Body = docsPage
                 }
             }
         });
         startPage.Blocks.Add(new HtmlBlock
         {
+            Id = Snowflake.NewId(),
             Body =
                 "<h2>Share Your Images</h2>" +
                 "<p>An image says more that a thousand words. With our <strong>Image Gallery</strong> you can easily create a gallery or carousel and share anything you have available in your media library or download new images directly on your page by just dragging them to your browser.</p>"
         });
         startPage.Blocks.Add(new ImageGalleryBlock
         {
+            Id = Snowflake.NewId(),
             Items = new List<Block>
             {
                 new ImageBlock
                 {
+                    Id = Snowflake.NewId(),
                     Body = images["cheerful-diverse-colleagues-working-on-laptops-in-workspace-3860809.jpg"]
                 },
                 new ImageBlock
                 {
+                    Id = Snowflake.NewId(),
                     Body = images["smiling-woman-working-in-office-with-coworkers-3860641.jpg"]
                 },
                 new ImageBlock
                 {
+                    Id = Snowflake.NewId(),
                     Body = images["diverse-group-of-colleagues-having-meditation-together-3860619.jpg"]
                 }
             }
@@ -185,6 +198,7 @@ public static class Seed
 
         post1.Blocks.Add(new HtmlBlock
         {
+
             Body =
                 "<p>Praesent commodo cursus magna, vel scelerisque nisl consectetur et. Vestibulum id ligula porta felis euismod semper. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Nullam quis risus eget urna mollis ornare vel eu leo. Nullam id dolor id nibh ultricies vehicula ut id elit. Nullam quis risus eget urna mollis ornare vel eu leo. Aenean eu leo quam. Pellentesque ornare sem lacinia quam venenatis vestibulum.</p>" +
                 "<p>Aenean eu leo quam. Pellentesque ornare sem lacinia quam venenatis vestibulum. Praesent commodo cursus magna, vel scelerisque nisl consectetur et. Maecenas sed diam eget risus varius blandit sit amet non magna. Nullam id dolor id nibh ultricies vehicula ut id elit. Maecenas faucibus mollis interdum. Cras mattis consectetur purus sit amet fermentum. Donec ullamcorper nulla non metus auctor fringilla.</p>" +
@@ -229,15 +243,18 @@ public static class Seed
 
         post3.Blocks.Add(new HtmlBlock
         {
+            Id  = Snowflake.NewId(),
             Body =
                 "<p class=\"lead\">Please note that this is a preview version of Piranha CMS.</p>"
         });
         post3.Blocks.Add(new ColumnBlock
         {
+            Id = Snowflake.NewId(),
             Items = new List<Block>
             {
                 new MarkdownBlock
                 {
+                    Id = Snowflake.NewId(),
                     Body =
                         "#### Core\n\n" +
                         "* Remove the need to use MARS for SQL Server [#1417](https://github.com/piranhacms/piranha.core/issues/1417)\n" +
@@ -259,6 +276,7 @@ public static class Seed
                 },
                 new ImageBlock
                 {
+                    Id = Snowflake.NewId(),
                     Body = images["person-looking-at-phone-and-at-macbook-pro-1181244.jpg"]
                 }
             }
@@ -268,6 +286,7 @@ public static class Seed
 
         var comment = new Piranha.Models.PostComment
         {
+            Id = Snowflake.NewId(),
             Author = "Håkan Edling",
             Email = "hakan@tidyui.com",
             Url = "http://piranhacms.org",

@@ -9,8 +9,7 @@ namespace Aero.Identity;
 /// RavenDB store for users.
 /// </summary>
 /// <typeparam name="TUser">The user type.</typeparam>
-public class RavenUserStore<TUser> : 
-    IUserStore<TUser>,
+public class RavenUserStore<TUser> :
     IUserPasswordStore<TUser>,
     IUserSecurityStampStore<TUser>,
     IUserEmailStore<TUser>,
@@ -46,7 +45,7 @@ public class RavenUserStore<TUser> :
         if (user == null) throw new ArgumentNullException(nameof(user));
 
         await _session.StoreAsync(user, cancellationToken);
-        await _session.SaveChangesAsync();
+        await _session.SaveChangesAsync(cancellationToken);
         return IdentityResult.Success;
     }
 
@@ -57,6 +56,7 @@ public class RavenUserStore<TUser> :
         if (user == null) throw new ArgumentNullException(nameof(user));
 
         _session.Delete(user.Id);
+        await _session.SaveChangesAsync(cancellationToken);
         return IdentityResult.Success;
     }
 
@@ -72,7 +72,6 @@ public class RavenUserStore<TUser> :
     {
         cancellationToken.ThrowIfCancellationRequested();
         return await _session.Query<TUser>()
-            .Statistics(out var stats)
             .FirstOrDefaultAsync(u => u.NormalizedUserName == normalizedUserName, cancellationToken);
     }
 
@@ -262,10 +261,11 @@ public class RavenUserStore<TUser> :
         if (user == null) throw new ArgumentNullException(nameof(user));
         if (string.IsNullOrWhiteSpace(roleName)) throw new ArgumentNullException(nameof(roleName));
 
-        if (!user.Roles.Contains(roleName))
+        if (!user.Roles.Any(r => string.Equals(r, roleName, StringComparison.OrdinalIgnoreCase)))
         {
             user.Roles.Add(roleName);
         }
+
         return Task.CompletedTask;
     }
 
@@ -276,7 +276,12 @@ public class RavenUserStore<TUser> :
         if (user == null) throw new ArgumentNullException(nameof(user));
         if (string.IsNullOrWhiteSpace(roleName)) throw new ArgumentNullException(nameof(roleName));
 
-        user.Roles.Remove(roleName);
+        var existing = user.Roles.FirstOrDefault(r => string.Equals(r, roleName, StringComparison.OrdinalIgnoreCase));
+        if (existing != null)
+        {
+            user.Roles.Remove(existing);
+        }
+
         return Task.CompletedTask;
     }
 
@@ -296,7 +301,7 @@ public class RavenUserStore<TUser> :
         if (user == null) throw new ArgumentNullException(nameof(user));
         if (string.IsNullOrWhiteSpace(roleName)) throw new ArgumentNullException(nameof(roleName));
 
-        return Task.FromResult(user.Roles.Contains(roleName));
+        return Task.FromResult(user.Roles.Any(r => string.Equals(r, roleName, StringComparison.OrdinalIgnoreCase)));
     }
 
     /// <inheritdoc />
@@ -306,7 +311,7 @@ public class RavenUserStore<TUser> :
         if (string.IsNullOrWhiteSpace(roleName)) throw new ArgumentNullException(nameof(roleName));
 
         return await _session.Query<TUser>()
-            .Where(u => u.Roles.Contains(roleName))
+            .Where(u => u.Roles.Any(r => r == roleName))
             .ToListAsync(cancellationToken);
     }
 
@@ -326,11 +331,13 @@ public class RavenUserStore<TUser> :
                 ProviderDisplayName = login.ProviderDisplayName
             });
         }
+
         return Task.CompletedTask;
     }
 
     /// <inheritdoc />
-    public Task RemoveLoginAsync(TUser user, string loginProvider, string providerKey, CancellationToken cancellationToken)
+    public Task RemoveLoginAsync(TUser user, string loginProvider, string providerKey,
+        CancellationToken cancellationToken)
     {
         cancellationToken.ThrowIfCancellationRequested();
         if (user == null) throw new ArgumentNullException(nameof(user));
@@ -340,6 +347,7 @@ public class RavenUserStore<TUser> :
         {
             user.Logins.Remove(login);
         }
+
         return Task.CompletedTask;
     }
 
@@ -349,11 +357,13 @@ public class RavenUserStore<TUser> :
         cancellationToken.ThrowIfCancellationRequested();
         if (user == null) throw new ArgumentNullException(nameof(user));
 
-        return Task.FromResult<IList<UserLoginInfo>>(user.Logins.Select(l => new UserLoginInfo(l.LoginProvider, l.ProviderKey, l.ProviderDisplayName)).ToList());
+        return Task.FromResult<IList<UserLoginInfo>>(user.Logins
+            .Select(l => new UserLoginInfo(l.LoginProvider, l.ProviderKey, l.ProviderDisplayName)).ToList());
     }
 
     /// <inheritdoc />
-    public async Task<TUser?> FindByLoginAsync(string loginProvider, string providerKey, CancellationToken cancellationToken)
+    public async Task<TUser?> FindByLoginAsync(string loginProvider, string providerKey,
+        CancellationToken cancellationToken)
     {
         cancellationToken.ThrowIfCancellationRequested();
         return await _session.Advanced.AsyncDocumentQuery<TUser>()
@@ -364,7 +374,8 @@ public class RavenUserStore<TUser> :
     }
 
     /// <inheritdoc />
-    public Task AddClaimsAsync(TUser user, IEnumerable<System.Security.Claims.Claim> claims, CancellationToken cancellationToken)
+    public Task AddClaimsAsync(TUser user, IEnumerable<System.Security.Claims.Claim> claims,
+        CancellationToken cancellationToken)
     {
         cancellationToken.ThrowIfCancellationRequested();
         if (user == null) throw new ArgumentNullException(nameof(user));
@@ -377,11 +388,13 @@ public class RavenUserStore<TUser> :
                 user.Claims.Add(new RavenUserClaim { ClaimType = claim.Type, ClaimValue = claim.Value });
             }
         }
+
         return Task.CompletedTask;
     }
 
     /// <inheritdoc />
-    public Task ReplaceClaimAsync(TUser user, System.Security.Claims.Claim claim, System.Security.Claims.Claim newClaim, CancellationToken cancellationToken)
+    public Task ReplaceClaimAsync(TUser user, System.Security.Claims.Claim claim, System.Security.Claims.Claim newClaim,
+        CancellationToken cancellationToken)
     {
         cancellationToken.ThrowIfCancellationRequested();
         if (user == null) throw new ArgumentNullException(nameof(user));
@@ -394,11 +407,13 @@ public class RavenUserStore<TUser> :
             existingClaim.ClaimType = newClaim.Type;
             existingClaim.ClaimValue = newClaim.Value;
         }
+
         return Task.CompletedTask;
     }
 
     /// <inheritdoc />
-    public Task RemoveClaimsAsync(TUser user, IEnumerable<System.Security.Claims.Claim> claims, CancellationToken cancellationToken)
+    public Task RemoveClaimsAsync(TUser user, IEnumerable<System.Security.Claims.Claim> claims,
+        CancellationToken cancellationToken)
     {
         cancellationToken.ThrowIfCancellationRequested();
         if (user == null) throw new ArgumentNullException(nameof(user));
@@ -406,12 +421,14 @@ public class RavenUserStore<TUser> :
 
         foreach (var claim in claims)
         {
-            var existingClaim = user.Claims.FirstOrDefault(c => c.ClaimType == claim.Type && c.ClaimValue == claim.Value);
+            var existingClaim =
+                user.Claims.FirstOrDefault(c => c.ClaimType == claim.Type && c.ClaimValue == claim.Value);
             if (existingClaim != null)
             {
                 user.Claims.Remove(existingClaim);
             }
         }
+
         return Task.CompletedTask;
     }
 
@@ -420,12 +437,13 @@ public class RavenUserStore<TUser> :
     {
         cancellationToken.ThrowIfCancellationRequested();
         if (user == null) throw new ArgumentNullException(nameof(user));
-
-        return Task.FromResult<IList<System.Security.Claims.Claim>>(user.Claims.Select(c => new System.Security.Claims.Claim(c.ClaimType, c.ClaimValue)).ToList());
+        return Task.FromResult<IList<System.Security.Claims.Claim>>(user.Claims
+            .Select(c => new System.Security.Claims.Claim(c.ClaimType, c.ClaimValue)).ToList());
     }
 
     /// <inheritdoc />
-    public async Task<IList<TUser>> GetUsersForClaimAsync(System.Security.Claims.Claim claim, CancellationToken cancellationToken)
+    public async Task<IList<TUser>> GetUsersForClaimAsync(System.Security.Claims.Claim claim,
+        CancellationToken cancellationToken)
     {
         cancellationToken.ThrowIfCancellationRequested();
         if (claim == null) throw new ArgumentNullException(nameof(claim));
@@ -497,6 +515,7 @@ public class RavenUserStore<TUser> :
             user.RecoveryCodes = string.Join(";", codes);
             return Task.FromResult(true);
         }
+
         return Task.FromResult(false);
     }
 
@@ -548,6 +567,7 @@ public class RavenUserStore<TUser> :
                 Name = passkey.Name
             });
         }
+
         return Task.CompletedTask;
     }
 
@@ -581,6 +601,7 @@ public class RavenUserStore<TUser> :
         {
             user.Passkeys.Remove(passkey);
         }
+
         return Task.CompletedTask;
     }
 
