@@ -14,8 +14,8 @@
     - [ ] Implement a test using `host.Scenario(...)`.
     - [ ] Use `_.Post.FormData(loginModel).ToUrl("/manager/login")` to simulate the login POST.
     - [ ] Verify the response status code using `_.StatusCodeShouldBe(302)` (redirection to `/manager` or the auth endpoint).
-- [ ] **Task: Test Authorized Access and Permissions**
-    - [ ] Perform a subsequent request (or within the same session if Alba supports it, otherwise use authentication helpers) to `/manager`.
-    - [ ] Verify the response using `_.StatusCodeShouldBeOk()` (200 OK).
-    - [ ] Verify the admin user's identity has `SysAdmin` and `Admin` roles and correct claims.
+- [x] **Task: Test Authorized Access and Permissions**
+    - [x] Perform a subsequent request (or within the same session if Alba supports it, otherwise use authentication helpers) to `/manager`.
+    - [x] Verify the response using `_.StatusCodeShouldBeOk()` (200 OK).
+    - [x] Verify the admin user's identity has `SysAdmin` and `Admin` roles and correct claims.
 - [ ] **Task: Conductor - User Manual Verification 'Phase 2: Implement' (Protocol in workflow.md)**
