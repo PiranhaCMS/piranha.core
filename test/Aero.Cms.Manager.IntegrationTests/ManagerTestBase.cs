@@ -9,6 +9,8 @@ using Microsoft.AspNetCore.Identity;
 using Aero.Cms.RavenDb.Extensions;
 using Xunit;
 using Microsoft.Extensions.Hosting;
+using Microsoft.AspNetCore.Antiforgery;
+using Microsoft.AspNetCore.Http;
 
 namespace Aero.Cms.Manager.IntegrationTests;
 
@@ -42,6 +44,9 @@ public class ManagerTestBase : RavenTestDriver, IAsyncLifetime
                 
                 // Add Aero Store in testing mode to skip its own IDocumentStore registration
                 services.AddAeroStore(isTesting: true);
+
+                // Disable Antiforgery for tests by providing a mock/no-op implementation
+                services.AddSingleton<IAntiforgery, NoOpAntiforgery>();
             });
         });
 
@@ -71,5 +76,14 @@ public class ManagerTestBase : RavenTestDriver, IAsyncLifetime
             await Host.DisposeAsync();
         }
         Dispose();
+    }
+
+    private class NoOpAntiforgery : IAntiforgery
+    {
+        public AntiforgeryTokenSet GetAndStoreTokens(HttpContext httpContext) => new AntiforgeryTokenSet("token", "cookie", "form", "header");
+        public AntiforgeryTokenSet GetTokens(HttpContext httpContext) => new AntiforgeryTokenSet("token", "cookie", "form", "header");
+        public Task<bool> IsRequestValidAsync(HttpContext httpContext) => Task.FromResult(true);
+        public void SetCookieTokenAndHeader(HttpContext httpContext) { }
+        public Task ValidateRequestAsync(HttpContext httpContext) => Task.CompletedTask;
     }
 }

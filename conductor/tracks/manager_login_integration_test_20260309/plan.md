@@ -9,7 +9,7 @@
 - [x] **Task: Conductor - User Manual Verification 'Phase 1: Setup' (Protocol in workflow.md)** [e2b73ee]
 
 ## Phase 2: Implement Manager Login Tests
-- [ ] **Task: Test Admin Login with Alba `FormData`**
+- [~] **Task: Test Admin Login with Alba `FormData`**
     - [ ] Execute `Seed()` within the test host initialization or at the start of the test.
     - [ ] Implement a test using `host.Scenario(...)`.
     - [ ] Use `_.Post.FormData(loginModel).ToUrl("/manager/login")` to simulate the login POST.
