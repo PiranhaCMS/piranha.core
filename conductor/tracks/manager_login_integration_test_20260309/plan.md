@@ -1,7 +1,7 @@
 # Implementation Plan: `plan.md`
 
 ## Phase 1: Setup Integration Test Project
-- [ ] **Task: Create `test/Aero.Cms.Manager.IntegrationTests` project**
+- [x] **Task: Create `test/Aero.Cms.Manager.IntegrationTests` project** [f0fe306]
     - [ ] Create `.csproj` with references to `MvcWeb`, `Alba`, `xunit`, `Raven.TestDriver`.
 - [ ] **Task: Set up `AlbaHost` for Integration Testing**
     - [ ] Create a custom `AlbaHost` setup in the test project that targets `MvcWeb`.
