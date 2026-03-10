@@ -3,7 +3,6 @@
 using System.ComponentModel.DataAnnotations;
 using Aero.Manager;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
@@ -24,7 +23,7 @@ public class LoginModel : PageModel
     /// </summary>
     /// <param name="service">The current security service</param>
     /// <param name="localizer">The manager localizer</param>
-    public LoginModel(ISecurity service, ManagerLocalizer localizer, SignInManager<object> manager, ILogger<LoginModel> log)
+    public LoginModel(ISecurity service, ManagerLocalizer localizer, ILogger<LoginModel> log)
     {
         _service = service;
         _localizer = localizer;
