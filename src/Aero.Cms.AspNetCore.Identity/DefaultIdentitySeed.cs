@@ -3,6 +3,7 @@
 using Microsoft.AspNetCore.Identity;
 using Aero.Cms.AspNetCore.Identity.Data;
 using Raven.Client.Documents;
+using Aero.Cms.Manager;
 
 namespace Aero.Cms.AspNetCore.Identity;
 
@@ -51,7 +52,7 @@ public class DefaultIdentitySeed : IIdentitySeed
             if (createResult.Succeeded)
             {
                 await _userManager.AddToRoleAsync(user, "SysAdmin");
-                await _userManager.AddToRoleAsync(user, "Admin");
+                await _userManager.AddToRoleAsync(user, Permission.Admin);
                 await _db.SaveChangesAsync();
             }
         }

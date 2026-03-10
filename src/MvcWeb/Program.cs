@@ -6,14 +6,39 @@ using Aero.Cms.AspNetCore.Identity.Extensions;
 using Aero.Cms.AspNetCore.Identity;
 using Aero.Cms.RavenDb.Extensions;
 using Aero.Local;
+using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
 var env = builder.Environment;
 builder.Configuration
     .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
-    .AddJsonFile($"appsettings.{env}.json", optional: true, reloadOnChange: true)
+    .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true, reloadOnChange: true)
     .AddEnvironmentVariables()
+    .AddUserSecrets<Program>()
     .Build();
+
+var config = builder.Configuration;
+
+var log = new LoggerConfiguration()
+    .ReadFrom.Configuration(config)
+    .Enrich.FromLogContext()
+    .Enrich.WithProperty("Application", "microbian-web")
+    .WriteTo.Console()
+    .WriteTo.File("logs/microbians-.log", rollingInterval: RollingInterval.Day)
+    .CreateBootstrapLogger();
+
+builder.Host.UseSerilog((context, configuration) =>
+{
+    configuration.ReadFrom.Configuration(config)
+        .Enrich.FromLogContext()
+        .Enrich.WithProperty("Application", "microbian-web")
+        .WriteTo.Console()
+        .WriteTo.File("logs/microbians-.log", rollingInterval: RollingInterval.Day)
+        ;
+});
+
+
+log.Information("Starting application");
 
 builder.AddAero(options =>
 {
@@ -83,13 +108,20 @@ try
         options.UseTinyMCE();
 
         // Seed data
+        log.Information("Seeding data");
         Seed.RunAsync(options.Api).GetAwaiter().GetResult();
+        log.Information("Data seeded");
     });
 
-    app.Run();
+    log.Information("Starting application");
+    await app.RunAsync();
+    log.Information("Application stopped");
 }
 catch (Exception ex)
 {
-    Console.WriteLine(ex);
-    throw;
+    log.Fatal(ex, "Application terminated unexpectedly");
+}
+finally
+{
+       Log.CloseAndFlush();
 }

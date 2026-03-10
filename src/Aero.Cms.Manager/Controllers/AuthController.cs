@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Antiforgery;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
 namespace Aero.Cms.Manager.Controllers;
@@ -16,20 +17,21 @@ public sealed class AuthController : Controller
 {
     private readonly IAntiforgery _antiForgery;
     private readonly ManagerOptions _options;
+    private readonly ILogger<AuthController> log;
 
     /// <summary>
     /// Default constructor.
     /// </summary>
     /// <param name="antiforgery">The antiforgery service</param>
     /// <param name="options">The manager options</param>
-    public AuthController(IAntiforgery antiforgery, IOptions<ManagerOptions> options)
+    public AuthController(IAntiforgery antiforgery, IOptions<ManagerOptions> options, ILogger<AuthController> log)
     {
         _antiForgery = antiforgery;
         _options = options.Value;
+        this.log = log;
     }
 
-    [Route("{returnUrl?}")]
-    [HttpGet]
+    [HttpGet("{returnUrl?}")]
     public IActionResult SetAuthCookie([FromQuery]string returnUrl = null)
     {
         var tokens = _antiForgery.GetAndStoreTokens(HttpContext);

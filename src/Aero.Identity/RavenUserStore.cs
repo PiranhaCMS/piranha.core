@@ -255,7 +255,7 @@ public class RavenUserStore<TUser> :
     }
 
     /// <inheritdoc />
-    public Task AddToRoleAsync(TUser user, string roleName, CancellationToken cancellationToken)
+    public async Task AddToRoleAsync(TUser user, string roleName, CancellationToken cancellationToken)
     {
         cancellationToken.ThrowIfCancellationRequested();
         if (user == null) throw new ArgumentNullException(nameof(user));
@@ -264,9 +264,30 @@ public class RavenUserStore<TUser> :
         if (!user.Roles.Any(r => string.Equals(r, roleName, StringComparison.OrdinalIgnoreCase)))
         {
             user.Roles.Add(roleName);
-        }
 
-        return Task.CompletedTask;
+            // Denormalized: copy role claims to user claims
+            var normalizedRoleName = roleName.ToUpperInvariant();
+            var role = await _session.Query<RavenRole>()
+                .FirstOrDefaultAsync(r => r.NormalizedName == normalizedRoleName, cancellationToken);
+
+            if (role != null)
+            {
+                foreach (var roleClaim in role.Claims)
+                {
+                    if (!string.IsNullOrEmpty(roleClaim.ClaimType) && !string.IsNullOrEmpty(roleClaim.ClaimValue))
+                    {
+                        if (!user.Claims.Any(uc => uc.ClaimType == roleClaim.ClaimType && uc.ClaimValue == roleClaim.ClaimValue))
+                        {
+                            user.Claims.Add(new RavenUserClaim
+                            {
+                                ClaimType = roleClaim.ClaimType,
+                                ClaimValue = roleClaim.ClaimValue
+                            });
+                        }
+                    }
+                }
+            }
+        }
     }
 
     /// <inheritdoc />

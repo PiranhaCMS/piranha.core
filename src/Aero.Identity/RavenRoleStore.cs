@@ -122,56 +122,61 @@ public class RavenRoleStore<TRole> :
     }
 
     /// <inheritdoc />
-    public async Task<IList<System.Security.Claims.Claim>> GetClaimsAsync(TRole role,
+    public Task<IList<System.Security.Claims.Claim>> GetClaimsAsync(TRole role,
         CancellationToken cancellationToken = default)
     {
         cancellationToken.ThrowIfCancellationRequested();
         if (role == null) throw new ArgumentNullException(nameof(role));
 
-        var claims = await _session.Query<IdentityRoleClaim<string>>()
-            .Where(c => c.RoleId == role.Id)
-            .ToListAsync(cancellationToken);
-
-        return claims
-            .Where(c => c.ClaimType != null && c.ClaimValue != null)
-            .Select(c => new System.Security.Claims.Claim(c.ClaimType!, c.ClaimValue!))
+        // Denormalized: claims are stored directly in the role document
+        var claims = role.Claims
+            .Where(c => !string.IsNullOrEmpty(c.ClaimType) && !string.IsNullOrEmpty(c.ClaimValue))
+            .Select(c => new System.Security.Claims.Claim(c.ClaimType, c.ClaimValue))
             .ToList();
+
+        return Task.FromResult<IList<System.Security.Claims.Claim>>(claims);
     }
 
     /// <inheritdoc />
-    public async Task AddClaimAsync(TRole role, System.Security.Claims.Claim claim,
+    public Task AddClaimAsync(TRole role, System.Security.Claims.Claim claim,
         CancellationToken cancellationToken = default)
     {
         cancellationToken.ThrowIfCancellationRequested();
         if (role == null) throw new ArgumentNullException(nameof(role));
         if (claim == null) throw new ArgumentNullException(nameof(claim));
 
-        var roleClaim = new IdentityRoleClaim<string>
+        // Denormalized: add claim to the role document
+        if (!role.Claims.Any(c => c.ClaimType == claim.Type && c.ClaimValue == claim.Value))
         {
-            RoleId = role.Id,
-            ClaimType = claim.Type,
-            ClaimValue = claim.Value
-        };
-
-        await _session.StoreAsync(roleClaim, cancellationToken);
-    }
-
-    /// <inheritdoc />
-    public async Task RemoveClaimAsync(TRole role, System.Security.Claims.Claim claim,
-        CancellationToken cancellationToken = default)
-    {
-        cancellationToken.ThrowIfCancellationRequested();
-        if (role == null) throw new ArgumentNullException(nameof(role));
-        if (claim == null) throw new ArgumentNullException(nameof(claim));
-
-        var claims = await _session.Query<IdentityRoleClaim<string>>()
-            .Where(c => c.RoleId == role.Id && c.ClaimType == claim.Type && c.ClaimValue == claim.Value)
-            .ToListAsync(cancellationToken);
-
-        foreach (var c in claims)
-        {
-            _session.Delete(c);
+            role.Claims.Add(new RavenRoleClaim
+            {
+                ClaimType = claim.Type,
+                ClaimValue = claim.Value
+            });
         }
+
+        return Task.CompletedTask;
+    }
+
+    /// <inheritdoc />
+    public Task RemoveClaimAsync(TRole role, System.Security.Claims.Claim claim,
+        CancellationToken cancellationToken = default)
+    {
+        cancellationToken.ThrowIfCancellationRequested();
+        if (role == null) throw new ArgumentNullException(nameof(role));
+        if (claim == null) throw new ArgumentNullException(nameof(claim));
+
+        // Denormalized: remove claim from the role document
+        var existingClaims = role.Claims
+            .Where(c => c.ClaimType == claim.Type && c.ClaimValue == claim.Value)
+            .ToList();
+
+        foreach (var c in existingClaims)
+        {
+            role.Claims.Remove(c);
+        }
+
+        return Task.CompletedTask;
     }
 
     /// <inheritdoc />

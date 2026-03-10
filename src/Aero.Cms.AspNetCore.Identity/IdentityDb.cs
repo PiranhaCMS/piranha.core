@@ -1,5 +1,7 @@
 using Microsoft.AspNetCore.Identity;
 using Aero.Cms.AspNetCore.Identity.Data;
+using Aero.Cms.Manager;
+using Aero.Identity.Models;
 using Raven.Client.Documents.Linq;
 using Raven.Client.Documents.Session;
 
@@ -30,7 +32,7 @@ public abstract class IdentityDb<T> : IIdentityDb
     /// <summary>
     ///     Default constructor.
     /// </summary>
-    /// <param name="options">Configuration options</param>
+    /// <param name="db">The RavenDB session</param>
     protected IdentityDb(IAsyncDocumentSession db)
     {
         this.db = db;
@@ -47,7 +49,6 @@ public abstract class IdentityDb<T> : IIdentityDb
             IsInitialized = true;
         }
     }
-
 
     /// <summary>
     /// Seeds the default data.
@@ -70,28 +71,29 @@ public abstract class IdentityDb<T> : IIdentityDb
         }
 
         // Make sure our SysAdmin role has all of the available claims
-        //foreach (var claim in Aero.Cms.Security.Permission.All())
+        // Denormalized: store claims directly in the role document
+        var existingClaims = role.Claims.Select(c => (c.ClaimType, c.ClaimValue)).ToHashSet();
+        
         foreach (var permission in App.Permissions.GetPermissions())
         {
-            var roleClaim = RoleClaims.FirstOrDefault(c =>
-                c.RoleId == role.Id && c.ClaimType == permission.Name && c.ClaimValue == permission.Name);
-            if (roleClaim == null)
+            if (!existingClaims.Contains((permission.Name, permission.Name)))
             {
-                // RoleClaims.Add(new IdentityRoleClaim<string>
-                // {
-                //     RoleId = role.Id,
-                //     ClaimType = permission.Name,
-                //     ClaimValue = permission.Name
-                // });
-                var r = new IdentityRoleClaim<string>
+                role.Claims.Add(new RavenRoleClaim
                 {
-                    RoleId = role.Id,
                     ClaimType = permission.Name,
                     ClaimValue = permission.Name
-                };
-                
-                await db.StoreAsync(r);
+                });
             }
+        }
+
+        // Add the Admin claim which is required by all authorization policies
+        if (!existingClaims.Contains((Permission.Admin, Permission.Admin)))
+        {
+            role.Claims.Add(new RavenRoleClaim
+            {
+                ClaimType = Permission.Admin,
+                ClaimValue = Permission.Admin
+            });
         }
 
         await SaveChangesAsync();

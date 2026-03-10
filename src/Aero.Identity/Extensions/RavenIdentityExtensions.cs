@@ -96,7 +96,7 @@ public static class RavenIdentityExtensions
 
         services.Configure(identityOptions ?? SetDefaultOptions);
         services.ConfigureApplicationCookie(cookieOptions ?? SetDefaultCookieOptions);
-        services.AddScoped<ISecurity, RavenIdentitySecurity>();
+        //services.AddScoped<ISecurity, RavenIdentitySecurity>();
 
         return services;
     }
