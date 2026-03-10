@@ -2,10 +2,13 @@ using Alba;
 using Microsoft.Extensions.DependencyInjection;
 using Raven.Client.Documents;
 using Raven.TestDriver;
+using Raven.Embedded;
 using Aero.Cms.AspNetCore.Identity;
 using Aero.Cms.AspNetCore.Identity.Data;
 using Microsoft.AspNetCore.Identity;
 using Aero.Cms.RavenDb.Extensions;
+using Xunit;
+using Microsoft.Extensions.Hosting;
 
 namespace Aero.Cms.Manager.IntegrationTests;
 
@@ -30,6 +33,7 @@ public class ManagerTestBase : RavenTestDriver, IAsyncLifetime
 
         Host = await AlbaHost.For<Program>(builder =>
         {
+            builder.UseEnvironment("Testing");
             builder.ConfigureServices(services =>
             {
                 // Register the test store before AddAeroStore so it can be used
@@ -41,13 +45,12 @@ public class ManagerTestBase : RavenTestDriver, IAsyncLifetime
             });
         });
 
-        // Ensure the database is seeded
+        // Ensure the database is seeded with identity data
         using var scope = Host.Services.CreateScope();
         var identityDb = scope.ServiceProvider.GetRequiredService<IIdentityDb>();
         var seed = scope.ServiceProvider.GetService<IIdentitySeed>();
         
-        // IdentityDb constructor already calls SeedAsync().GetAwaiter().GetResult()
-        // but we might need to call the IIdentitySeed to create the admin user.
+        // IIdentitySeed creates the admin user
         if (seed != null)
         {
             await seed.CreateAsync();

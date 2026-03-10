@@ -108,9 +108,12 @@ try
         options.UseTinyMCE();
 
         // Seed data
-        log.Information("Seeding data");
-        Seed.RunAsync(options.Api).GetAwaiter().GetResult();
-        log.Information("Data seeded");
+        if (!app.Environment.IsEnvironment("Testing"))
+        {
+            log.Information("Seeding data");
+            Seed.RunAsync(options.Api).GetAwaiter().GetResult();
+            log.Information("Data seeded");
+        }
     });
 
     log.Information("Starting application");

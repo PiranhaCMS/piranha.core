@@ -288,6 +288,7 @@ public class RavenUserStore<TUser, TRole> :
 
             // Denormalized: copy role claims to user claims
             var normalizedRoleName = roleName.ToUpperInvariant();
+
             var role = await _session.Query<TRole>()
                 .Customize(x => x.WaitForNonStaleResults())
                 .FirstOrDefaultAsync(r => r.NormalizedName == normalizedRoleName, cancellationToken);
@@ -298,7 +299,8 @@ public class RavenUserStore<TUser, TRole> :
                 {
                     if (!string.IsNullOrEmpty(roleClaim.ClaimType) && !string.IsNullOrEmpty(roleClaim.ClaimValue))
                     {
-                        if (!user.Claims.Any(uc => uc.ClaimType == roleClaim.ClaimType && uc.ClaimValue == roleClaim.ClaimValue))
+                        if (!user.Claims.Any(uc =>
+                                uc.ClaimType == roleClaim.ClaimType && uc.ClaimValue == roleClaim.ClaimValue))
                         {
                             user.Claims.Add(new RavenUserClaim
                             {

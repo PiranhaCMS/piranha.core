@@ -111,7 +111,7 @@ public class IdentitySecurity : ISecurity
                         ClaimType = roleClaim.ClaimType,
                         ClaimValue = roleClaim.ClaimValue
                     });
-                }
+                }   
             }
         }
 

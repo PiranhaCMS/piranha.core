@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Identity;
 using Aero.Cms.AspNetCore.Identity.Data;
 using Aero.Cms.Manager;
 using Aero.Identity.Models;
+using Raven.Client.Documents;
 using Raven.Client.Documents.Linq;
 using Raven.Client.Documents.Session;
 
@@ -44,7 +45,7 @@ public abstract class IdentityDb<T> : IIdentityDb
             if (IsInitialized)
                 return;
 
-            Seed().GetAwaiter().GetResult();
+            SeedAsync().GetAwaiter().GetResult();
 
             IsInitialized = true;
         }
@@ -53,12 +54,12 @@ public abstract class IdentityDb<T> : IIdentityDb
     /// <summary>
     /// Seeds the default data.
     /// </summary>
-    private async Task Seed()
+    private async Task SeedAsync()
     {
         await SaveChangesAsync();
 
         // Make sure we have a SysAdmin role
-        var role = Roles.FirstOrDefault(r => r.NormalizedName == "SYSADMIN");
+        var role = await Roles.FirstOrDefaultAsync(r => r.NormalizedName == "SYSADMIN");
         if (role == null)
         {
             role = new Role
@@ -108,12 +109,10 @@ public abstract class IdentityDb<T> : IIdentityDb
     public IRavenQueryable<IdentityRoleClaim<string>> RoleClaims => db.Query<IdentityRoleClaim<string>>();
     public IRavenQueryable<IdentityUserToken<string>> UserTokens => db.Query<IdentityUserToken<string>>();
 
-    public int SaveChanges()
-    {
-        return SaveChangesAsync()
+    public int SaveChanges() => SaveChangesAsync()
             .GetAwaiter()
             .GetResult();
-    }
+    
 
     public async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default(CancellationToken))
     {

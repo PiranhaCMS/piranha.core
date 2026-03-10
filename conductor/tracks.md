@@ -24,5 +24,5 @@ This file tracks all major tracks for the project. Each track has its own detail
 
 ---
 
-- [ ] **Track: Implement Manager Login Integration Tests**
+- [~] **Track: Implement Manager Login Integration Tests**
 *Link: [./tracks/manager_login_integration_test_20260309/](./tracks/manager_login_integration_test_20260309/)*

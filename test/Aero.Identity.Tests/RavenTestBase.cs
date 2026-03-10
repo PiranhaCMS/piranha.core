@@ -20,7 +20,7 @@ public class RavenTestBase : RavenTestDriver
 
     protected override void PreInitialize(IDocumentStore store)
     {
-        store.Conventions.MaxNumberOfRequestsPerSession = 100;
+        store.Conventions.MaxNumberOfRequestsPerSession = 1000;
     }
 
     public IDocumentStore CreateStore([CallerMemberName] string database = "")

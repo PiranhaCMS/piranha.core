@@ -5,6 +5,11 @@
     <File Path="LICENSE" />
     <File Path="README.md" />
   </Folder>
+  <Folder Name="/Tests/">
+    <Project Path="../test/Aero.Cms.Manager.Tests/Aero.Cms.Manager.Tests.csproj" />
+    <Project Path="../test/Aero.Cms.Tests/Aero.Cms.Tests.csproj" />
+    <Project Path="../test/Aero.Identity.Tests/Aero.Identity.Tests.csproj" />
+  </Folder>
   <Project Path="Aero.Cms.AspNetCore.Hosting/Aero.Cms.AspNetCore.Hosting.csproj" />
   <Project Path="Aero.Cms.AspNetCore.Identity/Aero.Cms.AspNetCore.Identity.csproj" />
   <Project Path="Aero.Cms.AspNetCore/Aero.Cms.AspNetCore.csproj" />
