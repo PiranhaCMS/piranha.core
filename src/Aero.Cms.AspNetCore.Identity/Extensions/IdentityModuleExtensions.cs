@@ -15,6 +15,8 @@ using Aero.Cms.Manager.LocalAuth;
 using IIdentityDb = Aero.Cms.AspNetCore.Identity.IIdentityDb;
 using Module = Aero.Cms.AspNetCore.Identity.Module;
 
+namespace Aero.Cms.AspNetCore.Identity;
+
 public static class IdentityModuleExtensions
 {
     /// <summary>

@@ -26,8 +26,4 @@
     <EmbeddedResource Include="assets\**\*" />
   </ItemGroup>
 
-  <ItemGroup>
-    <None Remove="assets\Aero.useredit.js" />
-  </ItemGroup>
-
 </Project>

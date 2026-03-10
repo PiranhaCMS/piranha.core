@@ -8,7 +8,7 @@
     var userIsDelete = Context.Request.Query["d"] == "1";
 }
 @section script { 
-    <script src="~/manager/identity/Aero.userlist.js"></script>
+    <script src="~/manager/identity/AeroUserList.js"></script>
     <script type="text/javascript">
         Aero.userlist.currentUserName = "@User.Identity.Name";
         Aero.userlist.load();
