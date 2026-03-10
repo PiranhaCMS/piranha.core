@@ -18,4 +18,4 @@
     - [x] Perform a subsequent request (or within the same session if Alba supports it, otherwise use authentication helpers) to `/manager`.
     - [x] Verify the response using `_.StatusCodeShouldBeOk()` (200 OK).
     - [x] Verify the admin user's identity has `SysAdmin` and `Admin` roles and correct claims.
-- [ ] **Task: Conductor - User Manual Verification 'Phase 2: Implement' (Protocol in workflow.md)**
+- [x] **Task: Conductor - User Manual Verification 'Phase 2: Implement' (Protocol in workflow.md)** [048143f]
