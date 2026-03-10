@@ -1,5 +1,6 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
     <GenerateDocumentationFile>false</GenerateDocumentationFile>
     <OutputType>Exe</OutputType>
     <IsPackable>false</IsPackable>
@@ -38,12 +39,12 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
-    <ProjectReference Include="..\..\core\Aero.Cms\Aero.Cms.csproj" />
-    <ProjectReference Include="..\..\core\Aero.Cms.AttributeBuilder\Aero.Cms.AttributeBuilder.csproj" />
-    <ProjectReference Include="..\..\core\Aero.Cms.ImageSharp\Aero.Cms.ImageSharp.csproj" />
-    <ProjectReference Include="..\..\core\Aero.Cms.Local.FileStorage\Aero.Cms.Local.FileStorage.csproj" />
-    <ProjectReference Include="..\..\examples\MvcWeb\MvcWeb.csproj" />
-    <ProjectReference Include="..\..\data\Aero.Cms.RavenDb\Aero.Cms.RavenDb.csproj" />
+    <ProjectReference Include="..\..\src\Aero.Cms\Aero.Cms.csproj" />
+    <ProjectReference Include="..\..\src\Aero.Cms.AttributeBuilder\Aero.Cms.AttributeBuilder.csproj" />
+    <ProjectReference Include="..\..\src\Aero.Cms.ImageSharp\Aero.Cms.ImageSharp.csproj" />
+    <ProjectReference Include="..\..\src\Aero.Cms.Local.FileStorage\Aero.Cms.Local.FileStorage.csproj" />
+    <ProjectReference Include="..\..\src\MvcWeb\MvcWeb.csproj" />
+    <ProjectReference Include="..\..\src\Aero.Cms.RavenDb\Aero.Cms.RavenDb.csproj" />
   </ItemGroup>
 
   <ItemGroup>

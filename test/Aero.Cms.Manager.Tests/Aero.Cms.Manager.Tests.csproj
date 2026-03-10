@@ -1,6 +1,7 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
     <GenerateDocumentationFile>false</GenerateDocumentationFile>
     <OutputType>Exe</OutputType>
     <IsPackable>false</IsPackable>
@@ -24,7 +25,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\core\Aero.Cms.Manager\Aero.Cms.Manager.csproj" />
+    <ProjectReference Include="..\..\src\Aero.Cms.Manager\Aero.Cms.Manager.csproj" />
   </ItemGroup>
 
 </Project>
