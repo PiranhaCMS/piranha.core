@@ -16,3 +16,8 @@ This file tracks all major tracks for the project. Each track has its own detail
 
 - [x] **Track: Analyze and align implementation with flow.md diagram**
 *Link: [./tracks/align_test_flow_20260226/](./tracks/align_test_flow_20260226/)*
+
+---
+
+- [ ] **Track: Fix Identity Role Claims Synchronization**
+*Link: [./tracks/fix_identity_role_claims_sync_20260309/](./tracks/fix_identity_role_claims_sync_20260309/)*

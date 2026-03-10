@@ -1,0 +1,8 @@
+{
+  "track_id": "fix_identity_role_claims_sync_20260309",
+  "type": "bug",
+  "status": "new",
+  "created_at": "2026-03-09T20:23:00Z",
+  "updated_at": "2026-03-09T20:23:00Z",
+  "description": "Fix role retrieval in RoleManager.FindByNameAsync failing to return roles, causing missing claims and 403 error on login."
+}
