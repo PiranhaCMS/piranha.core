@@ -21,3 +21,8 @@ This file tracks all major tracks for the project. Each track has its own detail
 
 - [x] **Track: Fix Identity Role Claims Synchronization**
 *Link: [./tracks/fix_identity_role_claims_sync_20260309/](./tracks/fix_identity_role_claims_sync_20260309/)*
+
+---
+
+- [ ] **Track: Implement Manager Login Integration Tests**
+*Link: [./tracks/manager_login_integration_test_20260309/](./tracks/manager_login_integration_test_20260309/)*

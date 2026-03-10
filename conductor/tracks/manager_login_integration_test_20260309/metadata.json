@@ -1,0 +1,8 @@
+{
+  "track_id": "manager_login_integration_test_20260309",
+  "type": "feature",
+  "status": "new",
+  "created_at": "2026-03-09T23:17:00Z",
+  "updated_at": "2026-03-09T23:17:00Z",
+  "description": "Implement Alba-based integration tests for manager login using seeded admin account."
+}
