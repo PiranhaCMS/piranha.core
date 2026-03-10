@@ -3,16 +3,19 @@
 ## Phase 1: Setup Integration Test Project
 - [ ] **Task: Create `test/Aero.Cms.Manager.IntegrationTests` project**
     - [ ] Create `.csproj` with references to `MvcWeb`, `Alba`, `xunit`, `Raven.TestDriver`.
-- [ ] **Task: Set up `WebApplicationFactory` equivalent with Alba**
-    - [ ] Configure `AlbaHost` to use a test RavenDB store.
+- [ ] **Task: Set up `AlbaHost` for Integration Testing**
+    - [ ] Create a custom `AlbaHost` setup in the test project that targets `MvcWeb`.
+    - [ ] Configure the host to use a test RavenDB store (Raven.TestDriver) and ensure `IdentityWithSeed` is called.
 - [ ] **Task: Conductor - User Manual Verification 'Phase 1: Setup' (Protocol in workflow.md)**
 
 ## Phase 2: Implement Manager Login Tests
-- [ ] **Task: Test Admin Login**
-    - [ ] Run `Seed()` in the test host.
-    - [ ] Use Alba to POST to `/manager/login`.
-    - [ ] Verify successful login and 200/302 response (depending on redirect).
-- [ ] **Task: Test Permissions (Roles/Claims)**
-    - [ ] Verify the admin user has `SysAdmin` and `Admin` roles.
-    - [ ] Verify the admin user can access `/manager`.
+- [ ] **Task: Test Admin Login with Alba `FormData`**
+    - [ ] Execute `Seed()` within the test host initialization or at the start of the test.
+    - [ ] Implement a test using `host.Scenario(...)`.
+    - [ ] Use `_.Post.FormData(loginModel).ToUrl("/manager/login")` to simulate the login POST.
+    - [ ] Verify the response status code using `_.StatusCodeShouldBe(302)` (redirection to `/manager` or the auth endpoint).
+- [ ] **Task: Test Authorized Access and Permissions**
+    - [ ] Perform a subsequent request (or within the same session if Alba supports it, otherwise use authentication helpers) to `/manager`.
+    - [ ] Verify the response using `_.StatusCodeShouldBeOk()` (200 OK).
+    - [ ] Verify the admin user's identity has `SysAdmin` and `Admin` roles and correct claims.
 - [ ] **Task: Conductor - User Manual Verification 'Phase 2: Implement' (Protocol in workflow.md)**
