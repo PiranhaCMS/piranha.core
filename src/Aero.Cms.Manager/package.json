@@ -1,7 +1,7 @@
 {
-  "name": "piranha.manager",
+  "name": "aero.manager",
   "version": "11.3.0",
-  "description": "Manager interface for Piranha CMS",
+  "description": "Manager interface for Aero CMS",
   "repository": {
     "type": "git",
     "url": "https://github.com/piranhacms/piranha.core.git"
