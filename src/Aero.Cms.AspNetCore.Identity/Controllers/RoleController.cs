@@ -4,50 +4,47 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Aero.Cms.AspNetCore.Identity.Models;
 using Aero.Cms.Manager.Controllers;
+using Microsoft.Extensions.Logging;
+using Raven.Client.Documents;
 
 namespace Aero.Cms.AspNetCore.Identity.Controllers;
 
 [Area("Manager")]
 [AutoValidateAntiforgeryToken]
-public class RoleController : ManagerController
+public class RoleController(IIdentityDb db, ILogger<RoleController> log) : ManagerController
 {
-    private readonly IIdentityDb _db;
-
-    public RoleController(IIdentityDb db)
-    {
-        _db = db;
-    }
-
-    [HttpGet]
-    [Route("/manager/roles")]
+    [HttpGet("/manager/roles")]
     [Authorize(Policy = Permissions.Roles)]
-    public IActionResult List()
+    public async Task<IActionResult> List()
     {
-        return View(RoleListModel.Get(_db));
+        var list = await RoleListModel.Get(db);
+        
+        return View(list);
     }
 
-    [HttpGet]
-    [Route("/manager/role/{id}")]
+    [HttpGet("/manager/role/{id}")]
     [Authorize(Policy = Permissions.RolesEdit)]
-    public IActionResult Edit(string id)
+    public async Task<IActionResult> Edit(string id)
     {
-        return View("Edit", RoleEditModel.GetById(_db, id));
+        var role = await RoleEditModel.GetById(db, id);
+        
+        return View("Edit", role);
     }
 
-    [HttpGet]
-    [Route("/manager/role")]
+    [HttpGet("/manager/role")]
     [Authorize(Policy = Permissions.RolesAdd)]
-    public IActionResult Add()
+    public async Task<IActionResult> Add()
     {
-        return View("Edit", RoleEditModel.Create());
+        var role = await RoleEditModel.Create();
+        
+        return View("Edit", role);
     }
 
-    [HttpPost]
-    [Route("/manager/role/save")]
+    [HttpPost("/manager/role/save")]
     [Authorize(Policy = Permissions.RolesSave)]
-    public IActionResult Save(RoleEditModel model)
+    public async Task<IActionResult> Save(RoleEditModel model)
     {
-        if (model.Save(_db))
+        if (await model.Save(db))
         {
             SuccessMessage("The role has been saved.");
             return RedirectToAction("Edit", new { id = model.Role.Id });
@@ -60,16 +57,16 @@ public class RoleController : ManagerController
     [HttpPost]
     [Route("/manager/role/delete")]
     [Authorize(Policy = Permissions.RolesDelete)]
-    public IActionResult Delete(string id)
+    public async Task<IActionResult> Delete(string id, CancellationToken ct)
     {
-        var role = _db.Roles
-            .FirstOrDefault(r => r.Id == id);
+        var role = await db.Roles
+            .FirstOrDefaultAsync(r => r.Id == id, token: ct);
 
         if (role != null)
         {
             //_db.Roles.Remove(role);
-            _db.session.Delete(role);
-            _db.SaveChanges();
+            db.session.Delete(role);
+            await db.SaveChangesAsync(ct);
 
             SuccessMessage("The role has been deleted.");
             return RedirectToAction("List");

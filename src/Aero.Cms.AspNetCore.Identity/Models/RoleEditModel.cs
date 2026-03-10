@@ -2,6 +2,7 @@
 
 using Microsoft.AspNetCore.Identity;
 using Aero.Cms.AspNetCore.Identity.Data;
+using Raven.Client.Documents;
 using Raven.Client.Documents.Linq;
 
 namespace Aero.Cms.AspNetCore.Identity.Models;
@@ -16,9 +17,9 @@ public class RoleEditModel
     public Role Role { get; set; }
     public List<string> SelectedClaims { get; set; }
 
-    public static RoleEditModel GetById(IIdentityDb db, string id)
+    public static async Task<RoleEditModel> GetById(IIdentityDb db, string id)
     {
-        var role = db.Roles.FirstOrDefault(r => r.Id == id);
+        var role = await db.Roles.FirstOrDefaultAsync(r => r.Id == id);
 
         if (role != null)
         {
@@ -39,17 +40,19 @@ public class RoleEditModel
         return null;
     }
 
-    public static RoleEditModel Create()
+    public static async ValueTask<RoleEditModel> Create()
     {
-        return new RoleEditModel
+        var result = new RoleEditModel
         {
             Role = new Role()
         };
+
+        return result;
     }
 
-    public bool Save(IIdentityDb db)
+    public async Task<bool> Save(IIdentityDb db)
     {
-        var role = db.Roles.FirstOrDefault(r => r.Id == Role.Id);
+        var role = await db.Roles.FirstOrDefaultAsync(r => r.Id == Role.Id);
 
         if (role == null)
         {
@@ -63,7 +66,7 @@ public class RoleEditModel
                 Id = Role.Id
             };
             //db.Roles.Add(role);
-            db.session.StoreAsync(role);
+            await db.session.StoreAsync(role);
         }
 
         role.Name = Role.Name;
@@ -102,10 +105,10 @@ public class RoleEditModel
         }
         
         foreach (var r in add)        {
-            db.session.StoreAsync(r);
+            await db.session.StoreAsync(r);
         }
 
-        db.SaveChanges();
+        await db.SaveChangesAsync();
 
         return true;
     }

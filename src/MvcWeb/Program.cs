@@ -24,7 +24,7 @@ var log = new LoggerConfiguration()
     .Enrich.FromLogContext()
     .Enrich.WithProperty("Application", "microbian-web")
     .WriteTo.Console()
-    .WriteTo.File("logs/microbians-.log", rollingInterval: RollingInterval.Day)
+    .WriteTo.File("logs/aero-.log", rollingInterval: RollingInterval.Day)
     .CreateBootstrapLogger();
 
 builder.Host.UseSerilog((context, configuration) =>
@@ -33,7 +33,7 @@ builder.Host.UseSerilog((context, configuration) =>
         .Enrich.FromLogContext()
         .Enrich.WithProperty("Application", "microbian-web")
         .WriteTo.Console()
-        .WriteTo.File("logs/microbians-.log", rollingInterval: RollingInterval.Day)
+        .WriteTo.File("logs/aero-.log", rollingInterval: RollingInterval.Day)
         ;
 });
 
