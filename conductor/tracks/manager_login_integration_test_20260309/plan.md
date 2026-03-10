@@ -3,7 +3,7 @@
 ## Phase 1: Setup Integration Test Project
 - [x] **Task: Create `test/Aero.Cms.Manager.IntegrationTests` project** [f0fe306]
     - [ ] Create `.csproj` with references to `MvcWeb`, `Alba`, `xunit`, `Raven.TestDriver`.
-- [ ] **Task: Set up `AlbaHost` for Integration Testing**
+- [x] **Task: Set up `AlbaHost` for Integration Testing** [7df246a]
     - [ ] Create a custom `AlbaHost` setup in the test project that targets `MvcWeb`.
     - [ ] Configure the host to use a test RavenDB store (Raven.TestDriver) and ensure `IdentityWithSeed` is called.
 - [ ] **Task: Conductor - User Manual Verification 'Phase 1: Setup' (Protocol in workflow.md)**
