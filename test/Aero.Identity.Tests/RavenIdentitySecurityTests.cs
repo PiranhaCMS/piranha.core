@@ -10,6 +10,8 @@ namespace Aero.Identity.Tests;
 
 public class RavenIdentitySecurityTests
 {
+    // These tests are commented out because RavenIdentitySecurity is currently commented out in the source.
+    /*
     [Fact]
     public async Task SignIn_ReturnsSucceeded_WhenSignInSucceeds()
     {
@@ -104,4 +106,5 @@ public class RavenIdentitySecurityTests
         // Assert
         mockSignInManager.Verify(s => s.SignOutAsync(), Times.Once);
     }
+    */
 }

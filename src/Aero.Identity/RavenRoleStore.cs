@@ -35,6 +35,7 @@ public class RavenRoleStore<TRole> :
         if (role == null) throw new ArgumentNullException(nameof(role));
 
         await _session.StoreAsync(role, cancellationToken);
+        await _session.SaveChangesAsync(cancellationToken);
         return IdentityResult.Success;
     }
 
@@ -45,6 +46,7 @@ public class RavenRoleStore<TRole> :
         if (role == null) throw new ArgumentNullException(nameof(role));
 
         _session.Delete(role.Id);
+        await _session.SaveChangesAsync(cancellationToken);
         return IdentityResult.Success;
     }
 
@@ -60,6 +62,7 @@ public class RavenRoleStore<TRole> :
     {
         cancellationToken.ThrowIfCancellationRequested();
         return await _session.Query<TRole>()
+            .Customize(x => x.WaitForNonStaleResults())
             .FirstOrDefaultAsync(r => r.NormalizedName == normalizedRoleName, cancellationToken);
     }
 
@@ -113,6 +116,7 @@ public class RavenRoleStore<TRole> :
                 await _session.StoreAsync(role, cancellationToken);
             }
 
+            await _session.SaveChangesAsync(cancellationToken);
             return IdentityResult.Success;
         }
         catch (Exception ex)

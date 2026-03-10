@@ -44,7 +44,7 @@ public abstract class IdentityDb<T> : IIdentityDb
             if (IsInitialized)
                 return;
 
-            Seed();
+            Seed().GetAwaiter().GetResult();
 
             IsInitialized = true;
         }

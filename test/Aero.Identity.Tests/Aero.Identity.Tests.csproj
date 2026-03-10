@@ -25,6 +25,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\..\src\Aero.Identity\Aero.Identity.csproj" />
+      <ProjectReference Include="..\..\src\Aero.Cms.AspNetCore.Identity\Aero.Cms.AspNetCore.Identity.csproj" />
     </ItemGroup>
 
 </Project>

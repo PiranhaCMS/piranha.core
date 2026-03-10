@@ -9,7 +9,24 @@ namespace Aero.Identity;
 /// RavenDB store for users.
 /// </summary>
 /// <typeparam name="TUser">The user type.</typeparam>
-public class RavenUserStore<TUser> :
+public class RavenUserStore<TUser> : RavenUserStore<TUser, RavenRole>
+    where TUser : RavenUser, new()
+{
+    /// <summary>
+    /// Initializes a new instance of the RavenUserStore.
+    /// </summary>
+    /// <param name="session">The RavenDB session.</param>
+    public RavenUserStore(IAsyncDocumentSession session) : base(session)
+    {
+    }
+}
+
+/// <summary>
+/// RavenDB store for users with a specific role type.
+/// </summary>
+/// <typeparam name="TUser">The user type.</typeparam>
+/// <typeparam name="TRole">The role type.</typeparam>
+public class RavenUserStore<TUser, TRole> :
     IUserPasswordStore<TUser>,
     IUserSecurityStampStore<TUser>,
     IUserEmailStore<TUser>,
@@ -23,8 +40,9 @@ public class RavenUserStore<TUser> :
     IUserPasskeyStore<TUser>,
     IQueryableUserStore<TUser>
     where TUser : RavenUser, new()
+    where TRole : RavenRole, new()
 {
-    private readonly IAsyncDocumentSession _session;
+    protected readonly IAsyncDocumentSession _session;
 
     /// <summary>
     /// Initializes a new instance of the RavenUserStore.
@@ -72,6 +90,7 @@ public class RavenUserStore<TUser> :
     {
         cancellationToken.ThrowIfCancellationRequested();
         return await _session.Query<TUser>()
+            .Customize(x => x.WaitForNonStaleResults())
             .FirstOrDefaultAsync(u => u.NormalizedUserName == normalizedUserName, cancellationToken);
     }
 
@@ -126,6 +145,7 @@ public class RavenUserStore<TUser> :
                 await _session.StoreAsync(user, cancellationToken);
             }
 
+            await _session.SaveChangesAsync(cancellationToken);
             return IdentityResult.Success;
         }
         catch (Exception ex)
@@ -206,6 +226,7 @@ public class RavenUserStore<TUser> :
     {
         cancellationToken.ThrowIfCancellationRequested();
         return await _session.Query<TUser>()
+            .Customize(x => x.WaitForNonStaleResults())
             .FirstOrDefaultAsync(u => u.NormalizedEmail == normalizedEmail, cancellationToken);
     }
 
@@ -267,7 +288,8 @@ public class RavenUserStore<TUser> :
 
             // Denormalized: copy role claims to user claims
             var normalizedRoleName = roleName.ToUpperInvariant();
-            var role = await _session.Query<RavenRole>()
+            var role = await _session.Query<TRole>()
+                .Customize(x => x.WaitForNonStaleResults())
                 .FirstOrDefaultAsync(r => r.NormalizedName == normalizedRoleName, cancellationToken);
 
             if (role != null)
@@ -388,6 +410,7 @@ public class RavenUserStore<TUser> :
     {
         cancellationToken.ThrowIfCancellationRequested();
         return await _session.Advanced.AsyncDocumentQuery<TUser>()
+            .WaitForNonStaleResults()
             .WhereEquals("Logins[].LoginProvider", loginProvider)
             .AndAlso()
             .WhereEquals("Logins[].ProviderKey", providerKey)
@@ -470,6 +493,7 @@ public class RavenUserStore<TUser> :
         if (claim == null) throw new ArgumentNullException(nameof(claim));
 
         return await _session.Advanced.AsyncDocumentQuery<TUser>()
+            .WaitForNonStaleResults()
             .WhereEquals("Claims[].ClaimType", claim.Type)
             .AndAlso()
             .WhereEquals("Claims[].ClaimValue", claim.Value)
@@ -631,6 +655,7 @@ public class RavenUserStore<TUser> :
     {
         cancellationToken.ThrowIfCancellationRequested();
         return await _session.Advanced.AsyncDocumentQuery<TUser>()
+            .WaitForNonStaleResults()
             .WhereEquals("Passkeys[].CredentialId", credentialId)
             .FirstOrDefaultAsync(cancellationToken);
     }

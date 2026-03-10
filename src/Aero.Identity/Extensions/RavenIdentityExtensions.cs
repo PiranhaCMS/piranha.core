@@ -119,10 +119,9 @@ public static class RavenIdentityExtensions
     {
         if (userType == null) throw new ArgumentNullException(nameof(userType));
 
-        var userStoreType = typeof(RavenUserStore<>).MakeGenericType(userType);
-
         if (roleType != null)
         {
+            var userStoreType = typeof(RavenUserStore<,>).MakeGenericType(userType, roleType);
             var roleStoreType = typeof(RavenRoleStore<>).MakeGenericType(roleType);
 
             services.TryAddScoped(
@@ -135,6 +134,8 @@ public static class RavenIdentityExtensions
         }
         else
         {
+            var userStoreType = typeof(RavenUserStore<>).MakeGenericType(userType);
+
             services.TryAddScoped(
                 typeof(IUserStore<>).MakeGenericType(userType),
                 userStoreType);
