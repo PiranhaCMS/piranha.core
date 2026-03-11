@@ -13,4 +13,8 @@
     <ProjectReference Include="..\Aero.Cms\Aero.Cms.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <PackageReference Update="Microsoft.SourceLink.GitHub" Version="10.0.200" />
+  </ItemGroup>
+
 </Project>

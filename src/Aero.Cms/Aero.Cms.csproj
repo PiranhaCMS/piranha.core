@@ -18,12 +18,13 @@
   <ItemGroup>
     <PackageReference Include="IdGen" Version="3.0.7" />
     <PackageReference Include="IdGen.DependencyInjection" Version="3.0.7" />
-    <PackageReference Include="Markdig" Version="0.40.0" />
-    <PackageReference Include="Microsoft.Extensions.Caching.Hybrid" Version="10.3.0" />
-    <PackageReference Include="Microsoft.Extensions.Caching.Memory" Version="10.0.3" />
-    <PackageReference Include="Microsoft.Extensions.Localization" Version="10.0.3" />
-    <PackageReference Include="Microsoft.Extensions.Caching.Abstractions" Version="10.0.3" />
-    <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="8.0.0" />
+    <PackageReference Include="Markdig" Version="1.1.1" />
+    <PackageReference Include="Microsoft.Extensions.Caching.Hybrid" Version="10.4.0" />
+    <PackageReference Include="Microsoft.Extensions.Caching.Memory" Version="10.0.4" />
+    <PackageReference Include="Microsoft.Extensions.Localization" Version="10.0.4" />
+    <PackageReference Include="Microsoft.Extensions.Caching.Abstractions" Version="10.0.4" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="10.0.4" />
+    <PackageReference Update="Microsoft.SourceLink.GitHub" Version="10.0.200" />
   </ItemGroup>
 
 </Project>

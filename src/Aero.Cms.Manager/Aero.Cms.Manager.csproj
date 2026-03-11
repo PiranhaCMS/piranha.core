@@ -18,7 +18,8 @@
 
 
     <ItemGroup>
-        <PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" Version="9.0.2"/>
+        <PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" Version="10.0.4" />
+        <PackageReference Update="Microsoft.SourceLink.GitHub" Version="10.0.200" />
     </ItemGroup>
 
     <ItemGroup>

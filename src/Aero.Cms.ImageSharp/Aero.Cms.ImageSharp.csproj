@@ -12,6 +12,7 @@
   <ItemGroup>
     <PackageReference Include="SixLabors.ImageSharp" Version="2.1.13" />
     <ProjectReference Include="..\Aero.Cms\Aero.Cms.csproj" />
+    <PackageReference Update="Microsoft.SourceLink.GitHub" Version="10.0.200" />
   </ItemGroup>
 
 </Project>

@@ -13,6 +13,7 @@
   <ItemGroup>
     <PackageReference Include="Azure.Storage.Blobs" Version="12.18.0" />
     <ProjectReference Include="..\Aero.Cms\Aero.Cms.csproj" />
+    <PackageReference Update="Microsoft.SourceLink.GitHub" Version="10.0.200" />
   </ItemGroup>
 
 </Project>
