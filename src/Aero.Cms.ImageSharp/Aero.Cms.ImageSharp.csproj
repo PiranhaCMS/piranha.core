@@ -10,7 +10,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="SixLabors.ImageSharp" Version="2.1.13" />
+    <PackageReference Include="SixLabors.ImageSharp" Version="3.1.12" />
     <ProjectReference Include="..\Aero.Cms\Aero.Cms.csproj" />
     <PackageReference Update="Microsoft.SourceLink.GitHub" Version="10.0.200" />
   </ItemGroup>

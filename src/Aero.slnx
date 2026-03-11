@@ -16,13 +16,13 @@
   <Project Path="Aero.Cms.AspNetCore/Aero.Cms.AspNetCore.csproj" />
   <Project Path="Aero.Cms.AttributeBuilder/Aero.Cms.AttributeBuilder.csproj" />
   <Project Path="Aero.Cms.Azure.BlobStorage/Aero.Cms.Azure.BlobStorage.csproj" />
+  <Project Path="Aero.Cms.Data/Aero.Cms.Data.csproj" />
   <Project Path="Aero.Cms.ImageSharp/Aero.Cms.ImageSharp.csproj" />
   <Project Path="Aero.Cms.Local.FileStorage/Aero.Cms.Local.FileStorage.csproj" />
   <Project Path="Aero.Cms.Manager.LocalAuth/Aero.Cms.Manager.LocalAuth.csproj" />
   <Project Path="Aero.Cms.Manager.Localization/Aero.Cms.Manager.Localization.csproj" />
   <Project Path="Aero.Cms.Manager.TinyMCE/Aero.Cms.Manager.TinyMCE.csproj" />
   <Project Path="Aero.Cms.Manager/Aero.Cms.Manager.csproj" />
-  <Project Path="Aero.Cms.RavenDb/Aero.Cms.RavenDb.csproj" />
   <Project Path="Aero.Cms.WebApi/Aero.Cms.WebApi.csproj" />
   <Project Path="Aero.Cms/Aero.Cms.csproj" />
   <Project Path="Aero.Identity/Aero.Identity.csproj" />

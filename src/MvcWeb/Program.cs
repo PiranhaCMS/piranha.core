@@ -4,7 +4,7 @@ using Aero.Cms.AttributeBuilder;
 using Aero.Cms.Manager.Editor;
 using Aero.Cms.AspNetCore.Identity.Extensions;
 using Aero.Cms.AspNetCore.Identity;
-using Aero.Cms.RavenDb.Extensions;
+using Aero.Cms.Data.Extensions;
 using Aero.Local;
 using Serilog;
 

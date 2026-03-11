@@ -20,7 +20,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="X.Web.Sitemap" Version="2.10.1" />
+    <PackageReference Include="X.Web.Sitemap" Version="2.11.3" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="10.0.4" />
   </ItemGroup>
 

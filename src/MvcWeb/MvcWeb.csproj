@@ -15,7 +15,7 @@
     <ProjectReference Include="..\Aero.Cms.Manager\Aero.Cms.Manager.csproj" />
     <ProjectReference Include="..\Aero.Cms.Manager.TinyMCE\Aero.Cms.Manager.TinyMCE.csproj" />
     <ProjectReference Include="..\Aero.Identity\Aero.Identity.csproj" />
-    <ProjectReference Include="..\Aero.Cms.RavenDb\Aero.Cms.RavenDb.csproj" />
+    <ProjectReference Include="..\Aero.Cms.Data\Aero.Cms.Data.csproj" />
     <ProjectReference Include="..\Aero.Cms.AspNetCore.Identity\Aero.Cms.AspNetCore.Identity.csproj" />
   </ItemGroup>
 

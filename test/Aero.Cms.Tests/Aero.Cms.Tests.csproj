@@ -16,8 +16,6 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="10.0.4" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="10.0.4" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="18.3.0" />
     <PackageReference Include="NSubstitute" Version="5.3.0" />
     <PackageReference Include="NSubstitute.Analyzers.CSharp" Version="1.0.17">
@@ -26,12 +24,12 @@
     </PackageReference>
     <PackageReference Include="RavenDB.TestDriver" Version="7.2.0" />
     <PackageReference Include="Shouldly" Version="4.3.0" />
-    <PackageReference Include="xunit" Version="2.7.0" />
-    <PackageReference Include="xunit.runner.visualstudio" Version="2.5.7">
+    <PackageReference Include="xunit" Version="2.9.3" />
+    <PackageReference Include="xunit.runner.visualstudio" Version="3.1.5">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
-    <PackageReference Include="coverlet.collector" Version="6.0.2">
+    <PackageReference Include="coverlet.collector" Version="8.0.0">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
@@ -44,7 +42,7 @@
     <ProjectReference Include="..\..\src\Aero.Cms.ImageSharp\Aero.Cms.ImageSharp.csproj" />
     <ProjectReference Include="..\..\src\Aero.Cms.Local.FileStorage\Aero.Cms.Local.FileStorage.csproj" />
     <ProjectReference Include="..\..\src\MvcWeb\MvcWeb.csproj" />
-    <ProjectReference Include="..\..\src\Aero.Cms.RavenDb\Aero.Cms.RavenDb.csproj" />
+    <ProjectReference Include="..\..\src\Aero.Cms.Data\Aero.Cms.Data.csproj" />
   </ItemGroup>
 
   <ItemGroup>

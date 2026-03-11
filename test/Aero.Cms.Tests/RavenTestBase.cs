@@ -2,7 +2,7 @@ using Raven.Client.Documents;
 using Raven.Embedded;
 using Raven.TestDriver;
 using System.Runtime.CompilerServices;
-using Aero.Cms.RavenDb;
+using Aero.Cms.Data;
 
 namespace Aero.Cms.Tests;
 

@@ -1,5 +1,5 @@
-﻿using Aero.Cms.RavenDb.Repositories;
-using Aero.Cms.RavenDb.Services.Internal;
+﻿using Aero.Cms.Data.Repositories;
+using Aero.Cms.Data.Services.Internal;
 using Xunit;
 using Aero.Cms.Services;
 

@@ -4,8 +4,8 @@ using System.Text;
 using Xunit;
 using Aero.Cms.Extend;
 using Aero.Cms.Models;
-using Aero.Cms.RavenDb.Repositories;
-using Aero.Cms.RavenDb.Services.Internal;
+using Aero.Cms.Data.Repositories;
+using Aero.Cms.Data.Services.Internal;
 using Aero.Cms.Runtime;
 using Aero.Cms.Services;
 
