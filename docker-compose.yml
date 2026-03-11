@@ -1,0 +1,206 @@
+services:
+  # The Coordinator (formerly your single postgres node)
+  pgsql-master:
+    image: citusdata/citus:14.0  # Includes Postgres 18 + Citus 14.0
+    restart: unless-stopped
+    environment:
+      POSTGRES_PASSWORD: "*strongPassword1"
+      POSTGRES_HOST_AUTH_METHOD: "scram-sha-256"
+    ports:
+      - "5432:5432"
+    volumes:
+      - aero-data:/var/lib/postgresql
+    networks:
+      - aero-net
+
+  # Worker Node 1
+  pgsql-worker1:
+    image: citusdata/citus:14.0
+    restart: unless-stopped
+    environment:
+      POSTGRES_PASSWORD: "*strongPassword1"
+    volumes:
+      - citus-worker1-data:/var/lib/postgresql
+    networks:
+      - aero-net
+
+  # Worker Node 2
+  pgsql-worker2:
+    image: citusdata/citus:14.0
+    restart: unless-stopped
+    environment:
+      POSTGRES_PASSWORD: "*strongPassword1"
+    volumes:
+      - citus-worker2-data:/var/lib/postgresql
+    networks:
+      - aero-net
+
+  openobserve:
+    image: public.ecr.aws/zinclabs/openobserve:latest
+    container_name: openobserve
+    ports:
+      - "5080:5080"
+    environment:
+      - ZO_ROOT_USER_EMAIL=socials@microbians.com
+      - ZO_ROOT_USER_PASSWORD=*strongPassword1
+    volumes:
+      - openobserve-data:/data
+    networks:
+      - aero-net
+
+  neo4j:
+    image: neo4j:latest
+    container_name: neo4j
+    pull_policy: always
+    environment:
+      - NEO4J_AUTH=neo4j/*strongPassword1
+    ports:
+      - "7474:7474"
+      - "7687:7687"
+    volumes:
+      - neo4j-data:/data
+    networks:
+      - aero-net
+
+  surrealdb:
+    image: surrealdb/surrealdb:latest
+    container_name: surrealdb
+    pull_policy: always
+    ports:
+      - "8000:8000"
+    command: start --log trace --user admin --pass *strongPassword1
+    networks:
+      - aero-net
+
+  sql2025:
+    image: mcr.microsoft.com/mssql/server:2025-latest
+    container_name: sql2025
+    hostname: sql2025
+    ports:
+      - "1433:1433"
+    environment:
+      - ACCEPT_EULA=Y
+      - MSSQL_SA_PASSWORD=*strongPassword1
+    networks:
+      - aero-net
+
+  garnet:
+    image: ghcr.io/microsoft/garnet:latest
+    container_name: garnet
+    pull_policy: always
+    ports:
+      - "6379:6379"
+    volumes:
+      - garnet-data:/data
+    networks:
+      - aero-net
+
+  lavinmq1:
+    image: cloudamqp/lavinmq:latest
+    hostname: lavinmq1
+    container_name: lavinmq1
+    ports:
+      - 5672:5672
+      - 5679:5679
+      - 15672:15672
+    volumes:
+      - lavinmq-data:/var/lib/lavinmq/data
+    configs:
+      - source: lavinmq_config
+        target: /etc/lavinmq/lavinmq.ini
+    depends_on:
+      etcd:
+        condition: service_healthy
+    networks:
+      - aero-net
+
+  lavinmq2:
+    image: cloudamqp/lavinmq:latest
+    hostname: lavinmq2
+    container_name: lavinmq2
+    ports:
+      - 5673:5672
+      - 15679:5679
+      - 25672:15672
+    volumes:
+      - lavinmq-data:/var/lib/lavinmq/data
+    configs:
+      - source: lavinmq_config
+        target: /etc/lavinmq/lavinmq.ini
+    depends_on:
+      etcd:
+        condition: service_healthy
+    networks:
+      - aero-net
+
+  lavinmq3:
+    image: cloudamqp/lavinmq:latest
+    hostname: lavinmq3
+    container_name: lavinmq3
+    ports:
+      - 5674:5672
+      - 25679:5679
+      - 35672:15672
+    volumes:
+      - lavinmq-data:/var/lib/lavinmq/data
+    configs:
+      - source: lavinmq_config
+        target: /etc/lavinmq/lavinmq.ini
+    depends_on:
+      etcd:
+        condition: service_healthy
+    networks:
+      - aero-net
+
+  etcd:
+    image: gcr.io/etcd-development/etcd:v3.6.5
+    container_name: etcd
+    ports:
+      - 2379:2379
+      - 2380:2380
+    command:
+      - /usr/local/bin/etcd
+      - --name=etcd
+      - --data-dir=/var/lib/etcd/data
+      - --listen-client-urls=http://0.0.0.0:2379
+      - --listen-peer-urls=http://0.0.0.0:2380
+      - --initial-advertise-peer-urls=http://etcd:2380
+      - --advertise-client-urls=http://etcd:2379
+      - --initial-cluster=etcd=http://etcd:2380
+      - --initial-cluster-state=new
+      - --initial-cluster-token=etcd-cluster-0
+    volumes:
+      - etcd-data:/var/lib/etcd/data
+    networks:
+      - aero-net
+    healthcheck:
+      test: [ "CMD", "etcdctl", "--endpoints=http://localhost:2379", "endpoint", "health" ]
+      interval: 5s
+      timeout: 5s
+      retries: 3
+    environment:
+      - ETCDCTL_API=3
+
+
+configs:
+  lavinmq_config:
+    content: |
+        [clustering]
+        enabled = true
+        bind = 0.0.0.0
+        etcd_endpoints = etcd:2379
+
+networks:
+  aero-net:
+    name: aero-net  # This forces the exact name 'aero-net'
+    driver: bridge
+
+volumes:
+  aero-data:
+  citus-worker1-data:
+  citus-worker2-data:
+  lavinmq-data:
+  etcd-data:
+  openobserve-data:
+  garnet-data:
+  neo4j-data:
