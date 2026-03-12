@@ -1,8 +1,6 @@
 
 // todo - replace automapper w/ Mapster or manual mappings
 using AutoMapper;
-using Aero.Cms.Data.Data;
-using Aero.Cms.Data.Services.Internal;
 using Aero.Cms.Services;
 
 namespace Aero.Cms.Data.Services.Internal;

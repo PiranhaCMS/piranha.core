@@ -8,8 +8,8 @@
 
     <ItemGroup>
       <PackageReference Include="IdGen" Version="3.0.7" />
+      <PackageReference Include="Marten" Version="8.23.0" />
       <PackageReference Include="Microsoft.Extensions.Identity.Core" Version="10.0.4" />
-      <PackageReference Include="RavenDB.Client" Version="7.2.0" />
       <PackageReference Update="Microsoft.SourceLink.GitHub" Version="10.0.200" />
     </ItemGroup>
 

@@ -2,48 +2,50 @@
 
 using Microsoft.AspNetCore.Identity;
 using Aero.Cms.AspNetCore.Identity.Data;
-using Raven.Client.Documents.Linq;
-using Raven.Client.Documents.Session;
+using Marten;
+using Marten.Linq;
+
+
 
 namespace Aero.Cms.AspNetCore.Identity;
 
 public interface IIdentityDb
 {
-    IAsyncDocumentSession session { get; }
+    IDocumentSession session { get; }
     /// <summary>
     /// Gets/sets the users set.
     /// </summary>
-    IRavenQueryable<User> Users { get => session.Query<User>(); }
+    IMartenQueryable<User> Users => session.Query<User>();
 
     /// <summary>
     /// Gets/sets the roles set.
     /// </summary>
-    IRavenQueryable<Role> Roles { get => session.Query<Role>(); }
+    IMartenQueryable<Role> Roles => session.Query<Role>();
 
     /// <summary>
     /// Gets/sets the user claims set.
     /// </summary>
-    IRavenQueryable<IdentityUserClaim<string>> UserClaims { get => session.Query<IdentityUserClaim<string>>(); }
+    IMartenQueryable<IdentityUserClaim<string>> UserClaims => session.Query<IdentityUserClaim<string>>();
 
     /// <summary>
     /// Gets/sets the user roles set.
     /// </summary>
-    IRavenQueryable<IdentityUserRole<string>> UserRoles { get => session.Query<IdentityUserRole<string>>(); }
+    IMartenQueryable<IdentityUserRole<string>> UserRoles => session.Query<IdentityUserRole<string>>();
 
     /// <summary>
     /// Gets/sets the user roles set.
     /// </summary>
-    IRavenQueryable<IdentityUserLogin<string>> UserLogins { get => session.Query<IdentityUserLogin<string>>(); }
+    IMartenQueryable<IdentityUserLogin<string>> UserLogins => session.Query<IdentityUserLogin<string>>();
 
     /// <summary>
     /// Gets/sets the roles claims set.
     /// </summary>
-    IRavenQueryable<IdentityRoleClaim<string>> RoleClaims { get => session.Query<IdentityRoleClaim<string>>(); }
+    IMartenQueryable<IdentityRoleClaim<string>> RoleClaims => session.Query<IdentityRoleClaim<string>>();
 
     /// <summary>
     /// Gets/sets the user tokes set.
     /// </summary>
-    IRavenQueryable<IdentityUserToken<string>> UserTokens { get => session.Query<IdentityUserToken<string>>(); }
+    IMartenQueryable<IdentityUserToken<string>> UserTokens => session.Query<IdentityUserToken<string>>();
 
     /// <summary>
     /// Saves the changes made to the context.

@@ -1,9 +1,14 @@
 using Aero.Cms.Data.Data;
-using Aero.Cms.Data.Indexes;
+
 using Aero.Cms.Data.Services;
+using Aero.Cms.Models;
 using Aero.Cms.Repositories;
-using Raven.Client.Documents;
-using Raven.Client.Documents.Linq;
+using Marten;
+using Marten.Linq;
+using Language = Aero.Cms.Data.Data.Language;
+using Taxonomy = Aero.Cms.Data.Data.Taxonomy;
+using TaxonomyType = Aero.Cms.Data.Data.TaxonomyType;
+
 
 namespace Aero.Cms.Data.Repositories;
 
@@ -35,7 +40,7 @@ internal class ContentRepository : IContentRepository
 
         if (!string.IsNullOrEmpty(groupId))
         {
-            query = (IRavenQueryable<Content>)query.Where(c => c.Type.Group == groupId);
+            query = (IMartenQueryable<Content>)query.Where(c => c.Type.Group == groupId);
         }
 
         return await query
@@ -95,7 +100,7 @@ internal class ContentRepository : IContentRepository
     public async Task<Models.TranslationStatus> GetTranslationStatusById(string contentId)
     {
         var allLanguages = await _db.Languages
-            .Customize(x => x.WaitForNonStaleResults())
+            
             .OrderBy(l => l.Title)
             .ToListAsync();
 
@@ -107,7 +112,7 @@ internal class ContentRepository : IContentRepository
 
         // Query the content with embedded translations
         var content = await _db.Content
-            .Customize(x => x.WaitForNonStaleResults())
+            
             .Where(c => c.Id == contentId)
             .FirstOrDefaultAsync();
 
@@ -161,14 +166,24 @@ internal class ContentRepository : IContentRepository
 
         // Query content with embedded translations by group
         //var contents = await _db.Content
-        //    .Customize(x => x.WaitForNonStaleResults())
+        //    
         //    .Where(c => c.Type.Group == groupId)
         //    .ToListAsync();
 
-        var contents = await _db.session.Query<Content_ByTypeGroup.IndexEntry, Content_ByTypeGroup>()
-            .Customize(x => x.WaitForNonStaleResults())
-            .Where(c => c.Group == groupId)
-            .OfType<Content>()
+        //var contents = await _db.session.Query<Content_ByTypeGroup.IndexEntry, Content_ByTypeGroup>()
+
+        //    .Where(c => c.Group == groupId)
+        //    .OfType<Content>()
+        //    .ToListAsync();
+        var contents = await _db.session.Query<Content>()
+            .Join(
+                _db.session.Query<ContentType>(),
+                content => content.TypeId,
+                type => type.Id,
+                (content, type) => new { content, type }
+            )
+            .Where(x => x.type.Group == groupId)
+            .Select(x => x.content) // Select the original Content document
             .ToListAsync();
 
         Console.WriteLine($"[DEBUG] Group search: {groupId}, Contents found: {contents.Count}");
@@ -256,7 +271,7 @@ internal class ContentRepository : IContentRepository
                                 LastModified = DateTime.Now
                             };
                             //await _db.Taxonomies.AddAsync(category).ConfigureAwait(false);
-                            await _db.session.StoreAsync(category);
+                            _db.session.Store(category);
                         }
 
                         categorized.Category.Id = category.Id;
@@ -305,7 +320,7 @@ internal class ContentRepository : IContentRepository
                                     LastModified = DateTime.Now
                                 };
                                 //await _db.Taxonomies.AddAsync(tag).ConfigureAwait(false);
-                                await _db.session.StoreAsync(tag);
+                                _db.session.Store(tag);
                             }
 
                             t.Id = tag.Id;
@@ -332,7 +347,7 @@ internal class ContentRepository : IContentRepository
                 model.Id = content.Id;
 
                 //await _db.Content.AddAsync(content).ConfigureAwait(false);
-                await _db.session.StoreAsync(content);
+                _db.session.Store(content);
             }
             else
             {
@@ -349,7 +364,7 @@ internal class ContentRepository : IContentRepository
                 {
                     field.ContentId = content.Id;
                     //await _db.ContentFields.AddAsync(field).ConfigureAwait(false);
-                    await _db.session.StoreAsync(field);
+                    _db.session.Store(field);
                 }
             }
 
@@ -429,7 +444,7 @@ internal class ContentRepository : IContentRepository
                                 Id = !string.IsNullOrEmpty(blocks[n].Id) ? blocks[n].Id : Snowflake.NewId()
                             };
                             //await _db.ContentBlocks.AddAsync(block).ConfigureAwait(false);
-                            await _db.session.StoreAsync(block);
+                            _db.session.Store(block);
                         }
 
                         block.ParentId = blocks[n].ParentId;
@@ -456,7 +471,7 @@ internal class ContentRepository : IContentRepository
                                     FieldId = newField.FieldId
                                 };
                                 //await _db.ContentBlockFields.AddAsync(field).ConfigureAwait(false);
-                                await _db.session.StoreAsync(field);
+                                _db.session.Store(field);
                                 block.Fields.Add(field);
                             }
 
@@ -476,7 +491,7 @@ internal class ContentRepository : IContentRepository
                                         LanguageId = languageId
                                     };
                                     //await _db.ContentBlockFieldTranslations.AddAsync(translation).ConfigureAwait(false);
-                                    await _db.session.StoreAsync(translation);
+                                    _db.session.Store(translation);
                                     field.Translations.Add(translation);
                                 }
 
@@ -599,10 +614,9 @@ internal class ContentRepository : IContentRepository
     /// Gets the base query for content.
     /// </summary>
     /// <returns>The queryable</returns>
-    private IRavenQueryable<Content> GetQuery()
+    private IMartenQueryable<Content> GetQuery()
     {
-        return _db.Content
-            .Customize(x => x.WaitForNonStaleResults());
+        return _db.Content;
     }
 
     /// <summary>

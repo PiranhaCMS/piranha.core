@@ -1,10 +1,5 @@
 using Alba;
 using Xunit;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using System.Security.Claims;
-using System.Linq;
-using Aero.Cms.Manager;
 
 namespace Aero.Cms.Manager.IntegrationTests;
 

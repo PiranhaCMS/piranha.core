@@ -13,7 +13,7 @@ public class PageTypeTestsMemoryCache : PageTypeTests
     public override async Task InitializeAsync()
     {
         await base.InitializeAsync();
-        _cache = new Cache.MemoryCache((IMemoryCache)_services.GetService(typeof(IMemoryCache)));
+        cache = new Cache.MemoryCache((IMemoryCache)services.GetService(typeof(IMemoryCache)));
     }
 }
 
@@ -23,7 +23,7 @@ public class PageTypeTestsDistributedCache : PageTypeTests
     public override async Task InitializeAsync()
     {
         await base.InitializeAsync();
-        _cache = new Cache.DistributedCache((IDistributedCache)_services.GetService(typeof(IDistributedCache)));
+        cache = new Cache.DistributedCache((IDistributedCache)services.GetService(typeof(IDistributedCache)));
     }
 }
 

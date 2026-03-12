@@ -2,7 +2,8 @@
 
 using Aero.Cms.Models;
 using Aero.Cms.Repositories;
-using Raven.Client.Documents;
+using Marten;
+
 
 namespace Aero.Cms.Data.Repositories;
 
@@ -71,7 +72,7 @@ internal class ContentGroupRepository : IContentGroupRepository
                 Created = DateTime.Now
             };
             
-            await _db.session.StoreAsync(group);
+            _db.session.Store(group);
             //await _db.ContentGroups.AddAsync(group).ConfigureAwait(false);
         }
         Module.Mapper.Map<ContentGroup, Data.ContentGroup>(model, group);

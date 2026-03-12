@@ -16,8 +16,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="RavenDB.Client" Version="7.2.0" />
-    <PackageReference Include="RavenDB.Embedded" Version="7.2.0" />
+    <PackageReference Include="Marten" Version="8.23.0" />
+    <PackageReference Include="Marten.PLv8" Version="7.40.5" />
     <ProjectReference Include="..\Aero.Cms\Aero.Cms.csproj" />
     <PackageReference Include="AutoMapper" Version="16.1.0" />
     <PackageReference Update="Microsoft.SourceLink.GitHub" Version="10.0.200" />

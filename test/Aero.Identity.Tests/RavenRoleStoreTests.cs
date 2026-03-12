@@ -3,14 +3,14 @@ using Xunit;
 
 namespace Aero.Identity.Tests;
 
-public class RavenRoleStoreTests : RavenTestBase
+public class RavenRoleStoreTests : AeroDbTestDriver
 {
     [Fact]
     public async Task CanCreateRole()
     {
         // Arrange
-        using var store = CreateStore();
-        using var session = store.OpenAsyncSession();
+        
+        using var session = store.LightweightSession();
         var roleStore = new RavenRoleStore<RavenRole>(session);
         var role = new RavenRole { Name = "Admin", NormalizedName = "ADMIN" };
 
@@ -21,7 +21,7 @@ public class RavenRoleStoreTests : RavenTestBase
         // Assert
         Assert.True(result.Succeeded);
         
-        using var assertSession = store.OpenAsyncSession();
+        using var assertSession = store.LightweightSession();
         var dbRole = await assertSession.LoadAsync<RavenRole>(role.Id);
         Assert.NotNull(dbRole);
         Assert.Equal("Admin", dbRole.Name);
@@ -31,10 +31,10 @@ public class RavenRoleStoreTests : RavenTestBase
     public async Task CanFindRoleById()
     {
         // Arrange
-        using var store = CreateStore();
-        using var session = store.OpenAsyncSession();
+        
+        using var session = store.LightweightSession();
         var role = new RavenRole { Name = "Admin" };
-        await session.StoreAsync(role);
+        session.Store(role);
         await session.SaveChangesAsync();
 
         var roleStore = new RavenRoleStore<RavenRole>(session);
@@ -51,10 +51,10 @@ public class RavenRoleStoreTests : RavenTestBase
     public async Task CanFindRoleByName()
     {
         // Arrange
-        using var store = CreateStore();
-        using var session = store.OpenAsyncSession();
+        
+        using var session = store.LightweightSession();
         var role = new RavenRole { Name = "Admin", NormalizedName = "ADMIN" };
-        await session.StoreAsync(role);
+        session.Store(role);
         await session.SaveChangesAsync();
 
         var roleStore = new RavenRoleStore<RavenRole>(session);
@@ -71,10 +71,10 @@ public class RavenRoleStoreTests : RavenTestBase
     public async Task CanDeleteRole()
     {
         // Arrange
-        using var store = CreateStore();
-        using var session = store.OpenAsyncSession();
+        
+        using var session = store.LightweightSession();
         var role = new RavenRole { Name = "DeleteMe" };
-        await session.StoreAsync(role);
+        session.Store(role);
         await session.SaveChangesAsync();
 
         var roleStore = new RavenRoleStore<RavenRole>(session);
@@ -85,7 +85,7 @@ public class RavenRoleStoreTests : RavenTestBase
 
         // Assert
         Assert.True(result.Succeeded);
-        using var assertSession = store.OpenAsyncSession();
+        using var assertSession = store.LightweightSession();
         var dbRole = await assertSession.LoadAsync<RavenRole>(role.Id);
         Assert.Null(dbRole);
     }
@@ -94,8 +94,8 @@ public class RavenRoleStoreTests : RavenTestBase
     public async Task UpdateAsync_ReturnsSuccess()
     {
         // Arrange
-        using var store = CreateStore();
-        using var session = store.OpenAsyncSession();
+        
+        using var session = store.LightweightSession();
         var roleStore = new RavenRoleStore<RavenRole>(session);
         var role = new RavenRole { Name = "Admin" };
 
@@ -110,8 +110,8 @@ public class RavenRoleStoreTests : RavenTestBase
     public async Task CreateAsync_ThrowsOnNullRole()
     {
         // Arrange
-        using var store = CreateStore();
-        using var session = store.OpenAsyncSession();
+        
+        using var session = store.LightweightSession();
         var roleStore = new RavenRoleStore<RavenRole>(session);
 
         // Act & Assert
@@ -122,8 +122,8 @@ public class RavenRoleStoreTests : RavenTestBase
     public async Task UpdateAsync_ThrowsOnNullRole()
     {
         // Arrange
-        using var store = CreateStore();
-        using var session = store.OpenAsyncSession();
+        
+        using var session = store.LightweightSession();
         var roleStore = new RavenRoleStore<RavenRole>(session);
 
         // Act & Assert
@@ -134,8 +134,8 @@ public class RavenRoleStoreTests : RavenTestBase
     public async Task DeleteAsync_ThrowsOnNullRole()
     {
         // Arrange
-        using var store = CreateStore();
-        using var session = store.OpenAsyncSession();
+        
+        using var session = store.LightweightSession();
         var roleStore = new RavenRoleStore<RavenRole>(session);
 
         // Act & Assert
@@ -146,8 +146,8 @@ public class RavenRoleStoreTests : RavenTestBase
     public async Task GetRoleIdAsync_ReturnsRoleId()
     {
         // Arrange
-        using var store = CreateStore();
-        using var session = store.OpenAsyncSession();
+        
+        using var session = store.LightweightSession();
         var roleStore = new RavenRoleStore<RavenRole>(session);
         var role = new RavenRole { Id = "roles/1" };
 
@@ -162,8 +162,8 @@ public class RavenRoleStoreTests : RavenTestBase
     public async Task GetRoleNameAsync_ReturnsRoleName()
     {
         // Arrange
-        using var store = CreateStore();
-        using var session = store.OpenAsyncSession();
+        
+        using var session = store.LightweightSession();
         var roleStore = new RavenRoleStore<RavenRole>(session);
         var role = new RavenRole { Name = "Admin" };
 
@@ -178,8 +178,8 @@ public class RavenRoleStoreTests : RavenTestBase
     public async Task SetRoleNameAsync_SetsRoleName()
     {
         // Arrange
-        using var store = CreateStore();
-        using var session = store.OpenAsyncSession();
+        
+        using var session = store.LightweightSession();
         var roleStore = new RavenRoleStore<RavenRole>(session);
         var role = new RavenRole();
 
@@ -194,8 +194,8 @@ public class RavenRoleStoreTests : RavenTestBase
     public async Task GetNormalizedRoleNameAsync_ReturnsNormalizedRoleName()
     {
         // Arrange
-        using var store = CreateStore();
-        using var session = store.OpenAsyncSession();
+        
+        using var session = store.LightweightSession();
         var roleStore = new RavenRoleStore<RavenRole>(session);
         var role = new RavenRole { NormalizedName = "ADMIN" };
 
@@ -210,8 +210,8 @@ public class RavenRoleStoreTests : RavenTestBase
     public async Task SetNormalizedRoleNameAsync_SetsNormalizedRoleName()
     {
         // Arrange
-        using var store = CreateStore();
-        using var session = store.OpenAsyncSession();
+        
+        using var session = store.LightweightSession();
         var roleStore = new RavenRoleStore<RavenRole>(session);
         var role = new RavenRole();
 

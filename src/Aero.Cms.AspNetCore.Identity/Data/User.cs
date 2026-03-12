@@ -7,4 +7,4 @@ namespace Aero.Cms.AspNetCore.Identity.Data;
 /// <summary>
 /// The application user.
 /// </summary>
-public sealed class User : RavenUser { }
+public sealed class User : AeroUser { }

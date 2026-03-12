@@ -2,7 +2,8 @@ using Aero.Cms.Data.Data;
 using Aero.Cms.Data.Services;
 using Aero.Cms.Extend.Fields;
 using Aero.Cms.Repositories;
-using Raven.Client.Documents;
+using Marten;
+
 
 namespace Aero.Cms.Data.Repositories;
 
@@ -62,7 +63,7 @@ internal class SiteRepository : ISiteRepository
                                 Culture = "en-US",
                                 IsDefault = true
                             };
-                            await _db.session.StoreAsync(defaultLanguage);
+                            _db.session.Store(defaultLanguage);
                             await _db.SaveChangesAsync();
                         }
                     }
@@ -187,12 +188,12 @@ internal class SiteRepository : ISiteRepository
     public async Task<Models.Site> GetDefault()
     {
         var site = await _db.Sites
-            .Customize(x => x.WaitForNonStaleResults())
+            
             .FirstOrDefaultAsync(s => s.IsDefault);
         if (site != null)
         {
             var defaultLanguage = await _db.Languages
-                .Where(x => x.Id == site.LanguageId, exact: false)
+                .Where(x => x.Id == site.LanguageId)
                 .FirstOrDefaultAsync();
 
             if (defaultLanguage is null)
@@ -320,7 +321,7 @@ internal class SiteRepository : ISiteRepository
                 Created = DateTime.Now
             };
             //await _db.Sites.AddAsync(site).ConfigureAwait(false);
-            await _db.session.StoreAsync(site).ConfigureAwait(false);
+            _db.session.Store(site);
         }
 
         site.LanguageId = model.LanguageId;
@@ -376,7 +377,7 @@ internal class SiteRepository : ISiteRepository
                 {
                     field.SiteId = site.Id;
                     //await _db.SiteFields.AddAsync(field).ConfigureAwait(false);
-                    await _db.session.StoreAsync(field).ConfigureAwait(false);
+                    _db.session.Store(field);
                 }
             }
 

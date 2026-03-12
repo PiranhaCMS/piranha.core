@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
-using Aero.Cms.Manager.LocalAuth;
 
 namespace Aero.Identity;
 
@@ -90,7 +89,7 @@ public static class RavenIdentityExtensions
             });
         });
 
-        services.AddIdentity<RavenUser, RavenRole>()
+        services.AddIdentity<AeroUser, RavenRole>()
             .AddRavenDbStores()
             .AddDefaultTokenProviders();
 

@@ -13,7 +13,7 @@ public class AliasTestsMemoryCache : AliasTests
     public override async Task InitializeAsync()
     {
         await base.InitializeAsync();
-        _cache = new Cache.MemoryCache((IMemoryCache)_services.GetService(typeof(IMemoryCache)));
+        cache = new Cache.MemoryCache((IMemoryCache)services.GetService(typeof(IMemoryCache)));
     }
 }
 
@@ -23,21 +23,21 @@ public class AliasTestsDistributedCache : AliasTests
     public override async Task InitializeAsync()
     {
         await base.InitializeAsync();
-        _cache = new Cache.DistributedCache((IDistributedCache)_services.GetService(typeof(IDistributedCache)));
+        cache = new Cache.DistributedCache((IDistributedCache)services.GetService(typeof(IDistributedCache)));
     }
 }
 
 [Collection("Integration tests")]
 public class AliasTests : BaseTestsAsync
 {
-    private const string ALIAS_1 = "/old-url";
-    private const string ALIAS_2 = "/another-old-url";
-    private const string ALIAS_3 = "/moved/page";
-    private const string ALIAS_4 = "/another-moved-page";
-    private const string ALIAS_5 = "/the-last-moved-page";
+    private const string ALIAS1 = "/old-url";
+    private const string ALIAS2 = "/another-old-url";
+    private const string ALIAS3 = "/moved/page";
+    private const string ALIAS4 = "/another-moved-page";
+    private const string ALIAS5 = "/the-last-moved-page";
 
-    private readonly string SITE_ID = Snowflake.NewId();
-    private readonly string ALIAS_1_ID = Snowflake.NewId();
+    private readonly string SITEID = Snowflake.NewId();
+    private readonly string ALIAS1ID = Snowflake.NewId();
 
     public override async Task InitializeAsync()
     {
@@ -47,7 +47,7 @@ public class AliasTests : BaseTestsAsync
         // Add site
         var site = new Site
         {
-            Id = SITE_ID,
+            Id = SITEID,
             Title = "Alias Site",
             InternalId = "AliasSite",
             IsDefault = true
@@ -57,27 +57,24 @@ public class AliasTests : BaseTestsAsync
         // Add aliases
         await api.Aliases.SaveAsync(new Alias
         {
-            Id = ALIAS_1_ID,
-            SiteId = SITE_ID,
-            AliasUrl = ALIAS_1,
+            Id = ALIAS1ID,
+            SiteId = SITEID,
+            AliasUrl = ALIAS1,
             RedirectUrl = "/redirect-1"
         });
-        //WaitForUserToContinueTheTest(_store);
+        //WaitForUserToContinueTheTest(store);
         await api.Aliases.SaveAsync(new Alias
         {
-            SiteId = SITE_ID,
-            AliasUrl = ALIAS_4,
+            SiteId = SITEID,
+            AliasUrl = ALIAS4,
             RedirectUrl = "/redirect-4"
         });
         await api.Aliases.SaveAsync(new Alias
         {
-            SiteId = SITE_ID,
-            AliasUrl = ALIAS_5,
+            SiteId = SITEID,
+            AliasUrl = ALIAS5,
             RedirectUrl = "/redirect-5"
         });
-
-        // make sure we give some time for the indexes to update before we start running tests
-        WaitForIndexing(_store);
     }
 
     public override async Task DisposeAsync()
@@ -111,8 +108,8 @@ public class AliasTests : BaseTestsAsync
         using var api = CreateApi();
         await api.Aliases.SaveAsync(new Alias
         {
-            SiteId = SITE_ID,
-            AliasUrl = ALIAS_2,
+            SiteId = SITEID,
+            AliasUrl = ALIAS2,
             RedirectUrl = "/redirect-2"
         });
     }
@@ -124,8 +121,8 @@ public class AliasTests : BaseTestsAsync
         await Assert.ThrowsAnyAsync<Exception>(async () =>
             await api.Aliases.SaveAsync(new Alias
             {
-                SiteId = SITE_ID,
-                AliasUrl = ALIAS_1,
+                SiteId = SITEID,
+                AliasUrl = ALIAS1,
                 RedirectUrl = "/duplicate-alias"
             })
         );
@@ -172,20 +169,20 @@ public class AliasTests : BaseTestsAsync
     public async Task GetById()
     {
         using var api = CreateApi();
-        var model = await api.Aliases.GetByIdAsync(ALIAS_1_ID);
+        var model = await api.Aliases.GetByIdAsync(ALIAS1ID);
 
         Assert.NotNull(model);
-        Assert.Equal(ALIAS_1, model.AliasUrl);
+        Assert.Equal(ALIAS1, model.AliasUrl);
     }
 
     [Fact]
     public async Task GetByAliasUrl()
     {
         using var api = CreateApi();
-        var model = await api.Aliases.GetByAliasUrlAsync(ALIAS_1);
+        var model = await api.Aliases.GetByAliasUrlAsync(ALIAS1);
 
         Assert.NotNull(model);
-        Assert.Equal(ALIAS_1, model.AliasUrl);
+        Assert.Equal(ALIAS1, model.AliasUrl);
     }
 
     [Fact]
@@ -195,7 +192,7 @@ public class AliasTests : BaseTestsAsync
         var model = await api.Aliases.GetByAliasUrlAsync("/Old-URL");
 
         Assert.NotNull(model);
-        Assert.Equal(ALIAS_1, model.AliasUrl);
+        Assert.Equal(ALIAS1, model.AliasUrl);
     }
 
     [Fact]
@@ -205,7 +202,7 @@ public class AliasTests : BaseTestsAsync
         var models = await api.Aliases.GetByRedirectUrlAsync("/redirect-1");
 
         Assert.Single(models);
-        Assert.Equal(ALIAS_1, models.First().AliasUrl);
+        Assert.Equal(ALIAS1, models.First().AliasUrl);
     }
 
     [Fact]
@@ -215,14 +212,14 @@ public class AliasTests : BaseTestsAsync
         var models = await api.Aliases.GetByRedirectUrlAsync("/ReDiRect-1");
 
         Assert.Single(models);
-        Assert.Equal(ALIAS_1, models.First().AliasUrl);
+        Assert.Equal(ALIAS1, models.First().AliasUrl);
     }
 
     [Fact]
     public async Task Update()
     {
         using var api = CreateApi();
-        var model = await api.Aliases.GetByIdAsync(ALIAS_1_ID);
+        var model = await api.Aliases.GetByIdAsync(ALIAS1ID);
 
         Assert.Equal("/redirect-1", model.RedirectUrl);
 
@@ -237,7 +234,7 @@ public class AliasTests : BaseTestsAsync
         using var api = CreateApi();
         var model = new Alias
         {
-            SiteId = SITE_ID,
+            SiteId = SITEID,
             AliasUrl = "the-alias-url-1",
             RedirectUrl = "/the-redirect-1"
         };
@@ -253,7 +250,7 @@ public class AliasTests : BaseTestsAsync
         using var api = CreateApi();
         var model = new Alias
         {
-            SiteId = SITE_ID,
+            SiteId = SITEID,
             AliasUrl = "/the-alias-url-2",
             RedirectUrl = "the-redirect-2"
         };
@@ -269,7 +266,7 @@ public class AliasTests : BaseTestsAsync
         using var api = CreateApi();
         var model = new Alias
         {
-            SiteId = SITE_ID,
+            SiteId = SITEID,
             AliasUrl = "/the-alias-url-3",
             RedirectUrl = "http://redirect.com"
         };
@@ -285,7 +282,7 @@ public class AliasTests : BaseTestsAsync
         using var api = CreateApi();
         var model = new Alias
         {
-            SiteId = SITE_ID,
+            SiteId = SITEID,
             AliasUrl = "/the-alias-url-4",
             RedirectUrl = "https://redirect.com"
         };
@@ -299,11 +296,11 @@ public class AliasTests : BaseTestsAsync
     public async Task Delete()
     {
         using var api = CreateApi();
-        var model = await api.Aliases.GetByAliasUrlAsync(ALIAS_4);
+        var model = await api.Aliases.GetByAliasUrlAsync(ALIAS4);
 
         Assert.NotNull(model);
 
-        model = await api.Aliases.GetByAliasUrlAsync(ALIAS_4);
+        model = await api.Aliases.GetByAliasUrlAsync(ALIAS4);
 
         await api.Aliases.DeleteAsync(model);
     }
@@ -312,7 +309,7 @@ public class AliasTests : BaseTestsAsync
     public async Task DeleteById()
     {
         using var api = CreateApi();
-        var model = await api.Aliases.GetByAliasUrlAsync(ALIAS_5);
+        var model = await api.Aliases.GetByAliasUrlAsync(ALIAS5);
 
         Assert.NotNull(model);
 

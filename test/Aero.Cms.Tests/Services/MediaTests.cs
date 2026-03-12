@@ -13,7 +13,7 @@ public class MediaTestsMemoryCache: MediaTests
     public override async Task InitializeAsync()
     {
         await base.InitializeAsync();
-        _cache = new Cache.MemoryCache((IMemoryCache)_services.GetService(typeof(IMemoryCache)));
+        cache = new Cache.MemoryCache((IMemoryCache)services.GetService(typeof(IMemoryCache)));
     }
 }
 
@@ -23,7 +23,7 @@ public class MediaTestsDistributedCache: MediaTests
     public override async Task InitializeAsync()
     {
         await base.InitializeAsync();
-        _cache = new Cache.DistributedCache((IDistributedCache)_services.GetService(typeof(IDistributedCache)));
+        cache = new Cache.DistributedCache((IDistributedCache)services.GetService(typeof(IDistributedCache)));
     }
 }
 
@@ -53,11 +53,11 @@ public class MediaTests : BaseTestsAsync
         folder1Id = folder1.Id;
 
         // Add media
-        using (var stream = File.OpenRead("Assets/HLD_Screenshot_01_mech_1080.png"))
+        using (var stream = File.OpenRead("Assets/HLDScreenshot01mech1080.png"))
         {
             var image1 = new Models.StreamMediaContent
             {
-                Filename = "HLD_Screenshot_01_mech_1080.png",
+                Filename = "HLDScreenshot01mech1080.png",
                 Data = stream
             };
             await api.Media.SaveAsync(image1);
@@ -74,12 +74,12 @@ public class MediaTests : BaseTestsAsync
             await api.Media.SaveAsync(image);
         }
 
-        using (var stream = File.OpenRead("Assets/HLD_Screenshot_01_rise_1080.png"))
+        using (var stream = File.OpenRead("Assets/HLDScreenshot01rise1080.png"))
         {
             var image2 = new Models.StreamMediaContent
             {
                 FolderId = folder1Id,
-                Filename = "HLD_Screenshot_01_rise_1080.png",
+                Filename = "HLDScreenshot01rise1080.png",
                 Data = stream
             };
             await api.Media.SaveAsync(image2);
@@ -87,11 +87,11 @@ public class MediaTests : BaseTestsAsync
             image2Id = image2.Id;
         }
 
-        using (var stream = File.OpenRead("Assets/HLD_Screenshot_01_robot_1080.png"))
+        using (var stream = File.OpenRead("Assets/HLDScreenshot01robot1080.png"))
         {
             var image3 = new Models.StreamMediaContent
             {
-                Filename = "HLD_Screenshot_01_robot_1080.png",
+                Filename = "HLDScreenshot01robot1080.png",
                 Data = stream
             };
             await api.Media.SaveAsync(image3);
@@ -161,7 +161,7 @@ public class MediaTests : BaseTestsAsync
         var media = await api.Media.GetByIdAsync(image1Id);
 
         Assert.NotNull(media);
-        Assert.Equal("HLD_Screenshot_01_mech_1080.png", media.Filename);
+        Assert.Equal("HLDScreenshot01mech1080.png", media.Filename);
         Assert.Equal("image/png", media.ContentType);
         Assert.Equal(Models.MediaType.Image, media.Type);
     }
@@ -173,7 +173,7 @@ public class MediaTests : BaseTestsAsync
         var media = (await api.Media.GetAllByFolderIdAsync(folder1Id)).ToList();
 
         Assert.NotEmpty(media);
-        Assert.Equal("HLD_Screenshot_01_rise_1080.png", media[0].Filename);
+        Assert.Equal("HLDScreenshot01rise1080.png", media[0].Filename);
     }
 
     [Fact]
@@ -183,7 +183,7 @@ public class MediaTests : BaseTestsAsync
         var media = await api.Media.GetByIdAsync(image5Id);
 
         Assert.NotNull(media);
-        Assert.Equal("HLD_Screenshot_01_mech_1080.png", media.Filename);
+        Assert.Equal("HLDScreenshot01mech1080.png", media.Filename);
     }
 
     [Fact]
@@ -245,10 +245,10 @@ public class MediaTests : BaseTestsAsync
     public async Task Insert()
     {
         using var api = CreateApi();
-        using var stream = File.OpenRead("Assets/HLD_Screenshot_BETA_entrance.png");
+        using var stream = File.OpenRead("Assets/HLDScreenshotBETAentrance.png");
         var image = new Models.StreamMediaContent
         {
-            Filename = "HLD_Screenshot_BETA_entrance.png",
+            Filename = "HLDScreenshotBETAentrance.png",
             Data = stream
         };
         await api.Media.SaveAsync(image);
@@ -270,7 +270,7 @@ public class MediaTests : BaseTestsAsync
         var media = await api.Media.GetByIdAsync(image1Id);
 
         Assert.NotNull(media);
-        Assert.Equal($"~/uploads/{image1Id}-HLD_Screenshot_01_mech_1080.png", media.PublicUrl);
+        Assert.Equal($"~/uploads/{image1Id}-HLDScreenshot01mech1080.png", media.PublicUrl);
     }
 
     [Fact]
@@ -285,7 +285,7 @@ public class MediaTests : BaseTestsAsync
         var media = await api.Media.GetByIdAsync(image1Id);
 
         Assert.NotNull(media);
-        Assert.Equal($"https://mycdn.org/uploads/{image1Id}-HLD_Screenshot_01_mech_1080.png", media.PublicUrl);
+        Assert.Equal($"https://mycdn.org/uploads/{image1Id}-HLDScreenshot01mech1080.png", media.PublicUrl);
     }
 
     [Fact]

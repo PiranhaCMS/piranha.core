@@ -1,39 +1,100 @@
 services:
+  master:
+    container_name: "${COMPOSE_PROJECT_NAME:-citus}_master"
+    image: "citusdata/citus:14.0.0"
+    ports: ["${COORDINATOR_EXTERNAL_PORT:-5432}:5432"]
+    labels: ["com.citusdata.role=Master"]
+    environment: &AUTH
+      POSTGRES_USER: "postgres"
+      POSTGRES_PASSWORD: "*strongPassword1"
+      PGUSER: "postgres"
+      PGPASSWORD: "*strongPassword1"
+      POSTGRES_HOST_AUTH_METHOD: "trust"
+  # worker:
+  #   image: "citusdata/citus:14.0.0"
+  #   labels: ["com.citusdata.role=Worker"]
+  #   depends_on: [manager]
+  #   environment: *AUTH
+  #   #command: "manager/wait-for-manager.sh"
+  #   entrypoint: ["/bin/sh", "/wait-for-manager.sh"]
+  #   volumes:
+  #     - healthcheck-volume:/healthcheck
+  #     - ./manager/wait-for-manager.sh:/wait-for-manager.sh
+
+  worker:
+    build:
+      context: ./manager
+      dockerfile: Dockerfile.worker
+      labels: ["com.citusdata.role=Worker"]
+    depends_on: [manager]
+    environment: *AUTH
+    command: "/wait-for-manager.sh"
+    volumes:
+      - healthcheck-volume:/healthcheck
+
+
+  manager:
+    container_name: "${COMPOSE_PROJECT_NAME:-citus}_manager"
+    build:
+      context: ./manager
+    volumes:
+      - "${DOCKER_SOCK:-/var/run/docker.sock}:/var/run/docker.sock"
+      - healthcheck-volume:/healthcheck
+    depends_on:
+      master:
+        condition: service_healthy
+    environment:
+      <<: *AUTH
+      DOCKER_API_VERSION: "1.44"
+
+
+  # manager:
+  #   container_name: "${COMPOSE_PROJECT_NAME:-citus}_manager"
+  #   image: "citusdata/membership-manager:0.3.0"
+  #   volumes:
+  #     - "${DOCKER_SOCK:-/var/run/docker.sock}:/var/run/docker.sock"
+  #     - healthcheck-volume:/healthcheck
+  #   depends_on: [master]
+  #   environment: #*AUTH
+  #     <<: *AUTH
+  #     DOCKER_API_VERSION: "1.44"
+
+
   # The Coordinator (formerly your single postgres node)
-  pgsql-master:
-    image: citusdata/citus:14.0  # Includes Postgres 18 + Citus 14.0
-    restart: unless-stopped
-    environment:
-      POSTGRES_PASSWORD: "*strongPassword1"
-      POSTGRES_HOST_AUTH_METHOD: "scram-sha-256"
-    ports:
-      - "5432:5432"
-    volumes:
-      - aero-data:/var/lib/postgresql
-    networks:
-      - aero-net
+  # pgsql-master:
+  #   image: citusdata/citus:14.0  # Includes Postgres 18 + Citus 14.0
+  #   restart: unless-stopped
+  #   environment:
+  #     POSTGRES_PASSWORD: "*strongPassword1"
+  #     POSTGRES_HOST_AUTH_METHOD: "scram-sha-256"
+  #   ports:
+  #     - "5432:5432"
+  #   volumes:
+  #     - aero-data:/var/lib/postgresql
+  #   networks:
+  #     - aero-net
 
-  # Worker Node 1
-  pgsql-worker1:
-    image: citusdata/citus:14.0
-    restart: unless-stopped
-    environment:
-      POSTGRES_PASSWORD: "*strongPassword1"
-    volumes:
-      - citus-worker1-data:/var/lib/postgresql
-    networks:
-      - aero-net
+  # # Worker Node 1
+  # pgsql-worker1:
+  #   image: citusdata/citus:14.0
+  #   restart: unless-stopped
+  #   environment:
+  #     POSTGRES_PASSWORD: "*strongPassword1"
+  #   volumes:
+  #     - citus-worker1-data:/var/lib/postgresql
+  #   networks:
+  #     - aero-net
 
-  # Worker Node 2
-  pgsql-worker2:
-    image: citusdata/citus:14.0
-    restart: unless-stopped
-    environment:
-      POSTGRES_PASSWORD: "*strongPassword1"
-    volumes:
-      - citus-worker2-data:/var/lib/postgresql
-    networks:
-      - aero-net
+  # # Worker Node 2
+  # pgsql-worker2:
+  #   image: citusdata/citus:14.0
+  #   restart: unless-stopped
+  #   environment:
+  #     POSTGRES_PASSWORD: "*strongPassword1"
+  #   volumes:
+  #     - citus-worker2-data:/var/lib/postgresql
+  #   networks:
+  #     - aero-net
 
   openobserve:
     image: public.ecr.aws/zinclabs/openobserve:latest
@@ -204,3 +265,4 @@ volumes:
   openobserve-data:
   garnet-data:
   neo4j-data:
+  healthcheck-volume:

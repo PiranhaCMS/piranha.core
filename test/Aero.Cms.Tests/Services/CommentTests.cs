@@ -15,7 +15,7 @@ public class CommentTestsMemoryCache : CommentTests
     public override async Task InitializeAsync()
     {
         await base.InitializeAsync();
-        _cache = new Cache.MemoryCache((IMemoryCache)_services.GetService(typeof(IMemoryCache)));
+        cache = new Cache.MemoryCache((IMemoryCache)services.GetService(typeof(IMemoryCache)));
     }
 }
 
@@ -25,18 +25,18 @@ public class CommentTestsDistributedCache : CommentTests
     public override async Task InitializeAsync()
     {
         await base.InitializeAsync();
-        _cache = new Cache.DistributedCache((IDistributedCache)_services.GetService(typeof(IDistributedCache)));
+        cache = new Cache.DistributedCache((IDistributedCache)services.GetService(typeof(IDistributedCache)));
     }
 }
 
 [Collection("Integration tests")]
 public class CommentTests : BaseTestsAsync
 {
-    private string SITE_ID = Snowflake.NewId();
-    private string BLOG_ID = Snowflake.NewId();
-    private string NEWS_ID = Snowflake.NewId();
-    private string BLOGPOST_ID = Snowflake.NewId();
-    private string NEWSPOST_ID = Snowflake.NewId();
+    private string SITEID = Snowflake.NewId();
+    private string BLOGID = Snowflake.NewId();
+    private string NEWSID = Snowflake.NewId();
+    private string BLOGPOSTID = Snowflake.NewId();
+    private string NEWSPOSTID = Snowflake.NewId();
 
     [PageType(Title = "Blog Archive", IsArchive = true, UseBlocks = false)]
     public class BlogArchive : Page<BlogArchive> {}
@@ -60,25 +60,25 @@ public class CommentTests : BaseTestsAsync
         // Add site
         var site = new Site
         {
-            Id = SITE_ID,
+            Id = SITEID,
             Title = "Comment Site",
-            InternalId = $"CommentSite_{ SITE_ID }",
+            InternalId = $"CommentSite{ SITEID }",
             IsDefault = true
         };
         await api.Sites.SaveAsync(site);
 
         // Add archive
         var blog = await BlogArchive.CreateAsync(api);
-        blog.Id = BLOG_ID;
-        blog.SiteId = SITE_ID;
+        blog.Id = BLOGID;
+        blog.SiteId = SITEID;
         blog.Title = "Blog";
         blog.EnableComments = true;
         blog.Published = DateTime.Now;
         await api.Pages.SaveAsync(blog);
 
         var news = await BlogArchive.CreateAsync(api);
-        news.Id = NEWS_ID;
-        news.SiteId = SITE_ID;
+        news.Id = NEWSID;
+        news.SiteId = SITEID;
         news.Title = "News";
         blog.EnableComments = true;
         news.Published = DateTime.Now;
@@ -86,16 +86,16 @@ public class CommentTests : BaseTestsAsync
 
         // Add posts
         var blogPost = await BlogPost.CreateAsync(api);
-        blogPost.Id = BLOGPOST_ID;
-        blogPost.BlogId = BLOG_ID;
+        blogPost.Id = BLOGPOSTID;
+        blogPost.BlogId = BLOGID;
         blogPost.Category = "The Category";
         blogPost.Title = "Welcome To The Blog";
         blogPost.Published = DateTime.Now;
         await api.Posts.SaveAsync(blogPost);
 
         var newsPost = await BlogPost.CreateAsync(api);
-        newsPost.Id = NEWSPOST_ID;
-        newsPost.BlogId = NEWS_ID;
+        newsPost.Id = NEWSPOSTID;
+        newsPost.BlogId = NEWSID;
         newsPost.Category = "The Category";
         newsPost.Title = "Welcome To The News";
         newsPost.Published = DateTime.Now;
@@ -105,25 +105,25 @@ public class CommentTests : BaseTestsAsync
     public override async Task DisposeAsync()
     {
         using var api = CreateApi();
-        var posts = await api.Posts.GetAllDynamicAsync(BLOG_ID);
+        var posts = await api.Posts.GetAllDynamicAsync(BLOGID);
         foreach (var p in posts)
         {
             await api.Posts.DeleteAsync(p);
         }
 
-        posts = await api.Posts.GetAllDynamicAsync(NEWS_ID);
+        posts = await api.Posts.GetAllDynamicAsync(NEWSID);
         foreach (var p in posts)
         {
             await api.Posts.DeleteAsync(p);
         }
 
-        var pages = await api.Pages.GetAllAsync(SITE_ID);
+        var pages = await api.Pages.GetAllAsync(SITEID);
         foreach (var p in pages)
         {
             await api.Pages.DeleteAsync(p);
         }
 
-        await api.Sites.DeleteAsync(SITE_ID);
+        await api.Sites.DeleteAsync(SITEID);
     }
 
     [Fact]
@@ -139,16 +139,16 @@ public class CommentTests : BaseTestsAsync
     public async Task AddPostComment()
     {
         using var api = CreateApi();
-        var count = (await api.Posts.GetByIdAsync(BLOGPOST_ID)).CommentCount;
+        var count = (await api.Posts.GetByIdAsync(BLOGPOSTID)).CommentCount;
 
-        await api.Posts.SaveCommentAsync(BLOGPOST_ID, new PostComment
+        await api.Posts.SaveCommentAsync(BLOGPOSTID, new PostComment
         {
             Author = "John Doe",
             Email = "john@doe.com",
             Body = "Integer posuere erat a ante venenatis dapibus posuere velit aliquet."
         });
 
-        var newCount = (await api.Posts.GetByIdAsync(BLOGPOST_ID)).CommentCount;
+        var newCount = (await api.Posts.GetByIdAsync(BLOGPOSTID)).CommentCount;
 
         Assert.Equal(count + 1, newCount);
     }
@@ -157,7 +157,7 @@ public class CommentTests : BaseTestsAsync
     public async Task CheckPostCommentType()
     {
         using var api = CreateApi();
-        var comments = await api.Posts.GetAllCommentsAsync(BLOGPOST_ID);
+        var comments = await api.Posts.GetAllCommentsAsync(BLOGPOSTID);
 
         Assert.True(comments.All(c => c is PostComment));
     }
@@ -167,7 +167,7 @@ public class CommentTests : BaseTestsAsync
     {
         using var api = CreateApi();
         await Assert.ThrowsAsync<ValidationException>(async () => {
-            await api.Posts.SaveCommentAsync(BLOGPOST_ID, new PostComment
+            await api.Posts.SaveCommentAsync(BLOGPOSTID, new PostComment
             {
                 Email = "john@doe.com",
                 Body = "Integer posuere erat a ante venenatis dapibus posuere velit aliquet."
@@ -180,7 +180,7 @@ public class CommentTests : BaseTestsAsync
     {
         using var api = CreateApi();
         await Assert.ThrowsAsync<ValidationException>(async () => {
-            await api.Posts.SaveCommentAsync(BLOGPOST_ID, new PostComment
+            await api.Posts.SaveCommentAsync(BLOGPOSTID, new PostComment
             {
                 Author = "John Doe",
                 Body = "Integer posuere erat a ante venenatis dapibus posuere velit aliquet."
@@ -193,7 +193,7 @@ public class CommentTests : BaseTestsAsync
     {
         using var api = CreateApi();
         await Assert.ThrowsAsync<ValidationException>(async () => {
-            await api.Posts.SaveCommentAsync(BLOGPOST_ID, new PostComment
+            await api.Posts.SaveCommentAsync(BLOGPOSTID, new PostComment
             {
                 Author = "John Doe",
                 Email = "ThisIsNotAnEmail",
@@ -213,7 +213,7 @@ public class CommentTests : BaseTestsAsync
 
         var id = Snowflake.NewId();
 
-        await api.Posts.SaveCommentAndVerifyAsync(BLOGPOST_ID, new PostComment
+        await api.Posts.SaveCommentAndVerifyAsync(BLOGPOSTID, new PostComment
         {
             Id = id,
             Author = "John Doe",
@@ -238,7 +238,7 @@ public class CommentTests : BaseTestsAsync
 
         var id = Snowflake.NewId();
 
-        await api.Posts.SaveCommentAndVerifyAsync(BLOGPOST_ID, new PostComment
+        await api.Posts.SaveCommentAndVerifyAsync(BLOGPOSTID, new PostComment
         {
             Id = id,
             Author = "John Doe",
@@ -256,16 +256,16 @@ public class CommentTests : BaseTestsAsync
     public async Task AddPageComment()
     {
         using var api = CreateApi();
-        var count = (await api.Pages.GetByIdAsync(BLOG_ID)).CommentCount;
+        var count = (await api.Pages.GetByIdAsync(BLOGID)).CommentCount;
 
-        await api.Pages.SaveCommentAsync(BLOG_ID, new PageComment
+        await api.Pages.SaveCommentAsync(BLOGID, new PageComment
         {
             Author = "John Doe",
             Email = "john@doe.com",
             Body = "Integer posuere erat a ante venenatis dapibus posuere velit aliquet."
         });
 
-        var newCount = (await api.Pages.GetByIdAsync(BLOG_ID)).CommentCount;
+        var newCount = (await api.Pages.GetByIdAsync(BLOGID)).CommentCount;
 
         Assert.Equal(count + 1, newCount);
     }
@@ -274,7 +274,7 @@ public class CommentTests : BaseTestsAsync
     public async Task CheckPageCommentType()
     {
         using var api = CreateApi();
-        var comments = await api.Pages.GetAllCommentsAsync(BLOG_ID);
+        var comments = await api.Pages.GetAllCommentsAsync(BLOGID);
 
         Assert.True(comments.All(c => c is PageComment));
     }
@@ -284,7 +284,7 @@ public class CommentTests : BaseTestsAsync
     {
         using var api = CreateApi();
         await Assert.ThrowsAsync<ValidationException>(async () => {
-            await api.Pages.SaveCommentAsync(BLOG_ID, new PageComment
+            await api.Pages.SaveCommentAsync(BLOGID, new PageComment
             {
                 Email = "john@doe.com",
                 Body = "Integer posuere erat a ante venenatis dapibus posuere velit aliquet."
@@ -297,7 +297,7 @@ public class CommentTests : BaseTestsAsync
     {
         using var api = CreateApi();
         await Assert.ThrowsAsync<ValidationException>(async () => {
-            await api.Pages.SaveCommentAsync(BLOG_ID, new PageComment
+            await api.Pages.SaveCommentAsync(BLOGID, new PageComment
             {
                 Author = "John Doe",
                 Body = "Integer posuere erat a ante venenatis dapibus posuere velit aliquet."
@@ -310,7 +310,7 @@ public class CommentTests : BaseTestsAsync
     {
         using var api = CreateApi();
         await Assert.ThrowsAsync<ValidationException>(async () => {
-            await api.Pages.SaveCommentAsync(BLOG_ID, new PageComment
+            await api.Pages.SaveCommentAsync(BLOGID, new PageComment
             {
                 Author = "John Doe",
                 Email = "ThisIsNotAnEmail",
@@ -330,7 +330,7 @@ public class CommentTests : BaseTestsAsync
 
         var id = Snowflake.NewId();
 
-        await api.Pages.SaveCommentAndVerifyAsync(BLOG_ID, new PageComment
+        await api.Pages.SaveCommentAndVerifyAsync(BLOGID, new PageComment
         {
             Id = id,
             Author = "John Doe",
@@ -355,7 +355,7 @@ public class CommentTests : BaseTestsAsync
 
         var id = Snowflake.NewId();
 
-        await api.Pages.SaveCommentAndVerifyAsync(BLOG_ID, new PageComment
+        await api.Pages.SaveCommentAndVerifyAsync(BLOGID, new PageComment
         {
             Id = id,
             Author = "John Doe",

@@ -1,10 +1,9 @@
-using Aero.Cms;
 using Aero.Identity.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
-using Raven.Client.Documents.Session;
+
 using Moq;
-using Aero.Cms.Manager.LocalAuth;
+using Marten;
 using Xunit;
 
 namespace Aero.Identity.Tests.Extensions;
@@ -16,22 +15,22 @@ public class RavenIdentityExtensionsTests
     {
         // Arrange
         var services = new ServiceCollection();
-        var mockSession = new Mock<IAsyncDocumentSession>();
+        var mockSession = new Mock<IDocumentSession>();
         services.AddScoped(_ => mockSession.Object);
 
         // Act
-        services.AddIdentityCore<RavenUser>()
+        services.AddIdentityCore<AeroUser>()
             .AddRoles<RavenRole>()
             .AddRavenDbStores();
 
         var serviceProvider = services.BuildServiceProvider();
 
         // Assert
-        var userStore = serviceProvider.GetService<IUserStore<RavenUser>>();
+        var userStore = serviceProvider.GetService<IUserStore<AeroUser>>();
         var roleStore = serviceProvider.GetService<IRoleStore<RavenRole>>();
 
         Assert.NotNull(userStore);
-        Assert.IsType<RavenUserStore<RavenUser>>(userStore);
+        Assert.IsType<RavenUserStore<AeroUser>>(userStore);
         Assert.NotNull(roleStore);
         Assert.IsType<RavenRoleStore<RavenRole>>(roleStore);
     }
@@ -41,21 +40,21 @@ public class RavenIdentityExtensionsTests
     {
         // Arrange
         var services = new ServiceCollection();
-        var mockSession = new Mock<IAsyncDocumentSession>();
+        var mockSession = new Mock<IDocumentSession>();
         services.AddScoped(_ => mockSession.Object);
 
         // Act
-        services.AddIdentityCore<RavenUser>()
+        services.AddIdentityCore<AeroUser>()
             .AddRavenDbStores();
 
         var serviceProvider = services.BuildServiceProvider();
 
         // Assert
-        var userStore = serviceProvider.GetService<IUserStore<RavenUser>>();
+        var userStore = serviceProvider.GetService<IUserStore<AeroUser>>();
         var roleStore = serviceProvider.GetService<IRoleStore<RavenRole>>();
 
         Assert.NotNull(userStore);
-        Assert.IsType<RavenUserStore<RavenUser>>(userStore);
+        Assert.IsType<RavenUserStore<AeroUser>>(userStore);
         Assert.Null(roleStore);
     }
 
@@ -66,7 +65,7 @@ public class RavenIdentityExtensionsTests
         // Arrange
         var services = new ServiceCollection();
         var mockStore = new Mock<Raven.Client.Documents.IDocumentStore>();
-        var mockSession = new Mock<IAsyncDocumentSession>();
+        var mockSession = new Mock<IDocumentSession>();
         services.AddSingleton(mockStore.Object);
         services.AddScoped(_ => mockSession.Object);
 

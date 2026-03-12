@@ -2,7 +2,8 @@
 
 using Aero.Cms.Models;
 using Aero.Cms.Repositories;
-using Raven.Client.Documents;
+using Marten;
+
 
 namespace Aero.Cms.Data.Repositories;
 
@@ -48,7 +49,7 @@ internal class ParamRepository : IParamRepository
     public Task<Param> GetById(string id)
     {
         return _db.Params
-            .Customize(x => x.WaitForNonStaleResults())
+            
             .Select(p => new Param
             {
                 Id = p.Id,
@@ -69,7 +70,7 @@ internal class ParamRepository : IParamRepository
     public Task<Param> GetByKey(string key)
     {
         return _db.Params
-            .Customize(x => x.WaitForNonStaleResults())
+            
             .Select(p => new Param
             {
                 Id = p.Id,
@@ -90,7 +91,7 @@ internal class ParamRepository : IParamRepository
     public async Task Save(Param model)
     {
         var param = await _db.Params
-            .Customize(x => x.WaitForNonStaleResults())
+            
             .FirstOrDefaultAsync(p => p.Id == model.Id);
 
         if (param == null)
@@ -101,7 +102,7 @@ internal class ParamRepository : IParamRepository
                 Created = DateTime.Now
             };
             //await _db.Params.AddAsync(param).ConfigureAwait(false);
-            await _db.session.StoreAsync(param);
+            _db.session.Store(param);
         }
         param.Key = model.Key;
         param.Description = model.Description;
@@ -118,7 +119,7 @@ internal class ParamRepository : IParamRepository
     public async Task Delete(string id)
     {
         var param = await _db.Params
-            .Customize(x => x.WaitForNonStaleResults())
+            
             .FirstOrDefaultAsync(p => p.Id == id);
 
         if (param != null)

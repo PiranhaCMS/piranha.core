@@ -2,24 +2,9 @@
 
 using Aero.Cms.Data.Data;
 using Aero.Cms.Models;
-using Raven.Client.Documents;
-using Raven.Client.Documents.Linq;
-using Raven.Client.Documents.Session;
-using Raven.Embedded;
+using Marten;
+using Marten.Linq;
 using Alias = Aero.Cms.Data.Data.Alias;
-using AliasEntity = Aero.Cms.Data.Data.Alias;
-using ContentGroup = Aero.Cms.Data.Data.ContentGroup;
-using Language = Aero.Cms.Data.Data.Language;
-using Media = Aero.Cms.Data.Data.Media;
-using MediaFolder = Aero.Cms.Data.Data.MediaFolder;
-using PageComment = Aero.Cms.Data.Data.PageComment;
-using PageType = Aero.Cms.Data.Data.PageType;
-using Param = Aero.Cms.Data.Data.Param;
-using PostComment = Aero.Cms.Data.Data.PostComment;
-using PostType = Aero.Cms.Data.Data.PostType;
-using Site = Aero.Cms.Data.Data.Site;
-using SiteType = Aero.Cms.Data.Data.SiteType;
-using Taxonomy = Aero.Cms.Data.Data.Taxonomy;
 
 namespace Aero.Cms.Data;
 
@@ -36,33 +21,28 @@ using Data_Site = Data.Site;
 using Data_SiteType = Data.SiteType;
 using Data_Taxonomy = Data.Taxonomy;
 
-public class DbRaven : DbRavenBase
-{
-    public DbRaven(IAsyncDocumentSession db, IDocumentStore store) : base(db, store)
-    {
-        // todo - drop the max requests limit for RavenDB sessions. This is a safety mechanism to prevent runaway sessions, but it can cause issues if users are not aware of it and have long-running sessions or perform many operations in a single session. We should review this and consider removing it or increasing the limit, especially for local dev and testing scenarios.
-        db.Advanced.MaxNumberOfRequestsPerSession = 1000;
-    }
-}
+public class AeroDb(IDocumentSession db, IDocumentStore store) : AeroDbBase(db, store);
+
 
 /// <inheritdoc />
-public abstract class DbRavenBase : IDb
+public abstract class AeroDbBase : IDb
 {
     private static readonly object _lock = new object();
     private IDocumentStore _store;
-    private IAsyncDocumentSession _session;
+    private IDocumentSession _session;
 
     /// <summary>
     /// Default constructor.
     /// </summary>
     /// <param name="db">The current raven db session</param>
-    protected DbRavenBase(IAsyncDocumentSession db, IDocumentStore store)
+    protected AeroDbBase(IDocumentSession db, IDocumentStore store)
     {
-        Console.WriteLine($"[DEBUG] DbRavenBase constructor: db null={db == null}, store null={store == null}");
-        if (store != null)
-        {
-            Console.WriteLine($"[DEBUG] DbRavenBase constructor: Database={store.Database}");
-        }
+        if (store is null)
+            ArgumentNullException.ThrowIfNull(store, nameof(IDocumentStore));
+
+        // todo - figure out a cleaner way to instantiate IDocumentSession
+        db ??= store.LightweightSession();
+
         this._store = store;
         this._session = db;
 
@@ -95,60 +75,10 @@ public abstract class DbRavenBase : IDb
     /// <summary>
     /// Gets the raven db session.
     /// </summary>
-    public IAsyncDocumentSession session
+    public IDocumentSession session
     {
         get
         {
-            // TODO: Review this logic. We should rely on DI to manage the session/store lifecycle,
-            // not fallback logic in the db context. This is here for testing and local dev stability.
-            if (_session == null)
-            {
-                if (_store == null)
-                {
-                    lock (_lock)
-                    {
-                        if (_store == null)
-                        {
-                            string url = Environment.GetEnvironmentVariable("RAVENDB_URL");
-                            string dbName = Environment.GetEnvironmentVariable("RAVENDB_DATABASE") ?? "Aero";
-
-                            if (string.IsNullOrEmpty(url))
-                            {
-                                Console.WriteLine(
-                                    "[Db.cs] Session is null and RAVENDB_URL is empty. Falling back to EmbeddedServer.");
-                                try
-                                {
-                                    EmbeddedServer.Instance.StartServer(new ServerOptions
-                                    {
-                                        Licensing = new ServerOptions.LicensingOptions
-                                            { ThrowOnInvalidOrMissingLicense = false }
-                                    });
-                                }
-                                catch (InvalidOperationException)
-                                {
-                                }
-
-                                _store = EmbeddedServer.Instance.GetDocumentStore(
-                                    new DatabaseOptions(dbName + "-embedded"));
-                            }
-                            else
-                            {
-                                Console.WriteLine($"[Db.cs] Session is null. Connecting to RavenDB at {url}");
-                                var store = new DocumentStore
-                                {
-                                    Urls = new[] { url },
-                                    Database = dbName
-                                };
-                                store.Initialize();
-                                _store = store;
-                            }
-                        }
-                    }
-                }
-
-                _session = _store.OpenAsyncSession();
-            }
-
             return _session;
         }
     }
@@ -160,37 +90,38 @@ public abstract class DbRavenBase : IDb
     // collection. Use session.LoadAsync<T>(id) for ID-based lookups.
     // -------------------------------------------------------------------------
 
-    public IRavenQueryable<Alias> Aliases => session.Query<Alias>();
-    public IRavenQueryable<Block> Blocks => session.Query<Block>();
-    public IRavenQueryable<Category> Categories => session.Query<Category>();
-    public IRavenQueryable<Content> Content => session.Query<Content>();
-    public IRavenQueryable<ContentBlock> ContentBlocks => session.Query<ContentBlock>();
-    public IRavenQueryable<ContentBlockField> ContentBlockFields => session.Query<ContentBlockField>();
-    public IRavenQueryable<ContentBlockFieldTranslation> ContentBlockFieldTranslations =>
+    // todo - might be able to simply use IQueryable<> instead of IMartenQueryable<>
+    public IMartenQueryable<Alias> Aliases => session.Query<Alias>();
+    public IMartenQueryable<Block> Blocks => session.Query<Block>();
+    public IMartenQueryable<Category> Categories => session.Query<Category>();
+    public IMartenQueryable<Content> Content => session.Query<Content>();
+    public IMartenQueryable<ContentBlock> ContentBlocks => session.Query<ContentBlock>();
+    public IMartenQueryable<ContentBlockField> ContentBlockFields => session.Query<ContentBlockField>();
+    public IMartenQueryable<ContentBlockFieldTranslation> ContentBlockFieldTranslations =>
         session.Query<ContentBlockFieldTranslation>();
-    public IRavenQueryable<ContentField> ContentFields => session.Query<ContentField>();
-    public IRavenQueryable<ContentFieldTranslation> ContentFieldTranslations =>
+    public IMartenQueryable<ContentField> ContentFields => session.Query<ContentField>();
+    public IMartenQueryable<ContentFieldTranslation> ContentFieldTranslations =>
         session.Query<ContentFieldTranslation>();
-    public IRavenQueryable<ContentTaxonomy> ContentTaxonomies => session.Query<ContentTaxonomy>();
-    public IRavenQueryable<ContentTranslation> ContentTranslations => session.Query<ContentTranslation>();
-    public IRavenQueryable<Data_ContentGroup> ContentGroups => session.Query<Data_ContentGroup>();
-    public IRavenQueryable<ContentType> ContentTypes => session.Query<ContentType>();
-    public IRavenQueryable<Data_Language> Languages => session.Query<Data_Language>();
-    public IRavenQueryable<Data_Media> Media => session.Query<Data_Media>();
-    public IRavenQueryable<Data_MediaFolder> MediaFolders => session.Query<Data_MediaFolder>();
-    public IRavenQueryable<Page> Pages => session.Query<Page>();
-    public IRavenQueryable<Data_PageComment> PageComments => session.Query<Data_PageComment>();
-    public IRavenQueryable<PageRevision> PageRevisions => session.Query<PageRevision>();
-    public IRavenQueryable<Data_PageType> PageTypes => session.Query<Data_PageType>();
-    public IRavenQueryable<Data_Param> Params => session.Query<Data_Param>();
-    public IRavenQueryable<Post> Posts => session.Query<Post>();
-    public IRavenQueryable<Data_PostComment> PostComments => session.Query<Data_PostComment>();
-    public IRavenQueryable<PostRevision> PostRevisions => session.Query<PostRevision>();
-    public IRavenQueryable<Data_PostType> PostTypes => session.Query<Data_PostType>();
-    public IRavenQueryable<Data_Site> Sites => session.Query<Data_Site>();
-    public IRavenQueryable<Data_SiteType> SiteTypes => session.Query<Data_SiteType>();
-    public IRavenQueryable<Tag> Tags => session.Query<Tag>();
-    public IRavenQueryable<Data_Taxonomy> Taxonomies => session.Query<Data_Taxonomy>();
+    public IMartenQueryable<ContentTaxonomy> ContentTaxonomies => session.Query<ContentTaxonomy>();
+    public IMartenQueryable<ContentTranslation> ContentTranslations => session.Query<ContentTranslation>();
+    public IMartenQueryable<Data_ContentGroup> ContentGroups => session.Query<Data_ContentGroup>();
+    public IMartenQueryable<ContentType> ContentTypes => session.Query<ContentType>();
+    public IMartenQueryable<Data_Language> Languages => session.Query<Data_Language>();
+    public IMartenQueryable<Data_Media> Media => session.Query<Data_Media>();
+    public IMartenQueryable<Data_MediaFolder> MediaFolders => session.Query<Data_MediaFolder>();
+    public IMartenQueryable<Page> Pages => session.Query<Page>();
+    public IMartenQueryable<Data_PageComment> PageComments => session.Query<Data_PageComment>();
+    public IMartenQueryable<PageRevision> PageRevisions => session.Query<PageRevision>();
+    public IMartenQueryable<Data_PageType> PageTypes => session.Query<Data_PageType>();
+    public IMartenQueryable<Data_Param> Params => session.Query<Data_Param>();
+    public IMartenQueryable<Post> Posts => session.Query<Post>();
+    public IMartenQueryable<Data_PostComment> PostComments => session.Query<Data_PostComment>();
+    public IMartenQueryable<PostRevision> PostRevisions => session.Query<PostRevision>();
+    public IMartenQueryable<Data_PostType> PostTypes => session.Query<Data_PostType>();
+    public IMartenQueryable<Data_Site> Sites => session.Query<Data_Site>();
+    public IMartenQueryable<Data_SiteType> SiteTypes => session.Query<Data_SiteType>();
+    public IMartenQueryable<Tag> Tags => session.Query<Tag>();
+    public IMartenQueryable<Data_Taxonomy> Taxonomies => session.Query<Data_Taxonomy>();
 
     public async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
     {
@@ -225,7 +156,7 @@ public abstract class DbRavenBase : IDb
                 Culture = "en-US",
                 IsDefault = true
             };
-            await session.StoreAsync(lang);
+            session.Store(lang);
         }
         else
         {
@@ -248,7 +179,7 @@ public abstract class DbRavenBase : IDb
                 Created = DateTime.UtcNow,
                 LastModified = DateTime.UtcNow
             };
-            await session.StoreAsync(site);
+            session.Store(site);
         }
         else
         {
@@ -265,6 +196,15 @@ public abstract class DbRavenBase : IDb
 
     public void Dispose()
     {
-        _session?.Dispose();
+        Dispose(true);
+        GC.SuppressFinalize(this);
+    }
+
+    public void Dispose(bool IsDisposing)
+    {
+        if (IsDisposing)
+        {
+            session?.Dispose();
+        }
     }
 }

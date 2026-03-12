@@ -2,8 +2,8 @@
 
 using Aero.Cms.Data.Data;
 using Aero.Cms.Repositories;
-using Raven.Client.Documents;
-using Raven.Client.Documents.Linq;
+using Marten;
+
 
 namespace Aero.Cms.Data.Repositories;
 
@@ -73,7 +73,7 @@ internal class MediaRepository : IMediaRepository
         return _db.Media
             .Where(m => m.Id.In(idList))
             .OrderBy(m => m.Filename)
-            .ToArrayAsync()
+            .ToListAsync()
             .ContinueWith(t => t.Result.Select(m => (Models.Media) m));
     }
 
@@ -125,7 +125,7 @@ internal class MediaRepository : IMediaRepository
             .ToListAsync()
             .ConfigureAwait(false);
 
-        return Sort(folders, count);
+        return Sort(folders, count.ToList());
     }
 
     /// <summary>
@@ -148,7 +148,7 @@ internal class MediaRepository : IMediaRepository
                 Created = DateTime.Now
             };
             //await _db.Media.AddAsync(media).ConfigureAwait(false);
-            await _db.session.StoreAsync(media);
+            _db.session.Store(media);
         }
 
         media.Filename = model.Filename;
@@ -189,7 +189,7 @@ internal class MediaRepository : IMediaRepository
                     FileExtension = version.FileExtension
                 };
                 //_db.MediaVersions.Add(mediaVersion);
-                await _db.session.StoreAsync(mediaVersion);
+                _db.session.Store(mediaVersion);
                 //media.Versions.Add(mediaVersion);
                 media.Versions.Add(mediaVersion);
             }
@@ -219,7 +219,7 @@ internal class MediaRepository : IMediaRepository
             };
             model.Id = folder.Id;
             //await _db.MediaFolders.AddAsync(folder).ConfigureAwait(false);
-            await _db.session.StoreAsync(folder).ConfigureAwait(false);
+            _db.session.Store(folder);
         }
         folder.ParentId = model.ParentId;
         folder.Name = model.Name;

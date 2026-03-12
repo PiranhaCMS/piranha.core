@@ -1,7 +1,8 @@
 using Aero.Identity.Models;
+using Marten;
 using Microsoft.AspNetCore.Identity;
-using Raven.Client.Documents;
-using Raven.Client.Documents.Session;
+
+
 
 namespace Aero.Identity;
 
@@ -14,13 +15,13 @@ public class RavenRoleStore<TRole> :
     IRoleClaimStore<TRole>
     where TRole : RavenRole, new()
 {
-    private readonly IAsyncDocumentSession _session;
+    private readonly IDocumentSession _session;
 
     /// <summary>
     /// Initializes a new instance of the RavenRoleStore.
     /// </summary>
     /// <param name="session">The RavenDB session.</param>
-    public RavenRoleStore(IAsyncDocumentSession session)
+    public RavenRoleStore(IDocumentSession session)
     {
         _session = session ?? throw new ArgumentNullException(nameof(session));
     }
@@ -34,7 +35,7 @@ public class RavenRoleStore<TRole> :
         cancellationToken.ThrowIfCancellationRequested();
         if (role == null) throw new ArgumentNullException(nameof(role));
 
-        await _session.StoreAsync(role, cancellationToken);
+        _session.Store(role);
         await _session.SaveChangesAsync(cancellationToken);
         return IdentityResult.Success;
     }
@@ -62,7 +63,7 @@ public class RavenRoleStore<TRole> :
     {
         cancellationToken.ThrowIfCancellationRequested();
         return await _session.Query<TRole>()
-            .Customize(x => x.WaitForNonStaleResults())
+            
             .FirstOrDefaultAsync(r => r.NormalizedName == normalizedRoleName, cancellationToken);
     }
 
@@ -111,9 +112,9 @@ public class RavenRoleStore<TRole> :
 
         try
         {
-            if (!_session.Advanced.IsLoaded(role.Id))
+            //if (!_session.Advanced.IsLoaded(role.Id))
             {
-                await _session.StoreAsync(role, cancellationToken);
+                _session.Store(role);
             }
 
             await _session.SaveChangesAsync(cancellationToken);

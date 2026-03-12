@@ -9,7 +9,7 @@ public class RavenUserTests
     public void CanInitializeRavenUser()
     {
         // Arrange & Act
-        var user = new RavenUser();
+        var user = new AeroUser();
 
         // Assert
         Assert.NotNull(user);
@@ -21,7 +21,7 @@ public class RavenUserTests
     public void CanAddPasskeyToRavenUser()
     {
         // Arrange
-        var user = new RavenUser();
+        var user = new AeroUser();
         var passkey = new PasskeyCredential
         {
             CredentialId = new byte[] { 1, 2, 3 },

@@ -18,10 +18,10 @@ public class MemCache : BaseTestsAsync
     public override async Task InitializeAsync()
     {
         await base.InitializeAsync();
-        _cache = new Cache.MemoryCache((IMemoryCache)_services.GetService(typeof(IMemoryCache)));
+        cache = new Cache.MemoryCache((IMemoryCache)services.GetService(typeof(IMemoryCache)));
 
-        await _cache.SetAsync(id1, val1);
-        await _cache.SetAsync(id2, val2);
+        await cache.SetAsync(id1, val1);
+        await cache.SetAsync(id2, val2);
     }
 
     public override Task DisposeAsync()
@@ -32,13 +32,13 @@ public class MemCache : BaseTestsAsync
     [Fact]
     public async Task AddEntry()
     {
-        await _cache.SetAsync(id3, val3);
+        await cache.SetAsync(id3, val3);
     }
 
     [Fact]
     public async Task GetEntry()
     {
-        var val = await _cache.GetAsync<string>(id2);
+        var val = await cache.GetAsync<string>(id2);
 
         Assert.NotNull(val);
         Assert.Equal(val2, val);
@@ -47,9 +47,9 @@ public class MemCache : BaseTestsAsync
     [Fact]
     public async Task UpdateEntry()
     {
-        await _cache.SetAsync(id2, val4);
+        await cache.SetAsync(id2, val4);
 
-        var val = await _cache.GetAsync<string>(id2);
+        var val = await cache.GetAsync<string>(id2);
 
         Assert.NotNull(val);
         Assert.Equal(val4, val);
@@ -58,9 +58,9 @@ public class MemCache : BaseTestsAsync
     [Fact]
     public async Task RemoveEntry()
     {
-        await _cache.RemoveAsync(id1);
+        await cache.RemoveAsync(id1);
 
-        var val = await _cache.GetAsync<string>(id1);
+        var val = await cache.GetAsync<string>(id1);
 
         Assert.Null(val);
     }

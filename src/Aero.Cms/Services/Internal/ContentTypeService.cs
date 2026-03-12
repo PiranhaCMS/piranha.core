@@ -35,7 +35,7 @@ internal sealed class ContentTypeService : IContentTypeService
     public async Task<IEnumerable<ContentType>> GetAllAsync()
     {
         var types = await GetTypes().ConfigureAwait(false);
-        return types ?? await _repo.GetAll().ConfigureAwait(false);
+        return types ?? await _repo.GetAllAsync().ConfigureAwait(false);
     }
 
     /// <summary>
@@ -51,7 +51,7 @@ internal sealed class ContentTypeService : IContentTypeService
         {
             return types.Where(t => t.Group == group).ToList();
         }
-        return await _repo.GetByGroup(group).ConfigureAwait(false);
+        return await _repo.GetByGroupAsync(group).ConfigureAwait(false);
     }
 
     /// <summary>
@@ -67,7 +67,7 @@ internal sealed class ContentTypeService : IContentTypeService
         {
             return types.FirstOrDefault(t => t.Id == id);
         }
-        return await _repo.GetById(id).ConfigureAwait(false);
+        return await _repo.GetByIdAsync(id).ConfigureAwait(false);
     }
 
     /// <summary>
@@ -97,7 +97,7 @@ internal sealed class ContentTypeService : IContentTypeService
 
         // Call hooks & save
         App.Hooks.OnBeforeSave(model);
-        await _repo.Save(model).ConfigureAwait(false);
+        await _repo.SaveAsync(model).ConfigureAwait(false);
         App.Hooks.OnAfterSave(model);
 
         // Clear cache
@@ -113,7 +113,7 @@ internal sealed class ContentTypeService : IContentTypeService
     /// <param name="id">The unique id</param>
     public async Task DeleteAsync(string id)
     {
-        var model = await _repo.GetById(id).ConfigureAwait(false);
+        var model = await _repo.GetByIdAsync(id).ConfigureAwait(false);
 
         if (model != null)
         {
@@ -129,7 +129,7 @@ internal sealed class ContentTypeService : IContentTypeService
     {
         // Call hooks & delete
         App.Hooks.OnBeforeDelete(model);
-        await _repo.Delete(model.Id).ConfigureAwait(false);
+        await _repo.DeleteAsync(model.Id).ConfigureAwait(false);
         App.Hooks.OnAfterDelete(model);
 
         // Clear cache
@@ -151,7 +151,7 @@ internal sealed class ContentTypeService : IContentTypeService
             {
                 // Call hooks & delete
                 App.Hooks.OnBeforeDelete(model);
-                await _repo.Delete(model.Id).ConfigureAwait(false);
+                await _repo.DeleteAsync(model.Id).ConfigureAwait(false);
                 App.Hooks.OnAfterDelete(model);
             }
             // Clear cache
@@ -173,7 +173,7 @@ internal sealed class ContentTypeService : IContentTypeService
 
             if (types == null)
             {
-                types = await _repo.GetAll().ConfigureAwait(false);
+                types = await _repo.GetAllAsync().ConfigureAwait(false);
 
                 await _cache.SetAsync(CacheKey, types).ConfigureAwait(false);
             }

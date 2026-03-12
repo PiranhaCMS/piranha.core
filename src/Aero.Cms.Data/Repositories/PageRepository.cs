@@ -1,10 +1,9 @@
 using System.Text.Json;
 using Aero.Cms.Data.Data;
-using Aero.Cms.Data.Indexes;
 using Aero.Cms.Data.Services;
 using Aero.Cms.Repositories;
-using Raven.Client.Documents;
-using Raven.Client.Documents.Linq;
+using Marten;
+using Marten.Linq;
 
 namespace Aero.Cms.Data.Repositories;
 
@@ -31,13 +30,13 @@ internal class PageRepository : IPageRepository
     /// <returns>The pages</returns>
     public async Task<IEnumerable<string>> GetAll(string siteId)
     {
-        return await _db.Pages
+        var pages = await _db.Pages
             .Where(p => p.SiteId == siteId)
             .OrderBy(p => p.ParentId)
             .ThenBy(p => p.SortOrder)
-            .Select(p => p.Id)
             .ToListAsync()
             .ConfigureAwait(false);
+        return pages.Select(p => p.Id);
     }
 
     /// <summary>
@@ -47,13 +46,13 @@ internal class PageRepository : IPageRepository
     /// <returns>The pages</returns>
     public async Task<IEnumerable<string>> GetAllBlogs(string siteId)
     {
-        return await _db.Pages
+        var pages = await _db.Pages
             .Where(p => p.SiteId == siteId && p.ContentType == "Blog")
             .OrderBy(p => p.ParentId)
             .ThenBy(p => p.SortOrder)
-            .Select(p => p.Id)
             .ToListAsync()
             .ConfigureAwait(false);
+        return pages.Select(p => p.Id);
     }
 
     /// <summary>
@@ -64,15 +63,17 @@ internal class PageRepository : IPageRepository
     /// <returns>The pages that have a draft</returns>
     public async Task<IEnumerable<string>> GetAllDrafts(string siteId)
     {
-        // Use the PageRevisions_BySite index which precomputes IsDraft = Created > PageLastModified.
-        // RavenDB LINQ cannot compare two document fields in a Where clause at query time.
-        var pageIds = await _db.session
-            .Query<PageRevisions_BySite.Result, PageRevisions_BySite>()
-            .Where(r => r.SiteId == siteId && r.IsDraft)
-            .Select(r => r.PageId)
-            .Distinct()
+        // Query PageRevisions directly and filter in-memory since Marten can't compare two fields in SQL
+        var revisions = await _db.session.Query<PageRevision>()
+            .Where(r => r.SiteId == siteId)
             .ToListAsync()
             .ConfigureAwait(false);
+        
+        var pageIds = revisions
+            .Where(r => r.Created > r.PageLastModified) // The "IsDraft" logic - filter in memory
+            .Select(r => r.PageId)
+            .Distinct()
+            .ToList();
 
         return pageIds;
     }
@@ -244,7 +245,7 @@ internal class PageRepository : IPageRepository
     public async Task<T> GetBySlug<T>(string slug, string siteId) where T : Models.PageBase
     {
         var page = await GetQuery<T>()
-            .Customize(x => x.WaitForNonStaleResults())
+            
             .FirstOrDefaultAsync(p => p.SiteId == siteId && p.Slug == slug)
             .ConfigureAwait(false);
 
@@ -264,26 +265,25 @@ internal class PageRepository : IPageRepository
     /// <returns>The draft, or null if no draft exists</returns>
     public async Task<T> GetDraftById<T>(string id) where T : Models.PageBase
     {
-        DateTime? lastModified = await _db.Pages
-            .Customize(x => x.WaitForNonStaleResults())
+        var page = await _db.Pages
             .Where(p => p.Id == id)
-            .Select(p => p.LastModified)
             .FirstOrDefaultAsync()
             .ConfigureAwait(false);
+        DateTime? lastModified = page?.LastModified;
 
         if (lastModified.HasValue)
         {
             var draft = await _db.PageRevisions
-                .Customize(x => x.WaitForNonStaleResults())
+                
                 .FirstOrDefaultAsync(r => r.PageId == id && r.Created > lastModified)
                 .ConfigureAwait(false);
 
             if (draft != null)
             {
                 // Transform data model
-                var page = JsonSerializer.Deserialize<Page>(draft.Data);
+                var pageData = JsonSerializer.Deserialize<Page>(draft.Data);
 
-                return await _contentService.TransformAsync<T>(page, App.PageTypes.GetById(page.PageTypeId),
+                return await _contentService.TransformAsync<T>(pageData, App.PageTypes.GetById(pageData.PageTypeId),
                     ProcessAsync);
             }
         }
@@ -304,10 +304,12 @@ internal class PageRepository : IPageRepository
         var affected = new List<string>();
 
         var source = await _db.Pages
-            .Where(p => p.SiteId == model.SiteId && p.ParentId == model.ParentId && p.Id != model.Id).ToListAsync();
+            .Where(p => p.SiteId == model.SiteId && p.ParentId == model.ParentId && p.Id != model.Id).ToListAsync()
+            .ConfigureAwait(false);
         var dest = model.ParentId == parentId
             ? source
-            : await _db.Pages.Where(p => p.SiteId == model.SiteId && p.ParentId == parentId).ToListAsync();
+            : await _db.Pages.Where(p => p.SiteId == model.SiteId && p.ParentId == parentId).ToListAsync()
+                .ConfigureAwait(false);
 
         // Remove the old position for the page
         affected.AddRange(MovePages(source, model.Id, model.SiteId, model.SortOrder + 1, false));
@@ -333,20 +335,22 @@ internal class PageRepository : IPageRepository
     /// <returns>The model</returns>
     public async Task<Models.Comment> GetCommentById(string id)
     {
-        return await _db.PageComments
+        var comments = await _db.PageComments
             .Where(c => c.Id == id)
-            .Select(c => new Models.PageComment
-            {
-                Id = c.Id,
-                ContentId = c.PageId,
-                UserId = c.UserId,
-                Author = c.Author,
-                Email = c.Email,
-                Url = c.Url,
-                IsApproved = c.IsApproved,
-                Body = c.Body,
-                Created = c.Created.DateTime
-            }).FirstOrDefaultAsync();
+            .ToListAsync()
+            .ConfigureAwait(false);
+        return comments.Select(c => new Models.PageComment
+        {
+            Id = c.Id,
+            ContentId = c.PageId,
+            UserId = c.UserId,
+            Author = c.Author,
+            Email = c.Email,
+            Url = c.Url,
+            IsApproved = c.IsApproved,
+            Body = c.Body,
+            Created = c.Created.DateTime
+        }).FirstOrDefault();
     }
 
     /// <summary>
@@ -376,7 +380,8 @@ internal class PageRepository : IPageRepository
     public async Task SaveComment(string pageId, Models.Comment model)
     {
         var comment = await _db.PageComments
-            .FirstOrDefaultAsync(c => c.Id == model.Id);
+            .FirstOrDefaultAsync(c => c.Id == model.Id)
+            .ConfigureAwait(false);
 
         if (comment == null)
         {
@@ -385,7 +390,7 @@ internal class PageRepository : IPageRepository
                 Id = model.Id
             };
             //await _db.PageComments.AddAsync(comment);
-            await _db.session.StoreAsync(comment);
+            _db.session.Store(comment);
         }
 
         comment.UserId = model.UserId;
@@ -413,7 +418,7 @@ internal class PageRepository : IPageRepository
 
         if (page != null)
         {
-            await _db.session.StoreAsync(new PageRevision
+            _db.session.Store(new PageRevision
             {
                 Id = Snowflake.NewId(),
                 PageId = id,
@@ -422,7 +427,7 @@ internal class PageRepository : IPageRepository
                 PageLastModified = page.LastModified,
                 Data = JsonSerializer.Serialize(page),
                 Created = page.LastModified
-            }).ConfigureAwait(false);
+            });
 
             await _db.SaveChangesAsync().ConfigureAwait(false);
 
@@ -434,13 +439,13 @@ internal class PageRepository : IPageRepository
                     .OrderByDescending(r => r.Created)
                     .Select(r => r.Id)
                     .Take(revisions)
-                    .ToListAsync()
+                    .ToListAsync<string>()
                     .ConfigureAwait(false);
 
                 if (existing.Count == revisions)
                 {
                     var removed = await _db.PageRevisions
-                        .Where(r => r.PageId == id && !existing.Contains(r.Id))
+                        .Where(r => r.PageId == id && !r.Id.In(existing.ToArray()))
                         .ToListAsync()
                         .ConfigureAwait(false);
 
@@ -502,7 +507,8 @@ internal class PageRepository : IPageRepository
 
             var siblings = await _db.Pages
                 .Where(p => p.SiteId == model.SiteId && p.ParentId == model.ParentId)
-                .ToListAsync();
+                .ToListAsync()
+                .ConfigureAwait(false);
 
             // Move all remaining pages after this page in the site structure
             affected.AddRange(MovePages(siblings, id, model.SiteId, model.SortOrder + 1, false));
@@ -525,13 +531,17 @@ internal class PageRepository : IPageRepository
 
         if (page != null)
         {
-            // Use PageRevisions_BySite index to find drafts — avoids field-to-field date comparison
-            var draftRevisionIds = await _db.session
-                .Query<PageRevisions_BySite.Result, PageRevisions_BySite>()
-                .Where(r => r.PageId == id && r.IsDraft)
-                .Select(r => r.Id)
+            // Query all revisions for this page and filter in memory
+            var allRevisions = await _db.session
+                .Query<PageRevision>()
+                .Where(r => r.PageId == id)
                 .ToListAsync()
                 .ConfigureAwait(false);
+            
+            var draftRevisionIds = allRevisions
+                .Where(r => r.Created > page.LastModified) // IsDraft logic
+                .Select(r => r.Id)
+                .ToList();
 
             foreach (var draftId in draftRevisionIds)
             {
@@ -608,19 +618,22 @@ internal class PageRepository : IPageRepository
         }
 
         // Get the comments
-        return await query
-            .Select(c => new Models.PageComment
-            {
-                Id = c.Id,
-                ContentId = c.PageId,
-                UserId = c.UserId,
-                Author = c.Author,
-                Email = c.Email,
-                Url = c.Url,
-                IsApproved = c.IsApproved,
-                Body = c.Body,
-                Created = c.Created.DateTime
-            }).ToListAsync();
+        var comments = await query
+            .ToListAsync()
+            .ConfigureAwait(false);
+        
+        return comments.Select(c => new Models.PageComment
+        {
+            Id = c.Id,
+            ContentId = c.PageId,
+            UserId = c.UserId,
+            Author = c.Author,
+            Email = c.Email,
+            Url = c.Url,
+            IsApproved = c.IsApproved,
+            Body = c.Body,
+            Created = c.Created.DateTime
+        });
     }
 
     /// <summary>
@@ -644,11 +657,12 @@ internal class PageRepository : IPageRepository
 
         if (type != null)
         {
-            IRavenQueryable<Page> pageQuery = _db.Pages;
-            if (isDraft)
-            {
-                pageQuery = pageQuery.Customize(x => x.NoTracking());
-            }
+            IMartenQueryable<Page> pageQuery = _db.Pages;
+            // Marten doesn't have NoTracking - skip this
+            // if (isDraft)
+            // {
+            //     pageQuery = pageQuery.Customize(x => x.NoTracking());
+            // }
 
             var page = await pageQuery
                 .FirstOrDefaultAsync(p => p.Id == model.Id)
@@ -660,8 +674,6 @@ internal class PageRepository : IPageRepository
                 var json = JsonSerializer.Serialize(page);
                 page = JsonSerializer.Deserialize<Page>(json);
             }
-
-            if (page == null)
 
             if (page == null)
             {
@@ -698,11 +710,12 @@ internal class PageRepository : IPageRepository
                     if (!isDraft)
                     {
                         //await _db.Pages.AddAsync(page).ConfigureAwait(false);
-                        await _db.session.StoreAsync(page).ConfigureAwait(false);
+                        _db.session.Store(page);
 
                         // Make room for the new page
                         var dest = await _db.Pages.Where(p => p.SiteId == model.SiteId && p.ParentId == model.ParentId)
-                            .ToListAsync();
+                            .ToListAsync()
+                            .ConfigureAwait(false);
                         affected.AddRange(MovePages(dest, page.Id, model.SiteId, model.SortOrder, true));
                     }
                 }
@@ -712,11 +725,13 @@ internal class PageRepository : IPageRepository
                     if (!isDraft && (page.ParentId != model.ParentId || page.SortOrder != model.SortOrder))
                     {
                         var source = await _db.Pages.Where(p =>
-                            p.SiteId == page.SiteId && p.ParentId == page.ParentId && p.Id != model.Id).ToListAsync();
+                            p.SiteId == page.SiteId && p.ParentId == page.ParentId && p.Id != model.Id).ToListAsync()
+                            .ConfigureAwait(false);
                         var dest = page.ParentId == model.ParentId
                             ? source
                             : await _db.Pages.Where(p => p.SiteId == model.SiteId && p.ParentId == model.ParentId)
-                                .ToListAsync();
+                                .ToListAsync()
+                                .ConfigureAwait(false);
 
                         // Remove the old position for the page
                         affected.AddRange(MovePages(source, page.Id, page.SiteId, page.SortOrder + 1, false));
@@ -776,7 +791,7 @@ internal class PageRepository : IPageRepository
                         // await _db.PageRevisions
                         //     .AddAsync(draft)
                         //     .ConfigureAwait(false);
-                        await _db.session.StoreAsync(draft).ConfigureAwait(false);
+                        _db.session.Store(draft);
                     }
 
                     draft.Data = JsonSerializer.Serialize(page);
@@ -805,11 +820,12 @@ internal class PageRepository : IPageRepository
                 if (!isDraft)
                 {
                     //await _db.Pages.AddAsync(page).ConfigureAwait(false);
-                    await _db.session.StoreAsync(page).ConfigureAwait(false);
+                    _db.session.Store(page);
 
                     // Make room for the new page
                     var dest = await _db.Pages.Where(p => p.SiteId == model.SiteId && p.ParentId == model.ParentId)
-                        .ToListAsync();
+                        .ToListAsync()
+                        .ConfigureAwait(false);
                     affected.AddRange(MovePages(dest, page.Id, model.SiteId, model.SortOrder, true));
                 }
             }
@@ -820,11 +836,13 @@ internal class PageRepository : IPageRepository
                 {
                     var source = await _db.Pages
                         .Where(p => p.SiteId == page.SiteId && p.ParentId == page.ParentId && p.Id != model.Id)
-                        .ToListAsync();
+                        .ToListAsync()
+                        .ConfigureAwait(false);
                     var dest = page.ParentId == model.ParentId
                         ? source
                         : await _db.Pages.Where(p => p.SiteId == model.SiteId && p.ParentId == model.ParentId)
-                            .ToListAsync();
+                            .ToListAsync()
+                            .ConfigureAwait(false);
 
                     // Remove the old position for the page
                     affected.AddRange(MovePages(source, page.Id, page.SiteId, page.SortOrder + 1, false));
@@ -916,14 +934,15 @@ internal class PageRepository : IPageRepository
                 for (var n = 0; n < blocks.Count; n++)
                 {
                     var blockQuery = _db.Blocks;
-                    if (isDraft)
-                    {
-                        blockQuery = blockQuery.Customize(x => x.NoTracking());
-                    }
+                    // Marten doesn't have Customize/NoTracking
+                    // if (isDraft)
+                    // {
+                    //     blockQuery = blockQuery.Customize(x => x.NoTracking());
+                    // }
 
                     var id = blocks[n].Id;
+                    // Marten Include has different syntax - skip for now
                     var block = await blockQuery
-                        .Include(x => x.Fields)
                         .FirstOrDefaultAsync(b => b.Id == id)
                         .ConfigureAwait(false);
 
@@ -937,7 +956,7 @@ internal class PageRepository : IPageRepository
                         if (!isDraft)
                         {
                             //await _db.Blocks.AddAsync(block).ConfigureAwait(false);
-                            await _db.session.StoreAsync(block).ConfigureAwait(false);
+                            _db.session.Store(block);
                         }
                     }
 
@@ -971,7 +990,7 @@ internal class PageRepository : IPageRepository
                             if (!isDraft)
                             {
                                 //await _db.BlockFields.AddAsync(field).ConfigureAwait(false);
-                                await _db.session.StoreAsync(field).ConfigureAwait(false);
+                                _db.session.Store(field);
                             }
 
                             block.Fields.Add(field);
@@ -994,7 +1013,7 @@ internal class PageRepository : IPageRepository
                     if (!isDraft)
                     {
                         //await _db.PageBlocks.AddAsync(pageBlock).ConfigureAwait(false);
-                        await _db.session.StoreAsync(pageBlock).ConfigureAwait(false);
+                        _db.session.Store(pageBlock);
                     }
 
                     page.Blocks.Add(pageBlock);
@@ -1021,7 +1040,7 @@ internal class PageRepository : IPageRepository
                     // await _db.PageRevisions
                     //     .AddAsync(draft)
                     //     .ConfigureAwait(false);
-                    await _db.session.StoreAsync(draft).ConfigureAwait(false);
+                    _db.session.Store(draft);
                 }
 
                 draft.Data = JsonSerializer.Serialize(page);
@@ -1039,17 +1058,17 @@ internal class PageRepository : IPageRepository
     /// </summary>
     /// <typeparam name="T">The requested model type</typeparam>
     /// <returns>The queryable</returns>
-    private IRavenQueryable<Page> GetQuery<T>()
+    private IMartenQueryable<Page> GetQuery<T>()
     {
         var loadRelated = !typeof(Models.IContentInfo).IsAssignableFrom(typeof(T));
 
-        IRavenQueryable<Page> query = _db.Pages
-            .Customize(x => x.WaitForNonStaleResults());
+        var query = _db.Pages
+            ;
 
         // FirstOrDefaultAsync(p => p.Id ...
-        query = query.OrderBy(p => p.Id);
+        query = (IMartenQueryable<Page>)query.OrderBy(p => p.Id);
 
-        if (loadRelated)
+        //if (loadRelated)
         {
             // query = query;
         }
@@ -1075,7 +1094,6 @@ internal class PageRepository : IPageRepository
         if (model.EnableComments)
         {
             model.CommentCount = await _db.PageComments
-                .Customize(x => x.WaitForNonStaleResults())
                 .CountAsync(c => c.PageId == model.Id && c.IsApproved)
                 .ConfigureAwait(false);
         }
@@ -1113,7 +1131,7 @@ internal class PageRepository : IPageRepository
     /// <param name="siteId">The site id</param>
     /// <param name="sortOrder">The sort order</param>
     /// <param name="increase">If sort order should be increase or decreased</param>
-    private IEnumerable<string> MovePages(List<Page> pages, string pageId, string siteId, int sortOrder, bool increase)
+    private IEnumerable<string> MovePages(IReadOnlyList<Page> pages, string pageId, string siteId, int sortOrder, bool increase)
     {
         var affected = pages.Where(p => p.SortOrder >= sortOrder).ToList();
 
@@ -1125,4 +1143,3 @@ internal class PageRepository : IPageRepository
         return affected.Select(p => p.Id).ToList();
     }
 }
-

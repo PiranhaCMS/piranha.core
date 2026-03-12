@@ -1,44 +1,44 @@
 using Aero.Identity.Models;
+using Marten;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Raven.Client.Documents;
-using Raven.Client.Documents.Session;
+
+
 using Xunit;
 
 namespace Aero.Identity.Tests;
 
-public class IdentityIntegrationTests : RavenTestBase
+public class IdentityIntegrationTests : AeroDbTestDriver
 {
     [Fact]
     public async Task UserManager_CanCreateAndFindUser()
     {
         // Arrange
-        using var store = CreateStore();
         var services = new ServiceCollection();
         services.AddSingleton(store);
-        services.AddScoped(s => s.GetRequiredService<IDocumentStore>().OpenAsyncSession());
+        services.AddScoped(s => s.GetRequiredService<IDocumentStore>().LightweightSession());
         services.AddLogging(builder => builder.AddConsole());
 
-        services.AddIdentityCore<RavenUser>()
+        services.AddIdentityCore<AeroUser>()
             .AddRavenDbStores();
 
         var serviceProvider = services.BuildServiceProvider();
         using var scope = serviceProvider.CreateScope();
-        var userManager = scope.ServiceProvider.GetRequiredService<UserManager<RavenUser>>();
-        var session = scope.ServiceProvider.GetRequiredService<IAsyncDocumentSession>();
+        var userManager = scope.ServiceProvider.GetRequiredService<UserManager<AeroUser>>();
+        var session = scope.ServiceProvider.GetRequiredService<IDocumentSession>();
 
-        var user = new RavenUser { UserName = "integrated", Email = "integrated@example.com" };
+        var user = new AeroUser { UserName = "integrated", Email = "integrated@example.com" };
 
         // Act
         var createResult = await userManager.CreateAsync(user, "Password123!");
         await session.SaveChangesAsync();
 
         // Wait for index
-        using (var waitSession = store.OpenAsyncSession())
+        using (var waitSession = store.LightweightSession())
         {
-            await waitSession.Query<RavenUser>()
-                .Customize(x => x.WaitForNonStaleResults())
+            await waitSession.Query<AeroUser>()
+                
                 .FirstOrDefaultAsync(u => u.UserName == "integrated");
         }
 
@@ -54,22 +54,22 @@ public class IdentityIntegrationTests : RavenTestBase
     public async Task UserManager_CanHandleRoles()
     {
         // Arrange
-        using var store = CreateStore();
+        
         var services = new ServiceCollection();
         services.AddSingleton(store);
-        services.AddScoped(s => s.GetRequiredService<IDocumentStore>().OpenAsyncSession());
+        services.AddScoped(s => s.GetRequiredService<IDocumentStore>().LightweightSession());
 
-        services.AddIdentityCore<RavenUser>()
+        services.AddIdentityCore<AeroUser>()
             .AddRoles<RavenRole>()
             .AddRavenDbStores();
 
         var serviceProvider = services.BuildServiceProvider();
         using var scope = serviceProvider.CreateScope();
-        var userManager = scope.ServiceProvider.GetRequiredService<UserManager<RavenUser>>();
+        var userManager = scope.ServiceProvider.GetRequiredService<UserManager<AeroUser>>();
         var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<RavenRole>>();
-        var session = scope.ServiceProvider.GetRequiredService<IAsyncDocumentSession>();
+        var session = scope.ServiceProvider.GetRequiredService<IDocumentSession>();
 
-        var user = new RavenUser { UserName = "roleuser" };
+        var user = new AeroUser { UserName = "roleuser" };
         var role = new RavenRole { Name = "Tester" };
 
         // Act
@@ -78,10 +78,10 @@ public class IdentityIntegrationTests : RavenTestBase
         await session.SaveChangesAsync();
 
         // Wait for index
-        using (var waitSession = store.OpenAsyncSession())
+        using (var waitSession = store.LightweightSession())
         {
             await waitSession.Query<RavenRole>()
-                .Customize(x => x.WaitForNonStaleResults())
+                
                 .FirstOrDefaultAsync(r => r.Name == "Tester");
         }
 
@@ -89,10 +89,10 @@ public class IdentityIntegrationTests : RavenTestBase
         await session.SaveChangesAsync();
 
         // Wait for index
-        using (var waitSession = store.OpenAsyncSession())
+        using (var waitSession = store.LightweightSession())
         {
-            await waitSession.Query<RavenUser>()
-                .Customize(x => x.WaitForNonStaleResults())
+            await waitSession.Query<AeroUser>()
+                
                 .FirstOrDefaultAsync(u => u.UserName == "roleuser");
         }
 
@@ -108,30 +108,33 @@ public class IdentityIntegrationTests : RavenTestBase
     public async Task UserManager_ScaleAndSearchTest()
     {
         // Arrange
-        using var store = CreateStore();
+        
         var services = new ServiceCollection();
         services.AddSingleton(store);
-        services.AddScoped(s => s.GetRequiredService<IDocumentStore>().OpenAsyncSession());
+        services.AddScoped(s => s.GetRequiredService<IDocumentStore>().LightweightSession());
 
-        services.AddIdentityCore<RavenUser>()
+        services.AddIdentityCore<AeroUser>()
             .AddRoles<RavenRole>()
             .AddRavenDbStores();
 
         var serviceProvider = services.BuildServiceProvider();
         using var scope = serviceProvider.CreateScope();
-        var userManager = scope.ServiceProvider.GetRequiredService<UserManager<RavenUser>>();
+        var userManager = scope.ServiceProvider.GetRequiredService<UserManager<AeroUser>>();
         var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<RavenRole>>();
-        var session = scope.ServiceProvider.GetRequiredService<IAsyncDocumentSession>();
+        var session = scope.ServiceProvider.GetRequiredService<IDocumentSession>();
 
         // Create a role
         await roleManager.CreateAsync(new RavenRole { Name = "PowerUser" });
 
+
+
         // Bulk insert 1000 users
-        await using (var bulk = store.BulkInsert())
+        //await using (var bulk = store.BulkInsert())
+        var docs = new List<AeroUser>();
         {
             for (int i = 0; i < 1000; i++)
             {
-                await bulk.StoreAsync(new RavenUser
+                docs.Add(new AeroUser
                 {
                     UserName = $"user{i}",
                     Email = $"user{i}@example.com",
@@ -140,13 +143,15 @@ public class IdentityIntegrationTests : RavenTestBase
                     Roles = new List<string> { i % 10 == 0 ? "POWERUSER" : "USER" }
                 });
             }
+
+            await store.BulkInsertDocumentsAsync(docs);
         }
 
         // Wait for indexing
-        using (var waitSession = store.OpenAsyncSession())
+        using (var waitSession = store.LightweightSession())
         {
-            await waitSession.Query<RavenUser>()
-                .Customize(x => x.WaitForNonStaleResults())
+            await waitSession.Query<AeroUser>()
+                
                 .Take(0)
                 .ToListAsync();
         }
@@ -154,7 +159,7 @@ public class IdentityIntegrationTests : RavenTestBase
         // Add 10 extra users via UserManager
         for (int i = 1000; i < 1010; i++)
         {
-            var user = new RavenUser { UserName = $"extra{i}", Email = $"extra{i}@example.com" };
+            var user = new AeroUser { UserName = $"extra{i}", Email = $"extra{i}@example.com" };
             await userManager.CreateAsync(user, "Password123!");
             await userManager.AddToRoleAsync(user, "PowerUser");
         }
@@ -162,10 +167,10 @@ public class IdentityIntegrationTests : RavenTestBase
         await session.SaveChangesAsync();
 
         // Wait for indexing again
-        using (var waitSession = store.OpenAsyncSession())
+        using (var waitSession = store.LightweightSession())
         {
-            await waitSession.Query<RavenUser>()
-                .Customize(x => x.WaitForNonStaleResults())
+            await waitSession.Query<AeroUser>()
+                
                 .Take(0)
                 .ToListAsync();
         }
@@ -207,20 +212,20 @@ public class IdentityIntegrationTests : RavenTestBase
     public async Task UserManager_CanFindUsersInMultipleRoles()
     {
         // Arrange
-        using var store = CreateStore();
+        
         var services = new ServiceCollection();
         services.AddSingleton(store);
-        services.AddScoped(s => s.GetRequiredService<IDocumentStore>().OpenAsyncSession());
+        services.AddScoped(s => s.GetRequiredService<IDocumentStore>().LightweightSession());
 
-        services.AddIdentityCore<RavenUser>()
+        services.AddIdentityCore<AeroUser>()
             .AddRoles<RavenRole>()
             .AddRavenDbStores();
 
         var serviceProvider = services.BuildServiceProvider();
         using var scope = serviceProvider.CreateScope();
-        var userManager = scope.ServiceProvider.GetRequiredService<UserManager<RavenUser>>();
+        var userManager = scope.ServiceProvider.GetRequiredService<UserManager<AeroUser>>();
         var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<RavenRole>>();
-        var session = scope.ServiceProvider.GetRequiredService<IAsyncDocumentSession>();
+        var session = scope.ServiceProvider.GetRequiredService<IDocumentSession>();
 
         var roleNames = new[] { "RoleA", "RoleB", "RoleC" };
         foreach (var roleName in roleNames)
@@ -237,7 +242,7 @@ public class IdentityIntegrationTests : RavenTestBase
 
         for (int i = 0; i < 25; i++)
         {
-            var user = new RavenUser { UserName = $"intersection_user_{i}", Email = $"intersection{i}@example.com" };
+            var user = new AeroUser { UserName = $"intersection_user_{i}", Email = $"intersection{i}@example.com" };
             await userManager.CreateAsync(user, "Password123!");
 
             if (i >= 0 && i < 15) await userManager.AddToRoleAsync(user, "RoleA");
@@ -253,17 +258,17 @@ public class IdentityIntegrationTests : RavenTestBase
         await session.SaveChangesAsync();
 
         // Wait for indexing
-        using (var waitSession = store.OpenAsyncSession())
+        using (var waitSession = store.LightweightSession())
         {
-            await waitSession.Query<RavenUser>()
-                .Customize(x => x.WaitForNonStaleResults())
+            await waitSession.Query<AeroUser>()
+                
                 .FirstOrDefaultAsync(u => u.UserName == "intersection_user_0");
         }
 
         // Act
         // Find users who belong to all three roles
-        var query = session.Query<RavenUser>()
-            .Customize(x => x.WaitForNonStaleResults())
+        var query = session.Query<AeroUser>()
+            
             .Where(u => u.Roles.Contains("ROLEA") && u.Roles.Contains("ROLEB") && u.Roles.Contains("ROLEC"));
 
         var usersInAllRoles = await query.ToListAsync();

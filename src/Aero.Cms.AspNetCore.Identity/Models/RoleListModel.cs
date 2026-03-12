@@ -1,7 +1,9 @@
 
 
-using Raven.Client.Documents;
-using Raven.Client.Documents.Linq;
+
+
+
+using Marten;
 
 namespace Aero.Cms.AspNetCore.Identity.Models;
 
@@ -11,16 +13,17 @@ public class RoleListModel
 
     public static async Task<RoleListModel> Get(IIdentityDb db)
     {
+        var roles = await db.Roles
+            .OrderBy(r => r.Name)
+            .Select(r => new ListItem
+            {
+                Id = r.Id,
+                Name = r.Name,
+                NormalizedName = r.NormalizedName
+            }).ToListAsync();
          var model = new RoleListModel
         {
-            Roles = await db.Roles
-                .OrderBy(r => r.Name)
-                .Select(r => new ListItem
-                {
-                    Id = r.Id,
-                    Name = r.Name,
-                    NormalizedName = r.NormalizedName
-                }).ToListAsync()
+            Roles = roles.ToList()
         };
 
         foreach (var role in model.Roles)

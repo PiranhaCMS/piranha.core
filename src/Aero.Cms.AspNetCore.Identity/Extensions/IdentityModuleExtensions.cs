@@ -6,14 +6,9 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
-using Aero.Cms;
-using Aero.Cms.AspNetCore.Identity;
 using Aero.Cms.AspNetCore.Identity.Data;
 using Aero.Cms.Manager;
 using Aero.Cms.Manager.LocalAuth;
-
-using IIdentityDb = Aero.Cms.AspNetCore.Identity.IIdentityDb;
-using Module = Aero.Cms.AspNetCore.Identity.Module;
 
 namespace Aero.Cms.AspNetCore.Identity;
 

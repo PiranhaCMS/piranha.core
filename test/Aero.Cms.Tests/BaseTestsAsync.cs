@@ -1,9 +1,4 @@
-
-
-
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using NSubstitute;
 using Xunit;
 using Aero.Cms.ImageSharp;
 using Aero.Cms.Data;
@@ -12,63 +7,50 @@ using Aero.Cms.Data.Repositories;
 using Aero.Cms.Data.Services.Internal;
 using Aero.Cms.Services;
 using Aero.Local;
-using Raven.Client.Documents;
-using Raven.Client.Documents.Session;
+using Marten;
+using Marten.Services;
+
 
 namespace Aero.Cms.Tests;
 
 /// <summary>
 /// Base class for using the api.
 /// </summary>
-public abstract class BaseTestsAsync : RavenTestBase, IAsyncLifetime
+public abstract class BaseTestsAsync : AeroDbTestDriver, IAsyncLifetime
 {
-    protected IStorage _storage = new FileStorage("uploads/", "~/uploads/");
-    protected IImageProcessor _processor = new ImageSharpProcessor();
-    protected IServiceProvider _services;
-    protected Cache.ICache _cache;
-    protected IApi _api;
-    protected IDocumentStore _store;
-    protected IAsyncDocumentSession _session;
+    protected IStorage storage = new FileStorage("uploads/", "~/uploads/");
+    protected IImageProcessor processor = new ImageSharpProcessor();
+    protected IServiceProvider services;
+    protected Cache.ICache cache;
+    protected IApi api;
+    protected IDocumentSession session;
 
     public virtual async Task InitializeAsync()
     {
-        _store = CreateStore();
-        _session = _store.OpenAsyncSession();
-        _services = CreateServiceCollection(_store, _session).BuildServiceProvider();
+        session = store.LightweightSession();
+        services = CreateServiceCollection(store).BuildServiceProvider();
 
-        _api = CreateApi();
-        Aero.Cms.App.Init(_api);
+        api = CreateApi();
+        Aero.Cms.App.Init(api);
     }
 
     public virtual async Task DisposeAsync()
     {
-        _session.Dispose();
-        _store.Dispose();
+        session.Dispose();
     }
 
-    /// <summary>
-    /// Creates a fake IConfiguration for test use via NSubstitute.
-    /// Provides default values for the RavenDB config keys that
-    /// AeroDataExtensions expects when resolving IDocumentStore.
-    /// </summary>
-    protected static IConfiguration CreateFakeConfiguration()
-    {
-        var config = Substitute.For<IConfiguration>();
-        config["RAVENDB_URL"].Returns("http://localhost:8080");
-        config["RavenDb:Database"].Returns("aero-cms-test");
-        config["RAVENDB_CERT"].Returns((string)null);
-        return config;
-    }
 
     protected static IServiceCollection CreateServiceCollection(
         IDocumentStore store,
-        IAsyncDocumentSession session,
         Func<IServiceCollection, IServiceCollection> register = null)
     {
+        if(store is null)
+            ArgumentNullException.ThrowIfNull(store, nameof(IDocumentStore));
+
         var sc = new ServiceCollection()
             //.AddSingleton(CreateFakeConfiguration())
-            .AddScoped(_ => session)
-            .AddAeroStore(isTesting: true) // don't need this when using RavenTestBase
+            .AddScoped(_ => store.LightweightSession())
+            .AddAeroStore(isTesting: true) // don't need this when using AeroDbTestDriver
             .AddAero()
             .AddMemoryCache()
             .AddAeroMemoryCache()
@@ -81,7 +63,7 @@ public abstract class BaseTestsAsync : RavenTestBase, IAsyncLifetime
         // if (register is not null)
         //     register.Invoke(sc);
         sc.AddSingleton<IDocumentStore>(store);
-        sc.AddScoped<IAsyncDocumentSession>(sc => session);
+        //sc.AddScoped<IDocumentSession>(sc => session);
 
         return sc;
     }
@@ -91,7 +73,7 @@ public abstract class BaseTestsAsync : RavenTestBase, IAsyncLifetime
     /// </summary>
     protected IDb GetDb()
     {
-        return new DbRaven(_session, _store);
+        return new AeroDb(session, store);
     }
 
     /// <summary>
@@ -99,7 +81,7 @@ public abstract class BaseTestsAsync : RavenTestBase, IAsyncLifetime
     /// </summary>
     protected virtual IApi CreateApi()
     {
-        var factory = new ContentFactory(_services);
+        var factory = new ContentFactory(services);
         var serviceFactory = new ContentServiceFactory(factory);
 
         var db = GetDb();
@@ -120,9 +102,9 @@ public abstract class BaseTestsAsync : RavenTestBase, IAsyncLifetime
             new PostTypeRepository(db),
             new SiteRepository(db, serviceFactory),
             new SiteTypeRepository(db),
-            cache: _cache,
-            storage: _storage,
-            processor: _processor
+            cache: cache,
+            storage: storage,
+            processor: processor
         );
 
         return api;

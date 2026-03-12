@@ -1,33 +1,16 @@
 using Alba;
-using Microsoft.Extensions.DependencyInjection;
-using Raven.Client.Documents;
-using Raven.TestDriver;
-using Raven.Embedded;
 using Aero.Cms.AspNetCore.Identity;
 using Aero.Cms.AspNetCore.Identity.Data;
 using Aero.Cms.Data.Extensions;
-using Microsoft.AspNetCore.Identity;
+using Marten;
 using Xunit;
-using Microsoft.Extensions.Hosting;
 using Microsoft.AspNetCore.Antiforgery;
-using Microsoft.AspNetCore.Http;
 
 namespace Aero.Cms.Manager.IntegrationTests;
 
-public class ManagerTestBase : RavenTestDriver, IAsyncLifetime
+public class ManagerTestBase : AeroDbTestDriver, IAsyncLifetime
 {
     protected IAlbaHost Host { get; private set; } = null!;
-
-    static ManagerTestBase()
-    {
-        ConfigureServer(new TestServerOptions
-        {
-            Licensing = new ServerOptions.LicensingOptions
-            {
-                ThrowOnInvalidOrMissingLicense = false
-            }
-        });
-    }
 
     public async Task InitializeAsync()
     {
@@ -40,7 +23,7 @@ public class ManagerTestBase : RavenTestDriver, IAsyncLifetime
             {
                 // Register the test store before AddAeroStore so it can be used
                 services.AddSingleton<IDocumentStore>(store);
-                services.AddScoped(s => s.GetRequiredService<IDocumentStore>().OpenAsyncSession());
+                services.AddScoped(s => s.GetRequiredService<IDocumentStore>().LightweightSession());
                 
                 // Add Aero Store in testing mode to skip its own IDocumentStore registration
                 services.AddAeroStore(isTesting: true);
@@ -64,9 +47,9 @@ public class ManagerTestBase : RavenTestDriver, IAsyncLifetime
         await identityDb.SaveChangesAsync();
         
         // Wait for indexing
-        using var session = store.OpenAsyncSession();
-        await session.Query<User>().Customize(x => x.WaitForNonStaleResults()).ToListAsync();
-        await session.Query<Role>().Customize(x => x.WaitForNonStaleResults()).ToListAsync();
+        using var session = store.LightweightSession();
+        await session.Query<User>().ToListAsync();
+        await session.Query<Role>().ToListAsync();
     }
 
     public async Task DisposeAsync()

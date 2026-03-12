@@ -3,7 +3,8 @@
 using System.Text.Json;
 using Aero.Cms.Models;
 using Aero.Cms.Repositories;
-using Raven.Client.Documents;
+using Marten;
+
 
 namespace Aero.Cms.Data.Repositories;
 
@@ -77,7 +78,7 @@ internal class PageTypeRepository : IPageTypeRepository
                 Created = DateTime.Now
             };
             //await _db.PageTypes.AddAsync(type).ConfigureAwait(false);
-            await _db.session.StoreAsync(type).ConfigureAwait(false);
+            _db.session.Store(type);
         }
         type.CLRType = model.CLRType;
         type.Body = JsonSerializer.Serialize(model);

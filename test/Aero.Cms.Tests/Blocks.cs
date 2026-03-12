@@ -26,13 +26,13 @@ public class Blocks : BaseTestsAsync
         using var api = CreateApi();
         Aero.Cms.App.Init(api);
 
-        contentService = new ContentService<Page, PageField, Models.PageBase>(new ContentFactory(_services), Module.Mapper);
+        contentService = new ContentService<Page, PageField, Models.PageBase>(new ContentFactory(services), Module.Mapper);
 
         // Add media
-        await using var stream = File.OpenRead("Assets/HLD_Screenshot_01_mech_1080.png");
+        await using var stream = File.OpenRead("Assets/HLDScreenshot01mech1080.png");
         var image1 = new Models.StreamMediaContent
         {
-            Filename = "HLD_Screenshot_01_mech_1080.png",
+            Filename = "HLDScreenshot01mech1080.png",
             Data = stream
         };
         await api.Media.SaveAsync(image1);
@@ -81,7 +81,7 @@ public class Blocks : BaseTestsAsync
 
         var title = block.GetTitle();
 
-        Assert.Equal("HLD_Screenshot_01_mech_1080.png", title);
+        Assert.Equal("HLDScreenshot01mech1080.png", title);
     }
 
     [Fact]
@@ -110,7 +110,7 @@ public class Blocks : BaseTestsAsync
 
         var title = block.GetTitle();
 
-        Assert.Equal("HLD_Screenshot_01_mech_1080.png", title);
+        Assert.Equal("HLDScreenshot01mech1080.png", title);
     }
 
     [Fact]
@@ -286,13 +286,13 @@ public class Blocks : BaseTestsAsync
             {
                 Media = new Models.Media
                 {
-                    Filename = "Lorem_ipsum.mp4"
+                    Filename = "Loremipsum.mp4"
                 }
             }
         };
         var title = block.GetTitle();
 
-        Assert.Equal("Lorem_ipsum.mp4", title);
+        Assert.Equal("Loremipsum.mp4", title);
     }
 
     [Fact]

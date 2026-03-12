@@ -20,9 +20,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="Marten" Version="8.23.0" />
     <PackageReference Include="Microsoft.Extensions.Logging" Version="10.0.4" />
     <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="10.0.4" />
-    <PackageReference Include="RavenDB.Client" Version="7.2.0" />
     <PackageReference Include="Serilog" Version="4.3.1" />
     <PackageReference Include="Serilog.AspNetCore" Version="10.0.0" />
     <PackageReference Include="Serilog.Enrichers.Environment" Version="3.0.1" />

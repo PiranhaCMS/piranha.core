@@ -1,21 +1,21 @@
-using Aero.Identity.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Raven.Client.Documents;
-using Raven.Client.Documents.Session;
+
+
 using Aero.Cms.AspNetCore.Identity.Data;
+using Marten;
 using Xunit;
 
 namespace Aero.Identity.Tests;
 
-public class IdentityManagementTests : RavenTestBase
+public class IdentityManagementTests : AeroDbTestDriver
 {
-    private async Task<(UserManager<User>, RoleManager<Role>, IAsyncDocumentSession, IServiceProvider)> SetupIdentityAsync(IDocumentStore store)
+    private async Task<(UserManager<User>, RoleManager<Role>, IDocumentSession, IServiceProvider)> SetupIdentityAsync(IDocumentStore store)
     {
         var services = new ServiceCollection();
         services.AddSingleton(store);
-        services.AddScoped(s => s.GetRequiredService<IDocumentStore>().OpenAsyncSession());
+        services.AddScoped(s => s.GetRequiredService<IDocumentStore>().LightweightSession());
         services.AddLogging(builder => builder.AddConsole());
 
         services.AddIdentityCore<User>()
@@ -26,7 +26,7 @@ public class IdentityManagementTests : RavenTestBase
         var scope = serviceProvider.CreateScope();
         var userManager = scope.ServiceProvider.GetRequiredService<UserManager<User>>();
         var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<Role>>();
-        var session = scope.ServiceProvider.GetRequiredService<IAsyncDocumentSession>();
+        var session = scope.ServiceProvider.GetRequiredService<IDocumentSession>();
 
         return (userManager, roleManager, session, serviceProvider);
     }
@@ -35,7 +35,7 @@ public class IdentityManagementTests : RavenTestBase
     public async Task UserLifecycle_Create_Read_Update_Delete()
     {
         // Arrange
-        using var store = CreateStore();
+        
         var (userManager, _, session, _) = await SetupIdentityAsync(store);
 
         var userName = "lifecycleuser";
@@ -71,7 +71,7 @@ public class IdentityManagementTests : RavenTestBase
     public async Task RoleAndClaimManagement_Lifecycle()
     {
         // Arrange
-        using var store = CreateStore();
+        
         var (userManager, roleManager, session, _) = await SetupIdentityAsync(store);
 
         var roleName = "TestRole";
@@ -112,7 +112,7 @@ public class IdentityManagementTests : RavenTestBase
     public async Task UserClaims_CanBeAddedAndRemovedDirectly()
     {
         // Arrange
-        using var store = CreateStore();
+        
         var (userManager, _, session, _) = await SetupIdentityAsync(store);
 
         var user = new User { UserName = "directclaimuser" };

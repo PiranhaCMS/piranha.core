@@ -14,7 +14,7 @@ public class ParamTestsMemoryCache : ParamTests
     public override async Task InitializeAsync()
     {
         await base.InitializeAsync();
-        _cache = new Cache.MemoryCache((IMemoryCache)_services.GetService(typeof(IMemoryCache)));
+        cache = new Cache.MemoryCache((IMemoryCache)services.GetService(typeof(IMemoryCache)));
     }
 }
 
@@ -24,20 +24,20 @@ public class ParamTestsDistributedCache : ParamTests
     public override async Task InitializeAsync()
     {
         await base.InitializeAsync();
-        _cache = new Cache.DistributedCache((IDistributedCache)_services.GetService(typeof(IDistributedCache)));
+        cache = new Cache.DistributedCache((IDistributedCache)services.GetService(typeof(IDistributedCache)));
     }
 }
 
 [Collection("Integration tests")]
 public class ParamTests : BaseTestsAsync
 {
-    private const string PARAM_1 = "MyFirstParam";
-    private const string PARAM_2 = "MySecondParam";
-    private const string PARAM_4 = "MyFourthParam";
-    private const string PARAM_5 = "MyFifthParam";
+    private const string PARAM1 = "MyFirstParam";
+    private const string PARAM2 = "MySecondParam";
+    private const string PARAM4 = "MyFourthParam";
+    private const string PARAM5 = "MyFifthParam";
 
-    private readonly string PARAM_1_ID = Snowflake.NewId();
-    private readonly string PARAM_1_VALUE = "My first value";
+    private readonly string PARAM1ID = Snowflake.NewId();
+    private readonly string PARAM1VALUE = "My first value";
 
     public override async Task InitializeAsync()
     {
@@ -46,18 +46,18 @@ public class ParamTests : BaseTestsAsync
         using var api = CreateApi();
         await api.Params.SaveAsync(new Param
         {
-            Id = PARAM_1_ID,
-            Key = PARAM_1,
-            Value = PARAM_1_VALUE
+            Id = PARAM1ID,
+            Key = PARAM1,
+            Value = PARAM1VALUE
         });
 
         await api.Params.SaveAsync(new Param
         {
-            Key = PARAM_4,
+            Key = PARAM4,
         });
         await api.Params.SaveAsync(new Param
         {
-            Key = PARAM_5,
+            Key = PARAM5,
         });
     }
 
@@ -87,7 +87,7 @@ public class ParamTests : BaseTestsAsync
         using var api = CreateApi();
         await api.Params.SaveAsync(new Param
         {
-            Key = PARAM_2,
+            Key = PARAM2,
             Value = "My second value"
         });
     }
@@ -99,7 +99,7 @@ public class ParamTests : BaseTestsAsync
         await Assert.ThrowsAsync<ValidationException>(async () =>
             await api.Params.SaveAsync(new Param
             {
-                Key = PARAM_1,
+                Key = PARAM1,
                 Value = "My duplicate value"
             })
         );
@@ -158,29 +158,29 @@ public class ParamTests : BaseTestsAsync
     public async Task GetById()
     {
         using var api = CreateApi();
-        var model = await api.Params.GetByIdAsync(PARAM_1_ID);
+        var model = await api.Params.GetByIdAsync(PARAM1ID);
 
         Assert.NotNull(model);
-        Assert.Equal(PARAM_1, model.Key);
+        Assert.Equal(PARAM1, model.Key);
     }
 
     [Fact]
     public async Task GetByKey()
     {
         using var api = CreateApi();
-        var model = await api.Params.GetByKeyAsync(PARAM_1);
+        var model = await api.Params.GetByKeyAsync(PARAM1);
 
         Assert.NotNull(model);
-        Assert.Equal(PARAM_1, model.Key);
+        Assert.Equal(PARAM1, model.Key);
     }
 
     [Fact]
     public async Task Update()
     {
         using var api = CreateApi();
-        var model = await api.Params.GetByIdAsync(PARAM_1_ID);
+        var model = await api.Params.GetByIdAsync(PARAM1ID);
 
-        Assert.Equal(PARAM_1_VALUE, model.Value);
+        Assert.Equal(PARAM1VALUE, model.Value);
 
         model.Value = "Updated";
 
@@ -191,7 +191,7 @@ public class ParamTests : BaseTestsAsync
     public async Task Delete()
     {
         using var api = CreateApi();
-        var model = await api.Params.GetByKeyAsync(PARAM_4);
+        var model = await api.Params.GetByKeyAsync(PARAM4);
 
         Assert.NotNull(model);
 
@@ -202,7 +202,7 @@ public class ParamTests : BaseTestsAsync
     public async Task DeleteById()
     {
         using var api = CreateApi();
-        var model = await api.Params.GetByKeyAsync(PARAM_4);
+        var model = await api.Params.GetByKeyAsync(PARAM4);
 
         Assert.NotNull(model);
 

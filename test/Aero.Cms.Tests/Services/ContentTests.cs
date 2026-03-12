@@ -16,7 +16,7 @@ public class ContentTestsMemoryCache : ContentTests
     public override async Task InitializeAsync()
     {
         await base.InitializeAsync();
-        _cache = new Cache.MemoryCache((IMemoryCache)_services.GetService(typeof(IMemoryCache)));
+        cache = new Cache.MemoryCache((IMemoryCache)services.GetService(typeof(IMemoryCache)));
     }
 }
 
@@ -26,18 +26,18 @@ public class ContentTestsDistributedCache : ContentTests
     public override async Task InitializeAsync()
     {
         await base.InitializeAsync();
-        _cache = new Cache.DistributedCache((IDistributedCache)_services.GetService(typeof(IDistributedCache)));
+        cache = new Cache.DistributedCache((IDistributedCache)services.GetService(typeof(IDistributedCache)));
     }
 }
 
 [Collection("Integration tests")]
 public class ContentTests : BaseTestsAsync
 {
-    private readonly string ID_1 = Snowflake.NewId();
-    private readonly string ID_2 = Snowflake.NewId();
-    private readonly string ID_3 = Snowflake.NewId();
+    private readonly string ID1 = Snowflake.NewId();
+    private readonly string ID2 = Snowflake.NewId();
+    private readonly string ID3 = Snowflake.NewId();
 
-    private readonly string ID_LANG = Snowflake.NewId();
+    private readonly string IDLANG = Snowflake.NewId();
 
     [ContentGroup(Id = "MyContentGroup", Title = "My content group")]
     public abstract class MyContentGroup<T> : Content<T> where T : MyContentGroup<T>
@@ -65,14 +65,14 @@ public class ContentTests : BaseTestsAsync
         // Add a secondary language
         await api.Languages.SaveAsync(new Language
         {
-            Id = ID_LANG,
+            Id = IDLANG,
             Title = "Second Language",
             Culture = "sv-SE"
         });
 
         // Add some default content
         var content1 = await MyContent.CreateAsync(api);
-        content1.Id = ID_1;
+        content1.Id = ID1;
         content1.Title = "My first content";
         content1.Excerpt = "My first excerpt";
         content1.MainDescription = "My first description";
@@ -80,7 +80,7 @@ public class ContentTests : BaseTestsAsync
         await api.Content.SaveAsync(content1);
 
         var content2 = await MyContent.CreateAsync(api);
-        content2.Id = ID_2;
+        content2.Id = ID2;
         content2.Title = "My second content";
         content2.Excerpt = "My second excerpt";
         content2.MainDescription = "My second description";
@@ -88,7 +88,7 @@ public class ContentTests : BaseTestsAsync
         await api.Content.SaveAsync(content2);
 
         var content3 = await MyContent.CreateAsync(api);
-        content3.Id = ID_3;
+        content3.Id = ID3;
         content3.Title = "My third content";
         content3.Excerpt = "My third excerpt";
         content3.MainDescription = "My third description";
@@ -100,7 +100,7 @@ public class ContentTests : BaseTestsAsync
         content1.Excerpt = "Min första sammanfattning";
         content1.MainDescription = "Min första beskrivning";
 
-        await api.Content.SaveAsync(content1, ID_LANG);
+        await api.Content.SaveAsync(content1, IDLANG);
     }
 
     public override async Task DisposeAsync()
@@ -121,15 +121,15 @@ public class ContentTests : BaseTestsAsync
         }
 
         // Delete added language
-        await api.Languages.DeleteAsync(ID_LANG);
+        await api.Languages.DeleteAsync(IDLANG);
     }
 
     [Fact]
     public async Task GetById()
     {
         using var api = CreateApi();
-        var content = await api.Content.GetByIdAsync<MyContent>(ID_1);
-        var contentInfo = await api.Content.GetByIdAsync<ContentInfo>(ID_1);
+        var content = await api.Content.GetByIdAsync<MyContent>(ID1);
+        var contentInfo = await api.Content.GetByIdAsync<ContentInfo>(ID1);
 
         Assert.NotNull(content);
         Assert.NotNull(contentInfo);
@@ -141,8 +141,8 @@ public class ContentTests : BaseTestsAsync
     public async Task GetTranslationById()
     {
         using var api = CreateApi();
-        var content = await api.Content.GetByIdAsync<MyContent>(ID_1, ID_LANG);
-        var contentInfo = await api.Content.GetByIdAsync<ContentInfo>(ID_1, ID_LANG);
+        var content = await api.Content.GetByIdAsync<MyContent>(ID1, IDLANG);
+        var contentInfo = await api.Content.GetByIdAsync<ContentInfo>(ID1, IDLANG);
 
         Assert.NotNull(content);
         Assert.NotNull(contentInfo);
@@ -154,7 +154,7 @@ public class ContentTests : BaseTestsAsync
     public async Task GetTranslatedStatus()
     {
         using var api = CreateApi();
-        var status = await api.Content.GetTranslationStatusByIdAsync(ID_1);
+        var status = await api.Content.GetTranslationStatusByIdAsync(ID1);
 
         Assert.NotNull(status);
 
@@ -167,7 +167,7 @@ public class ContentTests : BaseTestsAsync
     public async Task GetUntranslatedStatus()
     {
         using var api = CreateApi();
-        var status = await api.Content.GetTranslationStatusByIdAsync(ID_2);
+        var status = await api.Content.GetTranslationStatusByIdAsync(ID2);
 
         Assert.NotNull(status);
 

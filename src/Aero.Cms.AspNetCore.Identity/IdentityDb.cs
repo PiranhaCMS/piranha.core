@@ -2,22 +2,22 @@ using Microsoft.AspNetCore.Identity;
 using Aero.Cms.AspNetCore.Identity.Data;
 using Aero.Cms.Manager;
 using Aero.Identity.Models;
-using Raven.Client.Documents;
-using Raven.Client.Documents.Linq;
-using Raven.Client.Documents.Session;
+using Marten;
+using Marten.Linq;
+
 
 namespace Aero.Cms.AspNetCore.Identity;
 
 public class RavenIdentityDb : IdentityDb<RavenIdentityDb>
 {
-    public RavenIdentityDb(IAsyncDocumentSession db) : base(db)
+    public RavenIdentityDb(IDocumentSession db) : base(db)
     {
     }
 }
 
 public abstract class IdentityDb<T> : IIdentityDb
 {
-    protected readonly IAsyncDocumentSession db;
+    protected readonly IDocumentSession db;
 
     /// <summary>
     ///     Gets/sets whether the db context as been initialized. This
@@ -34,7 +34,7 @@ public abstract class IdentityDb<T> : IIdentityDb
     ///     Default constructor.
     /// </summary>
     /// <param name="db">The RavenDB session</param>
-    protected IdentityDb(IAsyncDocumentSession db)
+    protected IdentityDb(IDocumentSession db)
     {
         this.db = db;
         if (IsInitialized)
@@ -68,7 +68,7 @@ public abstract class IdentityDb<T> : IIdentityDb
                 Name = "SysAdmin",
                 NormalizedName = "SYSADMIN"
             };
-            await db.StoreAsync(role);
+            db.Store(role);
         }
 
         // Make sure our SysAdmin role has all of the available claims
@@ -100,14 +100,14 @@ public abstract class IdentityDb<T> : IIdentityDb
         await SaveChangesAsync();
     }
 
-    public IAsyncDocumentSession session => db;
-    public IRavenQueryable<User> Users => db.Query<User>();
-    public IRavenQueryable<Role> Roles => db.Query<Role>();
-    public IRavenQueryable<IdentityUserClaim<string>> UserClaims => db.Query<IdentityUserClaim<string>>();
-    public IRavenQueryable<IdentityUserRole<string>> UserRoles => db.Query<IdentityUserRole<string>>();
-    public IRavenQueryable<IdentityUserLogin<string>> UserLogins => db.Query<IdentityUserLogin<string>>();
-    public IRavenQueryable<IdentityRoleClaim<string>> RoleClaims => db.Query<IdentityRoleClaim<string>>();
-    public IRavenQueryable<IdentityUserToken<string>> UserTokens => db.Query<IdentityUserToken<string>>();
+    public IDocumentSession session => db;
+    public IMartenQueryable<User> Users => db.Query<User>();
+    public IMartenQueryable<Role> Roles => db.Query<Role>();
+    public IMartenQueryable<IdentityUserClaim<string>> UserClaims => db.Query<IdentityUserClaim<string>>();
+    public IMartenQueryable<IdentityUserRole<string>> UserRoles => db.Query<IdentityUserRole<string>>();
+    public IMartenQueryable<IdentityUserLogin<string>> UserLogins => db.Query<IdentityUserLogin<string>>();
+    public IMartenQueryable<IdentityRoleClaim<string>> RoleClaims => db.Query<IdentityRoleClaim<string>>();
+    public IMartenQueryable<IdentityUserToken<string>> UserTokens => db.Query<IdentityUserToken<string>>();
 
     public int SaveChanges() => SaveChangesAsync()
             .GetAwaiter()

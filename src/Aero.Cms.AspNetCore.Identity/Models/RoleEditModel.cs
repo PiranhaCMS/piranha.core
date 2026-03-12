@@ -2,8 +2,8 @@
 
 using Microsoft.AspNetCore.Identity;
 using Aero.Cms.AspNetCore.Identity.Data;
-using Raven.Client.Documents;
-using Raven.Client.Documents.Linq;
+using Marten;
+
 
 namespace Aero.Cms.AspNetCore.Identity.Models;
 
@@ -66,7 +66,7 @@ public class RoleEditModel
                 Id = Role.Id
             };
             //db.Roles.Add(role);
-            await db.session.StoreAsync(role);
+            db.session.Store(role);
         }
 
         role.Name = Role.Name;
@@ -105,7 +105,7 @@ public class RoleEditModel
         }
         
         foreach (var r in add)        {
-            await db.session.StoreAsync(r);
+            db.session.Store(r);
         }
 
         await db.SaveChangesAsync();

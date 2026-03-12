@@ -1,7 +1,8 @@
 using Aero.Identity.Models;
+using Marten;
 using Microsoft.AspNetCore.Identity;
-using Raven.Client.Documents;
-using Raven.Client.Documents.Session;
+
+
 
 namespace Aero.Identity;
 
@@ -10,13 +11,13 @@ namespace Aero.Identity;
 /// </summary>
 /// <typeparam name="TUser">The user type.</typeparam>
 public class RavenUserStore<TUser> : RavenUserStore<TUser, RavenRole>
-    where TUser : RavenUser, new()
+    where TUser : AeroUser, new()
 {
     /// <summary>
     /// Initializes a new instance of the RavenUserStore.
     /// </summary>
     /// <param name="session">The RavenDB session.</param>
-    public RavenUserStore(IAsyncDocumentSession session) : base(session)
+    public RavenUserStore(IDocumentSession session) : base(session)
     {
     }
 }
@@ -39,16 +40,16 @@ public class RavenUserStore<TUser, TRole> :
     IUserTwoFactorRecoveryCodeStore<TUser>,
     IUserPasskeyStore<TUser>,
     IQueryableUserStore<TUser>
-    where TUser : RavenUser, new()
+    where TUser : AeroUser, new()
     where TRole : RavenRole, new()
 {
-    protected readonly IAsyncDocumentSession _session;
+    protected readonly IDocumentSession _session;
 
     /// <summary>
     /// Initializes a new instance of the RavenUserStore.
     /// </summary>
     /// <param name="session">The RavenDB session.</param>
-    public RavenUserStore(IAsyncDocumentSession session)
+    public RavenUserStore(IDocumentSession session)
     {
         _session = session ?? throw new ArgumentNullException(nameof(session));
     }
@@ -62,7 +63,7 @@ public class RavenUserStore<TUser, TRole> :
         cancellationToken.ThrowIfCancellationRequested();
         if (user == null) throw new ArgumentNullException(nameof(user));
 
-        await _session.StoreAsync(user, cancellationToken);
+        _session.Store(user);
         await _session.SaveChangesAsync(cancellationToken);
         return IdentityResult.Success;
     }
@@ -90,7 +91,7 @@ public class RavenUserStore<TUser, TRole> :
     {
         cancellationToken.ThrowIfCancellationRequested();
         return await _session.Query<TUser>()
-            .Customize(x => x.WaitForNonStaleResults())
+            
             .FirstOrDefaultAsync(u => u.NormalizedUserName == normalizedUserName, cancellationToken);
     }
 
@@ -140,9 +141,9 @@ public class RavenUserStore<TUser, TRole> :
         try
         {
             // If the user is not loaded in the current session, we store it to track it.
-            if (!_session.Advanced.IsLoaded(user.Id))
+            //if (!_session.Advanced.IsLoaded(user.Id))
             {
-                await _session.StoreAsync(user, cancellationToken);
+                _session.Store(user);
             }
 
             await _session.SaveChangesAsync(cancellationToken);
@@ -226,7 +227,7 @@ public class RavenUserStore<TUser, TRole> :
     {
         cancellationToken.ThrowIfCancellationRequested();
         return await _session.Query<TUser>()
-            .Customize(x => x.WaitForNonStaleResults())
+            
             .FirstOrDefaultAsync(u => u.NormalizedEmail == normalizedEmail, cancellationToken);
     }
 
@@ -290,7 +291,7 @@ public class RavenUserStore<TUser, TRole> :
             var normalizedRoleName = roleName.ToUpperInvariant();
 
             var role = await _session.Query<TRole>()
-                .Customize(x => x.WaitForNonStaleResults())
+                
                 .FirstOrDefaultAsync(r => r.NormalizedName == normalizedRoleName, cancellationToken);
 
             if (role != null)
@@ -355,9 +356,11 @@ public class RavenUserStore<TUser, TRole> :
         cancellationToken.ThrowIfCancellationRequested();
         if (string.IsNullOrWhiteSpace(roleName)) throw new ArgumentNullException(nameof(roleName));
 
-        return await _session.Query<TUser>()
+        var users = await _session.Query<TUser>()
             .Where(u => u.Roles.Any(r => r == roleName))
             .ToListAsync(cancellationToken);
+
+        return users.ToList();
     }
 
     /// <inheritdoc />
@@ -411,12 +414,19 @@ public class RavenUserStore<TUser, TRole> :
         CancellationToken cancellationToken)
     {
         cancellationToken.ThrowIfCancellationRequested();
-        return await _session.Advanced.AsyncDocumentQuery<TUser>()
-            .WaitForNonStaleResults()
-            .WhereEquals("Logins[].LoginProvider", loginProvider)
-            .AndAlso()
-            .WhereEquals("Logins[].ProviderKey", providerKey)
+        //return await _session.Advanced.AsyncDocumentQuery<TUser>()
+        //    .WaitForNonStaleResults()
+        //    .WhereEquals("Logins[].LoginProvider", loginProvider)
+        //    .AndAlso()
+        //    .WhereEquals("Logins[].ProviderKey", providerKey)
+        //    .FirstOrDefaultAsync(cancellationToken);
+        var results = await _session.Query<TUser>()
+            .Where(u => u.Logins.Any(l =>
+                l.LoginProvider == loginProvider &&
+                l.ProviderKey == providerKey))
             .FirstOrDefaultAsync(cancellationToken);
+
+        return results;
     }
 
     /// <inheritdoc />
@@ -494,12 +504,19 @@ public class RavenUserStore<TUser, TRole> :
         cancellationToken.ThrowIfCancellationRequested();
         if (claim == null) throw new ArgumentNullException(nameof(claim));
 
-        return await _session.Advanced.AsyncDocumentQuery<TUser>()
-            .WaitForNonStaleResults()
-            .WhereEquals("Claims[].ClaimType", claim.Type)
-            .AndAlso()
-            .WhereEquals("Claims[].ClaimValue", claim.Value)
+        //return await _session.Advanced.AsyncDocumentQuery<TUser>()
+        //    .WaitForNonStaleResults()
+        //    .WhereEquals("Claims[].ClaimType", claim.Type)
+        //    .AndAlso()
+        //    .WhereEquals("Claims[].ClaimValue", claim.Value)
+        //    .ToListAsync(cancellationToken);
+        var results = await _session.Query<TUser>()
+            .Where(u => u.Claims.Any(c =>
+                c.ClaimType == claim.Type &&
+                c.ClaimValue == claim.Value))
             .ToListAsync(cancellationToken);
+
+        return results.ToList();
     }
 
     /// <inheritdoc />
@@ -656,9 +673,8 @@ public class RavenUserStore<TUser, TRole> :
     public async Task<TUser?> FindByPasskeyIdAsync(byte[] credentialId, CancellationToken cancellationToken)
     {
         cancellationToken.ThrowIfCancellationRequested();
-        return await _session.Advanced.AsyncDocumentQuery<TUser>()
-            .WaitForNonStaleResults()
-            .WhereEquals("Passkeys[].CredentialId", credentialId)
+        return await _session.Query<TUser>()
+            .Where(u => u.Passkeys.Any(p => p.CredentialId == credentialId))
             .FirstOrDefaultAsync(cancellationToken);
     }
 

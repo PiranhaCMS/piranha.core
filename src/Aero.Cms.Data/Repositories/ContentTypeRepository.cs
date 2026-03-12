@@ -2,7 +2,8 @@
 
 using Aero.Cms.Models;
 using Aero.Cms.Repositories;
-using Raven.Client.Documents;
+using Marten;
+
 
 namespace Aero.Cms.Data.Repositories;
 
@@ -23,7 +24,7 @@ internal class ContentTypeRepository : IContentTypeRepository
     /// Gets all available models.
     /// </summary>
     /// <returns>The available models</returns>
-    public async Task<IEnumerable<ContentType>> GetAll()
+    public async Task<IEnumerable<ContentType>> GetAllAsync()
     {
         return await _db.ContentTypes
             .OrderBy(t => t.Id)
@@ -36,7 +37,7 @@ internal class ContentTypeRepository : IContentTypeRepository
     /// </summary>
     /// <param name="group">The content group</param>
     /// <returns>The available models</returns>
-    public async Task<IEnumerable<ContentType>> GetByGroup(string group)
+    public async Task<IEnumerable<ContentType>> GetByGroupAsync(string group)
     {
         return await _db.ContentTypes
             .Where(t => t.Group == group)
@@ -50,7 +51,7 @@ internal class ContentTypeRepository : IContentTypeRepository
     /// </summary>
     /// <param name="id">The unique id</param>
     /// <returns></returns>
-    public async Task<ContentType> GetById(string id)
+    public async Task<ContentType> GetByIdAsync(string id)
     {
         return await _db.ContentTypes
             .FirstOrDefaultAsync(t => t.Id == id)
@@ -62,9 +63,9 @@ internal class ContentTypeRepository : IContentTypeRepository
     /// depending on its state.
     /// </summary>
     /// <param name="model">The model</param>
-    public async Task Save(ContentType model)
+    public async Task SaveAsync(ContentType model)
     {
-        await _db.session.StoreAsync(model, model.Id).ConfigureAwait(false);
+        _db.session.Store(model);
         await _db.SaveChangesAsync().ConfigureAwait(false);
     }
 
@@ -72,9 +73,9 @@ internal class ContentTypeRepository : IContentTypeRepository
     /// Deletes the model with the specified id.
     /// </summary>
     /// <param name="id">The unique id</param>
-    public async Task Delete(string id)
+    public async Task DeleteAsync(string id)
     {
-        var type = await GetById(id).ConfigureAwait(false);
+        var type = await GetByIdAsync(id).ConfigureAwait(false);
 
         if (type != null)
         {

@@ -2,7 +2,8 @@
 
 using Aero.Cms.Models;
 using Aero.Cms.Repositories;
-using Raven.Client.Documents;
+using Marten;
+
 
 namespace Aero.Cms.Data.Repositories;
 
@@ -96,7 +97,7 @@ internal class LanguageRepository : ILanguageRepository
                 Id = !string.IsNullOrEmpty(model.Id) ? model.Id : Snowflake.NewId().ToString()
             };
             //await _db.Languages.AddAsync(language).ConfigureAwait(false);
-            await _db.session.StoreAsync(language).ConfigureAwait(false);
+            _db.session.Store(language);
         }
         language.Culture = model.Culture;
         language.IsDefault = model.IsDefault;

@@ -2,7 +2,8 @@
 
 using Aero.Cms.Models;
 using Aero.Cms.Repositories;
-using Raven.Client.Documents;
+using Marten;
+
 
 namespace Aero.Cms.Data.Repositories;
 
@@ -100,7 +101,7 @@ internal class AliasRepository : IAliasRepository
     public async Task<IEnumerable<Alias>> GetByRedirectUrl(string url, string siteId)
     {
         return await _db.Aliases
-            .Where(a => a.SiteId == siteId && a.RedirectUrl == url, exact: false)
+            .Where(a => a.SiteId == siteId && a.RedirectUrl == url)
             .Select(a => new Alias
             {
                 Id = a.Id,
@@ -132,7 +133,7 @@ internal class AliasRepository : IAliasRepository
                 Created = DateTime.Now
             };
             // await _db.Aliases.AddAsync(alias).ConfigureAwait(false);
-            await _db.session.StoreAsync(alias);
+            _db.session.Store(alias);
         }
 
         alias.SiteId = model.SiteId;

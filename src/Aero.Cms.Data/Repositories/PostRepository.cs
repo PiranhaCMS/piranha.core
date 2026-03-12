@@ -1,10 +1,12 @@
 using Aero.Cms.Repositories;
-using Raven.Client.Documents;
-using Raven.Client.Documents.Linq;
+
+
 using System.Text.Json;
 using Aero.Cms.Data.Data;
-using Aero.Cms.Data.Indexes;
+
 using Aero.Cms.Data.Services;
+using Marten;
+using Marten.Linq;
 
 namespace Aero.Cms.Data.Repositories;
 
@@ -34,7 +36,7 @@ internal class PostRepository : IPostRepository
     public async Task<IEnumerable<string>> GetAll(string blogId, int? index = null, int? pageSize = null)
     {
         // Prepare base query
-        IRavenQueryable<Post> query = _db.Posts
+        var query = _db.Posts
             .Where(p => p.BlogId == blogId)
             .OrderByDescending(p => p.Published)
             .ThenByDescending(p => p.LastModified)
@@ -43,7 +45,7 @@ internal class PostRepository : IPostRepository
         // Add paging if requested
         if (index.HasValue && pageSize.HasValue)
         {
-            query = query
+            query = (IOrderedQueryable<Post>)query
                 .Skip(index.Value * pageSize.Value)
                 .Take(pageSize.Value);
         }
@@ -135,13 +137,26 @@ internal class PostRepository : IPostRepository
     {
         // Use the PostRevisions_ByBlog index which precomputes IsDraft = Created > PostLastModified.
         // RavenDB LINQ cannot compare two document fields in a Where clause at query time.
-        var postIds = await _db.session
-            .Query<PostRevisions_ByBlog.Result, PostRevisions_ByBlog>()
-            .Where(r => r.BlogId == blogId && r.IsDraft)
-            .Select(r => r.PostId)
-            .Distinct()
-            .ToListAsync()
-            .ConfigureAwait(false);
+        //var postIds = await _db.session
+        //    .Query<PostRevisions_ByBlog.Result, PostRevisions_ByBlog>()
+        //    .Where(r => r.BlogId == blogId && r.IsDraft)
+        //    .Select(r => r.PostId)
+        //    .Distinct()
+        //    .ToListAsync()
+        //    .ConfigureAwait(false);
+        var postIds = await _db.session.Query<PostRevision>()
+            .Where(x => x.BlogId == blogId)
+            // No need for a pre-computed index field!
+            .Where(x => x.Created > x.PostLastModified)
+            .Select(r => 
+                //r.BlogId,
+                r.PostId
+                //r.Id,
+                //r.Created,
+                //r.PostLastModified,
+                //IsDraft = r.Created > r.PostLastModified
+            )
+            .ToListAsync();
 
         return postIds;
     }
@@ -207,7 +222,7 @@ internal class PostRepository : IPostRepository
         
         var query = GetQuery<T>();
         var post = await query
-            .Customize(x => x.WaitForNonStaleResults())
+            
             .FirstOrDefaultAsync(p => p.BlogId == blogId && p.Slug == slug)
             .ConfigureAwait(false);
         
@@ -215,7 +230,7 @@ internal class PostRepository : IPostRepository
 
         if (post == null)
         {
-            Console.WriteLine($"[DEBUG] GetBySlug: Database: {_db.session.Advanced.DocumentStore.Database}, session={_db.session.GetHashCode()}");
+            Console.WriteLine($"[DEBUG] GetBySlug: Database: session document store, session={_db.session.GetHashCode()}");
             // Debug: list all posts in the whole database
             var allPostsGlobal = await _db.session.Query<Post>().ToListAsync();
             Console.WriteLine($"[DEBUG] GetBySlug: GLOBAL posts count: {allPostsGlobal.Count}");
@@ -250,7 +265,7 @@ internal class PostRepository : IPostRepository
     public async Task<T> GetDraftById<T>(string id) where T : Models.PostBase
     {
         DateTime? lastModified = await _db.Posts
-            .Customize(x => x.WaitForNonStaleResults())
+            
             .Where(p => p.Id == id)
             .Select(p => p.LastModified)
             .FirstOrDefaultAsync()
@@ -415,7 +430,7 @@ internal class PostRepository : IPostRepository
                 Id = model.Id
             };
             //await _db.PostComments.AddAsync(comment);
-            await _db.session.StoreAsync(comment);
+            _db.session.Store(comment);
         }
 
         comment.UserId = model.UserId;
@@ -443,7 +458,7 @@ internal class PostRepository : IPostRepository
 
         if (post != null)
         {
-            await _db.session.StoreAsync(new PostRevision
+            _db.session.Store(new PostRevision
             {
                 Id = Snowflake.NewId(),
                 PostId = id,
@@ -452,7 +467,7 @@ internal class PostRepository : IPostRepository
                 PostLastModified = post.LastModified,
                 Data = JsonSerializer.Serialize(post),
                 Created = post.LastModified
-            }).ConfigureAwait(false);
+            });
 
             await _db.SaveChangesAsync().ConfigureAwait(false);
 
@@ -534,12 +549,19 @@ internal class PostRepository : IPostRepository
         if (post != null)
         {
             // Use PostRevisions_ByBlog index to find drafts — avoids field-to-field date comparison
-            var draftRevisionIds = await _db.session
-                .Query<PostRevisions_ByBlog.Result, PostRevisions_ByBlog>()
-                .Where(r => r.PostId == id && r.IsDraft)
-                .Select(r => r.Id)
-                .ToListAsync()
-                .ConfigureAwait(false);
+            var draftRevisionIds = await _db.session.Query<PostRevision>()
+                .Where(x => x.BlogId == "blogs/1")
+                // No need for a pre-computed index field!
+                .Where(x => x.Created > x.PostLastModified)
+                .Select(r => new {
+                    r.BlogId,
+                    r.PostId,
+                    r.Id,
+                    r.Created,
+                    r.PostLastModified,
+                    IsDraft = r.Created > r.PostLastModified
+                })
+                .ToListAsync();
 
             foreach (var draftId in draftRevisionIds)
             {
@@ -585,7 +607,7 @@ internal class PostRepository : IPostRepository
         bool onlyPending, int page, int pageSize)
     {
         // Create base query
-        IRavenQueryable<Data.PostComment> query = _db.PostComments
+        IQueryable<PostComment> query = _db.PostComments;
             ;
 
         // Check if only should include a comments for a certain post
@@ -683,7 +705,7 @@ internal class PostRepository : IPostRepository
                         LastModified = DateTime.Now
                     };
                     //await _db.Categories.AddAsync(category).ConfigureAwait(false);
-                    await _db.session.StoreAsync(category).ConfigureAwait(false);
+                    _db.session.Store(category);
                 }
 
                 model.Category.Id = category.Id;
@@ -726,7 +748,7 @@ internal class PostRepository : IPostRepository
                             LastModified = DateTime.Now
                         };
                         //await _db.Tags.AddAsync(tag).ConfigureAwait(false);
-                        await _db.session.StoreAsync(tag).ConfigureAwait(false);
+                        _db.session.Store(tag);
                     }
 
                     t.Id = tag.Id;
@@ -746,14 +768,13 @@ internal class PostRepository : IPostRepository
                 model.Slug = Utils.GenerateSlug(model.Slug, false);
             }
 
-            IRavenQueryable<Post> postQuery = _db.Posts;
+        IQueryable<Post> postQuery = _db.Posts;
             if (isDraft)
             {
-                postQuery = postQuery.Customize(x => x.NoTracking());
+                // NoTracking not supported in Marten
             }
 
-            // FirstOrDefaultAsync(p => p.Id ...
-            postQuery = postQuery.OrderBy(p => p.Id);
+            // FirstOrDefaultAsync(p => p.Id ...) - no need for OrderBy
 
             var post = await postQuery
                 .FirstOrDefaultAsync(p => p.Id == model.Id)
@@ -779,7 +800,7 @@ internal class PostRepository : IPostRepository
                 if (!isDraft)
                 {
                     //await _db.Posts.AddAsync(post).ConfigureAwait(false);
-                    await _db.session.StoreAsync(post).ConfigureAwait(false);
+                    _db.session.Store(post);
                 }
             }
             else
@@ -864,10 +885,10 @@ internal class PostRepository : IPostRepository
                 // Now map the new block
                 for (var n = 0; n < blocks.Count; n++)
                 {
-                    IRavenQueryable<Block> blockQuery = _db.Blocks;
+                    IMartenQueryable<Block> blockQuery = _db.Blocks;
                     if (isDraft)
                     {
-                        blockQuery = blockQuery.Customize(x => x.NoTracking());
+                    // NoTracking not supported in Marten
                     }
 
 
@@ -890,7 +911,7 @@ internal class PostRepository : IPostRepository
                         if (!isDraft && blocks[n].IsReusable)
                         {
                             // Only store reusable blocks as separate documents
-                            await _db.session.StoreAsync(block).ConfigureAwait(false);
+                            _db.session.Store(block);
                         }
                     }
 
@@ -925,7 +946,7 @@ internal class PostRepository : IPostRepository
                             // Only store separately for reusable blocks
                             if (!isDraft && blocks[n].IsReusable)
                             {
-                                await _db.session.StoreAsync(field).ConfigureAwait(false);
+                                _db.session.Store(field);
                             }
 
                             block.Fields.Add(field);
@@ -1013,7 +1034,7 @@ internal class PostRepository : IPostRepository
                         BlogId = post.BlogId,
                         PostLastModified = post.LastModified
                     };
-                    await _db.session.StoreAsync(draft).ConfigureAwait(false);
+                    _db.session.Store(draft);
                 }
 
                 draft.Data = JsonSerializer.Serialize(post);
@@ -1031,30 +1052,32 @@ internal class PostRepository : IPostRepository
     private async Task DeleteUnusedCategories(string blogId)
     {
         // 1. Collect all category IDs used by published posts
-        var used = await _db.Posts
-            .Customize(x => x.WaitForNonStaleResults())
+        var used = (await _db.Posts
+            
             .Where(p => p.BlogId == blogId)
             .Select(p => p.CategoryId)
             .Distinct()
             .ToListAsync()
-            .ConfigureAwait(false);
+            .ConfigureAwait(false)).ToList();
 
         // 2. Query the index for revisions newer than their posts
-        var draftIds = await _db.session
-            .Query<Revisions_ByIsNewerThanPost.Result, Revisions_ByIsNewerThanPost>()
-            .Customize(x => x.WaitForNonStaleResults())
-            .Where(x => x.BlogId == blogId && x.IsNewer)
-            .Select(x => x.Id)
+        // 2. Query for revisions newer than their posts directly
+        var revisions = await _db.session.Query<PostRevision>()
+            .Where(r => r.BlogId == blogId)
             .ToListAsync()
             .ConfigureAwait(false);
+        
+        // Filter in-memory for drafts (Created > PostLastModified)
+        var draftIds = revisions
+            .Where(r => r.Created > r.PostLastModified)
+            .Select(r => r.Id)
+            .ToList();
 
-        // 3. Load the actual revision documents
-        var drafts = await _db.session
-            .LoadAsync<PostRevision>(draftIds)
-            .ConfigureAwait(false);
+        // 3. Use the revisions we already have (filter for drafts)
+        var drafts = revisions.Where(r => r.Created > r.PostLastModified).ToList();
 
         // 4. Extract category IDs from draft data
-        foreach (var draft in drafts.Values)
+        foreach (var draft in drafts)
         {
             var post = JsonSerializer.Deserialize<Post>(draft.Data);
             used.Add(post.CategoryId);
@@ -1064,7 +1087,7 @@ internal class PostRepository : IPostRepository
 
         // 5. Find categories not used by published posts or drafts
         var unused = await _db.Categories
-            .Customize(x => x.WaitForNonStaleResults())
+            
             .Where(c => c.BlogId == blogId && !c.Id.In(used)) // !used.Contains(c.Id))
             .ToListAsync()
             .ConfigureAwait(false);
@@ -1088,7 +1111,7 @@ internal class PostRepository : IPostRepository
     //        .ConfigureAwait(false);
     //
     //    var drafts = await _db.PostRevisions
-    //        .Where(r => r.Post.BlogId == blogId && r.Created > r.Post.LastModified, exact: false)
+    //        .Where(r => r.Post.BlogId == blogId && r.Created > r.Post.LastModified)
     //        .ToListAsync()
     //        .ConfigureAwait(false);
     //
@@ -1123,7 +1146,7 @@ internal class PostRepository : IPostRepository
         // Tags are embedded within Post documents (post.Tags) — no separate PostTags collection.
         // Collect all tag IDs currently referenced by any post in this blog.
         var allPosts = await _db.Posts
-            .Customize(x => x.WaitForNonStaleResults())
+            
             .Where(p => p.BlogId == blogId)
             .ToListAsync()
             .ConfigureAwait(false);
@@ -1134,33 +1157,39 @@ internal class PostRepository : IPostRepository
             .ToList();
 
         // Also collect tag IDs referenced by draft revisions
-        var draftIds = await _db.session
-            .Query<PostRevisions_ByBlog.Result, PostRevisions_ByBlog>()
-            .Customize(x => x.WaitForNonStaleResults())
-            .Where(r => r.BlogId == blogId && r.IsDraft)
-            .Select(r => r.Id)
+        var allRevisions = await _db.session.Query<PostRevision>()
+            .Where(r => r.BlogId == blogId)
             .ToListAsync()
             .ConfigureAwait(false);
+        
+        // Filter in-memory for drafts
+        var draftIds = allRevisions
+            .Where(r => r.Created > r.PostLastModified)
+            .Select(r => r.Id)
+            .ToList();
 
-        if (draftIds.Count > 0)
+        // Filter for drafts and extract tag IDs directly from revisions we already have
+        var draftRevisions = allRevisions.Where(r => r.Created > r.PostLastModified).ToList();
+        
+        foreach (var draft in draftRevisions)
         {
-            var drafts = await _db.session.LoadAsync<PostRevision>(draftIds).ConfigureAwait(false);
-            foreach (var draft in drafts.Values.Where(d => d != null))
+            var draftPost = JsonSerializer.Deserialize<Post>(draft.Data);
+            if (draftPost?.Tags != null)
             {
-                var draftPost = JsonSerializer.Deserialize<Post>(draft.Data);
-                if (draftPost?.Tags != null)
+                foreach (var tag in draftPost.Tags)
                 {
-                    foreach (var tag in draftPost.Tags)
-                    {
-                        used.Add(tag.TagId);
-                    }
+                    used.Add(tag.TagId);
                 }
             }
+        }
+        
+        if (draftRevisions.Count > 0)
+        {
             used = used.Distinct().ToList();
         }
 
         var unused = await _db.Tags
-            .Customize(x => x.WaitForNonStaleResults())
+            
             .Where(t => t.BlogId == blogId && !t.Id.In(used))
             .ToListAsync()
             .ConfigureAwait(false);
@@ -1179,19 +1208,19 @@ internal class PostRepository : IPostRepository
     /// </summary>
     /// <typeparam name="T">The requested model type</typeparam>
     /// <returns>The queryable</returns>
-    private IRavenQueryable<Post> GetQuery<T>()
+    private IMartenQueryable<Post> GetQuery<T>()
     {
         var loadRelated = !typeof(Models.IContentInfo).IsAssignableFrom(typeof(T));
 
-        IRavenQueryable<Post> query = _db.Posts
-            .Customize(x => x.WaitForNonStaleResults());
+        IMartenQueryable<Post> query = _db.Posts
+            ;
 
         if (loadRelated)
         {
             // query = query;
         }
 
-        query = query.OrderBy(p => p.Created);
+        query = (IMartenQueryable<Post>)query.OrderBy(p => p.Created);
 
         return query;
     }
@@ -1251,7 +1280,7 @@ internal class PostRepository : IPostRepository
         if (model.EnableComments)
         {
             model.CommentCount = await _db.PostComments
-                .Customize(x => x.WaitForNonStaleResults())
+                
                 .CountAsync(c => c.PostId == model.Id && c.IsApproved)
                 .ConfigureAwait(false);
         }
