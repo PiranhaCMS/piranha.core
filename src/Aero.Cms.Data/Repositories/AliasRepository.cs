@@ -27,7 +27,7 @@ internal class AliasRepository : IAliasRepository
     /// <returns>The available models</returns>
     public async Task<IEnumerable<Alias>> GetAll(string siteId)
     {
-        return await _db.Aliases
+        var aliases = await _db.Aliases
             .Where(a => a.SiteId == siteId)
             .OrderBy(a => a.AliasUrl)
             .ThenBy(a => a.RedirectUrl)
@@ -42,6 +42,8 @@ internal class AliasRepository : IAliasRepository
                 LastModified = a.LastModified
             })
             .ToListAsync();
+
+        return aliases;
     }
 
     /// <summary>
@@ -51,7 +53,7 @@ internal class AliasRepository : IAliasRepository
     /// <returns>The model, or NULL if it doesn't exist</returns>
     public Task<Alias> GetById(string id)
     {
-        return _db.Aliases
+        var alias = _db.Aliases
             .Where(a => a.Id == id)
             .Select(a => new Alias
             {
@@ -64,6 +66,8 @@ internal class AliasRepository : IAliasRepository
                 LastModified = a.LastModified
             })
             .FirstOrDefaultAsync();
+
+        return alias;
     }
 
     /// <summary>

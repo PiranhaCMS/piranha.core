@@ -2,13 +2,12 @@
 
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Caching.Distributed;
-using Xunit;
 using Aero.Cms.Models;
 
 namespace Aero.Cms.Tests.Repositories;
 
-[Collection("Integration tests")]
-public class PostTypeTestsMemoryCache : PostTypeTests
+//[Collection("Integration tests")]
+public class PostTypeTestsMemoryCache(MartenFixture fixture) : PostTypeTests(fixture)
 {
     public override async Task InitializeAsync()
     {
@@ -17,8 +16,8 @@ public class PostTypeTestsMemoryCache : PostTypeTests
     }
 }
 
-[Collection("Integration tests")]
-public class PostTypeTestsDistributedCache : PostTypeTests
+//[Collection("Integration tests")]
+public class PostTypeTestsDistributedCache(MartenFixture fixture) : PostTypeTests(fixture)
 {
     public override async Task InitializeAsync()
     {
@@ -27,8 +26,8 @@ public class PostTypeTestsDistributedCache : PostTypeTests
     }
 }
 
-[Collection("Integration tests")]
-public class PostTypeTests : BaseTestsAsync
+//[Collection("Integration tests")]
+public class PostTypeTests(MartenFixture fixture) : AsyncTestBase(fixture)
 {
     private readonly List<PostType> postTypes = new List<PostType>
     {
@@ -133,7 +132,7 @@ public class PostTypeTests : BaseTestsAsync
     {
         await base.InitializeAsync();
 
-        using var api = CreateApi();
+        
         await api.PostTypes.SaveAsync(postTypes[0]);
         await api.PostTypes.SaveAsync(postTypes[3]);
         await api.PostTypes.SaveAsync(postTypes[4]);
@@ -141,7 +140,7 @@ public class PostTypeTests : BaseTestsAsync
 
     public override async Task DisposeAsync()
     {
-        using var api = CreateApi();
+        
         var postTypes = await api.PostTypes.GetAllAsync();
 
         foreach (var p in postTypes)
@@ -153,7 +152,7 @@ public class PostTypeTests : BaseTestsAsync
     [Fact]
     public void IsCached()
     {
-        using var api = CreateApi();
+        
         Assert.Equal(((Api)api).IsCached,
             this.GetType() == typeof(PostTypeTestsMemoryCache) ||
             this.GetType() == typeof(PostTypeTestsDistributedCache));
@@ -162,14 +161,14 @@ public class PostTypeTests : BaseTestsAsync
     [Fact]
     public async Task Add()
     {
-        using var api = CreateApi();
+        
         await api.PostTypes.SaveAsync(postTypes[1]);
     }
 
     [Fact]
     public async Task GetAll()
     {
-        using var api = CreateApi();
+        
         var models = await api.PostTypes.GetAllAsync();
 
         Assert.NotNull(models);
@@ -179,7 +178,7 @@ public class PostTypeTests : BaseTestsAsync
     [Fact]
     public async Task GetNoneById()
     {
-        using var api = CreateApi();
+        
         var none = await api.PostTypes.GetByIdAsync("none-existing-type");
 
         Assert.Null(none);
@@ -188,7 +187,7 @@ public class PostTypeTests : BaseTestsAsync
     [Fact]
     public async Task GetById()
     {
-        using var api = CreateApi();
+        
         var model = await api.PostTypes.GetByIdAsync(postTypes[0].Id);
 
         Assert.NotNull(model);
@@ -198,7 +197,7 @@ public class PostTypeTests : BaseTestsAsync
     [Fact]
     public async Task Update()
     {
-        using var api = CreateApi();
+        
         var model = await api.PostTypes.GetByIdAsync(postTypes[0].Id);
 
         Assert.Null(model.Title);
@@ -211,7 +210,7 @@ public class PostTypeTests : BaseTestsAsync
     [Fact]
     public async Task Delete()
     {
-        using var api = CreateApi();
+        
         var model = await api.PostTypes.GetByIdAsync(postTypes[3].Id);
 
         Assert.NotNull(model);
@@ -222,7 +221,7 @@ public class PostTypeTests : BaseTestsAsync
     [Fact]
     public async Task DeleteById()
     {
-        using var api = CreateApi();
+        
         var model = await api.PostTypes.GetByIdAsync(postTypes[4].Id);
 
         Assert.NotNull(model);

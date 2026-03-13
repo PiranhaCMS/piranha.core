@@ -1,6 +1,3 @@
-
-
-using Xunit;
 using Aero.Cms.Data;
 using Aero.Cms.Data.Data;
 using Aero.Cms.Data.Services;
@@ -11,7 +8,7 @@ using Aero.Cms.Services;
 
 namespace Aero.Cms.Tests;
 
-public class Blocks : BaseTestsAsync
+public class Blocks(MartenFixture fixture) : AsyncTestBase(fixture)
 {
     private string image1Id;
     private IContentService<Page, PageField, Models.PageBase> contentService;
@@ -23,16 +20,16 @@ public class Blocks : BaseTestsAsync
     {
         await base.InitializeAsync();
 
-        using var api = CreateApi();
+        
         Aero.Cms.App.Init(api);
 
         contentService = new ContentService<Page, PageField, Models.PageBase>(new ContentFactory(services), Module.Mapper);
 
         // Add media
-        await using var stream = File.OpenRead("Assets/HLDScreenshot01mech1080.png");
+        await using var stream = File.OpenRead("Assets/HLD_Screenshot_01_mech_1080.png");
         var image1 = new Models.StreamMediaContent
         {
-            Filename = "HLDScreenshot01mech1080.png",
+            Filename = "HLD_Screenshot_01_mech_1080.png",
             Data = stream
         };
         await api.Media.SaveAsync(image1);
@@ -46,7 +43,7 @@ public class Blocks : BaseTestsAsync
     /// </summary>
     public override async Task DisposeAsync()
     {
-        using var api = CreateApi();
+        
         var media = await api.Media.GetAllByFolderIdAsync();
 
         foreach (var item in media)
@@ -67,7 +64,7 @@ public class Blocks : BaseTestsAsync
     [Fact]
     public async Task AudioBlockHasTitle()
     {
-        using var api = CreateApi();
+        
         var media = await api.Media.GetByIdAsync(image1Id);
 
         var block = new AudioBlock()
@@ -81,7 +78,7 @@ public class Blocks : BaseTestsAsync
 
         var title = block.GetTitle();
 
-        Assert.Equal("HLDScreenshot01mech1080.png", title);
+        Assert.Equal("HLD_Screenshot_01_mech_1080.png", title);
     }
 
     [Fact]
@@ -96,7 +93,7 @@ public class Blocks : BaseTestsAsync
     [Fact]
     public async Task ImageBlockHasTitle()
     {
-        using var api = CreateApi();
+        
         var media = await api.Media.GetByIdAsync(image1Id);
 
         var block = new ImageBlock()
@@ -110,7 +107,7 @@ public class Blocks : BaseTestsAsync
 
         var title = block.GetTitle();
 
-        Assert.Equal("HLDScreenshot01mech1080.png", title);
+        Assert.Equal("HLD_Screenshot_01_mech_1080.png", title);
     }
 
     [Fact]

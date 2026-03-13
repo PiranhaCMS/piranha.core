@@ -1,18 +1,17 @@
 ﻿using Aero.Cms.Data.Repositories;
 using Aero.Cms.Data.Services.Internal;
-using Xunit;
 using Aero.Cms.Services;
 
 namespace Aero.Cms.Tests;
 
-public class App : BaseTests
+public class App(MartenFixture fixture) : AsyncTestBase(fixture)
 {
     /// <summary>
     /// Sets up & initializes the tests.
     /// </summary>
     protected override void Init()
     {
-        using var api = CreateApi();
+        
         Aero.Cms.App.Init(api);
     }
 
@@ -25,7 +24,7 @@ public class App : BaseTests
     [Fact]
     public void AppInit()
     {
-        using var api = CreateApi();
+        
         Aero.Cms.App.Init(api);
     }
 

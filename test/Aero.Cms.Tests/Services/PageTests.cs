@@ -4,7 +4,6 @@ using System.ComponentModel.DataAnnotations;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.DependencyInjection;
-using Xunit;
 using Aero.Cms.AttributeBuilder;
 using Aero.Cms.Extend;
 using Aero.Cms.Extend.Fields;
@@ -12,8 +11,8 @@ using Aero.Cms.Models;
 
 namespace Aero.Cms.Tests.Services;
 
-[Collection("Integration tests")]
-public class PageTestsMemoryCache : PageTests
+//[Collection("Integration tests")]
+public class PageTestsMemoryCache(MartenFixture fixture) : PageTests(fixture)
 {
     public override async Task InitializeAsync()
     {
@@ -22,8 +21,8 @@ public class PageTestsMemoryCache : PageTests
     }
 }
 
-[Collection("Integration tests")]
-public class PageTestsDistributedCache : PageTests
+//[Collection("Integration tests")]
+public class PageTestsDistributedCache(MartenFixture fixture) : PageTests(fixture)
 {
     public override async Task InitializeAsync()
     {
@@ -32,8 +31,8 @@ public class PageTestsDistributedCache : PageTests
     }
 }
 
-[Collection("Integration tests")]
-public class PageTests : BaseTestsAsync
+//[Collection("Integration tests")]
+public class PageTests(MartenFixture fixture) : AsyncTestBase(fixture)
 {
     public readonly string SITEID = Snowflake.NewId();
     public readonly string SITEEMPTYID = Snowflake.NewId();
@@ -102,7 +101,7 @@ public class PageTests : BaseTestsAsync
         services = CreateServiceCollection(store)
             .BuildServiceProvider();
 
-        using var api = CreateApi();
+        
         Aero.Cms.App.Init(api);
 
         Aero.Cms.App.Fields.Register<MyFourthField>();
@@ -217,7 +216,7 @@ public class PageTests : BaseTestsAsync
 
     public override async Task DisposeAsync()
     {
-        using var api = CreateApi();
+        
         var pages = await api.Pages.GetAllAsync(SITEID);
 
         foreach (var page in pages.Where(p => !string.IsNullOrEmpty(p.OriginalPageId)))
@@ -251,7 +250,7 @@ public class PageTests : BaseTestsAsync
     [Fact]
     public void IsCached()
     {
-        using var api = CreateApi();
+        
         Assert.Equal(((Api)api).IsCached,
             this.GetType() == typeof(PageTestsMemoryCache) ||
             this.GetType() == typeof(PageTestsDistributedCache));
@@ -260,7 +259,7 @@ public class PageTests : BaseTestsAsync
     [Fact]
     public async Task GetNoneById()
     {
-        using var api = CreateApi();
+        
         var none = await api.Pages.GetByIdAsync(Snowflake.NewId());
 
         Assert.Null(none);
@@ -269,7 +268,7 @@ public class PageTests : BaseTestsAsync
     [Fact]
     public async Task GetNoneBySlug()
     {
-        using var api = CreateApi();
+        
         var none = await api.Pages.GetBySlugAsync("none-existing-slug");
 
         Assert.Null(none);
@@ -278,7 +277,7 @@ public class PageTests : BaseTestsAsync
     [Fact]
     public async Task GetStartpage()
     {
-        using var api = CreateApi();
+        
         var model = await api.Pages.GetStartpageAsync();
 
         Assert.NotNull(model);
@@ -289,7 +288,7 @@ public class PageTests : BaseTestsAsync
     [Fact]
     public async Task GetStartpageBySite()
     {
-        using var api = CreateApi();
+        
         var model = await api.Pages.GetStartpageAsync(SITEID);
 
         Assert.NotNull(model);
@@ -300,7 +299,7 @@ public class PageTests : BaseTestsAsync
     [Fact]
     public async Task GetStartpageNone()
     {
-        using var api = CreateApi();
+        
         var model = await api.Pages.GetStartpageAsync(SITEEMPTYID);
 
         Assert.Null(model);
@@ -309,7 +308,7 @@ public class PageTests : BaseTestsAsync
     [Fact]
     public async Task GetIdBySlug()
     {
-        using var api = CreateApi();
+        
         var model = await api.Pages.GetIdBySlugAsync("my-first-page");
 
         Assert.NotNull(model);
@@ -319,7 +318,7 @@ public class PageTests : BaseTestsAsync
     [Fact]
     public async Task GetIdBySlugSiteId()
     {
-        using var api = CreateApi();
+        
         var model = await api.Pages.GetIdBySlugAsync("my-first-page", SITEID);
 
         Assert.NotNull(model);
@@ -329,7 +328,7 @@ public class PageTests : BaseTestsAsync
     [Fact]
     public async Task GetAll()
     {
-        using var api = CreateApi();
+        
         var pages = await api.Pages.GetAllAsync(SITEID);
 
         Assert.NotNull(pages);
@@ -339,7 +338,7 @@ public class PageTests : BaseTestsAsync
     [Fact]
     public async Task GetAllByBaseClass()
     {
-        using var api = CreateApi();
+        
         var pages = await api.Pages.GetAllAsync<Models.PageBase>(SITEID);
 
         Assert.NotNull(pages);
@@ -349,7 +348,7 @@ public class PageTests : BaseTestsAsync
     [Fact]
     public async Task GetAllBlogs()
     {
-        using var api = CreateApi();
+        
         var pages = await api.Pages.GetAllBlogsAsync(SITEID);
 
         Assert.NotNull(pages);
@@ -359,7 +358,7 @@ public class PageTests : BaseTestsAsync
     [Fact]
     public async Task GetAllBlogsByBaseClass()
     {
-        using var api = CreateApi();
+        
         var pages = await api.Pages.GetAllBlogsAsync<MyBlogPage>(SITEID);
 
         Assert.NotNull(pages);
@@ -369,7 +368,7 @@ public class PageTests : BaseTestsAsync
     [Fact]
     public async Task GetAllByMissing()
     {
-        using var api = CreateApi();
+        
         var pages = await api.Pages.GetAllAsync<MissingPage>(SITEID);
 
         Assert.NotNull(pages);
@@ -379,7 +378,7 @@ public class PageTests : BaseTestsAsync
     [Fact]
     public async Task GetGenericById()
     {
-        using var api = CreateApi();
+        
         var model = await api.Pages.GetByIdAsync<MyPage>(PAGE1ID);
 
         Assert.NotNull(model);
@@ -390,7 +389,7 @@ public class PageTests : BaseTestsAsync
     [Fact]
     public async Task GetBaseClassById()
     {
-        using var api = CreateApi();
+        
         var model = await api.Pages.GetByIdAsync<Models.PageBase>(PAGE1ID);
 
         Assert.NotNull(model);
@@ -409,7 +408,7 @@ public class PageTests : BaseTestsAsync
     [Fact]
     public async Task GetBlocksById()
     {
-        using var api = CreateApi();
+        
         var model = await api.Pages.GetByIdAsync<MyPage>(PAGE1ID);
 
         Assert.NotNull(model);
@@ -421,7 +420,7 @@ public class PageTests : BaseTestsAsync
     [Fact]
     public async Task GetMissingById()
     {
-        using var api = CreateApi();
+        
         var model = await api.Pages.GetByIdAsync<MissingPage>(PAGE1ID);
 
         Assert.Null(model);
@@ -430,7 +429,7 @@ public class PageTests : BaseTestsAsync
     [Fact]
     public async Task GetInfoById()
     {
-        using var api = CreateApi();
+        
         var model = await api.Pages.GetByIdAsync<Models.PageInfo>(PAGE1ID);
 
         Assert.NotNull(model);
@@ -441,7 +440,7 @@ public class PageTests : BaseTestsAsync
     [Fact]
     public async Task GetMultipleBaseClassById()
     {
-        using var api = CreateApi();
+        
         var models = await api.Pages.GetByIdsAsync<Models.PageBase>(PAGE1ID, PAGE2ID, PAGE3ID);
 
         Assert.NotEmpty(models);
@@ -451,7 +450,7 @@ public class PageTests : BaseTestsAsync
     [Fact]
     public async Task GetGenericBySlug()
     {
-        using var api = CreateApi();
+        
         var model = await api.Pages.GetBySlugAsync<MyPage>("my-first-page");
 
         Assert.NotNull(model);
@@ -462,7 +461,7 @@ public class PageTests : BaseTestsAsync
     [Fact]
     public async Task GetBaseClassBySlug()
     {
-        using var api = CreateApi();
+        
         var model = await api.Pages.GetBySlugAsync<Models.PageBase>("my-first-page");
 
         Assert.NotNull(model);
@@ -474,7 +473,7 @@ public class PageTests : BaseTestsAsync
     [Fact]
     public async Task GetMissingBySlug()
     {
-        using var api = CreateApi();
+        
         var model = await api.Pages.GetBySlugAsync<MissingPage>("my-first-page");
 
         Assert.Null(model);
@@ -483,7 +482,7 @@ public class PageTests : BaseTestsAsync
     [Fact]
     public async Task GetInfoBySlug()
     {
-        using var api = CreateApi();
+        
         var model = await api.Pages.GetBySlugAsync<Models.PageInfo>("my-first-page");
 
         Assert.NotNull(model);
@@ -494,7 +493,7 @@ public class PageTests : BaseTestsAsync
     [Fact]
     public async Task GetDynamicById()
     {
-        using var api = CreateApi();
+        
         var model = await api.Pages.GetByIdAsync(PAGE1ID);
 
         Assert.NotNull(model);
@@ -505,7 +504,7 @@ public class PageTests : BaseTestsAsync
     [Fact]
     public async Task GetDynamicBySlug()
     {
-        using var api = CreateApi();
+        
         var model = await api.Pages.GetBySlugAsync("my-first-page");
 
         Assert.NotNull(model);
@@ -516,7 +515,7 @@ public class PageTests : BaseTestsAsync
     [Fact]
     public async Task CheckPermlinkSyntax()
     {
-        using var api = CreateApi();
+        
         var model = await api.Pages.GetByIdAsync(PAGE1ID);
 
         Assert.NotNull(model);
@@ -527,7 +526,7 @@ public class PageTests : BaseTestsAsync
     [Fact]
     public async Task GetCollectionPage()
     {
-        using var api = CreateApi();
+        
         var page = await api.Pages.GetBySlugAsync<MyCollectionPage>("my-collection-page");
 
         Assert.NotNull(page);
@@ -538,7 +537,7 @@ public class PageTests : BaseTestsAsync
     [Fact]
     public async Task GetCollectionPageBaseClass()
     {
-        using var api = CreateApi();
+        
         var page = await api.Pages.GetBySlugAsync<Models.PageBase>("my-collection-page");
 
         Assert.NotNull(page);
@@ -550,7 +549,7 @@ public class PageTests : BaseTestsAsync
     [Fact]
     public async Task GetDynamicCollectionPage()
     {
-        using var api = CreateApi();
+        
         var page = await api.Pages.GetBySlugAsync("my-collection-page");
 
         Assert.NotNull(page);
@@ -561,7 +560,7 @@ public class PageTests : BaseTestsAsync
     [Fact]
     public async Task EmptyCollectionPage()
     {
-        using var api = CreateApi();
+        
         var page = await MyCollectionPage.CreateAsync(api);
 
         Assert.Empty(page.Texts);
@@ -579,7 +578,7 @@ public class PageTests : BaseTestsAsync
     [Fact]
     public async Task EmptyDynamicCollectionPage()
     {
-        using var api = CreateApi();
+        
         var page = await Aero.Cms.Models.DynamicPage.CreateAsync(api, "MyCollectionPage");
 
         Assert.Equal(0, page.Regions.Texts.Count);
@@ -597,7 +596,7 @@ public class PageTests : BaseTestsAsync
     [Fact]
     public async Task EmptyCollectionPageComplex()
     {
-        using var api = CreateApi();
+        
         var page = await MyCollectionPage.CreateAsync(api);
 
         Assert.Empty(page.Teasers);
@@ -615,7 +614,7 @@ public class PageTests : BaseTestsAsync
     [Fact]
     public async Task EmptyDynamicCollectionPageComplex()
     {
-        using var api = CreateApi();
+        
         var page = await Aero.Cms.Models.DynamicPage.CreateAsync(api, "MyCollectionPage");
 
         Assert.Equal(0, page.Regions.Teasers.Count);
@@ -648,7 +647,7 @@ public class PageTests : BaseTestsAsync
     [Fact]
     public async Task AddHierarchical()
     {
-        using var api = CreateApi();
+        
         var page = await MyPage.CreateAsync(api, "MyPage");
         page.Id = Snowflake.NewId();
         page.ParentId = PAGE1ID;
@@ -668,7 +667,7 @@ public class PageTests : BaseTestsAsync
     [Fact]
     public async Task AddNonHierarchical()
     {
-        using var api = CreateApi();
+        
         using (var config = new Aero.Cms.Config(api))
         {
             config.HierarchicalPageSlugs = false;
@@ -698,7 +697,7 @@ public class PageTests : BaseTestsAsync
     [Fact]
     public async Task AddDuplicateSlugShouldThrow()
     {
-        using var api = CreateApi();
+        
         var page = await MyPage.CreateAsync(api);
         page.SiteId = SITEID;
         page.Title = "My first page";
@@ -710,7 +709,7 @@ public class PageTests : BaseTestsAsync
     [Fact]
     public async Task Update()
     {
-        using var api = CreateApi();
+        
         var page = await api.Pages.GetByIdAsync<MyPage>(PAGE1ID);
 
         Assert.NotNull(page);
@@ -730,7 +729,7 @@ public class PageTests : BaseTestsAsync
     [Fact]
     public async Task SaveDraft()
     {
-        using var api = CreateApi();
+        
         var page = await api.Pages.GetByIdAsync<MyPage>(PAGE1ID);
 
         Assert.NotNull(page);
@@ -752,7 +751,7 @@ public class PageTests : BaseTestsAsync
     [Fact]
     public async Task UpdateCollectionPage()
     {
-        using var api = CreateApi();
+        
         var page = await api.Pages.GetBySlugAsync<MyCollectionPage>("my-collection-page", SITEID);
 
         Assert.NotNull(page);
@@ -773,7 +772,7 @@ public class PageTests : BaseTestsAsync
     [Fact]
     public async Task Move()
     {
-        using var api = CreateApi();
+        
         var page = await api.Pages.GetByIdAsync(PAGE1ID);
 
         Assert.NotNull(page);
@@ -791,7 +790,7 @@ public class PageTests : BaseTestsAsync
     [Fact]
     public async Task Delete()
     {
-        using var api = CreateApi();
+        
         var page = await api.Pages.GetByIdAsync<MyPage>(PAGE3ID);
         var count = (await api.Pages.GetAllAsync(SITEID)).Count();
 
@@ -805,7 +804,7 @@ public class PageTests : BaseTestsAsync
     [Fact]
     public async Task DeleteById()
     {
-        using var api = CreateApi();
+        
         var count = (await api.Pages.GetAllAsync(SITEID)).Count();
 
         await api.Pages.DeleteAsync(PAGE2ID);
@@ -816,7 +815,7 @@ public class PageTests : BaseTestsAsync
     [Fact]
     public async Task GetDIGeneric()
     {
-        using var api = CreateApi();
+        
         var page = await api.Pages.GetByIdAsync<MyDIPage>(PAGEDIID);
 
         Assert.NotNull(page);
@@ -826,7 +825,7 @@ public class PageTests : BaseTestsAsync
     [Fact]
     public async Task GetDIDynamic()
     {
-        using var api = CreateApi();
+        
         var page = await api.Pages.GetByIdAsync(PAGEDIID);
 
         Assert.NotNull(page);
@@ -836,7 +835,7 @@ public class PageTests : BaseTestsAsync
     [Fact]
     public async Task CreateDIGeneric()
     {
-        using var api = CreateApi();
+        
         var page = await MyDIPage.CreateAsync(api);
 
         Assert.NotNull(page);
@@ -846,7 +845,7 @@ public class PageTests : BaseTestsAsync
     [Fact]
     public async Task CreateDIDynamic()
     {
-        using var api = CreateApi();
+        
         var page = await Models.DynamicPage.CreateAsync(api, nameof(MyDIPage));
 
         Assert.NotNull(page);
@@ -856,7 +855,7 @@ public class PageTests : BaseTestsAsync
     [Fact]
     public async Task GetCopyGenericById()
     {
-        using var api = CreateApi();
+        
         var model = await api.Pages.GetByIdAsync<MyPage>(PAGE8ID);
 
         Assert.NotNull(model);
@@ -874,7 +873,7 @@ public class PageTests : BaseTestsAsync
     [Fact]
     public async Task GetCopyGenericBySlug()
     {
-        using var api = CreateApi();
+        
         var model = await api.Pages.GetBySlugAsync<MyPage>("my-first-page/my-copied-page");
 
         Assert.NotNull(model);
@@ -892,7 +891,7 @@ public class PageTests : BaseTestsAsync
     [Fact]
     public async Task UpdatingCopyShouldIgnoreBodyAndDate()
     {
-        using var api = CreateApi();
+        
         var page = await api.Pages.GetByIdAsync<MyPage>(PAGE8ID);
         page.Created = DateTime.Parse("2001-01-01");
         page.LastModified = DateTime.Parse("2001-01-01");
@@ -909,7 +908,7 @@ public class PageTests : BaseTestsAsync
     [Fact]
     public async Task CanNotUpdateCopyOriginalPageWithAnotherCopy()
     {
-        using var api = CreateApi();
+        
         var page = await MyPage.CreateAsync(api);
         page.Title = "New title";
         page.OriginalPageId = PAGE8ID; // PAGE8 is an copy of PAGE7
@@ -922,7 +921,7 @@ public class PageTests : BaseTestsAsync
     [Fact]
     public async Task CanNotUpdateCopyWithAnotherTypeIdOtherThanOriginalPageTypeId()
     {
-        using var api = CreateApi();
+        
         var page = await MissingPage.CreateAsync(api);
         page.Title = "New title";
         page.OriginalPageId = PAGE7ID;
@@ -935,7 +934,7 @@ public class PageTests : BaseTestsAsync
     [Fact]
     public async Task DetachShouldCopyBlocks()
     {
-        using var api = CreateApi();
+        
         var originalPage = await api.Pages.GetByIdAsync<MyPage>(PAGE7ID);
         var copy = await api.Pages.GetByIdAsync<MyPage>(PAGE8ID);
         var originalBlock = new Extend.Blocks.TextBlock
@@ -961,7 +960,7 @@ public class PageTests : BaseTestsAsync
     [Fact]
     public async Task DetachShouldCopyRegions()
     {
-        using var api = CreateApi();
+        
         var originalPage = await api.Pages.GetByIdAsync<MyPage>(PAGE7ID);
         originalPage.Body = "body to be copied";
         originalPage.Ingress = "ingress to be copied";
@@ -993,7 +992,7 @@ public class PageTests : BaseTestsAsync
     {
         // After RavenDB/NoSQL refactor: deleting a page with copies now 
         // cascade deletes the copies first, so deletion succeeds.
-        using var api = CreateApi();
+        
         var count = (await api.Pages.GetAllAsync(SITEID)).Count();
 
         // This should now succeed - copies are deleted first

@@ -8,15 +8,14 @@
  *
  */
 
-using Xunit;
 using Aero.Cms.AttributeBuilder;
 using Aero.Cms.Extend;
 using Aero.Cms.Models;
 
 namespace Aero.Cms.Tests.AttributeBuilder;
 
-[Collection("Integration tests")]
-public class TypeBuilderTests : BaseTestsAsync
+////[Collection("Integration tests")]
+public class TypeBuilderTests(MartenFixture fixture) : AsyncTestBase(fixture)
 {
     [ContentGroup(Title = "My Content")]
     public abstract class MyContent<T> : Content<T> where T : Content<T>
@@ -168,13 +167,13 @@ public class TypeBuilderTests : BaseTestsAsync
     {
         await base.InitializeAsync();
 
-        using var api = CreateApi();
+        
         Aero.Cms.App.Init(api);
     }
 
     public override async Task DisposeAsync()
     {
-        using var api = CreateApi();
+        
         var types = await api.PageTypes.GetAllAsync();
         foreach (var t in types)
         {
@@ -203,7 +202,7 @@ public class TypeBuilderTests : BaseTestsAsync
     [Fact]
     public async Task AddSimpleContentType()
     {
-        using var api = CreateApi();
+        
         new ContentTypeBuilder(api)
             .AddType(typeof(SimpleContentType))
             .Build();
@@ -223,7 +222,7 @@ public class TypeBuilderTests : BaseTestsAsync
     [Fact]
     public async Task AddCategorizedContentType()
     {
-        using var api = CreateApi();
+        
         new ContentTypeBuilder(api)
             .AddType(typeof(CategorizedContentType))
             .Build();
@@ -247,7 +246,7 @@ public class TypeBuilderTests : BaseTestsAsync
     [Fact]
     public async Task AddTaggedContentType()
     {
-        using var api = CreateApi();
+        
         new ContentTypeBuilder(api)
             .AddType(typeof(TaggedContentType))
             .Build();
@@ -271,7 +270,7 @@ public class TypeBuilderTests : BaseTestsAsync
     [Fact]
     public async Task AddComplexContentType()
     {
-        using var api = CreateApi();
+        
         new ContentTypeBuilder(api)
             .AddType(typeof(ComplexContentType))
             .Build();
@@ -320,7 +319,7 @@ public class TypeBuilderTests : BaseTestsAsync
     [Fact]
     public async Task AddMultipleContentTypes()
     {
-        using var api = CreateApi();
+        
         new ContentTypeBuilder(api)
             .AddType(typeof(SimpleContentType))
             .AddType(typeof(ComplexContentType))
@@ -336,7 +335,7 @@ public class TypeBuilderTests : BaseTestsAsync
     [Fact]
     public async Task AddSimplePageType()
     {
-        using var api = CreateApi();
+        
         new ContentTypeBuilder(api)
             .AddType(typeof(SimplePageType))
             .Build();
@@ -353,7 +352,7 @@ public class TypeBuilderTests : BaseTestsAsync
     [Fact]
     public async Task AddForwardSlashToPageRoutes()
     {
-        using var api = CreateApi();
+        
         new ContentTypeBuilder(api)
             .AddType(typeof(RoutedPageType))
             .Build();
@@ -370,7 +369,7 @@ public class TypeBuilderTests : BaseTestsAsync
     [Fact]
     public async Task AddArchivePageType()
     {
-        using var api = CreateApi();
+        
         new ContentTypeBuilder(api)
             .AddType(typeof(ArchivePageType))
             .Build();
@@ -386,7 +385,7 @@ public class TypeBuilderTests : BaseTestsAsync
     [Fact]
     public async Task AddComplexPageType()
     {
-        using var api = CreateApi();
+        
         new ContentTypeBuilder(api)
             .AddType(typeof(ComplexPageType))
             .Build();
@@ -427,7 +426,7 @@ public class TypeBuilderTests : BaseTestsAsync
     [Fact]
     public async Task AddSimplePostType()
     {
-        using var api = CreateApi();
+        
         new ContentTypeBuilder(api)
             .AddType(typeof(SimplePostType))
             .Build();
@@ -446,7 +445,7 @@ public class TypeBuilderTests : BaseTestsAsync
     [Fact]
     public async Task AddForwardSlashToPostRoutes()
     {
-        using var api = CreateApi();
+        
         new ContentTypeBuilder(api)
             .AddType(typeof(RoutedPostType))
             .Build();
@@ -462,7 +461,7 @@ public class TypeBuilderTests : BaseTestsAsync
     [Fact]
     public async Task AddComplexPostType()
     {
-        using var api = CreateApi();
+        
         new ContentTypeBuilder(api)
             .AddType(typeof(ComplexPostType))
             .Build();
@@ -497,7 +496,7 @@ public class TypeBuilderTests : BaseTestsAsync
     [Fact]
     public async Task DeleteOrphans()
     {
-        using var api = CreateApi();
+        
         new ContentTypeBuilder(api)
             .AddType(typeof(SimplePageType))
             .AddType(typeof(ComplexPageType))
@@ -516,7 +515,7 @@ public class TypeBuilderTests : BaseTestsAsync
     [Fact]
     public async Task AddSimpleSiteType()
     {
-        using var api = CreateApi();
+        
         new ContentTypeBuilder(api)
             .AddType(typeof(SimpleSiteType))
             .Build();
@@ -532,7 +531,7 @@ public class TypeBuilderTests : BaseTestsAsync
     [Fact]
     public async Task AddComplexSiteType()
     {
-        using var api = CreateApi();
+        
         new ContentTypeBuilder(api)
             .AddType(typeof(ComplexSiteType))
             .Build();

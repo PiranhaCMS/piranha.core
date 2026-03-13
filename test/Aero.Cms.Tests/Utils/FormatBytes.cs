@@ -1,17 +1,12 @@
 ﻿
 
 using System.Globalization;
-using Xunit;
 
 namespace Aero.Cms.Tests.Utils;
 
 public class FormatBytes
 {
-    private readonly string separator;
-
-    public FormatBytes() {
-        separator = CultureInfo.CurrentCulture.NumberFormat.CurrencyDecimalSeparator;
-    }
+    private readonly string separator = CultureInfo.CurrentCulture.NumberFormat.CurrencyDecimalSeparator;
 
     [Fact]
     public void FormatToBytes() {

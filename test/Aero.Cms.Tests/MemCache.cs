@@ -1,11 +1,10 @@
 
 
 using Microsoft.Extensions.Caching.Memory;
-using Xunit;
 
 namespace Aero.Cms.Tests;
 
-public class MemCache : BaseTestsAsync
+public class MemCache(MartenFixture fixture) : AsyncTestBase(fixture)
 {
     private readonly string id1 = Snowflake.NewId().ToString();
     private readonly string id2 = Snowflake.NewId().ToString();

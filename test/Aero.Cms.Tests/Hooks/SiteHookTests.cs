@@ -1,12 +1,9 @@
-
-
-using Xunit;
 using Aero.Cms.Models;
 
 namespace Aero.Cms.Tests.Hooks;
 
-[Collection("Integration tests")]
-public class SiteHookTests : BaseTestsAsync
+//[Collection("Integration tests")]
+public class SiteHookTests(MartenFixture fixture) : AsyncTestBase(fixture)
 {
     private const string TITLE = "My Hook Site";
     private readonly string ID = Snowflake.NewId();
@@ -21,7 +18,7 @@ public class SiteHookTests : BaseTestsAsync
     {
         await base.InitializeAsync();
 
-        using var api = CreateApi();
+        
         // Initialize
         Aero.Cms.App.Init(api);
 
@@ -35,7 +32,7 @@ public class SiteHookTests : BaseTestsAsync
 
     public override async Task DisposeAsync()
     {
-        using var api = CreateApi();
+        
         // Remove test data
         var sites = await api.Sites.GetAllAsync();
 
@@ -49,7 +46,7 @@ public class SiteHookTests : BaseTestsAsync
     public async Task OnLoad()
     {
         Aero.Cms.App.Hooks.Site.RegisterOnLoad(m => throw new SiteOnLoadException());
-        using (var api = CreateApi())
+        
         {
             await Assert.ThrowsAsync<SiteOnLoadException>(async () =>
             {
@@ -63,7 +60,7 @@ public class SiteHookTests : BaseTestsAsync
     public async Task OnBeforeSave()
     {
         Aero.Cms.App.Hooks.Site.RegisterOnBeforeSave(m => throw new SiteOnBeforeSaveException());
-        using (var api = CreateApi())
+        
         {
             await Assert.ThrowsAsync<SiteOnBeforeSaveException>(async () =>
             {
@@ -79,7 +76,7 @@ public class SiteHookTests : BaseTestsAsync
     public async Task OnAfterSave()
     {
         Aero.Cms.App.Hooks.Site.RegisterOnAfterSave(m => throw new SiteOnAfterSaveException());
-        using (var api = CreateApi())
+        
         {
             await Assert.ThrowsAsync<SiteOnAfterSaveException>(async () =>
             {
@@ -95,7 +92,7 @@ public class SiteHookTests : BaseTestsAsync
     public async Task OnBeforeDelete()
     {
         Aero.Cms.App.Hooks.Site.RegisterOnBeforeDelete(m => throw new SiteOnBeforeDeleteException());
-        using (var api = CreateApi())
+        
         {
             await Assert.ThrowsAsync<SiteOnBeforeDeleteException>(async () =>
             {
@@ -109,7 +106,7 @@ public class SiteHookTests : BaseTestsAsync
     public async Task OnAfterDelete()
     {
         Aero.Cms.App.Hooks.Site.RegisterOnAfterDelete(m => throw new SiteOnAfterDeleteException());
-        using (var api = CreateApi())
+        
         {
             await Assert.ThrowsAsync<SiteOnAfterDeleteException>(async () =>
             {

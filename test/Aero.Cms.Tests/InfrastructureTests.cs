@@ -2,11 +2,10 @@
 using Microsoft.Extensions.DependencyInjection;
 using Aero.Cms.Cache;
 using Aero.Cms.Repositories;
-using Xunit;
 
 namespace Aero.Cms.Tests;
 
-public class InfrastructureTests : BaseTestsAsync
+public class InfrastructureTests(MartenFixture fixture) : AsyncTestBase(fixture)
 {
     public async override Task InitializeAsync()
     {

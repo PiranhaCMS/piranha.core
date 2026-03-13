@@ -1,5 +1,4 @@
 using Microsoft.Extensions.DependencyInjection;
-using Xunit;
 using Aero.Cms.ImageSharp;
 using Aero.Cms.Data;
 using Aero.Cms.Data.Extensions;
@@ -7,7 +6,6 @@ using Aero.Cms.Data.Repositories;
 using Aero.Cms.Data.Services.Internal;
 using Aero.Cms.Services;
 using Aero.Local;
-using Marten;
 using Marten.Services;
 
 
@@ -16,7 +14,7 @@ namespace Aero.Cms.Tests;
 /// <summary>
 /// Base class for using the api.
 /// </summary>
-public abstract class BaseTestsAsync : AeroDbTestDriver, IAsyncLifetime
+public abstract class AsyncTestBase(MartenFixture fixture) : AeroMartenTest(fixture), IClassFixture<MartenFixture>
 {
     protected IStorage storage = new FileStorage("uploads/", "~/uploads/");
     protected IImageProcessor processor = new ImageSharpProcessor();
@@ -25,18 +23,13 @@ public abstract class BaseTestsAsync : AeroDbTestDriver, IAsyncLifetime
     protected IApi api;
     protected IDocumentSession session;
 
-    public virtual async Task InitializeAsync()
+    public override async Task InitializeAsync()
     {
         session = store.LightweightSession();
         services = CreateServiceCollection(store).BuildServiceProvider();
 
         api = CreateApi();
         Aero.Cms.App.Init(api);
-    }
-
-    public virtual async Task DisposeAsync()
-    {
-        session.Dispose();
     }
 
 
@@ -108,5 +101,29 @@ public abstract class BaseTestsAsync : AeroDbTestDriver, IAsyncLifetime
         );
 
         return api;
+    }
+
+    /// <summary>
+    /// Sets up & initializes the tests.
+    /// </summary>
+    protected virtual void Init()
+    {
+    }
+
+    /// <summary>
+    /// Cleans up any possible data and resources
+    /// created by the test.
+    /// </summary>
+    protected virtual void Cleanup()
+    {
+    }
+
+    /// <summary>
+    /// Disposes the test class.
+    /// </summary>
+    public void Dispose()
+    {
+        session.Dispose();
+        Cleanup();
     }
 }

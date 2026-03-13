@@ -1,11 +1,10 @@
 
 
 using Aero.Cms.Runtime;
-using Xunit;
 
 namespace Aero.Cms.Tests;
 
-public class MediaMgr : BaseTests
+public class MediaMgr(MartenFixture fixture) : AsyncTestBase(fixture)
 {
     private readonly MediaManager mgr = new MediaManager();
 

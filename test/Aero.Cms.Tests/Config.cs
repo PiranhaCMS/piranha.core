@@ -1,12 +1,11 @@
 
 
-using Xunit;
-
 namespace Aero.Cms.Tests;
 
-[Collection("Integration tests")]
-public class Config : BaseTestsAsync
+//[Collection("Integration tests")]
+public class Config(MartenFixture fixture) : AsyncTestBase(fixture)
 {
+
     /// <summary>
     /// Sets up & initializes the tests.
     /// </summary>
@@ -14,7 +13,7 @@ public class Config : BaseTestsAsync
     {
         await base.InitializeAsync();
 
-        using var api = CreateApi();
+        
         using var config = new Aero.Cms.Config(api);
         config.ArchivePageSize = 0;
         config.CacheExpiresPages = 0;
@@ -25,19 +24,10 @@ public class Config : BaseTestsAsync
         config.ManagerExpandedSitemapLevels = 0;
     }
 
-    /// <summary>
-    /// Cleans up any possible data and resources
-    /// created by the test.
-    /// </summary>
-    public override Task DisposeAsync()
-    {
-        return Task.Run(() => {});
-    }
-
     [Fact]
     public void ArchivePageSize()
     {
-        using var api = CreateApi();
+       
         using var config = new Aero.Cms.Config(api);
         Assert.Equal(0, config.ArchivePageSize);
 
@@ -49,7 +39,7 @@ public class Config : BaseTestsAsync
     [Fact]
     public void CacheExpiresPages()
     {
-        using var api = CreateApi();
+        
         using var config = new Aero.Cms.Config(api);
         Assert.Equal(0, config.CacheExpiresPages);
 
@@ -61,7 +51,7 @@ public class Config : BaseTestsAsync
     [Fact]
     public void CacheExpiresPosts()
     {
-        using var api = CreateApi();
+        
         using var config = new Aero.Cms.Config(api);
         Assert.Equal(0, config.CacheExpiresPosts);
 
@@ -73,7 +63,7 @@ public class Config : BaseTestsAsync
     [Fact]
     public void CommentsApprove()
     {
-        using var api = CreateApi();
+        
         using var config = new Aero.Cms.Config(api);
         Assert.True(config.CommentsApprove);
 
@@ -85,7 +75,7 @@ public class Config : BaseTestsAsync
     [Fact]
     public void CommentsPageSize()
     {
-        using var api = CreateApi();
+        
         using var config = new Aero.Cms.Config(api);
         Assert.Equal(0, config.CommentsPageSize);
 
@@ -97,7 +87,7 @@ public class Config : BaseTestsAsync
     [Fact]
     public void HierarchicalPageSlugs()
     {
-        using var api = CreateApi();
+        
         using var config = new Aero.Cms.Config(api);
         Assert.True(config.HierarchicalPageSlugs);
 
@@ -109,7 +99,7 @@ public class Config : BaseTestsAsync
     [Fact]
     public void ManagerExpandedSitemapLevels()
     {
-        using var api = CreateApi();
+        
         using var config = new Aero.Cms.Config(api);
         Assert.Equal(0, config.ManagerExpandedSitemapLevels);
 
@@ -121,7 +111,7 @@ public class Config : BaseTestsAsync
     [Fact]
     public void MediaCDN()
     {
-        using var api = CreateApi();
+        
         using var config = new Aero.Cms.Config(api);
         config.MediaCDN = "https://mycdn.org/uploads/";
 
@@ -131,7 +121,7 @@ public class Config : BaseTestsAsync
     [Fact]
     public void MediaCDNTrailingSlash()
     {
-        using var api = CreateApi();
+        
         using var config = new Aero.Cms.Config(api);
         config.MediaCDN = "https://mycdn.org/uploads";
 

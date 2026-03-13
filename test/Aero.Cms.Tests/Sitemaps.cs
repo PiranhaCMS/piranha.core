@@ -1,11 +1,10 @@
 
 
 using Aero.Cms.Models;
-using Xunit;
 
 namespace Aero.Cms.Tests;
 
-public class Sitemaps : BaseTests
+public class Sitemaps(MartenFixture fixture) : AsyncTestBase(fixture)
 {
     private Sitemap sitemap;
     private readonly string id_1 = Snowflake.NewId();

@@ -2,13 +2,12 @@
 
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Caching.Distributed;
-using Xunit;
 using Aero.Cms.Models;
 
 namespace Aero.Cms.Tests.Services;
 
-[Collection("Integration tests")]
-public class AliasTestsMemoryCache : AliasTests
+//[Collection("Integration tests")]
+public class AliasTestsMemoryCache(MartenFixture fixture) : AliasTests(fixture)
 {
     public override async Task InitializeAsync()
     {
@@ -17,8 +16,8 @@ public class AliasTestsMemoryCache : AliasTests
     }
 }
 
-[Collection("Integration tests")]
-public class AliasTestsDistributedCache : AliasTests
+//[Collection("Integration tests")]
+public class AliasTestsDistributedCache(MartenFixture fixture) : AliasTests(fixture)
 {
     public override async Task InitializeAsync()
     {
@@ -27,8 +26,8 @@ public class AliasTestsDistributedCache : AliasTests
     }
 }
 
-[Collection("Integration tests")]
-public class AliasTests : BaseTestsAsync
+//[Collection("Integration tests")]
+public class AliasTests(MartenFixture fixture) : AsyncTestBase(fixture)
 {
     private const string ALIAS1 = "/old-url";
     private const string ALIAS2 = "/another-old-url";
@@ -43,7 +42,7 @@ public class AliasTests : BaseTestsAsync
     {
         await base.InitializeAsync();
 
-        using var api = CreateApi();
+        
         // Add site
         var site = new Site
         {
@@ -79,7 +78,7 @@ public class AliasTests : BaseTestsAsync
 
     public override async Task DisposeAsync()
     {
-        using var api = CreateApi();
+        
         var aliases = await api.Aliases.GetAllAsync();
         foreach (var a in aliases)
         {
@@ -96,7 +95,7 @@ public class AliasTests : BaseTestsAsync
     [Fact]
     public void IsCached()
     {
-        using var api = CreateApi();
+        
         Assert.Equal(((Api)api).IsCached,
             this.GetType() == typeof(AliasTestsMemoryCache) ||
             this.GetType() == typeof(AliasTestsDistributedCache));
@@ -105,7 +104,7 @@ public class AliasTests : BaseTestsAsync
     [Fact]
     public async Task Add()
     {
-        using var api = CreateApi();
+        
         await api.Aliases.SaveAsync(new Alias
         {
             SiteId = SITEID,
@@ -117,7 +116,7 @@ public class AliasTests : BaseTestsAsync
     [Fact]
     public async Task AddDuplicateKey()
     {
-        using var api = CreateApi();
+        
         await Assert.ThrowsAnyAsync<Exception>(async () =>
             await api.Aliases.SaveAsync(new Alias
             {
@@ -131,7 +130,7 @@ public class AliasTests : BaseTestsAsync
     [Fact]
     public async Task GetNoneById()
     {
-        using var api = CreateApi();
+        
         var none = await api.Aliases.GetByIdAsync(Snowflake.NewId());
 
         Assert.Null(none);
@@ -140,7 +139,7 @@ public class AliasTests : BaseTestsAsync
     [Fact]
     public async Task GetNoneByAliasUrl()
     {
-        using var api = CreateApi();
+        
         var none = await api.Aliases.GetByAliasUrlAsync("/none-existing-alias");
 
         Assert.Null(none);
@@ -149,7 +148,7 @@ public class AliasTests : BaseTestsAsync
     [Fact]
     public async Task GetNoneByRedirectUrl()
     {
-        using var api = CreateApi();
+        
         var none = await api.Aliases.GetByRedirectUrlAsync("/none-existing-alias");
 
         Assert.Empty(none);
@@ -158,7 +157,7 @@ public class AliasTests : BaseTestsAsync
     [Fact]
     public async Task GetAll()
     {
-        using var api = CreateApi();
+        
         var models = await api.Aliases.GetAllAsync();
 
         Assert.NotNull(models);
@@ -168,7 +167,7 @@ public class AliasTests : BaseTestsAsync
     [Fact]
     public async Task GetById()
     {
-        using var api = CreateApi();
+        
         var model = await api.Aliases.GetByIdAsync(ALIAS1ID);
 
         Assert.NotNull(model);
@@ -178,7 +177,7 @@ public class AliasTests : BaseTestsAsync
     [Fact]
     public async Task GetByAliasUrl()
     {
-        using var api = CreateApi();
+        
         var model = await api.Aliases.GetByAliasUrlAsync(ALIAS1);
 
         Assert.NotNull(model);
@@ -188,7 +187,7 @@ public class AliasTests : BaseTestsAsync
     [Fact]
     public async Task GetByAliasUrlWithDifferentCase()
     {
-        using var api = CreateApi();
+        
         var model = await api.Aliases.GetByAliasUrlAsync("/Old-URL");
 
         Assert.NotNull(model);
@@ -198,7 +197,7 @@ public class AliasTests : BaseTestsAsync
     [Fact]
     public async Task GetByRedirectUrl()
     {
-        using var api = CreateApi();
+        
         var models = await api.Aliases.GetByRedirectUrlAsync("/redirect-1");
 
         Assert.Single(models);
@@ -208,7 +207,7 @@ public class AliasTests : BaseTestsAsync
     [Fact]
     public async Task GetByRedirectUrlWithDifferentCase()
     {
-        using var api = CreateApi();
+        
         var models = await api.Aliases.GetByRedirectUrlAsync("/ReDiRect-1");
 
         Assert.Single(models);
@@ -218,7 +217,7 @@ public class AliasTests : BaseTestsAsync
     [Fact]
     public async Task Update()
     {
-        using var api = CreateApi();
+        
         var model = await api.Aliases.GetByIdAsync(ALIAS1ID);
 
         Assert.Equal("/redirect-1", model.RedirectUrl);
@@ -231,7 +230,7 @@ public class AliasTests : BaseTestsAsync
     [Fact]
     public async Task FixAliasUrl()
     {
-        using var api = CreateApi();
+        
         var model = new Alias
         {
             SiteId = SITEID,
@@ -247,7 +246,7 @@ public class AliasTests : BaseTestsAsync
     [Fact]
     public async Task FixRedirectUrl()
     {
-        using var api = CreateApi();
+        
         var model = new Alias
         {
             SiteId = SITEID,
@@ -263,7 +262,7 @@ public class AliasTests : BaseTestsAsync
     [Fact]
     public async Task AllowHttpUrl()
     {
-        using var api = CreateApi();
+        
         var model = new Alias
         {
             SiteId = SITEID,
@@ -279,7 +278,7 @@ public class AliasTests : BaseTestsAsync
     [Fact]
     public async Task AllowHttpsUrl()
     {
-        using var api = CreateApi();
+        
         var model = new Alias
         {
             SiteId = SITEID,
@@ -295,7 +294,7 @@ public class AliasTests : BaseTestsAsync
     [Fact]
     public async Task Delete()
     {
-        using var api = CreateApi();
+        
         var model = await api.Aliases.GetByAliasUrlAsync(ALIAS4);
 
         Assert.NotNull(model);
@@ -308,7 +307,7 @@ public class AliasTests : BaseTestsAsync
     [Fact]
     public async Task DeleteById()
     {
-        using var api = CreateApi();
+        
         var model = await api.Aliases.GetByAliasUrlAsync(ALIAS5);
 
         Assert.NotNull(model);

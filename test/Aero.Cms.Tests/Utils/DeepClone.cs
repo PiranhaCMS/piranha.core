@@ -1,7 +1,6 @@
 ﻿
 
 using Aero.Cms.Models;
-using Xunit;
 
 namespace Aero.Cms.Tests.Utils;
 

@@ -1,8 +1,4 @@
-﻿
-
-using System.Text;
-using Xunit;
-using Aero.Cms.Extend;
+﻿using Aero.Cms.Extend;
 using Aero.Cms.Models;
 using Aero.Cms.Data.Repositories;
 using Aero.Cms.Data.Services.Internal;
@@ -11,7 +7,7 @@ using Aero.Cms.Services;
 
 namespace Aero.Cms.Tests;
 
-public class Fields : BaseTests
+public class Fields(MartenFixture fixture) : AsyncTestBase(fixture)
 {
     [FieldType(Name = "First", Shorthand = "1")]
     public class MyFirstField : Extend.Fields.SimpleField<string> { }
@@ -34,7 +30,7 @@ public class Fields : BaseTests
     /// </summary>
     protected override void Init()
     {
-        using var api = CreateApi();
+        
         Aero.Cms.App.Init(api);
         Aero.Cms.App.Fields.Register<MyFirstField>();
 
@@ -344,7 +340,7 @@ public class Fields : BaseTests
     [Fact]
     public async Task ImageFieldInitMissing()
     {
-        using var api = CreateApi();
+        
         var field = new Aero.Cms.Extend.Fields.ImageField {
             Id = Snowflake.NewId()
         };
@@ -396,7 +392,7 @@ public class Fields : BaseTests
     [Fact]
     public async Task DocumentFieldInitMissing()
     {
-        using var api = CreateApi();
+        
         var field = new Aero.Cms.Extend.Fields.DocumentField {
             Id = Snowflake.NewId()
         };
@@ -448,7 +444,7 @@ public class Fields : BaseTests
     [Fact]
     public async Task VideoFieldInitMissing()
     {
-        using var api = CreateApi();
+        
         var field = new Aero.Cms.Extend.Fields.VideoField {
             Id = Snowflake.NewId()
         };
@@ -501,7 +497,7 @@ public class Fields : BaseTests
     [Fact]
     public async Task AudioFieldInitMissing()
     {
-        using var api = CreateApi();
+        
         var field = new Aero.Cms.Extend.Fields.AudioField
         {
             Id = Snowflake.NewId()
@@ -560,7 +556,7 @@ public class Fields : BaseTests
     [Fact]
     public async Task MediaFieldInitMissing()
     {
-        using var api = CreateApi();
+        
         var field = new Aero.Cms.Extend.Fields.MediaField {
             Id = Snowflake.NewId()
         };

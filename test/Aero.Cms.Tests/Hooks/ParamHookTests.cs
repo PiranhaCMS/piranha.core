@@ -1,12 +1,9 @@
-
-
-using Xunit;
 using Aero.Cms.Models;
 
 namespace Aero.Cms.Tests.Hooks;
 
-[Collection("Integration tests")]
-public class ParamHookTests : BaseTestsAsync
+//[Collection("Integration tests")]
+public class ParamHookTests(MartenFixture fixture) : AsyncTestBase(fixture)
 {
     private const string KEY = "MyHookParam";
     private readonly string ID = Snowflake.NewId();
@@ -21,7 +18,7 @@ public class ParamHookTests : BaseTestsAsync
     {
         await base.InitializeAsync();
 
-        using var api = CreateApi();
+        
         // Initialize
         Aero.Cms.App.Init(api);
 
@@ -35,7 +32,7 @@ public class ParamHookTests : BaseTestsAsync
 
     public override async Task DisposeAsync()
     {
-        using var api = CreateApi();
+        
         // Remove test data
         var param = await api.Params.GetAllAsync();
 
@@ -49,7 +46,7 @@ public class ParamHookTests : BaseTestsAsync
     public async Task OnLoad()
     {
         Aero.Cms.App.Hooks.Param.RegisterOnLoad(m => throw new ParamOnLoadException());
-        using (var api = CreateApi())
+        
         {
             await Assert.ThrowsAsync<ParamOnLoadException>(async () =>
             {
@@ -63,7 +60,7 @@ public class ParamHookTests : BaseTestsAsync
     public async Task OnBeforeSave()
     {
         Aero.Cms.App.Hooks.Param.RegisterOnBeforeSave(m => throw new ParamOnBeforeSaveException());
-        using (var api = CreateApi())
+        
         {
             await Assert.ThrowsAsync<ParamOnBeforeSaveException>(async () =>
             {
@@ -79,7 +76,7 @@ public class ParamHookTests : BaseTestsAsync
     public async Task OnAfterSave()
     {
         Aero.Cms.App.Hooks.Param.RegisterOnAfterSave(m => throw new ParamOnAfterSaveException());
-        using (var api = CreateApi())
+        
         {
             await Assert.ThrowsAsync<ParamOnAfterSaveException>(async () =>
             {
@@ -95,7 +92,7 @@ public class ParamHookTests : BaseTestsAsync
     public async Task OnBeforeDelete()
     {
         Aero.Cms.App.Hooks.Param.RegisterOnBeforeDelete(m => throw new ParamOnBeforeDeleteException());
-        using (var api = CreateApi())
+        
         {
             await Assert.ThrowsAsync<ParamOnBeforeDeleteException>(async () =>
             {
@@ -109,7 +106,7 @@ public class ParamHookTests : BaseTestsAsync
     public async Task OnAfterDelete()
     {
         Aero.Cms.App.Hooks.Param.RegisterOnAfterDelete(m => throw new ParamOnAfterDeleteException());
-        using (var api = CreateApi())
+        
         {
             await Assert.ThrowsAsync<ParamOnAfterDeleteException>(async () =>
             {

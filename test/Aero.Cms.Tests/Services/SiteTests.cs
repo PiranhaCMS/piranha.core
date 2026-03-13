@@ -3,7 +3,6 @@
 using System.ComponentModel.DataAnnotations;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Caching.Distributed;
-using Xunit;
 using Aero.Cms.AttributeBuilder;
 using Aero.Cms.Extend;
 using Aero.Cms.Extend.Fields;
@@ -11,8 +10,8 @@ using Aero.Cms.Models;
 
 namespace Aero.Cms.Tests.Services;
 
-[Collection("Integration tests")]
-public class SiteTestsMemoryCache : SiteTests
+//[Collection("Integration tests")]
+public class SiteTestsMemoryCache(MartenFixture fixture) : SiteTests(fixture)
 {
     public override async Task InitializeAsync()
     {
@@ -21,8 +20,8 @@ public class SiteTestsMemoryCache : SiteTests
     }
 }
 
-[Collection("Integration tests")]
-public class SiteTestsDistributedCache : SiteTests
+//[Collection("Integration tests")]
+public class SiteTestsDistributedCache(MartenFixture fixture) : SiteTests(fixture)
 {
     public override async Task InitializeAsync()
     {
@@ -31,8 +30,8 @@ public class SiteTestsDistributedCache : SiteTests
     }
 }
 
-[Collection("Integration tests")]
-public class SiteTests : BaseTestsAsync
+//[Collection("Integration tests")]
+public class SiteTests(MartenFixture fixture) : AsyncTestBase(fixture)
 {
     private const string SITE1 = "MyFirstSite";
     private const string SITE2 = "MySecondSite";
@@ -60,7 +59,7 @@ public class SiteTests : BaseTestsAsync
     public override async Task InitializeAsync()
     {
         await base.InitializeAsync();
-        using var api = CreateApi();
+        
         Aero.Cms.App.Init(api);
 
         new ContentTypeBuilder(api)
@@ -147,7 +146,7 @@ public class SiteTests : BaseTestsAsync
 
     public override async Task DisposeAsync()
     {
-        using var api = CreateApi();
+        
         var pages = await api.Pages.GetAllAsync(SITE1ID);
         foreach (var page in pages.Where(p => !string.IsNullOrEmpty(p.ParentId)))
         {
@@ -181,7 +180,7 @@ public class SiteTests : BaseTestsAsync
     [Fact]
     public void IsCached()
     {
-        using var api = CreateApi();
+        
         Assert.Equal(((Api)api).IsCached,
             this.GetType() == typeof(SiteTestsMemoryCache) ||
             this.GetType() == typeof(SiteTestsDistributedCache));
@@ -190,7 +189,7 @@ public class SiteTests : BaseTestsAsync
     [Fact]
     public async Task Add()
     {
-        using var api = CreateApi();
+        
         await api.Sites.SaveAsync(new Site
         {
             InternalId = SITE2,
@@ -201,7 +200,7 @@ public class SiteTests : BaseTestsAsync
     [Fact]
     public async Task AddDuplicateKey()
     {
-        using var api = CreateApi();
+        
         await Assert.ThrowsAnyAsync<ValidationException>(async () =>
             await api.Sites.SaveAsync(new Site
             {
@@ -213,7 +212,7 @@ public class SiteTests : BaseTestsAsync
     [Fact]
     public async Task AddEmptyFailure()
     {
-        using var api = CreateApi();
+        
         await Assert.ThrowsAnyAsync<ValidationException>(async () =>
             await api.Sites.SaveAsync(new Site()));
     }
@@ -223,7 +222,7 @@ public class SiteTests : BaseTestsAsync
     {
         var id = Snowflake.NewId();
 
-        using var api = CreateApi();
+        
         await api.Sites.SaveAsync(new Site
         {
             Id = id,
@@ -239,7 +238,7 @@ public class SiteTests : BaseTestsAsync
     [Fact]
     public async Task GetAll()
     {
-        using var api = CreateApi();
+        
         var models = await api.Sites.GetAllAsync();
 
         Assert.NotNull(models);
@@ -249,7 +248,7 @@ public class SiteTests : BaseTestsAsync
     [Fact]
     public async Task GetNoneById()
     {
-        using var api = CreateApi();
+        
         var none = await api.Sites.GetByIdAsync(Snowflake.NewId());
 
         Assert.Null(none);
@@ -258,7 +257,7 @@ public class SiteTests : BaseTestsAsync
     [Fact]
     public async Task GetNoneByInternalId()
     {
-        using var api = CreateApi();
+        
         var none = await api.Sites.GetByInternalIdAsync("none-existing-id");
 
         Assert.Null(none);
@@ -267,7 +266,7 @@ public class SiteTests : BaseTestsAsync
     [Fact]
     public async Task GetById()
     {
-        using var api = CreateApi();
+        
         var model = await api.Sites.GetByIdAsync(SITE1ID);
 
         Assert.NotNull(model);
@@ -277,7 +276,7 @@ public class SiteTests : BaseTestsAsync
     [Fact]
     public async Task GetByInternalId()
     {
-        using var api = CreateApi();
+        
         var model = await api.Sites.GetByInternalIdAsync(SITE1);
 
         Assert.NotNull(model);
@@ -287,7 +286,7 @@ public class SiteTests : BaseTestsAsync
     [Fact]
     public async Task GetDefault()
     {
-        using var api = CreateApi();
+        
         var model = await api.Sites.GetDefaultAsync();
 
         Assert.NotNull(model);
@@ -297,7 +296,7 @@ public class SiteTests : BaseTestsAsync
     [Fact]
     public async Task GetSitemap()
     {
-        using var api = CreateApi();
+        
         var sitemap = await api.Sites.GetSitemapAsync();
 
         Assert.NotNull(sitemap);
@@ -308,7 +307,7 @@ public class SiteTests : BaseTestsAsync
     [Fact]
     public async Task GetSitemapById()
     {
-        using var api = CreateApi();
+        
         var sitemap = await api.Sites.GetSitemapAsync(SITE1ID);
 
         Assert.NotNull(sitemap);
@@ -319,7 +318,7 @@ public class SiteTests : BaseTestsAsync
     [Fact]
     public async Task CheckPermlinkSyntax()
     {
-        using var api = CreateApi();
+        
         var sitemap = await api.Sites.GetSitemapAsync();
 
         foreach (var item in sitemap)
@@ -332,7 +331,7 @@ public class SiteTests : BaseTestsAsync
     [Fact]
     public async Task GetUnpublishedSitemap()
     {
-        using var api = CreateApi();
+        
         var sitemap = await api.Sites.GetSitemapAsync(onlyPublished: false);
 
         Assert.NotNull(sitemap);
@@ -345,7 +344,7 @@ public class SiteTests : BaseTestsAsync
     [Fact]
     public async Task CheckHiddenSitemapItems()
     {
-        using var api = CreateApi();
+        
         var sitemap = await api.Sites.GetSitemapAsync();
 
         Assert.Equal(1, sitemap.Count(s => s.IsHidden));
@@ -354,7 +353,7 @@ public class SiteTests : BaseTestsAsync
     [Fact]
     public async Task ChangeDefaultSite()
     {
-        using var api = CreateApi();
+        
         var site6 = await api.Sites.GetByInternalIdAsync(SITE6);
 
         Assert.False(site6.IsDefault);
@@ -371,7 +370,7 @@ public class SiteTests : BaseTestsAsync
     [Fact]
     public async Task CantRemoveDefault()
     {
-        using var api = CreateApi();
+        
         var site1 = await api.Sites.GetByIdAsync(SITE1ID);
 
         Assert.True(site1.IsDefault);
@@ -386,7 +385,7 @@ public class SiteTests : BaseTestsAsync
     [Fact]
     public async Task GetUnpublishedSitemapById()
     {
-        using var api = CreateApi();
+        
         var sitemap = await api.Sites.GetSitemapAsync(SITE1ID, onlyPublished: false);
 
         Assert.NotNull(sitemap);
@@ -399,7 +398,7 @@ public class SiteTests : BaseTestsAsync
     [Fact]
     public async Task Update()
     {
-        using var api = CreateApi();
+        
         var model = await api.Sites.GetByIdAsync(SITE1ID);
 
         Assert.Equal(SITE1HOSTS, model.Hostnames);
@@ -412,7 +411,7 @@ public class SiteTests : BaseTestsAsync
     [Fact]
     public async Task Delete()
     {
-        using var api = CreateApi();
+        
         var model = await api.Sites.GetByInternalIdAsync(SITE4);
 
         Assert.NotNull(model);
@@ -423,7 +422,7 @@ public class SiteTests : BaseTestsAsync
     [Fact]
     public async Task DeleteById()
     {
-        using var api = CreateApi();
+        
         var model = await api.Sites.GetByInternalIdAsync(SITE5);
 
         Assert.NotNull(model);
@@ -434,7 +433,7 @@ public class SiteTests : BaseTestsAsync
     [Fact]
     public async Task GetSiteContent()
     {
-        using var api = CreateApi();
+        
         var model = await api.Sites.GetContentByIdAsync<MySiteContent>(SITE1ID);
 
         Assert.NotNull(model);
@@ -444,7 +443,7 @@ public class SiteTests : BaseTestsAsync
     [Fact]
     public async Task UpdateSiteContent()
     {
-        using var api = CreateApi();
+        
         var model = await api.Sites.GetContentByIdAsync<MySiteContent>(SITE1ID);
 
         Assert.NotNull(model);
@@ -459,7 +458,7 @@ public class SiteTests : BaseTestsAsync
     [Fact]
     public async Task GetDynamicSiteContent()
     {
-        using var api = CreateApi();
+        
         var model = await api.Sites.GetContentByIdAsync(SITE1ID);
 
         Assert.NotNull(model);
@@ -469,7 +468,7 @@ public class SiteTests : BaseTestsAsync
     [Fact]
     public async Task UpdateDynamicSiteContent()
     {
-        using var api = CreateApi();
+        
         var model = await api.Sites.GetContentByIdAsync(SITE1ID);
 
         Assert.NotNull(model);
@@ -484,7 +483,7 @@ public class SiteTests : BaseTestsAsync
     [Fact]
     public async Task GetByHostname()
     {
-        using var api = CreateApi();
+        
         var model = await api.Sites.GetByHostnameAsync("mydomain.com");
 
         Assert.NotNull(model);
@@ -494,7 +493,7 @@ public class SiteTests : BaseTestsAsync
     [Fact]
     public async Task GetByHostnameSecond()
     {
-        using var api = CreateApi();
+        
         var model = await api.Sites.GetByHostnameAsync("localhost");
 
         Assert.NotNull(model);
@@ -504,7 +503,7 @@ public class SiteTests : BaseTestsAsync
     [Fact]
     public async Task GetByHostnameSuffix()
     {
-        using var api = CreateApi();
+        
         var model = await api.Sites.GetByHostnameAsync("mydomain.com/en");
 
         Assert.NotNull(model);
@@ -514,7 +513,7 @@ public class SiteTests : BaseTestsAsync
     [Fact]
     public async Task GetByHostnameSubdomain()
     {
-        using var api = CreateApi();
+        
         var model = await api.Sites.GetByHostnameAsync("sub.mydomain.com");
 
         Assert.NotNull(model);
@@ -524,7 +523,7 @@ public class SiteTests : BaseTestsAsync
     [Fact]
     public async Task GetByHostnameSubdomainSecond()
     {
-        using var api = CreateApi();
+        
         var model = await api.Sites.GetByHostnameAsync("sub2.localhost");
 
         Assert.NotNull(model);
@@ -534,7 +533,7 @@ public class SiteTests : BaseTestsAsync
     [Fact]
     public async Task GetByHostnameMissing()
     {
-        using var api = CreateApi();
+        
         var model = await api.Sites.GetByHostnameAsync("nosite.com");
 
         Assert.Null(model);

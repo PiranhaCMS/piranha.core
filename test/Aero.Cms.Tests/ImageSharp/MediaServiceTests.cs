@@ -1,11 +1,9 @@
 ﻿
 
-using Xunit;
-
 namespace Aero.Cms.Tests.ImageSharp;
 
-[Collection("Integration tests")]
-public class MediaServiceTests : BaseTestsAsync
+//[Collection("Integration tests")]
+public class MediaServiceTests(MartenFixture fixture) : AsyncTestBase(fixture)
 {
     private string imageId;
 
@@ -13,7 +11,7 @@ public class MediaServiceTests : BaseTestsAsync
     {
         await base.InitializeAsync();
 
-        using var api = CreateApi();
+        
         // Add media
         using var stream = File.OpenRead("Assets/HLD_Screenshot_01_mech_1080.png");
         var image1 = new Models.StreamMediaContent()
@@ -27,14 +25,14 @@ public class MediaServiceTests : BaseTestsAsync
     }
     public override async Task DisposeAsync()
     {
-        using var api = CreateApi();
+        
         await api.Media.DeleteAsync(imageId);
     }
 
     [Fact]
     public async Task GetOriginal()
     {
-        using var api = CreateApi();
+        
         var media = await api.Media.GetByIdAsync(imageId);
 
         Assert.NotNull(media);
@@ -44,7 +42,7 @@ public class MediaServiceTests : BaseTestsAsync
     [Fact]
     public async Task GetScaled()
     {
-        using var api = CreateApi();
+        
         var url = await api.Media.EnsureVersionAsync(imageId, 640);
 
         Assert.NotNull(url);
@@ -54,7 +52,7 @@ public class MediaServiceTests : BaseTestsAsync
     [Fact]
     public async Task GetCropped()
     {
-        using var api = CreateApi();
+        
         var url = await api.Media.EnsureVersionAsync(imageId, 640, 300);
 
         Assert.NotNull(url);
@@ -64,7 +62,7 @@ public class MediaServiceTests : BaseTestsAsync
     [Fact]
     public async Task GetScaledOrgSize()
     {
-        using var api = CreateApi();
+        
         var url = await api.Media.EnsureVersionAsync(imageId, 1920);
 
         Assert.NotNull(url);
@@ -74,7 +72,7 @@ public class MediaServiceTests : BaseTestsAsync
     [Fact]
     public async Task GetCroppedOrgSize()
     {
-        using var api = CreateApi();
+        
         var url = await api.Media.EnsureVersionAsync(imageId, 1920, 1080);
 
         Assert.NotNull(url);

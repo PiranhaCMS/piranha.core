@@ -2,7 +2,6 @@
 
 using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Caching.Memory;
-using Xunit;
 using Aero.Cms.AttributeBuilder;
 using Aero.Cms.Extend;
 using Aero.Cms.Extend.Fields;
@@ -10,8 +9,8 @@ using Aero.Cms.Models;
 
 namespace Aero.Cms.Tests.Services;
 
-[Collection("Integration tests")]
-public class ContentTestsMemoryCache : ContentTests
+//[Collection("Integration tests")]
+public class ContentTestsMemoryCache(MartenFixture fixture) : ContentTests(fixture)
 {
     public override async Task InitializeAsync()
     {
@@ -20,8 +19,8 @@ public class ContentTestsMemoryCache : ContentTests
     }
 }
 
-[Collection("Integration tests")]
-public class ContentTestsDistributedCache : ContentTests
+//[Collection("Integration tests")]
+public class ContentTestsDistributedCache(MartenFixture fixture) : ContentTests(fixture)
 {
     public override async Task InitializeAsync()
     {
@@ -30,8 +29,8 @@ public class ContentTestsDistributedCache : ContentTests
     }
 }
 
-[Collection("Integration tests")]
-public class ContentTests : BaseTestsAsync
+//[Collection("Integration tests")]
+public class ContentTests(MartenFixture fixture) : AsyncTestBase(fixture)
 {
     private readonly string ID1 = Snowflake.NewId();
     private readonly string ID2 = Snowflake.NewId();
@@ -54,7 +53,7 @@ public class ContentTests : BaseTestsAsync
     public override async Task InitializeAsync()
     {
         await base.InitializeAsync();
-        using var api = CreateApi();
+        
         Aero.Cms.App.Init(api);
 
         // Add the content type
@@ -105,7 +104,7 @@ public class ContentTests : BaseTestsAsync
 
     public override async Task DisposeAsync()
     {
-        using var api = CreateApi();
+        
         // Delete added content
         var content = await api.Content.GetAllAsync();
         foreach (var c in content)
@@ -127,7 +126,7 @@ public class ContentTests : BaseTestsAsync
     [Fact]
     public async Task GetById()
     {
-        using var api = CreateApi();
+        
         var content = await api.Content.GetByIdAsync<MyContent>(ID1);
         var contentInfo = await api.Content.GetByIdAsync<ContentInfo>(ID1);
 
@@ -140,7 +139,7 @@ public class ContentTests : BaseTestsAsync
     [Fact]
     public async Task GetTranslationById()
     {
-        using var api = CreateApi();
+        
         var content = await api.Content.GetByIdAsync<MyContent>(ID1, IDLANG);
         var contentInfo = await api.Content.GetByIdAsync<ContentInfo>(ID1, IDLANG);
 
@@ -153,7 +152,7 @@ public class ContentTests : BaseTestsAsync
     [Fact]
     public async Task GetTranslatedStatus()
     {
-        using var api = CreateApi();
+        
         var status = await api.Content.GetTranslationStatusByIdAsync(ID1);
 
         Assert.NotNull(status);
@@ -166,7 +165,7 @@ public class ContentTests : BaseTestsAsync
     [Fact]
     public async Task GetUntranslatedStatus()
     {
-        using var api = CreateApi();
+        
         var status = await api.Content.GetTranslationStatusByIdAsync(ID2);
 
         Assert.NotNull(status);
@@ -179,7 +178,7 @@ public class ContentTests : BaseTestsAsync
     [Fact]
     public async Task GetTranslationSummary()
     {
-        using var api = CreateApi();
+        
         var test = await api.Content.GetAllAsync();
 
         var summary = await api.Content.GetTranslationStatusByGroupAsync("MyContentGroup");

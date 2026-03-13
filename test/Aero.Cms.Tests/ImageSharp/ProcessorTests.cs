@@ -1,7 +1,4 @@
-﻿
-
-using Xunit;
-using Aero.Cms.ImageSharp;
+﻿using Aero.Cms.ImageSharp;
 
 namespace Aero.Cms.Tests.ImageSharp;
 

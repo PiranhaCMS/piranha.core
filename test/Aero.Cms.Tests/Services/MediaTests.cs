@@ -2,13 +2,12 @@
 
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Caching.Distributed;
-using Xunit;
 using Aero.Cms.Models;
 
 namespace Aero.Cms.Tests.Services;
 
-[Collection("Integration tests")]
-public class MediaTestsMemoryCache: MediaTests
+//[Collection("Integration tests")]
+public class MediaTestsMemoryCache(MartenFixture fixture) : MediaTests(fixture)
 {
     public override async Task InitializeAsync()
     {
@@ -17,8 +16,8 @@ public class MediaTestsMemoryCache: MediaTests
     }
 }
 
-[Collection("Integration tests")]
-public class MediaTestsDistributedCache: MediaTests
+//[Collection("Integration tests")]
+public class MediaTestsDistributedCache(MartenFixture fixture) : MediaTests(fixture)
 {
     public override async Task InitializeAsync()
     {
@@ -27,8 +26,8 @@ public class MediaTestsDistributedCache: MediaTests
     }
 }
 
-[Collection("Integration tests")]
-public class MediaTests : BaseTestsAsync
+//[Collection("Integration tests")]
+public class MediaTests(MartenFixture fixture) : AsyncTestBase(fixture)
 {
     private string image1Id;
     private string image2Id;
@@ -41,7 +40,7 @@ public class MediaTests : BaseTestsAsync
     {
         await base.InitializeAsync();
 
-        using var api = CreateApi();
+        
         Aero.Cms.App.Init(api);
 
         // Add media folders
@@ -114,7 +113,7 @@ public class MediaTests : BaseTestsAsync
 
     public override async Task DisposeAsync()
     {
-        using var api = CreateApi();
+        
         var media = await api.Media.GetAllByFolderIdAsync();
 
         foreach (var item in media)
@@ -139,7 +138,7 @@ public class MediaTests : BaseTestsAsync
     [Fact]
     public void IsCached()
     {
-        using var api = CreateApi();
+        
         Assert.Equal(((Api)api).IsCached,
             this.GetType() == typeof(MediaTestsMemoryCache) ||
             this.GetType() == typeof(MediaTestsDistributedCache));
@@ -148,7 +147,7 @@ public class MediaTests : BaseTestsAsync
     [Fact]
     public async Task GetAll()
     {
-        using var api = CreateApi();
+        
         var media = await api.Media.GetAllByFolderIdAsync();
 
         Assert.NotEmpty(media);
@@ -157,7 +156,7 @@ public class MediaTests : BaseTestsAsync
     [Fact]
     public async Task GetById()
     {
-        using var api = CreateApi();
+        
         var media = await api.Media.GetByIdAsync(image1Id);
 
         Assert.NotNull(media);
@@ -169,7 +168,7 @@ public class MediaTests : BaseTestsAsync
     [Fact]
     public async Task GetByFolderId()
     {
-        using var api = CreateApi();
+        
         var media = (await api.Media.GetAllByFolderIdAsync(folder1Id)).ToList();
 
         Assert.NotEmpty(media);
@@ -179,7 +178,7 @@ public class MediaTests : BaseTestsAsync
     [Fact]
     public async Task FilenameHasNoSpaces()
     {
-        using var api = CreateApi();
+        
         var media = await api.Media.GetByIdAsync(image5Id);
 
         Assert.NotNull(media);
@@ -189,7 +188,7 @@ public class MediaTests : BaseTestsAsync
     [Fact]
     public async Task TitleNotNull()
     {
-        using var api = CreateApi();
+        
         var media = await api.Media.GetByIdAsync(image1Id);
 
         Assert.NotNull(media.Title);
@@ -199,7 +198,7 @@ public class MediaTests : BaseTestsAsync
     [Fact]
     public async Task AltTextNotNull()
     {
-        using var api = CreateApi();
+        
         var media = await api.Media.GetByIdAsync(image1Id);
 
         Assert.NotNull(media.AltText);
@@ -209,7 +208,7 @@ public class MediaTests : BaseTestsAsync
     [Fact]
     public async Task DescriptionNotNull()
     {
-        using var api = CreateApi();
+        
         var media = await api.Media.GetByIdAsync(image1Id);
 
         Assert.NotNull(media.Description);
@@ -219,7 +218,7 @@ public class MediaTests : BaseTestsAsync
     [Fact]
     public async Task HasProperty()
     {
-        using var api = CreateApi();
+        
         var media = await api.Media.GetByIdAsync(image1Id);
 
         Assert.Equal("Hyper Light Drifter", media.Properties["Game"]);
@@ -228,7 +227,7 @@ public class MediaTests : BaseTestsAsync
     [Fact]
     public async Task Move()
     {
-        using var api = CreateApi();
+        
         var media = await api.Media.GetByIdAsync(image1Id);
         Assert.NotNull(media);
         Assert.Null(media.FolderId);
@@ -244,7 +243,7 @@ public class MediaTests : BaseTestsAsync
     [Fact]
     public async Task Insert()
     {
-        using var api = CreateApi();
+        
         using var stream = File.OpenRead("Assets/HLDScreenshotBETAentrance.png");
         var image = new Models.StreamMediaContent
         {
@@ -261,7 +260,7 @@ public class MediaTests : BaseTestsAsync
     [Fact]
     public async Task PublicUrl()
     {
-        using var api = CreateApi();
+        
         using (var config = new Aero.Cms.Config(api))
         {
             config.MediaCDN = null;
@@ -276,7 +275,7 @@ public class MediaTests : BaseTestsAsync
     [Fact]
     public async Task PublicUrlCDN()
     {
-        using var api = CreateApi();
+        
         using (var config = new Aero.Cms.Config(api))
         {
             config.MediaCDN = "https://mycdn.org/uploads";
@@ -291,7 +290,7 @@ public class MediaTests : BaseTestsAsync
     [Fact]
     public async Task Delete()
     {
-        using var api = CreateApi();
+        
         var media = await api.Media.GetByIdAsync(image3Id);
 
         await api.Media.DeleteAsync(media);
@@ -300,7 +299,7 @@ public class MediaTests : BaseTestsAsync
     [Fact]
     public async Task DeleteById()
     {
-        using var api = CreateApi();
+        
         await api.Media.DeleteAsync(image4Id);
     }
 }

@@ -3,14 +3,13 @@
 using System.ComponentModel.DataAnnotations;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Caching.Distributed;
-using Xunit;
 using Aero.Cms.AttributeBuilder;
 using Aero.Cms.Models;
 
 namespace Aero.Cms.Tests.Services;
 
-[Collection("Integration tests")]
-public class CommentTestsMemoryCache : CommentTests
+//[Collection("Integration tests")]
+public class CommentTestsMemoryCache(MartenFixture fixture) : CommentTests(fixture)
 {
     public override async Task InitializeAsync()
     {
@@ -19,8 +18,8 @@ public class CommentTestsMemoryCache : CommentTests
     }
 }
 
-[Collection("Integration tests")]
-public class CommentTestsDistributedCache : CommentTests
+//[Collection("Integration tests")]
+public class CommentTestsDistributedCache(MartenFixture fixture) : CommentTests(fixture)
 {
     public override async Task InitializeAsync()
     {
@@ -29,8 +28,8 @@ public class CommentTestsDistributedCache : CommentTests
     }
 }
 
-[Collection("Integration tests")]
-public class CommentTests : BaseTestsAsync
+//[Collection("Integration tests")]
+public class CommentTests(MartenFixture fixture) : AsyncTestBase(fixture)
 {
     private string SITEID = Snowflake.NewId();
     private string BLOGID = Snowflake.NewId();
@@ -48,7 +47,7 @@ public class CommentTests : BaseTestsAsync
     {
         await base.InitializeAsync();
 
-        using var api = CreateApi();
+        
         // Import content types
         new ContentTypeBuilder(api)
             .AddType(typeof(BlogArchive))
@@ -104,7 +103,7 @@ public class CommentTests : BaseTestsAsync
 
     public override async Task DisposeAsync()
     {
-        using var api = CreateApi();
+        
         var posts = await api.Posts.GetAllDynamicAsync(BLOGID);
         foreach (var p in posts)
         {
@@ -129,7 +128,7 @@ public class CommentTests : BaseTestsAsync
     [Fact]
     public void IsCached()
     {
-        using var api = CreateApi();
+        
         Assert.Equal(((Api)api).IsCached,
             this.GetType() == typeof(CommentTestsMemoryCache) ||
             this.GetType() == typeof(CommentTestsDistributedCache));
@@ -138,7 +137,7 @@ public class CommentTests : BaseTestsAsync
     [Fact]
     public async Task AddPostComment()
     {
-        using var api = CreateApi();
+        
         var count = (await api.Posts.GetByIdAsync(BLOGPOSTID)).CommentCount;
 
         await api.Posts.SaveCommentAsync(BLOGPOSTID, new PostComment
@@ -156,7 +155,7 @@ public class CommentTests : BaseTestsAsync
     [Fact]
     public async Task CheckPostCommentType()
     {
-        using var api = CreateApi();
+        
         var comments = await api.Posts.GetAllCommentsAsync(BLOGPOSTID);
 
         Assert.True(comments.All(c => c is PostComment));
@@ -165,7 +164,7 @@ public class CommentTests : BaseTestsAsync
     [Fact]
     public async Task AddPostCommentNoAuthor()
     {
-        using var api = CreateApi();
+        
         await Assert.ThrowsAsync<ValidationException>(async () => {
             await api.Posts.SaveCommentAsync(BLOGPOSTID, new PostComment
             {
@@ -178,7 +177,7 @@ public class CommentTests : BaseTestsAsync
     [Fact]
     public async Task AddPostCommentNoEmail()
     {
-        using var api = CreateApi();
+        
         await Assert.ThrowsAsync<ValidationException>(async () => {
             await api.Posts.SaveCommentAsync(BLOGPOSTID, new PostComment
             {
@@ -191,7 +190,7 @@ public class CommentTests : BaseTestsAsync
     [Fact]
     public async Task AddPostCommentBadEmail()
     {
-        using var api = CreateApi();
+        
         await Assert.ThrowsAsync<ValidationException>(async () => {
             await api.Posts.SaveCommentAsync(BLOGPOSTID, new PostComment
             {
@@ -205,7 +204,7 @@ public class CommentTests : BaseTestsAsync
     [Fact]
     public async Task AddPostCommentAutoApprove()
     {
-        using var api = CreateApi();
+        
         using (var config = new Aero.Cms.Config(api))
         {
             config.CommentsApprove = true;
@@ -230,7 +229,7 @@ public class CommentTests : BaseTestsAsync
     [Fact]
     public async Task AddPostCommentAutoUnApprove()
     {
-        using var api = CreateApi();
+        
         using (var config = new Aero.Cms.Config(api))
         {
             config.CommentsApprove = false;
@@ -255,7 +254,7 @@ public class CommentTests : BaseTestsAsync
     [Fact]
     public async Task AddPageComment()
     {
-        using var api = CreateApi();
+        
         var count = (await api.Pages.GetByIdAsync(BLOGID)).CommentCount;
 
         await api.Pages.SaveCommentAsync(BLOGID, new PageComment
@@ -273,7 +272,7 @@ public class CommentTests : BaseTestsAsync
     [Fact]
     public async Task CheckPageCommentType()
     {
-        using var api = CreateApi();
+        
         var comments = await api.Pages.GetAllCommentsAsync(BLOGID);
 
         Assert.True(comments.All(c => c is PageComment));
@@ -282,7 +281,7 @@ public class CommentTests : BaseTestsAsync
     [Fact]
     public async Task AddPageCommentNoAuthor()
     {
-        using var api = CreateApi();
+        
         await Assert.ThrowsAsync<ValidationException>(async () => {
             await api.Pages.SaveCommentAsync(BLOGID, new PageComment
             {
@@ -295,7 +294,7 @@ public class CommentTests : BaseTestsAsync
     [Fact]
     public async Task AddPageCommentNoEmail()
     {
-        using var api = CreateApi();
+        
         await Assert.ThrowsAsync<ValidationException>(async () => {
             await api.Pages.SaveCommentAsync(BLOGID, new PageComment
             {
@@ -308,7 +307,7 @@ public class CommentTests : BaseTestsAsync
     [Fact]
     public async Task AddPageCommentBadEmail()
     {
-        using var api = CreateApi();
+        
         await Assert.ThrowsAsync<ValidationException>(async () => {
             await api.Pages.SaveCommentAsync(BLOGID, new PageComment
             {
@@ -322,7 +321,7 @@ public class CommentTests : BaseTestsAsync
     [Fact]
     public async Task AddPageCommentAutoApprove()
     {
-        using var api = CreateApi();
+        
         using (var config = new Aero.Cms.Config(api))
         {
             config.CommentsApprove = true;
@@ -347,7 +346,7 @@ public class CommentTests : BaseTestsAsync
     [Fact]
     public async Task AddPageCommentAutoUnApprove()
     {
-        using var api = CreateApi();
+        
         using (var config = new Aero.Cms.Config(api))
         {
             config.CommentsApprove = false;

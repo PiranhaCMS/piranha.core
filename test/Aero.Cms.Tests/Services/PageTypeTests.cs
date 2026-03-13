@@ -2,13 +2,12 @@
 
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Caching.Distributed;
-using Xunit;
 using Aero.Cms.Models;
 
 namespace Aero.Cms.Tests.Services;
 
-[Collection("Integration tests")]
-public class PageTypeTestsMemoryCache : PageTypeTests
+//[Collection("Integration tests")]
+public class PageTypeTestsMemoryCache(MartenFixture fixture) : PageTypeTests(fixture)
 {
     public override async Task InitializeAsync()
     {
@@ -17,8 +16,8 @@ public class PageTypeTestsMemoryCache : PageTypeTests
     }
 }
 
-[Collection("Integration tests")]
-public class PageTypeTestsDistributedCache : PageTypeTests
+//[Collection("Integration tests")]
+public class PageTypeTestsDistributedCache(MartenFixture fixture) : PageTypeTests(fixture)
 {
     public override async Task InitializeAsync()
     {
@@ -27,8 +26,8 @@ public class PageTypeTestsDistributedCache : PageTypeTests
     }
 }
 
-[Collection("Integration tests")]
-public class PageTypeTests : BaseTestsAsync
+//[Collection("Integration tests")]
+public class PageTypeTests(MartenFixture fixture) : AsyncTestBase(fixture)
 {
     private readonly List<PageType> pageTypes = new List<PageType>
     {
@@ -133,7 +132,7 @@ public class PageTypeTests : BaseTestsAsync
     {
         await base.InitializeAsync();
 
-        using var api = CreateApi();
+        
         await api.PageTypes.SaveAsync(pageTypes[0]);
         await api.PageTypes.SaveAsync(pageTypes[3]);
         await api.PageTypes.SaveAsync(pageTypes[4]);
@@ -141,7 +140,7 @@ public class PageTypeTests : BaseTestsAsync
 
     public override async Task DisposeAsync()
     {
-        using var api = CreateApi();
+        
         var pageTypes = await api.PageTypes.GetAllAsync();
 
         foreach (var p in pageTypes)
@@ -153,7 +152,7 @@ public class PageTypeTests : BaseTestsAsync
     [Fact]
     public void IsCached()
     {
-        using var api = CreateApi();
+        
         Assert.Equal(((Api)api).IsCached,
             this.GetType() == typeof(PageTypeTestsMemoryCache) ||
             this.GetType() == typeof(PageTypeTestsDistributedCache));
@@ -162,14 +161,14 @@ public class PageTypeTests : BaseTestsAsync
     [Fact]
     public async Task Add()
     {
-        using var api = CreateApi();
+        
         await api.PageTypes.SaveAsync(pageTypes[1]);
     }
 
     [Fact]
     public async Task GetAll()
     {
-        using var api = CreateApi();
+        
         var models = await api.PageTypes.GetAllAsync();
 
         Assert.NotNull(models);
@@ -179,7 +178,7 @@ public class PageTypeTests : BaseTestsAsync
     [Fact]
     public async Task GetNoneById()
     {
-        using var api = CreateApi();
+        
         var none = await api.PageTypes.GetByIdAsync("none-existing-type");
 
         Assert.Null(none);
@@ -188,7 +187,7 @@ public class PageTypeTests : BaseTestsAsync
     [Fact]
     public async Task GetById()
     {
-        using var api = CreateApi();
+        
         var model = await api.PageTypes.GetByIdAsync(pageTypes[0].Id);
 
         Assert.NotNull(model);
@@ -198,7 +197,7 @@ public class PageTypeTests : BaseTestsAsync
     [Fact]
     public async Task Update()
     {
-        using var api = CreateApi();
+        
         var model = await api.PageTypes.GetByIdAsync(pageTypes[0].Id);
 
         Assert.Null(model.Title);
@@ -211,7 +210,7 @@ public class PageTypeTests : BaseTestsAsync
     [Fact]
     public async Task Delete()
     {
-        using var api = CreateApi();
+        
         var model = await api.PageTypes.GetByIdAsync(pageTypes[3].Id);
 
         Assert.NotNull(model);
@@ -222,7 +221,7 @@ public class PageTypeTests : BaseTestsAsync
     [Fact]
     public async Task DeleteById()
     {
-        using var api = CreateApi();
+        
         var model = await api.PageTypes.GetByIdAsync(pageTypes[4].Id);
 
         Assert.NotNull(model);

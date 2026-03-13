@@ -1,14 +1,10 @@
-
-
-using System.Text;
-using Xunit;
 using Aero.Cms.Extend;
 using Aero.Cms.Extend.Blocks;
 using Aero.Cms.Extend.Fields;
 
 namespace Aero.Cms.Tests;
 
-[Collection("Integration tests")]
+//[Collection("Integration tests")]
 public class Searchable
 {
     [Fact]

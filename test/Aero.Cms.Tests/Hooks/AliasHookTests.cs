@@ -1,12 +1,9 @@
-
-
-using Xunit;
 using Aero.Cms.Models;
 
 namespace Aero.Cms.Tests.Hooks;
 
-[Collection("Integration tests")]
-public class AliasHookTests : BaseTestsAsync
+//[Collection("Integration tests")]
+public class AliasHookTests(MartenFixture fixture) : AsyncTestBase(fixture)
 {
     private const string ALIAS = "/alias-url";
     private readonly string SITE_ID = Snowflake.NewId();
@@ -22,7 +19,7 @@ public class AliasHookTests : BaseTestsAsync
     {
         await base.InitializeAsync();
 
-        using var api = CreateApi();
+        
         // Initialize
         Aero.Cms.App.Init(api);
 
@@ -45,7 +42,7 @@ public class AliasHookTests : BaseTestsAsync
 
     public override async Task DisposeAsync()
     {
-        using var api = CreateApi();
+        
         // Remove test data
         var aliases = await api.Aliases.GetAllAsync();
 
@@ -60,7 +57,7 @@ public class AliasHookTests : BaseTestsAsync
     public async Task OnLoad()
     {
         Aero.Cms.App.Hooks.Alias.RegisterOnLoad(m => throw new AliasOnLoadException());
-        using (var api = CreateApi())
+        
         {
             await Assert.ThrowsAsync<AliasOnLoadException>(async () =>
             {
@@ -74,7 +71,7 @@ public class AliasHookTests : BaseTestsAsync
     public async Task OnBeforeSave()
     {
         Aero.Cms.App.Hooks.Alias.RegisterOnBeforeSave(m => throw new AliasOnBeforeSaveException());
-        using (var api = CreateApi())
+        
         {
             await Assert.ThrowsAsync<AliasOnBeforeSaveException>(async () =>
             {
@@ -93,7 +90,7 @@ public class AliasHookTests : BaseTestsAsync
     public async Task OnAfterSave()
     {
         Aero.Cms.App.Hooks.Alias.RegisterOnAfterSave(m => throw new AliasOnAfterSaveException());
-        using (var api = CreateApi())
+        
         {
             await Assert.ThrowsAsync<AliasOnAfterSaveException>(async () =>
             {
@@ -112,7 +109,7 @@ public class AliasHookTests : BaseTestsAsync
     public async Task OnBeforeDelete()
     {
         Aero.Cms.App.Hooks.Alias.RegisterOnBeforeDelete(m => throw new AliasOnBeforeDeleteException());
-        using (var api = CreateApi())
+        
         {
             await Assert.ThrowsAsync<AliasOnBeforeDeleteException>(async () =>
             {
@@ -126,7 +123,7 @@ public class AliasHookTests : BaseTestsAsync
     public async Task OnAfterDelete()
     {
         Aero.Cms.App.Hooks.Alias.RegisterOnAfterDelete(m => throw new AliasOnAfterDeleteException());
-        using (var api = CreateApi())
+        
         {
             await Assert.ThrowsAsync<AliasOnAfterDeleteException>(async () =>
             {

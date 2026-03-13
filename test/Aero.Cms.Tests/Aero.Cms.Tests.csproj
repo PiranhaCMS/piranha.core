@@ -5,6 +5,30 @@
     <OutputType>Exe</OutputType>
     <IsPackable>false</IsPackable>
   </PropertyGroup>
+  <ItemGroup>
+    <None Remove="Assets\HLD Screenshot 01 mech 1080.png" />
+    <None Remove="Assets\HLD_Screenshot_01_mech_1080.png" />
+    <None Remove="Assets\HLD_Screenshot_01_rise_1080.png" />
+    <None Remove="Assets\HLD_Screenshot_01_robot_1080.png" />
+    <None Remove="Assets\HLD_Screenshot_BETA_entrance.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Assets\HLD Screenshot 01 mech 1080.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\HLD_Screenshot_01_mech_1080.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\HLD_Screenshot_01_rise_1080.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\HLD_Screenshot_01_robot_1080.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\HLD_Screenshot_BETA_entrance.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Bogus" Version="35.6.5" />

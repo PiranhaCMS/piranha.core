@@ -1,18 +1,3 @@
-using JasperFx;
-using Marten;
-
-namespace Aero.Cms.Tests;
-
-public abstract class AeroDbTestDriver : IDisposable
-{
-    protected IDocumentStore store
-    {
-        get => field ?? GetDocumentStore();
-        init;
-    }
-
-    protected bool IsDisposed { get; private set; }
-
     protected AeroDbTestDriver()
     {
         store = DocumentStore.For(opts =>
@@ -43,41 +28,9 @@ public abstract class AeroDbTestDriver : IDisposable
         store.Storage.ApplyAllConfiguredChangesToDatabaseAsync()
             .GetAwaiter()
             .GetResult();
+
+        var sesh = store.LightweightSession();
+        sesh.QueueSqlCommand("CREATE EXTENSION IF NOT EXISTS citus;");
+        sesh.QueueSqlCommand("");
+        sesh.SaveChangesAsync();
     }
-
-    protected internal IDocumentStore GetDocumentStore(string database = null)
-    {
-        return this.store;
-    }
-
-    protected virtual void PreInitialize(IDocumentStore store)
-    {
-
-    }
-
-    protected virtual void PreConfigureDatabase(IDocumentStore store)
-    {
-
-    }
-
-    protected virtual void SetupDatabase(IDocumentStore store)
-    {
-
-    }
-
-    public void Dispose()
-    { 
-        Dispose(true);
-        GC.SuppressFinalize(this);
-    }
-
-    protected virtual void Dispose(bool disposing)
-    {
-        if (IsDisposed) return;
-        if (disposing)
-        {
-            store.Dispose();
-        }
-        IsDisposed = true;
-    }
-}

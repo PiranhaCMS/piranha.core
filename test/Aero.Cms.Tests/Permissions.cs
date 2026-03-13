@@ -1,7 +1,5 @@
 
 
-using Xunit;
-
 namespace Aero.Cms.Tests;
 
 public class Permissions

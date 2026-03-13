@@ -1,5 +1,6 @@
 ﻿
 
+
 using System.Reflection;
 using Aero.Cms.Extend;
 using Aero.Cms.Extend.Serializers;
@@ -21,7 +22,7 @@ public sealed class App
     /// <summary>
     /// Mutex for thread safe initialization.
     /// </summary>
-    private static readonly object _mutex = new object();
+    private static readonly Lock _mutex = new Lock();
 
     /// <summary>
     /// If the app has been initialized.
@@ -187,6 +188,7 @@ public sealed class App
     {
         Instance = new App();
 
+        // todo - add more supported media types (avif, docx, xlsx, etc)
         // Setup media types
         Instance._mediaTypes.Documents.Add(".pdf", "application/pdf");
         Instance._mediaTypes.Images.Add(".jpg", "image/jpeg");
