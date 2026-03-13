@@ -29,5 +29,5 @@ This file tracks all major tracks for the project. Each track has its own detail
 
 ---
 
-- [ ] **Track: Fix PostgreSQL unit test duplicate key error (pg_database_datname_index)**
+- [x] **Track: Fix PostgreSQL unit test duplicate key error (pg_database_datname_index)**
 *Link: [./tracks/fix_unit_test_postgres_duplicate_error_20260313/](./tracks/fix_unit_test_postgres_duplicate_error_20260313/)*
