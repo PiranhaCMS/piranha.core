@@ -19,10 +19,11 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Mapster" Version="7.4.0" />
+    <PackageReference Include="Mapster.Core" Version="1.2.1" />
     <PackageReference Include="Marten" Version="8.23.0" />
     <PackageReference Include="Marten.PLv8" Version="7.40.5" />
     <ProjectReference Include="..\Aero.Cms\Aero.Cms.csproj" />
-    <PackageReference Include="AutoMapper" Version="16.1.0" />
     <PackageReference Update="Microsoft.SourceLink.GitHub" Version="10.0.200" />
   </ItemGroup>
 </Project>

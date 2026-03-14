@@ -16,7 +16,7 @@ namespace Aero.Cms.Data.Services.Internal;
 
 using System.Collections;
 using System.Dynamic;
-using AutoMapper;
+using MapsterMapper;
 // using Aero.Data.RavenDb.Data;
 // using Aero.Models;
 // using Aero.Services;
@@ -38,7 +38,7 @@ internal class ContentService<TContent, TField, TModelBase> : IContentService<TC
     /// Default constructor.
     /// </summary>
     /// <param name="factory">The content factory</param>
-    /// <param name="mapper">The AutoMapper instance to use</param>
+    /// <param name="mapper">The Mapster mapper instance to use</param>
     public ContentService(IContentFactory factory, IMapper mapper)
     {
         _factory = factory;
@@ -81,7 +81,7 @@ internal class ContentService<TContent, TField, TModelBase> : IContentService<TC
             //
             // 3: Map basic fields
             //
-            _mapper.Map<TContent, TModelBase>(content, model);
+            _mapper.Map((dynamic)content, (dynamic)model);
 
             //
             // 4: Map routes
@@ -102,7 +102,7 @@ internal class ContentService<TContent, TField, TModelBase> : IContentService<TC
 
                 if (translation != null)
                 {
-                    _mapper.Map(translation, model);
+                    _mapper.Map((dynamic)translation, (dynamic)model);
                 }
             }
 

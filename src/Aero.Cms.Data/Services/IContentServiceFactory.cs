@@ -1,7 +1,7 @@
 
 
 using Aero.Cms.Data.Data;
-using AutoMapper;
+using MapsterMapper;
 
 namespace Aero.Cms.Data.Services;
 
@@ -13,7 +13,7 @@ public interface IContentServiceFactory
     /// <summary>
     /// Creates a new content service for the specified types.
     /// </summary>
-    /// <param name="mapper">The AutoMapper instance to use for transformation</param>
+    /// <param name="mapper">The Mapster mapper instance to use for transformation</param>
     /// <returns>The content service</returns>
     IContentService<TContent, TField, TModelBase> Create<TContent, TField, TModelBase>(IMapper mapper)
         where TContent : ContentBase<TField>
