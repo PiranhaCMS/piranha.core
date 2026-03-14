@@ -1,0 +1,52 @@
+
+
+using Aero.Cms.Models;
+
+namespace Aero.Cms.Extend.Fields;
+
+/// <summary>
+/// Field for referencing an audio asset.
+/// </summary>
+[FieldType(Name = "Audio", Shorthand = "Audio", Component = "audio-field")]
+public class AudioField : MediaFieldBase<AudioField>
+{
+    /// <summary>
+    /// Implicit operator for converting a string id to a field.
+    /// </summary>
+    /// <param name="id">The id value</param>
+    public static implicit operator AudioField(string id)
+    {
+        return new AudioField { Id = id };
+    }
+
+    /// <summary>
+    /// Implicit operator for converting a Guid id to a field.
+    /// </summary>
+    /// <param name="guid">The guid value</param>
+    public static implicit operator AudioField(Guid guid)
+    {
+        return new AudioField { Id = guid.ToString() };
+    }
+
+    /// <summary>
+    /// Implicit operator for converting a media object to a field.
+    /// </summary>
+    /// <param name="media">The media object</param>
+    public static implicit operator AudioField(Media media)
+    {
+        return new AudioField { Id = media.Id };
+    }
+
+    /// <summary>
+    /// Impicit operator for converting the field to an url string.
+    /// </summary>
+    /// <param name="audio">The Audio field</param>
+    public static implicit operator string(AudioField audio)
+    {
+        if (audio.Media != null)
+        {
+            return audio.Media.PublicUrl;
+        }
+        return "";
+    }
+}

@@ -1,0 +1,34 @@
+﻿
+
+namespace Aero.Cms.Extend.Fields;
+
+/// <summary>
+/// Field for single line string values.
+/// </summary>
+[FieldType(Name = "String", Shorthand = "String", Component = "string-field")]
+public class StringField : SimpleField<string>, ISearchable, ITranslatable
+{
+    /// <summary>
+    /// Implicit operator for converting a string to a field.
+    /// </summary>
+    /// <param name="str">The string value</param>
+    public static implicit operator StringField(string str)
+    {
+        return new StringField { Value = str };
+    }
+
+    /// <summary>
+    /// Implicitly converts the String field to a string.
+    /// </summary>
+    /// <param name="field">The field</param>
+    public static implicit operator string(StringField field)
+    {
+        return field.Value;
+    }
+
+    /// <inheritdoc />
+    public string GetIndexedContent()
+    {
+        return !string.IsNullOrEmpty(Value) ? Value : "";
+    }
+}

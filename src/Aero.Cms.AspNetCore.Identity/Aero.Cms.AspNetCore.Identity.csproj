@@ -1,0 +1,29 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Razor">
+
+  <PropertyGroup>
+    <NoWarn>$(NoWarn);1591</NoWarn>
+    <AddRazorSupportForMvc>true</AddRazorSupportForMvc>
+    <Description>Aero CMS security provider for AspNetCore Identity</Description>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(GITHUB_ACTIONS)' == 'true'">
+    <ContinuousIntegrationBuild>true</ContinuousIntegrationBuild>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Aero.Identity\Aero.Identity.csproj" />
+    <ProjectReference Include="..\Aero.Cms\Aero.Cms.csproj" />
+    <ProjectReference Include="..\Aero.Cms.Manager\Aero.Cms.Manager.csproj" />
+    <ProjectReference Include="..\Aero.Cms.Manager.LocalAuth\Aero.Cms.Manager.LocalAuth.csproj" />
+    <ProjectReference Include="..\Aero.Cms.Manager.Localization\Aero.Cms.Manager.Localization.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Update="Microsoft.SourceLink.GitHub" Version="10.0.200" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="assets\**\*" />
+  </ItemGroup>
+
+</Project>

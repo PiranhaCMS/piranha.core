@@ -1,1 +1,0 @@
-dotnet test --no-build -s build/tests.runsettings --verbosity quiet /p:CollectCoverage=true /p:CoverletOutputFormat=\"json,lcov\" /p:MergeWith=../../coverage/lcov.json /p:CoverletOutput=../../coverage/lcov

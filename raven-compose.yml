@@ -1,0 +1,24 @@
+  ravendb:
+    container_name: ravendb
+    image: ravendb/ravendb:ubuntu-latest
+    volumes:
+      - raven-data:/var/lib/ravendb/data
+      - type: bind
+        source: D:/aero-certs
+        target: /certs
+    ports:
+      - 8888:443
+      - 38888:38888
+    environment:
+      - RAVEN_Setup_Mode=None
+      - RAVEN_License_Eula_Accepted=true
+      - RAVEN_ServerUrl=https://0.0.0.0
+      - RAVEN_PublicServerUrl=https://aero.local
+      - RAVEN_ServerUrl_Tcp=tcp://0.0.0.0:38888
+      - RAVEN_PublicServerUrl_Tcp=tcp://aero.local:38888
+      - RAVEN_Security_Certificate_Path=/certs/aero.local.pfx
+      #- 'RAVEN_License={"Id":"d8fd202c-c864-452d-b3cc-e48f93441830","Name":"Microbians","Keys":["NLN1heK4JQan416pU3MXYtAfX","5U8D1TdtvMruLpV1cCKUHJId7","BWL9bx+obqy84glZe0Mc0TCVz","7AS6r1oG0SguM+TwuzKNbZvX6","EQfDZMYUsyBhh2/7VKmhkT95q","emNAz0uQ7n3ZvhH6RC1vSNQM4","ai6tQcu4ZuKrpski58DatABYE","DNy4yBSYoSQMqKywtLi8wJzEy","MzQVFjc4OTo7PD0+nwIfIJ8CI","CCfAiEgnwIjIJ8CJCCfAiUgnw","ImIJ8CJyCfAiggnwIpIJ8CKiC","fAisgnwIsIJ8CLSCfAi4gnwIv","IJ8CMCCfAzZAAZ8CQiCfAkMgn","wJEIJ8CRSCfAkYgnwJHIJ8CSC","BDJEQJYgtdnwRBYAhd"]}'
+    extra_hosts:
+      - "aero.local:127.0.0.1"
+    networks:
+      - aero-net

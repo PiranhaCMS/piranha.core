@@ -1,0 +1,30 @@
+﻿<Project Sdk="Microsoft.NET.Sdk" ToolsVersion="15.0">
+
+  <PropertyGroup>
+    <NoWarn>$(NoWarn);1591</NoWarn>
+    <Description>Core package for Aero CMS for .NET Core</Description>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleToAttribute">
+    <_Parameter1>Aero.Cms.Tests</_Parameter1>
+    </AssemblyAttribute>
+  </ItemGroup>
+
+  <PropertyGroup Condition="'$(GITHUB_ACTIONS)' == 'true'">
+    <ContinuousIntegrationBuild>true</ContinuousIntegrationBuild>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="IdGen" Version="3.0.7" />
+    <PackageReference Include="IdGen.DependencyInjection" Version="3.0.7" />
+    <PackageReference Include="Markdig" Version="1.1.1" />
+    <PackageReference Include="Microsoft.Extensions.Caching.Hybrid" Version="10.4.0" />
+    <PackageReference Include="Microsoft.Extensions.Caching.Memory" Version="10.0.4" />
+    <PackageReference Include="Microsoft.Extensions.Localization" Version="10.0.4" />
+    <PackageReference Include="Microsoft.Extensions.Caching.Abstractions" Version="10.0.4" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="10.0.4" />
+    <PackageReference Update="Microsoft.SourceLink.GitHub" Version="10.0.200" />
+  </ItemGroup>
+
+</Project>

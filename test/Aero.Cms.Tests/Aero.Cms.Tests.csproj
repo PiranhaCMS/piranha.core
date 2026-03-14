@@ -1,0 +1,77 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <GenerateDocumentationFile>false</GenerateDocumentationFile>
+    <OutputType>Exe</OutputType>
+    <IsPackable>false</IsPackable>
+  </PropertyGroup>
+  <ItemGroup>
+    <None Remove="Assets\HLD Screenshot 01 mech 1080.png" />
+    <None Remove="Assets\HLD_Screenshot_01_mech_1080.png" />
+    <None Remove="Assets\HLD_Screenshot_01_rise_1080.png" />
+    <None Remove="Assets\HLD_Screenshot_01_robot_1080.png" />
+    <None Remove="Assets\HLD_Screenshot_BETA_entrance.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Assets\HLD Screenshot 01 mech 1080.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\HLD_Screenshot_01_mech_1080.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\HLD_Screenshot_01_rise_1080.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\HLD_Screenshot_01_robot_1080.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\HLD_Screenshot_BETA_entrance.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Bogus" Version="35.6.5" />
+    <PackageReference Include="Bogus.Healthcare" Version="35.6.5" />
+    <PackageReference Include="Bogus.Hollywood" Version="35.6.5" />
+    <PackageReference Include="Bogus.Locations" Version="35.6.5" />
+    <PackageReference Include="Bogus.Text" Version="35.6.5" />
+    <PackageReference Include="Bogus.Tools.Analyzer" Version="35.6.5">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="18.3.0" />
+    <PackageReference Include="NSubstitute" Version="5.3.0" />
+    <PackageReference Include="NSubstitute.Analyzers.CSharp" Version="1.0.17">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Shouldly" Version="4.3.0" />
+    <PackageReference Include="xunit" Version="2.9.3" />
+    <PackageReference Include="xunit.runner.visualstudio" Version="3.1.5">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+    <PackageReference Include="coverlet.collector" Version="8.0.0">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+    <PackageReference Include="coverlet.msbuild" Version="8.0.0">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+    <ProjectReference Include="..\..\src\Aero.Cms\Aero.Cms.csproj" />
+    <ProjectReference Include="..\..\src\Aero.Cms.AttributeBuilder\Aero.Cms.AttributeBuilder.csproj" />
+    <ProjectReference Include="..\..\src\Aero.Cms.ImageSharp\Aero.Cms.ImageSharp.csproj" />
+    <ProjectReference Include="..\..\src\Aero.Cms.Local.FileStorage\Aero.Cms.Local.FileStorage.csproj" />
+    <ProjectReference Include="..\..\src\MvcWeb\MvcWeb.csproj" />
+    <ProjectReference Include="..\..\src\Aero.Cms.Data\Aero.Cms.Data.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="Assets\**">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+</Project>

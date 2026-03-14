@@ -1,0 +1,12 @@
+namespace Aero.Cms.Tests;
+
+public interface IMyService
+{
+    string Value { get; }
+}
+
+
+public class MyService : IMyService
+{
+    public string Value => "My service value";
+}
