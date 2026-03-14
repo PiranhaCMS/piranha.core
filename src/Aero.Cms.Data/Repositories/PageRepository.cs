@@ -115,7 +115,8 @@ internal class PageRepository : IPageRepository
     public async Task<T> GetStartpage<T>(string siteId) where T : Models.PageBase
     {
         var page = await GetQuery<T>()
-            .FirstOrDefaultAsync(p => p.SiteId == siteId && p.ParentId == null && p.SortOrder == 0)
+
+            .FirstOrDefaultAsync(p => p.SiteId == siteId && (p.ParentId == null || p.ParentId == "") && p.SortOrder == 0)
             .ConfigureAwait(false);
 
         if (page != null)
@@ -246,7 +247,7 @@ internal class PageRepository : IPageRepository
     {
         var page = await GetQuery<T>()
             
-            .FirstOrDefaultAsync(p => p.SiteId == siteId && p.Slug == slug)
+            .FirstOrDefaultAsync(p => p.SiteId == siteId && p.Slug.ToLower() == slug.ToLower())
             .ConfigureAwait(false);
 
         if (page != null)
@@ -452,7 +453,7 @@ internal class PageRepository : IPageRepository
                     // Fix: session.Delete() only accepts a single entity or ID — iterate to delete each
                     foreach (var rev in removed)
                     {
-                        _db.session.Delete(rev.Id);
+                        _db.session.Delete<PageRevision>(rev.Id);
                     }
                     if (removed.Count > 0)
                     {
@@ -499,11 +500,11 @@ internal class PageRepository : IPageRepository
                 .ConfigureAwait(false);
             foreach (var rev in revisions)
             {
-                _db.session.Delete(rev.Id);
+                _db.session.Delete<PageRevision>(rev.Id);
             }
 
             // Remove the main page — embedded blocks/fields/permissions are deleted with it
-            _db.session.Delete(model.Id);
+            _db.session.Delete<Page>(model.Id);
 
             var siblings = await _db.Pages
                 .Where(p => p.SiteId == model.SiteId && p.ParentId == model.ParentId)
@@ -545,7 +546,7 @@ internal class PageRepository : IPageRepository
 
             foreach (var draftId in draftRevisionIds)
             {
-                _db.session.Delete(draftId);
+                _db.session.Delete<PageRevision>(draftId);
             }
             if (draftRevisionIds.Count > 0)
             {
@@ -950,7 +951,7 @@ internal class PageRepository : IPageRepository
                     {
                         block = new Block
                         {
-                            Id = blocks[n].Id != string.Empty ? blocks[n].Id : Snowflake.NewId(),
+                            Id = !string.IsNullOrEmpty(blocks[n].Id) ? blocks[n].Id : Snowflake.NewId(),
                             Created = DateTime.Now
                         };
                         if (!isDraft)

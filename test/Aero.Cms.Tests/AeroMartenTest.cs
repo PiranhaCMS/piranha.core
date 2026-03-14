@@ -22,7 +22,16 @@ public abstract class AeroMartenTest(MartenFixture fixture) : IAsyncLifetime
     /// </summary>
     public virtual async Task InitializeAsync()
     {
-        session = store.LightweightSession();
+        // Reset application state
+        Aero.Cms.App.Reset();
+
+        // Clean the database documents before each test method
+        await store.Advanced.Clean.DeleteAllDocumentsAsync();
+
+        // Reset initialization flag so seeding runs for the next test
+        Aero.Cms.Data.AeroDbBase.IsInitialized = false;
+        
+        session = store.DirtyTrackedSession();
         await Task.CompletedTask;
     }
 

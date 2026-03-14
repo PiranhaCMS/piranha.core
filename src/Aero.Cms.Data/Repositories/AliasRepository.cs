@@ -31,19 +31,18 @@ internal class AliasRepository : IAliasRepository
             .Where(a => a.SiteId == siteId)
             .OrderBy(a => a.AliasUrl)
             .ThenBy(a => a.RedirectUrl)
-            .Select(a => new Alias
-            {
-                Id = a.Id,
-                SiteId = a.SiteId,
-                AliasUrl = a.AliasUrl,
-                RedirectUrl = a.RedirectUrl,
-                Type = a.Type,
-                Created = a.Created,
-                LastModified = a.LastModified
-            })
             .ToListAsync();
 
-        return aliases;
+        return aliases.Select(a => new Alias
+        {
+            Id = a.Id,
+            SiteId = a.SiteId,
+            AliasUrl = a.AliasUrl,
+            RedirectUrl = a.RedirectUrl,
+            Type = a.Type,
+            Created = a.Created,
+            LastModified = a.LastModified
+        });
     }
 
     /// <summary>
@@ -51,23 +50,21 @@ internal class AliasRepository : IAliasRepository
     /// </summary>
     /// <param name="id">The unique id</param>
     /// <returns>The model, or NULL if it doesn't exist</returns>
-    public Task<Alias> GetById(string id)
+    public async Task<Alias> GetById(string id)
     {
-        var alias = _db.Aliases
-            .Where(a => a.Id == id)
-            .Select(a => new Alias
-            {
-                Id = a.Id,
-                SiteId = a.SiteId,
-                AliasUrl = a.AliasUrl,
-                RedirectUrl = a.RedirectUrl,
-                Type = a.Type,
-                Created = a.Created,
-                LastModified = a.LastModified
-            })
-            .FirstOrDefaultAsync();
+        var a = await _db.Aliases
+            .FirstOrDefaultAsync(a => a.Id == id);
 
-        return alias;
+        return a != null ? new Alias
+        {
+            Id = a.Id,
+            SiteId = a.SiteId,
+            AliasUrl = a.AliasUrl,
+            RedirectUrl = a.RedirectUrl,
+            Type = a.Type,
+            Created = a.Created,
+            LastModified = a.LastModified
+        } : null;
     }
 
     /// <summary>
@@ -78,22 +75,19 @@ internal class AliasRepository : IAliasRepository
     /// <returns>The model</returns>
     public async Task<Alias> GetByAliasUrl(string url, string siteId)
     {
-        var test = await _db.Aliases.ToListAsync();
-        var aliases = await _db.Aliases
-            .Where(a => a.SiteId == siteId && a.AliasUrl.Equals(url, StringComparison.OrdinalIgnoreCase))
-            .Select(a => new Alias
-            {
-                Id = a.Id,
-                SiteId = a.SiteId,
-                AliasUrl = a.AliasUrl,
-                RedirectUrl = a.RedirectUrl,
-                Type = a.Type,
-                Created = a.Created,
-                LastModified = a.LastModified
-            })
-            .FirstOrDefaultAsync();
+        var a = await _db.Aliases
+            .FirstOrDefaultAsync(a => a.SiteId == siteId && a.AliasUrl.ToLower() == url.ToLower());
         
-        return aliases;
+        return a != null ? new Alias
+        {
+            Id = a.Id,
+            SiteId = a.SiteId,
+            AliasUrl = a.AliasUrl,
+            RedirectUrl = a.RedirectUrl,
+            Type = a.Type,
+            Created = a.Created,
+            LastModified = a.LastModified
+        } : null;
     }
 
     /// <summary>
@@ -104,19 +98,20 @@ internal class AliasRepository : IAliasRepository
     /// <returns>The model</returns>
     public async Task<IEnumerable<Alias>> GetByRedirectUrl(string url, string siteId)
     {
-        return await _db.Aliases
-            .Where(a => a.SiteId == siteId && a.RedirectUrl == url)
-            .Select(a => new Alias
-            {
-                Id = a.Id,
-                SiteId = a.SiteId,
-                AliasUrl = a.AliasUrl,
-                RedirectUrl = a.RedirectUrl,
-                Type = a.Type,
-                Created = a.Created,
-                LastModified = a.LastModified
-            })
+        var aliases = await _db.Aliases
+            .Where(a => a.SiteId == siteId && a.RedirectUrl.ToLower() == url.ToLower())
             .ToListAsync();
+
+        return aliases.Select(a => new Alias
+        {
+            Id = a.Id,
+            SiteId = a.SiteId,
+            AliasUrl = a.AliasUrl,
+            RedirectUrl = a.RedirectUrl,
+            Type = a.Type,
+            Created = a.Created,
+            LastModified = a.LastModified
+        });
     }
 
     /// <summary>

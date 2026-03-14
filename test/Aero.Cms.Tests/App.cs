@@ -68,7 +68,7 @@ public class App(MartenFixture fixture) : AsyncTestBase(fixture)
         Assert.True(Aero.Cms.App.PropertyBindings.HasFlag(System.Reflection.BindingFlags.Instance));
     }
 
-    private IApi CreateApi()
+    protected override IApi CreateApi()
     {
         var factory = new ContentFactory(services);
         var serviceFactory = new ContentServiceFactory(factory);

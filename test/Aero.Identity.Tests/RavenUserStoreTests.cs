@@ -503,7 +503,7 @@ public class RavenUserStoreTests : AeroDbTestDriver
         await userStore.AddToRoleAsync(user, "Admin", CancellationToken.None);
 
         // Assert
-        Assert.Contains("Admin", user.Roles);
+        Assert.Contains("ADMIN", user.Roles);
     }
 
     [Fact]
@@ -513,7 +513,7 @@ public class RavenUserStoreTests : AeroDbTestDriver
 
         using var session = store.LightweightSession();
         var userStore = new RavenUserStore<AeroUser>(session);
-        var user = new AeroUser { UserName = "test", Roles = new List<string> { "Admin" } };
+        var user = new AeroUser { UserName = "test", Roles = new List<string> { "ADMIN" } };
         session.Store(user);
         await session.SaveChangesAsync();
 
@@ -521,7 +521,7 @@ public class RavenUserStoreTests : AeroDbTestDriver
         await userStore.RemoveFromRoleAsync(user, "Admin", CancellationToken.None);
 
         // Assert
-        Assert.DoesNotContain("Admin", user.Roles);
+        Assert.DoesNotContain("ADMIN", user.Roles);
     }
 
     [Fact]
@@ -531,7 +531,7 @@ public class RavenUserStoreTests : AeroDbTestDriver
 
         using var session = store.LightweightSession();
         var userStore = new RavenUserStore<AeroUser>(session);
-        var roles = new List<string> { "Admin", "User" };
+        var roles = new List<string> { "ADMIN", "USER" };
         var user = new AeroUser { UserName = "test", Roles = roles };
 
         // Act
@@ -548,7 +548,7 @@ public class RavenUserStoreTests : AeroDbTestDriver
 
         using var session = store.LightweightSession();
         var userStore = new RavenUserStore<AeroUser>(session);
-        var user = new AeroUser { UserName = "test", Roles = new List<string> { "Admin" } };
+        var user = new AeroUser { UserName = "test", Roles = new List<string> { "ADMIN" } };
 
         // Act
         var result = await userStore.IsInRoleAsync(user, "Admin", CancellationToken.None);
@@ -563,8 +563,8 @@ public class RavenUserStoreTests : AeroDbTestDriver
         // Arrange
 
         using var session = store.LightweightSession();
-        var user1 = new AeroUser { UserName = "user1", Roles = new List<string> { "Admin" } };
-        var user2 = new AeroUser { UserName = "user2", Roles = new List<string> { "User" } };
+        var user1 = new AeroUser { UserName = "user1", Roles = new List<string> { "ADMIN" } };
+        var user2 = new AeroUser { UserName = "user2", Roles = new List<string> { "USER" } };
         session.Store(user1);
         session.Store(user2);
         await session.SaveChangesAsync();

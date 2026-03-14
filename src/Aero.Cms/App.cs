@@ -303,6 +303,27 @@ public sealed class App
     }
 
     /// <summary>
+    /// Resets the application state. Only for testing purposes.
+    /// </summary>
+    public static void Reset()
+    {
+        lock (_mutex)
+        {
+            _isInitialized = false;
+            
+            // Clear content types
+            Instance._contentGroups.Clear();
+            Instance._contentTypes.Clear();
+            Instance._pageTypes.Clear();
+            Instance._postTypes.Clear();
+            Instance._siteTypes.Clear();
+
+            // Clear hooks
+            Instance._hooks.ClearAll();
+        }
+    }
+
+    /// <summary>
     /// Serializes the given object.
     /// </summary>
     /// <param name="obj">The object to serialize</param>

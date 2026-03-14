@@ -930,7 +930,7 @@ public class Fields(MartenFixture fixture) : AsyncTestBase(fixture)
         Assert.Equal(value, value2);
     }
 
-    private IApi CreateApi()
+    protected override IApi CreateApi()
     {
         var factory = new ContentFactory(services);
         var serviceFactory = new ContentServiceFactory(factory);

@@ -19,17 +19,28 @@ public abstract class AsyncTestBase(MartenFixture fixture) : AeroMartenTest(fixt
     protected IStorage storage = new FileStorage("uploads/", "~/uploads/");
     protected IImageProcessor processor = new ImageSharpProcessor();
     protected IServiceProvider services;
-    protected Cache.ICache cache;
+    protected Cache.ICache cache
+    {
+        get => _cache;
+        set
+        {
+            _cache = value;
+            api = CreateApi();
+        }
+    }
+    private Cache.ICache _cache;
     protected IApi api;
-    protected IDocumentSession session;
 
     public override async Task InitializeAsync()
     {
-        session = store.LightweightSession();
+        await base.InitializeAsync();
+        
         services = CreateServiceCollection(store).BuildServiceProvider();
 
         api = CreateApi();
         Aero.Cms.App.Init(api);
+
+        Init();
     }
 
 

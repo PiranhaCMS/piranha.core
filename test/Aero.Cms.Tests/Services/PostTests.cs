@@ -39,8 +39,6 @@ public class PostTests(MartenFixture fixture) : AsyncTestBase(fixture)
     private readonly string POST3ID = Snowflake.NewId();
     private readonly string POSTDIID = Snowflake.NewId();
 
-    IApi api;
-
     public class MyService : IMyService
     {
         public string Value { get; private set; } = "My service value";
@@ -89,12 +87,6 @@ public class PostTests(MartenFixture fixture) : AsyncTestBase(fixture)
     public override async Task InitializeAsync()
     {
         await base.InitializeAsync();
-        //Func<IServiceCollection, IServiceCollection> registration = sc => sc.AddSingleton<IMyService, MyService>(); 
-
-        services = CreateServiceCollection(store)
-            .BuildServiceProvider();
-
-        Aero.Cms.App.Init(api);
 
         Aero.Cms.App.Fields.Register<MyFourthField>();
 
@@ -194,8 +186,6 @@ public class PostTests(MartenFixture fixture) : AsyncTestBase(fixture)
         await api.Posts.SaveAsync(post6);
 
         var posts = await api.Posts.GetAllDynamicAsync(BLOGID);
-        var posts2 = await api.Posts.GetAllAsync<Models.PostBase>(BLOGID);
-        var posts3 = await api.Posts.GetAllBySiteIdAsync(SITEID);
         
         // DEBUG: Output saved data details
         Console.WriteLine($"[DEBUG] AddSampleData - SiteId: {SITEID}");
@@ -300,11 +290,6 @@ public class PostTests(MartenFixture fixture) : AsyncTestBase(fixture)
     [Fact]
     public async Task GetAllBaseClass()
     {
-        //
-        var site = await api.Sites.GetByIdAsync(SITEID);
-        if (site is null)
-            await AddSampleData();
-
         var posts = await api.Posts.GetAllBySiteIdAsync<Models.PostBase>(SITEID);
 
         Assert.NotNull(posts);

@@ -65,7 +65,7 @@ public abstract class AeroDbBase : IDb
     /// Gets/sets whether the db context has been initialized. This
     /// is only performed once in the application lifecycle.
     /// </summary>
-    private bool IsInitialized = false;
+    internal static bool IsInitialized = false;
 
     /// <summary>
     /// The object mutex used for initializing the context.

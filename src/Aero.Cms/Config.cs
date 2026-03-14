@@ -239,7 +239,14 @@ public sealed class Config : IDisposable
     {
         var param = _service.GetByKeyAsync(key).GetAwaiter().GetResult();
         if (param != null)
+        {
+            if (typeof(T) == typeof(bool))
+            {
+                if (param.Value == "1" || param.Value?.Equals("True", StringComparison.OrdinalIgnoreCase) == true) return (T)(object)true;
+                if (param.Value == "0" || param.Value?.Equals("False", StringComparison.OrdinalIgnoreCase) == true) return (T)(object)false;
+            }
             return (T)Convert.ChangeType(param.Value, typeof(T));
+        }
         return defaultValue;
     }
 

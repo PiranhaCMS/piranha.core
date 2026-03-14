@@ -236,6 +236,21 @@ public sealed class HookManager
     }
 
     /// <summary>
+    /// Removes all registered hooks for all model types.
+    /// </summary>
+    internal void ClearAll()
+    {
+        _onLoad.Clear();
+        _onBeforeSave.Clear();
+        _onValidate.Clear();
+        _onAfterSave.Clear();
+        _onBeforeDelete.Clear();
+        _onAfterDelete.Clear();
+        OnGenerateSlug = null;
+        OnGenerateSitemap = null;
+    }
+
+    /// <summary>
     /// Registers a new hook to be executed after the model
     /// has been loaded but BEFORE it has been added into
     /// the cache.

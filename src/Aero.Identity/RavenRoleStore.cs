@@ -46,7 +46,7 @@ public class RavenRoleStore<TRole> :
         cancellationToken.ThrowIfCancellationRequested();
         if (role == null) throw new ArgumentNullException(nameof(role));
 
-        _session.Delete(role.Id);
+        _session.Delete<TRole>(role.Id);
         await _session.SaveChangesAsync(cancellationToken);
         return IdentityResult.Success;
     }

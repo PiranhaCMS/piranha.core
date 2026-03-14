@@ -1,5 +1,6 @@
 using Aero.Identity.Models;
 using Marten;
+using Marten.Linq;
 using Microsoft.AspNetCore.Identity;
 
 
@@ -74,7 +75,7 @@ public class RavenUserStore<TUser, TRole> :
         cancellationToken.ThrowIfCancellationRequested();
         if (user == null) throw new ArgumentNullException(nameof(user));
 
-        _session.Delete(user.Id);
+        _session.Delete<TUser>(user.Id);
         await _session.SaveChangesAsync(cancellationToken);
         return IdentityResult.Success;
     }
@@ -285,11 +286,10 @@ public class RavenUserStore<TUser, TRole> :
 
         if (!user.Roles.Any(r => string.Equals(r, roleName, StringComparison.OrdinalIgnoreCase)))
         {
-            user.Roles.Add(roleName);
+            var normalizedRoleName = roleName.ToUpperInvariant();
+            user.Roles.Add(normalizedRoleName);
 
             // Denormalized: copy role claims to user claims
-            var normalizedRoleName = roleName.ToUpperInvariant();
-
             var role = await _session.Query<TRole>()
                 
                 .FirstOrDefaultAsync(r => r.NormalizedName == normalizedRoleName, cancellationToken);
@@ -322,7 +322,8 @@ public class RavenUserStore<TUser, TRole> :
         if (user == null) throw new ArgumentNullException(nameof(user));
         if (string.IsNullOrWhiteSpace(roleName)) throw new ArgumentNullException(nameof(roleName));
 
-        var existing = user.Roles.FirstOrDefault(r => string.Equals(r, roleName, StringComparison.OrdinalIgnoreCase));
+        var normalizedRoleName = roleName.ToUpperInvariant();
+        var existing = user.Roles.FirstOrDefault(r => string.Equals(r, normalizedRoleName, StringComparison.OrdinalIgnoreCase));
         if (existing != null)
         {
             user.Roles.Remove(existing);
@@ -347,7 +348,8 @@ public class RavenUserStore<TUser, TRole> :
         if (user == null) throw new ArgumentNullException(nameof(user));
         if (string.IsNullOrWhiteSpace(roleName)) throw new ArgumentNullException(nameof(roleName));
 
-        return Task.FromResult(user.Roles.Any(r => string.Equals(r, roleName, StringComparison.OrdinalIgnoreCase)));
+        var normalizedRoleName = roleName.ToUpperInvariant();
+        return Task.FromResult(user.Roles.Any(r => string.Equals(r, normalizedRoleName, StringComparison.OrdinalIgnoreCase)));
     }
 
     /// <inheritdoc />
@@ -356,8 +358,9 @@ public class RavenUserStore<TUser, TRole> :
         cancellationToken.ThrowIfCancellationRequested();
         if (string.IsNullOrWhiteSpace(roleName)) throw new ArgumentNullException(nameof(roleName));
 
+        var normalizedRoleName = roleName.ToUpperInvariant();
         var users = await _session.Query<TUser>()
-            .Where(u => u.Roles.Any(r => r == roleName))
+            .Where(u => u.Roles.Any(r => r == normalizedRoleName))
             .ToListAsync(cancellationToken);
 
         return users.ToList();
@@ -673,9 +676,17 @@ public class RavenUserStore<TUser, TRole> :
     public async Task<TUser?> FindByPasskeyIdAsync(byte[] credentialId, CancellationToken cancellationToken)
     {
         cancellationToken.ThrowIfCancellationRequested();
-        return await _session.Query<TUser>()
-            .Where(u => u.Passkeys.Any(p => p.CredentialId == credentialId))
-            .FirstOrDefaultAsync(cancellationToken);
+        
+        // Use a raw SQL check for JSONB array containment as LINQ translation for byte[] in collections is tricky
+        var base64Id = Convert.ToBase64String(credentialId);
+        var jsonPattern = $"[{{\"CredentialId\": \"{base64Id}\"}}]";
+        
+        var results = await _session.QueryAsync<TUser>(
+            "where data -> 'Passkeys' @> ?::jsonb", 
+            cancellationToken,
+            jsonPattern);
+            
+        return results.FirstOrDefault();
     }
 
     /// <inheritdoc />

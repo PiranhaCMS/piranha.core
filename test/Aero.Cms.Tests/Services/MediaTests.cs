@@ -52,7 +52,7 @@ public class MediaTests(MartenFixture fixture) : AsyncTestBase(fixture)
         folder1Id = folder1.Id;
 
         // Add media
-        using (var stream = File.OpenRead("Assets/HLDScreenshot01mech1080.png"))
+        using (var stream = File.OpenRead("Assets/HLD_Screenshot_01_mech_1080.png"))
         {
             var image1 = new Models.StreamMediaContent
             {
@@ -73,7 +73,7 @@ public class MediaTests(MartenFixture fixture) : AsyncTestBase(fixture)
             await api.Media.SaveAsync(image);
         }
 
-        using (var stream = File.OpenRead("Assets/HLDScreenshot01rise1080.png"))
+        using (var stream = File.OpenRead("Assets/HLD_Screenshot_01_rise_1080.png"))
         {
             var image2 = new Models.StreamMediaContent
             {
@@ -86,7 +86,7 @@ public class MediaTests(MartenFixture fixture) : AsyncTestBase(fixture)
             image2Id = image2.Id;
         }
 
-        using (var stream = File.OpenRead("Assets/HLDScreenshot01robot1080.png"))
+        using (var stream = File.OpenRead("Assets/HLD_Screenshot_01_robot_1080.png"))
         {
             var image3 = new Models.StreamMediaContent
             {
@@ -182,7 +182,7 @@ public class MediaTests(MartenFixture fixture) : AsyncTestBase(fixture)
         var media = await api.Media.GetByIdAsync(image5Id);
 
         Assert.NotNull(media);
-        Assert.Equal("HLDScreenshot01mech1080.png", media.Filename);
+        Assert.Equal("HLD_Screenshot_01_mech_1080.png", media.Filename);
     }
 
     [Fact]
@@ -244,7 +244,7 @@ public class MediaTests(MartenFixture fixture) : AsyncTestBase(fixture)
     public async Task Insert()
     {
         
-        using var stream = File.OpenRead("Assets/HLDScreenshotBETAentrance.png");
+        using var stream = File.OpenRead("Assets/HLD_Screenshot_BETA_entrance.png");
         var image = new Models.StreamMediaContent
         {
             Filename = "HLDScreenshotBETAentrance.png",

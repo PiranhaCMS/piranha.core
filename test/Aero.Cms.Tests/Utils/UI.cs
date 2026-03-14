@@ -63,7 +63,7 @@ public class UI(MartenFixture fixture) : AsyncTestBase(fixture)
         Assert.Equal("", Aero.Cms.Utils.FirstParagraph(field));
     }
 
-    private IApi CreateApi()
+    protected override IApi CreateApi()
     {
         var factory = new ContentFactory(services);
         var serviceFactory = new ContentServiceFactory(factory);

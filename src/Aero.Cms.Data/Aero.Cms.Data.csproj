@@ -7,7 +7,10 @@
 
   <ItemGroup>
     <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleToAttribute">
-    <_Parameter1>Aero.Cms.Tests</_Parameter1>
+      <_Parameter1>Aero.Cms.Tests</_Parameter1>
+    </AssemblyAttribute>
+    <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleToAttribute">
+      <_Parameter1>Aero.Cms.Manager.IntegrationTests</_Parameter1>
     </AssemblyAttribute>
   </ItemGroup>
 

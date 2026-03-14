@@ -51,10 +51,11 @@ internal class PostRepository : IPostRepository
         }
 
         // Execute query
-        return await query
-            .Select(p => p.Id)
+        var posts = await query
             .ToListAsync()
             .ConfigureAwait(false);
+
+        return posts.Select(p => p.Id);
     }
 
     /// <summary>
@@ -64,25 +65,15 @@ internal class PostRepository : IPostRepository
     /// <returns>The posts</returns>
     public async Task<IEnumerable<string>> GetAllBySiteId(string siteId)
     {
-        //return await _db.Posts
-        //    .Where(p => p.Blog.SiteId == siteId)
-        //    .OrderByDescending(p => p.Published)
-        //    .ThenByDescending(p => p.LastModified)
-        //    .ThenBy(p => p.Title)
-        //    .Select(p => p.Id)
-        //    .ToListAsync()
-        //    .ConfigureAwait(false);
-
         var posts = await _db.Posts
             .Where(p => p.SiteId == siteId)
             .OrderByDescending(p => p.Published)
             .ThenByDescending(p => p.LastModified)
             .ThenBy(p => p.Title)
-            .Select(p => p.Id)
             .ToListAsync()
             .ConfigureAwait(false);
 
-        return posts;
+        return posts.Select(p => p.Id);
     }
 
     /// <summary>
@@ -92,17 +83,18 @@ internal class PostRepository : IPostRepository
     /// <returns>The available categories</returns>
     public async Task<IEnumerable<Models.Taxonomy>> GetAllCategories(string blogId)
     {
-        return await _db.Categories
+        var categories = await _db.Categories
             .Where(c => c.BlogId == blogId)
             .OrderBy(c => c.Title)
-            .Select(c => new Models.Taxonomy
-            {
-                Id = c.Id,
-                Title = c.Title,
-                Slug = c.Slug
-            })
             .ToListAsync()
             .ConfigureAwait(false);
+
+        return categories.Select(c => new Models.Taxonomy
+        {
+            Id = c.Id,
+            Title = c.Title,
+            Slug = c.Slug
+        });
     }
 
     /// <summary>
@@ -115,16 +107,15 @@ internal class PostRepository : IPostRepository
         var tags = await _db.Tags
             .Where(c => c.BlogId == blogId)
             .OrderBy(c => c.Title)
-            .Select(c => new Models.Taxonomy
-            {
-                Id = c.Id,
-                Title = c.Title,
-                Slug = c.Slug
-            })
             .ToListAsync()
             .ConfigureAwait(false);
 
-        return tags;
+        return tags.Select(c => new Models.Taxonomy
+        {
+            Id = c.Id,
+            Title = c.Title,
+            Slug = c.Slug
+        });
     }
 
     /// <summary>
@@ -223,7 +214,7 @@ internal class PostRepository : IPostRepository
         var query = GetQuery<T>();
         var post = await query
             
-            .FirstOrDefaultAsync(p => p.BlogId == blogId && p.Slug == slug)
+            .FirstOrDefaultAsync(p => p.BlogId == blogId && p.Slug.ToLower() == slug.ToLower())
             .ConfigureAwait(false);
         
         Console.WriteLine($"[DEBUG] GetBySlug: post found = {post != null}");
@@ -379,20 +370,21 @@ internal class PostRepository : IPostRepository
     /// <returns>The model</returns>
     public async Task<Models.Comment> GetCommentById(string id)
     {
-        return await _db.PostComments
-            .Where(c => c.Id == id)
-            .Select(c => new Models.PostComment
-            {
-                Id = c.Id,
-                ContentId = c.PostId,
-                UserId = c.UserId,
-                Author = c.Author,
-                Email = c.Email,
-                Url = c.Url,
-                IsApproved = c.IsApproved,
-                Body = c.Body,
-                Created = c.Created.DateTime
-            }).FirstOrDefaultAsync();
+        var comment = await _db.PostComments
+            .FirstOrDefaultAsync(c => c.Id == id);
+
+        return comment != null ? new Models.PostComment
+        {
+            Id = comment.Id,
+            ContentId = comment.PostId,
+            UserId = comment.UserId,
+            Author = comment.Author,
+            Email = comment.Email,
+            Url = comment.Url,
+            IsApproved = comment.IsApproved,
+            Body = comment.Body,
+            Created = comment.Created.DateTime
+        } : null;
     }
 
     /// <summary>
@@ -492,7 +484,7 @@ internal class PostRepository : IPostRepository
                     // Fix: session.Delete() only accepts a single entity or ID — iterate to delete each
                     foreach (var rev in removed)
                     {
-                        _db.session.Delete(rev.Id);
+                        _db.session.Delete<PostRevision>(rev.Id);
                     }
                     if (removed.Count > 0)
                     {
@@ -548,24 +540,17 @@ internal class PostRepository : IPostRepository
 
         if (post != null)
         {
-            // Use PostRevisions_ByBlog index to find drafts — avoids field-to-field date comparison
+            // Use query to find drafts — avoids field-to-field date comparison
             var draftRevisionIds = await _db.session.Query<PostRevision>()
-                .Where(x => x.BlogId == "blogs/1")
+                .Where(x => x.PostId == id)
                 // No need for a pre-computed index field!
                 .Where(x => x.Created > x.PostLastModified)
-                .Select(r => new {
-                    r.BlogId,
-                    r.PostId,
-                    r.Id,
-                    r.Created,
-                    r.PostLastModified,
-                    IsDraft = r.Created > r.PostLastModified
-                })
+                .Select(r => r.Id)
                 .ToListAsync();
 
             foreach (var draftId in draftRevisionIds)
             {
-                _db.session.Delete(draftId);
+                _db.session.Delete<PostRevision>(draftId);
             }
             if (draftRevisionIds.Count > 0)
             {
@@ -638,19 +623,22 @@ internal class PostRepository : IPostRepository
         }
 
         // Get the comments
-        return await query
-            .Select(c => new Models.PostComment
-            {
-                Id = c.Id,
-                ContentId = c.PostId,
-                UserId = c.UserId,
-                Author = c.Author,
-                Email = c.Email,
-                Url = c.Url,
-                IsApproved = c.IsApproved,
-                Body = c.Body,
-                Created = c.Created.DateTime
-            }).ToListAsync();
+        var comments = await query
+            .ToListAsync()
+            .ConfigureAwait(false);
+
+        return comments.Select(c => new Models.PostComment
+        {
+            Id = c.Id,
+            ContentId = c.PostId,
+            UserId = c.UserId,
+            Author = c.Author,
+            Email = c.Email,
+            Url = c.Url,
+            IsApproved = c.IsApproved,
+            Body = c.Body,
+            Created = c.Created.DateTime
+        });
     }
 
     /// <summary>
@@ -928,7 +916,7 @@ internal class PostRepository : IPostRepository
                     {
                         // Only individually-stored reusable block fields should be deleted
                         foreach (var removedField in removedFields)
-                            _db.session.Delete(removedField.Id);
+                            _db.session.Delete<BlockField>(removedField.Id);
                     }
 
                     foreach (var newField in blocks[n].Fields)

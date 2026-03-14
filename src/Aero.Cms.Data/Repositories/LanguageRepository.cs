@@ -27,17 +27,18 @@ internal class LanguageRepository : ILanguageRepository
     /// <returns>The available models</returns>
     public async Task<IEnumerable<Language>> GetAll()
     {
-        return await _db.Languages
+        var languages = await _db.Languages
             .OrderBy(l => l.Title)
-            .Select(l => new Language
-            {
-                Id = l.Id,
-                Culture = l.Culture,
-                IsDefault = l.IsDefault,
-                Title = l.Title
-            })
             .ToListAsync()
             .ConfigureAwait(false);
+
+        return languages.Select(l => new Language
+        {
+            Id = l.Id,
+            Culture = l.Culture,
+            IsDefault = l.IsDefault,
+            Title = l.Title
+        });
     }
 
     /// <summary>
@@ -47,17 +48,17 @@ internal class LanguageRepository : ILanguageRepository
     /// <returns>The model, or null if it doesn't exist</returns>
     public async Task<Language> GetById(string id)
     {
-        return await _db.Languages
-            .Where(l => l.Id == id)
-            .Select(l => new Language
-            {
-                Id = l.Id,
-                Culture = l.Culture,
-                IsDefault = l.IsDefault,
-                Title = l.Title
-            })
-            .FirstOrDefaultAsync()
+        var l = await _db.Languages
+            .FirstOrDefaultAsync(l => l.Id == id)
             .ConfigureAwait(false);
+
+        return l != null ? new Language
+        {
+            Id = l.Id,
+            Culture = l.Culture,
+            IsDefault = l.IsDefault,
+            Title = l.Title
+        } : null;
     }
 
     /// <summary>
@@ -66,17 +67,17 @@ internal class LanguageRepository : ILanguageRepository
     /// <returns>The model</returns>
     public async Task<Language> GetDefault()
     {
-        return await _db.Languages
-            .Where(l => l.IsDefault)
-            .Select(l => new Language
-            {
-                Id = l.Id,
-                Culture = l.Culture,
-                IsDefault = l.IsDefault,
-                Title = l.Title
-            })
-            .FirstOrDefaultAsync()
+        var l = await _db.Languages
+            .FirstOrDefaultAsync(l => l.IsDefault)
             .ConfigureAwait(false);
+
+        return l != null ? new Language
+        {
+            Id = l.Id,
+            Culture = l.Culture,
+            IsDefault = l.IsDefault,
+            Title = l.Title
+        } : null;
     }
 
     /// <summary>

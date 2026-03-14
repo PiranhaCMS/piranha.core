@@ -26,19 +26,19 @@ internal class ParamRepository : IParamRepository
     /// <returns>The available models</returns>
     public async Task<IEnumerable<Param>> GetAll()
     {
-        return await _db.Params
-            
+        var params_ = await _db.Params
             .OrderBy(p => p.Key)
-            .Select(p => new Param
-            {
-                Id = p.Id,
-                Key = p.Key,
-                Description = p.Description,
-                Value = p.Value,
-                Created = p.Created,
-                LastModified = p.LastModified
-            })
             .ToListAsync();
+
+        return params_.Select(p => new Param
+        {
+            Id = p.Id,
+            Key = p.Key,
+            Description = p.Description,
+            Value = p.Value,
+            Created = p.Created,
+            LastModified = p.LastModified
+        });
     }
 
     /// <summary>
@@ -46,20 +46,20 @@ internal class ParamRepository : IParamRepository
     /// </summary>
     /// <param name="id">The unique id</param>
     /// <returns>The model, or NULL if it doesn't exist</returns>
-    public Task<Param> GetById(string id)
+    public async Task<Param> GetById(string id)
     {
-        return _db.Params
-            
-            .Select(p => new Param
-            {
-                Id = p.Id,
-                Key = p.Key,
-                Description = p.Description,
-                Value = p.Value,
-                Created = p.Created,
-                LastModified = p.LastModified
-            })
+        var p = await _db.Params
             .FirstOrDefaultAsync(p => p.Id == id);
+
+        return p != null ? new Param
+        {
+            Id = p.Id,
+            Key = p.Key,
+            Description = p.Description,
+            Value = p.Value,
+            Created = p.Created,
+            LastModified = p.LastModified
+        } : null;
     }
 
     /// <summary>
@@ -67,20 +67,20 @@ internal class ParamRepository : IParamRepository
     /// </summary>
     /// <param name="key">The unique key</param>
     /// <returns>The model</returns>
-    public Task<Param> GetByKey(string key)
+    public async Task<Param> GetByKey(string key)
     {
-        return _db.Params
-            
-            .Select(p => new Param
-            {
-                Id = p.Id,
-                Key = p.Key,
-                Description = p.Description,
-                Value = p.Value,
-                Created = p.Created,
-                LastModified = p.LastModified
-            })
+        var p = await _db.Params
             .FirstOrDefaultAsync(p => p.Key == key);
+
+        return p != null ? new Param
+        {
+            Id = p.Id,
+            Key = p.Key,
+            Description = p.Description,
+            Value = p.Value,
+            Created = p.Created,
+            LastModified = p.LastModified
+        } : null;
     }
 
     /// <summary>

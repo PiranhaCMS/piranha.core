@@ -96,8 +96,25 @@ public class IdentitySecurity : ISecurity
     private async Task SyncRoleClaimsToUserAsync(User user)
     {
         var roleNames = await _userManager.GetRolesAsync(user);
+        bool changed = false;
+
         foreach (var roleName in roleNames)
         {
+            // Add the role name itself as a claim if it starts with "Aero"
+            // This maps permissions (used as role names) to claims
+            if (roleName.StartsWith("Aero", StringComparison.OrdinalIgnoreCase))
+            {
+                if (!user.Claims.Any(c => string.Equals(c.ClaimType, roleName, StringComparison.OrdinalIgnoreCase)))
+                {
+                    user.Claims.Add(new RavenUserClaim
+                    {
+                        ClaimType = roleName,
+                        ClaimValue = roleName
+                    });
+                    changed = true;
+                }
+            }
+
             var role = await _roleManager.FindByNameAsync(roleName);
             if (role == null) continue;
 
@@ -111,11 +128,12 @@ public class IdentitySecurity : ISecurity
                         ClaimType = roleClaim.ClaimType,
                         ClaimValue = roleClaim.ClaimValue
                     });
+                    changed = true;
                 }   
             }
         }
 
-        if (user.Claims.Any(c => !string.IsNullOrEmpty(c.ClaimType)))
+        if (changed)
         {
             await _userManager.UpdateAsync(user);
         }

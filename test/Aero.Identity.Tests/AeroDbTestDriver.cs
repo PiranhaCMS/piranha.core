@@ -21,9 +21,12 @@ public abstract class AeroDbTestDriver : IDisposable
             opts.Connection(connString!);
             opts.AutoCreateSchemaObjects = AutoCreate.All; // Dev mode: create tables if missing
         });
+        
+        // Clean the database before each test run
+        store.Advanced.Clean.DeleteAllDocumentsAsync().GetAwaiter().GetResult();
     }
 
-    protected internal IDocumentStore GetDocumentStore(string database = null)
+    protected internal IDocumentStore GetDocumentStore(string? database = null)
     {
         return this.store;
     }

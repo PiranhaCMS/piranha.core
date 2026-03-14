@@ -37,7 +37,21 @@ public class ManagerTestBase : AeroDbTestDriver, IAsyncLifetime
         using var scope = Host.Services.CreateScope();
         var identityDb = scope.ServiceProvider.GetRequiredService<IIdentityDb>();
         var seed = scope.ServiceProvider.GetService<IIdentitySeed>();
+        var roleManager = scope.ServiceProvider.GetRequiredService<Microsoft.AspNetCore.Identity.RoleManager<Aero.Cms.AspNetCore.Identity.Data.Role>>();
         
+        // Reset initialization flag so seeding runs for the next test
+        Aero.Cms.Data.AeroDbBase.IsInitialized = false;
+
+        // Ensure roles exist
+        if (!await roleManager.RoleExistsAsync("SysAdmin"))
+        {
+            await roleManager.CreateAsync(new Aero.Cms.AspNetCore.Identity.Data.Role { Name = "SysAdmin" });
+        }
+        if (!await roleManager.RoleExistsAsync("AeroAdmin"))
+        {
+            await roleManager.CreateAsync(new Aero.Cms.AspNetCore.Identity.Data.Role { Name = "AeroAdmin" });
+        }
+
         // IIdentitySeed creates the admin user
         if (seed != null)
         {

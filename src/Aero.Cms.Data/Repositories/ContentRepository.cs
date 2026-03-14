@@ -176,14 +176,7 @@ internal class ContentRepository : IContentRepository
         //    .OfType<Content>()
         //    .ToListAsync();
         var contents = await _db.session.Query<Content>()
-            .Join(
-                _db.session.Query<ContentType>(),
-                content => content.TypeId,
-                type => type.Id,
-                (content, type) => new { content, type }
-            )
-            .Where(x => x.type.Group == groupId)
-            .Select(x => x.content) // Select the original Content document
+            .Where(c => c.Type.Group == groupId)
             .ToListAsync();
 
         Console.WriteLine($"[DEBUG] Group search: {groupId}, Contents found: {contents.Count}");
@@ -355,6 +348,7 @@ internal class ContentRepository : IContentRepository
             }
 
             content = _service.Transform<T>(model, type, content, languageId);
+            content.Type = type as Models.ContentType;
 
             // Process fields
             foreach (var field in content.Fields)

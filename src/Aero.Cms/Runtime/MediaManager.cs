@@ -162,24 +162,24 @@ public class MediaManager
         var extension = Path.GetExtension(filename).ToLower();
         MediaTypeItem item = null;
 
-        if ((item = Documents.SingleOrDefault(t => t.Extension == extension)) != null)
+        if ((item = Documents.FirstOrDefault(t => t.Extension == extension)) != null)
         {
             return item.ContentType;
         }
 
-        if ((item = Images.SingleOrDefault(t => t.Extension == extension)) != null)
+        if ((item = Images.FirstOrDefault(t => t.Extension == extension)) != null)
         {
             return item.ContentType;
         }
-        if ((item = Videos.SingleOrDefault(t => t.Extension == extension)) != null)
+        if ((item = Videos.FirstOrDefault(t => t.Extension == extension)) != null)
         {
             return item.ContentType;
         }
-        if ((item = Audio.SingleOrDefault(t => t.Extension == extension)) != null)
+        if ((item = Audio.FirstOrDefault(t => t.Extension == extension)) != null)
         {
             return item.ContentType;
         }
-        if ((item = Resources.SingleOrDefault(t => t.Extension == extension)) != null)
+        if ((item = Resources.FirstOrDefault(t => t.Extension == extension)) != null)
         {
             return item.ContentType;
         }
@@ -197,24 +197,24 @@ public class MediaManager
         var extension = Path.GetExtension(filename).ToLower();
         MediaTypeItem item = null;
 
-        if ((item = Documents.SingleOrDefault(t => t.Extension == extension)) != null)
+        if ((item = Documents.FirstOrDefault(t => t.Extension == extension)) != null)
         {
             return item;
         }
 
-        if ((item = Images.SingleOrDefault(t => t.Extension == extension)) != null)
+        if ((item = Images.FirstOrDefault(t => t.Extension == extension)) != null)
         {
             return item;
         }
-        if ((item = Videos.SingleOrDefault(t => t.Extension == extension)) != null)
+        if ((item = Videos.FirstOrDefault(t => t.Extension == extension)) != null)
         {
             return item;
         }
-        if ((item = Audio.SingleOrDefault(t => t.Extension == extension)) != null)
+        if ((item = Audio.FirstOrDefault(t => t.Extension == extension)) != null)
         {
             return item;
         }
-        if ((item = Resources.SingleOrDefault(t => t.Extension == extension)) != null)
+        if ((item = Resources.FirstOrDefault(t => t.Extension == extension)) != null)
         {
             return item;
         }
