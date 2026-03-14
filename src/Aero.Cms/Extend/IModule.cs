@@ -1,0 +1,44 @@
+﻿
+
+namespace Aero.Cms.Extend;
+
+/// <summary>
+/// A dynamically loaded module in Aero.Cms.
+/// </summary>
+public interface IModule
+{
+    /// <summary>
+    /// Get the author for this module
+    /// </summary>
+    string Author { get; }
+
+    /// <summary>
+    /// Get the name of the module
+    /// </summary>
+    string Name { get; }
+
+    /// <summary>
+    /// Get the module version
+    /// </summary>
+    string Version { get; }
+
+    /// <summary>
+    /// Get the module description
+    /// </summary>
+    string Description { get; }
+
+    /// <summary>
+    /// Get the package url for the module
+    /// </summary>
+    string PackageUrl { get; }
+
+    /// <summary>
+    /// Gets the logo url for the module.
+    /// </summary>
+    string IconUrl { get; }
+
+    /// <summary>
+    /// Initializes the module.
+    /// </summary>
+    void Init();
+}

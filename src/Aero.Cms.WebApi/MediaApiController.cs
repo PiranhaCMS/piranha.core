@@ -1,0 +1,86 @@
+
+
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+
+namespace Aero.Cms.WebApi;
+
+[ApiController]
+[Route("api/media")]
+public class MediaApiController : Controller
+{
+    private readonly IApi _api;
+    private readonly IAuthorizationService _auth;
+
+    /// <summary>
+    /// Default constructor.
+    /// </summary>
+    /// <param name="api">The current api</param>
+    /// <param name="auth">The authorization service</param>
+    public MediaApiController(IApi api, IAuthorizationService auth)
+    {
+        _api = api;
+        _auth = auth;
+    }
+
+    /// <summary>
+    /// Gets the media asset with the specified id.
+    /// </summary>
+    /// <param name="id">The media id</param>
+    /// <returns>The media asset</returns>
+    [HttpGet]
+    [Route("{id}")]
+    public virtual async Task<IActionResult> GetById(string id)
+    {
+        if (!Module.AllowAnonymousAccess)
+        {
+            if (!(await _auth.AuthorizeAsync(User, Permissions.Media)).Succeeded)
+            {
+                return Unauthorized();
+            }
+        }
+
+        return Json(await _api.Media.GetByIdAsync(id));
+    }
+
+    /// <summary>
+    /// Gets all of the media assets located in the folder
+    /// with the specified id. Not providing a folder id will
+    /// return all of the media assets at root level.
+    /// </summary>
+    /// <param name="folderId">The optional folder id</param>
+    /// <returns></returns>
+    [HttpGet]
+    [Route("list/{folderId?}")]
+    public virtual async Task<IActionResult> GetByFolderId(string? folderId = null)
+    {
+        if (!Module.AllowAnonymousAccess)
+        {
+            if (!(await _auth.AuthorizeAsync(User, Permissions.Media)).Succeeded)
+            {
+                return Unauthorized();
+            }
+        }
+
+        return Json(await _api.Media.GetAllByFolderIdAsync(folderId));
+    }
+
+    /// <summary>
+    /// Gets the media folder structure.
+    /// </summary>
+    /// <returns></returns>
+    [HttpGet]
+    [Route("structure")]
+    public virtual async Task<IActionResult> GetStructure()
+    {
+        if (!Module.AllowAnonymousAccess)
+        {
+            if (!(await _auth.AuthorizeAsync(User, Permissions.Media)).Succeeded)
+            {
+                return Unauthorized();
+            }
+        }
+
+        return Json(await _api.Media.GetStructureAsync());
+    }
+}

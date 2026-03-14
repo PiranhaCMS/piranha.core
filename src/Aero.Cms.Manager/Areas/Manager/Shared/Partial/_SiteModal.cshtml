@@ -1,0 +1,153 @@
+@using Aero.Manager
+@inject IAuthorizationService Auth
+@inject ManagerLocalizer Localizer
+
+<div id="siteedit" class="modal modal-panel" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-md" role="document">
+        <div class="modal-content">
+            <!-- Header -->
+            <div class="modal-header border-bottom-0">
+                <h5 class="modal-title"><i class="fas fa-globe"></i> @Localizer.Site["Edit site"]</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+
+            <!-- Tabs -->
+            <ul class="nav nav-tabs" role="tablist">
+                <li v-if="regions.length > 0" class="nav-item">
+                    <a v-on:click.prevent="selectRegion({ uid: 'uid-settings' })" href="#" class="nav-link" :class="{ active: selectedRegion.uid === 'uid-settings' }">@Localizer.General["Settings"]</a>
+                </li>
+                <li v-for="(region) in regions" class="nav-item">
+                    <a v-on:click.prevent="selectRegion(region.meta)" href="#" class="nav-link" :class="{ active: selectedRegion.uid === region.meta.uid }">{{ region.meta.name }}</a>
+                </li>
+            </ul>
+
+            <!-- Body -->
+            <div class="modal-body bg-light">
+                <form id="siteForm" action="post" v-on:submit.prevent="save()" novalidate>
+                    <!-- Settings -->
+                    <div v-if="selectedRegion.uid === 'uid-settings'">
+                        <div class="row">
+                            <div class="col">
+                                <div class="form-group">
+                                    <label>@Localizer.General["Title"]</label>
+                                    <input id="sitetitle" v-model="title" type="text" class="form-control form-control autofocus" placeholder="@Localizer.Site["Your site title"]" required>
+                                    <div class="invalid-feedback">
+                                        @Localizer.General["Title is mandatory."]
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                <div class="form-group">
+                                    <label>@Localizer.General["Internal id"]</label>
+                                    <input v-model="internalId" type="text" class="form-control">
+                                </div>
+                            </div>
+                            <div class="col">
+                                <div class="form-group">
+                                    <label>@Localizer.General["Language"]</label>
+                                    <div class="input-group">
+                                        <select v-model="languageId" class="form-control">
+                                            <option :value="language.id" v-for="language in languages">{{ language.title }}</option>
+                                        </select>
+                                        @if ((await Auth.AuthorizeAsync(User, Permission.Language)).Succeeded)
+                                        {
+                                            <div class="input-group-append">
+                                                <button v-on:click.prevent="Aero.languageedit.open()" type="button" class="btn btn-icon btn-primary rounded ml-3" title="@Localizer.General["Configure languages"]">
+                                                    <i class="fas fa-cog"></i>
+                                                </button>
+                                            </div>
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div v-if="siteTypes.length > 0" class="col">
+                                <div class="form-group">
+                                    <label>@Localizer.General["Content type"]</label>
+                                    <select v-model="typeId" class="form-control">
+                                        <option></option>
+                                        <option :value="siteType.id" v-for="siteType in siteTypes">{{ siteType.title }}</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col">
+                                <div class="form-group">
+                                    <label>@Localizer.Site["Logo"]</label>
+                                    <image-field v-bind:uid="'site_logo_' + id" v-bind:meta="{ placeholder: null }" v-bind:model="logo"></image-field>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                <div class="form-group">
+                                    <label>@Localizer.Site["Hostnames"]</label>
+                                    <input v-model="hostnames" type="text" class="form-control">
+                                </div>
+                            </div>                            
+                        </div>
+                        <div class="row">
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                <div class="form-group">
+                                    <label>@Localizer.General["Description"]</label>
+                                    <textarea v-model="description" class="form-control"></textarea>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                <div class="form-group">
+                                    <label>@Localizer.General["Is default"]</label>
+                                    <div class="form-check">
+                                        <input v-model="isDefault" type="checkbox" class="form-check-input">
+                                        <label class="form-check-label" for="exampleCheck1">@Localizer.Site["If this should be the default site of the installation."]</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Regions -->
+                    <div class="region" v-for="(region) in regions" v-if="selectedRegion.uid === region.meta.uid">
+                        <region v-bind:content="'site'" v-bind:type="typeId" v-bind:model="region"></region>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Footer -->
+            <div class="modal-footer">
+                <button v-if="Aero.permissions.sites.delete && !isConfirm && !isNew " v-on:click.prevent="confirm" :disabled="isConfirm" class="btn btn-labeled btn-danger">
+                    <i class="fas fa-trash"></i>@Localizer.General["Delete"]
+                </button>
+                <button v-if="Aero.permissions.sites.save && !isConfirm" form="siteForm" class="btn btn-labeled btn-success">
+                    <i class="fas fa-check"></i>@Localizer.General["Save"]
+                </button>
+                <div v-if="isConfirm" class="alert alert-danger w-100" role="alert">
+                    <h5>@Localizer.Site["Are you really sure?"]</h5>
+                    <p>
+                        @Html.Raw(Localizer.Site["ConfirmDelete"])
+                    </p>
+                    <div class="form-group">
+                        <input v-model="confirmTitle" class="form-control" type="text" placeholder="@Localizer.Site["Please type in the name of the site to confirm."]">
+                    </div>
+                    <p class="text-right">
+                        <button v-on:click.prevent="cancel" class="btn btn-secondary">
+                            @Localizer.General["Cancel"]
+                        </button>
+                        <button v-on:click.prevent="remove" :disabled="confirmTitle != title" class="btn btn-labeled btn-danger">
+                            <i class="fas fa-trash"></i>@Localizer.General["Continue"]
+                        </button>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

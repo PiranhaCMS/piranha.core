@@ -1,0 +1,23 @@
+<Project>
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+  </PropertyGroup>
+
+  <PropertyGroup Label="Package information">
+    <Version>12.2.0</Version>
+    <Authors>Aero Cms</Authors>
+    <Company>Aero Cms</Company>
+    <Copyright>Copyright (c) .NET Foundation and Contributors</Copyright>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageTags>cms mvc razorpages aspnetcore netstandard</PackageTags>
+    <PackageIcon>Aero.png</PackageIcon>
+    <PackageProjectUrl>https://github.com/Aerocms/Aero.core</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/Aerocms/Aero.core</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PublishRepositoryUrl>true</PublishRepositoryUrl>
+    <IncludeSymbols>true</IncludeSymbols>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+    <EmbedUntrackedSources>true</EmbedUntrackedSources>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+  </PropertyGroup>
+</Project>

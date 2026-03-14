@@ -1,0 +1,111 @@
+
+
+using System.ComponentModel.DataAnnotations;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Aero.Cms.Manager.Models;
+using Aero.Cms.Manager.Services;
+using Aero.Manager;
+
+namespace Aero.Cms.Manager.Controllers;
+
+/// <summary>
+/// Api controller for alias management.
+/// </summary>
+[Area("Manager")]
+[Route("manager/api/alias")]
+[Authorize(Policy = Permission.Admin)]
+[ApiController]
+[AutoValidateAntiforgeryToken]
+public class AliasApiController : Controller
+{
+    private readonly IApi _api;
+    private readonly AliasService _service;
+    private readonly ManagerLocalizer _localizer;
+
+    /// <summary>
+    /// Default constructor.
+    /// </summary>
+    public AliasApiController(IApi api, AliasService service, ManagerLocalizer localizer)
+    {
+        _api = api;
+        _service = service;
+        _localizer = localizer;
+    }
+
+    /// <summary>
+    /// Gets the list model.
+    /// </summary>
+    /// <returns>The list model</returns>
+    [Route("list/{siteId?}")]
+    [HttpGet]
+    [Authorize(Policy = Permission.Aliases)]
+    public async Task<AliasListModel> List(string? siteId = null)
+    {
+        return await _service.GetList(siteId);
+    }
+
+    /// <summary>
+    /// Saves the given alias and returns the updated list model.
+    /// </summary>
+    /// <param name="model">The alias</param>
+    /// <returns>The updated list model</returns>
+    [Route("save")]
+    [HttpPost]
+    [Authorize(Policy = Permission.AliasesEdit)]
+    public async Task<IActionResult> Save(AliasListModel.AliasItem model)
+    {
+        try
+        {
+            await _service.Save(model);
+
+            var result = await _service.GetList(model.SiteId);
+
+            result.Status = new StatusMessage
+            {
+                Type = StatusMessage.Success,
+                Body = _localizer.Alias["The alias was successfully added to the list"]
+            };
+
+            return Ok(result);
+        }
+        catch (ValidationException e)
+        {
+            var result = new AliasListModel();
+            result.Status = new StatusMessage
+            {
+                Type = StatusMessage.Error,
+                Body = e.Message
+            };
+            return BadRequest(result);
+        }
+    }
+
+    /// <summary>
+    /// Deletes the alias with the given id and returns the updated
+    /// list model.
+    /// </summary>
+    /// <param name="id">The alias id</param>
+    /// <returns>The updated list model</returns>
+    [Route("delete")]
+    [HttpDelete]
+    [Authorize(Policy = Permission.AliasesDelete)]
+    public async Task<IActionResult> Delete([FromBody]string id)
+    {
+        var alias = await _service.Delete(id);
+
+        if (alias != null)
+        {
+            var result = await _service.GetList(alias.SiteId);
+
+            result.Status = new StatusMessage
+            {
+                Type = StatusMessage.Success,
+                Body = _localizer.Alias["The alias was successfully deleted"]
+            };
+
+            return Ok(result);
+        }
+        return NotFound();
+    }
+}

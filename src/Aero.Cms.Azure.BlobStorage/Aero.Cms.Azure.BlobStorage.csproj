@@ -1,0 +1,19 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <RootNamespace>Aero.Azure</RootNamespace>
+    <NoWarn>$(NoWarn);1591</NoWarn>
+    <Description>Package for storing uploaded media assets on Azure Blob Storage</Description>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(GITHUB_ACTIONS)' == 'true'">
+    <ContinuousIntegrationBuild>true</ContinuousIntegrationBuild>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Azure.Storage.Blobs" Version="12.27.0" />
+    <ProjectReference Include="..\Aero.Cms\Aero.Cms.csproj" />
+    <PackageReference Update="Microsoft.SourceLink.GitHub" Version="10.0.200" />
+  </ItemGroup>
+
+</Project>
