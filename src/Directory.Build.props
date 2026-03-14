@@ -1,6 +1,8 @@
 <Project>
   <PropertyGroup>
-    <TargetFramework>net10.0</TargetFramework>
+    <!--<TargetFramework>net10.0</TargetFramework>-->
+    <!-- Skip for MAUI projects — they define their own multi-targeted TargetFrameworks -->
+    <TargetFramework Condition="'$(UseMaui)' != 'true' AND '$(ManageTargetFrameworkIndependently)' != 'true'">net10.0</TargetFramework>
   </PropertyGroup>
 
   <PropertyGroup Label="Package information">

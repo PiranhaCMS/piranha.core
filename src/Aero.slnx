@@ -1,7 +1,7 @@
 <Solution>
   <Folder Name="/.global/">
     <File Path="Directory.Build.props" />
-    <File Path="Directory.Build.targets" />
+    <File Path="Directory.Build.targets.old" />
     <File Path="LICENSE" />
     <File Path="README.md" />
   </Folder>
@@ -22,6 +22,10 @@
   <Project Path="Aero.Cms.Manager.LocalAuth/Aero.Cms.Manager.LocalAuth.csproj" />
   <Project Path="Aero.Cms.Manager.Localization/Aero.Cms.Manager.Localization.csproj" />
   <Project Path="Aero.Cms.Manager.TinyMCE/Aero.Cms.Manager.TinyMCE.csproj" />
+  <Project Path="Aero.Cms.Manager.UI.Shared/Aero.Cms.Manager.UI.Shared.csproj" />
+  <Project Path="Aero.Cms.Manager.UI.Web.Client/Aero.Cms.Manager.UI.Web.Client.csproj" />
+  <Project Path="Aero.Cms.Manager.UI.Web/Aero.Cms.Manager.UI.Web.csproj" />
+  <Project Path="Aero.Cms.Manager.UI/Aero.Cms.Manager.UI.csproj" />
   <Project Path="Aero.Cms.Manager/Aero.Cms.Manager.csproj" />
   <Project Path="Aero.Cms.WebApi/Aero.Cms.WebApi.csproj" />
   <Project Path="Aero.Cms/Aero.Cms.csproj" />
