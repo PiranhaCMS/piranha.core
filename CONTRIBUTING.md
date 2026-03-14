@@ -1,20 +1,20 @@
-# Contributing to Piranha
+# Contributing to Aero
 
-First off, thanks for showing interest in contributing to Piranha. Let's make 
+First off, thanks for showing interest in contributing to Aero. Let's make 
 this short and sweet so we can all go back to coding awesome new features!
 
-## What is Piranha
+## What is Aero
 
-Piranha is a **framework** and does **not** contain any components that produce
+Aero is a **framework** and does **not** contain any components that produce
 client code. If you want to contribute such functionality, this is **not** the place 
 and you should instead create your own community package.
 
-Piranha is **cross platform**. This means that nothing can be added to the core
+Aero is **cross platform**. This means that nothing can be added to the core
 packages that creates a dependency on a specific operating system or runtime
 environment. If you want to contribute such functionality you should also create
 your own community package.
 
-Piranha is **lightweight**. Just because you **can** add a feature doesn't necessarily
+Aero is **lightweight**. Just because you **can** add a feature doesn't necessarily
 mean that you **should**. If you're not sure if your idea fits the project, please open 
 an issue to get a second opinion on it.
 

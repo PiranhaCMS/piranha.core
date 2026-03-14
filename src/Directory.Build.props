@@ -6,10 +6,10 @@
   </PropertyGroup>
 
   <PropertyGroup Label="Package information">
-    <Version>12.2.0</Version>
+    <Version>1.0.0-alpha</Version>
     <Authors>Aero Cms</Authors>
     <Company>Aero Cms</Company>
-    <Copyright>Copyright (c) .NET Foundation and Contributors</Copyright>
+    <Copyright>Copyright (c) 2025 Microbians</Copyright>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageTags>cms mvc razorpages aspnetcore netstandard</PackageTags>
     <PackageIcon>Aero.png</PackageIcon>

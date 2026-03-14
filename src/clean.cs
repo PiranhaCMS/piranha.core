@@ -1,15 +1,14 @@
-using System;
 using System.Diagnostics;
-using System.IO;
-using System.Linq;
-using System.Collections.Generic;
 
 /// <summary>
-/// A C# console application that performs the following tasks:
+/// A C# file app that performs the following tasks:
 /// 1. Recursively finds and deletes all 'bin' and 'obj' directories 
 ///    in the current working directory.
 /// 2. Recursively discovers all solution (*.sln) files.
 /// 3. Executes 'dotnet restore' for every discovered solution file.
+/// <example>
+/// dotnet run ./clean.cs
+/// </example>
 /// </summary>
 public class CleanupAndRestore
 {
