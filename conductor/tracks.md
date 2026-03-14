@@ -26,8 +26,3 @@ This file tracks all major tracks for the project. Each track has its own detail
 
 - [ ] **Track: Blazor WASM Admin Migration (Tailwind UI + PWA)**
 *Link: [./tracks/blazor_admin_migration_20260310/](./tracks/blazor_admin_migration_20260310/)*
-
----
-
-- [x] **Track: Fix PostgreSQL unit test duplicate key error (pg_database_datname_index)**
-*Link: [./tracks/fix_unit_test_postgres_duplicate_error_20260313/](./tracks/fix_unit_test_postgres_duplicate_error_20260313/)*
