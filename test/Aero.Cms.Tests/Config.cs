@@ -1,0 +1,130 @@
+
+
+namespace Aero.Cms.Tests;
+
+//[Collection("Integration tests")]
+public class Config(MartenFixture fixture) : AsyncTestBase(fixture)
+{
+
+    /// <summary>
+    /// Sets up & initializes the tests.
+    /// </summary>
+    public override async Task InitializeAsync()
+    {
+        await base.InitializeAsync();
+
+        
+        using var config = new Aero.Cms.Config(api);
+        config.ArchivePageSize = 0;
+        config.CacheExpiresPages = 0;
+        config.CacheExpiresPosts = 0;
+        config.CommentsApprove = true;
+        config.CommentsPageSize = 0;
+        config.HierarchicalPageSlugs = true;
+        config.ManagerExpandedSitemapLevels = 0;
+    }
+
+    [Fact]
+    public void ArchivePageSize()
+    {
+       
+        using var config = new Aero.Cms.Config(api);
+        Assert.Equal(0, config.ArchivePageSize);
+
+        config.ArchivePageSize = 5;
+
+        Assert.Equal(5, config.ArchivePageSize);
+    }
+
+    [Fact]
+    public void CacheExpiresPages()
+    {
+        
+        using var config = new Aero.Cms.Config(api);
+        Assert.Equal(0, config.CacheExpiresPages);
+
+        config.CacheExpiresPages = 30;
+
+        Assert.Equal(30, config.CacheExpiresPages);
+    }
+
+    [Fact]
+    public void CacheExpiresPosts()
+    {
+        
+        using var config = new Aero.Cms.Config(api);
+        Assert.Equal(0, config.CacheExpiresPosts);
+
+        config.CacheExpiresPosts = 30;
+
+        Assert.Equal(30, config.CacheExpiresPosts);
+    }
+
+    [Fact]
+    public void CommentsApprove()
+    {
+        
+        using var config = new Aero.Cms.Config(api);
+        Assert.True(config.CommentsApprove);
+
+        config.CommentsApprove = false;
+
+        Assert.False(config.CommentsApprove);
+    }
+
+    [Fact]
+    public void CommentsPageSize()
+    {
+        
+        using var config = new Aero.Cms.Config(api);
+        Assert.Equal(0, config.CommentsPageSize);
+
+        config.CommentsPageSize = 5;
+
+        Assert.Equal(5, config.CommentsPageSize);
+    }
+
+    [Fact]
+    public void HierarchicalPageSlugs()
+    {
+        
+        using var config = new Aero.Cms.Config(api);
+        Assert.True(config.HierarchicalPageSlugs);
+
+        config.HierarchicalPageSlugs = false;
+
+        Assert.False(config.HierarchicalPageSlugs);
+    }
+
+    [Fact]
+    public void ManagerExpandedSitemapLevels()
+    {
+        
+        using var config = new Aero.Cms.Config(api);
+        Assert.Equal(0, config.ManagerExpandedSitemapLevels);
+
+        config.ManagerExpandedSitemapLevels = 3;
+
+        Assert.Equal(3, config.ManagerExpandedSitemapLevels);
+    }
+
+    [Fact]
+    public void MediaCDN()
+    {
+        
+        using var config = new Aero.Cms.Config(api);
+        config.MediaCDN = "https://mycdn.org/uploads/";
+
+        Assert.Equal("https://mycdn.org/uploads/", config.MediaCDN);
+    }
+
+    [Fact]
+    public void MediaCDNTrailingSlash()
+    {
+        
+        using var config = new Aero.Cms.Config(api);
+        config.MediaCDN = "https://mycdn.org/uploads";
+
+        Assert.Equal("https://mycdn.org/uploads/", config.MediaCDN);
+    }
+}

@@ -1,0 +1,8 @@
+{
+  "track_id": "aero_identity_20260223",
+  "type": "feature",
+  "status": "new",
+  "created_at": "2026-02-23T14:15:00Z",
+  "updated_at": "2026-02-23T14:15:00Z",
+  "description": "Implement RavenDB Identity Provider (Aero.Identity)"
+}

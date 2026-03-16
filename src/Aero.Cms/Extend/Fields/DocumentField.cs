@@ -1,0 +1,52 @@
+
+
+using Aero.Cms.Models;
+
+namespace Aero.Cms.Extend.Fields;
+
+/// <summary>
+/// Field for referencing a document asset.
+/// </summary>
+[FieldType(Name = "Document", Shorthand = "Document", Component = "document-field")]
+public class DocumentField : MediaFieldBase<DocumentField>
+{
+    /// <summary>
+    /// Implicit operator for converting a string id to a field.
+    /// </summary>
+    /// <param name="id">The id value</param>
+    public static implicit operator DocumentField(string id)
+    {
+        return new DocumentField { Id = id };
+    }
+
+    /// <summary>
+    /// Implicit operator for converting a Guid id to a field.
+    /// </summary>
+    /// <param name="guid">The guid value</param>
+    public static implicit operator DocumentField(Guid guid)
+    {
+        return new DocumentField { Id = guid.ToString() };
+    }
+
+    /// <summary>
+    /// Implicit operator for converting a media object to a field.
+    /// </summary>
+    /// <param name="media">The media object</param>
+    public static implicit operator DocumentField(Media media)
+    {
+        return new DocumentField { Id = media.Id };
+    }
+
+    /// <summary>
+    /// Impicit operator for converting the field to an url string.
+    /// </summary>
+    /// <param name="image">The document field</param>
+    public static implicit operator string(DocumentField image)
+    {
+        if (image.Media != null)
+        {
+            return image.Media.PublicUrl;
+        }
+        return "";
+    }
+}

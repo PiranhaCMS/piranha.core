@@ -1,0 +1,43 @@
+﻿
+
+namespace Aero.Cms.Extend.Fields;
+
+/// <summary>
+/// Field for Markdown string values.
+/// </summary>
+[FieldType(Name = "Markdown", Shorthand = "Markdown", Component = "markdown-field")]
+public class MarkdownField : SimpleField<string>, ISearchable, ITranslatable
+{
+    /// <summary>
+    /// Implicit operator for converting a string to a field.
+    /// </summary>
+    /// <param name="str">The string value</param>
+    public static implicit operator MarkdownField(string str)
+    {
+        return new MarkdownField { Value = str };
+    }
+
+    /// <summary>
+    /// Implicitly converts the markdown field to a HTML string.
+    /// </summary>
+    /// <param name="field">The field</param>
+    public static implicit operator string(MarkdownField field)
+    {
+        return field.ToHtml();
+    }
+
+    /// <summary>
+    /// Transforms the markdown field to HTML.
+    /// </summary>
+    /// <returns>The HTML string</returns>
+    public string ToHtml()
+    {
+        return App.Markdown.Transform(Value);
+    }
+
+    /// <inheritdoc />
+    public string GetIndexedContent()
+    {
+        return !string.IsNullOrEmpty(Value) ? ToHtml() : "";
+    }
+}

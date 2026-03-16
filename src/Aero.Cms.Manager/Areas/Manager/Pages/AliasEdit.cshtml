@@ -1,0 +1,57 @@
+@page "~/manager/aliases"
+@using Aero.Manager
+@model AliasEditViewModel
+@inject IAuthorizationService Auth
+@inject ManagerLocalizer Localizer
+@{
+    ViewBag.Title = Localizer.Alias["Aliases"];
+    ViewBag.MenuItem = "Aliases";
+}
+@section script
+{
+    <script src="~/manager/assets/js/Aero.alias.min.js?v=@Aero.Cms.Utils.GetAssemblyVersionHash(typeof(Aero.Cms.Manager.Module).Assembly)"></script>
+    <script>
+        Aero.permissions.load(function () {
+            Aero.alias.load();
+        });
+    </script>
+}
+
+<div id="alias">
+    <div class="top">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item">@Localizer.Menu["Settings"]</li>
+                <li class="breadcrumb-item active" aria-current="page">@Localizer.Menu["Aliases"]</li>
+            </ol>
+        </nav>
+
+        <div class="container-fluid">
+            <div class="top-nav">
+                <div v-if="sites.length > 1" class="dropdown d-inline" v-if="sites.length > 1">
+                    <button class="btn btn-primary btn-labeled dropdown-toggle" type="button" data-toggle="dropdown">
+                        <span class="btn-label">
+                            <i class="fas fa-globe"></i>
+                        </span>
+                        {{ siteTitle }}
+                    </button>
+                    <div class="dropdown-menu">
+                        <a class="dropdown-item" href="#" li v-for="site in sites" v-on:click.prevent="load(site.id)">{{ site.title }}</a>
+                    </div>
+                </div>
+                @foreach (var action in Aero.Cms.Manager.Actions.Toolbars.AliasEdit)
+                {
+                    <partial name="@action.ActionView" />
+                }
+            </div>
+        </div>
+    </div>
+
+    <div class="app" :class="{ ready: !loading }">
+        <partial name="Partial/_AliasList" />
+        @if ((await Auth.AuthorizeAsync(User, Permission.AliasesEdit)).Succeeded)
+        {
+            <partial name="Partial/_AliasForm" />
+        }
+    </div>
+</div>

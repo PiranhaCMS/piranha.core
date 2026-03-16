@@ -1,0 +1,36 @@
+    protected AeroDbTestDriver()
+    {
+        store = DocumentStore.For(opts =>
+        {
+            var connString =
+                "Host=localhost;Port=5432;Database=aero-test;Username=postgres;Password=*strongPassword1;";
+            opts.Connection(connString!);
+
+            opts.CreateDatabasesForTenants(config =>
+            {
+                // Maintenance database is used to connect and run the CREATE DATABASE script.
+                // If not specified, it defaults to 'postgres' on the same server.
+                config.MaintenanceDatabase(
+                    "Host=localhost;Database=postgres;Username=postgres;Password=*strongPassword1;");
+                config.ForTenant()
+                    .CheckAgainstPgDatabase() // Verify existence using pg_database table
+                    .WithOwner("postgres")
+                    .WithEncoding("UTF-8")
+                    .ConnectionLimit(-1);
+            });
+
+            // CRITICAL: This ensures the database creation and schema migrations run on startup
+            //.ApplyAllDatabaseChangesOnStartup();
+            ;
+            opts.AutoCreateSchemaObjects = AutoCreate.All; // Dev mode: create tables if missing
+        });
+
+        store.Storage.ApplyAllConfiguredChangesToDatabaseAsync()
+            .GetAwaiter()
+            .GetResult();
+
+        var sesh = store.LightweightSession();
+        sesh.QueueSqlCommand("CREATE EXTENSION IF NOT EXISTS citus;");
+        sesh.QueueSqlCommand("");
+        sesh.SaveChangesAsync();
+    }

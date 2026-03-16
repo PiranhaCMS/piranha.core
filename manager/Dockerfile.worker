@@ -1,0 +1,3 @@
+FROM citusdata/citus:14.0.0
+COPY wait-for-manager.sh /wait-for-manager.sh
+RUN chmod +x /wait-for-manager.sh

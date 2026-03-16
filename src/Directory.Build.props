@@ -1,0 +1,25 @@
+<Project>
+  <PropertyGroup>
+    <!--<TargetFramework>net10.0</TargetFramework>-->
+    <!-- Skip for MAUI projects — they define their own multi-targeted TargetFrameworks -->
+    <TargetFramework Condition="'$(UseMaui)' != 'true' AND '$(ManageTargetFrameworkIndependently)' != 'true'">net10.0</TargetFramework>
+  </PropertyGroup>
+
+  <PropertyGroup Label="Package information">
+    <Version>1.0.0-alpha</Version>
+    <Authors>Aero Cms</Authors>
+    <Company>Aero Cms</Company>
+    <Copyright>Copyright (c) 2025 Microbians</Copyright>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageTags>cms mvc razorpages aspnetcore netstandard</PackageTags>
+    <PackageIcon>Aero.png</PackageIcon>
+    <PackageProjectUrl>https://github.com/Aerocms/Aero.core</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/Aerocms/Aero.core</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PublishRepositoryUrl>true</PublishRepositoryUrl>
+    <IncludeSymbols>true</IncludeSymbols>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+    <EmbedUntrackedSources>true</EmbedUntrackedSources>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+  </PropertyGroup>
+</Project>
