@@ -14,7 +14,7 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" v-on:click.prevent="cancel()">
+                <button type="button" class="btn btn-secondary" :class="cancelCss" v-on:click.prevent="cancel()">
                     <i v-if="cancelIcon" :class="cancelIcon"></i>{{ cancelText }}
                 </button>
                 <button type="button" class="btn btn-labeled" :class="confirmCss" :disabled="!canConfirm()" v-on:click.prevent="confirm()">
