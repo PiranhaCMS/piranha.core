@@ -1,6 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
     <NoWarn>$(NoWarn);1591</NoWarn>
     <Description>Web Api module for Piranha CMS</Description>
   </PropertyGroup>
