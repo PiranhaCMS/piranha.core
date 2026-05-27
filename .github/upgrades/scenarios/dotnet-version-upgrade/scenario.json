@@ -3,12 +3,13 @@
   "operationId": "c2622273-e4bf-469b-a605-5bf19ab449f3",
   "description": "Upgrade .NET projects to newer .NET versions",
   "startTime": "2026-05-26T21:32:16.2740277Z",
-  "lastUpdateTime": "2026-05-26T21:50:19.8710354Z",
+  "lastUpdateTime": "2026-05-27T02:36:14.770036Z",
   "properties": {
     "UpgradeTargetFramework": "net10.0",
     "taskStates": {
       "01-prerequisites": "Completed",
-      "02-prepare-razorweb-libraries": "InProgress"
+      "02-prepare-razorweb-libraries": "InProgress",
+      "09-final-validation": "Completed"
     }
   },
   "folderPath": ""

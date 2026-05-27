@@ -1,6 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk" ToolsVersion="15.0">
 
   <PropertyGroup>
+    <TargetFrameworks>net10.0;net9.0;net8.0</TargetFrameworks>
     <NoWarn>$(NoWarn);1591</NoWarn>
     <Description>Core package for Piranha CMS for .NET Core</Description>
   </PropertyGroup>

@@ -1,6 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
+    <TargetFrameworks>net10.0;net9.0;net8.0</TargetFrameworks>
     <NoWarn>$(NoWarn);1591</NoWarn>
     <Description>Localization for the Piranha CMS manager panel</Description>
   </PropertyGroup>
