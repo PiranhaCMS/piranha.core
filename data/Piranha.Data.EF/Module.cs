@@ -57,17 +57,28 @@ public class Module : IModule
     {
         var mapperConfig = new MapperConfiguration(cfg =>
         {
-            cfg.CreateMap<Data.Alias, Data.Alias>()
-                .ForMember(a => a.Id, o => o.Ignore())
-                .ForMember(a => a.Created, o => o.Ignore());
-            cfg.CreateMap<Data.Category, Data.Category>()
-                .ForMember(c => c.Id, o => o.Ignore())
-                .ForMember(c => c.Created, o => o.Ignore());
-            cfg.CreateMap<Data.Category, Models.Taxonomy>()
-                .ForMember(c => c.Type, o => o.MapFrom(m => Models.TaxonomyType.Category));
-            cfg.CreateMap<Data.Content, Models.GenericContent>()
-                .ForMember(p => p.PrimaryImage, o => o.MapFrom(m => m.PrimaryImageId))
-                .ForMember(p => p.Permissions, o => o.Ignore());
+            ConfigureMappings(cfg);
+        });
+        mapperConfig.AssertConfigurationIsValid();
+        Mapper = mapperConfig.CreateMapper();
+    }
+
+    /// <summary>
+    /// Configure AutoMapper mappings.
+    /// </summary>
+    private static void ConfigureMappings(IMapperConfigurationExpression cfg)
+    {
+        cfg.CreateMap<Data.Alias, Data.Alias>()
+            .ForMember(a => a.Id, o => o.Ignore())
+            .ForMember(a => a.Created, o => o.Ignore());
+        cfg.CreateMap<Data.Category, Data.Category>()
+            .ForMember(c => c.Id, o => o.Ignore())
+            .ForMember(c => c.Created, o => o.Ignore());
+        cfg.CreateMap<Data.Category, Models.Taxonomy>()
+            .ForMember(c => c.Type, o => o.MapFrom(m => Models.TaxonomyType.Category));
+        cfg.CreateMap<Data.Content, Models.GenericContent>()
+            .ForMember(p => p.PrimaryImage, o => o.MapFrom(m => m.PrimaryImageId))
+            .ForMember(p => p.Permissions, o => o.Ignore());
         cfg.CreateMap<Models.GenericContent, Data.Content>()
             .ForMember(c => c.CategoryId, o => o.Ignore())
             .ForMember(c => c.Category, o => o.Ignore())
@@ -177,15 +188,12 @@ public class Module : IModule
             .ForMember(s => s.Created, o => o.Ignore())
             .ForMember(s => s.LastModified, o => o.Ignore())
             .ForMember(s => s.ContentLastModified, o => o.Ignore());
-                cfg.CreateMap<Data.Tag, Data.Tag>()
-                    .ForMember(t => t.Id, o => o.Ignore())
-                    .ForMember(t => t.Created, o => o.Ignore());
-                cfg.CreateMap<Data.Tag, Models.Taxonomy>()
-                    .ForMember(t => t.Type, o => o.MapFrom(m => Models.TaxonomyType.Tag));
-            });
-            mapperConfig.AssertConfigurationIsValid();
-            Mapper = mapperConfig.CreateMapper();
-        }
+        cfg.CreateMap<Data.Tag, Data.Tag>()
+            .ForMember(t => t.Id, o => o.Ignore())
+            .ForMember(t => t.Created, o => o.Ignore());
+        cfg.CreateMap<Data.Tag, Models.Taxonomy>()
+            .ForMember(t => t.Type, o => o.MapFrom(m => Models.TaxonomyType.Tag));
+    }
 
     /// <summary>
     /// Initializes the module.
