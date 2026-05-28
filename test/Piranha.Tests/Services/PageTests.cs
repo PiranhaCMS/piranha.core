@@ -124,7 +124,7 @@ public class PageTests : BaseTestsAsync
 
     public override async Task InitializeAsync()
     {
-        _services = CreateServiceCollection()
+        _services = CreateServiceCollection(_dbFile)
             .AddSingleton<IMyService, MyService>()
             .BuildServiceProvider();
 

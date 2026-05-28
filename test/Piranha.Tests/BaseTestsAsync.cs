@@ -23,19 +23,28 @@ namespace Piranha.Tests;
 /// </summary>
 public abstract class BaseTestsAsync : IAsyncLifetime
 {
+    protected readonly string _dbFile = $"./piranha.tests.{Guid.NewGuid():N}.db";
+
     protected IStorage _storage = new Local.FileStorage("uploads/", "~/uploads/");
     protected IImageProcessor _processor = new ImageSharpProcessor();
-    protected IServiceProvider _services = CreateServiceCollection().BuildServiceProvider();
+    protected IServiceProvider _services;
     protected Cache.ICache _cache;
 
+    protected BaseTestsAsync()
+    {
+        _services = CreateServiceCollection(_dbFile).BuildServiceProvider();
+    }
+
     public abstract Task InitializeAsync();
+
     public abstract Task DisposeAsync();
 
-    protected static IServiceCollection CreateServiceCollection()
+    protected static IServiceCollection CreateServiceCollection(string dbFile = null)
     {
+        dbFile ??= $"./piranha.tests.{Guid.NewGuid():N}.db";
         return new ServiceCollection()
             .AddPiranhaEF<SQLiteDb>(db =>
-                db.UseSqlite("Filename=./piranha.tests.db"))
+                db.UseSqlite($"Filename={dbFile}"))
             .AddPiranha()
             .AddMemoryCache()
             .AddDistributedMemoryCache()
@@ -48,7 +57,7 @@ public abstract class BaseTestsAsync : IAsyncLifetime
     protected IDb GetDb() {
         var builder = new DbContextOptionsBuilder<SQLiteDb>();
 
-        builder.UseSqlite("Filename=./piranha.tests.db");
+        builder.UseSqlite($"Filename={_dbFile}");
 
         return new SQLiteDb(builder.Options);
     }

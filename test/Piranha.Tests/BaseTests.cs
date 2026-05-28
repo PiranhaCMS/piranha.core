@@ -19,6 +19,8 @@ namespace Piranha.Tests;
 /// </summary>
 public abstract class BaseTests : IDisposable
 {
+    private readonly string _dbFile = $"./piranha.tests.{Guid.NewGuid():N}.db";
+
     protected IStorage storage = new Local.FileStorage("uploads/", "~/uploads/");
     protected IServiceProvider services = new ServiceCollection()
         .BuildServiceProvider();
@@ -54,7 +56,7 @@ public abstract class BaseTests : IDisposable
     protected IDb GetDb() {
         var builder = new DbContextOptionsBuilder<SQLiteDb>();
 
-        builder.UseSqlite("Filename=./piranha.tests.db");
+        builder.UseSqlite($"Filename={_dbFile}");
 
         return new SQLiteDb(builder.Options);
     }

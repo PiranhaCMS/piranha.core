@@ -8,7 +8,6 @@
  *
  */
 
-using AutoMapper;
 using Piranha.Data.EF;
 
 namespace Piranha.Services;
@@ -28,7 +27,7 @@ internal class ContentServiceFactory : IContentServiceFactory
     }
 
     /// <inheritdoc />
-    public IContentService<TContent, TField, TModelBase> Create<TContent, TField, TModelBase>(IMapper mapper)
+    public IContentService<TContent, TField, TModelBase> Create<TContent, TField, TModelBase>(IPiranhaMapper mapper)
         where TContent : Data.ContentBase<TField>
         where TField : Data.ContentFieldBase
         where TModelBase : Models.ContentBase

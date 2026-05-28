@@ -42,7 +42,7 @@ internal class ContentGroupRepository : IContentGroupRepository
 
         foreach (var group in groups)
         {
-            models.Add(Module.Mapper.Map<Data.ContentGroup, ContentGroup>(group));
+            models.Add(PiranhaMapper.MapContentGroupToModel(group));
         }
         return models;
     }
@@ -61,7 +61,7 @@ internal class ContentGroupRepository : IContentGroupRepository
 
         if (group != null)
         {
-            return Module.Mapper.Map<Data.ContentGroup, ContentGroup>(group);
+            return PiranhaMapper.MapContentGroupToModel(group);
         }
         return null;
     }
@@ -85,7 +85,7 @@ internal class ContentGroupRepository : IContentGroupRepository
             };
             await _db.ContentGroups.AddAsync(group).ConfigureAwait(false);
         }
-        Module.Mapper.Map<ContentGroup, Data.ContentGroup>(model, group);
+        PiranhaMapper.MapModelToContentGroup(model, group);
         group.LastModified = DateTime.Now;
 
         await _db.SaveChangesAsync().ConfigureAwait(false);

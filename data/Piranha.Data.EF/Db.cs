@@ -16,10 +16,9 @@ namespace Piranha;
 public abstract class Db<T> : DbContext, IDb where T : Db<T>
 {
     /// <summary>
-    /// Gets/sets whether the db context as been initialized. This
-    /// is only performed once in the application lifecycle.
+    /// Gets/sets the set of connection strings that have already been initialized.
     /// </summary>
-    private static volatile bool IsInitialized = false;
+    private static readonly HashSet<string> InitializedDbs = new HashSet<string>();
 
     /// <summary>
     /// The object mutex used for initializing the context.
@@ -227,18 +226,19 @@ public abstract class Db<T> : DbContext, IDb where T : Db<T>
     /// <param name="options">Configuration options</param>
     public Db(DbContextOptions<T> options) : base(options)
     {
-        if (!IsInitialized)
+        var connString = Database.GetConnectionString() ?? string.Empty;
+        if (!InitializedDbs.Contains(connString))
         {
             lock (Mutex)
             {
-                if (!IsInitialized)
+                if (!InitializedDbs.Contains(connString))
                 {
                     // Migrate database
                     Database.Migrate();
                     // Seed
                     Seed();
 
-                    IsInitialized = true;
+                    InitializedDbs.Add(connString);
                 }
             }
         }

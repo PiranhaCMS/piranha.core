@@ -373,7 +373,7 @@ internal class SiteRepository : ISiteRepository
 
         foreach (var page in pages.Where(p => p.ParentId == parentId).OrderBy(p => p.SortOrder))
         {
-            var item = Module.Mapper.Map<Page, Models.SitemapItem>(page);
+            var item = PiranhaMapper.MapPageToSitemapItem(page);
 
             if (!string.IsNullOrEmpty(page.RedirectUrl))
             {
