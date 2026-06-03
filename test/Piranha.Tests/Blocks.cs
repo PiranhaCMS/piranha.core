@@ -29,7 +29,7 @@ public class Blocks : BaseTestsAsync
         {
             Piranha.App.Init(api);
 
-            contentService = new ContentService<Page, PageField, Models.PageBase>(new ContentFactory(_services), Piranha.Data.EF.Module.Mapper);
+            contentService = new ContentService<Page, PageField, Models.PageBase>(new ContentFactory(_services));
 
             // Add media
             using (var stream = File.OpenRead("../../../Assets/HLD_Screenshot_01_mech_1080.png"))

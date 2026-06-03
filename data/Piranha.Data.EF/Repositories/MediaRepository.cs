@@ -11,6 +11,7 @@
 using Microsoft.EntityFrameworkCore;
 using Piranha.Data;
 using Piranha.Data.EF;
+using Piranha.Data.EF.Mapping;
 
 namespace Piranha.Repositories;
 
@@ -308,7 +309,7 @@ internal class MediaRepository : IMediaRepository
         var mediaFolders = folders as MediaFolder[] ?? folders.ToArray();
         foreach (var folder in mediaFolders.Where(f => f.ParentId == parentId).OrderBy(f => f.Name))
         {
-            var item = Module.Mapper.Map<MediaFolder, Models.MediaStructureItem>(folder);
+            var item = DataModelMapper.Map(folder);
             var folderCount = count.FirstOrDefault(c => c.FolderId == folder.Id)?.Count;
 
             item.Level = level;
