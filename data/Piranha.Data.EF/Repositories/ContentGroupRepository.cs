@@ -10,6 +10,7 @@
 
 using Microsoft.EntityFrameworkCore;
 using Piranha.Data.EF;
+using Piranha.Data.EF.Mapping;
 using Piranha.Models;
 
 namespace Piranha.Repositories;
@@ -42,7 +43,7 @@ internal class ContentGroupRepository : IContentGroupRepository
 
         foreach (var group in groups)
         {
-            models.Add(Module.Mapper.Map<Data.ContentGroup, ContentGroup>(group));
+            models.Add(DataModelMapper.Map(group));
         }
         return models;
     }
@@ -61,7 +62,7 @@ internal class ContentGroupRepository : IContentGroupRepository
 
         if (group != null)
         {
-            return Module.Mapper.Map<Data.ContentGroup, ContentGroup>(group);
+            return DataModelMapper.Map(group);
         }
         return null;
     }
@@ -85,7 +86,7 @@ internal class ContentGroupRepository : IContentGroupRepository
             };
             await _db.ContentGroups.AddAsync(group).ConfigureAwait(false);
         }
-        Module.Mapper.Map<ContentGroup, Data.ContentGroup>(model, group);
+        DataModelMapper.Map(model, group);
         group.LastModified = DateTime.Now;
 
         await _db.SaveChangesAsync().ConfigureAwait(false);

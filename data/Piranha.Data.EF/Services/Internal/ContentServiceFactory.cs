@@ -8,9 +8,6 @@
  *
  */
 
-using AutoMapper;
-using Piranha.Data.EF;
-
 namespace Piranha.Services;
 
 /// <inheritdoc />
@@ -28,35 +25,35 @@ internal class ContentServiceFactory : IContentServiceFactory
     }
 
     /// <inheritdoc />
-    public IContentService<TContent, TField, TModelBase> Create<TContent, TField, TModelBase>(IMapper mapper)
+    public IContentService<TContent, TField, TModelBase> Create<TContent, TField, TModelBase>()
         where TContent : Data.ContentBase<TField>
         where TField : Data.ContentFieldBase
         where TModelBase : Models.ContentBase
     {
-        return new ContentService<TContent, TField, TModelBase>(_factory, mapper);
+        return new ContentService<TContent, TField, TModelBase>(_factory);
     }
 
     /// <inheritdoc />
     public IContentService<Data.Content, Data.ContentField, Models.GenericContent> CreateContentService()
     {
-        return new ContentService<Data.Content, Data.ContentField, Models.GenericContent>(_factory, Module.Mapper);
+        return new ContentService<Data.Content, Data.ContentField, Models.GenericContent>(_factory);
     }
 
     /// <inheritdoc />
     public IContentService<Data.Page, Data.PageField, Models.PageBase> CreatePageService()
     {
-        return new ContentService<Data.Page, Data.PageField, Models.PageBase>(_factory, Module.Mapper);
+        return new ContentService<Data.Page, Data.PageField, Models.PageBase>(_factory);
     }
 
     /// <inheritdoc />
     public IContentService<Data.Post, Data.PostField, Models.PostBase> CreatePostService()
     {
-        return new ContentService<Data.Post, Data.PostField, Models.PostBase>(_factory, Module.Mapper);
+        return new ContentService<Data.Post, Data.PostField, Models.PostBase>(_factory);
     }
 
     /// <inheritdoc />
     public IContentService<Data.Site, Data.SiteField, Models.SiteContentBase> CreateSiteService()
     {
-        return new ContentService<Data.Site, Data.SiteField, Models.SiteContentBase>(_factory, Module.Mapper);
+        return new ContentService<Data.Site, Data.SiteField, Models.SiteContentBase>(_factory);
     }
 }

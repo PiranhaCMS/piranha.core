@@ -11,6 +11,7 @@
 using Microsoft.EntityFrameworkCore;
 using Piranha.Data;
 using Piranha.Data.EF;
+using Piranha.Data.EF.Mapping;
 using Piranha.Extend.Fields;
 using Piranha.Services;
 
@@ -373,7 +374,7 @@ internal class SiteRepository : ISiteRepository
 
         foreach (var page in pages.Where(p => p.ParentId == parentId).OrderBy(p => p.SortOrder))
         {
-            var item = Module.Mapper.Map<Page, Models.SitemapItem>(page);
+            var item = DataModelMapper.Map(page);
 
             if (!string.IsNullOrEmpty(page.RedirectUrl))
             {

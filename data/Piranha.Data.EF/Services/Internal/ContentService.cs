@@ -10,8 +10,8 @@
 
 using System.Collections;
 using System.Dynamic;
-using AutoMapper;
 using Piranha.Data;
+using Piranha.Data.EF.Mapping;
 using Piranha.Models;
 
 namespace Piranha.Services;
@@ -25,17 +25,14 @@ internal class ContentService<TContent, TField, TModelBase> : IContentService<TC
     //
     // Members
     protected readonly IContentFactory _factory;
-    protected readonly IMapper _mapper;
 
     /// <summary>
     /// Default constructor.
     /// </summary>
     /// <param name="factory">The content factory</param>
-    /// <param name="mapper">The AutoMapper instance to use</param>
-    public ContentService(IContentFactory factory, IMapper mapper)
+    public ContentService(IContentFactory factory)
     {
         _factory = factory;
-        _mapper = mapper;
     }
 
     /// <inheritdoc />
@@ -72,7 +69,7 @@ internal class ContentService<TContent, TField, TModelBase> : IContentService<TC
             //
             // 3: Map basic fields
             //
-            _mapper.Map<TContent, TModelBase>(content, model);
+            DataModelMapper.MapToModel(content, model);
 
             //
             // 4: Map routes
@@ -93,7 +90,10 @@ internal class ContentService<TContent, TField, TModelBase> : IContentService<TC
 
                 if (translation != null)
                 {
-                    _mapper.Map(translation, model);
+                    if (model is Models.GenericContent genericModel && translation is ContentTranslation contentTranslation)
+                    {
+                        DataModelMapper.Map(contentTranslation, genericModel);
+                    }
                 }
             }
 
@@ -185,7 +185,7 @@ internal class ContentService<TContent, TField, TModelBase> : IContentService<TC
         //
         // 2: Map basic fields
         //
-        _mapper.Map<TModelBase, TContent>(model, content);
+        DataModelMapper.MapToData(model, content);
 
         //
         // 3: Map translation
