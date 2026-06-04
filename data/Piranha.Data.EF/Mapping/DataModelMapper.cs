@@ -275,6 +275,8 @@ internal static class DataModelMapper
                 post.EnableComments = source.EnableComments;
                 post.CloseCommentsAfterDays = source.CloseCommentsAfterDays;
                 break;
+            default:
+                throw new NotSupportedException($"Unsupported routed content data type {target.GetType().FullName}.");
         }
     }
 
