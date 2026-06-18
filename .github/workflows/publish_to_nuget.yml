@@ -42,7 +42,7 @@ jobs:
     - name: Build frontend assets (Gulp)
       working-directory: core/Piranha.Manager
       run: |
-        npm install
+        npm install --legacy-peer-deps
         npx gulp
 
     # Build and pack
