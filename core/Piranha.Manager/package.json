@@ -11,7 +11,7 @@
   "license": "MIT",
   "devDependencies": {
     "@aspnet/signalr": "1.1.0",
-    "@babel/code-frame": "^7.8.3",
+    "@babel/code-frame": "^8.0.0",
     "@babel/core": "^7.8.4",
     "@babel/template": "^7.8.3",
     "@babel/types": "^7.8.3",
