@@ -18,6 +18,7 @@ public class ImageSharpProcessor : IImageProcessor
 
     public void GetSize(Stream stream, out int width, out int height)
     {
+        stream.Position = 0;
         using var data = SKData.Create(stream);
         using var codec = SKCodec.Create(data);
         width = codec.Info.Width;
@@ -82,6 +83,7 @@ public class ImageSharpProcessor : IImageProcessor
 
     public void AutoOrient(Stream source, Stream dest)
     {
+        source.Position = 0;
         using var data = SKData.Create(source);
         using var codec = SKCodec.Create(data);
         var origin = codec?.EncodedOrigin ?? SKEncodedOrigin.TopLeft;
@@ -94,6 +96,7 @@ public class ImageSharpProcessor : IImageProcessor
 
     private static (SKBitmap bitmap, SKEncodedImageFormat format) Load(Stream source)
     {
+        source.Position = 0;
         using var data = SKData.Create(source);
         using var codec = SKCodec.Create(data);
         var format = codec?.EncodedFormat ?? SKEncodedImageFormat.Jpeg;
