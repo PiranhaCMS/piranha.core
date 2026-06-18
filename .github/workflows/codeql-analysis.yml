@@ -12,6 +12,7 @@ jobs:
       actions: read
       contents: read
       security-events: write
+      issues: write
 
     steps:
       - name: Checkout repository
@@ -36,3 +37,53 @@ jobs:
 
       - name: Perform CodeQL Analysis
         uses: github/codeql-action/analyze@v3
+
+      - name: Create issues for new CodeQL alerts
+        if: success()
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          # Ensure labels exist (safe to run repeatedly)
+          gh label create "security" --color "d73a4a" --description "Security vulnerability" 2>/dev/null || true
+          gh label create "codeql"   --color "e4e669" --description "Found by CodeQL analysis" 2>/dev/null || true
+
+          # Cache all existing codeql-labelled issue titles (open + closed) for deduplication
+          existing=$(gh issue list --label "codeql" --state all --limit 500 --json title --jq '[.[].title]')
+
+          # Fetch all currently open code scanning alerts (up to 100)
+          gh api "repos/${{ github.repository }}/code-scanning/alerts?state=open&per_page=100" \
+            --jq '.[] | @base64' | \
+          while IFS= read -r encoded; do
+            alert=$(printf '%s' "$encoded" | base64 -d)
+            number=$(printf '%s' "$alert" | jq -r '.number')
+            description=$(printf '%s' "$alert" | jq -r '.rule.description')
+            title="[CodeQL #${number}] ${description}"
+
+            # Only create if no issue (open or closed) already carries this title
+            already=$(printf '%s' "$existing" | jq --arg t "$title" 'map(select(. == $t)) | length')
+            if [ "$already" -eq 0 ]; then
+              severity=$(printf '%s' "$alert" | jq -r '.rule.severity // "warning"')
+              rule=$(printf '%s'     "$alert" | jq -r '.rule.id')
+              url=$(printf '%s'      "$alert" | jq -r '.html_url')
+              path=$(printf '%s'     "$alert" | jq -r '.most_recent_instance.location.path // "unknown"')
+              line=$(printf '%s'     "$alert" | jq -r '.most_recent_instance.location.start_line // ""')
+
+              gh issue create \
+                --title "$title" \
+                --body "## CodeQL Security Finding
+
+| Field    | Value |
+|----------|-------|
+| Alert    | [#${number}](${url}) |
+| Rule     | \`${rule}\` |
+| Severity | ${severity} |
+| File     | \`${path}${line:+:${line}}\` |
+
+[View full details on the Security tab](${url})" \
+                --label "security" \
+                --label "codeql"
+              echo "Created issue: $title"
+            else
+              echo "Issue already exists for alert #${number} — skipping"
+            fi
+          done
