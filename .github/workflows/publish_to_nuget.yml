@@ -84,6 +84,18 @@ jobs:
 
     # Push to GitHub Packages
     - name: Push packages to GitHub Packages
+      shell: pwsh
       run: |
-        dotnet nuget push 'artifacts/*.nupkg' --skip-duplicate -k ${{ secrets.GITHUB_TOKEN }} -s https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json
-        dotnet nuget push 'artifacts/*.snupkg' --skip-duplicate -k ${{ secrets.GITHUB_TOKEN }} -s https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json
+        $ErrorActionPreference = 'Stop'
+        $source = "https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json"
+        $key    = "${{ secrets.GITHUB_TOKEN }}"
+
+        Get-ChildItem -Path "artifacts" -Filter "*.nupkg" | ForEach-Object {
+          dotnet nuget push $_.FullName --skip-duplicate -k $key -s $source
+          if ($LASTEXITCODE -ne 0) { throw "Push failed for $($_.Name)" }
+        }
+
+        Get-ChildItem -Path "artifacts" -Filter "*.snupkg" -ErrorAction SilentlyContinue | ForEach-Object {
+          dotnet nuget push $_.FullName --skip-duplicate -k $key -s $source
+          if ($LASTEXITCODE -ne 0) { throw "Push failed for $($_.Name)" }
+        }

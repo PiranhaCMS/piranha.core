@@ -11,8 +11,8 @@
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageTags>cms mvc razorpages aspnetcore netstandard</PackageTags>
     <PackageIcon>piranha.png</PackageIcon>
-    <PackageProjectUrl>https://github.com/MinooTrading/piranha.core</PackageProjectUrl>
-    <RepositoryUrl>https://github.com/MinooTrading/piranha.core</RepositoryUrl>
+    <PackageProjectUrl>https://github.com/MinooTradingSPC/piranha.core</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/MinooTradingSPC/piranha.core</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <PublishRepositoryUrl>true</PublishRepositoryUrl>
     <IncludeSymbols>true</IncludeSymbols>
