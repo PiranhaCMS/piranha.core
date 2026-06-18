@@ -12,10 +12,10 @@
   "devDependencies": {
     "@aspnet/signalr": "^1.0.27",
     "@babel/code-frame": "^8.0.0",
-    "@babel/core": "^7.8.4",
+    "@babel/core": "^8.0.1",
     "@babel/template": "^8.0.0",
     "@babel/types": "^7.8.3",
-    "@fortawesome/fontawesome-free": "5.8.1",
+    "@fortawesome/fontawesome-free": "7.2.0",
     "bootstrap": "4.4.1",
     "dompurify": "^3.4.11",
     "dropzone": "5.5.1",
@@ -30,11 +30,11 @@
     "nestable2": "1.6.0",
     "popper.js": "1.16.0",
     "sass": "^1.69.3",
-    "select2": "4.0.13",
+    "select2": "4.1.0",
     "simplemde": "1.11.2",
     "through2": "^3.0.1",
     "vue": "^3.5.38",
     "vue-template-compiler": "^0.1.0",
-    "vuejs-datepicker": "^0.9.29"
+    "vuejs-datepicker": "^1.6.2"
   }
 }
