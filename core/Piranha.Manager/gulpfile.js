@@ -44,7 +44,7 @@ function vueCompile() {
                     });
                 }
 
-                var ast = babel.parse(component.script.content, {
+                var ast = babel.parseSync(component.script.content, {
                     parserOpts: {
                         sourceFilename: file.path
                     }
@@ -61,15 +61,13 @@ function vueCompile() {
 
                 ast.program.body = [componentAst]
 
-                babel.transformFromAst(ast, null, null, function (err, result) {
-                    if (err) {
-                        callback(err, null)
-                    }
-                    else {
-                        file.contents = Buffer.from(result.code);
-                        callback(null, file)
-                    }
-                });
+                try {
+                    var result = babel.transformFromAstSync(ast, null, null);
+                    file.contents = Buffer.from(result.code);
+                    callback(null, file);
+                } catch (err) {
+                    callback(err, null);
+                }
             }
             var componentName = path.basename(file.path, ext);
             if (file.isBuffer()) {
