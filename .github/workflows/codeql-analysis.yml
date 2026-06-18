@@ -72,20 +72,23 @@ jobs:
               path=$(printf '%s'     "$alert" | jq -r '.most_recent_instance.location.path // "unknown"')
               line=$(printf '%s'     "$alert" | jq -r '.most_recent_instance.location.start_line // ""')
 
+              # Build body via printf into a temp file to avoid YAML pipe-character conflicts
+              body_file=$(mktemp)
+              printf '## CodeQL Security Finding\n\n'                           > "$body_file"
+              printf '| Field    | Value |\n'                                  >> "$body_file"
+              printf '|----------|-------|\n'                                  >> "$body_file"
+              printf '| Alert    | [#%s](%s) |\n'    "$number" "$url"         >> "$body_file"
+              printf '| Rule     | `%s` |\n'          "$rule"                 >> "$body_file"
+              printf '| Severity | %s |\n'            "$severity"             >> "$body_file"
+              printf '| File     | `%s` |\n'          "${path}${line:+:$line}" >> "$body_file"
+              printf '\n[View full details on the Security tab](%s)\n' "$url"  >> "$body_file"
+
               gh issue create \
                 --title "$title" \
-                --body "## CodeQL Security Finding
-
-| Field    | Value |
-|----------|-------|
-| Alert    | [#${number}](${url}) |
-| Rule     | \`${rule}\` |
-| Severity | ${severity} |
-| File     | \`${path}${line:+:${line}}\` |
-
-[View full details on the Security tab](${url})" \
+                --body-file "$body_file" \
                 --label "security" \
                 --label "codeql"
+              rm -f "$body_file"
               echo "Created issue: $title"
             else
               echo "Issue already exists for alert #${number} — skipping"
