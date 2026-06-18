@@ -10,14 +10,14 @@
   "author": "Copyright (c) .NET Foundation and Contributors",
   "license": "MIT",
   "devDependencies": {
-    "@aspnet/signalr": "1.1.0",
+/b    "@aspnet/signalr": "^1.0.27",
     "@babel/code-frame": "^8.0.0",
     "@babel/core": "^7.8.4",
     "@babel/template": "^8.0.0",
     "@babel/types": "^7.8.3",
     "@fortawesome/fontawesome-free": "5.8.1",
     "bootstrap": "4.4.1",
-    "dompurify": "3.2.4",
+    "dompurify": "^3.4.11",
     "dropzone": "5.5.1",
     "gulp": "^5.0.1",
     "gulp-concat": "2.6.1",
@@ -33,8 +33,8 @@
     "select2": "4.0.13",
     "simplemde": "1.11.2",
     "through2": "^3.0.1",
-    "vue": "2.7.16",
-    "vue-template-compiler": "2.7.16",
-    "vuejs-datepicker": "1.6.2"
+    "vue": "^3.5.38",
+    "vue-template-compiler": "^0.1.0",
+    "vuejs-datepicker": "^0.9.29"
   }
 }
