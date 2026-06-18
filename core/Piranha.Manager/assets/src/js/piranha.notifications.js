@@ -8,6 +8,9 @@ piranha.notifications = new Vue({
         items: [],
     },
     methods: {
+        sanitize: function (html) {
+            return DOMPurify.sanitize(html || '', {USE_PROFILES: {html: true}});
+        },
         unauthorized: function() {
             this.push({
                 type: "danger",

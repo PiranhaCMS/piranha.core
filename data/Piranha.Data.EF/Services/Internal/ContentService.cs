@@ -10,7 +10,7 @@
 
 using System.Collections;
 using System.Dynamic;
-using AutoMapper;
+using MapsterMapper;
 using Piranha.Data;
 using Piranha.Models;
 

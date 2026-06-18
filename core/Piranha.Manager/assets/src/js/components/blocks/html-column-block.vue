@@ -18,8 +18,8 @@ export default {
     props: ["uid", "toolbar", "model"],
     data: function () {
         return {
-            column1: this.model.column1.value,
-            column2: this.model.column2.value,
+            column1: DOMPurify.sanitize(this.model.column1.value || '', {USE_PROFILES: {html: true}}),
+            column2: DOMPurify.sanitize(this.model.column2.value || '', {USE_PROFILES: {html: true}}),
         };
     },
     methods: {

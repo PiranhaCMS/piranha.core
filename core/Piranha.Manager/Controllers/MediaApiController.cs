@@ -133,7 +133,7 @@ public class MediaApiController : Controller
             result.Status = new StatusMessage
             {
                 Type = StatusMessage.Success,
-                Body = String.Format(_localizer.Media["The folder <code>{0}</code> was saved"], model.Name)
+                Body = String.Format(_localizer.Media["The folder <code>{0}</code> was saved"], System.Text.Encodings.Web.HtmlEncoder.Default.Encode(model.Name ?? ""))
             };
 
             return Ok(result);

@@ -1,5 +1,5 @@
 <div id="notification-hub">
     <div v-for="item in items" class="notification" v-bind:class="item.style">
-        <p v-html="item.body"></p>
+        <p v-html="sanitize(item.body)"></p>
     </div>
 </div>

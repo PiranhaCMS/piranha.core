@@ -38,6 +38,12 @@ export default {
         }
     },
     created: function () {
+        if (this.model.body.value) {
+            this.model.body.value = DOMPurify.sanitize(this.model.body.value, {USE_PROFILES: {html: true}});
+        }
+        if (this.model.author.value) {
+            this.model.author.value = DOMPurify.sanitize(this.model.author.value, {USE_PROFILES: {html: true}});
+        }
         var quotes = [
             {
                 author: "Nelson Mandela",
