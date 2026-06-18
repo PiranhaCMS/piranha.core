@@ -1,9 +1,7 @@
 version: 2
 updates:
-  # Keep NuGet packages up-to-date.
-  # Third-party packages in Directory.Packages.props are pinned to exact versions;
-  # Dependabot will raise PRs whenever a newer version is published so the team
-  # can review changelogs and the existing patch-management workflow can audit CVEs.
+
+  # NuGet — solution-wide (Piranha.sln at root covers all projects)
   - package-ecosystem: "nuget"
     directory: "/"
     schedule:
@@ -15,20 +13,86 @@ updates:
       - "dependencies"
       - "security"
     open-pull-requests-limit: 10
-    # Group all Microsoft.Extensions.* and Asp.Versioning.* bumps into a single PR
-    # to reduce noise — they are released together and rarely introduce regressions.
     groups:
-      microsoft-extensions:
+      # EF Core and all provider packages are released together
+      entity-framework-core:
         patterns:
-          - "Microsoft.Extensions.*"
+          - "Microsoft.EntityFrameworkCore*"
+          - "Npgsql.EntityFrameworkCore.*"
+          - "Pomelo.EntityFrameworkCore.*"
+      # ASP.NET Core / Extensions ship in lock-step
+      aspnetcore:
+        patterns:
           - "Microsoft.AspNetCore.*"
-          - "Asp.Versioning.*"
+          - "Microsoft.Extensions.*"
+      # Identity packages are part of the ASP.NET Core release train
+      aspnetcore-identity:
+        patterns:
+          - "Microsoft.AspNetCore.Identity.*"
+      # Mapster object-mapping library
+      mapster:
+        patterns:
+          - "Mapster*"
+      # SkiaSharp image-processing library and native assets
+      skiasharp:
+        patterns:
+          - "SkiaSharp*"
+      # Test infrastructure: runner, coverage, and assertion libraries
+      testing:
+        patterns:
+          - "coverlet.*"
           - "Microsoft.NET.Test.Sdk"
+          - "xunit*"
+          - "Moq"
 
-  # Keep GitHub Actions pinned and up-to-date.
-  # Dependabot automatically proposes SHA-pinned updates so action versions
-  # can be locked to an immutable commit rather than a mutable tag (supply chain
-  # hardening per SLSA / OpenSSF Scorecard recommendations).
+  # npm — Piranha.Manager frontend (Vue 2, DOMPurify, gulp build pipeline)
+  - package-ecosystem: "npm"
+    directory: "/core/Piranha.Manager"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "08:30"
+      timezone: "UTC"
+    labels:
+      - "dependencies"
+      - "frontend"
+    open-pull-requests-limit: 5
+    groups:
+      gulp-build:
+        patterns:
+          - "gulp*"
+          - "del"
+      vue:
+        patterns:
+          - "vue*"
+
+  # npm — MvcWeb example application
+  - package-ecosystem: "npm"
+    directory: "/examples/MvcWeb"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "08:30"
+      timezone: "UTC"
+    labels:
+      - "dependencies"
+      - "examples"
+    open-pull-requests-limit: 3
+
+  # npm — RazorWeb example application
+  - package-ecosystem: "npm"
+    directory: "/examples/RazorWeb"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "08:30"
+      timezone: "UTC"
+    labels:
+      - "dependencies"
+      - "examples"
+    open-pull-requests-limit: 3
+
+  # GitHub Actions — keep workflow action versions up-to-date
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:
