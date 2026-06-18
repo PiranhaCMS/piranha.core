@@ -20,11 +20,11 @@ jobs:
 
     # Checkout
     - name: Checkout repository
-      uses: actions/checkout@v3
+      uses: actions/checkout@v6
 
     # Setup .NET Core
     - name: Setup .NET
-      uses: actions/setup-dotnet@v3
+      uses: actions/setup-dotnet@v5
       with:
         dotnet-version: '10.0.x'
         source-url: https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json
@@ -33,7 +33,7 @@ jobs:
 
     # Setup Node.js
     - name: Use Node.js 20.x
-      uses: actions/setup-node@v3
+      uses: actions/setup-node@v6
       with:
         node-version: 20
 
