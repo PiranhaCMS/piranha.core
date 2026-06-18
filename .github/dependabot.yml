@@ -44,6 +44,19 @@ updates:
           - "Microsoft.NET.Test.Sdk"
           - "xunit*"
           - "Moq"
+    # These packages are pinned per target framework (8.*/9.*/10.*).
+    # Block major bumps so Dependabot never changes a net8 reference from 8.* to 9.* or 10.*.
+    ignore:
+      - dependency-name: "Microsoft.Extensions.Caching.Abstractions"
+        update-types: ["version-update:semver-major"]
+      - dependency-name: "Microsoft.Extensions.Configuration.Abstractions"
+        update-types: ["version-update:semver-major"]
+      - dependency-name: "Microsoft.Extensions.DependencyInjection.Abstractions"
+        update-types: ["version-update:semver-major"]
+      - dependency-name: "Microsoft.Extensions.FileProviders.Embedded"
+        update-types: ["version-update:semver-major"]
+      - dependency-name: "Microsoft.Extensions.Localization"
+        update-types: ["version-update:semver-major"]
 
   # npm — Piranha.Manager frontend (Vue 2, DOMPurify, gulp build pipeline)
   - package-ecosystem: "npm"
