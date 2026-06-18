@@ -1,0 +1,43 @@
+version: 2
+updates:
+  # Keep NuGet packages up-to-date.
+  # Third-party packages in Directory.Packages.props are pinned to exact versions;
+  # Dependabot will raise PRs whenever a newer version is published so the team
+  # can review changelogs and the existing patch-management workflow can audit CVEs.
+  - package-ecosystem: "nuget"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "08:30"
+      timezone: "UTC"
+    labels:
+      - "dependencies"
+      - "security"
+    open-pull-requests-limit: 10
+    # Group all Microsoft.Extensions.* and Asp.Versioning.* bumps into a single PR
+    # to reduce noise — they are released together and rarely introduce regressions.
+    groups:
+      microsoft-extensions:
+        patterns:
+          - "Microsoft.Extensions.*"
+          - "Microsoft.AspNetCore.*"
+          - "Asp.Versioning.*"
+          - "Microsoft.NET.Test.Sdk"
+
+  # Keep GitHub Actions pinned and up-to-date.
+  # Dependabot automatically proposes SHA-pinned updates so action versions
+  # can be locked to an immutable commit rather than a mutable tag (supply chain
+  # hardening per SLSA / OpenSSF Scorecard recommendations).
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "08:30"
+      timezone: "UTC"
+    labels:
+      - "dependencies"
+      - "security"
+      - "ci"
+    open-pull-requests-limit: 5
