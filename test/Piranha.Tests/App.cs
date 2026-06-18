@@ -49,7 +49,7 @@ public class App : BaseTests
         str = Piranha.App.Markdown.Transform(str)
             .Replace("\n", "");
 
-        Assert.Equal("<h1>This is the title</h1><p>This is the body</p>", str);
+        Assert.Equal("<h1 id=\"this-is-the-title\">This is the title</h1><p>This is the body</p>", str);
     }
 
     [Fact]

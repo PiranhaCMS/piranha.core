@@ -8,7 +8,7 @@
  *
  */
 
-using AutoMapper;
+using MapsterMapper;
 using Piranha.Data.EF;
 
 namespace Piranha.Services;

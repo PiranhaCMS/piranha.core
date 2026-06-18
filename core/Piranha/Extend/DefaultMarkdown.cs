@@ -18,7 +18,10 @@ public class DefaultMarkdown : IMarkdown
     /// <summary>
     /// Gets/sets the additional pipeline to use for markdown transformation.
     /// </summary>
-    public MarkdownPipeline _pipeline { get; set; }
+    public MarkdownPipeline _pipeline { get; set; } = new MarkdownPipelineBuilder()
+        .UseAdvancedExtensions()
+        .DisableHtml()
+        .Build();
 
     /// <inheritdoc />
     public string Transform(string md)

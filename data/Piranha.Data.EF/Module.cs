@@ -8,7 +8,8 @@
  *
  */
 
-using AutoMapper;
+using Mapster;
+using MapsterMapper;
 using Piranha.Extend;
 
 namespace Piranha.Data.EF;
@@ -51,144 +52,166 @@ public class Module : IModule
     public string IconUrl => "https://piranhacms.org/assets/twitter-shield.png";
 
     /// <summary>
-    /// Create automapping.
+    /// Initializes the Mapster mapping configuration.
     /// </summary>
     static Module()
     {
-        var mapperConfig = new MapperConfiguration(cfg =>
-        {
-            cfg.CreateMap<Data.Alias, Data.Alias>()
-                .ForMember(a => a.Id, o => o.Ignore())
-                .ForMember(a => a.Created, o => o.Ignore());
-            cfg.CreateMap<Data.Category, Data.Category>()
-                .ForMember(c => c.Id, o => o.Ignore())
-                .ForMember(c => c.Created, o => o.Ignore());
-            cfg.CreateMap<Data.Category, Models.Taxonomy>()
-                .ForMember(c => c.Type, o => o.MapFrom(m => Models.TaxonomyType.Category));
-            cfg.CreateMap<Data.Content, Models.GenericContent>()
-                .ForMember(p => p.PrimaryImage, o => o.MapFrom(m => m.PrimaryImageId))
-                .ForMember(p => p.Permissions, o => o.Ignore());
-            cfg.CreateMap<Models.GenericContent, Data.Content>()
-                .ForMember(c => c.CategoryId, o => o.Ignore())
-                .ForMember(c => c.Category, o => o.Ignore())
-                .ForMember(c => c.Blocks, o => o.Ignore())
-                .ForMember(c => c.Fields, o => o.Ignore())
-                .ForMember(c => c.Tags, o => o.Ignore())
-                .ForMember(c => c.Type, o => o.Ignore())
-                .ForMember(c => c.Translations, o => o.Ignore())
-                .ForMember(c => c.Created, o => o.Ignore())
-                .ForMember(c => c.LastModified, o => o.Ignore());
-            cfg.CreateMap<Data.ContentGroup, Models.ContentGroup>();
-            cfg.CreateMap<Models.ContentGroup, Data.ContentGroup>()
-                .ForMember(g => g.Created, o => o.Ignore())
-                .ForMember(g => g.LastModified, o => o.Ignore());
-            cfg.CreateMap<Data.ContentTranslation, Models.GenericContent>()
-                .ForMember(c =>  c.Id, o => o.Ignore())
-                .ForMember(c =>  c.TypeId, o => o.Ignore())
-                .ForMember(c =>  c.PrimaryImage, o => o.Ignore())
-                .ForMember(c =>  c.Created, o => o.Ignore())
-                .ForMember(c =>  c.LastModified, o => o.Ignore())
-                .ForMember(c =>  c.Permissions, o => o.Ignore());
-            cfg.CreateMap<Data.MediaFolder, Data.MediaFolder>()
-                .ForMember(f => f.Id, o => o.Ignore())
-                .ForMember(f => f.Created, o => o.Ignore())
-                .ForMember(f => f.Media, o => o.Ignore());
-            cfg.CreateMap<Data.MediaFolder, Models.MediaStructureItem>()
-                .ForMember(f => f.Level, o => o.Ignore())
-                .ForMember(f => f.FolderCount, o => o.Ignore())
-                .ForMember(f => f.MediaCount, o => o.Ignore())
-                .ForMember(f => f.Items, o => o.Ignore());
-            cfg.CreateMap<Data.Page, Models.PageBase>()
-                .ForMember(p => p.TypeId, o => o.MapFrom(m => m.PageTypeId))
-                .ForMember(p => p.PrimaryImage, o => o.MapFrom(m => m.PrimaryImageId))
-                .ForMember(p => p.OgImage, o => o.MapFrom(m => m.OgImageId))
-                .ForMember(p => p.Permalink, o => o.MapFrom(m => "/" + m.Slug))
-                .ForMember(p => p.Permissions, o => o.Ignore())
-                .ForMember(p => p.Blocks, o => o.Ignore())
-                .ForMember(p => p.CommentCount, o => o.Ignore());
-            cfg.CreateMap<Models.PageBase, Data.Page>()
-                .ForMember(p => p.ContentType, o => o.Ignore())
-                .ForMember(p => p.PrimaryImageId, o => o.MapFrom(m => m.PrimaryImage != null ? m.PrimaryImage.Id : (Guid?)null ))
-                .ForMember(p => p.OgImageId, o => o.MapFrom(m => m.OgImage != null ? m.OgImage.Id : (Guid?)null ))
-                .ForMember(p => p.PageTypeId, o => o.MapFrom(m => m.TypeId))
-                .ForMember(p => p.Blocks, o => o.Ignore())
-                .ForMember(p => p.Fields, o => o.Ignore())
-                .ForMember(p => p.Created, o => o.Ignore())
-                .ForMember(p => p.LastModified, o => o.Ignore())
-                .ForMember(p => p.Permissions, o => o.Ignore())
-                .ForMember(p => p.PageType, o => o.Ignore())
-                .ForMember(p => p.Site, o => o.Ignore())
-                .ForMember(p => p.Parent, o => o.Ignore());
-            cfg.CreateMap<Data.Page, Models.SitemapItem>()
-                .ForMember(p => p.MenuTitle, o => o.Ignore())
-                .ForMember(p => p.Level, o => o.Ignore())
-                .ForMember(p => p.Items, o => o.Ignore())
-                .ForMember(p => p.PageTypeName, o => o.Ignore())
-                .ForMember(p => p.Permalink, o => o.MapFrom(d => !d.ParentId.HasValue && d.SortOrder == 0 ? "/" : "/" + d.Slug))
-                .ForMember(p => p.Permissions, o => o.MapFrom(d => d.Permissions.Select(dp => dp.Permission).ToList()));
-            cfg.CreateMap<Data.Param, Data.Param>()
-                .ForMember(p => p.Id, o => o.Ignore())
-                .ForMember(p => p.Created, o => o.Ignore());
-            cfg.CreateMap<Data.Post, Models.PostBase>()
-                .ForMember(p => p.TypeId, o => o.MapFrom(m => m.PostTypeId))
-                .ForMember(p => p.PrimaryImage, o => o.MapFrom(m => m.PrimaryImageId))
-                .ForMember(p => p.OgImage, o => o.MapFrom(m => m.OgImageId))
-                .ForMember(p => p.Permalink, o => o.Ignore())
-                .ForMember(p => p.Permissions, o => o.Ignore())
-                .ForMember(p => p.Blocks, o => o.Ignore())
-                .ForMember(p => p.CommentCount, o => o.Ignore());
-            cfg.CreateMap<Data.PostTag, Models.Taxonomy>()
-                .ForMember(p => p.Id, o => o.MapFrom(m => m.TagId))
-                .ForMember(p => p.Title, o => o.MapFrom(m => m.Tag.Title))
-                .ForMember(p => p.Slug, o => o.MapFrom(m => m.Tag.Slug))
-                .ForMember(p => p.Type, o => o.MapFrom(m => Models.TaxonomyType.Tag));
-            cfg.CreateMap<Models.PostBase, Data.Post>()
-                .ForMember(p => p.PostTypeId, o => o.MapFrom(m => m.TypeId))
-                .ForMember(p => p.CategoryId, o => o.MapFrom(m => m.Category.Id))
-                .ForMember(p => p.PrimaryImageId, o => o.MapFrom(m => m.PrimaryImage != null ? m.PrimaryImage.Id : (Guid?)null ))
-                .ForMember(p => p.OgImageId, o => o.MapFrom(m => m.OgImage != null ? m.OgImage.Id : (Guid?)null ))
-                .ForMember(p => p.Blocks, o => o.Ignore())
-                .ForMember(p => p.Fields, o => o.Ignore())
-                .ForMember(p => p.Created, o => o.Ignore())
-                .ForMember(p => p.LastModified, o => o.Ignore())
-                .ForMember(p => p.Permissions, o => o.Ignore())
-                .ForMember(p => p.PostType, o => o.Ignore())
-                .ForMember(p => p.Blog, o => o.Ignore())
-                .ForMember(p => p.Category, o => o.Ignore())
-                .ForMember(p => p.Tags, o => o.Ignore());
-            cfg.CreateMap<Data.Site, Data.Site>()
-                .ForMember(s => s.Id, o => o.Ignore())
-                .ForMember(s => s.Language, o => o.Ignore())
-                .ForMember(s => s.Created, o => o.Ignore());
-            cfg.CreateMap<Data.Site, Models.SiteContentBase>()
-                .ForMember(s => s.TypeId, o => o.MapFrom(m => m.SiteTypeId))
-                .ForMember(s => s.Permissions, o => o.Ignore());
-            cfg.CreateMap<Models.SiteContentBase, Data.Site>()
-                .ForMember(s => s.LanguageId, o => o.Ignore())
-                .ForMember(s => s.SiteTypeId, o => o.Ignore())
-                .ForMember(s => s.InternalId, o => o.Ignore())
-                .ForMember(s => s.Description, o => o.Ignore())
-                .ForMember(s => s.LogoId, o => o.Ignore())
-                .ForMember(s => s.Hostnames, o => o.Ignore())
-                .ForMember(s => s.IsDefault, o => o.Ignore())
-                .ForMember(s => s.Culture, o => o.Ignore())
-                .ForMember(s => s.Fields, o => o.Ignore())
-                .ForMember(s => s.Language, o => o.Ignore())
-                .ForMember(s => s.Created, o => o.Ignore())
-                .ForMember(s => s.LastModified, o => o.Ignore())
-                .ForMember(s => s.ContentLastModified, o => o.Ignore());
-            cfg.CreateMap<Data.Tag, Data.Tag>()
-                .ForMember(t => t.Id, o => o.Ignore())
-                .ForMember(t => t.Created, o => o.Ignore());
-            cfg.CreateMap<Data.Tag, Models.Taxonomy>()
-                .ForMember(t => t.Type, o => o.MapFrom(m => Models.TaxonomyType.Tag));
-        });
-        mapperConfig.AssertConfigurationIsValid();
-        Mapper = mapperConfig.CreateMapper();
+        var config = new TypeAdapterConfig();
+
+        config.NewConfig<Data.Alias, Data.Alias>()
+            .Ignore(a => a.Id)
+            .Ignore(a => a.Created);
+
+        config.NewConfig<Data.Category, Data.Category>()
+            .Ignore(c => c.Id)
+            .Ignore(c => c.Created);
+
+        config.NewConfig<Data.Category, Models.Taxonomy>()
+            .Map(c => c.Type, m => Models.TaxonomyType.Category);
+
+        config.NewConfig<Data.Content, Models.GenericContent>()
+            .Map(p => p.PrimaryImage, m => m.PrimaryImageId)
+            .Ignore(p => p.Permissions);
+
+        config.NewConfig<Models.GenericContent, Data.Content>()
+            .Ignore(c => c.CategoryId)
+            .Ignore(c => c.Category)
+            .Ignore(c => c.Blocks)
+            .Ignore(c => c.Fields)
+            .Ignore(c => c.Tags)
+            .Ignore(c => c.Type)
+            .Ignore(c => c.Translations)
+            .Ignore(c => c.Created)
+            .Ignore(c => c.LastModified);
+
+        config.NewConfig<Data.ContentGroup, Models.ContentGroup>();
+
+        config.NewConfig<Models.ContentGroup, Data.ContentGroup>()
+            .Ignore(g => g.Created)
+            .Ignore(g => g.LastModified);
+
+        config.NewConfig<Data.ContentTranslation, Models.GenericContent>()
+            .Ignore(c => c.Id)
+            .Ignore(c => c.TypeId)
+            .Ignore(c => c.PrimaryImage)
+            .Ignore(c => c.Created)
+            .Ignore(c => c.LastModified)
+            .Ignore(c => c.Permissions);
+
+        config.NewConfig<Data.MediaFolder, Data.MediaFolder>()
+            .Ignore(f => f.Id)
+            .Ignore(f => f.Created)
+            .Ignore(f => f.Media);
+
+        config.NewConfig<Data.MediaFolder, Models.MediaStructureItem>()
+            .Ignore(f => f.Level)
+            .Ignore(f => f.FolderCount)
+            .Ignore(f => f.MediaCount)
+            .Ignore(f => f.Items);
+
+        config.NewConfig<Data.Page, Models.PageBase>()
+            .Map(p => p.TypeId, m => m.PageTypeId)
+            .Map(p => p.PrimaryImage, m => m.PrimaryImageId)
+            .Map(p => p.OgImage, m => m.OgImageId)
+            .Map(p => p.Permalink, m => "/" + m.Slug)
+            .Ignore(p => p.Permissions)
+            .Ignore(p => p.Blocks)
+            .Ignore(p => p.CommentCount);
+
+        config.NewConfig<Models.PageBase, Data.Page>()
+            .Ignore(p => p.ContentType)
+            .Map(p => p.PrimaryImageId, m => m.PrimaryImage != null ? m.PrimaryImage.Id : (Guid?)null)
+            .Map(p => p.OgImageId, m => m.OgImage != null ? m.OgImage.Id : (Guid?)null)
+            .Map(p => p.PageTypeId, m => m.TypeId)
+            .Ignore(p => p.Blocks)
+            .Ignore(p => p.Fields)
+            .Ignore(p => p.Created)
+            .Ignore(p => p.LastModified)
+            .Ignore(p => p.Permissions)
+            .Ignore(p => p.PageType)
+            .Ignore(p => p.Site)
+            .Ignore(p => p.Parent);
+
+        config.NewConfig<Data.Page, Models.SitemapItem>()
+            .Ignore(p => p.MenuTitle)
+            .Ignore(p => p.Level)
+            .Ignore(p => p.Items)
+            .Ignore(p => p.PageTypeName)
+            .Map(p => p.Permalink, d => !d.ParentId.HasValue && d.SortOrder == 0 ? "/" : "/" + d.Slug)
+            .Map(p => p.Permissions, d => d.Permissions.Select(dp => dp.Permission).ToList());
+
+        config.NewConfig<Data.Param, Data.Param>()
+            .Ignore(p => p.Id)
+            .Ignore(p => p.Created);
+
+        config.NewConfig<Data.Post, Models.PostBase>()
+            .Map(p => p.TypeId, m => m.PostTypeId)
+            .Map(p => p.PrimaryImage, m => m.PrimaryImageId)
+            .Map(p => p.OgImage, m => m.OgImageId)
+            .Ignore(p => p.Permalink)
+            .Ignore(p => p.Permissions)
+            .Ignore(p => p.Blocks)
+            .Ignore(p => p.CommentCount);
+
+        config.NewConfig<Data.PostTag, Models.Taxonomy>()
+            .Map(p => p.Id, m => m.TagId)
+            .Map(p => p.Title, m => m.Tag.Title)
+            .Map(p => p.Slug, m => m.Tag.Slug)
+            .Map(p => p.Type, m => Models.TaxonomyType.Tag);
+
+        config.NewConfig<Models.PostBase, Data.Post>()
+            .Map(p => p.PostTypeId, m => m.TypeId)
+            .Map(p => p.CategoryId, m => m.Category.Id)
+            .Map(p => p.PrimaryImageId, m => m.PrimaryImage != null ? m.PrimaryImage.Id : (Guid?)null)
+            .Map(p => p.OgImageId, m => m.OgImage != null ? m.OgImage.Id : (Guid?)null)
+            .Ignore(p => p.Blocks)
+            .Ignore(p => p.Fields)
+            .Ignore(p => p.Created)
+            .Ignore(p => p.LastModified)
+            .Ignore(p => p.Permissions)
+            .Ignore(p => p.PostType)
+            .Ignore(p => p.Blog)
+            .Ignore(p => p.Category)
+            .Ignore(p => p.Tags);
+
+        config.NewConfig<Data.Site, Data.Site>()
+            .Ignore(s => s.Id)
+            .Ignore(s => s.Language)
+            .Ignore(s => s.Created);
+
+        config.NewConfig<Data.Site, Models.SiteContentBase>()
+            .Map(s => s.TypeId, m => m.SiteTypeId)
+            .Ignore(s => s.Permissions);
+
+        config.NewConfig<Models.SiteContentBase, Data.Site>()
+            .Ignore(s => s.LanguageId)
+            .Ignore(s => s.SiteTypeId)
+            .Ignore(s => s.InternalId)
+            .Ignore(s => s.Description)
+            .Ignore(s => s.LogoId)
+            .Ignore(s => s.Hostnames)
+            .Ignore(s => s.IsDefault)
+            .Ignore(s => s.Culture)
+            .Ignore(s => s.Fields)
+            .Ignore(s => s.Language)
+            .Ignore(s => s.Created)
+            .Ignore(s => s.LastModified)
+            .Ignore(s => s.ContentLastModified);
+
+        config.NewConfig<Data.Tag, Data.Tag>()
+            .Ignore(t => t.Id)
+            .Ignore(t => t.Created);
+
+        config.NewConfig<Data.Tag, Models.Taxonomy>()
+            .Map(t => t.Type, m => Models.TaxonomyType.Tag);
+
+        Mapper = new global::MapsterMapper.Mapper(config);
     }
 
     /// <summary>
     /// Initializes the module.
     /// </summary>
-    public void Init() { }
+    public void Init()
+    {
+    }
 }

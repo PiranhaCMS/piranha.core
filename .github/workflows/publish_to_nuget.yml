@@ -1,6 +1,7 @@
 on:
   release:
     types: [published]
+  workflow_dispatch:
 
 jobs:
   build:
@@ -8,7 +9,8 @@ jobs:
     environment: Production
     name: Publish NuGet Packages
     permissions:
-      id-token: write # Required for requesting the JWT
+      contents: read
+      packages: write
 
     steps:
 
@@ -20,10 +22,10 @@ jobs:
     - name: Setup .NET
       uses: actions/setup-dotnet@v3
       with:
-        dotnet-version: '9.0.x'
-        source-url: https://api.nuget.org/v3/index.json
+        dotnet-version: '10.0.x'
+        source-url: https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json
       env:
-        NUGET_AUTH_TOKEN: ${{secrets.NugetAuthToken}}
+        NUGET_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
     # Setup Node.js
     - name: Use Node.js 20.x
@@ -61,44 +63,8 @@ jobs:
         dotnet pack identity/Piranha.AspNetCore.Identity.SQLite/Piranha.AspNetCore.Identity.SQLite.csproj --no-build -c Release -o ./artifacts
         dotnet pack identity/Piranha.AspNetCore.Identity.SQLServer/Piranha.AspNetCore.Identity.SQLServer.csproj --no-build -c Release -o ./artifacts
 
-    # Install SignClient
-    - name: Install sign
-      run: dotnet tool install --tool-path . --prerelease sign
-
-    # Login to Azure using a ServicePrincipal configured to authenticate agaist a GitHub Action
-    - name: 'Az CLI login'
-      uses: azure/login@v2
-      with:
-        client-id: ${{ secrets.AZURE_CLIENT_ID }}
-        tenant-id: ${{ secrets.AZURE_TENANT_ID }}
-        subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
-
-    # Sign packages
-    - name: Sign packages
-      shell: pwsh
-      run: >
-        ./sign code azure-key-vault
-        artifacts/*.nupkg
-        --publisher-name "Piranha CMS"
-        --description "Piranha CMS"
-        --description-url "https://github.com/piranhacms/piranha.core"
-        --azure-credential-type "azure-cli"
-        --azure-key-vault-url "${{ secrets.KEY_VAULT_URL }}" # This does not need to be a secret and is just a placeholder
-        --azure-key-vault-certificate "${{ secrets.KEY_VAULT_CERTIFICATE_ID }}" # This does not need to be a secret and is just a placeholder
-
-    # Sign symbol packages
-    - name: Sign symbol packages
-      shell: pwsh
-      run: >
-        ./sign code azure-key-vault
-        artifacts/*.snupkg
-        --publisher-name "Piranha CMS"
-        --description "Piranha CMS"
-        --description-url "https://github.com/piranhacms/piranha.core"
-        --azure-credential-type "azure-cli"
-        --azure-key-vault-url "${{ secrets.KEY_VAULT_URL }}" # This does not need to be a secret and is just a placeholder
-        --azure-key-vault-certificate "${{ secrets.KEY_VAULT_CERTIFICATE_ID }}" # This does not need to be a secret and is just a placeholder
-
-    # Push to NuGet
-    - name: Push generated package to GitHub registry
-      run: dotnet nuget push '**/Piranha*.nupkg' --skip-duplicate -k ${{ secrets.NugetAuthToken }}
+    # Push to GitHub Packages
+    - name: Push packages to GitHub Packages
+      run: |
+        dotnet nuget push 'artifacts/*.nupkg' --skip-duplicate -k ${{ secrets.GITHUB_TOKEN }} -s https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json
+        dotnet nuget push 'artifacts/*.snupkg' --skip-duplicate -k ${{ secrets.GITHUB_TOKEN }} -s https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json

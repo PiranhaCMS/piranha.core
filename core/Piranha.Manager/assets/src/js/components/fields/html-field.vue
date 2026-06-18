@@ -9,7 +9,7 @@ export default {
     props: ["uid", "toolbar", "model", "meta"],
     data: function () {
         return {
-            body: this.model.value
+            body: DOMPurify.sanitize(this.model.value || '', {USE_PROFILES: {html: true}})
         };
     },
     methods: {
