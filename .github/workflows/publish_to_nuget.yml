@@ -33,6 +33,13 @@ jobs:
       with:
         node-version: 20
 
+    # Build frontend assets
+    - name: Build frontend assets (Gulp)
+      working-directory: core/Piranha.Manager
+      run: |
+        npm install
+        npx gulp
+
     # Build and pack
     - name: Build solution and generate NuGet package
       run: |
