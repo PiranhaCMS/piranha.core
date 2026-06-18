@@ -1,6 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
+    <PackageId>MinooTrading.Azure.BlobStorage</PackageId>
     <RootNamespace>Piranha.Azure</RootNamespace>
     <NoWarn>$(NoWarn);1591</NoWarn>
     <Description>Package for storing uploaded media assets on Azure Blob Storage</Description>
@@ -11,7 +12,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Azure.Storage.Blobs" Version="12.18.0" />
+    <PackageReference Include="Azure.Storage.Blobs" Version="12.29.0" />
     <ProjectReference Include="..\Piranha\Piranha.csproj" />
   </ItemGroup>
 

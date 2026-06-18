@@ -2,9 +2,9 @@ name: .NET Linux
 
 on:
   push:
-    branches: [ master ]
+    branches: [ develop ]
   pull_request:
-    branches: [ master ]
+    branches: [ develop ]
 
 jobs:
   build:
@@ -16,15 +16,27 @@ jobs:
     - name: Setup .NET
       uses: actions/setup-dotnet@v3
       with:
-        dotnet-version: '9.0.x'
+        dotnet-version: '10.0.x'
     - name: Restore dependencies
       run: dotnet restore
     - name: Build
       run: dotnet build --no-restore
     - name: Test
-      run: dotnet test -f net9.0 --no-build -s build/tests.runsettings --no-build --verbosity normal /p:CollectCoverage=true /p:CoverletOutputFormat=\"json,lcov\" /p:MergeWith=../../coverage/lcov.net9.0.json /p:CoverletOutput=../../coverage/lcov
+      run: |
+        mkdir -p coverage
+        dotnet test test/Piranha.Tests/Piranha.Tests.csproj \
+          -f net10.0 --no-build -s build/tests.runsettings --verbosity normal \
+          -p:CollectCoverage=true \
+          -p:CoverletOutputFormat=json \
+          -p:CoverletOutput=../../coverage/coverage
+        dotnet test test/Piranha.Manager.Tests/Piranha.Manager.Tests.csproj \
+          -f net10.0 --no-build -s build/tests.runsettings --verbosity normal \
+          -p:CollectCoverage=true \
+          -p:CoverletOutputFormat=lcov \
+          -p:MergeWith=../../coverage/coverage.net10.0.json \
+          -p:CoverletOutput=../../coverage/lcov
     - name: Coveralls
       uses: coverallsapp/github-action@master
       with:
         github-token: ${{ secrets.GITHUB_TOKEN }}
-        path-to-lcov: ./coverage/lcov.net9.0.info
+        path-to-lcov: ./coverage/lcov.net10.0.info

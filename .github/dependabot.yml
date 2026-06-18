@@ -1,0 +1,107 @@
+version: 2
+updates:
+
+  # NuGet — solution-wide (Piranha.sln at root covers all projects)
+  - package-ecosystem: "nuget"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "08:30"
+      timezone: "UTC"
+    labels:
+      - "dependencies"
+      - "security"
+    open-pull-requests-limit: 10
+    groups:
+      # EF Core and all provider packages are released together
+      entity-framework-core:
+        patterns:
+          - "Microsoft.EntityFrameworkCore*"
+          - "Npgsql.EntityFrameworkCore.*"
+          - "Pomelo.EntityFrameworkCore.*"
+      # ASP.NET Core / Extensions ship in lock-step
+      aspnetcore:
+        patterns:
+          - "Microsoft.AspNetCore.*"
+          - "Microsoft.Extensions.*"
+      # Identity packages are part of the ASP.NET Core release train
+      aspnetcore-identity:
+        patterns:
+          - "Microsoft.AspNetCore.Identity.*"
+      # Mapster object-mapping library
+      mapster:
+        patterns:
+          - "Mapster*"
+      # SkiaSharp image-processing library and native assets
+      skiasharp:
+        patterns:
+          - "SkiaSharp*"
+      # Test infrastructure: runner, coverage, and assertion libraries
+      testing:
+        patterns:
+          - "coverlet.*"
+          - "Microsoft.NET.Test.Sdk"
+          - "xunit*"
+          - "Moq"
+
+  # npm — Piranha.Manager frontend (Vue 2, DOMPurify, gulp build pipeline)
+  - package-ecosystem: "npm"
+    directory: "/core/Piranha.Manager"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "08:30"
+      timezone: "UTC"
+    labels:
+      - "dependencies"
+      - "frontend"
+    open-pull-requests-limit: 5
+    groups:
+      gulp-build:
+        patterns:
+          - "gulp*"
+          - "del"
+      vue:
+        patterns:
+          - "vue*"
+
+  # npm — MvcWeb example application
+  - package-ecosystem: "npm"
+    directory: "/examples/MvcWeb"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "08:30"
+      timezone: "UTC"
+    labels:
+      - "dependencies"
+      - "examples"
+    open-pull-requests-limit: 3
+
+  # npm — RazorWeb example application
+  - package-ecosystem: "npm"
+    directory: "/examples/RazorWeb"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "08:30"
+      timezone: "UTC"
+    labels:
+      - "dependencies"
+      - "examples"
+    open-pull-requests-limit: 3
+
+  # GitHub Actions — keep workflow action versions up-to-date
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "08:30"
+      timezone: "UTC"
+    labels:
+      - "dependencies"
+      - "security"
+      - "ci"
+    open-pull-requests-limit: 5

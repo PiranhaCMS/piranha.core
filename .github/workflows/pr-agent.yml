@@ -1,0 +1,21 @@
+name: PR-Agent AI Code Review
+
+on:
+  pull_request:
+    types:
+      - opened
+      - reopened
+      - synchronize
+      - ready_for_review
+
+permissions:
+  contents: read
+  pull-requests: write
+  issues: write
+
+jobs:
+  pr-agent:
+    uses: KiarashMinoo/.github/.github/workflows/reusable-pr-agent.yml@main
+
+    secrets:
+      OPENAI_KEY: ${{ secrets.OPENAI_KEY }}

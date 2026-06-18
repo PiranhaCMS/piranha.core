@@ -1,6 +1,6 @@
 <template>
     <div class="block-body" :class="{ empty: isEmpty }">
-        <pre class="invisible" v-html="model.body.value"></pre>
+        <pre class="invisible" v-text="model.body.value"></pre>
         <textarea v-text="model.body.value" v-on:change="onChange" v-on:blur="onBlur"></textarea>
     </div>
 </template>

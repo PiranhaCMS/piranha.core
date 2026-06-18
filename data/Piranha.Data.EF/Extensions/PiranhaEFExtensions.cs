@@ -8,6 +8,7 @@
  *
  */
 
+using Mapster;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Piranha;
@@ -87,6 +88,8 @@ public static class PiranhaEFExtensions
         // Register services
         services.Add(new ServiceDescriptor(typeof(IContentServiceFactory), typeof(ContentServiceFactory), ServiceLifetime.Singleton));
         services.Add(new ServiceDescriptor(typeof(IDb), typeof(T), scope));
+        
+        services.AddMapster();
 
         return services;
     }
