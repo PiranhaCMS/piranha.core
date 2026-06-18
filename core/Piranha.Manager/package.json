@@ -35,6 +35,6 @@
     "through2": "^3.0.1",
     "vue": "^3.5.38",
     "vue-template-compiler": "^0.1.0",
-    "vuejs-datepicker": "^0.9.29"
+    "vuejs-datepicker": "^1.6.2"
   }
 }
