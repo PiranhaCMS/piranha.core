@@ -1,7 +1,7 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <PackageId>MinooTrading.Data.EF.PostgreSql</PackageId>
+    <PackageId>MinooTrading.Piranha.Data.EF.PostgreSql</PackageId>
     <NoWarn>$(NoWarn);1591</NoWarn>
     <Description>Entity Framework Core migration package for PostgreSQL</Description>
   </PropertyGroup>

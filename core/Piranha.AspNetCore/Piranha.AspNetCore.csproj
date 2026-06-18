@@ -1,7 +1,7 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <PackageId>MinooTrading.AspNetCore</PackageId>
+    <PackageId>MinooTrading.Piranha.AspNetCore</PackageId>
     <Description>Piranha CMS middleware components for AspNetCore</Description>
   </PropertyGroup>
 

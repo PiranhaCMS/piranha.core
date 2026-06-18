@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <PackageId>MinooTrading.Data.EF.SQLite</PackageId>
+    <PackageId>MinooTrading.Piranha.Data.EF.SQLite</PackageId>
     <NoWarn>$(NoWarn);1591</NoWarn>
     <Description>Entity Framework Core migration package for SQLite</Description>
   </PropertyGroup>

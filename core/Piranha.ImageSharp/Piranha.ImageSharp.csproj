@@ -1,7 +1,7 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <PackageId>MinooTrading.ImageSharp</PackageId>
+    <PackageId>MinooTrading.Piranha.ImageSharp</PackageId>
     <NoWarn>$(NoWarn);1591</NoWarn>
     <Description>Package for processing uploaded images using ImageSharp</Description>
   </PropertyGroup>

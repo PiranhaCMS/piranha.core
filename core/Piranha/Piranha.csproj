@@ -1,7 +1,7 @@
-﻿<Project Sdk="Microsoft.NET.Sdk" ToolsVersion="15.0">
+<Project Sdk="Microsoft.NET.Sdk" ToolsVersion="15.0">
 
   <PropertyGroup>
-    <PackageId>MinooTrading</PackageId>
+    <PackageId>MinooTrading.Piranha</PackageId>
     <NoWarn>$(NoWarn);1591</NoWarn>
     <Description>Core package for Piranha CMS for .NET Core</Description>
   </PropertyGroup>

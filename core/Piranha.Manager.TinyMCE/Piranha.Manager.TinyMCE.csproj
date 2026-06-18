@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk.Razor">
 
   <PropertyGroup>
-    <PackageId>MinooTrading.Manager.TinyMCE</PackageId>
+    <PackageId>MinooTrading.Piranha.Manager.TinyMCE</PackageId>
     <AddRazorSupportForMvc>true</AddRazorSupportForMvc>
     <Description>TinyMCE WYSIWYG Editor for Piranha CMS</Description>
   </PropertyGroup>

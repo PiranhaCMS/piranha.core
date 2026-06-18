@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <PackageId>MinooTrading.Manager.Localization</PackageId>
+    <PackageId>MinooTrading.Piranha.Manager.Localization</PackageId>
     <NoWarn>$(NoWarn);1591</NoWarn>
     <Description>Localization for the Piranha CMS manager panel</Description>
   </PropertyGroup>

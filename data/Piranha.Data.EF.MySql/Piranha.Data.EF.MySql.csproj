@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <PackageId>MinooTrading.Data.EF.MySql</PackageId>
+    <PackageId>MinooTrading.Piranha.Data.EF.MySql</PackageId>
     <NoWarn>$(NoWarn);1591</NoWarn>
     <Description>Entity Framework Core migration package for MySql</Description>
   </PropertyGroup>

@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <PackageId>MinooTrading.Data.EF.SQLServer</PackageId>
+    <PackageId>MinooTrading.Piranha.Data.EF.SQLServer</PackageId>
     <NoWarn>$(NoWarn);1591</NoWarn>
     <Description>Data components for Entity Framework Core</Description>
   </PropertyGroup>

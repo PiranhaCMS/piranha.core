@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <PackageId>MinooTrading.WebApi</PackageId>
+    <PackageId>MinooTrading.Piranha.WebApi</PackageId>
     <NoWarn>$(NoWarn);1591</NoWarn>
     <Description>Web Api module for Piranha CMS</Description>
   </PropertyGroup>

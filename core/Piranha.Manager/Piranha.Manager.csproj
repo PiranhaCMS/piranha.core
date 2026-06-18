@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk.Razor">
 
   <PropertyGroup>
-    <PackageId>MinooTrading.Manager</PackageId>
+    <PackageId>MinooTrading.Piranha.Manager</PackageId>
     <AddRazorSupportForMvc>true</AddRazorSupportForMvc>
     <NoWarn>$(NoWarn);1591</NoWarn>
     <Description>Manager panel for Piranha CMS for AspNetCore</Description>

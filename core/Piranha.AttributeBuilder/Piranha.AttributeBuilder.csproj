@@ -1,7 +1,7 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <PackageId>MinooTrading.AttributeBuilder</PackageId>
+    <PackageId>MinooTrading.Piranha.AttributeBuilder</PackageId>
     <Description>Library for defining content types with Attributes</Description>
   </PropertyGroup>
 

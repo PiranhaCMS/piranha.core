@@ -1,7 +1,7 @@
-﻿<Project Sdk="Microsoft.NET.Sdk.Razor">
+<Project Sdk="Microsoft.NET.Sdk.Razor">
 
   <PropertyGroup>
-    <PackageId>MinooTrading.AspNetCore.Identity</PackageId>
+    <PackageId>MinooTrading.Piranha.AspNetCore.Identity</PackageId>
     <NoWarn>$(NoWarn);1591</NoWarn>
     <AddRazorSupportForMvc>true</AddRazorSupportForMvc>
     <Description>Piranha CMS security provider for AspNetCore Identity</Description>

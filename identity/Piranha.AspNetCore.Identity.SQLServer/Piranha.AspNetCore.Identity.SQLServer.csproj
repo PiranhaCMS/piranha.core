@@ -1,7 +1,7 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <PackageId>MinooTrading.AspNetCore.Identity.SQLServer</PackageId>
+    <PackageId>MinooTrading.Piranha.AspNetCore.Identity.SQLServer</PackageId>
     <NoWarn>$(NoWarn);1591</NoWarn>
     <Description>Piranha CMS AspNetCore Identity provider for SQLServer</Description>
   </PropertyGroup>
