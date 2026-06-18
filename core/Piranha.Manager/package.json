@@ -25,7 +25,7 @@
     "gulp-rtlcss": "^2.0.0",
     "gulp-sass": "^5.1.0",
     "gulp-uglify-es": "3.0.0",
-    "html5sortable": "0.9.10",
+    "html5sortable": "0.14.0",
     "jquery": "^3.5.1",
     "nestable2": "1.6.0",
     "popper.js": "1.16.0",
