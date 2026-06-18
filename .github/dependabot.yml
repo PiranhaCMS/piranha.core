@@ -65,6 +65,9 @@ updates:
       vue:
         patterns:
           - "vue*"
+        update-types:
+          - "minor"
+          - "patch"
 
   # npm — MvcWeb example application
   - package-ecosystem: "npm"

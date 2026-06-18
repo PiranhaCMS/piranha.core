@@ -33,7 +33,7 @@
     "select2": "4.0.13",
     "simplemde": "1.11.2",
     "through2": "^3.0.1",
-    "vue": "3.5.38",
+    "vue": "2.7.16",
     "vue-template-compiler": "2.7.16",
     "vuejs-datepicker": "1.6.2"
   }
