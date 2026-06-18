@@ -13,6 +13,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Piranha\Piranha.csproj" />
     <PackageReference Include="SkiaSharp" Version="3.119.4" />
+    <PackageReference Include="SkiaSharp.NativeAssets.Linux.NoDependencies" Version="3.119.4" />
   </ItemGroup>
 
 </Project>
