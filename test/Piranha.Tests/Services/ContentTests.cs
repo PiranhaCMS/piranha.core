@@ -145,7 +145,7 @@ public class ContentTests : BaseTestsAsync
 
             Assert.NotNull(content);
             Assert.NotNull(contentInfo);
-            Assert.Equal("My first content", content.Title);
+            Assert.Equal("Mitt första innehåll", content.Title);
             Assert.Equal(content.Title, contentInfo.Title);
         }
     }

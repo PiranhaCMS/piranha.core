@@ -185,12 +185,7 @@ internal class ContentService<TContent, TField, TModelBase> : IContentService<TC
         //
         // 2: Map basic fields
         //
-        // When saving a translation the main entity's Title must stay as the default-language
-        // value; only ContentTranslation gets the translated text (via SetTranslation below).
-        var savedTitle = (languageId.HasValue && content is ITranslatable) ? content.Title : null;
         _mapper.Map<TModelBase, TContent>(model, content);
-        if (savedTitle != null)
-            content.Title = savedTitle;
 
         //
         // 3: Map translation
