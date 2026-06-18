@@ -1,7 +1,14 @@
+name: Publish NuGet Packages
+
 on:
   release:
     types: [published]
   workflow_dispatch:
+    inputs:
+      build_frontend:
+        description: 'Run npm install and Gulp to rebuild frontend assets before packing'
+        type: boolean
+        default: false
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -12,7 +19,6 @@ jobs:
     runs-on: windows-latest
     timeout-minutes: 30
     environment: Production
-    name: Publish NuGet Packages
     permissions:
       contents: read
       packages: write
@@ -40,6 +46,7 @@ jobs:
 
     # Build frontend assets
     - name: Build frontend assets (Gulp)
+      if: ${{ github.event_name == 'release' || inputs.build_frontend == true }}
       working-directory: core/Piranha.Manager
       run: |
         npm install --legacy-peer-deps
