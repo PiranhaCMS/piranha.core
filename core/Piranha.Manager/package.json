@@ -29,7 +29,7 @@
     "html5sortable": "0.14.0",
     "jquery": "^3.5.1",
     "nestable2": "1.6.0",
-    "popper.js": "1.16.0",
+    "popper.js": "1.16.1",
     "sass": "^1.69.3",
     "select2": "4.1.0",
     "simplemde": "1.11.2",
