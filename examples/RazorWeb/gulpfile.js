@@ -1,6 +1,6 @@
 var gulp = require('gulp'),
-    sass = require('gulp-sass')
-    cssmin = require("gulp-cssmin")
+    sass = require('gulp-sass')(require('sass'))
+    cssmin = require("gulp-clean-css")
     rename = require("gulp-rename");
 
 gulp.task('min', function (done) {

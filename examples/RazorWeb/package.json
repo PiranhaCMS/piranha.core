@@ -7,8 +7,10 @@
   "license": "MIT",
   "devDependencies": {
     "gulp": "^5.0.1",
+    "gulp-clean-css": "^4.3.0",
     "gulp-cssmin": "^0.2.0",
     "gulp-rename": "^2.0.0",
-    "gulp-sass": "^6.0.1"
+    "gulp-sass": "^6.0.1",
+    "sass": "^1.101.0"
   }
 }
