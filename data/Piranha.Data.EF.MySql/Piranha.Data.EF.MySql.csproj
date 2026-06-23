@@ -23,6 +23,12 @@
     <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="9.*" />
   </ItemGroup>
   
+  <!-- Pomelo.EntityFrameworkCore.MySql 10.x does not exist yet.
+       NU1608 is suppressed until a Pomelo release targets EF Core 10. -->
+  <PropertyGroup Condition="'$(TargetFramework)' == 'net10.0'">
+    <NoWarn>$(NoWarn);NU1608</NoWarn>
+  </PropertyGroup>
+
   <ItemGroup Condition="'$(TargetFramework)' == 'net10.0'">
     <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="9.*" />
   </ItemGroup>

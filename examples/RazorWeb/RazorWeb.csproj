@@ -3,6 +3,9 @@
   <PropertyGroup>
     <ImplicitUsings>enable</ImplicitUsings>
     <GenerateDocumentationFile>false</GenerateDocumentationFile>
+    <!-- NU1608: Pomelo.EntityFrameworkCore.MySql 9.x constraint on EF Core <= 9.0.999
+         is violated when building for net10.0. Suppress until Pomelo 10.x is released. -->
+    <NoWarn>$(NoWarn);NU1608</NoWarn>
   </PropertyGroup>
 
   <ItemGroup>
