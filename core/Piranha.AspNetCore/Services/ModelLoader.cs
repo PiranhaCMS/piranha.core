@@ -151,16 +151,14 @@ public class ModelLoader : IModelLoader
         // Check if we're requesting a draft
         if (draft)
         {
-            // Check that the current user is authorized to preview pages
-            if ((await _auth.AuthorizeAsync(user, Piranha.Security.Permission.PostPreview)).Succeeded)
+            if (!(await _auth.AuthorizeAsync(user, Piranha.Security.Permission.PostPreview)).Succeeded)
             {
-                // Get the draft, if available
-                model = await _api.Posts.GetDraftByIdAsync<T>(id);
-
-                if (model == null)
-                {
-                    model = await _api.Posts.GetByIdAsync<T>(id);
-                }
+                return null;
+            }
+            model = await _api.Posts.GetDraftByIdAsync<T>(id);
+            if (model == null)
+            {
+                model = await _api.Posts.GetByIdAsync<T>(id);
             }
         }
 
