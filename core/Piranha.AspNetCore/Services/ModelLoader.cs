@@ -186,8 +186,19 @@ public class ModelLoader : IModelLoader
         // Check permissions
         if (model.Permissions.Count > 0)
         {
+            var currentPermissions = App.Permissions.GetPublicPermissions()
+                .Select(p => p.Name);
+
             foreach (var permission in model.Permissions)
             {
+                // Make sure the permission is still available as a
+                // registered public permission.
+                if (!currentPermissions.Contains(permission))
+                {
+                    continue;
+                }
+
+                // Authorize
                 if (!(await _auth.AuthorizeAsync(user, permission)).Succeeded)
                 {
                     throw new UnauthorizedAccessException();
