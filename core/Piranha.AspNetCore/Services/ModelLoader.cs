@@ -80,9 +80,9 @@ public class ModelLoader : IModelLoader
         {
             // Use the already-resolved page from the application service if available,
             // otherwise fetch from the database.
-            if (_app.CurrentPage != null && _app.CurrentPage.Id == id && _app.CurrentPage is T)
+            if (_app.CurrentPage != null && _app.CurrentPage.Id == id && _app.CurrentPage is T currentPage)
             {
-                model = (T)_app.CurrentPage;
+                model = currentPage;
             }
             else
             {
@@ -95,7 +95,7 @@ public class ModelLoader : IModelLoader
             }
 
             // Always verify the published state for non-draft access, even for cache hits.
-            if (!model.Published.HasValue || model.Published.Value > DateTime.Now)
+            if (!model.Published.HasValue || model.Published.Value >= DateTime.Now)
             {
                 return null;
             }
@@ -161,9 +161,9 @@ public class ModelLoader : IModelLoader
         {
             // Use the already-resolved post from the application service if available,
             // otherwise fetch from the database.
-            if (_app.CurrentPost != null && _app.CurrentPost.Id == id && _app.CurrentPost is T)
+            if (_app.CurrentPost != null && _app.CurrentPost.Id == id && _app.CurrentPost is T currentPost)
             {
-                model = (T)_app.CurrentPost;
+                model = currentPost;
             }
             else
             {
@@ -176,7 +176,7 @@ public class ModelLoader : IModelLoader
             }
 
             // Always verify the published state for non-draft access, even for cache hits.
-            if (!model.Published.HasValue || model.Published.Value > DateTime.Now)
+            if (!model.Published.HasValue || model.Published.Value >= DateTime.Now)
             {
                 return null;
             }
