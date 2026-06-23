@@ -13845,7 +13845,7 @@ return Popper;
           $element.text($(content).text());
         }
       } else {
-        $element[html ? 'html' : 'text'](content);
+        $element[html ? 'html' : 'text'](html && typeof DOMPurify !== 'undefined' ? DOMPurify.sanitize(content) : content);
       }
     };
 
