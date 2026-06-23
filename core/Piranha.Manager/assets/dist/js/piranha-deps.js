@@ -14492,7 +14492,7 @@ return Popper;
         return;
       }
 
-      var target = $(selector)[0];
+      var target = document.querySelector(selector);
 
       if (!target || !$(target).hasClass(ClassName$2.CAROUSEL)) {
         return;
