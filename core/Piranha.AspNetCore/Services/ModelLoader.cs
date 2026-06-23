@@ -106,16 +106,14 @@ public class ModelLoader : IModelLoader
         // Check permissions
         if (model.Permissions.Count > 0)
         {
-            var currentPermissions = App.Permissions.GetPublicPermissions()
-                .Select(p => p.Name);
+            var currentPermissions = new HashSet<string>(App.Permissions.GetPublicPermissions()
+                .Select(p => p.Name));
 
             foreach (var permission in model.Permissions)
             {
-                // Make sure the permissions is still available as a
-                // registered public permission.
-                if (!currentPermissions.Contains(permission))
+                if (permission == null || !currentPermissions.Contains(permission))
                 {
-                    continue;
+                    throw new UnauthorizedAccessException();
                 }
 
                 // Authorize
@@ -186,16 +184,14 @@ public class ModelLoader : IModelLoader
         // Check permissions
         if (model.Permissions.Count > 0)
         {
-            var currentPermissions = App.Permissions.GetPublicPermissions()
-                .Select(p => p.Name);
+            var currentPermissions = new HashSet<string>(App.Permissions.GetPublicPermissions()
+                .Select(p => p.Name));
 
             foreach (var permission in model.Permissions)
             {
-                // Make sure the permission is still available as a
-                // registered public permission.
-                if (!currentPermissions.Contains(permission))
+                if (permission == null || !currentPermissions.Contains(permission))
                 {
-                    continue;
+                    throw new UnauthorizedAccessException();
                 }
 
                 // Authorize
