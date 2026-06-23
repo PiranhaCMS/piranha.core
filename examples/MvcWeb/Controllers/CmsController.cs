@@ -100,6 +100,7 @@ public class CmsController : Controller
     /// <param name="commentModel">The comment model</param>
     [HttpPost]
     [Route("post/comment")]
+    [ValidateAntiForgeryToken]
     public async Task<IActionResult> SavePostComment(SaveCommentModel commentModel)
     {
         try
