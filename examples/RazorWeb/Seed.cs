@@ -259,6 +259,55 @@ public static class Seed
 
         await api.Posts.SaveAsync(post3);
 
+        var post4 = await StandardPost.CreateAsync(api);
+        post4.Id = Guid.NewGuid();
+        post4.BlogId = blogPage.Id;
+        post4.Category = "Piranha";
+        post4.Tags.Add("Security", "Release Info");
+        post4.Title = "What's New In v1.0.1 (MinooTrading Security Release)";
+        post4.Slug = "whats-new-v1-0-1";
+        post4.MetaKeywords = "Piranha, Security, MinooTrading, CodeQL";
+        post4.MetaDescription = "Security hardening release by MinooTrading SPC — all CodeQL findings from the upstream 10.x codebase have been remediated.";
+        post4.PrimaryImage = images["bird-s-eye-view-photography-of-lighted-city-3573383.jpg"];
+        post4.Excerpt = "This fork (MinooTrading SPC) ships with comprehensive security remediations on top of upstream Piranha CMS 10.x, covering CodeQL findings across C# and JavaScript.";
+        post4.Published = DateTime.Now;
+
+        post4.Blocks.Add(new HtmlBlock
+        {
+            Body =
+                "<p class=\"lead\">This release is the <strong>MinooTrading SPC</strong> security-hardened fork of " +
+                "<a href=\"https://github.com/PiranhaCMS/piranha.core\">PiranhaCMS/piranha.core</a>, " +
+                "maintained by <a href=\"https://github.com/KiarashMinoo\">Kiarash Minoo</a>. " +
+                "All CodeQL findings present in the upstream 10.x codebase have been resolved.</p>"
+        });
+        post4.Blocks.Add(new ColumnBlock
+        {
+            Items = new List<Block>
+            {
+                new MarkdownBlock
+                {
+                    Body =
+                        "#### C# Security Fixes\n\n" +
+                        "* Cookie `Secure` flag not set — `AuthController.cs` [#40](https://github.com/MinooTradingSPC/piranha.core/issues/40)\n" +
+                        "* Missing CSRF token validation on `SavePostComment` — `CmsController.cs` [#39](https://github.com/MinooTradingSPC/piranha.core/issues/39)\n" +
+                        "* User-controlled bypass of page preview auth — `ModelLoader.cs` [#38](https://github.com/MinooTradingSPC/piranha.core/issues/38)\n" +
+                        "* User-controlled bypass of post preview auth — `ModelLoader.cs` [#37](https://github.com/MinooTradingSPC/piranha.core/issues/37)\n" +
+                        "* User-controlled bypass of published-state checks — `ModelLoader.cs` [#86](https://github.com/MinooTradingSPC/piranha.core/issues/86) [#87](https://github.com/MinooTradingSPC/piranha.core/issues/87)\n\n" +
+                        "#### JavaScript Security Fixes (Manager Bundles)\n\n" +
+                        "* DOM XSS via Bootstrap Carousel `data-target` — `piranha-dev.js`, `piranha-deps.js`, `piranha-deps-dev.js` [#32](https://github.com/MinooTradingSPC/piranha.core/issues/32) [#31](https://github.com/MinooTradingSPC/piranha.core/issues/31) [#29](https://github.com/MinooTradingSPC/piranha.core/issues/29)\n" +
+                        "* DOM XSS via Tooltip/Popover `innerHTML` — `piranha-dev.js` [#30](https://github.com/MinooTradingSPC/piranha.core/issues/30)\n" +
+                        "* Incomplete sanitization (missing `g` flag) — marked.js table parser [#35](https://github.com/MinooTradingSPC/piranha.core/issues/35) [#34](https://github.com/MinooTradingSPC/piranha.core/issues/34) [#33](https://github.com/MinooTradingSPC/piranha.core/issues/33)\n" +
+                        "* Unsafe self-closing HTML expansion — jQuery `htmlPrefilter` [#36](https://github.com/MinooTradingSPC/piranha.core/issues/36)\n"
+                },
+                new ImageBlock
+                {
+                    Body = images["person-looking-at-phone-and-at-macbook-pro-1181244.jpg"]
+                }
+            }
+        });
+
+        await api.Posts.SaveAsync(post4);
+
         var comment = new Piranha.Models.PostComment
         {
             Author = "Håkan Edling",

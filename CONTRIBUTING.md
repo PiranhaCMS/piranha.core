@@ -1,5 +1,7 @@
 # Contributing to Piranha
 
+> **Note:** This is the **MinooTrading SPC fork** of Piranha CMS ([PiranhaCMS/piranha.core](https://github.com/PiranhaCMS/piranha.core)). Pull requests should target this fork's `master` branch at https://github.com/MinooTradingSPC/piranha.core — not the upstream repository.
+
 First off, thanks for showing interest in contributing to Piranha. Let's make 
 this short and sweet so we can all go back to coding awesome new features!
 
@@ -38,7 +40,7 @@ branches. This means:
 
 1. **Never** write any code in your `master` branch
 2. When writing code, do it in a specific feature branch
-3. Send your pull request from that feature branch back to this repo
-4. After your pull request has been accepted, sync the changes into your master from the upstream remote
+3. Send your pull request from that feature branch back to https://github.com/MinooTradingSPC/piranha.core
+4. After your pull request has been accepted, sync the changes into your master from the fork remote
 5. Delete you feature branch
 6. Again, **NEVER** write any code in your `master` branch
