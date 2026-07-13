@@ -16,7 +16,7 @@ namespace Piranha.Extend.Fields;
 /// Field for referencing an image asset.
 /// </summary>
 [FieldType(Name = "Image", Shorthand = "Image", Component = "image-field")]
-public class ImageField : MediaFieldBase<ImageField>
+public class ImageField : MediaFieldBase<ImageField>, ITranslatable
 {
     /// <summary>
     /// Implicit operator for converting a Guid id to a field.

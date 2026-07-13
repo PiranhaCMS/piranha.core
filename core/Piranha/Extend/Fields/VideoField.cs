@@ -16,7 +16,7 @@ namespace Piranha.Extend.Fields;
 /// Field for referenncing a video asset.
 /// </summary>
 [FieldType(Name = "Video", Shorthand = "Video", Component = "video-field")]
-public class VideoField : MediaFieldBase<VideoField>
+public class VideoField : MediaFieldBase<VideoField>, ITranslatable
 {
     /// <summary>
     /// Implicit operator for converting a Guid id to a field.

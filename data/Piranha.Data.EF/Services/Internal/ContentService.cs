@@ -947,7 +947,7 @@ internal class ContentService<TContent, TField, TModelBase> : IContentService<TC
             if (typeof(Extend.ITranslatable).IsAssignableFrom(type.Type) && field is ITranslatable translatable && languageId.HasValue)
             {
                 var value = (string)translatable.GetTranslation(languageId.Value);
-                return string.IsNullOrEmpty(value) ? Activator.CreateInstance(type.Type) : App.DeserializeObject(value, type.Type);
+                return string.IsNullOrEmpty(value) ? App.DeserializeObject(field.Value, type.Type) : App.DeserializeObject(value, type.Type);
             }
             return App.DeserializeObject(field.Value, type.Type);
         }
@@ -969,7 +969,7 @@ internal class ContentService<TContent, TField, TModelBase> : IContentService<TC
             if (typeof(Extend.ITranslatable).IsAssignableFrom(type.Type) && field is ITranslatable translatable && languageId.HasValue)
             {
                 var value = (string)translatable.GetTranslation(languageId.Value);
-                return string.IsNullOrEmpty(value) ? Activator.CreateInstance(type.Type) : App.DeserializeObject(value, type.Type);
+                return string.IsNullOrEmpty(value) ? App.DeserializeObject(field.Value, type.Type) : App.DeserializeObject(value, type.Type);
             }
             return App.DeserializeObject(field.Value, type.Type);
         }
