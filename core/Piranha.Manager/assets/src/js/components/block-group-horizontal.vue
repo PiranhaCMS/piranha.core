@@ -1,7 +1,7 @@
 <template>
     <div :id="uid" class="block-group">
         <div class="actions block-group-actions">
-            <button v-on:click.prevent="piranha.blockpicker.open(addGroupBlock, 0, model.type)" class="btn btn-sm add">
+            <button v-if="canEditStructure" v-on:click.prevent="piranha.blockpicker.open(addGroupBlock, 0, model.type)" class="btn btn-sm add">
                 <i class="fas fa-plus"></i>
             </button>
             <button v-on:click.prevent='toggleHeader()' v-if='model.fields.length > 0' class='btn btn-sm' :class='{ selected: model.meta.showHeader }'>
@@ -27,18 +27,18 @@
                 <div class="block" :class="child.meta.component">
                     <div class="block-header">
                         <div class="title">
-                            <i :class="child.meta.icon"></i><strong>{{ child.meta.name }}</strong>
+                            <i :class="child.meta.icon"></i><input v-if="canEditBlockName" :value="getItemName(child)" v-on:input="setItemName(child, $event.target.value)" class="block-name" maxlength="128"><strong v-else>{{ getItemName(child) }}</strong>
                         </div>
                         <div class="actions">
-                            <span class="btn btn-sm handle">
+                            <span v-if="canEditStructure" class="btn btn-sm handle">
                                 <i class="fas fa-ellipsis-v"></i>
                             </span>
-                            <button v-on:click.prevent="removeItem(child)" class="btn btn-sm danger" tabindex="-1">
+                            <button v-if="canEditStructure" v-on:click.prevent="removeItem(child)" class="btn btn-sm danger" tabindex="-1">
                                 <i class="fas fa-trash"></i>
                             </button>
                         </div>
                     </div>
-                    <component v-bind:is="child.meta.component" v-bind:uid="child.meta.uid" v-bind:toolbar="toolbar" v-bind:model="child.model"></component>
+                    <component v-bind:is="child.meta.component" v-bind:uid="child.meta.uid" v-bind:toolbar="toolbar" v-bind:model="child.model" v-bind:can-edit-structure="canEditStructure" v-bind:can-edit-block-name="canEditBlockName"></component>
                 </div>
             </div>
         </div>
@@ -47,14 +47,22 @@
 
 <script>
 export default {
-    props: ["uid", "toolbar", "model"],
+    props: ["uid", "toolbar", "model", "canEditStructure", "canEditBlockName"],
     methods: {
         removeItem: function (item) {
+            if (!this.canEditStructure) {
+                return;
+            }
+
             var itemIndex = this.model.items.indexOf(item);
 
             this.model.items.splice(itemIndex, 1);
         },
         addGroupBlock: function (type, pos) {
+            if (!this.canEditStructure) {
+                return;
+            }
+
             var self = this;
 
             fetch(piranha.baseUrl + "manager/api/content/block/" + type)
@@ -80,11 +88,33 @@ export default {
         toggleHeader: function () {
             this.model.meta.showHeader = !this.model.meta.showHeader;
         },
+        getItemLabel: function (item) {
+            return Array.isArray(item.model) ? item.label : item.model.label;
+        },
+        getItemName: function (item) {
+            var label = this.getItemLabel(item);
+            return label === null || typeof label === "undefined" ? item.meta.name : label;
+        },
+        setItemName: function (item, name) {
+            if (Array.isArray(item.model)) {
+                item.label = name;
+            } else {
+                item.model.label = name;
+            }
+        },
         moveItem: function (from, to) {
+            if (!this.canEditStructure) {
+                return;
+            }
+
             this.model.items.splice(to, 0, this.model.items.splice(from, 1)[0])
         }
     },
     mounted: function () {
+        if (!this.canEditStructure) {
+            return;
+        }
+
         var self = this;
 
         sortable("#" + this.uid + " .block-group-items", {

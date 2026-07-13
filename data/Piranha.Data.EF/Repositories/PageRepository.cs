@@ -820,26 +820,67 @@ internal class PageRepository : IPageRepository
             {
                 var blocks = _contentService.TransformBlocks(blockModels, languageId);
                 var current = blocks.Select(b => b.Id).ToArray();
+                var draftStructure = languageId.HasValue
+                    ? await GetDraftBlockStructure(page.Id).ConfigureAwait(false)
+                    : null;
+                var matchesCurrentStructure = HasMatchingBlockStructure(page.Blocks, blocks);
+                var matchesDraftStructure = draftStructure != null && HasMatchingBlockStructure(draftStructure, blocks);
+                var materializeDraftStructure = languageId.HasValue && !isDraft && matchesDraftStructure;
 
                 // Blocks are a shared page structure. Only the default
                 // language may change that structure; translated saves only
                 // update field translations on the existing blocks.
+                if (languageId.HasValue && !matchesCurrentStructure && !matchesDraftStructure)
+                {
+                    throw new InvalidOperationException("Block structure can only be changed in the default language.");
+                }
+
+                if (materializeDraftStructure && page.Blocks.Count > 0)
+                {
+                    for (var n = 0; n < page.Blocks.Count; n++)
+                    {
+                        page.Blocks[n].SortOrder = -n - 1;
+                    }
+                    await _db.SaveChangesAsync().ConfigureAwait(false);
+                }
+
                 if (!languageId.HasValue)
                 {
-                    var removed = page.Blocks
-                        .Where(b => !current.Contains(b.BlockId) && !b.Block.IsReusable && b.Block.ParentId == null)
-                        .Select(b => b.Block);
-                    var removedItems = page.Blocks
-                        .Where(b => !current.Contains(b.BlockId) && b.Block.ParentId != null && removed.Select(p => p.Id).ToList().Contains(b.Block.ParentId.Value))
-                        .Select(b => b.Block);
+                    var removedPageBlocks = page.Blocks
+                        .Where(b => !current.Contains(b.BlockId))
+                        .ToList();
+                    var removed = removedPageBlocks
+                        .Where(b => !b.Block.IsReusable && b.Block.ParentId == null)
+                        .Select(b => b.Block)
+                        .ToList();
+                    var removedIds = removed.Select(b => b.Id).ToList();
+                    var removedItems = removedPageBlocks
+                        .Where(b => b.Block.ParentId.HasValue && removedIds.Contains(b.Block.ParentId.Value))
+                        .Select(b => b.Block)
+                        .ToList();
 
                     if (!isDraft)
                     {
+                        _db.PageBlocks.RemoveRange(removedPageBlocks);
                         _db.Blocks.RemoveRange(removed);
                         _db.Blocks.RemoveRange(removedItems);
                     }
 
-                    page.Blocks.Clear();
+                    foreach (var pageBlock in removedPageBlocks)
+                    {
+                        page.Blocks.Remove(pageBlock);
+                    }
+
+                    // Avoid transient collisions with the unique PageId /
+                    // SortOrder key while existing links are reordered.
+                    if (!isDraft && page.Blocks.Count > 0)
+                    {
+                        for (var n = 0; n < page.Blocks.Count; n++)
+                        {
+                            page.Blocks[n].SortOrder = -n - 1;
+                        }
+                        await _db.SaveChangesAsync().ConfigureAwait(false);
+                    }
                 }
 
                 // Now map the new block
@@ -871,7 +912,10 @@ internal class PageRepository : IPageRepository
                     block.ParentId = blocks[n].ParentId;
                     block.CLRType = blocks[n].CLRType;
                     block.IsReusable = blocks[n].IsReusable;
-                    block.Title = blocks[n].Title;
+                    if (!languageId.HasValue)
+                    {
+                        block.Title = blocks[n].Title;
+                    }
                     block.LastModified = DateTime.Now;
 
                     var currentFields = blocks[n].Fields.Select(f => f.FieldId).Distinct();
@@ -936,21 +980,32 @@ internal class PageRepository : IPageRepository
                     // A translated save may only update its field values and
                     // must never create another page/block link at the same
                     // sort order.
-                    if (!languageId.HasValue && !page.Blocks.Any(b => b.BlockId == block.Id))
+                    if (!languageId.HasValue || materializeDraftStructure)
                     {
-                        var pageBlock = new PageBlock
+                        var pageBlock = page.Blocks.FirstOrDefault(b => b.BlockId == block.Id);
+                        if (pageBlock == null)
                         {
-                            Id = Guid.NewGuid(),
-                            BlockId = block.Id,
-                            Block = block,
-                            PageId = page.Id,
-                            SortOrder = n
-                        };
-                        if (!isDraft)
-                        {
-                            await _db.PageBlocks.AddAsync(pageBlock).ConfigureAwait(false);
+                            pageBlock = new PageBlock
+                            {
+                                Id = Guid.NewGuid(),
+                                BlockId = block.Id,
+                                Block = block,
+                                PageId = page.Id
+                            };
+                            if (!isDraft)
+                            {
+                                await _db.PageBlocks.AddAsync(pageBlock).ConfigureAwait(false);
+                            }
+                            page.Blocks.Add(pageBlock);
                         }
-                        page.Blocks.Add(pageBlock);
+                        else
+                        {
+                            // Draft block queries are no-tracking. Replace the
+                            // stale navigation so the revision serializes the
+                            // edited label and fields.
+                            pageBlock.Block = block;
+                        }
+                        pageBlock.SortOrder = n;
                     }
                 }
             }
@@ -1051,6 +1106,89 @@ internal class PageRepository : IPageRepository
                 }
                 model.Blocks = _contentService.TransformBlocks(page.Blocks.OrderBy(b => b.SortOrder).Select(b => b.Block), page.SelectedLanguageId);
             }
+        }
+    }
+
+    private static bool HasMatchingBlockStructure(IEnumerable<PageBlock> pageBlocks, IEnumerable<Block> submittedBlocks)
+    {
+        return HasMatchingBlockStructure(
+            pageBlocks
+                .OrderBy(pageBlock => pageBlock.SortOrder)
+                .Select(pageBlock => new BlockStructure(
+                    pageBlock.BlockId,
+                    pageBlock.Block.ParentId,
+                    pageBlock.Block.CLRType)),
+            submittedBlocks);
+    }
+
+    private static bool HasMatchingBlockStructure(IEnumerable<BlockStructure> current, IEnumerable<Block> submittedBlocks)
+    {
+        var currentStructure = current;
+        var submitted = submittedBlocks
+            .Select(block => new BlockStructure(block.Id, block.ParentId, block.CLRType));
+
+        return currentStructure.SequenceEqual(submitted);
+    }
+
+    private async Task<IList<BlockStructure>> GetDraftBlockStructure(Guid pageId)
+    {
+        var lastModified = await _db.Pages
+            .Where(page => page.Id == pageId)
+            .Select(page => page.LastModified)
+            .FirstOrDefaultAsync()
+            .ConfigureAwait(false);
+
+        var data = await _db.PageRevisions
+            .Where(revision => revision.PageId == pageId && revision.Created > lastModified)
+            .OrderByDescending(revision => revision.Created)
+            .Select(revision => revision.Data)
+            .FirstOrDefaultAsync()
+            .ConfigureAwait(false);
+
+        if (string.IsNullOrEmpty(data))
+        {
+            return null;
+        }
+
+        var draft = JsonConvert.DeserializeObject<Page>(data);
+        return draft?.Blocks?
+            .OrderBy(pageBlock => pageBlock.SortOrder)
+            .Select(pageBlock => new BlockStructure(
+                pageBlock.BlockId,
+                pageBlock.Block.ParentId,
+                pageBlock.Block.CLRType))
+            .ToList();
+    }
+
+    private sealed class BlockStructure : IEquatable<BlockStructure>
+    {
+        public BlockStructure(Guid id, Guid? parentId, string type)
+        {
+            Id = id;
+            ParentId = parentId;
+            Type = type;
+        }
+
+        public Guid Id { get; }
+        public Guid? ParentId { get; }
+        public string Type { get; }
+
+        public bool Equals(BlockStructure other)
+        {
+            return other != null &&
+                Id == other.Id &&
+                ParentId == other.ParentId &&
+                string.Equals(Type, other.Type, StringComparison.Ordinal);
+        }
+
+        public override bool Equals(object obj)
+        {
+            return Equals(obj as BlockStructure);
+        }
+
+        public override int GetHashCode()
+        {
+            return HashCode.Combine(Id, ParentId, Type);
         }
     }
 

@@ -26,6 +26,12 @@ public abstract class Block
     public string Type { get; set; }
 
     /// <summary>
+    /// Gets/sets the optional editor label for this block instance.
+    /// The label is shared by every language of the owning page.
+    /// </summary>
+    public string Label { get; set; }
+
+    /// <summary>
     /// Gets the title of the block when used in a block group.
     /// </summary>
     /// <returns>The title</returns>

@@ -73,6 +73,12 @@ piranha.pageedit = new Vue({
             var lang = this.languages.find(function (l) { return l.id === self.languageId; });
             return lang || { title: "" };
         },
+        canEditBlockStructure: function () {
+            return !this.useTranslations || !this.languageId || this.currentLanguage.isDefault;
+        },
+        canEditBlockName: function () {
+            return !this.isCopy && this.canEditBlockStructure;
+        },
         contentRegions: function () {
             return this.regions.filter(function (item) {
                 return item.meta.display != "setting" && item.meta.display != "hidden";
@@ -354,7 +360,7 @@ piranha.pageedit = new Vue({
 
                 piranha.notifications.push(result.status);
             })
-            .catch(function (error) { 
+            .catch(function (error) {
                 console.log("error:", error );
             });
         },
@@ -372,7 +378,7 @@ piranha.pageedit = new Vue({
 
                 piranha.notifications.push(result.status);
             })
-            .catch(function (error) { 
+            .catch(function (error) {
                 console.log("error:", error );
             });
         },
@@ -402,6 +408,10 @@ piranha.pageedit = new Vue({
             });
         },
         addBlock: function (type, pos) {
+            if (!piranha.pageedit.canEditBlockStructure) {
+                return;
+            }
+
             fetch(piranha.baseUrl + "manager/api/content/block/" + type)
                 .then(function (response) { return response.json(); })
                 .then(function (result) {
@@ -411,16 +421,41 @@ piranha.pageedit = new Vue({
             });
         },
         moveBlock: function (from, to) {
+            if (!this.canEditBlockStructure) {
+                return;
+            }
+
             this.blocks.splice(to, 0, this.blocks.splice(from, 1)[0])
         },
         collapseBlock: function (block) {
             block.meta.isCollapsed = !block.meta.isCollapsed;
         },
         removeBlock: function (block) {
+            if (!this.canEditBlockStructure) {
+                return;
+            }
+
             var index = this.blocks.indexOf(block);
 
             if (index !== -1) {
                 this.blocks.splice(index, 1);
+            }
+        },
+        getBlockLabel: function (block) {
+            if (block.meta.isGroup || Array.isArray(block.model)) {
+                return block.label;
+            }
+            return block.model.label;
+        },
+        getBlockName: function (block) {
+            var label = this.getBlockLabel(block);
+            return label === null || typeof label === "undefined" ? block.meta.name : label;
+        },
+        setBlockName: function (block, name) {
+            if (block.meta.isGroup || Array.isArray(block.model)) {
+                block.label = name;
+            } else {
+                block.model.label = name;
             }
         },
         updateBlockTitle: function (e) {
@@ -491,7 +526,9 @@ piranha.pageedit = new Vue({
                 handle: ".handle",
                 items: ":not(.unsortable)"
             })[0].addEventListener("sortupdate", function (e) {
-                piranha.pageedit.moveBlock(e.detail.origin.index, e.detail.destination.index);
+                if (piranha.pageedit.canEditBlockStructure) {
+                    piranha.pageedit.moveBlock(e.detail.origin.index, e.detail.destination.index);
+                }
             });
             piranha.editor.addInline('excerpt-body', 'excerpt-toolbar');
         }

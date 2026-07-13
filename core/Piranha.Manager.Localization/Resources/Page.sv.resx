@@ -24,6 +24,12 @@
   <data name="Archive" xml:space="preserve">
     <value>Arkiv</value>
   </data>
+  <data name="Block name" xml:space="preserve">
+    <value>Blocknamn</value>
+  </data>
+  <data name="Block structure is managed in the default language. You can edit translated field values here." xml:space="preserve">
+    <value>Blockstrukturen hanteras på standardspråket. Du kan redigera översatta fältvärden här.</value>
+  </data>
   <data name="Detach page" xml:space="preserve">
     <value>Koppla loss</value>
   </data>

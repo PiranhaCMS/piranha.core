@@ -283,6 +283,7 @@ internal class ContentService<TContent, TField, TModelBase> : IContentService<TC
                 var model = (Extend.Block)Activator.CreateInstance(blockType.Type);
                 model.Id = block.Id;
                 model.Type = block.CLRType;
+                model.Label = block.Title;
 
                 foreach (var prop in model.GetType().GetProperties(App.PropertyBindings))
                 {
@@ -340,6 +341,7 @@ internal class ContentService<TContent, TField, TModelBase> : IContentService<TC
                 var model = (Extend.Block)Activator.CreateInstance(blockType.Type);
                 model.Id = block.Id;
                 model.Type = block.CLRType;
+                model.Label = block.Title;
 
                 foreach (var prop in model.GetType().GetProperties(App.PropertyBindings))
                 {
@@ -451,6 +453,7 @@ internal class ContentService<TContent, TField, TModelBase> : IContentService<TC
                     {
                         Id = models[n].Id != Guid.Empty ? models[n].Id : Guid.NewGuid(),
                         CLRType = models[n].GetType().FullName,
+                        Title = models[n].Label,
                         Created = DateTime.Now,
                         LastModified = DateTime.Now
                     };
@@ -510,6 +513,7 @@ internal class ContentService<TContent, TField, TModelBase> : IContentService<TC
                     {
                         Id = models[n].Id != Guid.Empty ? models[n].Id : Guid.NewGuid(),
                         CLRType = models[n].GetType().FullName,
+                        Title = models[n].Label,
                         Created = DateTime.Now,
                         LastModified = DateTime.Now
                     };
@@ -942,7 +946,8 @@ internal class ContentService<TContent, TField, TModelBase> : IContentService<TC
         {
             if (typeof(Extend.ITranslatable).IsAssignableFrom(type.Type) && field is ITranslatable translatable && languageId.HasValue)
             {
-                return App.DeserializeObject((string)translatable.GetTranslation(languageId.Value), type.Type);
+                var value = (string)translatable.GetTranslation(languageId.Value);
+                return string.IsNullOrEmpty(value) ? Activator.CreateInstance(type.Type) : App.DeserializeObject(value, type.Type);
             }
             return App.DeserializeObject(field.Value, type.Type);
         }
@@ -963,7 +968,8 @@ internal class ContentService<TContent, TField, TModelBase> : IContentService<TC
         {
             if (typeof(Extend.ITranslatable).IsAssignableFrom(type.Type) && field is ITranslatable translatable && languageId.HasValue)
             {
-                return App.DeserializeObject((string)translatable.GetTranslation(languageId.Value), type.Type);
+                var value = (string)translatable.GetTranslation(languageId.Value);
+                return string.IsNullOrEmpty(value) ? Activator.CreateInstance(type.Type) : App.DeserializeObject(value, type.Type);
             }
             return App.DeserializeObject(field.Value, type.Type);
         }

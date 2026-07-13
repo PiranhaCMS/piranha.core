@@ -299,6 +299,15 @@ public class PageService
 
         if (page != null)
         {
+            if (contentLanguageId.HasValue && useDraft)
+            {
+                var defaultDraft = await _api.Pages.GetDraftByIdAsync(id);
+                if (defaultDraft != null)
+                {
+                    MergeDraftBlockStructure(page, defaultDraft);
+                }
+            }
+
             // Perform manager init
             await _factory.InitDynamicManagerAsync(page,
                 App.PageTypes.GetById(page.TypeId));
@@ -356,6 +365,11 @@ public class PageService
                 page.Id = model.Id;
             }
 
+            var defaultLanguage = await _api.Languages.GetDefaultAsync();
+            var languageId = model.LanguageId.HasValue && defaultLanguage != null && model.LanguageId.Value != defaultLanguage.Id
+                ? model.LanguageId
+                : null;
+
             page.SiteId = model.SiteId;
             page.ParentId = model.ParentId;
             page.OriginalPageId = model.OriginalId;
@@ -400,6 +414,18 @@ public class PageService
             //
             if (!page.OriginalPageId.HasValue)
             {
+                if (languageId.HasValue)
+                {
+                    var structurePage = page;
+                    var defaultDraft = await _api.Pages.GetDraftByIdAsync(model.Id);
+                    if (defaultDraft != null)
+                    {
+                        structurePage = defaultDraft;
+                    }
+                    ValidateTranslatedBlockStructure(structurePage.Blocks, model.Blocks);
+                    ValidateTranslatedBlockLabels(structurePage.Blocks, model.Blocks);
+                }
+
                 // Save regions
                 foreach (var region in pageType.Regions)
                 {
@@ -468,6 +494,7 @@ public class PageService
 
                             pageBlock.Id = blockGroup.Id;
                             pageBlock.Type = blockGroup.Type;
+                            pageBlock.Label = NormalizeBlockLabel(blockGroup.Label);
 
                             foreach (var field in blockGroup.Fields)
                             {
@@ -479,6 +506,7 @@ public class PageService
                             {
                                 if (item is BlockItemModel blockItem)
                                 {
+                                    blockItem.Model.Label = NormalizeBlockLabel(blockItem.Model.Label);
                                     pageBlock.Items.Add(blockItem.Model);
                                 }
                                 else if (item is BlockGenericModel blockGeneric)
@@ -487,6 +515,7 @@ public class PageService
 
                                     if (transformed != null)
                                     {
+                                        transformed.Label = NormalizeBlockLabel(blockGeneric.Label);
                                         pageBlock.Items.Add(transformed);
                                     }
                                 }
@@ -496,6 +525,7 @@ public class PageService
                     }
                     else if (block is BlockItemModel blockItem)
                     {
+                        blockItem.Model.Label = NormalizeBlockLabel(blockItem.Model.Label);
                         page.Blocks.Add(blockItem.Model);
                     }
                     else if (block is BlockGenericModel blockGeneric)
@@ -504,6 +534,7 @@ public class PageService
 
                         if (transformed != null)
                         {
+                            transformed.Label = NormalizeBlockLabel(blockGeneric.Label);
                             page.Blocks.Add(transformed);
                         }
                     }
@@ -511,18 +542,14 @@ public class PageService
             }
 
             // Only pass languageId for non-default languages
-            var defaultLang = (await _api.Languages.GetDefaultAsync());
-            var langId = (model.LanguageId.HasValue && defaultLang != null && model.LanguageId.Value != defaultLang.Id)
-                ? model.LanguageId : null;
-
             // Save page
             if (draft)
             {
-                await _api.Pages.SaveDraftAsync(page, langId);
+                await _api.Pages.SaveDraftAsync(page, languageId);
             }
             else
             {
-                await _api.Pages.SaveAsync(page, langId);
+                await _api.Pages.SaveAsync(page, languageId);
             }
         }
         else
@@ -582,6 +609,208 @@ public class PageService
             }
         }
         return null;
+    }
+
+    private static void ValidateTranslatedBlockStructure(IList<Block> blocks, IList<BlockModel> submittedBlocks)
+    {
+        var current = new List<BlockStructure>();
+        foreach (var block in blocks)
+        {
+            AddBlockStructure(current, block, null);
+        }
+
+        var submitted = new List<BlockStructure>();
+        foreach (var block in submittedBlocks ?? new List<BlockModel>())
+        {
+            AddBlockStructure(submitted, block, null);
+        }
+
+        if (current.Count != submitted.Count || current.Where((block, index) =>
+            block.Id != submitted[index].Id ||
+            block.ParentId != submitted[index].ParentId ||
+            !string.Equals(block.Type, submitted[index].Type, StringComparison.Ordinal)).Any())
+        {
+            throw new ValidationException("Block structure can only be changed in the default language.");
+        }
+    }
+
+    private static void ValidateTranslatedBlockLabels(IList<Block> blocks, IList<BlockModel> submittedBlocks)
+    {
+        var current = new Dictionary<Guid, string>();
+        foreach (var block in blocks)
+        {
+            AddBlockLabels(current, block);
+        }
+
+        var submitted = new Dictionary<Guid, string>();
+        foreach (var block in submittedBlocks ?? new List<BlockModel>())
+        {
+            AddBlockLabels(submitted, block);
+        }
+
+        if (current.Count != submitted.Count || current.Any(block =>
+            !submitted.TryGetValue(block.Key, out var label) ||
+            !string.Equals(block.Value, label, StringComparison.Ordinal)))
+        {
+            throw new ValidationException("Block labels can only be changed in the default language.");
+        }
+    }
+
+    private static void AddBlockStructure(IList<BlockStructure> structure, Block block, Guid? parentId)
+    {
+        structure.Add(new BlockStructure(block.Id, parentId, block.Type));
+
+        if (block is BlockGroup group)
+        {
+            foreach (var child in group.Items)
+            {
+                AddBlockStructure(structure, child, block.Id);
+            }
+        }
+    }
+
+    private static void AddBlockStructure(IList<BlockStructure> structure, BlockModel block, Guid? parentId)
+    {
+        switch (block)
+        {
+            case BlockGroupModel group:
+                structure.Add(new BlockStructure(group.Id, parentId, group.Type));
+                foreach (var child in group.Items)
+                {
+                    AddBlockStructure(structure, child, group.Id);
+                }
+                break;
+            case BlockItemModel item when item.Model != null:
+                structure.Add(new BlockStructure(item.Model.Id, parentId, item.Model.Type));
+                break;
+            case BlockGenericModel generic:
+                structure.Add(new BlockStructure(generic.Id, parentId, generic.Type));
+                break;
+            default:
+                throw new ValidationException("Invalid block structure.");
+        }
+    }
+
+    private static void AddBlockLabels(IDictionary<Guid, string> labels, Block block)
+    {
+        labels.Add(block.Id, NormalizeBlockLabel(block.Label));
+
+        if (block is BlockGroup group)
+        {
+            foreach (var child in group.Items)
+            {
+                AddBlockLabels(labels, child);
+            }
+        }
+    }
+
+    private static void AddBlockLabels(IDictionary<Guid, string> labels, BlockModel block)
+    {
+        switch (block)
+        {
+            case BlockGroupModel group:
+                labels.Add(group.Id, NormalizeBlockLabel(group.Label));
+                foreach (var child in group.Items)
+                {
+                    AddBlockLabels(labels, child);
+                }
+                break;
+            case BlockItemModel item when item.Model != null:
+                labels.Add(item.Model.Id, NormalizeBlockLabel(item.Model.Label));
+                break;
+            case BlockGenericModel generic:
+                labels.Add(generic.Id, NormalizeBlockLabel(generic.Label));
+                break;
+            default:
+                throw new ValidationException("Invalid block metadata.");
+        }
+    }
+
+    private static string NormalizeBlockLabel(string label)
+    {
+        if (string.IsNullOrWhiteSpace(label))
+        {
+            return null;
+        }
+
+        label = label.Trim();
+        if (label.Length > 128)
+        {
+            throw new ValidationException("Block labels cannot exceed 128 characters.");
+        }
+        return label;
+    }
+
+    private static void MergeDraftBlockStructure(DynamicPage translatedPage, DynamicPage defaultDraft)
+    {
+        var translatedBlocks = translatedPage.Blocks
+            .ToDictionary(block => block.Id);
+
+        translatedPage.Blocks = defaultDraft.Blocks
+            .Select(block => MergeDraftBlock(block, translatedBlocks.TryGetValue(block.Id, out var translated) ? translated : null))
+            .ToList();
+    }
+
+    private static Block MergeDraftBlock(Block draft, Block translated)
+    {
+        var block = translated ?? CloneDraftBlock(draft);
+        block.Label = draft.Label;
+
+        if (draft is BlockGroup draftGroup && block is BlockGroup translatedGroup)
+        {
+            var translatedItems = translatedGroup.Items.ToDictionary(item => item.Id);
+            translatedGroup.Items = draftGroup.Items
+                .Select(item => MergeDraftBlock(item, translatedItems.TryGetValue(item.Id, out var translatedItem) ? translatedItem : null))
+                .ToList();
+        }
+
+        return block;
+    }
+
+    private static Block CloneDraftBlock(Block source)
+    {
+        var clone = (Block)Activator.CreateInstance(source.GetType());
+        clone.Id = source.Id;
+        clone.Type = source.Type;
+        clone.Label = source.Label;
+
+        foreach (var prop in source.GetType().GetProperties(App.PropertyBindings))
+        {
+            if (typeof(IField).IsAssignableFrom(prop.PropertyType))
+            {
+                var field = prop.GetValue(source) as IField;
+                if (field == null)
+                {
+                    prop.SetValue(clone, Activator.CreateInstance(prop.PropertyType));
+                }
+                else if (field is ITranslatable)
+                {
+                    // New blocks are shared structurally, but their translated
+                    // fields must start empty instead of copying the default value.
+                    prop.SetValue(clone, Activator.CreateInstance(prop.PropertyType));
+                }
+                else
+                {
+                    prop.SetValue(clone, field);
+                }
+            }
+        }
+
+        return clone;
+    }
+
+    private sealed class BlockStructure
+    {
+        public BlockStructure(Guid id, Guid? parentId, string type)
+        {
+            Id = id;
+            ParentId = parentId;
+            Type = type;
+        }
+
+        public Guid Id { get; }
+        public Guid? ParentId { get; }
+        public string Type { get; }
     }
 
     private PageListModel.PageItem MapRecursive(Guid siteId, SitemapItem item, int level, int expandedLevels, IEnumerable<Guid> drafts)
@@ -767,6 +996,7 @@ public class PageService
                 var group = new BlockGroupModel
                 {
                     Id = block.Id,
+                    Label = block.Label,
                     Type = block.Type,
                     Meta = new BlockMeta
                     {
@@ -811,6 +1041,7 @@ public class PageService
                         group.Items.Add(new BlockGenericModel
                         {
                             Id = child.Id,
+                            Label = child.Label,
                             IsActive = firstChild,
                             Model = ContentUtils.GetBlockFields(child),
                             Type = child.Type,
@@ -854,6 +1085,7 @@ public class PageService
                     model.Blocks.Add(new BlockGenericModel
                     {
                         Id = block.Id,
+                        Label = block.Label,
                         Model = ContentUtils.GetBlockFields(block),
                         Type = block.Type,
                         Meta = new BlockMeta

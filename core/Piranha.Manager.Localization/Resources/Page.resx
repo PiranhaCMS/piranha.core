@@ -24,6 +24,12 @@
   <data name="Archive" xml:space="preserve">
     <value>Archive</value>
   </data>
+  <data name="Block name" xml:space="preserve">
+    <value>Block name</value>
+  </data>
+  <data name="Block structure is managed in the default language. You can edit translated field values here." xml:space="preserve">
+    <value>Block structure is managed in the default language. You can edit translated field values here.</value>
+  </data>
   <data name="Detach page" xml:space="preserve">
     <value>Detach page</value>
   </data>

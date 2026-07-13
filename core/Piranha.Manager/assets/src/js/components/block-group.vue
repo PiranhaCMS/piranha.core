@@ -19,17 +19,17 @@
                 <div class="list-group list-group-flush">
                     <div class="list-group-item" :class="{ active: child.isActive }" v-for="child in model.items" v-bind:key="child.meta.uid">
                         <a href="#" v-on:click.prevent="selectItem(child)">
-                            <div class="handle">
+                            <div v-if="canEditStructure" class="handle">
                                 <i class="fas fa-ellipsis-v"></i>
                             </div>
-                            {{ child.meta.title }}
+                            {{ getItemName(child) }}
                         </a>
-                        <span class='actions'>
+                            <span v-if="canEditStructure" class='actions'>
                             <a v-on:click.prevent="removeItem(child)" href="#" class="danger"><i class="fas fa-trash"></i></a>
                         </span>
                     </div>
                 </div>
-                <button v-on:click.prevent="piranha.blockpicker.open(addGroupBlock, 0, model.type)" class="btn btn-sm btn-primary btn-labeled mt-3">
+                <button v-if="canEditStructure" v-on:click.prevent="piranha.blockpicker.open(addGroupBlock, 0, model.type)" class="btn btn-sm btn-primary btn-labeled mt-3">
                     <i class="fas fa-plus"></i>{{ piranha.resources.texts.add }}
                 </button>
             </div>
@@ -39,7 +39,12 @@
                 </div>
                 <template v-for="child in model.items">
                     <div class="block" :class="child.meta.component" v-if="child.isActive" v-bind:key="'details-' + child.meta.uid">
-                        <component v-bind:is="child.meta.component" v-bind:uid="child.meta.uid" v-bind:toolbar="toolbar" v-bind:model="child.model" v-on:update-title="updateTitle($event)"></component>
+                        <div v-if="canEditBlockName" class="block-header block-name-header">
+                            <div class="title">
+                                <input :value="getItemName(child)" v-on:input="setItemName(child, $event.target.value)" class="block-name" maxlength="128">
+                            </div>
+                        </div>
+                        <component v-bind:is="child.meta.component" v-bind:uid="child.meta.uid" v-bind:toolbar="toolbar" v-bind:model="child.model" v-bind:can-edit-structure="canEditStructure" v-bind:can-edit-block-name="canEditBlockName" v-on:update-title="updateTitle($event)"></component>
                     </div>
                 </template>
             </div>
@@ -49,7 +54,7 @@
 
 <script>
 export default {
-    props: ["uid", "toolbar", "model"],
+    props: ["uid", "toolbar", "model", "canEditStructure", "canEditBlockName"],
     methods: {
         selectItem: function (item) {
             for (var n = 0; n < this.model.items.length; n++) {
@@ -61,6 +66,10 @@ export default {
             }
         },
         removeItem: function (item) {
+            if (!this.canEditStructure) {
+                return;
+            }
+
             var itemActive = item.isActive;
             var itemIndex = this.model.items.indexOf(item);
 
@@ -71,6 +80,10 @@ export default {
             }
         },
         addGroupBlock: function (type, pos) {
+            if (!this.canEditStructure) {
+                return;
+            }
+
             var self = this;
 
             fetch(piranha.baseUrl + "manager/api/content/block/" + type)
@@ -90,14 +103,36 @@ export default {
                 }
             }
         },
+        getItemLabel: function (item) {
+            return Array.isArray(item.model) ? item.label : item.model.label;
+        },
+        getItemName: function (item) {
+            var label = this.getItemLabel(item);
+            return label === null || typeof label === "undefined" ? item.meta.name : label;
+        },
+        setItemName: function (item, name) {
+            if (Array.isArray(item.model)) {
+                item.label = name;
+            } else {
+                item.model.label = name;
+            }
+        },
         toggleHeader: function () {
             this.model.meta.showHeader = !this.model.meta.showHeader;
         },
         moveItem: function (from, to) {
+            if (!this.canEditStructure) {
+                return;
+            }
+
             this.model.items.splice(to, 0, this.model.items.splice(from, 1)[0])
         }
     },
     mounted: function () {
+        if (!this.canEditStructure) {
+            return;
+        }
+
         var self = this;
 
         sortable("#" + this.uid + " .list-group", {

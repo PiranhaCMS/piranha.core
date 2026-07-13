@@ -336,6 +336,33 @@ public class Blocks : BaseTestsAsync
     }
 
     [Fact]
+    public void DeserializeBlockLabel()
+    {
+        var blocks = new List<Block>
+        {
+            new Block
+            {
+                CLRType = typeof(Extend.Blocks.TextBlock).FullName,
+                Title = "Intro content",
+                Fields = new List<BlockField>
+                {
+                    new BlockField
+                    {
+                        CLRType = typeof(Extend.Fields.TextField).FullName,
+                        FieldId = "Body",
+                        Value = "Lorem ipsum"
+                    }
+                }
+            }
+        };
+
+        var models = contentService.TransformBlocks(blocks);
+
+        Assert.Single(models);
+        Assert.Equal("Intro content", models[0].Label);
+    }
+
+    [Fact]
     public void SerializeHtmlBlock() {
         var models = new List<Extend.Block>();
         models.Add(new Extend.Blocks.HtmlBlock
@@ -354,6 +381,27 @@ public class Blocks : BaseTestsAsync
         Assert.Equal(typeof(Extend.Blocks.HtmlBlock).FullName, blocks[0].CLRType);
         Assert.Equal(typeof(Extend.Fields.HtmlField).FullName, blocks[0].Fields[0].CLRType);
         Assert.Equal("<p>Lorem ipsum</p>", blocks[0].Fields[0].Value);
+    }
+
+    [Fact]
+    public void SerializeBlockLabel()
+    {
+        var models = new List<Extend.Block>
+        {
+            new Extend.Blocks.TextBlock
+            {
+                Label = "Intro content",
+                Body = new Extend.Fields.TextField
+                {
+                    Value = "Lorem ipsum"
+                }
+            }
+        };
+
+        var blocks = contentService.TransformBlocks(models);
+
+        Assert.Single(blocks);
+        Assert.Equal("Intro content", blocks[0].Title);
     }
 
     [Fact]
