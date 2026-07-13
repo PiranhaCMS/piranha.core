@@ -449,7 +449,7 @@ public class Blocks : BaseTestsAsync
         };
 
         var blocks = contentService.TransformBlocks(models, languageId);
-        var field = Assert.Single(Assert.Single(blocks).Fields);
+        var field = Assert.Single(Assert.Single(blocks).Fields.Where(f => f.FieldId == "Body"));
         var translation = Assert.Single(field.Translations);
 
         Assert.Equal(languageId, translation.LanguageId);

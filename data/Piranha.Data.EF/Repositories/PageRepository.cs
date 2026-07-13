@@ -819,6 +819,34 @@ internal class PageRepository : IPageRepository
             if (blockModels != null)
             {
                 var blocks = _contentService.TransformBlocks(blockModels, languageId);
+                var draftBlocks = languageId.HasValue
+                    ? await GetDraftBlocks(page.Id).ConfigureAwait(false)
+                    : null;
+
+                if (draftBlocks != null)
+                {
+                    // A default-language edit may exist only in the draft
+                    // revision. Carry those default field values forward when
+                    // a translation is saved before the default is published.
+                    foreach (var block in blocks)
+                    {
+                        var draftBlock = draftBlocks.FirstOrDefault(b => b.Id == block.Id);
+                        if (draftBlock == null)
+                        {
+                            continue;
+                        }
+
+                        foreach (var field in block.Fields)
+                        {
+                            var draftField = draftBlock.Fields.FirstOrDefault(f => f.FieldId == field.FieldId);
+                            if (draftField != null)
+                            {
+                                field.Value = draftField.Value;
+                            }
+                        }
+                    }
+                }
+
                 var current = blocks.Select(b => b.Id).ToArray();
                 var draftStructure = languageId.HasValue
                     ? await GetDraftBlockStructure(page.Id).ConfigureAwait(false)
@@ -935,7 +963,8 @@ internal class PageRepository : IPageRepository
                             {
                                 Id = newField.Id != Guid.Empty ? newField.Id : Guid.NewGuid(),
                                 BlockId = block.Id,
-                                FieldId = newField.FieldId
+                                FieldId = newField.FieldId,
+                                Value = newField.Value
                             };
                             if (!isDraft)
                             {
@@ -970,9 +999,26 @@ internal class PageRepository : IPageRepository
                                 translation.Value = newTranslation.Value;
                             }
                         }
-                        else
+                        else if (!languageId.HasValue || !typeof(Extend.ITranslatable).IsAssignableFrom(App.Fields.GetByType(newField.CLRType)?.Type) || string.IsNullOrEmpty(field.Value))
                         {
+                            // A translated save must not replace the default
+                            // value when the submitted field has no
+                            // translation (for example, an older client or a
+                            // missing media selection).
                             field.Value = newField.Value;
+                        }
+                    }
+
+                    if (isDraft)
+                    {
+                        // Drafts are serialized from the page graph. Keep the
+                        // freshly merged block attached to that graph so a
+                        // translated draft preserves the default field value
+                        // while also containing its language translation.
+                        var draftPageBlock = page.Blocks.FirstOrDefault(b => b.BlockId == block.Id);
+                        if (draftPageBlock != null)
+                        {
+                            draftPageBlock.Block = block;
                         }
                     }
 
@@ -1000,9 +1046,8 @@ internal class PageRepository : IPageRepository
                         }
                         else
                         {
-                            // Draft block queries are no-tracking. Replace the
-                            // stale navigation so the revision serializes the
-                            // edited label and fields.
+                            // Replace the stale navigation so the revision
+                            // serializes the edited label and fields.
                             pageBlock.Block = block;
                         }
                         pageBlock.SortOrder = n;
@@ -1130,7 +1175,7 @@ internal class PageRepository : IPageRepository
         return currentStructure.SequenceEqual(submitted);
     }
 
-    private async Task<IList<BlockStructure>> GetDraftBlockStructure(Guid pageId)
+    private async Task<IList<Block>> GetDraftBlocks(Guid pageId)
     {
         var lastModified = await _db.Pages
             .Where(page => page.Id == pageId)
@@ -1152,11 +1197,16 @@ internal class PageRepository : IPageRepository
 
         var draft = JsonConvert.DeserializeObject<Page>(data);
         return draft?.Blocks?
-            .OrderBy(pageBlock => pageBlock.SortOrder)
-            .Select(pageBlock => new BlockStructure(
-                pageBlock.BlockId,
-                pageBlock.Block.ParentId,
-                pageBlock.Block.CLRType))
+            .Select(pageBlock => pageBlock.Block)
+            .Where(block => block != null)
+            .ToList();
+    }
+
+    private async Task<IList<BlockStructure>> GetDraftBlockStructure(Guid pageId)
+    {
+        var draftBlocks = await GetDraftBlocks(pageId).ConfigureAwait(false);
+        return draftBlocks?
+            .Select(block => new BlockStructure(block.Id, block.ParentId, block.CLRType))
             .ToList();
     }
 
