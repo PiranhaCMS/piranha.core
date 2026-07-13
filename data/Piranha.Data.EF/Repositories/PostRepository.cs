@@ -174,7 +174,7 @@ internal class PostRepository : IPostRepository
     /// <typeparam name="T">The model type</typeparam>
     /// <param name="id">The unique id</param>
     /// <returns>The post model</returns>
-    public async Task<T> GetById<T>(Guid id) where T : Models.PostBase
+    public async Task<T> GetById<T>(Guid id, Guid? languageId = null) where T : Models.PostBase
     {
         var post = await GetQuery<T>()
             .FirstOrDefaultAsync(p => p.Id == id)
@@ -182,7 +182,7 @@ internal class PostRepository : IPostRepository
 
         if (post != null)
         {
-            return await _contentService.TransformAsync<T>(post, App.PostTypes.GetById(post.PostTypeId), ProcessAsync);
+            return await _contentService.TransformAsync<T>(post, App.PostTypes.GetById(post.PostTypeId), ProcessAsync, languageId);
         }
         return null;
     }
@@ -194,16 +194,34 @@ internal class PostRepository : IPostRepository
     /// <param name="blogId">The blog id</param>
     /// <param name="slug">The unique slug</param>
     /// <returns>The post model</returns>
-    public async Task<T> GetBySlug<T>(Guid blogId, string slug) where T : Models.PostBase
+    public async Task<T> GetBySlug<T>(Guid blogId, string slug, Guid? languageId = null) where T : Models.PostBase
     {
         // No cache found, load from database
         var post = await GetQuery<T>()
             .FirstOrDefaultAsync(p => p.BlogId == blogId && p.Slug == slug)
             .ConfigureAwait(false);
 
+        // If not found, try translated slug
+        if (post == null && languageId.HasValue)
+        {
+            var postId = await _db.PostTranslations
+                .AsNoTracking()
+                .Where(t => t.LanguageId == languageId.Value && t.Slug == slug)
+                .Select(t => t.PostId)
+                .FirstOrDefaultAsync()
+                .ConfigureAwait(false);
+
+            if (postId != Guid.Empty)
+            {
+                post = await GetQuery<T>()
+                    .FirstOrDefaultAsync(p => p.Id == postId && p.BlogId == blogId)
+                    .ConfigureAwait(false);
+            }
+        }
+
         if (post != null)
         {
-            return await _contentService.TransformAsync<T>(post, App.PostTypes.GetById(post.PostTypeId), ProcessAsync);
+            return await _contentService.TransformAsync<T>(post, App.PostTypes.GetById(post.PostTypeId), ProcessAsync, languageId);
         }
         return null;
     }
@@ -348,9 +366,9 @@ internal class PostRepository : IPostRepository
     /// Saves the given post model
     /// </summary>
     /// <param name="model">The post model</param>
-    public Task Save<T>(T model) where T : Models.PostBase
+    public Task Save<T>(T model, Guid? languageId = null) where T : Models.PostBase
     {
-        return Save<T>(model, false);
+        return Save<T>(model, false, languageId);
     }
 
     /// <summary>
@@ -595,7 +613,7 @@ internal class PostRepository : IPostRepository
     /// </summary>
     /// <param name="model">The post model</param>
     /// <param name="isDraft">If the model should be saved as a draft</param>
-    private async Task Save<T>(T model, bool isDraft) where T : Models.PostBase
+    private async Task Save<T>(T model, bool isDraft, Guid? languageId = null) where T : Models.PostBase
     {
         var type = App.PostTypes.GetById(model.TypeId);
         var lastModified = DateTime.MinValue;
@@ -702,9 +720,10 @@ internal class PostRepository : IPostRepository
 
             var post = await postQuery
                 .Include(p => p.Permissions)
-                .Include(p => p.Blocks).ThenInclude(b => b.Block).ThenInclude(b => b.Fields)
-                .Include(p => p.Fields)
+                .Include(p => p.Blocks).ThenInclude(b => b.Block).ThenInclude(b => b.Fields).ThenInclude(f => f.Translations)
+                .Include(p => p.Fields).ThenInclude(f => f.Translations)
                 .Include(p => p.Tags).ThenInclude(t => t.Tag)
+                .Include(p => p.Translations)
                 .AsSplitQuery()
                 .FirstOrDefaultAsync(p => p.Id == model.Id)
                 .ConfigureAwait(false);
@@ -729,7 +748,29 @@ internal class PostRepository : IPostRepository
             {
                 post.LastModified = DateTime.Now;
             }
-            post = _contentService.Transform<T>(model, type, post);
+            // When saving a non-default language, preserve the main post columns
+            var origTitle = post.Title;
+            var origSlug = post.Slug;
+            var origExcerpt = post.Excerpt;
+            var origMetaTitle = post.MetaTitle;
+            var origMetaKeywords = post.MetaKeywords;
+            var origMetaDescription = post.MetaDescription;
+            var origOgTitle = post.OgTitle;
+            var origOgDescription = post.OgDescription;
+
+            post = _contentService.Transform<T>(model, type, post, languageId);
+
+            if (languageId.HasValue)
+            {
+                post.Title = origTitle;
+                post.Slug = origSlug;
+                post.Excerpt = origExcerpt;
+                post.MetaTitle = origMetaTitle;
+                post.MetaKeywords = origMetaKeywords;
+                post.MetaDescription = origMetaDescription;
+                post.OgTitle = origOgTitle;
+                post.OgDescription = origOgDescription;
+            }
 
             // Set if comments should be enabled
             post.EnableComments = model.EnableComments;
@@ -775,7 +816,7 @@ internal class PostRepository : IPostRepository
 
             if (blockModels != null)
             {
-                var blocks = _contentService.TransformBlocks(blockModels);
+                var blocks = _contentService.TransformBlocks(blockModels, languageId);
                 var current = blocks.Select(b => b.Id).ToArray();
 
                 // Delete removed blocks
@@ -853,7 +894,35 @@ internal class PostRepository : IPostRepository
                         }
                         field.SortOrder = newField.SortOrder;
                         field.CLRType = newField.CLRType;
-                        field.Value = newField.Value;
+
+                        if (newField.Translations.Count > 0)
+                        {
+                            // Translatable field. Merge the translations for the
+                            // current language without touching the values stored
+                            // for the other languages.
+                            foreach (var newTranslation in newField.Translations)
+                            {
+                                var translation = field.Translations.FirstOrDefault(t => t.LanguageId == newTranslation.LanguageId);
+                                if (translation == null)
+                                {
+                                    translation = new PageBlockFieldTranslation
+                                    {
+                                        FieldId = field.Id,
+                                        LanguageId = newTranslation.LanguageId
+                                    };
+                                    if (!isDraft)
+                                    {
+                                        await _db.PageBlockFieldTranslations.AddAsync(translation).ConfigureAwait(false);
+                                    }
+                                    field.Translations.Add(translation);
+                                }
+                                translation.Value = newTranslation.Value;
+                            }
+                        }
+                        else
+                        {
+                            field.Value = newField.Value;
+                        }
                     }
 
                     // Create the post block
@@ -1034,14 +1103,15 @@ internal class PostRepository : IPostRepository
         IQueryable<Post> query = _db.Posts
             .AsNoTracking()
             .Include(p => p.Permissions)
+            .Include(p => p.Translations)
             .Include(p => p.Category)
             .Include(p => p.Tags).ThenInclude(t => t.Tag);
 
         if (loadRelated)
         {
             query = query
-                .Include(p => p.Blocks).ThenInclude(b => b.Block).ThenInclude(b => b.Fields)
-                .Include(p => p.Fields);
+                .Include(p => p.Blocks).ThenInclude(b => b.Block).ThenInclude(b => b.Fields).ThenInclude(f => f.Translations)
+                .Include(p => p.Fields).ThenInclude(f => f.Translations);
         }
 
         query = query.OrderBy(p => p.Created);
@@ -1086,7 +1156,7 @@ internal class PostRepository : IPostRepository
                         }
                     }
                 }
-                model.Blocks = _contentService.TransformBlocks(post.Blocks.OrderBy(b => b.SortOrder).Select(b => b.Block));
+                model.Blocks = _contentService.TransformBlocks(post.Blocks.OrderBy(b => b.SortOrder).Select(b => b.Block), post.SelectedLanguageId);
             }
         }
     }

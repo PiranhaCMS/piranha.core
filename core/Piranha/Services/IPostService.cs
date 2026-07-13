@@ -125,15 +125,16 @@ public interface IPostService
     /// </summary>
     /// <param name="id">The unique id</param>
     /// <returns>The post model</returns>
-    Task<DynamicPost> GetByIdAsync(Guid id);
+    Task<DynamicPost> GetByIdAsync(Guid id, Guid? languageId = null);
 
     /// <summary>
     /// Gets the post model with the specified id.
     /// </summary>
     /// <typeparam name="T">The model type</typeparam>
     /// <param name="id">The unique id</param>
+    /// <param name="languageId">The optional language id for translated content</param>
     /// <returns>The post model</returns>
-    Task<T> GetByIdAsync<T>(Guid id) where T : PostBase;
+    Task<T> GetByIdAsync<T>(Guid id, Guid? languageId = null) where T : PostBase;
 
     /// <summary>
     /// Gets the draft for the post model with the specified id.
@@ -175,7 +176,7 @@ public interface IPostService
     /// <param name="blogId">The unique blog slug</param>
     /// <param name="slug">The unique slug</param>
     /// <returns>The post model</returns>
-    Task<DynamicPost> GetBySlugAsync(Guid blogId, string slug);
+    Task<DynamicPost> GetBySlugAsync(Guid blogId, string slug, Guid? languageId = null);
 
     /// <summary>
     /// Gets the post model with the specified slug.
@@ -183,8 +184,9 @@ public interface IPostService
     /// <typeparam name="T">The model type</typeparam>
     /// <param name="blogId">The unique blog slug</param>
     /// <param name="slug">The unique slug</param>
+    /// <param name="languageId">The optional language id for translated content</param>
     /// <returns>The post model</returns>
-    Task<T> GetBySlugAsync<T>(Guid blogId, string slug) where T : PostBase;
+    Task<T> GetBySlugAsync<T>(Guid blogId, string slug, Guid? languageId = null) where T : PostBase;
 
     /// <summary>
     /// Gets the category with the id.
@@ -227,7 +229,7 @@ public interface IPostService
     /// Saves the given post model.
     /// </summary>
     /// <param name="model">The post model</param>
-    Task SaveAsync<T>(T model) where T : PostBase;
+    Task SaveAsync<T>(T model, Guid? languageId = null) where T : PostBase;
 
     /// <summary>
     /// Saves the given post model as a draft

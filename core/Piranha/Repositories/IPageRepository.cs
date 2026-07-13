@@ -63,16 +63,18 @@ public interface IPageRepository
     /// </summary>
     /// <typeparam name="T">The model type</typeparam>
     /// <param name="siteId">The site id</param>
+    /// <param name="languageId">The optional language id</param>
     /// <returns>The page model</returns>
-    Task<T> GetStartpage<T>(Guid siteId) where T : PageBase;
+    Task<T> GetStartpage<T>(Guid siteId, Guid? languageId = null) where T : PageBase;
 
     /// <summary>
     /// Gets the page model with the specified id.
     /// </summary>
     /// <typeparam name="T">The model type</typeparam>
     /// <param name="id">The unique id</param>
+    /// <param name="languageId">The optional language id</param>
     /// <returns>The page model</returns>
-    Task<T> GetById<T>(Guid id) where T : PageBase;
+    Task<T> GetById<T>(Guid id, Guid? languageId = null) where T : PageBase;
 
     /// <summary>
     /// Gets the page models with the specified id's.
@@ -88,8 +90,9 @@ public interface IPageRepository
     /// <typeparam name="T">The model type</typeparam>
     /// <param name="slug">The unique slug</param>
     /// <param name="siteId">The site id</param>
+    /// <param name="languageId">The optional language id</param>
     /// <returns>The page model</returns>
-    Task<T> GetBySlug<T>(string slug, Guid siteId) where T : PageBase;
+    Task<T> GetBySlug<T>(string slug, Guid siteId, Guid? languageId = null) where T : PageBase;
 
     /// <summary>
     /// Gets the draft for the page model with the specified id.
@@ -120,8 +123,9 @@ public interface IPageRepository
     /// Saves the given page model
     /// </summary>
     /// <param name="model">The page model</param>
+    /// <param name="languageId">The optional language id for saving translated content</param>
     /// <returns>The other pages that were affected by the move</returns>
-    Task<IEnumerable<Guid>> Save<T>(T model) where T : PageBase;
+    Task<IEnumerable<Guid>> Save<T>(T model, Guid? languageId = null) where T : PageBase;
 
     /// <summary>
     /// Saves the given model as a draft revision.

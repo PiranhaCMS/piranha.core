@@ -68,6 +68,7 @@ public class RoutingMiddleware : MiddlewareBase
             // 2: Get the current site
             //
             Site site = null;
+            Guid? languageId = null;
 
             var hostname = context.Request.Host.Host;
 
@@ -130,6 +131,27 @@ public class RoutingMiddleware : MiddlewareBase
                     service.Site.Host = context.Request.Host.Host;
                 }
 
+                //
+                // 2b: Detect language from URL prefix
+                //
+                if (segments.Length > pos)
+                {
+                    var languages = await api.Languages.GetAllAsync().ConfigureAwait(false);
+                    var matchedLanguage = languages.FirstOrDefault(l =>
+                        !string.IsNullOrEmpty(l.Culture) &&
+                        (l.Culture.Split('-', '_')[0].Equals(segments[pos], StringComparison.OrdinalIgnoreCase) ||
+                         l.Culture.Equals(segments[pos], StringComparison.OrdinalIgnoreCase) ||
+                         l.Culture.Replace('-', '_').Equals(segments[pos], StringComparison.OrdinalIgnoreCase)));
+
+                    if (matchedLanguage != null)
+                    {
+                        languageId = matchedLanguage.Id;
+                        service.Site.LanguageId = matchedLanguage.Id;
+                        service.Site.Culture = matchedLanguage.Culture;
+                        pos++;
+                    }
+                }
+
                 // Set current culture if specified in site
                 if (!string.IsNullOrEmpty(service.Site.Culture))
                 {
@@ -179,7 +201,7 @@ public class RoutingMiddleware : MiddlewareBase
                 for (var n = segments.Length; n > pos; n--)
                 {
                     var slug = string.Join("/", segments.Subset(pos, n - pos));
-                    page = await api.Pages.GetBySlugAsync<PageBase>(slug, site.Id)
+                    page = await api.Pages.GetBySlugAsync<PageBase>(slug, site.Id, languageId)
                         .ConfigureAwait(false);
 
                     if (page != null)
@@ -191,7 +213,7 @@ public class RoutingMiddleware : MiddlewareBase
             }
             else
             {
-                page = await api.Pages.GetStartpageAsync<PageBase>(site.Id)
+                page = await api.Pages.GetStartpageAsync<PageBase>(site.Id, languageId)
                     .ConfigureAwait(false);
             }
 

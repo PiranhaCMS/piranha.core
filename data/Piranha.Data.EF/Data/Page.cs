@@ -1,4 +1,4 @@
-﻿/*
+/*
  * Copyright (c) .NET Foundation and Contributors
  *
  * This software may be modified and distributed under the terms
@@ -11,8 +11,14 @@
 namespace Piranha.Data;
 
 [Serializable]
-public sealed class Page : RoutedContentBase<PageField>
+public sealed class Page : RoutedContentBase<PageField>, ITranslatable
 {
+    /// <summary>
+    /// The currently selected language id. This is only used for
+    /// mapping and is not stored in the database.
+    /// </summary>
+    internal Guid? SelectedLanguageId { get; set; }
+
     /// <summary>
     /// Gets/sets the page type id.
     /// </summary>
@@ -115,4 +121,48 @@ public sealed class Page : RoutedContentBase<PageField>
     /// Gets/sets the optional page this page is a copy of
     /// </summary>
     public Guid? OriginalPageId { get; set; }
+
+    /// <summary>
+    /// Gets/sets the available translations.
+    /// </summary>
+    public IList<PageTranslation> Translations { get; set; } = new List<PageTranslation>();
+
+    /// <summary>
+    /// Sets the translation for the specified language.
+    /// </summary>
+    public void SetTranslation(Guid parentId, Guid languageId, object model)
+    {
+        if (model is Models.PageBase page)
+        {
+            var translation = Translations.FirstOrDefault(t => t.LanguageId == languageId);
+
+            if (translation == null)
+            {
+                translation = new PageTranslation
+                {
+                    PageId = page.Id,
+                    LanguageId = languageId
+                };
+                Translations.Add(translation);
+            }
+            translation.Title = page.Title;
+            translation.NavigationTitle = page.NavigationTitle;
+            translation.Slug = page.Slug;
+            translation.Excerpt = page.Excerpt;
+            translation.MetaTitle = page.MetaTitle;
+            translation.MetaKeywords = page.MetaKeywords;
+            translation.MetaDescription = page.MetaDescription;
+            translation.OgTitle = page.OgTitle;
+            translation.OgDescription = page.OgDescription;
+            translation.LastModified = DateTime.Now;
+        }
+    }
+
+    /// <summary>
+    /// Gets the translation for the specified language.
+    /// </summary>
+    public object GetTranslation(Guid languageId)
+    {
+        return Translations.FirstOrDefault(t => t.LanguageId == languageId);
+    }
 }

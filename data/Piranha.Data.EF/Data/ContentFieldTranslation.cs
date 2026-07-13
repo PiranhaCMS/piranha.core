@@ -10,6 +10,8 @@
 
 namespace Piranha.Data;
 
+using Newtonsoft.Json;
+
 [Serializable]
 public sealed class ContentFieldTranslation
 {
@@ -31,6 +33,7 @@ public sealed class ContentFieldTranslation
     /// <summary>
     /// Gets/sets the field.
     /// </summary>
+    [JsonIgnore]
     public ContentField Field { get; set; }
 
     /// <summary>

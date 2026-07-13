@@ -13,12 +13,12 @@ using Newtonsoft.Json;
 namespace Piranha.Data;
 
 [Serializable]
-public sealed class ContentTranslation
+public sealed class PageBlockFieldTranslation
 {
     /// <summary>
-    /// Gets/sets the content id.
+    /// Gets/sets the field id.
     /// </summary>
-    public Guid ContentId { get; set; }
+    public Guid FieldId { get; set; }
 
     /// <summary>
     /// Gets/sets the language id.
@@ -26,25 +26,15 @@ public sealed class ContentTranslation
     public Guid LanguageId { get; set; }
 
     /// <summary>
-    /// Gets/sets the main title.
+    /// Gets/sets the serialized value.
     /// </summary>
-    public string Title { get; set; }
+    public string Value { get; set; }
 
     /// <summary>
-    /// Gets/sets the optional excerpt.
-    /// </summary>
-    public string Excerpt { get; set; }
-
-    /// <summary>
-    /// Gets/sets the last modification date.
-    /// </summary>
-    public DateTime LastModified { get; set; }
-
-    /// <summary>
-    /// Gets/sets the content.
+    /// Gets/sets the block field.
     /// </summary>
     [JsonIgnore]
-    public Content Content { get; set; }
+    public BlockField Field { get; set; }
 
     /// <summary>
     /// Gets/sets the language.

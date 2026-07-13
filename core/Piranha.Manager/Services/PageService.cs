@@ -281,14 +281,19 @@ public class PageService
         return null;
     }
 
-    public async Task<PageEditModel> GetById(Guid id, bool useDraft = true)
+    public async Task<PageEditModel> GetById(Guid id, bool useDraft = true, Guid? languageId = null)
     {
+        var languages = await _api.Languages.GetAllAsync();
+        var defaultLanguageId = languages.FirstOrDefault(l => l.IsDefault)?.Id;
+        var contentLanguageId = languageId == defaultLanguageId ? null : languageId;
         var isDraft = true;
-        var page = useDraft ? await _api.Pages.GetDraftByIdAsync(id) : null;
+        var useDefaultLanguageDraft = useDraft &&
+            !contentLanguageId.HasValue;
+        var page = useDefaultLanguageDraft ? await _api.Pages.GetDraftByIdAsync(id) : null;
 
         if (page == null)
         {
-            page = await _api.Pages.GetByIdAsync(id);
+            page = await _api.Pages.GetByIdAsync(id, contentLanguageId);
             isDraft = false;
         }
 
@@ -302,6 +307,11 @@ public class PageService
 
             model.PendingCommentCount = (await _api.Pages.GetAllPendingCommentsAsync(id))
                 .Count();
+
+            // Populate language data
+            model.Languages = languages;
+            model.UseTranslations = languages.Count() > 1;
+            model.LanguageId = languageId ?? defaultLanguageId;
 
             return model;
         }
@@ -500,14 +510,19 @@ public class PageService
                 }
             }
 
+            // Only pass languageId for non-default languages
+            var defaultLang = (await _api.Languages.GetDefaultAsync());
+            var langId = (model.LanguageId.HasValue && defaultLang != null && model.LanguageId.Value != defaultLang.Id)
+                ? model.LanguageId : null;
+
             // Save page
             if (draft)
             {
-                await _api.Pages.SaveDraftAsync(page);
+                await _api.Pages.SaveDraftAsync(page, langId);
             }
             else
             {
-                await _api.Pages.SaveAsync(page);
+                await _api.Pages.SaveAsync(page, langId);
             }
         }
         else

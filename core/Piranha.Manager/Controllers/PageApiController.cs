@@ -93,13 +93,14 @@ public class PageApiController : Controller
     /// Gets the page with the given id.
     /// </summary>
     /// <param name="id">The unique id</param>
+    /// <param name="languageId">The optional language id</param>
     /// <returns>The page edit model</returns>
-    [Route("{id:Guid}")]
+    [Route("{id:Guid}/{languageId:Guid?}")]
     [HttpGet]
     [Authorize(Policy = Permission.PagesEdit)]
-    public async Task<PageEditModel> Get(Guid id)
+    public async Task<PageEditModel> Get(Guid id, Guid? languageId = null)
     {
-        return await _service.GetById(id);
+        return await _service.GetById(id, languageId: languageId);
     }
 
     /// <summary>
@@ -367,7 +368,7 @@ public class PageApiController : Controller
             return model;
         }
 
-        var ret = await _service.GetById(model.Id);
+        var ret = await _service.GetById(model.Id, languageId: model.LanguageId);
         ret.Status = new StatusMessage
         {
             Type = StatusMessage.Success,

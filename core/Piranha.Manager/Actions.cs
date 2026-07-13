@@ -111,6 +111,11 @@ public static class Actions
         {
             new ToolbarAction
             {
+                InternalId = "Languages",
+                ActionView = "Partial/Actions/_PageLangPicker"
+            },
+            new ToolbarAction
+            {
                 InternalId = "Settings",
                 ActionView = "Partial/Actions/_PageSettings"
             },

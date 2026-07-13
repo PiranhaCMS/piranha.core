@@ -12,6 +12,9 @@ piranha.pageedit = new Vue({
         originalId: null,
         sortOrder: 0,
         typeId: null,
+        languageId: null,
+        languages: [],
+        useTranslations: false,
         title: null,
         navigationTitle: null,
         slug: null,
@@ -65,6 +68,11 @@ piranha.pageedit = new Vue({
         routes: []
     },
     computed: {
+        currentLanguage: function () {
+            var self = this;
+            var lang = this.languages.find(function (l) { return l.id === self.languageId; });
+            return lang || { title: "" };
+        },
         contentRegions: function () {
             return this.regions.filter(function (item) {
                 return item.meta.display != "setting" && item.meta.display != "hidden";
@@ -112,6 +120,9 @@ piranha.pageedit = new Vue({
             this.originalId = model.originalId;
             this.sortOrder = model.sortOrder;
             this.typeId = model.typeId;
+            this.languageId = model.languageId;
+            this.languages = model.languages || [];
+            this.useTranslations = model.useTranslations;
             this.title = model.title;
             this.navigationTitle = model.navigationTitle;
             this.slug = model.slug;
@@ -168,16 +179,24 @@ piranha.pageedit = new Vue({
                 };
             }
         },
-        load: function (id) {
+        load: function (id, languageId) {
             var self = this;
+            var url = piranha.baseUrl + "manager/api/page/" + id;
+            if (languageId) {
+                url += "/" + languageId;
+            }
 
-            fetch(piranha.baseUrl + "manager/api/page/" + id)
+            fetch(url)
                 .then(function (response) { return response.json(); })
                 .then(function (result) {
                     self.bind(result);
                 })
                 .catch(function (error) { console.log("error:", error );
             });
+        },
+        switchLanguage: function (lang) {
+            this.languageId = lang.id;
+            this.load(this.id, lang.id);
         },
         create: function (id, pageType) {
             var self = this;
@@ -257,6 +276,7 @@ piranha.pageedit = new Vue({
                 originalId: self.originalId,
                 sortOrder: self.sortOrder,
                 typeId: self.typeId,
+                languageId: self.languageId,
                 title: self.title,
                 navigationTitle: self.navigationTitle,
                 slug: self.slug,

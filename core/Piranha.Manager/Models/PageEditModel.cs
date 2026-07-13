@@ -9,6 +9,7 @@
  */
 
 using Piranha.Extend.Fields;
+using Piranha.Models;
 
 namespace Piranha.Manager.Models;
 
@@ -180,6 +181,21 @@ public class PageEditModel : Content.ContentEditModel
     /// Gets/sets all of the available permissions.
     /// </summary>
     public IList<KeyValuePair<string, string>> Permissions { get; set; } = new List<KeyValuePair<string, string>>();
+
+    /// <summary>
+    /// Gets/sets the optional language id.
+    /// </summary>
+    public Guid? LanguageId { get; set; }
+
+    /// <summary>
+    /// Gets/sets if the content should be translatable.
+    /// </summary>
+    public bool UseTranslations { get; set; }
+
+    /// <summary>
+    /// Gets/sets the available languages.
+    /// </summary>
+    public IEnumerable<Language> Languages { get; set; } = new List<Language>();
 
     /// <summary>
     /// Gets/sets if primary image should be used for the

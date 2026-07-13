@@ -79,7 +79,7 @@ public interface IPostRepository
     /// <typeparam name="T">The model type</typeparam>
     /// <param name="id">The unique id</param>
     /// <returns>The post model</returns>
-    Task<T> GetById<T>(Guid id) where T : PostBase;
+    Task<T> GetById<T>(Guid id, Guid? languageId = null) where T : PostBase;
 
     /// <summary>
     /// Gets the post model with the specified slug.
@@ -88,7 +88,7 @@ public interface IPostRepository
     /// <param name="blogId">The blog id</param>
     /// <param name="slug">The unique slug</param>
     /// <returns>The post model</returns>
-    Task<T> GetBySlug<T>(Guid blogId, string slug) where T : PostBase;
+    Task<T> GetBySlug<T>(Guid blogId, string slug, Guid? languageId = null) where T : PostBase;
 
     /// <summary>
     /// Gets the draft for the post model with the specified id.
@@ -146,7 +146,7 @@ public interface IPostRepository
     /// Saves the given post model
     /// </summary>
     /// <param name="model">The post model</param>
-    Task Save<T>(T model) where T : PostBase;
+    Task Save<T>(T model, Guid? languageId = null) where T : PostBase;
 
     /// <summary>
     /// Saves the given model as a draft revision.
