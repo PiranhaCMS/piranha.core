@@ -20,6 +20,7 @@
                             <tr>
                                 <th class="w-100">@Localizer.General["Title"]</th>
                                 <th class="text-center">@Localizer.General["Culture"]</th>
+                                <th class="text-center">@Localizer.Site["Hostnames"]</th>
                                 <th class="text-center">@Localizer.General["Default"]</th>
                                 <th class="actions one"></th>
                             </tr>
@@ -31,6 +32,9 @@
                                 </td>
                                 <td class="text-center">
                                     <input type="text" class="form-control form-control-sm" v-model="item.culture">
+                                </td>
+                                <td class="text-center">
+                                    <input type="text" class="form-control form-control-sm" v-model="item.hostnames">
                                 </td>
                                 <td class="text-center">
                                     <button v-on:click.prevent="setDefault(item)" class="switch mt-1" :aria-pressed="item.isDefault"><span></span></button>

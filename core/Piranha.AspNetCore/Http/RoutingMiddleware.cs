@@ -106,14 +106,19 @@ public class RoutingMiddleware : MiddlewareBase
 
             if (site != null)
             {
-                // Get the selected language
-                var language = await api.Languages.GetByIdAsync(site.LanguageId)
+                // A language hostname overrides the language configured on the site.
+                var hostnameLanguage = await api.Languages.GetByHostnameAsync(context.Request.Host.Host)
                     .ConfigureAwait(false);
+
+                // Get the selected language
+                var language = hostnameLanguage ?? await api.Languages.GetByIdAsync(site.LanguageId)
+                    .ConfigureAwait(false);
+                languageId = language?.Id;
 
                 // Update application service
                 service.Site.Id = site.Id;
+                service.Site.LanguageId = language?.Id ?? Guid.Empty;
                 service.Site.Culture = language?.Culture;
-                service.Site.Sitemap = await api.Sites.GetSitemapAsync(site.Id);
 
                 // Set preferred hostname & prefix
                 var siteHost = GetMatchingHost(site, hostname);
@@ -138,6 +143,7 @@ public class RoutingMiddleware : MiddlewareBase
                 {
                     var languages = await api.Languages.GetAllAsync().ConfigureAwait(false);
                     var matchedLanguage = languages.FirstOrDefault(l =>
+                        l.Id != language?.Id &&
                         !string.IsNullOrEmpty(l.Culture) &&
                         (l.Culture.Split('-', '_')[0].Equals(segments[pos], StringComparison.OrdinalIgnoreCase) ||
                          l.Culture.Equals(segments[pos], StringComparison.OrdinalIgnoreCase) ||
@@ -151,6 +157,9 @@ public class RoutingMiddleware : MiddlewareBase
                         pos++;
                     }
                 }
+
+                service.Site.Sitemap = await api.Sites.GetSitemapAsync(site.Id, true, languageId)
+                    .ConfigureAwait(false);
 
                 // Set current culture if specified in site
                 if (!string.IsNullOrEmpty(service.Site.Culture))

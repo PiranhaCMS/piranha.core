@@ -115,6 +115,7 @@ internal class PageRepository : IPageRepository
     /// </summary>
     /// <typeparam name="T">The model type</typeparam>
     /// <param name="siteId">The site id</param>
+    /// <param name="languageId">The optional language id</param>
     /// <returns>The page model</returns>
     public async Task<T> GetStartpage<T>(Guid siteId, Guid? languageId = null) where T : Models.PageBase
     {
@@ -124,7 +125,9 @@ internal class PageRepository : IPageRepository
 
         if (page != null)
         {
-            return await _contentService.TransformAsync<T>(page, App.PageTypes.GetById(page.PageTypeId), ProcessAsync, languageId);
+            var model = await _contentService.TransformAsync<T>(page, App.PageTypes.GetById(page.PageTypeId), ProcessAsync, languageId);
+            await SetPermalinkAsync(model, page, languageId).ConfigureAwait(false);
+            return model;
         }
         return null;
     }
@@ -144,7 +147,9 @@ internal class PageRepository : IPageRepository
 
         if (page != null)
         {
-            return await _contentService.TransformAsync<T>(page, App.PageTypes.GetById(page.PageTypeId), ProcessAsync, languageId);
+            var model = await _contentService.TransformAsync<T>(page, App.PageTypes.GetById(page.PageTypeId), ProcessAsync, languageId);
+            await SetPermalinkAsync(model, page, languageId).ConfigureAwait(false);
+            return model;
         }
         return null;
     }
@@ -176,6 +181,7 @@ internal class PageRepository : IPageRepository
     /// <typeparam name="T">The model type</typeparam>
     /// <param name="slug">The unique slug</param>
     /// <param name="siteId">The site id</param>
+    /// <param name="languageId">The optional language id</param>
     /// <returns>The page model</returns>
     public async Task<T> GetBySlug<T>(string slug, Guid siteId, Guid? languageId = null) where T : Models.PageBase
     {
@@ -213,9 +219,44 @@ internal class PageRepository : IPageRepository
 
         if (page != null)
         {
-            return await _contentService.TransformAsync<T>(page, App.PageTypes.GetById(page.PageTypeId), ProcessAsync, languageId);
+            var model = await _contentService.TransformAsync<T>(page, App.PageTypes.GetById(page.PageTypeId), ProcessAsync, languageId);
+            await SetPermalinkAsync(model, page, languageId).ConfigureAwait(false);
+            return model;
         }
         return null;
+    }
+
+    private async Task SetPermalinkAsync<T>(T model, Page page, Guid? languageId) where T : Models.PageBase
+    {
+        if (model == null)
+        {
+            return;
+        }
+
+        var defaultLanguageData = await _db.Languages.AsNoTracking().FirstOrDefaultAsync(l => l.IsDefault).ConfigureAwait(false);
+        var selectedLanguageId = languageId ?? defaultLanguageData?.Id;
+        var languageData = selectedLanguageId.HasValue
+            ? await _db.Languages.AsNoTracking().FirstOrDefaultAsync(l => l.Id == selectedLanguageId.Value).ConfigureAwait(false)
+            : null;
+        var defaultLanguage = ToModel(defaultLanguageData);
+        var language = ToModel(languageData);
+        var slug = languageId.HasValue
+            ? page.Translations.FirstOrDefault(t => t.LanguageId == languageId.Value)?.Slug ?? page.Slug
+            : page.Slug;
+
+        model.Permalink = Utils.GeneratePermalink(slug, language, defaultLanguage, page.ParentId == null && page.SortOrder == 0);
+    }
+
+    private static Models.Language ToModel(Data.Language language)
+    {
+        return language == null ? null : new Models.Language
+        {
+            Id = language.Id,
+            Title = language.Title,
+            Culture = language.Culture,
+            Hostnames = language.Hostnames,
+            IsDefault = language.IsDefault
+        };
     }
 
     /// <summary>
@@ -308,6 +349,7 @@ internal class PageRepository : IPageRepository
     /// Saves the given page model
     /// </summary>
     /// <param name="model">The page model</param>
+    /// <param name="languageId">The optional language id</param>
     /// <returns>The other pages that were affected by the move</returns>
     public Task<IEnumerable<Guid>> Save<T>(T model, Guid? languageId = null) where T : Models.PageBase
     {
@@ -566,6 +608,7 @@ internal class PageRepository : IPageRepository
     /// </summary>
     /// <param name="model">The page model</param>
     /// <param name="isDraft">If the model should be saved as a draft</param>
+    /// <param name="languageId">The optional language id</param>
     private async Task<IEnumerable<Guid>> Save<T>(T model, bool isDraft, Guid? languageId = null) where T : Models.PageBase
     {
         var type = App.PageTypes.GetById(model.TypeId);

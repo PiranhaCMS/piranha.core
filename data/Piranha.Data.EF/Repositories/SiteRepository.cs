@@ -239,12 +239,20 @@ internal class SiteRepository : ISiteRepository
     /// </summary>
     /// <param name="id">The optional site id</param>
     /// <param name="onlyPublished">If only published items should be included</param>
+    /// <param name="languageId">The optional language id</param>
     /// <returns>The sitemap</returns>
-    public async Task<Models.Sitemap> GetSitemap(Guid id, bool onlyPublished = true)
+    public async Task<Models.Sitemap> GetSitemap(Guid id, bool onlyPublished = true, Guid? languageId = null)
     {
+        var defaultLanguageData = await _db.Languages.AsNoTracking().FirstOrDefaultAsync(l => l.IsDefault).ConfigureAwait(false);
+        var languageData = languageId.HasValue
+            ? await _db.Languages.AsNoTracking().FirstOrDefaultAsync(l => l.Id == languageId.Value).ConfigureAwait(false)
+            : defaultLanguageData;
+        var defaultLanguage = ToModel(defaultLanguageData);
+        var language = ToModel(languageData);
         var pages = await _db.Pages
             .AsNoTracking()
             .Include(p => p.Permissions)
+            .Include(p => p.Translations)
             .Where(p => p.SiteId == id)
             .OrderBy(p => p.ParentId)
             .ThenBy(p => p.SortOrder)
@@ -255,7 +263,7 @@ internal class SiteRepository : ISiteRepository
         {
             pages = pages.Where(p => p.Published.HasValue && p.Published.Value <= DateTime.Now).ToList();
         }
-        return Sort(pages);
+        return Sort(pages, language, defaultLanguage);
     }
 
     /// <summary>
@@ -364,16 +372,25 @@ internal class SiteRepository : ISiteRepository
     /// Sorts the items.
     /// </summary>
     /// <param name="pages">The full page list</param>
+    /// <param name="language">The selected language</param>
+    /// <param name="defaultLanguage">The default language</param>
     /// <param name="parentId">The current parent id</param>
     /// <param name="level">The level in structure</param>
     /// <returns>The sitemap</returns>
-    private Models.Sitemap Sort(IEnumerable<Page> pages, Guid? parentId = null, int level = 0)
+    private Models.Sitemap Sort(IEnumerable<Page> pages, Models.Language language,
+        Models.Language defaultLanguage, Guid? parentId = null, int level = 0)
     {
         var result = new Models.Sitemap();
 
         foreach (var page in pages.Where(p => p.ParentId == parentId).OrderBy(p => p.SortOrder))
         {
             var item = Module.Mapper.Map<Page, Models.SitemapItem>(page);
+            var translation = language != null && language.Id != defaultLanguage?.Id
+                ? page.Translations.FirstOrDefault(t => t.LanguageId == language.Id)
+                : null;
+            var slug = translation?.Slug ?? page.Slug;
+            item.Permalink = Utils.GeneratePermalink(slug, language, defaultLanguage,
+                !page.ParentId.HasValue && page.SortOrder == 0);
 
             if (!string.IsNullOrEmpty(page.RedirectUrl))
             {
@@ -382,10 +399,22 @@ internal class SiteRepository : ISiteRepository
 
             item.Level = level;
             item.PageTypeName = App.PageTypes.First(t => t.Id == page.PageTypeId).Title;
-            item.Items = Sort(pages, page.Id, level + 1);
+            item.Items = Sort(pages, language, defaultLanguage, page.Id, level + 1);
 
             result.Add(item);
         }
         return result;
+    }
+
+    private static Models.Language ToModel(Data.Language language)
+    {
+        return language == null ? null : new Models.Language
+        {
+            Id = language.Id,
+            Title = language.Title,
+            Culture = language.Culture,
+            Hostnames = language.Hostnames,
+            IsDefault = language.IsDefault
+        };
     }
 }

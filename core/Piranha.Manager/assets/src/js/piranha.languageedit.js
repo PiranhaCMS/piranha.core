@@ -62,7 +62,7 @@ piranha.languageedit = new Vue({
                     if (result.status.type === "success") {
                         self.bind(result);
                     }
-                    
+
                     if (result.status !== 400) {
                         // Refresh language list
                         self.refreshLanguageList();
@@ -121,6 +121,7 @@ piranha.languageedit = new Vue({
                 id: "00000000-0000-0000-0000-000000000000",
                 title: "",
                 culture: "",
+                hostnames: "",
                 isDefault: false
             });
         },

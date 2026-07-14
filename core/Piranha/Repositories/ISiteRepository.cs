@@ -60,8 +60,9 @@ public interface ISiteRepository
     /// </summary>
     /// <param name="id">The site id</param>
     /// <param name="onlyPublished">If only published items should be included</param>
+    /// <param name="languageId">The optional language id</param>
     /// <returns>The sitemap</returns>
-    Task<Sitemap> GetSitemap(Guid id, bool onlyPublished = true);
+    Task<Sitemap> GetSitemap(Guid id, bool onlyPublished = true, Guid? languageId = null);
 
     /// <summary>
     /// Adds or updates the given model in the database

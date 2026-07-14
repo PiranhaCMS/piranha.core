@@ -39,6 +39,7 @@ internal class LanguageRepository : ILanguageRepository
             {
                 Id = l.Id,
                 Culture = l.Culture,
+                Hostnames = l.Hostnames,
                 IsDefault = l.IsDefault,
                 Title = l.Title
             })
@@ -60,6 +61,7 @@ internal class LanguageRepository : ILanguageRepository
             {
                 Id = l.Id,
                 Culture = l.Culture,
+                Hostnames = l.Hostnames,
                 IsDefault = l.IsDefault,
                 Title = l.Title
             })
@@ -80,11 +82,46 @@ internal class LanguageRepository : ILanguageRepository
             {
                 Id = l.Id,
                 Culture = l.Culture,
+                Hostnames = l.Hostnames,
                 IsDefault = l.IsDefault,
                 Title = l.Title
             })
             .FirstOrDefaultAsync()
             .ConfigureAwait(false);
+    }
+
+    /// <summary>
+    /// Gets the model with the given hostname.
+    /// </summary>
+    /// <param name="hostname">The hostname</param>
+    /// <returns>The model, or null if it doesn't exist</returns>
+    public async Task<Language> GetByHostname(string hostname)
+    {
+        var languages = await _db.Languages
+            .AsNoTracking()
+            .Where(l => l.Hostnames != null)
+            .Select(l => new Language
+            {
+                Id = l.Id,
+                Culture = l.Culture,
+                Hostnames = l.Hostnames,
+                IsDefault = l.IsDefault,
+                Title = l.Title
+            })
+            .ToListAsync()
+            .ConfigureAwait(false);
+
+        foreach (var language in languages)
+        {
+            foreach (var host in language.Hostnames.Split(new[] { ',' }))
+            {
+                if (host.Trim().ToLower() == hostname)
+                {
+                    return language;
+                }
+            }
+        }
+        return null;
     }
 
     /// <summary>
@@ -107,6 +144,7 @@ internal class LanguageRepository : ILanguageRepository
             await _db.Languages.AddAsync(language).ConfigureAwait(false);
         }
         language.Culture = model.Culture;
+        language.Hostnames = model.Hostnames;
         language.IsDefault = model.IsDefault;
         language.Title = model.Title;
 

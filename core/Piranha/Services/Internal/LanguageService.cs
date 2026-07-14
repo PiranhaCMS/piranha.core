@@ -78,6 +78,28 @@ internal sealed class LanguageService : ILanguageService
     }
 
     /// <summary>
+    /// Gets the model with the given hostname.
+    /// </summary>
+    /// <param name="hostname">The hostname</param>
+    /// <returns>The model, or null if it doesn't exist</returns>
+    public async Task<Language> GetByHostnameAsync(string hostname)
+    {
+        var languages = await GetAllAsync().ConfigureAwait(false);
+
+        foreach (var language in languages.Where(l => l.Hostnames != null))
+        {
+            foreach (var host in language.Hostnames.Split(new[] { ',' }))
+            {
+                if (host.Trim().ToLower() == hostname)
+                {
+                    return language;
+                }
+            }
+        }
+        return null;
+    }
+
+    /// <summary>
     /// Adds or updates the given model in the database
     /// depending on its state.
     /// </summary>

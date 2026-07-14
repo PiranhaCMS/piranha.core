@@ -26,6 +26,35 @@ namespace Piranha;
 public static class Utils
 {
     /// <summary>
+    /// Generates a permalink for a page in the specified language.
+    /// </summary>
+    /// <param name="slug">The page slug</param>
+    /// <param name="language">The requested language</param>
+    /// <param name="defaultLanguage">The default language</param>
+    /// <param name="isStartPage">If the page is the start page</param>
+    /// <returns>The language-aware permalink</returns>
+    public static string GeneratePermalink(string slug, Models.Language language,
+        Models.Language defaultLanguage, bool isStartPage = false)
+    {
+        if (isStartPage && (language == null || language.Id == defaultLanguage?.Id ||
+            !string.IsNullOrWhiteSpace(language.Hostnames)))
+        {
+            return "/";
+        }
+
+        var path = string.IsNullOrEmpty(slug) ? string.Empty : $"/{slug}";
+
+        if (language == null || language.Id == defaultLanguage?.Id ||
+            !string.IsNullOrWhiteSpace(language.Hostnames) || string.IsNullOrEmpty(language.Culture))
+        {
+            return path.Length == 0 ? "/" : path;
+        }
+
+        var culture = language.Culture.Split('-', '_')[0];
+        return isStartPage ? $"/{culture}" : $"/{culture}{path}";
+    }
+
+    /// <summary>
     /// Gets a subset of the given array as a new array.
     /// </summary>
     /// <typeparam name="T">The array type</typeparam>

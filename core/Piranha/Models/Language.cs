@@ -32,6 +32,12 @@ public class Language
     public string Culture { get; set; }
 
     /// <summary>
+    /// Gets/sets the optional hostnames to bind this language for.
+    /// </summary>
+    [StringLength(256)]
+    public string Hostnames { get; set; }
+
+    /// <summary>
     /// Gets/sets if this is the default language.
     /// </summary>
     public bool IsDefault { get; set; }

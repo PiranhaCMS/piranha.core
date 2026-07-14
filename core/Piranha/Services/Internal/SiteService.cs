@@ -246,7 +246,7 @@ internal sealed class SiteService : ISiteService
     /// <param name="id">The optional site id</param>
     /// <param name="onlyPublished">If only published items should be included</param>
     /// <returns>The sitemap</returns>
-    public async Task<Sitemap> GetSitemapAsync(Guid? id = null, bool onlyPublished = true)
+    public async Task<Sitemap> GetSitemapAsync(Guid? id = null, bool onlyPublished = true, Guid? languageId = null)
     {
         if (!id.HasValue)
         {
@@ -260,19 +260,23 @@ internal sealed class SiteService : ISiteService
 
         if (id != null)
         {
-            var sitemap = onlyPublished && _cache != null ? await _cache.GetAsync<Models.Sitemap>($"Sitemap_{id}").ConfigureAwait(false) : null;
+            var cacheKey = $"Sitemap_{id}";
+            var canUseCache = languageId == null;
+            var sitemap = onlyPublished && canUseCache && _cache != null
+                ? await _cache.GetAsync<Models.Sitemap>(cacheKey).ConfigureAwait(false)
+                : null;
 
             if (sitemap == null)
             {
-                sitemap = await _repo.GetSitemap(id.Value, onlyPublished).ConfigureAwait(false);
+                sitemap = await _repo.GetSitemap(id.Value, onlyPublished, languageId).ConfigureAwait(false);
 
                 App.Hooks.OnLoad<Sitemap>(sitemap);
 
                 if (onlyPublished)
                 {
-                    if (_cache != null)
+                    if (canUseCache && _cache != null)
                     {
-                        await _cache.SetAsync($"Sitemap_{id}", sitemap).ConfigureAwait(false);
+                        await _cache.SetAsync(cacheKey, sitemap).ConfigureAwait(false);
                     }
                 }
             }

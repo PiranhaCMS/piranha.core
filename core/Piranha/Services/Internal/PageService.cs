@@ -255,14 +255,16 @@ internal sealed class PageService : IPageService
         siteId = await EnsureSiteIdAsync(siteId).ConfigureAwait(false);
         PageBase model = null;
 
-        if (typeof(T) == typeof(Models.PageInfo))
+        // Cached models contain the default language. Translated content must
+        // always be loaded from the repository for its requested language.
+        if (!languageId.HasValue && typeof(T) == typeof(Models.PageInfo))
         {
             if (_cache != null)
             {
                 model = await _cache.GetAsync<PageInfo>($"PageInfo_{siteId.Value}").ConfigureAwait(false);
             }
         }
-        else if (!typeof(DynamicPage).IsAssignableFrom(typeof(T)))
+        else if (!languageId.HasValue && !typeof(DynamicPage).IsAssignableFrom(typeof(T)))
         {
             if (_cache != null)
             {
@@ -442,10 +444,12 @@ internal sealed class PageService : IPageService
         siteId = await EnsureSiteIdAsync(siteId).ConfigureAwait(false);
         PageBase model = null;
 
-        // Lets see if we can resolve the slug from cache
-        var pageId = _cache == null ? null : await _cache.GetAsync<Guid?>($"PageId_{siteId}_{slug}").ConfigureAwait(false);
+        // The slug and cached page content are language-specific.
+        var pageId = languageId.HasValue || _cache == null
+            ? null
+            : await _cache.GetAsync<Guid?>($"PageId_{siteId}_{slug}").ConfigureAwait(false);
 
-        if (pageId.HasValue)
+        if (pageId.HasValue && !languageId.HasValue)
         {
             if (typeof(T) == typeof(Models.PageInfo))
             {

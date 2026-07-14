@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using MvcWeb;
 using Piranha;
 using Piranha.AspNetCore.Identity.SQLite;
 using Piranha.AttributeBuilder;
@@ -72,5 +73,8 @@ app.UsePiranha(options =>
     options.UseTinyMCE();
     options.UseIdentity();
 });
+
+// Seed test data
+await Seed.RunAsync(app.Services.GetRequiredService<IApi>());
 
 app.Run();
