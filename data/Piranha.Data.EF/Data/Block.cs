@@ -17,9 +17,9 @@ namespace Piranha.Data;
 public sealed class Block : BlockBase<BlockField>
 {
     /// <summary>
-    /// Gets/sets the optional title. This property
-    /// is only used for reusable blocks within the
-    /// block library.
+    /// Gets/sets the optional title. This is used for
+    /// reusable blocks within the block library and as
+    /// the shared editor label for page block instances.
     /// </summary>
     public string Title { get; set; }
 

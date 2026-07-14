@@ -67,8 +67,9 @@ public interface ISiteService
     /// </summary>
     /// <param name="id">The optional site id</param>
     /// <param name="onlyPublished">If only published items should be included</param>
+    /// <param name="languageId">The optional language id</param>
     /// <returns>The sitemap</returns>
-    Task<Sitemap> GetSitemapAsync(Guid? id = null, bool onlyPublished = true);
+    Task<Sitemap> GetSitemapAsync(Guid? id = null, bool onlyPublished = true, Guid? languageId = null);
 
     /// <summary>
     /// Adds or updates the given model in the database

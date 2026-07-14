@@ -11,6 +11,8 @@
 using System.Collections;
 using System.ComponentModel.DataAnnotations;
 using System.Dynamic;
+using System.Security.Cryptography;
+using System.Text;
 using Piranha.Extend;
 using Piranha.Extend.Fields;
 using Piranha.Manager.Extensions;
@@ -281,19 +283,33 @@ public class PageService
         return null;
     }
 
-    public async Task<PageEditModel> GetById(Guid id, bool useDraft = true)
+    public async Task<PageEditModel> GetById(Guid id, bool useDraft = true, Guid? languageId = null)
     {
+        var languages = await _api.Languages.GetAllAsync();
+        var defaultLanguageId = languages.FirstOrDefault(l => l.IsDefault)?.Id;
+        var contentLanguageId = languageId == defaultLanguageId ? null : languageId;
         var isDraft = true;
-        var page = useDraft ? await _api.Pages.GetDraftByIdAsync(id) : null;
+        var useDefaultLanguageDraft = useDraft &&
+            !contentLanguageId.HasValue;
+        var page = useDefaultLanguageDraft ? await _api.Pages.GetDraftByIdAsync(id) : null;
 
         if (page == null)
         {
-            page = await _api.Pages.GetByIdAsync(id);
+            page = await _api.Pages.GetByIdAsync(id, contentLanguageId);
             isDraft = false;
         }
 
         if (page != null)
         {
+            if (contentLanguageId.HasValue && useDraft)
+            {
+                var defaultDraft = await _api.Pages.GetDraftByIdAsync(id);
+                if (defaultDraft != null)
+                {
+                    MergeDraftBlockStructure(page, defaultDraft);
+                }
+            }
+
             // Perform manager init
             await _factory.InitDynamicManagerAsync(page,
                 App.PageTypes.GetById(page.TypeId));
@@ -303,9 +319,145 @@ public class PageService
             model.PendingCommentCount = (await _api.Pages.GetAllPendingCommentsAsync(id))
                 .Count();
 
+            // Populate language data
+            model.Languages = languages;
+            model.UseTranslations = languages.Count() > 1;
+            model.LanguageId = languageId ?? defaultLanguageId;
+
             return model;
         }
         return null;
+    }
+
+    /// <summary>
+    /// Gets a page edit model for every configured language.
+    /// </summary>
+    /// <param name="id">The page id</param>
+    /// <param name="useDraft">If draft content should be loaded</param>
+    /// <returns>The language-specific page edit models.</returns>
+    public async Task<PageTranslationEditModel> GetTranslationsById(Guid id, bool useDraft = true)
+    {
+        var result = new PageTranslationEditModel();
+        var languages = (await _api.Languages.GetAllAsync())
+            .OrderByDescending(language => language.IsDefault);
+
+        foreach (var language in languages)
+        {
+            var page = await GetById(id, useDraft, language.Id);
+
+            if (page != null)
+            {
+                result.Pages.Add(page);
+            }
+        }
+        return result;
+    }
+
+    /// <summary>
+    /// Exports the text values of a page for one source and target language pair.
+    /// </summary>
+    public async Task<PageTranslationExchangeModel> ExportTranslations(Guid id, Guid sourceLanguageId, Guid targetLanguageId)
+    {
+        var languages = (await _api.Languages.GetAllAsync()).ToList();
+        ValidateTranslationLanguages(languages, sourceLanguageId, targetLanguageId);
+
+        var source = await GetById(id, true, sourceLanguageId);
+        var target = await GetById(id, true, targetLanguageId);
+        var defaultLanguage = languages.First(language => language.IsDefault);
+        var structure = await GetById(id, true, defaultLanguage.Id);
+
+        if (source == null || target == null || structure == null)
+        {
+            throw new ValidationException("The requested page could not be found.");
+        }
+
+        return new PageTranslationExchangeModel
+        {
+            PageId = source.Id,
+            SiteId = source.SiteId,
+            SourceLanguage = MapExchangeLanguage(languages.Single(language => language.Id == sourceLanguageId)),
+            TargetLanguage = MapExchangeLanguage(languages.Single(language => language.Id == targetLanguageId)),
+            ExportedAt = DateTime.UtcNow,
+            StructureHash = GetTranslationStructureHash(structure),
+            Units = CreateTranslationUnits(source, target)
+        };
+    }
+
+    /// <summary>
+    /// Imports supplied target-language text values into an existing page translation.
+    /// </summary>
+    public async Task<PageTranslationExchangeImportResult> ImportTranslations(Guid id, PageTranslationExchangeModel document)
+    {
+        var languages = (await _api.Languages.GetAllAsync()).ToList();
+        ValidateTranslationDocument(id, document, languages);
+
+        var defaultLanguage = languages.First(language => language.IsDefault);
+        var structure = await GetById(id, true, defaultLanguage.Id);
+        var target = await GetById(id, true, document.TargetLanguage.Id);
+
+        if (structure == null || target == null || structure.SiteId != document.SiteId)
+        {
+            throw new ValidationException("The translation file does not match the current page.");
+        }
+        if (!string.Equals(document.StructureHash, GetTranslationStructureHash(structure), StringComparison.Ordinal))
+        {
+            throw new ValidationException("The page structure has changed since this translation file was exported. Export a new file before importing.");
+        }
+        var writable = GetWritableTranslationUnits(target);
+        var result = ApplyTranslationUnits(document, writable);
+
+        await Save(target, true);
+        return result;
+    }
+
+    private void ValidateTranslationDocument(Guid id, PageTranslationExchangeModel document, IList<Language> languages)
+    {
+        if (document == null || document.FormatVersion != "1.0")
+        {
+            throw new ValidationException("The translation file format is not supported.");
+        }
+        if (document.PageId != id)
+        {
+            throw new ValidationException("The translation file belongs to a different page.");
+        }
+        if (document.SourceLanguage == null || document.TargetLanguage == null)
+        {
+            throw new ValidationException("The translation file must specify source and target languages.");
+        }
+        if (document.Units == null || document.Units.Any(unit => unit == null || string.IsNullOrWhiteSpace(unit.Key)) ||
+            document.Units.GroupBy(unit => unit.Key).Any(group => group.Count() > 1))
+        {
+            throw new ValidationException("The translation file contains duplicate or invalid text units.");
+        }
+
+        ValidateTranslationLanguages(languages, document.SourceLanguage.Id, document.TargetLanguage.Id);
+    }
+
+    private PageTranslationExchangeImportResult ApplyTranslationUnits(PageTranslationExchangeModel document,
+        IDictionary<string, WritableTranslationUnit> writable)
+    {
+        var result = new PageTranslationExchangeImportResult
+        {
+            TargetLanguageId = document.TargetLanguage.Id
+        };
+
+        foreach (var unit in document.Units)
+        {
+            if (!writable.TryGetValue(unit.Key, out var destination) ||
+                !string.Equals(unit.FieldType, destination.FieldType, StringComparison.Ordinal))
+            {
+                throw new ValidationException($"The translation unit '{unit.Key}' does not match the current page structure.");
+            }
+
+            if (unit.Target != null)
+            {
+                destination.SetValue(unit.Target);
+                result.Replaced++;
+                result.Cleared += unit.Target.Length == 0 ? 1 : 0;
+            }
+        }
+
+        return result;
     }
 
     public async Task<PageEditModel> Detach(Guid id)
@@ -345,6 +497,11 @@ public class PageService
                 page = await _factory.CreateAsync<DynamicPage>(pageType);
                 page.Id = model.Id;
             }
+
+            var defaultLanguage = await _api.Languages.GetDefaultAsync();
+            var languageId = model.LanguageId.HasValue && defaultLanguage != null && model.LanguageId.Value != defaultLanguage.Id
+                ? model.LanguageId
+                : null;
 
             page.SiteId = model.SiteId;
             page.ParentId = model.ParentId;
@@ -390,6 +547,18 @@ public class PageService
             //
             if (!page.OriginalPageId.HasValue)
             {
+                if (languageId.HasValue)
+                {
+                    var structurePage = page;
+                    var defaultDraft = await _api.Pages.GetDraftByIdAsync(model.Id);
+                    if (defaultDraft != null)
+                    {
+                        structurePage = defaultDraft;
+                    }
+                    ValidateTranslatedBlockStructure(structurePage.Blocks, model.Blocks);
+                    ValidateTranslatedBlockLabels(structurePage.Blocks, model.Blocks);
+                }
+
                 // Save regions
                 foreach (var region in pageType.Regions)
                 {
@@ -458,6 +627,7 @@ public class PageService
 
                             pageBlock.Id = blockGroup.Id;
                             pageBlock.Type = blockGroup.Type;
+                            pageBlock.Label = NormalizeBlockLabel(blockGroup.Label);
 
                             foreach (var field in blockGroup.Fields)
                             {
@@ -469,6 +639,7 @@ public class PageService
                             {
                                 if (item is BlockItemModel blockItem)
                                 {
+                                    blockItem.Model.Label = NormalizeBlockLabel(blockItem.Model.Label);
                                     pageBlock.Items.Add(blockItem.Model);
                                 }
                                 else if (item is BlockGenericModel blockGeneric)
@@ -477,6 +648,7 @@ public class PageService
 
                                     if (transformed != null)
                                     {
+                                        transformed.Label = NormalizeBlockLabel(blockGeneric.Label);
                                         pageBlock.Items.Add(transformed);
                                     }
                                 }
@@ -486,6 +658,7 @@ public class PageService
                     }
                     else if (block is BlockItemModel blockItem)
                     {
+                        blockItem.Model.Label = NormalizeBlockLabel(blockItem.Model.Label);
                         page.Blocks.Add(blockItem.Model);
                     }
                     else if (block is BlockGenericModel blockGeneric)
@@ -494,20 +667,22 @@ public class PageService
 
                         if (transformed != null)
                         {
+                            transformed.Label = NormalizeBlockLabel(blockGeneric.Label);
                             page.Blocks.Add(transformed);
                         }
                     }
                 }
             }
 
+            // Only pass languageId for non-default languages
             // Save page
             if (draft)
             {
-                await _api.Pages.SaveDraftAsync(page);
+                await _api.Pages.SaveDraftAsync(page, languageId);
             }
             else
             {
-                await _api.Pages.SaveAsync(page);
+                await _api.Pages.SaveAsync(page, languageId);
             }
         }
         else
@@ -567,6 +742,453 @@ public class PageService
             }
         }
         return null;
+    }
+
+    private static void ValidateTranslatedBlockStructure(IList<Block> blocks, IList<BlockModel> submittedBlocks)
+    {
+        var current = new List<BlockStructure>();
+        foreach (var block in blocks)
+        {
+            AddBlockStructure(current, block, null);
+        }
+
+        var submitted = new List<BlockStructure>();
+        foreach (var block in submittedBlocks ?? new List<BlockModel>())
+        {
+            AddBlockStructure(submitted, block, null);
+        }
+
+        if (current.Count != submitted.Count || current.Where((block, index) =>
+            block.Id != submitted[index].Id ||
+            block.ParentId != submitted[index].ParentId ||
+            !string.Equals(block.Type, submitted[index].Type, StringComparison.Ordinal)).Any())
+        {
+            throw new ValidationException("Block structure can only be changed in the default language.");
+        }
+    }
+
+    private static void ValidateTranslatedBlockLabels(IList<Block> blocks, IList<BlockModel> submittedBlocks)
+    {
+        var current = new Dictionary<Guid, string>();
+        foreach (var block in blocks)
+        {
+            AddBlockLabels(current, block);
+        }
+
+        var submitted = new Dictionary<Guid, string>();
+        foreach (var block in submittedBlocks ?? new List<BlockModel>())
+        {
+            AddBlockLabels(submitted, block);
+        }
+
+        if (current.Count != submitted.Count || current.Any(block =>
+            !submitted.TryGetValue(block.Key, out var label) ||
+            !string.Equals(block.Value, label, StringComparison.Ordinal)))
+        {
+            throw new ValidationException("Block labels can only be changed in the default language.");
+        }
+    }
+
+    private static void AddBlockStructure(IList<BlockStructure> structure, Block block, Guid? parentId)
+    {
+        structure.Add(new BlockStructure(block.Id, parentId, block.Type));
+
+        if (block is BlockGroup group)
+        {
+            foreach (var child in group.Items)
+            {
+                AddBlockStructure(structure, child, block.Id);
+            }
+        }
+    }
+
+    private static void AddBlockStructure(IList<BlockStructure> structure, BlockModel block, Guid? parentId)
+    {
+        switch (block)
+        {
+            case BlockGroupModel group:
+                structure.Add(new BlockStructure(group.Id, parentId, group.Type));
+                foreach (var child in group.Items)
+                {
+                    AddBlockStructure(structure, child, group.Id);
+                }
+                break;
+            case BlockItemModel item when item.Model != null:
+                structure.Add(new BlockStructure(item.Model.Id, parentId, item.Model.Type));
+                break;
+            case BlockGenericModel generic:
+                structure.Add(new BlockStructure(generic.Id, parentId, generic.Type));
+                break;
+            default:
+                throw new ValidationException("Invalid block structure.");
+        }
+    }
+
+    private static void AddBlockLabels(IDictionary<Guid, string> labels, Block block)
+    {
+        labels.Add(block.Id, NormalizeBlockLabel(block.Label));
+
+        if (block is BlockGroup group)
+        {
+            foreach (var child in group.Items)
+            {
+                AddBlockLabels(labels, child);
+            }
+        }
+    }
+
+    private static void AddBlockLabels(IDictionary<Guid, string> labels, BlockModel block)
+    {
+        switch (block)
+        {
+            case BlockGroupModel group:
+                labels.Add(group.Id, NormalizeBlockLabel(group.Label));
+                foreach (var child in group.Items)
+                {
+                    AddBlockLabels(labels, child);
+                }
+                break;
+            case BlockItemModel item when item.Model != null:
+                labels.Add(item.Model.Id, NormalizeBlockLabel(item.Model.Label));
+                break;
+            case BlockGenericModel generic:
+                labels.Add(generic.Id, NormalizeBlockLabel(generic.Label));
+                break;
+            default:
+                throw new ValidationException("Invalid block metadata.");
+        }
+    }
+
+    private static string NormalizeBlockLabel(string label)
+    {
+        if (string.IsNullOrWhiteSpace(label))
+        {
+            return null;
+        }
+
+        label = label.Trim();
+        if (label.Length > 128)
+        {
+            throw new ValidationException("Block labels cannot exceed 128 characters.");
+        }
+        return label;
+    }
+
+    private static void MergeDraftBlockStructure(DynamicPage translatedPage, DynamicPage defaultDraft)
+    {
+        var translatedBlocks = translatedPage.Blocks
+            .ToDictionary(block => block.Id);
+
+        translatedPage.Blocks = defaultDraft.Blocks
+            .Select(block => MergeDraftBlock(block, translatedBlocks.TryGetValue(block.Id, out var translated) ? translated : null))
+            .ToList();
+    }
+
+    private static Block MergeDraftBlock(Block draft, Block translated)
+    {
+        var block = translated ?? CloneDraftBlock(draft);
+        block.Label = draft.Label;
+
+        if (draft is BlockGroup draftGroup && block is BlockGroup translatedGroup)
+        {
+            var translatedItems = translatedGroup.Items.ToDictionary(item => item.Id);
+            translatedGroup.Items = draftGroup.Items
+                .Select(item => MergeDraftBlock(item, translatedItems.TryGetValue(item.Id, out var translatedItem) ? translatedItem : null))
+                .ToList();
+        }
+
+        return block;
+    }
+
+    private static Block CloneDraftBlock(Block source)
+    {
+        var clone = (Block)Activator.CreateInstance(source.GetType());
+        clone.Id = source.Id;
+        clone.Type = source.Type;
+        clone.Label = source.Label;
+
+        foreach (var prop in source.GetType().GetProperties(App.PropertyBindings))
+        {
+            if (typeof(IField).IsAssignableFrom(prop.PropertyType))
+            {
+                var field = prop.GetValue(source) as IField;
+                if (field == null)
+                {
+                    prop.SetValue(clone, Activator.CreateInstance(prop.PropertyType));
+                }
+                else if (field is ITranslatable)
+                {
+                    // New blocks are shared structurally, but their translated
+                    // fields must start empty instead of copying the default value.
+                    prop.SetValue(clone, Activator.CreateInstance(prop.PropertyType));
+                }
+                else
+                {
+                    prop.SetValue(clone, field);
+                }
+            }
+        }
+
+        return clone;
+    }
+
+    private static void ValidateTranslationLanguages(IList<Language> languages, Guid sourceLanguageId, Guid targetLanguageId)
+    {
+        if (sourceLanguageId == targetLanguageId)
+        {
+            throw new ValidationException("The source and target language must be different.");
+        }
+        if (!languages.Any(language => language.Id == sourceLanguageId) ||
+            !languages.Any(language => language.Id == targetLanguageId))
+        {
+            throw new ValidationException("The translation file references a language that is not configured for this site.");
+        }
+    }
+
+    private static PageTranslationExchangeLanguage MapExchangeLanguage(Language language)
+    {
+        return new PageTranslationExchangeLanguage
+        {
+            Id = language.Id,
+            Title = language.Title,
+            Culture = language.Culture
+        };
+    }
+
+    private static string GetTranslationStructureHash(PageEditModel model)
+    {
+        var structure = CreateTranslationUnits(model, model)
+            .Select(unit => $"{unit.Key}|{unit.FieldType}");
+        var content = Encoding.UTF8.GetBytes(string.Join("\n", structure));
+        return Convert.ToHexString(SHA256.HashData(content)).ToLowerInvariant();
+    }
+
+    private static List<PageTranslationExchangeUnit> CreateTranslationUnits(PageEditModel source, PageEditModel target)
+    {
+        var units = new List<PageTranslationExchangeUnit>();
+
+        AddMetadataUnits(source, target, units);
+
+        foreach (var sourceRegion in source.Regions)
+        {
+            var targetRegion = target.Regions.FirstOrDefault(region => region.Meta.Id == sourceRegion.Meta.Id);
+            for (var itemIndex = 0; itemIndex < sourceRegion.Items.Count; itemIndex++)
+            {
+                var sourceItem = sourceRegion.Items[itemIndex];
+                var targetItem = targetRegion?.Items.ElementAtOrDefault(itemIndex);
+
+                foreach (var sourceField in sourceItem.Fields)
+                {
+                    var targetField = targetItem?.Fields.FirstOrDefault(field => field.Meta.Id == sourceField.Meta.Id);
+                    AddTextUnit(units,
+                        $"region:{sourceRegion.Meta.Id}:{itemIndex}:{sourceField.Meta.Id}",
+                        $"{sourceRegion.Meta.Name} / {sourceField.Meta.Name}",
+                        sourceField,
+                        targetField);
+                }
+            }
+        }
+
+        foreach (var sourceBlock in source.Blocks)
+        {
+            var sourceBlockId = GetBlockId(sourceBlock);
+            var targetBlock = target.Blocks.FirstOrDefault(block => GetBlockId(block) == sourceBlockId);
+            AddBlockTextUnits(units, sourceBlock, targetBlock, null);
+        }
+        return units;
+    }
+
+    private static void AddMetadataUnits(PageEditModel source, PageEditModel target, IList<PageTranslationExchangeUnit> units)
+    {
+        AddMetadataUnit(units, "title", "Page title", source.Title, target.Title);
+        AddMetadataUnit(units, "navigationTitle", "Navigation title", source.NavigationTitle, target.NavigationTitle);
+        AddMetadataUnit(units, "slug", "Slug", source.Slug, target.Slug);
+        AddMetadataUnit(units, "metaTitle", "Meta title", source.MetaTitle, target.MetaTitle);
+        AddMetadataUnit(units, "metaKeywords", "Meta keywords", source.MetaKeywords, target.MetaKeywords);
+        AddMetadataUnit(units, "metaDescription", "Meta description", source.MetaDescription, target.MetaDescription);
+        AddMetadataUnit(units, "ogTitle", "Open Graph title", source.OgTitle, target.OgTitle);
+        AddMetadataUnit(units, "ogDescription", "Open Graph description", source.OgDescription, target.OgDescription);
+        AddMetadataUnit(units, "excerpt", "Excerpt", source.Excerpt, target.Excerpt);
+    }
+
+    private static void AddMetadataUnit(IList<PageTranslationExchangeUnit> units, string key, string context, string source, string target)
+    {
+        units.Add(new PageTranslationExchangeUnit
+        {
+            Key = $"metadata:{key}",
+            Context = context,
+            FieldType = "metadata",
+            Source = source,
+            Target = target
+        });
+    }
+
+    private static void AddBlockTextUnits(IList<PageTranslationExchangeUnit> units, BlockModel sourceBlock, BlockModel targetBlock, Guid? parentId)
+    {
+        var blockId = GetBlockId(sourceBlock);
+        var prefix = $"block:{parentId?.ToString() ?? "root"}:{blockId}";
+        var sourceFields = GetBlockFields(sourceBlock);
+        var targetFields = targetBlock == null ? null : GetBlockFields(targetBlock);
+
+        foreach (var sourceField in sourceFields)
+        {
+            var targetField = targetFields?.FirstOrDefault(field => field.Meta.Id == sourceField.Meta.Id);
+            AddTextUnit(units,
+                $"{prefix}:{sourceField.Meta.Id}",
+                $"{GetBlockContext(sourceBlock)} / {sourceField.Meta.Name}",
+                sourceField,
+                targetField);
+        }
+
+        if (sourceBlock is BlockGroupModel sourceGroup)
+        {
+            foreach (var sourceChild in sourceGroup.Items)
+            {
+                var sourceChildId = GetBlockId(sourceChild);
+                var targetChild = (targetBlock as BlockGroupModel)?.Items
+                    .FirstOrDefault(block => GetBlockId(block) == sourceChildId);
+                AddBlockTextUnits(units, sourceChild, targetChild, blockId);
+            }
+        }
+    }
+
+    private static IList<FieldModel> GetBlockFields(BlockModel block)
+    {
+        return block switch
+        {
+            BlockGroupModel group => group.Fields,
+            BlockGenericModel generic => generic.Model,
+            BlockItemModel item when item.Model != null => ContentUtils.GetBlockFields(item.Model),
+            _ => new List<FieldModel>()
+        };
+    }
+
+    private static Guid GetBlockId(BlockModel block)
+    {
+        return block switch
+        {
+            BlockGroupModel group => group.Id,
+            BlockGenericModel generic => generic.Id,
+            BlockItemModel item when item.Model != null => item.Model.Id,
+            _ => Guid.Empty
+        };
+    }
+
+    private static string GetBlockContext(BlockModel block)
+    {
+        return block switch
+        {
+            BlockGroupModel group => group.Label ?? group.Meta.Name,
+            BlockGenericModel generic => generic.Label ?? generic.Meta.Name,
+            BlockItemModel item => item.Model?.Label ?? item.Meta.Name,
+            _ => "Block"
+        };
+    }
+
+    private static void AddTextUnit(IList<PageTranslationExchangeUnit> units, string key, string context, FieldModel source, FieldModel target)
+    {
+        if (source?.Model is not SimpleField<string> sourceField)
+        {
+            return;
+        }
+
+        units.Add(new PageTranslationExchangeUnit
+        {
+            Key = key,
+            Context = context,
+            FieldType = source.Model.GetType().FullName,
+            Source = sourceField.Value,
+            Target = (target?.Model as SimpleField<string>)?.Value
+        });
+    }
+
+    private static Dictionary<string, WritableTranslationUnit> GetWritableTranslationUnits(PageEditModel target)
+    {
+        var writable = new Dictionary<string, WritableTranslationUnit>();
+
+        AddWritableMetadata(writable, "title", value => target.Title = value);
+        AddWritableMetadata(writable, "navigationTitle", value => target.NavigationTitle = value);
+        AddWritableMetadata(writable, "slug", value => target.Slug = value);
+        AddWritableMetadata(writable, "metaTitle", value => target.MetaTitle = value);
+        AddWritableMetadata(writable, "metaKeywords", value => target.MetaKeywords = value);
+        AddWritableMetadata(writable, "metaDescription", value => target.MetaDescription = value);
+        AddWritableMetadata(writable, "ogTitle", value => target.OgTitle = value);
+        AddWritableMetadata(writable, "ogDescription", value => target.OgDescription = value);
+        AddWritableMetadata(writable, "excerpt", value => target.Excerpt = value);
+
+        foreach (var region in target.Regions)
+        {
+            for (var itemIndex = 0; itemIndex < region.Items.Count; itemIndex++)
+            {
+                foreach (var field in region.Items[itemIndex].Fields)
+                {
+                    AddWritableField(writable, $"region:{region.Meta.Id}:{itemIndex}:{field.Meta.Id}", field);
+                }
+            }
+        }
+
+        foreach (var block in target.Blocks)
+        {
+            AddWritableBlockFields(writable, block, null);
+        }
+        return writable;
+    }
+
+    private static void AddWritableMetadata(IDictionary<string, WritableTranslationUnit> writable, string key, Action<string> setValue)
+    {
+        writable.Add($"metadata:{key}", new WritableTranslationUnit("metadata", setValue));
+    }
+
+    private static void AddWritableBlockFields(IDictionary<string, WritableTranslationUnit> writable, BlockModel block, Guid? parentId)
+    {
+        var blockId = GetBlockId(block);
+        var prefix = $"block:{parentId?.ToString() ?? "root"}:{blockId}";
+        foreach (var field in GetBlockFields(block))
+        {
+            AddWritableField(writable, $"{prefix}:{field.Meta.Id}", field);
+        }
+
+        if (block is BlockGroupModel group)
+        {
+            foreach (var child in group.Items)
+            {
+                AddWritableBlockFields(writable, child, blockId);
+            }
+        }
+    }
+
+    private static void AddWritableField(IDictionary<string, WritableTranslationUnit> writable, string key, FieldModel field)
+    {
+        if (field?.Model is SimpleField<string> textField)
+        {
+            writable.Add(key, new WritableTranslationUnit(field.Model.GetType().FullName, value => textField.Value = value));
+        }
+    }
+
+    private sealed class WritableTranslationUnit
+    {
+        public WritableTranslationUnit(string fieldType, Action<string> setValue)
+        {
+            FieldType = fieldType;
+            SetValue = setValue;
+        }
+
+        public string FieldType { get; }
+        public Action<string> SetValue { get; }
+    }
+
+    private sealed class BlockStructure
+    {
+        public BlockStructure(Guid id, Guid? parentId, string type)
+        {
+            Id = id;
+            ParentId = parentId;
+            Type = type;
+        }
+
+        public Guid Id { get; }
+        public Guid? ParentId { get; }
+        public string Type { get; }
     }
 
     private PageListModel.PageItem MapRecursive(Guid siteId, SitemapItem item, int level, int expandedLevels, IEnumerable<Guid> drafts)
@@ -752,6 +1374,7 @@ public class PageService
                 var group = new BlockGroupModel
                 {
                     Id = block.Id,
+                    Label = block.Label,
                     Type = block.Type,
                     Meta = new BlockMeta
                     {
@@ -796,6 +1419,7 @@ public class PageService
                         group.Items.Add(new BlockGenericModel
                         {
                             Id = child.Id,
+                            Label = child.Label,
                             IsActive = firstChild,
                             Model = ContentUtils.GetBlockFields(child),
                             Type = child.Type,
@@ -839,6 +1463,7 @@ public class PageService
                     model.Blocks.Add(new BlockGenericModel
                     {
                         Id = block.Id,
+                        Label = block.Label,
                         Model = ContentUtils.GetBlockFields(block),
                         Type = block.Type,
                         Meta = new BlockMeta

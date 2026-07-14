@@ -16,7 +16,7 @@ namespace Piranha.Extend.Fields;
 /// Field for referencing an audio asset.
 /// </summary>
 [FieldType(Name = "Audio", Shorthand = "Audio", Component = "audio-field")]
-public class AudioField : MediaFieldBase<AudioField>
+public class AudioField : MediaFieldBase<AudioField>, ITranslatable
 {
     /// <summary>
     /// Implicit operator for converting a Guid id to a field.

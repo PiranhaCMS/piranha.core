@@ -21,6 +21,11 @@ public class BlockGenericModel : BlockModel
     public Guid Id { get; set; }
 
     /// <summary>
+    /// Gets/sets the optional editor label for this block.
+    /// </summary>
+    public string Label { get; set; }
+
+    /// <summary>
     /// Gets/sets the type of the block group.
     /// </summary>
     public string Type { get; set; }

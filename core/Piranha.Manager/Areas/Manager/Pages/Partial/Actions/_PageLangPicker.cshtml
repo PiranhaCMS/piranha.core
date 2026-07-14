@@ -1,0 +1,15 @@
+@inject ManagerLocalizer Localizer
+
+<div v-if="useTranslations" class="dropdown d-inline">
+    <button class="btn btn-primary btn-labeled dropdown-toggle" type="button" data-toggle="dropdown">
+        <i class="fas fa-atlas"></i>
+        {{ currentLanguage.title }}
+    </button>
+    <ul class="dropdown-menu">
+        <li v-for="lang in languages">
+            <a class="dropdown-item" v-on:click.prevent="switchLanguage(lang)" href="#">{{ lang.title }}</a>
+        </li>
+        <li><div class="dropdown-divider"></div></li>
+        <li><a class="dropdown-item" :href="piranha.baseUrl + 'manager/page/edit/' + id + '?translations=side-by-side'"><i class="fas fa-columns"></i> @Localizer.Page["Edit side by side"]</a></li>
+    </ul>
+</div>

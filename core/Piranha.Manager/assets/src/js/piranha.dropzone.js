@@ -26,17 +26,17 @@ piranha.dropzone = new function () {
 
                 // Default addedfile callback
                 if (!options.addedfile) {
-                    options.addedfile = function (file) { }
+                    options.addedfile = function () { }
                 }
 
                 // Default removedfile callback
                 if (!options.removedfile) {
-                    options.removedfile = function (file) { }
+                    options.removedfile = function () { }
                 }
 
                 // Default error callback
                 if (!options.error) {
-                    options.error = function (file) { }
+                    options.error = function () { }
                 }
 
                 // Default complete callback

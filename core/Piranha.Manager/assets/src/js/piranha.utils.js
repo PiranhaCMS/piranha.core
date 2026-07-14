@@ -38,7 +38,7 @@ piranha.utils = {
         headers[piranha.antiForgery.headerName] = piranha.utils.antiForgery();
 
         return headers;
-    }    
+    }
 };
 
 Date.prototype.addDays = function(days) {
@@ -46,7 +46,7 @@ Date.prototype.addDays = function(days) {
     date.setDate(date.getDate() + days);
     return date;
 }
-Date.prototype.toDateString = function(days) {
+Date.prototype.toDateString = function() {
     var date = new Date(this.valueOf());
 
     return date.getFullYear() + "-" +

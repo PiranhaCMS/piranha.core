@@ -115,8 +115,9 @@ internal class PageRepository : IPageRepository
     /// </summary>
     /// <typeparam name="T">The model type</typeparam>
     /// <param name="siteId">The site id</param>
+    /// <param name="languageId">The optional language id</param>
     /// <returns>The page model</returns>
-    public async Task<T> GetStartpage<T>(Guid siteId) where T : Models.PageBase
+    public async Task<T> GetStartpage<T>(Guid siteId, Guid? languageId = null) where T : Models.PageBase
     {
         var page = await GetQuery<T>()
             .FirstOrDefaultAsync(p => p.SiteId == siteId && p.ParentId == null && p.SortOrder == 0)
@@ -124,7 +125,9 @@ internal class PageRepository : IPageRepository
 
         if (page != null)
         {
-            return await _contentService.TransformAsync<T>(page, App.PageTypes.GetById(page.PageTypeId), ProcessAsync);
+            var model = await _contentService.TransformAsync<T>(page, App.PageTypes.GetById(page.PageTypeId), ProcessAsync, languageId);
+            await SetPermalinkAsync(model, page, languageId).ConfigureAwait(false);
+            return model;
         }
         return null;
     }
@@ -134,8 +137,9 @@ internal class PageRepository : IPageRepository
     /// </summary>
     /// <typeparam name="T">The model type</typeparam>
     /// <param name="id">The unique id</param>
+    /// <param name="languageId">The optional language id</param>
     /// <returns>The page model</returns>
-    public async Task<T> GetById<T>(Guid id) where T : Models.PageBase
+    public async Task<T> GetById<T>(Guid id, Guid? languageId = null) where T : Models.PageBase
     {
         var page = await GetQuery<T>()
             .FirstOrDefaultAsync(p => p.Id == id)
@@ -143,7 +147,9 @@ internal class PageRepository : IPageRepository
 
         if (page != null)
         {
-            return await _contentService.TransformAsync<T>(page, App.PageTypes.GetById(page.PageTypeId), ProcessAsync);
+            var model = await _contentService.TransformAsync<T>(page, App.PageTypes.GetById(page.PageTypeId), ProcessAsync, languageId);
+            await SetPermalinkAsync(model, page, languageId).ConfigureAwait(false);
+            return model;
         }
         return null;
     }
@@ -175,18 +181,82 @@ internal class PageRepository : IPageRepository
     /// <typeparam name="T">The model type</typeparam>
     /// <param name="slug">The unique slug</param>
     /// <param name="siteId">The site id</param>
+    /// <param name="languageId">The optional language id</param>
     /// <returns>The page model</returns>
-    public async Task<T> GetBySlug<T>(string slug, Guid siteId) where T : Models.PageBase
+    public async Task<T> GetBySlug<T>(string slug, Guid siteId, Guid? languageId = null) where T : Models.PageBase
     {
-        var page = await GetQuery<T>()
-            .FirstOrDefaultAsync(p => p.SiteId == siteId && p.Slug == slug)
-            .ConfigureAwait(false);
+        Page page = null;
+
+        // A language-prefixed request must prefer a slug defined for that
+        // language. Otherwise a default-language page with the same slug
+        // would be selected before its translated counterpart.
+        if (languageId.HasValue)
+        {
+            var pageId = await _db.PageTranslations
+                .AsNoTracking()
+                .Where(t => t.LanguageId == languageId.Value && t.Slug == slug)
+                .Select(t => t.PageId)
+                .FirstOrDefaultAsync()
+                .ConfigureAwait(false);
+
+            if (pageId != Guid.Empty)
+            {
+                page = await GetQuery<T>()
+                    .FirstOrDefaultAsync(p => p.Id == pageId && p.SiteId == siteId)
+                    .ConfigureAwait(false);
+            }
+        }
+
+        // Requests without a language prefix resolve against the default
+        // page slug. A language-prefixed request deliberately does not fall
+        // back: it must use that language's explicit localized slug.
+        if (!languageId.HasValue)
+        {
+            page = await GetQuery<T>()
+                .FirstOrDefaultAsync(p => p.SiteId == siteId && p.Slug == slug)
+                .ConfigureAwait(false);
+        }
 
         if (page != null)
         {
-            return await _contentService.TransformAsync<T>(page, App.PageTypes.GetById(page.PageTypeId), ProcessAsync);
+            var model = await _contentService.TransformAsync<T>(page, App.PageTypes.GetById(page.PageTypeId), ProcessAsync, languageId);
+            await SetPermalinkAsync(model, page, languageId).ConfigureAwait(false);
+            return model;
         }
         return null;
+    }
+
+    private async Task SetPermalinkAsync<T>(T model, Page page, Guid? languageId) where T : Models.PageBase
+    {
+        if (model == null)
+        {
+            return;
+        }
+
+        var defaultLanguageData = await _db.Languages.AsNoTracking().FirstOrDefaultAsync(l => l.IsDefault).ConfigureAwait(false);
+        var selectedLanguageId = languageId ?? defaultLanguageData?.Id;
+        var languageData = selectedLanguageId.HasValue
+            ? await _db.Languages.AsNoTracking().FirstOrDefaultAsync(l => l.Id == selectedLanguageId.Value).ConfigureAwait(false)
+            : null;
+        var defaultLanguage = ToModel(defaultLanguageData);
+        var language = ToModel(languageData);
+        var slug = languageId.HasValue
+            ? page.Translations.FirstOrDefault(t => t.LanguageId == languageId.Value)?.Slug ?? page.Slug
+            : page.Slug;
+
+        model.Permalink = Utils.GeneratePermalink(slug, language, defaultLanguage, page.ParentId == null && page.SortOrder == 0);
+    }
+
+    private static Models.Language ToModel(Data.Language language)
+    {
+        return language == null ? null : new Models.Language
+        {
+            Id = language.Id,
+            Title = language.Title,
+            Culture = language.Culture,
+            Hostnames = language.Hostnames,
+            IsDefault = language.IsDefault
+        };
     }
 
     /// <summary>
@@ -279,10 +349,11 @@ internal class PageRepository : IPageRepository
     /// Saves the given page model
     /// </summary>
     /// <param name="model">The page model</param>
+    /// <param name="languageId">The optional language id</param>
     /// <returns>The other pages that were affected by the move</returns>
-    public Task<IEnumerable<Guid>> Save<T>(T model) where T : Models.PageBase
+    public Task<IEnumerable<Guid>> Save<T>(T model, Guid? languageId = null) where T : Models.PageBase
     {
-        return Save<T>(model, false);
+        return Save<T>(model, false, languageId);
     }
 
     /// <summary>
@@ -537,7 +608,8 @@ internal class PageRepository : IPageRepository
     /// </summary>
     /// <param name="model">The page model</param>
     /// <param name="isDraft">If the model should be saved as a draft</param>
-    private async Task<IEnumerable<Guid>> Save<T>(T model, bool isDraft) where T : Models.PageBase
+    /// <param name="languageId">The optional language id</param>
+    private async Task<IEnumerable<Guid>> Save<T>(T model, bool isDraft, Guid? languageId = null) where T : Models.PageBase
     {
         var type = App.PageTypes.GetById(model.TypeId);
         var affected = new List<Guid>();
@@ -557,8 +629,9 @@ internal class PageRepository : IPageRepository
 
             var page = await pageQuery
                 .Include(p => p.Permissions)
-                .Include(p => p.Blocks).ThenInclude(b => b.Block).ThenInclude(b => b.Fields)
-                .Include(p => p.Fields)
+                .Include(p => p.Blocks).ThenInclude(b => b.Block).ThenInclude(b => b.Fields).ThenInclude(f => f.Translations)
+                .Include(p => p.Fields).ThenInclude(f => f.Translations)
+                .Include(p => p.Translations)
                 .AsSplitQuery()
                 .FirstOrDefaultAsync(p => p.Id == model.Id)
                 .ConfigureAwait(false);
@@ -726,7 +799,33 @@ internal class PageRepository : IPageRepository
                 affected.Add(page.Id);
             }
 
-            page = _contentService.Transform<T>(model, type, page);
+            // When saving a non-default language, preserve the main page columns
+            // (title, slug, meta) — they belong to the default language.
+            var origTitle = page.Title;
+            var origNavTitle = page.NavigationTitle;
+            var origSlug = page.Slug;
+            var origExcerpt = page.Excerpt;
+            var origMetaTitle = page.MetaTitle;
+            var origMetaKeywords = page.MetaKeywords;
+            var origMetaDescription = page.MetaDescription;
+            var origOgTitle = page.OgTitle;
+            var origOgDescription = page.OgDescription;
+
+            page = _contentService.Transform<T>(model, type, page, languageId);
+
+            if (languageId.HasValue)
+            {
+                page.Title = origTitle;
+                page.NavigationTitle = origNavTitle;
+                page.Slug = origSlug;
+                page.Excerpt = origExcerpt;
+                page.MetaTitle = origMetaTitle;
+                page.MetaKeywords = origMetaKeywords;
+                page.MetaDescription = origMetaDescription;
+                page.OgTitle = origOgTitle;
+                page.OgDescription = origOgDescription;
+            }
+
             page.ContentType = type.IsArchive ? "Blog" : "Page";
 
             // Set if comments should be enabled
@@ -762,25 +861,98 @@ internal class PageRepository : IPageRepository
 
             if (blockModels != null)
             {
-                var blocks = _contentService.TransformBlocks(blockModels);
-                var current = blocks.Select(b => b.Id).ToArray();
+                var blocks = _contentService.TransformBlocks(blockModels, languageId);
+                var draftBlocks = languageId.HasValue
+                    ? await GetDraftBlocks(page.Id).ConfigureAwait(false)
+                    : null;
 
-                // Delete removed blocks
-                var removed = page.Blocks
-                    .Where(b => !current.Contains(b.BlockId) && !b.Block.IsReusable && b.Block.ParentId == null)
-                    .Select(b => b.Block);
-                var removedItems = page.Blocks
-                    .Where(b => !current.Contains(b.BlockId) && b.Block.ParentId != null && removed.Select(p => p.Id).ToList().Contains(b.Block.ParentId.Value))
-                    .Select(b => b.Block);
-
-                if (!isDraft)
+                if (draftBlocks != null)
                 {
-                    _db.Blocks.RemoveRange(removed);
-                    _db.Blocks.RemoveRange(removedItems);
+                    // A default-language edit may exist only in the draft
+                    // revision. Carry those default field values forward when
+                    // a translation is saved before the default is published.
+                    foreach (var block in blocks)
+                    {
+                        var draftBlock = draftBlocks.FirstOrDefault(b => b.Id == block.Id);
+                        if (draftBlock == null)
+                        {
+                            continue;
+                        }
+
+                        foreach (var field in block.Fields)
+                        {
+                            var draftField = draftBlock.Fields.FirstOrDefault(f => f.FieldId == field.FieldId);
+                            if (draftField != null)
+                            {
+                                field.Value = draftField.Value;
+                            }
+                        }
+                    }
                 }
 
-                // Delete the old page blocks
-                page.Blocks.Clear();
+                var current = blocks.Select(b => b.Id).ToArray();
+                var draftStructure = languageId.HasValue
+                    ? await GetDraftBlockStructure(page.Id).ConfigureAwait(false)
+                    : null;
+                var matchesCurrentStructure = HasMatchingBlockStructure(page.Blocks, blocks);
+                var matchesDraftStructure = draftStructure != null && HasMatchingBlockStructure(draftStructure, blocks);
+                var materializeDraftStructure = languageId.HasValue && !isDraft && matchesDraftStructure;
+
+                // Blocks are a shared page structure. Only the default
+                // language may change that structure; translated saves only
+                // update field translations on the existing blocks.
+                if (languageId.HasValue && !matchesCurrentStructure && !matchesDraftStructure)
+                {
+                    throw new InvalidOperationException("Block structure can only be changed in the default language.");
+                }
+
+                if (materializeDraftStructure && page.Blocks.Count > 0)
+                {
+                    for (var n = 0; n < page.Blocks.Count; n++)
+                    {
+                        page.Blocks[n].SortOrder = -n - 1;
+                    }
+                    await _db.SaveChangesAsync().ConfigureAwait(false);
+                }
+
+                if (!languageId.HasValue)
+                {
+                    var removedPageBlocks = page.Blocks
+                        .Where(b => !current.Contains(b.BlockId))
+                        .ToList();
+                    var removed = removedPageBlocks
+                        .Where(b => !b.Block.IsReusable && b.Block.ParentId == null)
+                        .Select(b => b.Block)
+                        .ToList();
+                    var removedIds = removed.Select(b => b.Id).ToList();
+                    var removedItems = removedPageBlocks
+                        .Where(b => b.Block.ParentId.HasValue && removedIds.Contains(b.Block.ParentId.Value))
+                        .Select(b => b.Block)
+                        .ToList();
+
+                    if (!isDraft)
+                    {
+                        _db.PageBlocks.RemoveRange(removedPageBlocks);
+                        _db.Blocks.RemoveRange(removed);
+                        _db.Blocks.RemoveRange(removedItems);
+                    }
+
+                    foreach (var pageBlock in removedPageBlocks)
+                    {
+                        page.Blocks.Remove(pageBlock);
+                    }
+
+                    // Avoid transient collisions with the unique PageId /
+                    // SortOrder key while existing links are reordered.
+                    if (!isDraft && page.Blocks.Count > 0)
+                    {
+                        for (var n = 0; n < page.Blocks.Count; n++)
+                        {
+                            page.Blocks[n].SortOrder = -n - 1;
+                        }
+                        await _db.SaveChangesAsync().ConfigureAwait(false);
+                    }
+                }
 
                 // Now map the new block
                 for (var n = 0; n < blocks.Count; n++)
@@ -792,7 +964,7 @@ internal class PageRepository : IPageRepository
                     }
 
                     var block = await blockQuery
-                        .Include(b => b.Fields)
+                        .Include(b => b.Fields).ThenInclude(f => f.Translations)
                         .FirstOrDefaultAsync(b => b.Id == blocks[n].Id)
                         .ConfigureAwait(false);
 
@@ -811,13 +983,16 @@ internal class PageRepository : IPageRepository
                     block.ParentId = blocks[n].ParentId;
                     block.CLRType = blocks[n].CLRType;
                     block.IsReusable = blocks[n].IsReusable;
-                    block.Title = blocks[n].Title;
+                    if (!languageId.HasValue)
+                    {
+                        block.Title = blocks[n].Title;
+                    }
                     block.LastModified = DateTime.Now;
 
                     var currentFields = blocks[n].Fields.Select(f => f.FieldId).Distinct();
                     var removedFields = block.Fields.Where(f => !currentFields.Contains(f.FieldId));
 
-                    if (!isDraft)
+                    if (!languageId.HasValue && !isDraft)
                     {
                         _db.BlockFields.RemoveRange(removedFields);
                     }
@@ -831,7 +1006,8 @@ internal class PageRepository : IPageRepository
                             {
                                 Id = newField.Id != Guid.Empty ? newField.Id : Guid.NewGuid(),
                                 BlockId = block.Id,
-                                FieldId = newField.FieldId
+                                FieldId = newField.FieldId,
+                                Value = newField.Value
                             };
                             if (!isDraft)
                             {
@@ -841,23 +1017,84 @@ internal class PageRepository : IPageRepository
                         }
                         field.SortOrder = newField.SortOrder;
                         field.CLRType = newField.CLRType;
-                        field.Value = newField.Value;
+
+                        if (newField.Translations.Count > 0)
+                        {
+                            // Translatable field. Merge the translations for the
+                            // current language without touching the values stored
+                            // for the other languages.
+                            foreach (var newTranslation in newField.Translations)
+                            {
+                                var translation = field.Translations.FirstOrDefault(t => t.LanguageId == newTranslation.LanguageId);
+                                if (translation == null)
+                                {
+                                    translation = new PageBlockFieldTranslation
+                                    {
+                                        FieldId = field.Id,
+                                        LanguageId = newTranslation.LanguageId
+                                    };
+                                    if (!isDraft)
+                                    {
+                                        await _db.PageBlockFieldTranslations.AddAsync(translation).ConfigureAwait(false);
+                                    }
+                                    field.Translations.Add(translation);
+                                }
+                                translation.Value = newTranslation.Value;
+                            }
+                        }
+                        else if (!languageId.HasValue || !typeof(Extend.ITranslatable).IsAssignableFrom(App.Fields.GetByType(newField.CLRType)?.Type) || string.IsNullOrEmpty(field.Value))
+                        {
+                            // A translated save must not replace the default
+                            // value when the submitted field has no
+                            // translation (for example, an older client or a
+                            // missing media selection).
+                            field.Value = newField.Value;
+                        }
                     }
 
-                    // Create the page block
-                    var pageBlock = new PageBlock
+                    if (isDraft)
                     {
-                        Id = Guid.NewGuid(),
-                        BlockId = block.Id,
-                        Block = block,
-                        PageId = page.Id,
-                        SortOrder = n
-                    };
-                    if (!isDraft)
-                    {
-                        await _db.PageBlocks.AddAsync(pageBlock).ConfigureAwait(false);
+                        // Drafts are serialized from the page graph. Keep the
+                        // freshly merged block attached to that graph so a
+                        // translated draft preserves the default field value
+                        // while also containing its language translation.
+                        var draftPageBlock = page.Blocks.FirstOrDefault(b => b.BlockId == block.Id);
+                        if (draftPageBlock != null)
+                        {
+                            draftPageBlock.Block = block;
+                        }
                     }
-                    page.Blocks.Add(pageBlock);
+
+                    // The default language owns the shared block structure.
+                    // A translated save may only update its field values and
+                    // must never create another page/block link at the same
+                    // sort order.
+                    if (!languageId.HasValue || materializeDraftStructure)
+                    {
+                        var pageBlock = page.Blocks.FirstOrDefault(b => b.BlockId == block.Id);
+                        if (pageBlock == null)
+                        {
+                            pageBlock = new PageBlock
+                            {
+                                Id = Guid.NewGuid(),
+                                BlockId = block.Id,
+                                Block = block,
+                                PageId = page.Id
+                            };
+                            if (!isDraft)
+                            {
+                                await _db.PageBlocks.AddAsync(pageBlock).ConfigureAwait(false);
+                            }
+                            page.Blocks.Add(pageBlock);
+                        }
+                        else
+                        {
+                            // Replace the stale navigation so the revision
+                            // serializes the edited label and fields.
+                            pageBlock.Block = block;
+                        }
+                        pageBlock.SortOrder = n;
+                    }
                 }
             }
             if (!isDraft)
@@ -910,8 +1147,9 @@ internal class PageRepository : IPageRepository
         if (loadRelated)
         {
             query = query
-                .Include(p => p.Blocks).ThenInclude(b => b.Block).ThenInclude(b => b.Fields)
-                .Include(p => p.Fields)
+                .Include(p => p.Blocks).ThenInclude(b => b.Block).ThenInclude(b => b.Fields).ThenInclude(f => f.Translations)
+                .Include(p => p.Fields).ThenInclude(f => f.Translations)
+                .Include(p => p.Translations)
                 .AsSplitQuery();
         }
         return query;
@@ -954,8 +1192,96 @@ internal class PageRepository : IPageRepository
                         }
                     }
                 }
-                model.Blocks = _contentService.TransformBlocks(page.Blocks.OrderBy(b => b.SortOrder).Select(b => b.Block));
+                model.Blocks = _contentService.TransformBlocks(page.Blocks.OrderBy(b => b.SortOrder).Select(b => b.Block), page.SelectedLanguageId);
             }
+        }
+    }
+
+    private static bool HasMatchingBlockStructure(IEnumerable<PageBlock> pageBlocks, IEnumerable<Block> submittedBlocks)
+    {
+        return HasMatchingBlockStructure(
+            pageBlocks
+                .OrderBy(pageBlock => pageBlock.SortOrder)
+                .Select(pageBlock => new BlockStructure(
+                    pageBlock.BlockId,
+                    pageBlock.Block.ParentId,
+                    pageBlock.Block.CLRType)),
+            submittedBlocks);
+    }
+
+    private static bool HasMatchingBlockStructure(IEnumerable<BlockStructure> current, IEnumerable<Block> submittedBlocks)
+    {
+        var currentStructure = current;
+        var submitted = submittedBlocks
+            .Select(block => new BlockStructure(block.Id, block.ParentId, block.CLRType));
+
+        return currentStructure.SequenceEqual(submitted);
+    }
+
+    private async Task<IList<Block>> GetDraftBlocks(Guid pageId)
+    {
+        var lastModified = await _db.Pages
+            .Where(page => page.Id == pageId)
+            .Select(page => page.LastModified)
+            .FirstOrDefaultAsync()
+            .ConfigureAwait(false);
+
+        var data = await _db.PageRevisions
+            .Where(revision => revision.PageId == pageId && revision.Created > lastModified)
+            .OrderByDescending(revision => revision.Created)
+            .Select(revision => revision.Data)
+            .FirstOrDefaultAsync()
+            .ConfigureAwait(false);
+
+        if (string.IsNullOrEmpty(data))
+        {
+            return null;
+        }
+
+        var draft = JsonConvert.DeserializeObject<Page>(data);
+        return draft?.Blocks?
+            .Select(pageBlock => pageBlock.Block)
+            .Where(block => block != null)
+            .ToList();
+    }
+
+    private async Task<IList<BlockStructure>> GetDraftBlockStructure(Guid pageId)
+    {
+        var draftBlocks = await GetDraftBlocks(pageId).ConfigureAwait(false);
+        return draftBlocks?
+            .Select(block => new BlockStructure(block.Id, block.ParentId, block.CLRType))
+            .ToList();
+    }
+
+    private sealed class BlockStructure : IEquatable<BlockStructure>
+    {
+        public BlockStructure(Guid id, Guid? parentId, string type)
+        {
+            Id = id;
+            ParentId = parentId;
+            Type = type;
+        }
+
+        public Guid Id { get; }
+        public Guid? ParentId { get; }
+        public string Type { get; }
+
+        public bool Equals(BlockStructure other)
+        {
+            return other != null &&
+                Id == other.Id &&
+                ParentId == other.ParentId &&
+                string.Equals(Type, other.Type, StringComparison.Ordinal);
+        }
+
+        public override bool Equals(object obj)
+        {
+            return Equals(obj as BlockStructure);
+        }
+
+        public override int GetHashCode()
+        {
+            return HashCode.Combine(Id, ParentId, Type);
         }
     }
 

@@ -18,7 +18,11 @@
     {
         <script>
             piranha.permissions.load(function () {
-                piranha.pageedit.load("@RouteData.Values["id"]");
+                if (new URLSearchParams(window.location.search).get("translations") === "side-by-side") {
+                    piranha.pageedit.loadTranslations("@RouteData.Values["id"]");
+                } else {
+                    piranha.pageedit.load("@RouteData.Values["id"]");
+                }
                 $(".title input").focus();
             });
         </script>
@@ -105,7 +109,7 @@
         </div>
 
         <!-- Content navigation -->
-        <ul v-if="(useBlocks && (editors.length + contentRegions.length > 0)) || editors.length + contentRegions.length > 1 || (enableComments && (commentCount > 0 || pendingCommentCount > 0))" class="nav nav-pills nav-pills-card justify-content-center">
+        <ul v-if="!translationMode && ((useBlocks && (editors.length + contentRegions.length > 0)) || editors.length + contentRegions.length > 1 || (enableComments && (commentCount > 0 || pendingCommentCount > 0)))" class="nav nav-pills nav-pills-card justify-content-center">
             <li v-if="useBlocks" class="nav-item">
                 <a class="nav-link" v-on:click.prevent="selectRegion({ uid: 'uid-blocks' })" :class="{ active: selectedRegion.uid === 'uid-blocks' }" href="#">
                     <i class="fas fa-pen-alt"></i>@Localizer.General["Main content"]
@@ -129,8 +133,104 @@
             </li>
         </ul>
 
+        <!-- Side-by-side translation metadata -->
+        <div v-if="translationMode" class="translation-editor">
+            <div class="translation-editor__intro">
+                <i class="fas fa-language"></i>
+                @Localizer.Page["Edit translated page metadata side by side. Block structure remains managed in the default language."]
+            </div>
+            <div class="translation-editor__exchange card card-body mb-3">
+                <div class="form-row align-items-end">
+                    <div class="form-group col-md-3 mb-md-0">
+                        <label for="translation-source-language">Source language</label>
+                        <select id="translation-source-language" v-model="translationSourceLanguageId" class="form-control">
+                            <option v-for="language in languages" :value="language.id">{{ language.title }}</option>
+                        </select>
+                    </div>
+                    <div class="form-group col-md-3 mb-md-0">
+                        <label for="translation-target-language">Target language</label>
+                        <select id="translation-target-language" v-model="translationTargetLanguageId" class="form-control">
+                            <option v-for="language in languages" :value="language.id">{{ language.title }}</option>
+                        </select>
+                    </div>
+                    <div class="col-md-auto mt-2 mt-md-0">
+                        <button type="button" class="btn btn-secondary" v-on:click="exportTranslationFile()">
+                            <i class="fas fa-file-export"></i> Export translation JSON
+                        </button>
+                    </div>
+                    <div class="col-md-auto mt-2 mt-md-0">
+                        <button type="button" class="btn btn-outline-primary" :disabled="importingTranslation" v-on:click="selectTranslationImportFile()">
+                            <i class="fas fa-file-import"></i> {{ importingTranslation ? 'Importing…' : 'Import translation JSON' }}
+                        </button>
+                        <input ref="translationImportFile" type="file" class="d-none" accept="application/json,.json" v-on:change="importTranslationFile($event)">
+                    </div>
+                </div>
+                <small class="form-text text-muted mt-2">Export source text for translation. Import replaces every included target text value, including existing block text; omitted values are kept and empty values clear text.</small>
+            </div>
+            <div class="translation-editor__columns">
+                <section v-for="translation in translationModels" :key="translation.languageId" class="translation-editor__column" :class="{ 'translation-editor__column--default': languageFor(translation).isDefault }">
+                    <header>
+                        <strong>{{ languageFor(translation).title }}</strong>
+                        <span v-if="languageFor(translation).isDefault" class="badge badge-secondary">@Localizer.General["Default"]</span>
+                    </header>
+                    <div class="form-group">
+                        <label>@Localizer.Page["Your page title"]</label>
+                        <input v-model="translation.title" type="text" class="form-control form-control-lg" :placeholder="languageFor(translation).title">
+                    </div>
+                    <div class="form-group">
+                        <label>@Localizer.Page["Navigation title"]</label>
+                        <input v-model="translation.navigationTitle" type="text" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label>@Localizer.Page["Slug"]</label>
+                        <input v-model="translation.slug" type="text" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label>@Localizer.Page["Excerpt"]</label>
+                        <textarea v-model="translation.excerpt" class="form-control" rows="4"></textarea>
+                    </div>
+                </section>
+            </div>
+
+            <div v-if="translationModels.length > 0" class="translation-editor__block-list">
+                <article v-for="(referenceBlock, blockIndex) in translationModels[0].blocks" :key="referenceBlock.meta.uid" class="translation-editor__block-row">
+                    <header class="translation-editor__block-row-header">
+                        <i :class="referenceBlock.meta.icon"></i>
+                        <strong>{{ translationBlockName(referenceBlock) }}</strong>
+                        <span class="small text-muted">{{ referenceBlock.meta.title }}</span>
+                    </header>
+                    <div class="translation-editor__block-row-columns">
+                        <section v-for="translation in translationModels" :key="translation.languageId" class="translation-editor__block-cell">
+                            <div class="translation-editor__block-cell-language">{{ languageFor(translation).title }}</div>
+                            <template v-if="translationBlock(translation, referenceBlock, blockIndex)">
+                                <div :id="'tb-' + translationBlockUid(translation, translationBlock(translation, referenceBlock, blockIndex))" class="component-toolbar"></div>
+                                <div class="block" :class="translationBlock(translation, referenceBlock, blockIndex).meta.component">
+                                    <component v-if="!translationBlock(translation, referenceBlock, blockIndex).meta.isGroup"
+                                               :is="translationBlock(translation, referenceBlock, blockIndex).meta.component"
+                                               :uid="translationBlockUid(translation, translationBlock(translation, referenceBlock, blockIndex))"
+                                               :toolbar="'tb-' + translationBlockUid(translation, translationBlock(translation, referenceBlock, blockIndex))"
+                                               :model="translationBlock(translation, referenceBlock, blockIndex).model"
+                                               v-on:update-title="updateTranslationBlockTitle(translation, translationBlock(translation, referenceBlock, blockIndex), $event)"></component>
+                                    <component v-else
+                                               :is="translationBlock(translation, referenceBlock, blockIndex).meta.component"
+                                               :uid="translationBlockUid(translation, translationBlock(translation, referenceBlock, blockIndex))"
+                                               :toolbar="'tb-' + translationBlockUid(translation, translationBlock(translation, referenceBlock, blockIndex))"
+                                               :model="translationBlock(translation, referenceBlock, blockIndex)"
+                                               :can-edit-structure="false"
+                                               :can-edit-block-name="false"></component>
+                                </div>
+                            </template>
+                            <div v-else class="translation-editor__missing-block">
+                                @Localizer.Page["This block is missing in this language."]
+                            </div>
+                        </section>
+                    </div>
+                </article>
+            </div>
+        </div>
+
         <!-- Title -->
-        <div class="card">
+        <div v-if="!translationMode" class="card">
             <div class="card-body">
                 <div class="row">
                     <div class="col">
@@ -143,43 +243,44 @@
         </div>
 
         <!-- Blocks -->
-        <div class="card" :class="{ 'd-none': selectedRegion.uid != 'uid-blocks' }">
+        <div v-if="!translationMode" class="card" :class="{ 'd-none': selectedRegion.uid != 'uid-blocks' }">
             <div class="card-body" v-bind:class="{ readonly: isCopy }">
+                <div v-if="!canEditBlockStructure" class="alert alert-info">
+                    @Localizer.Page["Block structure is managed in the default language. You can edit translated field values here."]
+                </div>
                 <div id="content-blocks" class="blocks@(Config.ManagerOutlined ? " blocks-outline" : "")">
-                    <a v-if="!isCopy" href="#" class="block-add unsortable" v-on:click.prevent="piranha.blockpicker.open(piranha.pageedit.addBlock, 0)">
+                    <a v-if="!isCopy && canEditBlockStructure" href="#" class="block-add unsortable" v-on:click.prevent="piranha.blockpicker.open(piranha.pageedit.addBlock, 0)">
                         <hr>
                         <i class="fas fa-plus-circle"></i>
                     </a>
-                    <span v-else class="block-add unsortable"><hr><i class="fas fa-plus-circle"></i></span>
-                    <div v-for="(block, index) in blocks" v-bind:key="block.meta.uid">
+                    <div v-for="(block, index) in blocks" v-bind:key="block.meta.uid" :class="{ unsortable: !canEditBlockStructure }">
                         <div :class="'block ' + block.meta.component + (block.meta.isCollapsed ? ' collapsed' : '') + (block.meta.width === 'full' ? ' block-full' : '')">
                             <div :id="'tb-' + block.meta.uid" class="component-toolbar"></div>
                             <div class="block-header">
                                 <div class="title">
-                                    <i :class="block.meta.icon"></i><strong>{{ block.meta.name }}</strong> <span v-if="!block.meta.isGroup && block.meta.isCollapsed">- {{ block.meta.title }}</span>
+                                    <i :class="block.meta.icon"></i><input v-if="canEditBlockName" :value="getBlockName(block)" v-on:input="setBlockName(block, $event.target.value)" class="block-name" maxlength="128" placeholder='@Localizer.Page["Block name"]'><strong v-else>{{ getBlockName(block) }}</strong><span v-if="!getBlockLabel(block) && !block.meta.isGroup && block.meta.isCollapsed">- {{ block.meta.title }}</span>
                                 </div>
                                 <div class="actions">
                                     <span v-on:click.prevent="collapseBlock(block)" class="btn btn-sm">
                                         <i v-if="block.meta.isCollapsed" class="fas fa-chevron-down"></i>
                                         <i v-else class="fas fa-chevron-up"></i>
                                     </span>
-                                    <span class="btn btn-sm handle">
+                                    <span v-if="canEditBlockStructure" class="btn btn-sm handle">
                                         <i class="fas fa-ellipsis-v"></i>
                                     </span>
-                                    <button v-on:click.prevent="removeBlock(block)" class="btn btn-sm danger block-remove" tabindex="-1">
+                                    <button v-if="canEditBlockStructure" v-on:click.prevent="removeBlock(block)" class="btn btn-sm danger block-remove" tabindex="-1">
                                         <i class="fas fa-trash"></i>
                                     </button>
                                 </div>
                             </div>
                             <component v-if="!block.meta.isGroup" v-bind:is="block.meta.component" v-bind:uid="block.meta.uid" v-bind:toolbar="'tb-' + block.meta.uid" v-bind:model="block.model" v-on:update-title='updateBlockTitle($event)'></component>
-                            <component v-if="block.meta.isGroup" v-bind:is="block.meta.component" v-bind:uid="block.meta.uid" v-bind:toolbar="'tb-' + block.meta.uid" v-bind:model="block"></component>
+                            <component v-if="block.meta.isGroup" v-bind:is="block.meta.component" v-bind:uid="block.meta.uid" v-bind:toolbar="'tb-' + block.meta.uid" v-bind:model="block" v-bind:can-edit-structure="canEditBlockStructure" v-bind:can-edit-block-name="canEditBlockName"></component>
                             <div class="content-blocker"></div>
                         </div>
-                        <a v-if="!isCopy" href="#" class="block-add" v-on:click.prevent="piranha.blockpicker.open(piranha.pageedit.addBlock, index + 1)">
+                        <a v-if="!isCopy && canEditBlockStructure" href="#" class="block-add" v-on:click.prevent="piranha.blockpicker.open(piranha.pageedit.addBlock, index + 1)">
                             <hr>
                             <i class="fas fa-plus-circle"></i>
                         </a>
-                        <span v-else class="block-add"><hr><i class="fas fa-plus-circle"></i></span>
                     </div>
                     <div v-if="blocks.length == 0" class="empty-info">
                         <p>@Localizer.Page["Welcome to your new page. Click on the button above to add your first block of content!"]</p>
@@ -189,7 +290,7 @@
         </div>
 
         <!-- Custom Editors -->
-        <div class="card" :class="{ 'd-none': selectedRegion.uid != editor.uid }" v-for="editor in editors">
+        <div v-if="!translationMode" class="card" :class="{ 'd-none': selectedRegion.uid != editor.uid }" v-for="editor in editors">
             <div class="card-body">
                 <div class="region-center">
                     <component v-bind:is="editor.component" v-bind:uid="editor.uid" v-bind:id="id"></component>
@@ -198,7 +299,7 @@
         </div>
 
         <!-- Content Regions -->
-        <div class="card" :class="{ 'd-none': selectedRegion.uid != region.meta.uid }" v-for="region in contentRegions">
+        <div v-if="!translationMode" class="card" :class="{ 'd-none': selectedRegion.uid != region.meta.uid }" v-for="region in contentRegions">
             <div class="card-body">
                 <div class="region" :class="{ readonly: isCopy, 'region-center': region.meta.width === 'centered' }">
                     <region v-bind:content="'page'" v-bind:type="typeId" v-bind:model="region"></region>
@@ -208,5 +309,101 @@
         </div>
     </div>
 
-    <partial name="Partial/_PageSettings" />
+    <div v-if="!translationMode">
+        <partial name="Partial/_PageSettings" />
+    </div>
 </div>
+
+<style>
+    .translation-editor {
+        margin-bottom: 1.5rem;
+    }
+
+    .translation-editor__intro {
+        margin-bottom: 1rem;
+        padding: .75rem 1rem;
+        background: #edf5ff;
+        border-left: 4px solid #007bff;
+    }
+
+    .translation-editor__columns {
+        display: flex;
+        gap: 1rem;
+        overflow-x: auto;
+        padding-bottom: .75rem;
+        scroll-snap-type: x proximity;
+    }
+
+    .translation-editor__column {
+        flex: 0 0 min(26rem, 85vw);
+        padding: 1rem;
+        background: #fff;
+        border: 1px solid #dee2e6;
+        border-radius: .25rem;
+        scroll-snap-align: start;
+    }
+
+    .translation-editor__column--default {
+        border-top: 4px solid #007bff;
+    }
+
+    .translation-editor__column header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin: -.25rem 0 1rem;
+    }
+
+    .translation-editor__block-list {
+        margin-top: 1.5rem;
+        overflow-x: auto;
+        padding-bottom: .75rem;
+    }
+
+    .translation-editor__block-row {
+        margin-bottom: 1rem;
+        background: #fff;
+        border: 1px solid #dee2e6;
+        border-radius: .25rem;
+        overflow: hidden;
+        min-width: max-content;
+    }
+
+    .translation-editor__block-row-header {
+        display: flex;
+        gap: .5rem;
+        align-items: center;
+        padding: .65rem 1rem;
+        background: #f8f9fa;
+        border-bottom: 1px solid #dee2e6;
+    }
+
+    .translation-editor__block-row-columns {
+        display: flex;
+        min-width: max-content;
+    }
+
+    .translation-editor__block-cell {
+        flex: 0 0 min(26rem, 85vw);
+        min-width: 0;
+        padding: 1rem;
+        border-right: 1px solid #dee2e6;
+    }
+
+    .translation-editor__block-cell:last-child {
+        border-right: 0;
+    }
+
+    .translation-editor__block-cell-language {
+        margin: -.25rem 0 .75rem;
+        color: #6c757d;
+        font-size: .875rem;
+        font-weight: 600;
+    }
+
+    .translation-editor__missing-block {
+        padding: 1rem;
+        color: #6c757d;
+        font-style: italic;
+    }
+</style>

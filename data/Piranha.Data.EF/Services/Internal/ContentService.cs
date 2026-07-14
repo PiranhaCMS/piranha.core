@@ -47,6 +47,16 @@ internal class ContentService<TContent, TField, TModelBase> : IContentService<TC
             // We need the currently selected language id for mapping.
             genericContent.SelectedLanguageId = languageId;
         }
+        else if (content is Page pageContent)
+        {
+            // We need the currently selected language id for mapping.
+            pageContent.SelectedLanguageId = languageId;
+        }
+        else if (content is Post postContent)
+        {
+            // We need the currently selected language id for mapping.
+            postContent.SelectedLanguageId = languageId;
+        }
 
         if (type != null)
         {
@@ -273,6 +283,7 @@ internal class ContentService<TContent, TField, TModelBase> : IContentService<TC
                 var model = (Extend.Block)Activator.CreateInstance(blockType.Type);
                 model.Id = block.Id;
                 model.Type = block.CLRType;
+                model.Label = block.Title;
 
                 foreach (var prop in model.GetType().GetProperties(App.PropertyBindings))
                 {
@@ -286,6 +297,61 @@ internal class ContentService<TContent, TField, TModelBase> : IContentService<TC
                             var val = (Extend.IField)App.DeserializeObject(field.Value, type.Type);
 
                             prop.SetValue(model, val);
+                        }
+                        else
+                        {
+                            prop.SetValue(model, Activator.CreateInstance(prop.PropertyType));
+                        }
+                    }
+                }
+
+                if (block.ParentId.HasValue)
+                {
+                    var parent = models.FirstOrDefault(m => m.Id == block.ParentId.Value);
+
+                    if (parent != null && typeof(Extend.BlockGroup).IsAssignableFrom(parent.GetType()))
+                    {
+                        ((Extend.BlockGroup)parent).Items.Add(model);
+                    }
+                    else
+                    {
+                        throw new InvalidOperationException("Block parent is missing");
+                    }
+                }
+                else
+                {
+                    models.Add(model);
+                }
+            }
+        }
+        return models;
+    }
+
+    /// <inheritdoc />
+    public IList<Extend.Block> TransformBlocks(IEnumerable<Block> blocks, Guid? languageId)
+    {
+        var models = new List<Extend.Block>();
+
+        foreach (var block in blocks)
+        {
+            var blockType = App.Blocks.GetByType(block.CLRType);
+
+            if (blockType != null)
+            {
+                var model = (Extend.Block)Activator.CreateInstance(blockType.Type);
+                model.Id = block.Id;
+                model.Type = block.CLRType;
+                model.Label = block.Title;
+
+                foreach (var prop in model.GetType().GetProperties(App.PropertyBindings))
+                {
+                    if (typeof(Extend.IField).IsAssignableFrom(prop.PropertyType))
+                    {
+                        var field = block.Fields.FirstOrDefault(f => f.FieldId == prop.Name);
+
+                        if (field != null)
+                        {
+                            prop.SetValue(model, DeserializeValue(field, languageId));
                         }
                         else
                         {
@@ -387,6 +453,7 @@ internal class ContentService<TContent, TField, TModelBase> : IContentService<TC
                     {
                         Id = models[n].Id != Guid.Empty ? models[n].Id : Guid.NewGuid(),
                         CLRType = models[n].GetType().FullName,
+                        Title = models[n].Label,
                         Created = DateTime.Now,
                         LastModified = DateTime.Now
                     };
@@ -413,6 +480,79 @@ internal class ContentService<TContent, TField, TModelBase> : IContentService<TC
                     if (typeof(Extend.BlockGroup).IsAssignableFrom(models[n].GetType()))
                     {
                         var blockItems = TransformBlocks(((Extend.BlockGroup)models[n]).Items);
+
+                        if (blockItems.Count() > 0)
+                        {
+                            foreach (var item in blockItems)
+                            {
+                                item.ParentId = block.Id;
+                            }
+                            blocks.AddRange(blockItems);
+                        }
+                    }
+                }
+            }
+        }
+        return blocks;
+    }
+
+    /// <inheritdoc />
+    public IList<Block> TransformBlocks(IList<Extend.Block> models, Guid? languageId)
+    {
+        var blocks = new List<Block>();
+
+        if (models != null)
+        {
+            for (var n = 0; n < models.Count; n++)
+            {
+                var type = App.Blocks.GetByType(models[n].GetType().FullName);
+
+                if (type != null)
+                {
+                    var block = new Block()
+                    {
+                        Id = models[n].Id != Guid.Empty ? models[n].Id : Guid.NewGuid(),
+                        CLRType = models[n].GetType().FullName,
+                        Title = models[n].Label,
+                        Created = DateTime.Now,
+                        LastModified = DateTime.Now
+                    };
+
+                    foreach (var prop in models[n].GetType().GetProperties(App.PropertyBindings))
+                    {
+                        if (typeof(Extend.IField).IsAssignableFrom(prop.PropertyType))
+                        {
+                            var blockValue = prop.GetValue(models[n]);
+
+                            // Only save fields to the database
+                            var field = new BlockField()
+                            {
+                                Id = Guid.NewGuid(),
+                                BlockId = block.Id,
+                                FieldId = prop.Name,
+                                SortOrder = 0,
+                                CLRType = prop.PropertyType.FullName
+                            };
+
+                            // Set value. Translatable fields are stored as a
+                            // translation for the given language, otherwise the
+                            // value is stored directly on the field.
+                            if (blockValue is Extend.ITranslatable && languageId.HasValue)
+                            {
+                                field.SetTranslation(field.Id, languageId.Value, blockValue);
+                            }
+                            else
+                            {
+                                field.Value = App.SerializeObject(blockValue, prop.PropertyType);
+                            }
+                            block.Fields.Add(field);
+                        }
+                    }
+                    blocks.Add(block);
+
+                    if (typeof(Extend.BlockGroup).IsAssignableFrom(models[n].GetType()))
+                    {
+                        var blockItems = TransformBlocks(((Extend.BlockGroup)models[n]).Items, languageId);
 
                         if (blockItems.Count() > 0)
                         {
@@ -806,7 +946,8 @@ internal class ContentService<TContent, TField, TModelBase> : IContentService<TC
         {
             if (typeof(Extend.ITranslatable).IsAssignableFrom(type.Type) && field is ITranslatable translatable && languageId.HasValue)
             {
-                return App.DeserializeObject((string)translatable.GetTranslation(languageId.Value), type.Type);
+                var value = (string)translatable.GetTranslation(languageId.Value);
+                return string.IsNullOrEmpty(value) ? App.DeserializeObject(field.Value, type.Type) : App.DeserializeObject(value, type.Type);
             }
             return App.DeserializeObject(field.Value, type.Type);
         }
@@ -827,7 +968,8 @@ internal class ContentService<TContent, TField, TModelBase> : IContentService<TC
         {
             if (typeof(Extend.ITranslatable).IsAssignableFrom(type.Type) && field is ITranslatable translatable && languageId.HasValue)
             {
-                return App.DeserializeObject((string)translatable.GetTranslation(languageId.Value), type.Type);
+                var value = (string)translatable.GetTranslation(languageId.Value);
+                return string.IsNullOrEmpty(value) ? App.DeserializeObject(field.Value, type.Type) : App.DeserializeObject(value, type.Type);
             }
             return App.DeserializeObject(field.Value, type.Type);
         }

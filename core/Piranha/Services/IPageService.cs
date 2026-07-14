@@ -94,23 +94,26 @@ public interface IPageService
     /// Gets the site startpage.
     /// </summary>
     /// <param name="siteId">The optional site id</param>
+    /// <param name="languageId">The optional language id for translated content</param>
     /// <returns>The page model</returns>
-    Task<DynamicPage> GetStartpageAsync(Guid? siteId = null);
+    Task<DynamicPage> GetStartpageAsync(Guid? siteId = null, Guid? languageId = null);
 
     /// <summary>
     /// Gets the site startpage.
     /// </summary>
     /// <typeparam name="T">The model type</typeparam>
     /// <param name="siteId">The optional site id</param>
+    /// <param name="languageId">The optional language id for translated content</param>
     /// <returns>The page model</returns>
-    Task<T> GetStartpageAsync<T>(Guid? siteId = null) where T : Models.PageBase;
+    Task<T> GetStartpageAsync<T>(Guid? siteId = null, Guid? languageId = null) where T : Models.PageBase;
 
     /// <summary>
     /// Gets the page model with the specified id.
     /// </summary>
     /// <param name="id">The unique id</param>
+    /// <param name="languageId">The optional language id for translated content</param>
     /// <returns>The page model</returns>
-    Task<DynamicPage> GetByIdAsync(Guid id);
+    Task<DynamicPage> GetByIdAsync(Guid id, Guid? languageId = null);
 
     /// <summary>
     /// Gets the page models with the specified id's.
@@ -123,16 +126,18 @@ public interface IPageService
     /// Gets the model with the specified id.
     /// </summary>
     /// <param name="id">The unique id</param>
+    /// <param name="languageId">The optional language id for translated content</param>
     /// <returns>The model, or null if it doesn't exist</returns>
-    Task<T> GetByIdAsync<T>(Guid id) where T : PageBase;
+    Task<T> GetByIdAsync<T>(Guid id, Guid? languageId = null) where T : PageBase;
 
     /// <summary>
     /// Gets the page model with the specified slug.
     /// </summary>
     /// <param name="slug">The unique slug</param>
     /// <param name="siteId">The optional site id</param>
+    /// <param name="languageId">The optional language id for translated content</param>
     /// <returns>The page model</returns>
-    Task<DynamicPage> GetBySlugAsync(string slug, Guid? siteId = null);
+    Task<DynamicPage> GetBySlugAsync(string slug, Guid? siteId = null, Guid? languageId = null);
 
     /// <summary>
     /// Gets the page model with the specified slug.
@@ -140,8 +145,9 @@ public interface IPageService
     /// <typeparam name="T">The model type</typeparam>
     /// <param name="slug">The unique slug</param>
     /// <param name="siteId">The optional site id</param>
+    /// <param name="languageId">The optional language id for translated content</param>
     /// <returns>The page model</returns>
-    Task<T> GetBySlugAsync<T>(string slug, Guid? siteId = null) where T : Models.PageBase;
+    Task<T> GetBySlugAsync<T>(string slug, Guid? siteId = null, Guid? languageId = null) where T : Models.PageBase;
 
     /// <summary>
     /// Gets the id for the page with the given slug.
@@ -186,13 +192,15 @@ public interface IPageService
     /// Saves the given page model
     /// </summary>
     /// <param name="model">The page model</param>
-    Task SaveAsync<T>(T model) where T : PageBase;
+    /// <param name="languageId">The optional language id for saving translated content</param>
+    Task SaveAsync<T>(T model, Guid? languageId = null) where T : PageBase;
 
     /// <summary>
     /// Saves the given page model as a draft
     /// </summary>
     /// <param name="model">The page model</param>
-    Task SaveDraftAsync<T>(T model) where T : PageBase;
+    /// <param name="languageId">The optional language id for saving translated content</param>
+    Task SaveDraftAsync<T>(T model, Guid? languageId = null) where T : PageBase;
 
     /// <summary>
     /// Saves the comment.

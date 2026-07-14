@@ -264,9 +264,9 @@ internal sealed class PostService : IPostService
     /// </summary>
     /// <param name="id">The unique id</param>
     /// <returns>The post model</returns>
-    public Task<DynamicPost> GetByIdAsync(Guid id)
+    public Task<DynamicPost> GetByIdAsync(Guid id, Guid? languageId = null)
     {
-        return GetByIdAsync<DynamicPost>(id);
+        return GetByIdAsync<DynamicPost>(id, new List<PageInfo>(), languageId);
     }
 
     /// <summary>
@@ -275,9 +275,9 @@ internal sealed class PostService : IPostService
     /// <typeparam name="T">The model type</typeparam>
     /// <param name="id">The unique id</param>
     /// <returns>The post model</returns>
-    public Task<T> GetByIdAsync<T>(Guid id) where T : PostBase
+    public Task<T> GetByIdAsync<T>(Guid id, Guid? languageId = null) where T : PostBase
     {
-        return GetByIdAsync<T>(id, new List<PageInfo>());
+        return GetByIdAsync<T>(id, new List<PageInfo>(), languageId);
     }
 
     /// <summary>
@@ -319,9 +319,9 @@ internal sealed class PostService : IPostService
     /// <param name="blogId">The unique blog slug</param>
     /// <param name="slug">The unique slug</param>
     /// <returns>The post model</returns>
-    public Task<DynamicPost> GetBySlugAsync(Guid blogId, string slug)
+    public Task<DynamicPost> GetBySlugAsync(Guid blogId, string slug, Guid? languageId = null)
     {
-        return GetBySlugAsync<DynamicPost>(blogId, slug);
+        return GetBySlugAsync<DynamicPost>(blogId, slug, languageId);
     }
 
     /// <summary>
@@ -331,7 +331,7 @@ internal sealed class PostService : IPostService
     /// <param name="blogId">The unique blog slug</param>
     /// <param name="slug">The unique slug</param>
     /// <returns>The post model</returns>
-    public async Task<T> GetBySlugAsync<T>(Guid blogId, string slug) where T : PostBase
+    public async Task<T> GetBySlugAsync<T>(Guid blogId, string slug, Guid? languageId = null) where T : PostBase
     {
         PostBase model = null;
 
@@ -358,7 +358,7 @@ internal sealed class PostService : IPostService
 
         if (model == null)
         {
-            model = await _repo.GetBySlug<T>(blogId, slug).ConfigureAwait(false);
+            model = await _repo.GetBySlug<T>(blogId, slug, languageId).ConfigureAwait(false);
 
             if (model != null)
             {
@@ -518,9 +518,9 @@ internal sealed class PostService : IPostService
     /// Saves the given post model
     /// </summary>
     /// <param name="model">The post model</param>
-    public Task SaveAsync<T>(T model) where T : PostBase
+    public Task SaveAsync<T>(T model, Guid? languageId = null) where T : PostBase
     {
-        return SaveAsync(model, false);
+        return SaveAsync(model, false, languageId);
     }
 
     /// <summary>
@@ -663,7 +663,7 @@ internal sealed class PostService : IPostService
     /// </summary>
     /// <param name="model">The post model</param>
     /// <param name="isDraft">If the model should be saved as a draft</param>
-    private async Task SaveAsync<T>(T model, bool isDraft) where T : PostBase
+    private async Task SaveAsync<T>(T model, bool isDraft, Guid? languageId = null) where T : PostBase
     {
         // Ensure id
         if (model.Id == Guid.Empty)
@@ -752,7 +752,7 @@ internal sealed class PostService : IPostService
             }
 
             // Save the main post
-            await _repo.Save(model).ConfigureAwait(false);
+            await _repo.Save(model, languageId).ConfigureAwait(false);
         }
 
         App.Hooks.OnAfterSave<PostBase>(model);
@@ -868,27 +868,31 @@ internal sealed class PostService : IPostService
     /// <param name="id">The unique id</param>
     /// <param name="blogPages">The blog pages</param>
     /// <returns>The post model</returns>
-    private async Task<T> GetByIdAsync<T>(Guid id, IList<PageInfo> blogPages) where T : PostBase
+    private async Task<T> GetByIdAsync<T>(Guid id, IList<PageInfo> blogPages, Guid? languageId = null) where T : PostBase
     {
         PostBase model = null;
 
-        if (typeof(T) == typeof(PostInfo))
+        // The cache is language-unaware, so bypass it for translated content
+        if (!languageId.HasValue)
         {
-            model = _cache == null ? null : await _cache.GetAsync<PostInfo>($"PostInfo_{id.ToString()}").ConfigureAwait(false);
-        }
-        else if (!typeof(DynamicPost).IsAssignableFrom(typeof(T)))
-        {
-            model = _cache == null ? null : await _cache.GetAsync<PostBase>(id.ToString()).ConfigureAwait(false);
-
-            if (model != null)
+            if (typeof(T) == typeof(PostInfo))
             {
-                await _factory.InitAsync(model, App.PostTypes.GetById(model.TypeId));
+                model = _cache == null ? null : await _cache.GetAsync<PostInfo>($"PostInfo_{id.ToString()}").ConfigureAwait(false);
+            }
+            else if (!typeof(DynamicPost).IsAssignableFrom(typeof(T)))
+            {
+                model = _cache == null ? null : await _cache.GetAsync<PostBase>(id.ToString()).ConfigureAwait(false);
+
+                if (model != null)
+                {
+                    await _factory.InitAsync(model, App.PostTypes.GetById(model.TypeId));
+                }
             }
         }
 
         if (model == null)
         {
-            model = await _repo.GetById<T>(id).ConfigureAwait(false);
+            model = await _repo.GetById<T>(id, languageId).ConfigureAwait(false);
 
             if (model != null)
             {

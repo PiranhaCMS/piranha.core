@@ -34,6 +34,13 @@ public interface ILanguageService
     Task<Language> GetDefaultAsync();
 
     /// <summary>
+    /// Gets the model with the given hostname.
+    /// </summary>
+    /// <param name="hostname">The hostname</param>
+    /// <returns>The model, or null if it doesn't exist</returns>
+    Task<Language> GetByHostnameAsync(string hostname);
+
+    /// <summary>
     /// Adds or updates the given model in the database
     /// depending on its state.
     /// </summary>

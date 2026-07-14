@@ -336,6 +336,129 @@ public class Blocks : BaseTestsAsync
     }
 
     [Fact]
+    public void DeserializeBlockLabel()
+    {
+        var blocks = new List<Block>
+        {
+            new Block
+            {
+                CLRType = typeof(Extend.Blocks.TextBlock).FullName,
+                Title = "Intro content",
+                Fields = new List<BlockField>
+                {
+                    new BlockField
+                    {
+                        CLRType = typeof(Extend.Fields.TextField).FullName,
+                        FieldId = "Body",
+                        Value = "Lorem ipsum"
+                    }
+                }
+            }
+        };
+
+        var models = contentService.TransformBlocks(blocks);
+
+        Assert.Single(models);
+        Assert.Equal("Intro content", models[0].Label);
+    }
+
+    [Fact]
+    public void DeserializeImageBlockUsesDefaultValueWhenTranslationIsMissing()
+    {
+        var defaultMediaId = Guid.NewGuid();
+        var languageId = Guid.NewGuid();
+        var blocks = new List<Block>
+        {
+            new Block
+            {
+                CLRType = typeof(Extend.Blocks.ImageBlock).FullName,
+                Fields = new List<BlockField>
+                {
+                    new BlockField
+                    {
+                        CLRType = typeof(Extend.Fields.ImageField).FullName,
+                        FieldId = "Body",
+                        Value = Piranha.App.SerializeObject(new Extend.Fields.ImageField { Id = defaultMediaId }, typeof(Extend.Fields.ImageField))
+                    }
+                }
+            }
+        };
+
+        var models = contentService.TransformBlocks(blocks, languageId);
+
+        var imageBlock = Assert.IsType<Extend.Blocks.ImageBlock>(Assert.Single(models));
+        Assert.Equal(defaultMediaId, imageBlock.Body.Id);
+    }
+
+    [Fact]
+    public void DeserializeImageBlockUsesLanguageSpecificValueWhenAvailable()
+    {
+        var defaultMediaId = Guid.NewGuid();
+        var translatedMediaId = Guid.NewGuid();
+        var languageId = Guid.NewGuid();
+        var blocks = new List<Block>
+        {
+            new Block
+            {
+                CLRType = typeof(Extend.Blocks.ImageBlock).FullName,
+                Fields = new List<BlockField>
+                {
+                    new BlockField
+                    {
+                        CLRType = typeof(Extend.Fields.ImageField).FullName,
+                        FieldId = "Body",
+                        Value = Piranha.App.SerializeObject(new Extend.Fields.ImageField { Id = defaultMediaId }, typeof(Extend.Fields.ImageField)),
+                        Translations = new List<PageBlockFieldTranslation>
+                        {
+                            new PageBlockFieldTranslation
+                            {
+                                LanguageId = languageId,
+                                Value = Piranha.App.SerializeObject(new Extend.Fields.ImageField { Id = translatedMediaId }, typeof(Extend.Fields.ImageField))
+                            }
+                        }
+                    }
+                }
+            }
+        };
+
+        var models = contentService.TransformBlocks(blocks, languageId);
+
+        var imageBlock = Assert.IsType<Extend.Blocks.ImageBlock>(Assert.Single(models));
+        Assert.Equal(translatedMediaId, imageBlock.Body.Id);
+    }
+
+    [Fact]
+    public void MediaBlockFieldsAreTranslatable()
+    {
+        Assert.IsAssignableFrom<Extend.ITranslatable>(new Extend.Fields.ImageField());
+        Assert.IsAssignableFrom<Extend.ITranslatable>(new Extend.Fields.AudioField());
+        Assert.IsAssignableFrom<Extend.ITranslatable>(new Extend.Fields.VideoField());
+    }
+
+    [Fact]
+    public void SerializeImageBlockStoresLanguageSpecificValue()
+    {
+        var languageId = Guid.NewGuid();
+        var mediaId = Guid.NewGuid();
+        var models = new List<Extend.Block>
+        {
+            new Extend.Blocks.ImageBlock
+            {
+                Body = new Extend.Fields.ImageField { Id = mediaId }
+            }
+        };
+
+        var blocks = contentService.TransformBlocks(models, languageId);
+        var field = Assert.Single(Assert.Single(blocks).Fields.Where(f => f.FieldId == "Body"));
+        var translation = Assert.Single(field.Translations);
+
+        Assert.Equal(languageId, translation.LanguageId);
+        var translatedField = Assert.IsType<Extend.Fields.ImageField>(Piranha.App.DeserializeObject(translation.Value, typeof(Extend.Fields.ImageField)));
+        Assert.Equal(mediaId, translatedField.Id);
+        Assert.Null(field.Value);
+    }
+
+    [Fact]
     public void SerializeHtmlBlock() {
         var models = new List<Extend.Block>();
         models.Add(new Extend.Blocks.HtmlBlock
@@ -354,6 +477,27 @@ public class Blocks : BaseTestsAsync
         Assert.Equal(typeof(Extend.Blocks.HtmlBlock).FullName, blocks[0].CLRType);
         Assert.Equal(typeof(Extend.Fields.HtmlField).FullName, blocks[0].Fields[0].CLRType);
         Assert.Equal("<p>Lorem ipsum</p>", blocks[0].Fields[0].Value);
+    }
+
+    [Fact]
+    public void SerializeBlockLabel()
+    {
+        var models = new List<Extend.Block>
+        {
+            new Extend.Blocks.TextBlock
+            {
+                Label = "Intro content",
+                Body = new Extend.Fields.TextField
+                {
+                    Value = "Lorem ipsum"
+                }
+            }
+        };
+
+        var blocks = contentService.TransformBlocks(models);
+
+        Assert.Single(blocks);
+        Assert.Equal("Intro content", blocks[0].Title);
     }
 
     [Fact]

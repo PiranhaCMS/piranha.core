@@ -9,9 +9,12 @@
  */
 
 using System.ComponentModel.DataAnnotations;
+using System.Text;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
+using Newtonsoft.Json;
 using Piranha.Manager.Models;
 using Piranha.Manager.Services;
 
@@ -93,13 +96,113 @@ public class PageApiController : Controller
     /// Gets the page with the given id.
     /// </summary>
     /// <param name="id">The unique id</param>
+    /// <param name="languageId">The optional language id</param>
     /// <returns>The page edit model</returns>
-    [Route("{id:Guid}")]
+    [Route("{id:Guid}/{languageId:Guid?}")]
     [HttpGet]
     [Authorize(Policy = Permission.PagesEdit)]
-    public async Task<PageEditModel> Get(Guid id)
+    public async Task<PageEditModel> Get(Guid id, Guid? languageId = null)
     {
-        return await _service.GetById(id);
+        return await _service.GetById(id, languageId: languageId);
+    }
+
+    /// <summary>
+    /// Gets the page in every configured language for side-by-side editing.
+    /// </summary>
+    /// <param name="id">The unique page id</param>
+    /// <returns>The language-specific page edit models</returns>
+    [Route("translations/{id:Guid}")]
+    [HttpGet]
+    [Authorize(Policy = Permission.PagesEdit)]
+    public async Task<PageTranslationEditModel> GetTranslations(Guid id)
+    {
+        return await _service.GetTranslationsById(id);
+    }
+
+    /// <summary>
+    /// Downloads one page's text in the Piranha translation exchange format.
+    /// </summary>
+    [Route("translation/export/{id:Guid}")]
+    [HttpGet]
+    [Authorize(Policy = Permission.PagesEdit)]
+    public async Task<IActionResult> ExportTranslations(Guid id, Guid sourceLanguageId, Guid targetLanguageId)
+    {
+        try
+        {
+            var document = await _service.ExportTranslations(id, sourceLanguageId, targetLanguageId);
+            var fileName = $"page-{id}-{document.SourceLanguage.Culture ?? document.SourceLanguage.Id.ToString()}-to-{document.TargetLanguage.Culture ?? document.TargetLanguage.Id.ToString()}.json";
+            var content = JsonConvert.SerializeObject(document, Formatting.Indented);
+
+            return File(Encoding.UTF8.GetBytes(content), "application/json", fileName);
+        }
+        catch (ValidationException exception)
+        {
+            return BadRequest(new StatusMessage
+            {
+                Type = StatusMessage.Error,
+                Body = exception.Message
+            });
+        }
+    }
+
+    /// <summary>
+    /// Imports target-language text from a Piranha translation exchange document.
+    /// </summary>
+    [Route("translation/import/{id:Guid}")]
+    [HttpPost]
+    [Consumes("multipart/form-data")]
+    [Authorize(Policy = Permission.PagesSave)]
+    public async Task<PageTranslationExchangeImportResult> ImportTranslations(Guid id, [FromForm] IFormFile file, [FromForm] Guid targetLanguageId)
+    {
+        var result = new PageTranslationExchangeImportResult();
+        try
+        {
+            if (file == null || file.Length == 0)
+            {
+                throw new ValidationException("Select a translation JSON file to import.");
+            }
+
+            using var reader = new StreamReader(file.OpenReadStream());
+            var document = JsonConvert.DeserializeObject<PageTranslationExchangeModel>(await reader.ReadToEndAsync());
+            if (document?.TargetLanguage?.Id != targetLanguageId)
+            {
+                throw new ValidationException("The translation file target language does not match the selected target language.");
+            }
+            result = await _service.ImportTranslations(id, document);
+            result.Status = new StatusMessage
+            {
+                Type = StatusMessage.Success,
+                Body = result.Cleared > 0
+                    ? $"Imported {result.Replaced} text values and cleared {result.Cleared} values."
+                    : $"Imported {result.Replaced} text values."
+            };
+            await _hub?.Clients.All.SendAsync("Update", id);
+        }
+        catch (ValidationException exception)
+        {
+            result.Status = new StatusMessage
+            {
+                Type = StatusMessage.Error,
+                Body = exception.Message
+            };
+        }
+        catch (JsonException)
+        {
+            result.Status = new StatusMessage
+            {
+                Type = StatusMessage.Error,
+                Body = "The selected file is not valid Piranha translation JSON."
+            };
+        }
+        catch
+        {
+            result.Status = new StatusMessage
+            {
+                Type = StatusMessage.Error,
+                Body = "An unexpected error occurred while importing the translation file."
+            };
+        }
+        return result;
     }
 
     /// <summary>
@@ -237,6 +340,39 @@ public class PageApiController : Controller
     }
 
     /// <summary>
+    /// Saves every language variant of a page as published content.
+    /// </summary>
+    [Route("save/translations")]
+    [HttpPost]
+    [Authorize(Policy = Permission.PagesPublish)]
+    public async Task<PageTranslationEditModel> SaveTranslations(PageTranslationEditModel model)
+    {
+        return await SaveTranslations(model, false);
+    }
+
+    /// <summary>
+    /// Saves every language variant of a page as draft content.
+    /// </summary>
+    [Route("save/translations/draft")]
+    [HttpPost]
+    [Authorize(Policy = Permission.PagesSave)]
+    public async Task<PageTranslationEditModel> SaveTranslationsDraft(PageTranslationEditModel model)
+    {
+        return await SaveTranslations(model, true);
+    }
+
+    /// <summary>
+    /// Unpublishes every language variant of a page.
+    /// </summary>
+    [Route("save/translations/unpublish")]
+    [HttpPost]
+    [Authorize(Policy = Permission.PagesPublish)]
+    public async Task<PageTranslationEditModel> UnpublishTranslations(PageTranslationEditModel model)
+    {
+        return await SaveTranslations(model, false, true);
+    }
+
+    /// <summary>
     /// Saves the given model and unpublishes it
     /// </summary>
     /// <param name="model">The model</param>
@@ -367,7 +503,7 @@ public class PageApiController : Controller
             return model;
         }
 
-        var ret = await _service.GetById(model.Id);
+        var ret = await _service.GetById(model.Id, languageId: model.LanguageId);
         ret.Status = new StatusMessage
         {
             Type = StatusMessage.Success,
@@ -376,5 +512,66 @@ public class PageApiController : Controller
         };
 
         return ret;
+    }
+
+    /// <summary>
+    /// Saves all language variants.
+    /// </summary>
+    private async Task<PageTranslationEditModel> SaveTranslations(PageTranslationEditModel model, bool draft, bool unpublish = false)
+    {
+        if (model.Pages.Count == 0)
+        {
+            model.Status = new StatusMessage
+            {
+                Type = StatusMessage.Error,
+                Body = _localizer.Page["No translations were supplied"]
+            };
+            return model;
+        }
+
+        try
+        {
+            foreach (var page in model.Pages.OrderByDescending(page => page.Languages.FirstOrDefault(language => language.Id == page.LanguageId)?.IsDefault == true))
+            {
+                if (unpublish)
+                {
+                    page.Published = null;
+                }
+                else if (!draft && string.IsNullOrEmpty(page.Published))
+                {
+                    page.Published = DateTime.Now.ToString("yyyy-MM-dd HH:mm");
+                }
+                await _service.Save(page, draft);
+            }
+        }
+        catch (ValidationException e)
+        {
+            model.Status = new StatusMessage
+            {
+                Type = StatusMessage.Error,
+                Body = e.Message
+            };
+            return model;
+        }
+        catch
+        {
+            model.Status = new StatusMessage
+            {
+                Type = StatusMessage.Error,
+                Body = _localizer.Page["An error occured while saving the page"]
+            };
+            return model;
+        }
+
+        var pageId = model.Pages[0].Id;
+        var result = await _service.GetTranslationsById(pageId);
+        result.Status = new StatusMessage
+        {
+            Type = StatusMessage.Success,
+            Body = draft ? _localizer.Page["The page was successfully saved"] : unpublish ? _localizer.Page["The page was successfully unpublished"] : _localizer.Page["The page was successfully published"]
+        };
+
+        await _hub?.Clients.All.SendAsync("Update", pageId);
+        return result;
     }
 }

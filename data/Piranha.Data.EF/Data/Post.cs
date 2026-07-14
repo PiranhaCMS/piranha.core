@@ -1,4 +1,4 @@
-﻿/*
+/*
  * Copyright (c) .NET Foundation and Contributors
  *
  * This software may be modified and distributed under the terms
@@ -11,8 +11,14 @@
 namespace Piranha.Data;
 
 [Serializable]
-public sealed class Post : RoutedContentBase<PostField>
+public sealed class Post : RoutedContentBase<PostField>, ITranslatable
 {
+    /// <summary>
+    /// The currently selected language id. This is only used for
+    /// mapping and is not stored in the database.
+    /// </summary>
+    internal Guid? SelectedLanguageId { get; set; }
+
     /// <summary>
     /// Gets/sets the post type id.
     /// </summary>
@@ -92,4 +98,47 @@ public sealed class Post : RoutedContentBase<PostField>
     /// Gets/sets the available permissions.
     /// </summary>
     public IList<PostPermission> Permissions { get; set; } = new List<PostPermission>();
+
+    /// <summary>
+    /// Gets/sets the available translations.
+    /// </summary>
+    public IList<PostTranslation> Translations { get; set; } = new List<PostTranslation>();
+
+    /// <summary>
+    /// Sets the translation for the specified language.
+    /// </summary>
+    public void SetTranslation(Guid parentId, Guid languageId, object model)
+    {
+        if (model is Models.PostBase post)
+        {
+            var translation = Translations.FirstOrDefault(t => t.LanguageId == languageId);
+
+            if (translation == null)
+            {
+                translation = new PostTranslation
+                {
+                    PostId = post.Id,
+                    LanguageId = languageId
+                };
+                Translations.Add(translation);
+            }
+            translation.Title = post.Title;
+            translation.Slug = post.Slug;
+            translation.Excerpt = post.Excerpt;
+            translation.MetaTitle = post.MetaTitle;
+            translation.MetaKeywords = post.MetaKeywords;
+            translation.MetaDescription = post.MetaDescription;
+            translation.OgTitle = post.OgTitle;
+            translation.OgDescription = post.OgDescription;
+            translation.LastModified = DateTime.Now;
+        }
+    }
+
+    /// <summary>
+    /// Gets the translation for the specified language.
+    /// </summary>
+    public object GetTranslation(Guid languageId)
+    {
+        return Translations.FirstOrDefault(t => t.LanguageId == languageId);
+    }
 }

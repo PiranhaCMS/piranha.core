@@ -25,14 +25,11 @@ Vue.component("region", {
     },
     updateTitle: function (e) {
       var self = this;
-
       if (self.model.meta.isCollection) {
         for (var n = 0; n < self.model.items.length; n++) {
           var item = self.model.items[n];
-
           for (var m = 0; m < item.fields.length; m++) {
             var field = item.fields[m];
-
             if (field.meta.uid === e.uid) {
               self.model.items[n].title = e.title;
               break;
@@ -57,11 +54,9 @@ Vue.component("region", {
     if (this.model.meta.isCollection && this.itemAdded) {
       sortable("#" + this.model.meta.uid, "disable");
       sortable("#" + this.model.meta.uid, "enable");
-
       if (!this.model.meta.expanded) {
         $("#" + this.model.meta.uid + " .card:last-child .card-header > a").click();
       }
-
       this.itemAdded = false;
     }
   },
@@ -84,11 +79,9 @@ Vue.component("post-archive", {
   methods: {
     load: function (index) {
       var self = this;
-
       if (!index) {
         index = 0;
       }
-
       fetch(piranha.baseUrl + "manager/api/post/list/" + self.id + "/" + index).then(function (response) {
         return response.json();
       }).then(function (result) {
@@ -156,16 +149,16 @@ Vue.component("post-archive", {
       // Check category
       if (this.category !== piranha.resources.texts.allCategories && item.category !== this.category) {
         return false;
-      } // Check status
+      }
 
-
+      // Check status
       if (this.status === "draft") {
         return item.status === "draft" || item.status === "unpublished";
       } else if (this.status === 'scheduled') {
         return item.isScheduled;
-      } // Selected
+      }
 
-
+      // Selected
       return true;
     },
     selectStatus: function (status) {
@@ -196,7 +189,7 @@ Vue.component("post-archive", {
   template: "\n<div :id=\"uid\">\n    <div class=\"mb-2\">\n        <div class=\"btn-group\" role=\"group\">\n            <button v-on:click=\"selectStatus('all')\" class=\"btn btn-sm\" :class=\"status === 'all' ? 'btn-primary' : 'btn-light'\" href=\"#\">{{ piranha.resources.texts.all }}</button>\n            <button v-on:click=\"selectStatus('draft')\" class=\"btn btn-sm\" :class=\"status === 'draft' ? 'btn-primary' : 'btn-light'\" href=\"#\">{{ piranha.resources.texts.drafts }}</button>\n            <button v-on:click=\"selectStatus('scheduled')\" class=\"btn btn-sm\" :class=\"status === 'scheduled' ? 'btn-primary' : 'btn-light'\" href=\"#\">{{ piranha.resources.texts.scheduled }}</button>\n        </div>\n        <div v-if=\"postTypes.length > 1\" class=\"btn-group\" role=\"group\">\n            <button type=\"button\" class=\"btn btn-sm btn-light dropdown-toggle\" data-toggle=\"dropdown\" aria-haspopup=\"true\" aria-expanded=\"false\">\n                {{ piranha.resources.texts.all }}\n            </button>\n            <div class=\"dropdown-menu dropdown-menu-right\">\n                <a v-for=\"type in postTypes\" v-bind:key=\"type.id\" href=\"#\" class=\"dropdown-item\">{{ type.title }}</a>\n            </div>\n        </div>\n        <div v-if=\"categories.length > 1\" class=\"btn-group\" role=\"group\">\n            <button type=\"button\" class=\"btn btn-sm dropdown-toggle\" :class=\"category === piranha.resources.texts.allCategories ? 'btn-light' : 'btn-primary'\" data-toggle=\"dropdown\" aria-haspopup=\"true\" aria-expanded=\"false\">\n                {{ category }}\n            </button>\n            <div class=\"dropdown-menu dropdown-menu-right\">\n                <a v-on:click.prevent=\"selectCategory(piranha.resources.texts.allCategories)\" href=\"#\" class=\"dropdown-item\">{{ piranha.resources.texts.allCategories }}</a>\n                <a v-on:click.prevent=\"selectCategory(category.title)\" v-for=\"category in categories\" v-bind:key=\"category.slug\" href=\"#\" class=\"dropdown-item\">{{ category.title }}</a>\n            </div>\n        </div>\n        <div v-if=\"postTypes.length > 1 && piranha.permissions.posts.add\" class=\"btn-group float-right\">\n            <button id=\"addPostGroup\" class=\"btn btn-sm btn-primary btn-labeled dropdown-toggle\" data-toggle=\"dropdown\" aria-haspopup=\"true\" aria-expanded=\"false\"><i class=\"fas fa-plus\"></i>{{ piranha.resources.texts.add }}</button>\n            <div class=\"dropdown-menu dropdown-menu-right\" aria-labelledby=\"addPostGroup\">\n                <a class=\"dropdown-item\" :href=\"piranha.baseUrl + type.addUrl + id + '/' + type.id\" v-bind:key=\"'add-' + type.id\" v-for=\"type in postTypes\">{{ type.title }}</a>\n            </div>\n        </div>\n        <a v-if=\"postTypes.length === 1 && piranha.permissions.posts.add\" :href=\"piranha.baseUrl + postTypes[0].addUrl + id + '/' + postTypes[0].id\" class=\"btn btn-sm btn-primary btn-labeled float-right\"><i class=\"fas fa-plus\"></i>{{ piranha.resources.texts.add }}</a>\n    </div>\n    <table v-if=\"items.length > 0\" class=\"table\">\n        <tbody>\n            <tr v-bind:key=\"post.id\" v-for=\"post in selectedPosts\" :class=\"{ unpublished: post.status === 'unpublished' || post.isScheduled }\">\n                <td>\n                    <a :href=\"piranha.baseUrl + post.editUrl + post.id\">{{ post.title }}</a>\n                    <small v-if=\"post.status === 'published' || post.status === 'draft'\" class=\"text-muted\">| {{ post.published }}</small>\n                    <small v-else-if=\"post.status === 'unpublished'\" class=\"text-muted\">| Unpublished</small>\n                    <span v-if=\"post.status === 'draft'\" class=\"badge badge-info float-right\">{{ piranha.resources.texts.draft }}</span>\n                    <span v-if=\"post.isScheduled\" class=\"badge badge-info float-right\">{{ piranha.resources.texts.scheduled }}</span>\n                </td>\n                <td>\n                    {{ post.typeName }}\n                </td>\n                <td>\n                    {{ post.category }}\n                </td>\n                <td class=\"actions one\">\n                    <a v-if=\"piranha.permissions.posts.delete\" v-on:click.prevent=\"remove(post.id)\" class=\"danger\"><i class=\"fas fa-trash\"></i></a>\n                </td>\n            </tr>\n        </tbody>\n    </table>\n    <div v-else class=\"empty-info\">\n        <p>Looks like there's no posts here. Click on the Add button above to get started!</p>\n    </div>\n    <nav v-if=\"totalPages > 1\">\n        <ul class=\"pagination justify-content-center\">\n            <li class=\"page-item\" :class=\"{ disabled: !hasPrev() }\"><button v-on:click.prevent=\"first()\" :disabled=\"!hasPrev()\" class=\"page-link\" href=\"#\"><i class=\"fas fa-angle-double-left\"></i></button></li>\n            <li class=\"page-item\" :class=\"{ disabled: !hasPrev() }\"><button v-on:click.prevent=\"prev()\" :disabled=\"!hasPrev()\" class=\"page-link\" href=\"#\"><i class=\"fas fa-chevron-left\"></i></button></li>\n            <li class=\"page-item disabled\"><span class=\"page-link\">{{ index + 1}} / {{ totalPages }}</span></li>\n            <li class=\"page-item\" :class=\"{ disabled: !hasNext() }\"><button v-on:click.prevent=\"next()\" :disabled=\"!hasNext()\" class=\"page-link\" href=\"#\"><i class=\"fas fa-chevron-right\"></i></button></li>\n            <li class=\"page-item\" :class=\"{ disabled: !hasNext() }\"><button v-on:click.prevent=\"last()\" :disabled=\"!hasNext()\" class=\"page-link\" href=\"#\"><i class=\"fas fa-angle-double-right\"></i></button></li>\n        </ul>\n    </nav>\n</div>\n"
 });
 Vue.component("block-group", {
-  props: ["uid", "toolbar", "model"],
+  props: ["uid", "toolbar", "model", "canEditStructure", "canEditBlockName"],
   methods: {
     selectItem: function (item) {
       for (var n = 0; n < this.model.items.length; n++) {
@@ -208,15 +201,20 @@ Vue.component("block-group", {
       }
     },
     removeItem: function (item) {
+      if (!this.canEditStructure) {
+        return;
+      }
       var itemActive = item.isActive;
       var itemIndex = this.model.items.indexOf(item);
       this.model.items.splice(itemIndex, 1);
-
       if (itemActive) {
         this.selectItem(this.model.items[Math.min(itemIndex, this.model.items.length - 1)]);
       }
     },
     addGroupBlock: function (type, pos) {
+      if (!this.canEditStructure) {
+        return;
+      }
       var self = this;
       fetch(piranha.baseUrl + "manager/api/content/block/" + type).then(function (response) {
         return response.json();
@@ -229,20 +227,40 @@ Vue.component("block-group", {
     },
     updateTitle: function (e) {
       for (var n = 0; n < this.model.items.length; n++) {
-        if (this.model.items[n].meta.uid === e.uid) {
+        if (e.uid === this.model.items[n].meta.uid || e.uid.endsWith("-" + this.model.items[n].meta.uid)) {
           this.model.items[n].meta.title = e.title;
           break;
         }
+      }
+    },
+    getItemLabel: function (item) {
+      return Array.isArray(item.model) ? item.label : item.model.label;
+    },
+    getItemName: function (item) {
+      var label = this.getItemLabel(item);
+      return label === null || typeof label === "undefined" ? item.meta.name : label;
+    },
+    setItemName: function (item, name) {
+      if (Array.isArray(item.model)) {
+        item.label = name;
+      } else {
+        item.model.label = name;
       }
     },
     toggleHeader: function () {
       this.model.meta.showHeader = !this.model.meta.showHeader;
     },
     moveItem: function (from, to) {
+      if (!this.canEditStructure) {
+        return;
+      }
       this.model.items.splice(to, 0, this.model.items.splice(from, 1)[0]);
     }
   },
   mounted: function () {
+    if (!this.canEditStructure) {
+      return;
+    }
     var self = this;
     sortable("#" + this.uid + " .list-group", {
       items: ":not(.unsortable)"
@@ -250,16 +268,22 @@ Vue.component("block-group", {
       self.moveItem(e.detail.origin.index, e.detail.destination.index);
     });
   },
-  template: "\n<div :id=\"uid\" class=\"block-group\">\n    <div v-if=\"model.fields.length > 0\" class=\"actions block-group-actions\">\n        <button v-on:click.prevent=\"toggleHeader()\" class=\"btn btn-sm\" :class=\"{ selected: model.meta.showHeader }\">\n            <i class=\"fas fa-list\"></i>\n        </button>\n    </div>\n    <div class=\"block-group-header\">\n        <div v-if=\"model.meta.showHeader\" class=\"row\">\n            <div class=\"form-group\" :class=\"{ 'col-sm-6': field.meta.isHalfWidth, 'col-sm-12': !field.meta.isHalfWidth }\" v-bind:key=\"field.meta.id\" v-for=\"field in model.fields\">\n                <label>{{ field.meta.name }}</label>\n                <div v-if=\"field.meta.description != null\" v-html=\"field.meta.description\" class=\"field-description small text-muted\"></div>\n                <component v-bind:is=\"field.meta.component\" v-bind:uid=\"field.meta.uid\" v-bind:meta=\"field.meta\" v-bind:toolbar=\"toolbar\" v-bind:model=\"field.model\"></component>\n            </div>\n        </div>\n    </div>\n    <div class=\"row\">\n        <div class=\"col-md-4\">\n            <div class=\"list-group list-group-flush\">\n                <div class=\"list-group-item\" :class=\"{ active: child.isActive }\" v-for=\"child in model.items\" v-bind:key=\"child.meta.uid\">\n                    <a href=\"#\" v-on:click.prevent=\"selectItem(child)\">\n                        <div class=\"handle\">\n                            <i class=\"fas fa-ellipsis-v\"></i>\n                        </div>\n                        {{ child.meta.title }}\n                    </a>\n                    <span class='actions'>\n                        <a v-on:click.prevent=\"removeItem(child)\" href=\"#\" class=\"danger\"><i class=\"fas fa-trash\"></i></a>\n                    </span>\n                </div>\n            </div>\n            <button v-on:click.prevent=\"piranha.blockpicker.open(addGroupBlock, 0, model.type)\" class=\"btn btn-sm btn-primary btn-labeled mt-3\">\n                <i class=\"fas fa-plus\"></i>{{ piranha.resources.texts.add }}\n            </button>\n        </div>\n        <div class='col-md-8'>\n            <div v-if=\"model.items.length === 0\" class=\"empty-info unsortable\">\n                <p>{{ piranha.resources.texts.emptyAddLeft }}</p>\n            </div>\n            <template v-for=\"child in model.items\">\n                <div class=\"block\" :class=\"child.meta.component\" v-if=\"child.isActive\" v-bind:key=\"'details-' + child.meta.uid\">\n                    <component v-bind:is=\"child.meta.component\" v-bind:uid=\"child.meta.uid\" v-bind:toolbar=\"toolbar\" v-bind:model=\"child.model\" v-on:update-title=\"updateTitle($event)\"></component>\n                </div>\n            </template>\n        </div>\n    </div>\n</div>\n"
+  template: "\n<div :id=\"uid\" class=\"block-group\">\n    <div v-if=\"model.fields.length > 0\" class=\"actions block-group-actions\">\n        <button v-on:click.prevent=\"toggleHeader()\" class=\"btn btn-sm\" :class=\"{ selected: model.meta.showHeader }\">\n            <i class=\"fas fa-list\"></i>\n        </button>\n    </div>\n    <div class=\"block-group-header\">\n        <div v-if=\"model.meta.showHeader\" class=\"row\">\n            <div class=\"form-group\" :class=\"{ 'col-sm-6': field.meta.isHalfWidth, 'col-sm-12': !field.meta.isHalfWidth }\" v-bind:key=\"field.meta.id\" v-for=\"field in model.fields\">\n                <label>{{ field.meta.name }}</label>\n                <div v-if=\"field.meta.description != null\" v-html=\"field.meta.description\" class=\"field-description small text-muted\"></div>\n                <component v-bind:is=\"field.meta.component\" v-bind:uid=\"uid + '-' + field.meta.uid\" v-bind:meta=\"field.meta\" v-bind:toolbar=\"toolbar\" v-bind:model=\"field.model\"></component>\n            </div>\n        </div>\n    </div>\n    <div class=\"row\">\n        <div class=\"col-md-4\">\n            <div class=\"list-group list-group-flush\">\n                <div class=\"list-group-item\" :class=\"{ active: child.isActive }\" v-for=\"child in model.items\" v-bind:key=\"child.meta.uid\">\n                    <a href=\"#\" v-on:click.prevent=\"selectItem(child)\">\n                        <div v-if=\"canEditStructure\" class=\"handle\">\n                            <i class=\"fas fa-ellipsis-v\"></i>\n                        </div>\n                        {{ getItemName(child) }}\n                    </a>\n                        <span v-if=\"canEditStructure\" class='actions'>\n                        <a v-on:click.prevent=\"removeItem(child)\" href=\"#\" class=\"danger\"><i class=\"fas fa-trash\"></i></a>\n                    </span>\n                </div>\n            </div>\n            <button v-if=\"canEditStructure\" v-on:click.prevent=\"piranha.blockpicker.open(addGroupBlock, 0, model.type)\" class=\"btn btn-sm btn-primary btn-labeled mt-3\">\n                <i class=\"fas fa-plus\"></i>{{ piranha.resources.texts.add }}\n            </button>\n        </div>\n        <div class='col-md-8'>\n            <div v-if=\"model.items.length === 0\" class=\"empty-info unsortable\">\n                <p>{{ piranha.resources.texts.emptyAddLeft }}</p>\n            </div>\n            <template v-for=\"child in model.items\">\n                <div class=\"block\" :class=\"child.meta.component\" v-if=\"child.isActive\" v-bind:key=\"'details-' + child.meta.uid\">\n                    <div v-if=\"canEditBlockName\" class=\"block-header block-name-header\">\n                        <div class=\"title\">\n                            <input :value=\"getItemName(child)\" v-on:input=\"setItemName(child, $event.target.value)\" class=\"block-name\" maxlength=\"128\">\n                        </div>\n                    </div>\n                    <component v-bind:is=\"child.meta.component\" v-bind:uid=\"uid + '-' + child.meta.uid\" v-bind:toolbar=\"toolbar\" v-bind:model=\"child.model\" v-bind:can-edit-structure=\"canEditStructure\" v-bind:can-edit-block-name=\"canEditBlockName\" v-on:update-title=\"updateTitle($event)\"></component>\n                </div>\n            </template>\n        </div>\n    </div>\n</div>\n"
 });
 Vue.component("block-group-horizontal", {
-  props: ["uid", "toolbar", "model"],
+  props: ["uid", "toolbar", "model", "canEditStructure", "canEditBlockName"],
   methods: {
     removeItem: function (item) {
+      if (!this.canEditStructure) {
+        return;
+      }
       var itemIndex = this.model.items.indexOf(item);
       this.model.items.splice(itemIndex, 1);
     },
     addGroupBlock: function (type, pos) {
+      if (!this.canEditStructure) {
+        return;
+      }
       var self = this;
       fetch(piranha.baseUrl + "manager/api/content/block/" + type).then(function (response) {
         return response.json();
@@ -282,11 +306,31 @@ Vue.component("block-group-horizontal", {
     toggleHeader: function () {
       this.model.meta.showHeader = !this.model.meta.showHeader;
     },
+    getItemLabel: function (item) {
+      return Array.isArray(item.model) ? item.label : item.model.label;
+    },
+    getItemName: function (item) {
+      var label = this.getItemLabel(item);
+      return label === null || typeof label === "undefined" ? item.meta.name : label;
+    },
+    setItemName: function (item, name) {
+      if (Array.isArray(item.model)) {
+        item.label = name;
+      } else {
+        item.model.label = name;
+      }
+    },
     moveItem: function (from, to) {
+      if (!this.canEditStructure) {
+        return;
+      }
       this.model.items.splice(to, 0, this.model.items.splice(from, 1)[0]);
     }
   },
   mounted: function () {
+    if (!this.canEditStructure) {
+      return;
+    }
     var self = this;
     sortable("#" + this.uid + " .block-group-items", {
       handle: '.handle',
@@ -296,19 +340,25 @@ Vue.component("block-group-horizontal", {
       self.moveItem(e.detail.origin.index, e.detail.destination.index);
     });
   },
-  template: "\n<div :id=\"uid\" class=\"block-group\">\n    <div class=\"actions block-group-actions\">\n        <button v-on:click.prevent=\"piranha.blockpicker.open(addGroupBlock, 0, model.type)\" class=\"btn btn-sm add\">\n            <i class=\"fas fa-plus\"></i>\n        </button>\n        <button v-on:click.prevent='toggleHeader()' v-if='model.fields.length > 0' class='btn btn-sm' :class='{ selected: model.meta.showHeader }'>\n            <i class=\"fas fa-list\"></i>\n        </button>\n    </div>\n    <div v-if=\"model.meta.showHeader && model.fields.length > 0\" class=\"block-group-header\">\n        <div class=\"row\">\n            <div class=\"form-group\" :class=\"{ 'col-sm-6': field.meta.isHalfWidth, 'col-sm-12': !field.meta.isHalfWidth }\" v-bind:key=\"field.meta.id\" v-for=\"field in model.fields\">\n                <label>{{ field.meta.name }}</label>\n                <div v-if=\"field.meta.description != null\" v-html=\"field.meta.description\" class=\"field-description small text-muted\"></div>\n                <component v-bind:is='field.meta.component' v-bind:uid='field.meta.uid' v-bind:meta='field.meta' v-bind:toolbar='toolbar' v-bind:model='field.model'></component>\n            </div>\n        </div>\n    </div>\n    <div class=\"row block-group-items\">\n        <div v-if=\"model.items.length === 0\" class=\"col\">\n            <div class=\"empty-info unsortable\">\n                <p>{{ piranha.resources.texts.emptyAddAbove }}</p>\n            </div>\n        </div>\n        <div v-for=\"child in model.items\" v-bind:key=\"child.meta.uid\" class=\"col\">\n            <div class=\"block\" :class=\"child.meta.component\">\n                <div class=\"block-header\">\n                    <div class=\"title\">\n                        <i :class=\"child.meta.icon\"></i><strong>{{ child.meta.name }}</strong>\n                    </div>\n                    <div class=\"actions\">\n                        <span class=\"btn btn-sm handle\">\n                            <i class=\"fas fa-ellipsis-v\"></i>\n                        </span>\n                        <button v-on:click.prevent=\"removeItem(child)\" class=\"btn btn-sm danger\" tabindex=\"-1\">\n                            <i class=\"fas fa-trash\"></i>\n                        </button>\n                    </div>\n                </div>\n                <component v-bind:is=\"child.meta.component\" v-bind:uid=\"child.meta.uid\" v-bind:toolbar=\"toolbar\" v-bind:model=\"child.model\"></component>\n            </div>\n        </div>\n    </div>\n</div>\n"
+  template: "\n<div :id=\"uid\" class=\"block-group\">\n    <div class=\"actions block-group-actions\">\n        <button v-if=\"canEditStructure\" v-on:click.prevent=\"piranha.blockpicker.open(addGroupBlock, 0, model.type)\" class=\"btn btn-sm add\">\n            <i class=\"fas fa-plus\"></i>\n        </button>\n        <button v-on:click.prevent='toggleHeader()' v-if='model.fields.length > 0' class='btn btn-sm' :class='{ selected: model.meta.showHeader }'>\n            <i class=\"fas fa-list\"></i>\n        </button>\n    </div>\n    <div v-if=\"model.meta.showHeader && model.fields.length > 0\" class=\"block-group-header\">\n        <div class=\"row\">\n            <div class=\"form-group\" :class=\"{ 'col-sm-6': field.meta.isHalfWidth, 'col-sm-12': !field.meta.isHalfWidth }\" v-bind:key=\"field.meta.id\" v-for=\"field in model.fields\">\n                <label>{{ field.meta.name }}</label>\n                <div v-if=\"field.meta.description != null\" v-html=\"field.meta.description\" class=\"field-description small text-muted\"></div>\n                <component v-bind:is='field.meta.component' v-bind:uid='uid + \"-\" + field.meta.uid' v-bind:meta='field.meta' v-bind:toolbar='toolbar' v-bind:model='field.model'></component>\n            </div>\n        </div>\n    </div>\n    <div class=\"row block-group-items\">\n        <div v-if=\"model.items.length === 0\" class=\"col\">\n            <div class=\"empty-info unsortable\">\n                <p>{{ piranha.resources.texts.emptyAddAbove }}</p>\n            </div>\n        </div>\n        <div v-for=\"child in model.items\" v-bind:key=\"child.meta.uid\" class=\"col\">\n            <div class=\"block\" :class=\"child.meta.component\">\n                <div class=\"block-header\">\n                    <div class=\"title\">\n                        <i :class=\"child.meta.icon\"></i><input v-if=\"canEditBlockName\" :value=\"getItemName(child)\" v-on:input=\"setItemName(child, $event.target.value)\" class=\"block-name\" maxlength=\"128\"><strong v-else>{{ getItemName(child) }}</strong>\n                    </div>\n                    <div class=\"actions\">\n                        <span v-if=\"canEditStructure\" class=\"btn btn-sm handle\">\n                            <i class=\"fas fa-ellipsis-v\"></i>\n                        </span>\n                        <button v-if=\"canEditStructure\" v-on:click.prevent=\"removeItem(child)\" class=\"btn btn-sm danger\" tabindex=\"-1\">\n                            <i class=\"fas fa-trash\"></i>\n                        </button>\n                    </div>\n                </div>\n                <component v-bind:is=\"child.meta.component\" v-bind:uid=\"uid + '-' + child.meta.uid\" v-bind:toolbar=\"toolbar\" v-bind:model=\"child.model\" v-bind:can-edit-structure=\"canEditStructure\" v-bind:can-edit-block-name=\"canEditBlockName\"></component>\n            </div>\n        </div>\n    </div>\n</div>\n"
 });
 Vue.component("block-group-vertical", {
-  props: ["uid", "toolbar", "model"],
+  props: ["uid", "toolbar", "model", "canEditStructure", "canEditBlockName"],
   methods: {
     collapseItem: function (item) {
       item.meta.isCollapsed = !item.meta.isCollapsed;
     },
     removeItem: function (item) {
+      if (!this.canEditStructure) {
+        return;
+      }
       var itemIndex = this.model.items.indexOf(item);
       this.model.items.splice(itemIndex, 1);
     },
     addGroupBlock: function (type, pos) {
+      if (!this.canEditStructure) {
+        return;
+      }
       var self = this;
       fetch(piranha.baseUrl + "manager/api/content/block/" + type).then(function (response) {
         return response.json();
@@ -331,11 +381,31 @@ Vue.component("block-group-vertical", {
     toggleHeader: function () {
       this.model.meta.showHeader = !this.model.meta.showHeader;
     },
+    getItemLabel: function (item) {
+      return Array.isArray(item.model) ? item.label : item.model.label;
+    },
+    getItemName: function (item) {
+      var label = this.getItemLabel(item);
+      return label === null || typeof label === "undefined" ? item.meta.name : label;
+    },
+    setItemName: function (item, name) {
+      if (Array.isArray(item.model)) {
+        item.label = name;
+      } else {
+        item.model.label = name;
+      }
+    },
     moveItem: function (from, to) {
+      if (!this.canEditStructure) {
+        return;
+      }
       this.model.items.splice(to, 0, this.model.items.splice(from, 1)[0]);
     }
   },
   mounted: function () {
+    if (!this.canEditStructure) {
+      return;
+    }
     var self = this;
     sortable("#" + this.uid + " .block-group-items", {
       handle: '.handle',
@@ -345,7 +415,7 @@ Vue.component("block-group-vertical", {
       self.moveItem(e.detail.origin.index, e.detail.destination.index);
     });
   },
-  template: "\n<div :id=\"uid\" class=\"block-group\">\n    <div class=\"actions block-group-actions\">\n        <button v-on:click.prevent=\"toggleHeader()\" v-if=\"model.fields.length > 0\" class=\"btn btn-sm\" :class=\"{ selected: model.meta.showHeader }\">\n            <i class=\"fas fa-list\"></i>\n        </button>\n    </div>\n    <div v-if=\"model.meta.showHeader && model.fields.length > 0\" class=\"block-group-header\">\n        <div class=\"row\">\n            <div class=\"form-group\" :class=\"{ 'col-sm-6': field.meta.isHalfWidth, 'col-sm-12': !field.meta.isHalfWidth }\" v-bind:key=\"field.meta.uid\" v-for=\"field in model.fields\">\n                <label>{{ field.meta.name }}</label>\n                <div v-if=\"field.meta.description != null\" v-html=\"field.meta.description\" class=\"field-description small text-muted\"></div>\n                <component v-bind:is=\"field.meta.component\" v-bind:uid=\"field.meta.uid\" v-bind:meta=\"field.meta\" v-bind:toolbar=\"toolbar\" v-bind:model=\"field.model\"></component>\n            </div>\n        </div>\n    </div>\n    <div class=\"block-group-items\">\n        <a href=\"#\" class=\"block-add unsortable\" v-on:click.prevent=\"piranha.blockpicker.open(addGroupBlock, 0, model.type)\">\n            <hr>\n            <i class=\"fas fa-plus-circle\"></i>\n        </a>\n        <div v-if=\"model.items.length === 0\" class=\"col\">\n            <div class=\"empty-info unsortable\">\n                <p>{{ piranha.resources.texts.emptyAddAbove }}</p>\n            </div>\n        </div>\n        <div v-for=\"(child, index) in model.items\" v-bind:key=\"child.meta.uid\">\n            <div class=\"block\" :class=\"child.meta.component + (child.meta.isCollapsed ? ' collapsed' : '')\">\n                <div class=\"block-header\">\n                    <div class=\"title\">\n                        <i :class=\"child.meta.icon\"></i><strong>{{ child.meta.name }}</strong>\n                    </div>\n                    <div class=\"actions\">\n                        <span v-on:click.prevent=\"collapseItem(child)\" class=\"btn btn-sm\">\n                            <i v-if=\"child.meta.isCollapsed\" class=\"fas fa-chevron-down\"></i>\n                            <i v-else class=\"fas fa-chevron-up\"></i>\n                        </span>\n                        <span class=\"btn btn-sm handle\">\n                            <i class=\"fas fa-ellipsis-v\"></i>\n                        </span>\n                        <button v-on:click.prevent=\"removeItem(child)\" class=\"btn btn-sm danger\" tabindex=\"-1\">\n                            <i class=\"fas fa-trash\"></i>\n                        </button>\n                    </div>\n                </div>\n                <component v-bind:is=\"child.meta.component\" v-bind:uid=\"child.meta.uid\" v-bind:toolbar=\"toolbar\" v-bind:model=\"child.model\"></component>\n            </div>\n            <a href=\"#\" class=\"block-add unsortable\" v-on:click.prevent=\"piranha.blockpicker.open(addGroupBlock, index + 1, model.type)\">\n                <hr>\n                <i class=\"fas fa-plus-circle\"></i>\n            </a>\n        </div>\n    </div>\n</div>\n"
+  template: "\n<div :id=\"uid\" class=\"block-group\">\n    <div class=\"actions block-group-actions\">\n        <button v-on:click.prevent=\"toggleHeader()\" v-if=\"model.fields.length > 0\" class=\"btn btn-sm\" :class=\"{ selected: model.meta.showHeader }\">\n            <i class=\"fas fa-list\"></i>\n        </button>\n    </div>\n    <div v-if=\"model.meta.showHeader && model.fields.length > 0\" class=\"block-group-header\">\n        <div class=\"row\">\n            <div class=\"form-group\" :class=\"{ 'col-sm-6': field.meta.isHalfWidth, 'col-sm-12': !field.meta.isHalfWidth }\" v-bind:key=\"field.meta.uid\" v-for=\"field in model.fields\">\n                <label>{{ field.meta.name }}</label>\n                <div v-if=\"field.meta.description != null\" v-html=\"field.meta.description\" class=\"field-description small text-muted\"></div>\n                <component v-bind:is=\"field.meta.component\" v-bind:uid=\"uid + '-' + field.meta.uid\" v-bind:meta=\"field.meta\" v-bind:toolbar=\"toolbar\" v-bind:model=\"field.model\"></component>\n            </div>\n        </div>\n    </div>\n    <div class=\"block-group-items\">\n        <a v-if=\"canEditStructure\" href=\"#\" class=\"block-add unsortable\" v-on:click.prevent=\"piranha.blockpicker.open(addGroupBlock, 0, model.type)\">\n            <hr>\n            <i class=\"fas fa-plus-circle\"></i>\n        </a>\n        <div v-if=\"model.items.length === 0\" class=\"col\">\n            <div class=\"empty-info unsortable\">\n                <p>{{ piranha.resources.texts.emptyAddAbove }}</p>\n            </div>\n        </div>\n        <div v-for=\"(child, index) in model.items\" v-bind:key=\"child.meta.uid\">\n            <div class=\"block\" :class=\"child.meta.component + (child.meta.isCollapsed ? ' collapsed' : '')\">\n                <div class=\"block-header\">\n                    <div class=\"title\">\n                        <i :class=\"child.meta.icon\"></i><input v-if=\"canEditBlockName\" :value=\"getItemName(child)\" v-on:input=\"setItemName(child, $event.target.value)\" class=\"block-name\" maxlength=\"128\"><strong v-else>{{ getItemName(child) }}</strong>\n                    </div>\n                    <div class=\"actions\">\n                        <span v-on:click.prevent=\"collapseItem(child)\" class=\"btn btn-sm\">\n                            <i v-if=\"child.meta.isCollapsed\" class=\"fas fa-chevron-down\"></i>\n                            <i v-else class=\"fas fa-chevron-up\"></i>\n                        </span>\n                        <span v-if=\"canEditStructure\" class=\"btn btn-sm handle\">\n                            <i class=\"fas fa-ellipsis-v\"></i>\n                        </span>\n                        <button v-if=\"canEditStructure\" v-on:click.prevent=\"removeItem(child)\" class=\"btn btn-sm danger\" tabindex=\"-1\">\n                            <i class=\"fas fa-trash\"></i>\n                        </button>\n                    </div>\n                </div>\n                <component v-bind:is=\"child.meta.component\" v-bind:uid=\"uid + '-' + child.meta.uid\" v-bind:toolbar=\"toolbar\" v-bind:model=\"child.model\" v-bind:can-edit-structure=\"canEditStructure\" v-bind:can-edit-block-name=\"canEditBlockName\"></component>\n            </div>\n            <a v-if=\"canEditStructure\" href=\"#\" class=\"block-add unsortable\" v-on:click.prevent=\"piranha.blockpicker.open(addGroupBlock, index + 1, model.type)\">\n                <hr>\n                <i class=\"fas fa-plus-circle\"></i>\n            </a>\n        </div>\n    </div>\n</div>\n"
 });
 Vue.component("generic-block", {
   props: ["uid", "toolbar", "model"],
@@ -357,12 +427,13 @@ Vue.component("generic-block", {
       });
     }
   },
-  template: "\n<div class=\"block-body\">\n    <div class=\"row\">\n        <div class=\"form-group\" :class=\"{ 'col-sm-6': field.meta.isHalfWidth, 'col-sm-12': !field.meta.isHalfWidth }\" v-bind:key=\"'field' + field.meta.uid\" v-for=\"field in model\">\n            <label>{{ field.meta.name }}</label>\n            <div v-if=\"field.meta.description != null\" v-html=\"field.meta.description\" class=\"field-description small text-muted\"></div>\n            <component v-bind:is=\"field.meta.component\" v-bind:uid=\"field.meta.uid\" v-bind:meta=\"field.meta\" v-bind:toolbar=\"toolbar\" v-bind:model=\"field.model\" v-on:update-title=\"updateTitle($event)\"></component>\n        </div>\n    </div>\n</div>\n"
+  template: "\n<div class=\"block-body\">\n    <div class=\"row\">\n        <div class=\"form-group\" :class=\"{ 'col-sm-6': field.meta.isHalfWidth, 'col-sm-12': !field.meta.isHalfWidth }\" v-bind:key=\"'field' + field.meta.uid\" v-for=\"field in model\">\n            <label>{{ field.meta.name }}</label>\n            <div v-if=\"field.meta.description != null\" v-html=\"field.meta.description\" class=\"field-description small text-muted\"></div>\n            <component v-bind:is=\"field.meta.component\" v-bind:uid=\"uid + '-' + field.meta.uid\" v-bind:meta=\"field.meta\" v-bind:toolbar=\"toolbar\" v-bind:model=\"field.model\" v-on:update-title=\"updateTitle($event)\"></component>\n        </div>\n    </div>\n</div>\n"
 });
 Vue.component("audio-block", {
   props: ["uid", "model"],
   methods: {
-    clear: function () {// clear media from block
+    clear: function () {
+      // clear media from block
     },
     select: function () {
       if (this.model.body.media != null) {
@@ -385,8 +456,9 @@ Vue.component("audio-block", {
           filename: media.filename,
           contentType: media.contentType,
           publicUrl: media.publicUrl
-        }; // Tell parent that title has been updated
+        };
 
+        // Tell parent that title has been updated
         this.$emit('update-title', {
           uid: this.uid,
           title: this.model.body.media.filename
@@ -434,8 +506,9 @@ Vue.component("content-block", {
           return response.json();
         }).then(function (result) {
           self.model.body.id = result.id;
-          self.model.body.content = result; // Tell parent that title has been updated
+          self.model.body.content = result;
 
+          // Tell parent that title has been updated
           self.$emit('update-title', {
             uid: self.uid,
             title: self.model.body.content.title
@@ -466,7 +539,6 @@ Vue.component("content-block", {
       if (this.hasContentTitle) {
         return this.model.body.content.title;
       }
-
       return "Lorem Ipsum";
     },
     hasContentTitle: function () {
@@ -476,7 +548,6 @@ Vue.component("content-block", {
       if (this.hasContentExcerpt) {
         return this.model.body.content.excerpt;
       }
-
       return "Donec id elit non mi porta gravida at eget metus. Cras mattis consectetur purus sit amet fermentum. Integer posuere erat a ante venenatis dapibus posuere velit aliquet.";
     },
     hasContentExcerpt: function () {
@@ -567,7 +638,8 @@ Vue.component("html-column-block", {
 Vue.component("image-block", {
   props: ["uid", "model"],
   methods: {
-    clear: function () {// clear media from block
+    clear: function () {
+      // clear media from block
     },
     select: function () {
       if (this.model.body.media != null) {
@@ -590,8 +662,9 @@ Vue.component("image-block", {
           filename: media.filename,
           contentType: media.contentType,
           publicUrl: media.publicUrl
-        }; // Tell parent that title has been updated
+        };
 
+        // Tell parent that title has been updated
         this.$emit('update-title', {
           uid: this.uid,
           title: this.model.body.media.filename
@@ -603,11 +676,9 @@ Vue.component("image-block", {
     selectAspect: function (val) {
       this.model.aspect.value = val;
     },
-
     isAspectSelected(val) {
       return this.model.aspect.value === val;
     }
-
   },
   computed: {
     isEmpty: function () {
@@ -630,7 +701,6 @@ Vue.component("image-block", {
           return piranha.utils.formatUrl("~/manager/assets/img/icons/img-square.svg");
         }
       }
-
       return null;
     }
   },
@@ -651,11 +721,9 @@ Vue.component("markdown-block", {
     onBlur: function (e) {
       // Tell parent that title has been updated
       var title = this.model.body.value.replace(/(<([^>]+)>)/ig, "");
-
       if (title.length > 40) {
         title = title.substring(0, 40) + "...";
       }
-
       this.$emit('update-title', {
         uid: this.uid,
         title: title
@@ -690,8 +758,9 @@ Vue.component("page-block", {
           return response.json();
         }).then(function (result) {
           self.model.body.id = result.id;
-          self.model.body.page = result; // Tell parent that title has been updated
+          self.model.body.page = result;
 
+          // Tell parent that title has been updated
           self.$emit('update-title', {
             uid: self.uid,
             title: self.model.body.page.title
@@ -710,7 +779,8 @@ Vue.component("page-block", {
     },
     pageImage: function () {
       if (this.hasPageImage) {
-        return piranha.baseUrl + "manager/api/media/url/" + this.model.body.page.primaryImage.id + "/446/220"; //return piranha.utils.formatUrl(this.model.body.page.primaryImage.media.publicUrl);
+        return piranha.baseUrl + "manager/api/media/url/" + this.model.body.page.primaryImage.id + "/446/220";
+        //return piranha.utils.formatUrl(this.model.body.page.primaryImage.media.publicUrl);
       } else {
         return piranha.utils.formatUrl("~/manager/assets/img/empty-image.png");
       }
@@ -722,7 +792,6 @@ Vue.component("page-block", {
       if (this.hasPageTitle) {
         return this.model.body.page.title;
       }
-
       return "Lorem Ipsum";
     },
     hasPageTitle: function () {
@@ -732,7 +801,6 @@ Vue.component("page-block", {
       if (this.hasPageExcerpt) {
         return this.model.body.page.excerpt;
       }
-
       return "Donec id elit non mi porta gravida at eget metus. Cras mattis consectetur purus sit amet fermentum. Integer posuere erat a ante venenatis dapibus posuere velit aliquet.";
     },
     hasPageExcerpt: function () {
@@ -767,8 +835,9 @@ Vue.component("post-block", {
           return response.json();
         }).then(function (result) {
           self.model.body.id = result.id;
-          self.model.body.post = result; // Tell parent that title has been updated
+          self.model.body.post = result;
 
+          // Tell parent that title has been updated
           self.$emit('update-title', {
             uid: self.uid,
             title: self.model.body.post.title
@@ -799,7 +868,6 @@ Vue.component("post-block", {
       if (this.hasPostTitle) {
         return this.model.body.post.title;
       }
-
       return "Lorem Ipsum";
     },
     hasPostTitle: function () {
@@ -809,7 +877,6 @@ Vue.component("post-block", {
       if (this.hasPostExcerpt) {
         return this.model.body.post.excerpt;
       }
-
       return "Donec id elit non mi porta gravida at eget metus. Cras mattis consectetur purus sit amet fermentum. Integer posuere erat a ante venenatis dapibus posuere velit aliquet.";
     },
     hasPostExcerpt: function () {
@@ -850,14 +917,13 @@ Vue.component("quote-block", {
         USE_PROFILES: {
           html: true
         }
-      }); // Tell parent that title has been updated
+      });
 
+      // Tell parent that title has been updated
       var title = this.model.body.value.replace(/(<([^>]+)>)/ig, "");
-
       if (title.length > 40) {
         title = title.substring(0, 40) + "...";
       }
-
       this.$emit('update-title', {
         uid: this.uid,
         title: title
@@ -907,13 +973,12 @@ Vue.component("text-block", {
     },
     onBlur: function (e) {
       // this.model.body.value = e.target.innerHTML;
+
       // Tell parent that title has been updated
       var title = this.model.body.value.replace(/(<([^>]+)>)/ig, "");
-
       if (title.length > 40) {
         title = title.substring(0, 40) + "...";
       }
-
       this.$emit('update-title', {
         uid: this.uid,
         title: title
@@ -930,7 +995,8 @@ Vue.component("text-block", {
 Vue.component("video-block", {
   props: ["uid", "model"],
   methods: {
-    clear: function () {// clear media from block
+    clear: function () {
+      // clear media from block
     },
     select: function () {
       if (this.model.body.media != null) {
@@ -953,8 +1019,9 @@ Vue.component("video-block", {
           filename: media.filename,
           contentType: media.contentType,
           publicUrl: media.publicUrl
-        }; // Tell parent that title has been updated
+        };
 
+        // Tell parent that title has been updated
         this.$emit('update-title', {
           uid: this.uid,
           title: this.model.body.media.filename
@@ -990,13 +1057,11 @@ Vue.component("archivepage-field", {
   methods: {
     select: function () {
       var siteId = null;
-
       if (this.model.page) {
         siteId = this.model.page.siteId;
       } else if (piranha.pageedit) {
         siteId = piranha.pageedit.siteId;
       }
-
       piranha.archivepicker.open(this.update, siteId);
     },
     remove: function () {
@@ -1005,8 +1070,9 @@ Vue.component("archivepage-field", {
     },
     update: function (page) {
       this.model.id = page.id;
-      this.model.page = page; // Tell parent that title has been updated
+      this.model.page = page;
 
+      // Tell parent that title has been updated
       if (this.meta.notifyChange) {
         this.$emit('update-title', {
           uid: this.uid,
@@ -1056,8 +1122,9 @@ Vue.component("audio-field", {
           title: media.title,
           contentType: media.contentType,
           publicUrl: media.publicUrl
-        }; // Tell parent that title has been updated
+        };
 
+        // Tell parent that title has been updated
         if (this.meta.notifyChange) {
           this.$emit('update-title', {
             uid: this.uid,
@@ -1119,8 +1186,9 @@ Vue.component("content-field", {
     },
     update: function (content) {
       this.model.id = content.id;
-      this.model.content = content; // Tell parent that title has been updated
+      this.model.content = content;
 
+      // Tell parent that title has been updated
       if (this.meta.notifyChange) {
         this.$emit('update-title', {
           uid: this.uid,
@@ -1169,8 +1237,9 @@ Vue.component("date-field", {
     onClosed: function () {
       var d = this.model.value;
       var str = d.getFullYear() + "-" + (d.getMonth() < 9 ? "0" : "") + (d.getMonth() + 1) + "-" + (d.getDate() < 10 ? "0" : "") + d.getDate();
-      this.model.value = str; // Tell parent that title has been updated
+      this.model.value = str;
 
+      // Tell parent that title has been updated
       if (this.meta.notifyChange) {
         this.$emit('update-title', {
           uid: this.uid,
@@ -1214,8 +1283,9 @@ Vue.component("document-field", {
           title: media.title,
           contentType: media.contentType,
           publicUrl: media.publicUrl
-        }; // Tell parent that title has been updated
+        };
 
+        // Tell parent that title has been updated
         if (this.meta.notifyChange) {
           this.$emit('update-title', {
             uid: this.uid,
@@ -1252,15 +1322,14 @@ Vue.component("html-field", {
   },
   methods: {
     onBlur: function (e) {
-      this.model.value = tinyMCE.activeEditor.getContent(); // Tell parent that title has been updated
+      this.model.value = tinyMCE.activeEditor.getContent();
 
+      // Tell parent that title has been updated
       if (this.meta.notifyChange) {
         var title = this.model.value.replace(/(<([^>]+)>)/ig, "");
-
         if (title.length > 40) {
           title = title.substring(0, 40) + "...";
         }
-
         this.$emit('update-title', {
           uid: this.uid,
           title: title
@@ -1268,15 +1337,14 @@ Vue.component("html-field", {
       }
     },
     onChange: function (data) {
-      this.model.value = data; // Tell parent that title has been updated
+      this.model.value = data;
 
+      // Tell parent that title has been updated
       if (this.meta.notifyChange) {
         var title = this.model.value.replace(/(<([^>]+)>)/ig, "");
-
         if (title.length > 40) {
           title = title.substring(0, 40) + "...";
         }
-
         if (this.meta.notifyChange) {
           this.$emit('update-title', {
             uid: this.uid,
@@ -1324,8 +1392,9 @@ Vue.component("image-field", {
           title: media.title,
           contentType: media.contentType,
           publicUrl: media.publicUrl
-        }; // Tell parent that title has been updated
+        };
 
+        // Tell parent that title has been updated
         if (this.meta.notifyChange) {
           this.$emit('update-title', {
             uid: this.uid,
@@ -1362,15 +1431,14 @@ Vue.component("markdown-field", {
   },
   methods: {
     update: function (md) {
-      this.model.value = md; // Tell parent that title has been updated
+      this.model.value = md;
 
+      // Tell parent that title has been updated
       if (this.meta && this.meta.notifyChange) {
         var title = this.model.value;
-
         if (title.length > 40) {
           title = title.substring(0, 40) + "...";
         }
-
         this.$emit('update-title', {
           uid: this.uid,
           title: title
@@ -1416,8 +1484,9 @@ Vue.component("media-field", {
         title: media.title,
         contentType: media.contentType,
         publicUrl: media.publicUrl
-      }; // Tell parent that title has been updated
+      };
 
+      // Tell parent that title has been updated
       if (this.meta.notifyChange) {
         this.$emit('update-title', {
           uid: this.uid,
@@ -1455,13 +1524,11 @@ Vue.component("page-field", {
   methods: {
     select: function () {
       var siteId = null;
-
       if (this.model.page) {
         siteId = this.model.page.siteId;
       } else if (piranha.pageedit) {
         siteId = piranha.pageedit.siteId;
       }
-
       piranha.pagepicker.open(this.update, siteId);
     },
     remove: function () {
@@ -1470,8 +1537,9 @@ Vue.component("page-field", {
     },
     update: function (page) {
       this.model.id = page.id;
-      this.model.page = page; // Tell parent that title has been updated
+      this.model.page = page;
 
+      // Tell parent that title has been updated
       if (this.meta.notifyChange) {
         this.$emit('update-title', {
           uid: this.uid,
@@ -1508,8 +1576,9 @@ Vue.component("post-field", {
     },
     update: function (post) {
       this.model.id = post.id;
-      this.model.post = post; // Tell parent that title has been updated
+      this.model.post = post;
 
+      // Tell parent that title has been updated
       if (this.meta.notifyChange) {
         this.$emit('update-title', {
           uid: this.uid,
@@ -1569,7 +1638,8 @@ Vue.component("string-field", {
       return this.meta.settings.MaxLength != null && this.meta.settings.MaxLength > 0 ? this.meta.settings.MaxLength : null;
     },
     isRequired: function () {
-      return false; //return this.meta.settings.IsRequired != null && this.meta.settings.IsRequired;
+      return false;
+      //return this.meta.settings.IsRequired != null && this.meta.settings.IsRequired;
     }
   },
   template: "\n<div>\n    <div v-if=\"maxLength() > 0\" class=\"input-group\">\n        <input class=\"form-control\" type=\"text\" :maxlength=\"maxLength()\" :required=\"isRequired()\" :placeholder=\"meta.placeholder\" v-model=\"model.value\" v-on:change=\"update()\">\n        <div class=\"input-group-append\">\n            <div class=\"input-group-text text-muted\">\n                {{ piranha.utils.strLength(model.value) + \"/\" + maxLength() }}\n            </div>\n        </div>\n    </div>\n    <input v-else class=\"form-control\" type=\"text\" :maxlength=\"maxLength()\" :required=\"isRequired()\" :placeholder=\"meta.placeholder\" v-model=\"model.value\" v-on:change=\"update()\">\n</div>\n"
@@ -1581,11 +1651,9 @@ Vue.component("text-field", {
       // Tell parent that title has been updated
       if (this.meta.notifyChange) {
         var title = this.model.value;
-
         if (title.length > 40) {
           title = title.substring(0, 40) + "...";
         }
-
         this.$emit('update-title', {
           uid: this.uid,
           title: title
@@ -1596,7 +1664,8 @@ Vue.component("text-field", {
       return this.meta.settings.MaxLength != null && this.meta.settings.MaxLength > 0 ? this.meta.settings.MaxLength : null;
     },
     isRequired: function () {
-      return false; //return this.meta.settings.IsRequired != null && this.meta.settings.IsRequired;
+      return false;
+      //return this.meta.settings.IsRequired != null && this.meta.settings.IsRequired;
     }
   },
   template: "\n<div>\n    <div v-if=\"maxLength() > 0\" class=\"input-group\">\n        <textarea class=\"form-control\" rows=\"4\" :maxlength=\"maxLength()\" :required=\"isRequired()\" :placeholder=\"meta.placeholder\" v-model=\"model.value\" v-on:change=\"update()\"></textarea>\n        <div class=\"input-group-append\">\n            <div class=\"input-group-text text-muted\">\n                {{ piranha.utils.strLength(model.value) + \"/\" + maxLength() }}\n            </div>\n        </div>\n    </div>\n    <textarea v-else class=\"form-control\" rows=\"4\" :maxlength=\"maxLength()\" :required=\"isRequired()\" :placeholder=\"meta.placeholder\" v-model=\"model.value\" v-on:change=\"update()\"></textarea>\n</div>\n"
@@ -1604,7 +1673,8 @@ Vue.component("text-field", {
 Vue.component("video-field", {
   props: ["uid", "model", "meta"],
   methods: {
-    clear: function () {// clear media from block
+    clear: function () {
+      // clear media from block
     },
     select: function () {
       if (this.model.media != null) {
@@ -1628,8 +1698,9 @@ Vue.component("video-field", {
           title: media.title,
           contentType: media.contentType,
           publicUrl: media.publicUrl
-        }; // Tell parent that title has been updated
+        };
 
+        // Tell parent that title has been updated
         if (this.meta.notifyChange) {
           this.$emit('update-title', {
             uid: this.uid,

@@ -9,6 +9,7 @@
  */
 
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Diagnostics;
 
 namespace Piranha;
 
@@ -137,6 +138,21 @@ public abstract class Db<T> : DbContext, IDb where T : Db<T>
     public DbSet<Data.PageField> PageFields { get; set; }
 
     /// <summary>
+    /// Gets/sets the page field translation set.
+    /// </summary>
+    public DbSet<Data.PageFieldTranslation> PageFieldTranslations { get; set; }
+
+    /// <summary>
+    /// Gets/sets the page translation set.
+    /// </summary>
+    public DbSet<Data.PageTranslation> PageTranslations { get; set; }
+
+    /// <summary>
+    /// Gets/sets the page block field translation set.
+    /// </summary>
+    public DbSet<Data.PageBlockFieldTranslation> PageBlockFieldTranslations { get; set; }
+
+    /// <summary>
     /// Gets/sets the page permission set.
     /// </summary>
     public DbSet<Data.PagePermission> PagePermissions { get; set; }
@@ -175,6 +191,16 @@ public abstract class Db<T> : DbContext, IDb where T : Db<T>
     /// Gets/sets the post field set.
     /// </summary>
     public DbSet<Data.PostField> PostFields { get; set; }
+
+    /// <summary>
+    /// Gets/sets the post field translation set.
+    /// </summary>
+    public DbSet<Data.PostFieldTranslation> PostFieldTranslations { get; set; }
+
+    /// <summary>
+    /// Gets/sets the post translation set.
+    /// </summary>
+    public DbSet<Data.PostTranslation> PostTranslations { get; set; }
 
     /// <summary>
     /// Gets/sets the post permission set.
@@ -242,6 +268,19 @@ public abstract class Db<T> : DbContext, IDb where T : Db<T>
                 }
             }
         }
+    }
+
+    /// <summary>
+    /// Configures the context options.
+    /// </summary>
+    /// <param name="optionsBuilder">The options builder</param>
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+    {
+        base.OnConfiguring(optionsBuilder);
+#if NET9_0_OR_GREATER
+        optionsBuilder.ConfigureWarnings(w =>
+            w.Ignore(Microsoft.EntityFrameworkCore.Diagnostics.RelationalEventId.PendingModelChangesWarning));
+#endif
     }
 
     /// <summary>
@@ -330,6 +369,7 @@ public abstract class Db<T> : DbContext, IDb where T : Db<T>
         mb.Entity<Data.MediaVersion>().HasIndex(v => new { v.MediaId, v.Width, v.Height }).IsUnique();
 
         mb.Entity<Data.Page>().ToTable("Piranha_Pages");
+        mb.Entity<Data.Page>().Ignore(p => p.SelectedLanguageId);
         mb.Entity<Data.Page>().Property(p => p.PageTypeId).HasMaxLength(64).IsRequired();
         mb.Entity<Data.Page>().Property(p => p.ContentType).HasMaxLength(255).IsRequired().HasDefaultValue("Page");
         mb.Entity<Data.Page>().Property(p => p.Title).HasMaxLength(128).IsRequired();
@@ -363,6 +403,24 @@ public abstract class Db<T> : DbContext, IDb where T : Db<T>
         mb.Entity<Data.PageField>().Property(f => f.CLRType).HasMaxLength(256).IsRequired();
         mb.Entity<Data.PageField>().HasIndex(f => new { f.PageId, f.RegionId, f.FieldId, f.SortOrder });
 
+        mb.Entity<Data.PageFieldTranslation>().ToTable("Piranha_PageFieldTranslations");
+        mb.Entity<Data.PageFieldTranslation>().HasKey(t => new { t.FieldId, t.LanguageId });
+
+        mb.Entity<Data.PageTranslation>().ToTable("Piranha_PageTranslations");
+        mb.Entity<Data.PageTranslation>().HasKey(t => new { t.PageId, t.LanguageId });
+        mb.Entity<Data.PageTranslation>().Property(t => t.Title).HasMaxLength(128);
+        mb.Entity<Data.PageTranslation>().Property(t => t.NavigationTitle).HasMaxLength(128);
+        mb.Entity<Data.PageTranslation>().Property(t => t.Slug).HasMaxLength(128);
+        mb.Entity<Data.PageTranslation>().Property(t => t.MetaTitle).HasMaxLength(128);
+        mb.Entity<Data.PageTranslation>().Property(t => t.MetaKeywords).HasMaxLength(128);
+        mb.Entity<Data.PageTranslation>().Property(t => t.MetaDescription).HasMaxLength(256);
+        mb.Entity<Data.PageTranslation>().Property(t => t.OgTitle).HasMaxLength(128);
+        mb.Entity<Data.PageTranslation>().Property(t => t.OgDescription).HasMaxLength(256);
+        mb.Entity<Data.PageTranslation>().HasIndex(t => new { t.LanguageId, t.Slug });
+
+        mb.Entity<Data.PageBlockFieldTranslation>().ToTable("Piranha_PageBlockFieldTranslations");
+        mb.Entity<Data.PageBlockFieldTranslation>().HasKey(t => new { t.FieldId, t.LanguageId });
+
         mb.Entity<Data.PagePermission>().ToTable("Piranha_PagePermissions");
         mb.Entity<Data.PagePermission>().HasKey(p => new { p.PageId, p.Permission });
 
@@ -378,6 +436,7 @@ public abstract class Db<T> : DbContext, IDb where T : Db<T>
         mb.Entity<Data.Param>().HasIndex(p => p.Key).IsUnique();
 
         mb.Entity<Data.Post>().ToTable("Piranha_Posts");
+        mb.Entity<Data.Post>().Ignore(p => p.SelectedLanguageId);
         mb.Entity<Data.Post>().Property(p => p.PostTypeId).HasMaxLength(64).IsRequired();
         mb.Entity<Data.Post>().Property(p => p.Title).HasMaxLength(128).IsRequired();
         mb.Entity<Data.Post>().Property(p => p.Slug).HasMaxLength(128).IsRequired();
@@ -410,6 +469,20 @@ public abstract class Db<T> : DbContext, IDb where T : Db<T>
         mb.Entity<Data.PostField>().Property(f => f.CLRType).HasMaxLength(256).IsRequired();
         mb.Entity<Data.PostField>().HasIndex(f => new { f.PostId, f.RegionId, f.FieldId, f.SortOrder });
 
+        mb.Entity<Data.PostFieldTranslation>().ToTable("Piranha_PostFieldTranslations");
+        mb.Entity<Data.PostFieldTranslation>().HasKey(t => new { t.FieldId, t.LanguageId });
+
+        mb.Entity<Data.PostTranslation>().ToTable("Piranha_PostTranslations");
+        mb.Entity<Data.PostTranslation>().HasKey(t => new { t.PostId, t.LanguageId });
+        mb.Entity<Data.PostTranslation>().Property(t => t.Title).HasMaxLength(128);
+        mb.Entity<Data.PostTranslation>().Property(t => t.Slug).HasMaxLength(128);
+        mb.Entity<Data.PostTranslation>().Property(t => t.MetaTitle).HasMaxLength(128);
+        mb.Entity<Data.PostTranslation>().Property(t => t.MetaKeywords).HasMaxLength(128);
+        mb.Entity<Data.PostTranslation>().Property(t => t.MetaDescription).HasMaxLength(256);
+        mb.Entity<Data.PostTranslation>().Property(t => t.OgTitle).HasMaxLength(128);
+        mb.Entity<Data.PostTranslation>().Property(t => t.OgDescription).HasMaxLength(256);
+        mb.Entity<Data.PostTranslation>().HasIndex(t => new { t.LanguageId, t.Slug });
+
         mb.Entity<Data.PostPermission>().ToTable("Piranha_PostPermissions");
         mb.Entity<Data.PostPermission>().HasKey(p => new { p.PostId, p.Permission });
 
@@ -432,7 +505,6 @@ public abstract class Db<T> : DbContext, IDb where T : Db<T>
         mb.Entity<Data.Site>().Property(s => s.Culture).HasMaxLength(6);
         mb.Entity<Data.Site>().HasOne(s => s.Language).WithMany().OnDelete(DeleteBehavior.Restrict);
         mb.Entity<Data.Site>().HasIndex(s => s.InternalId).IsUnique();
-
 
         mb.Entity<Data.SiteField>().ToTable("Piranha_SiteFields");
         mb.Entity<Data.SiteField>().Property(f => f.RegionId).HasMaxLength(64).IsRequired();

@@ -128,6 +128,21 @@ public interface IDb : IDisposable
     DbSet<Data.PageField> PageFields { get; set; }
 
     /// <summary>
+    /// Gets/sets the page field translation set.
+    /// </summary>
+    DbSet<Data.PageFieldTranslation> PageFieldTranslations { get; set; }
+
+    /// <summary>
+    /// Gets/sets the page translation set.
+    /// </summary>
+    DbSet<Data.PageTranslation> PageTranslations { get; set; }
+
+    /// <summary>
+    /// Gets/sets the page block field translation set.
+    /// </summary>
+    DbSet<Data.PageBlockFieldTranslation> PageBlockFieldTranslations { get; set; }
+
+    /// <summary>
     /// Gets/sets the page permission set.
     /// </summary>
     DbSet<Data.PagePermission> PagePermissions { get; set; }
@@ -166,6 +181,16 @@ public interface IDb : IDisposable
     /// Gets/sets the post field set.
     /// </summary>
     DbSet<Data.PostField> PostFields { get; set; }
+
+    /// <summary>
+    /// Gets/sets the post field translation set.
+    /// </summary>
+    DbSet<Data.PostFieldTranslation> PostFieldTranslations { get; set; }
+
+    /// <summary>
+    /// Gets/sets the post translation set.
+    /// </summary>
+    DbSet<Data.PostTranslation> PostTranslations { get; set; }
 
     /// <summary>
     /// Gets/sets the post permission set.

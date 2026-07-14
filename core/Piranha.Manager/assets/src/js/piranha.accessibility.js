@@ -12,7 +12,7 @@ piranha.accessibility = new function () {
     //
     // Removes the currently focused block
     //
-    self.removeBlock = function (e) {
+    self.removeBlock = function () {
         var block = $(":focus").parents(".block");
 
         if (block.length === 1) {
@@ -61,7 +61,7 @@ piranha.accessibility = new function () {
             }
             // Pressed backspace, check for focused block
             else if (e.keyCode === 8) {
-                self.removeBlock(e);
+                self.removeBlock();
             }
         }
     });

@@ -239,9 +239,9 @@ internal sealed class PageService : IPageService
     /// </summary>
     /// <param name="siteId">The optional site id</param>
     /// <returns>The page model</returns>
-    public Task<DynamicPage> GetStartpageAsync(Guid? siteId = null)
+    public Task<DynamicPage> GetStartpageAsync(Guid? siteId = null, Guid? languageId = null)
     {
-        return GetStartpageAsync<DynamicPage>(siteId);
+        return GetStartpageAsync<DynamicPage>(siteId, languageId);
     }
 
     /// <summary>
@@ -250,19 +250,21 @@ internal sealed class PageService : IPageService
     /// <typeparam name="T">The model type</typeparam>
     /// <param name="siteId">The optional site id</param>
     /// <returns>The page model</returns>
-    public async Task<T> GetStartpageAsync<T>(Guid? siteId = null) where T : Models.PageBase
+    public async Task<T> GetStartpageAsync<T>(Guid? siteId = null, Guid? languageId = null) where T : Models.PageBase
     {
         siteId = await EnsureSiteIdAsync(siteId).ConfigureAwait(false);
         PageBase model = null;
 
-        if (typeof(T) == typeof(Models.PageInfo))
+        // Cached models contain the default language. Translated content must
+        // always be loaded from the repository for its requested language.
+        if (!languageId.HasValue && typeof(T) == typeof(Models.PageInfo))
         {
             if (_cache != null)
             {
                 model = await _cache.GetAsync<PageInfo>($"PageInfo_{siteId.Value}").ConfigureAwait(false);
             }
         }
-        else if (!typeof(DynamicPage).IsAssignableFrom(typeof(T)))
+        else if (!languageId.HasValue && !typeof(DynamicPage).IsAssignableFrom(typeof(T)))
         {
             if (_cache != null)
             {
@@ -277,7 +279,7 @@ internal sealed class PageService : IPageService
 
         if (model == null)
         {
-            model = await _repo.GetStartpage<T>(siteId.Value).ConfigureAwait(false);
+            model = await _repo.GetStartpage<T>(siteId.Value, languageId).ConfigureAwait(false);
 
             await OnLoadAsync(model).ConfigureAwait(false);
         }
@@ -300,12 +302,36 @@ internal sealed class PageService : IPageService
     }
 
     /// <summary>
+    /// Gets the page model with the specified id.
+    /// </summary>
+    /// <param name="id">The unique id</param>
+    /// <param name="languageId">The optional language id for translated content</param>
+    /// <returns>The page model</returns>
+    public Task<DynamicPage> GetByIdAsync(Guid id, Guid? languageId = null)
+    {
+        return GetByIdAsync<DynamicPage>(id, languageId);
+    }
+
+    /// <summary>
     /// Gets the model with the specified id.
     /// </summary>
     /// <param name="id">The unique id</param>
+    /// <param name="languageId">The optional language id for translated content</param>
     /// <returns>The model, or null if it doesn't exist</returns>
-    public async Task<T> GetByIdAsync<T>(Guid id) where T : PageBase
+    public async Task<T> GetByIdAsync<T>(Guid id, Guid? languageId = null) where T : PageBase
     {
+        if (languageId.HasValue)
+        {
+            // The cache is language-unaware, so bypass it for translated content
+            var model = await _repo.GetById<T>(id, languageId).ConfigureAwait(false);
+
+            if (model != null)
+            {
+                await OnLoadAsync(model).ConfigureAwait(false);
+                return await MapOriginalAsync((T)model).ConfigureAwait(false);
+            }
+            return null;
+        }
         return (await GetByIdsAsync<T>(id)).FirstOrDefault();
     }
 
@@ -381,7 +407,6 @@ internal sealed class PageService : IPageService
         return sorted;
     }
 
-
     /// <summary>
     /// Gets the page model with the specified slug.
     /// </summary>
@@ -396,19 +421,34 @@ internal sealed class PageService : IPageService
     /// <summary>
     /// Gets the page model with the specified slug.
     /// </summary>
+    /// <param name="slug">The unique slug</param>
+    /// <param name="siteId">The optional site id</param>
+    /// <param name="languageId">The optional language id for translated content</param>
+    /// <returns>The page model</returns>
+    public Task<DynamicPage> GetBySlugAsync(string slug, Guid? siteId = null, Guid? languageId = null)
+    {
+        return GetBySlugAsync<DynamicPage>(slug, siteId, languageId);
+    }
+
+    /// <summary>
+    /// Gets the page model with the specified slug.
+    /// </summary>
     /// <typeparam name="T">The model type</typeparam>
     /// <param name="slug">The unique slug</param>
     /// <param name="siteId">The optional site id</param>
+    /// <param name="languageId">The optional language id for translated content</param>
     /// <returns>The page model</returns>
-    public async Task<T> GetBySlugAsync<T>(string slug, Guid? siteId = null) where T : Models.PageBase
+    public async Task<T> GetBySlugAsync<T>(string slug, Guid? siteId = null, Guid? languageId = null) where T : Models.PageBase
     {
         siteId = await EnsureSiteIdAsync(siteId).ConfigureAwait(false);
         PageBase model = null;
 
-        // Lets see if we can resolve the slug from cache
-        var pageId = _cache == null ? null : await _cache.GetAsync<Guid?>($"PageId_{siteId}_{slug}").ConfigureAwait(false);
+        // The slug and cached page content are language-specific.
+        var pageId = languageId.HasValue || _cache == null
+            ? null
+            : await _cache.GetAsync<Guid?>($"PageId_{siteId}_{slug}").ConfigureAwait(false);
 
-        if (pageId.HasValue)
+        if (pageId.HasValue && !languageId.HasValue)
         {
             if (typeof(T) == typeof(Models.PageInfo))
             {
@@ -433,7 +473,7 @@ internal sealed class PageService : IPageService
 
         if (model == null)
         {
-            model = await _repo.GetBySlug<T>(slug, siteId.Value).ConfigureAwait(false);
+            model = await _repo.GetBySlug<T>(slug, siteId.Value, languageId).ConfigureAwait(false);
 
             await OnLoadAsync(model).ConfigureAwait(false);
         }
@@ -541,18 +581,19 @@ internal sealed class PageService : IPageService
     /// Saves the given page model
     /// </summary>
     /// <param name="model">The page model</param>
-    public Task SaveAsync<T>(T model) where T : PageBase
+    public Task SaveAsync<T>(T model, Guid? languageId = null) where T : PageBase
     {
-        return SaveAsync(model, false);
+        return SaveAsync(model, false, languageId);
     }
 
     /// <summary>
     /// Saves the given page model as a draft
     /// </summary>
     /// <param name="model">The page model</param>
-    public Task SaveDraftAsync<T>(T model) where T : PageBase
+    /// <param name="languageId">The optional language id for saving translated content</param>
+    public Task SaveDraftAsync<T>(T model, Guid? languageId = null) where T : PageBase
     {
-        return SaveAsync(model, true);
+        return SaveAsync(model, true, languageId);
     }
 
     /// <summary>
@@ -607,7 +648,7 @@ internal sealed class PageService : IPageService
     /// </summary>
     /// <param name="model">The page model</param>
     /// <param name="isDraft">If we're saving as a draft</param>
-    private async Task SaveAsync<T>(T model, bool isDraft) where T : PageBase
+    private async Task SaveAsync<T>(T model, bool isDraft, Guid? languageId = null) where T : PageBase
     {
         // Ensure id
         if (model.Id == Guid.Empty)
@@ -666,7 +707,7 @@ internal sealed class PageService : IPageService
         }
 
         // Ensure that the slug is unique
-        var duplicate = await GetBySlugAsync(model.Slug, model.SiteId);
+        var duplicate = await GetBySlugAsync(model.Slug, model.SiteId, languageId);
         if (duplicate != null && duplicate.Id != model.Id)
         {
             throw new ValidationException("The specified slug already exists, please create a unique slug");
@@ -682,7 +723,15 @@ internal sealed class PageService : IPageService
         App.Hooks.OnBeforeSave<PageBase>(model);
 
         // Handle revisions and save
-        if ((IsPublished(current) || IsScheduled(current)) && isDraft)
+        // Page revisions are global and cannot represent a particular
+        // language. Save translations directly so their content is stored
+        // against the requested language instead of replacing the default
+        // language draft.
+        if (languageId.HasValue)
+        {
+            affected = await _repo.Save(model, languageId).ConfigureAwait(false);
+        }
+        else if ((IsPublished(current) || IsScheduled(current)) && isDraft)
         {
             // We're saving a draft since we have a previously
             // published version of the page
@@ -709,7 +758,7 @@ internal sealed class PageService : IPageService
             }
 
             // Save the main page
-            affected = await _repo.Save(model).ConfigureAwait(false);
+            affected = await _repo.Save(model, languageId).ConfigureAwait(false);
         }
 
         // Call after save hook
