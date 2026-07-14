@@ -616,399 +616,358 @@ internal class PostRepository : IPostRepository
     private async Task Save<T>(T model, bool isDraft, Guid? languageId = null) where T : Models.PostBase
     {
         var type = App.PostTypes.GetById(model.TypeId);
-        var lastModified = DateTime.MinValue;
 
         if (type != null)
         {
-            // Ensure category
-            var category = await _db.Categories
-                .FirstOrDefaultAsync(c => c.Id == model.Category.Id)
-                .ConfigureAwait(false);
+            await NormalizeTaxonomiesAsync(model).ConfigureAwait(false);
+            NormalizeSlug(model);
 
+            var post = await LoadOrCreatePostAsync(model, isDraft).ConfigureAwait(false);
+            var metadata = PostMetadata.Capture(post);
+            post = _contentService.Transform<T>(model, type, post, languageId);
+            metadata.Restore(post, languageId.HasValue);
+
+            await ApplyPostSettingsAsync(post, model, isDraft).ConfigureAwait(false);
+            await SaveBlocksAsync(post, model.Blocks, languageId, isDraft).ConfigureAwait(false);
+            SynchronizeTags(post, model, isDraft);
+            await PersistPostAsync(post, model.BlogId, isDraft).ConfigureAwait(false);
+        }
+    }
+
+    private async Task NormalizeTaxonomiesAsync<T>(T model) where T : Models.PostBase
+    {
+        var category = await _db.Categories
+            .FirstOrDefaultAsync(c => c.Id == model.Category.Id)
+            .ConfigureAwait(false);
+
+        if (category == null)
+        {
+            if (!string.IsNullOrWhiteSpace(model.Category.Slug))
+            {
+                category = await _db.Categories
+                    .FirstOrDefaultAsync(c => c.BlogId == model.BlogId && c.Slug == model.Category.Slug)
+                    .ConfigureAwait(false);
+            }
+            if (category == null && !string.IsNullOrWhiteSpace(model.Category.Title))
+            {
+                category = await _db.Categories
+                    .FirstOrDefaultAsync(c => c.BlogId == model.BlogId && c.Title == model.Category.Title)
+                    .ConfigureAwait(false);
+            }
             if (category == null)
             {
-                if (!string.IsNullOrWhiteSpace(model.Category.Slug))
+                category = new Category
                 {
-                    category = await _db.Categories
-                        .FirstOrDefaultAsync(c => c.BlogId == model.BlogId && c.Slug == model.Category.Slug)
-                        .ConfigureAwait(false);
-                }
-                if (category == null && !string.IsNullOrWhiteSpace(model.Category.Title))
-                {
-                    category = await _db.Categories
-                        .FirstOrDefaultAsync(c => c.BlogId == model.BlogId && c.Title == model.Category.Title)
-                        .ConfigureAwait(false);
-                }
-
-                if (category == null)
-                {
-                    category = new Category
-                    {
-                        Id = model.Category.Id != Guid.Empty ? model.Category.Id : Guid.NewGuid(),
-                        BlogId = model.BlogId,
-                        Title = model.Category.Title,
-                        Slug = Utils.GenerateSlug(model.Category.Title),
-                        Created = DateTime.Now,
-                        LastModified = DateTime.Now
-                    };
-                    await _db.Categories.AddAsync(category).ConfigureAwait(false);
-                }
-                model.Category.Id = category.Id;
-                model.Category.Title = category.Title;
-                model.Category.Slug = category.Slug;
-            }
-
-            // Ensure tags
-            foreach (var t in model.Tags)
-            {
-                var tag = await _db.Tags
-                    .FirstOrDefaultAsync(tg => tg.Id == t.Id)
-                    .ConfigureAwait(false);
-
-                if (tag == null)
-                {
-                    if (!string.IsNullOrWhiteSpace(t.Slug))
-                    {
-                        tag = await _db.Tags
-                            .FirstOrDefaultAsync(tg => tg.BlogId == model.BlogId && tg.Slug == t.Slug)
-                            .ConfigureAwait(false);
-                    }
-                    if (tag == null && !string.IsNullOrWhiteSpace(t.Title))
-                    {
-                        tag = await _db.Tags
-                            .FirstOrDefaultAsync(tg => tg.BlogId == model.BlogId && tg.Title == t.Title)
-                            .ConfigureAwait(false);
-                    }
-
-                    if (tag == null)
-                    {
-                        tag = new Tag
-                        {
-                            Id = t.Id != Guid.Empty ? t.Id : Guid.NewGuid(),
-                            BlogId = model.BlogId,
-                            Title = t.Title,
-                            Slug = Utils.GenerateSlug(t.Title),
-                            Created = DateTime.Now,
-                            LastModified = DateTime.Now
-                        };
-                        await _db.Tags.AddAsync(tag).ConfigureAwait(false);
-                    }
-                    t.Id = tag.Id;
-                }
-                t.Title = tag.Title;
-                t.Slug = tag.Slug;
-            }
-
-            // Ensure that we have a slug
-            if (string.IsNullOrWhiteSpace(model.Slug))
-            {
-                model.Slug = Utils.GenerateSlug(model.Title, false);
-            }
-            else
-            {
-                model.Slug = Utils.GenerateSlug(model.Slug, false);
-            }
-
-            IQueryable<Post> postQuery = _db.Posts;
-            if (isDraft)
-            {
-                postQuery = postQuery.AsNoTracking();
-            }
-
-            // FirstOrDefaultAsync(p => p.Id ...
-            postQuery = postQuery.OrderBy(p => p.Id);
-
-            var post = await postQuery
-                .Include(p => p.Permissions)
-                .Include(p => p.Blocks).ThenInclude(b => b.Block).ThenInclude(b => b.Fields).ThenInclude(f => f.Translations)
-                .Include(p => p.Fields).ThenInclude(f => f.Translations)
-                .Include(p => p.Tags).ThenInclude(t => t.Tag)
-                .Include(p => p.Translations)
-                .AsSplitQuery()
-                .FirstOrDefaultAsync(p => p.Id == model.Id)
-                .ConfigureAwait(false);
-
-            // If not, create a new post
-            if (post == null)
-            {
-                post = new Post
-                {
-                    Id = model.Id != Guid.Empty ? model.Id : Guid.NewGuid(),
+                    Id = model.Category.Id != Guid.Empty ? model.Category.Id : Guid.NewGuid(),
+                    BlogId = model.BlogId,
+                    Title = model.Category.Title,
+                    Slug = Utils.GenerateSlug(model.Category.Title),
                     Created = DateTime.Now,
                     LastModified = DateTime.Now
                 };
-                model.Id = post.Id;
+                await _db.Categories.AddAsync(category).ConfigureAwait(false);
+            }
 
-                if (!isDraft)
+            model.Category.Id = category.Id;
+            model.Category.Title = category.Title;
+            model.Category.Slug = category.Slug;
+        }
+
+        foreach (var taxonomy in model.Tags)
+        {
+            var tag = await _db.Tags.FirstOrDefaultAsync(t => t.Id == taxonomy.Id).ConfigureAwait(false);
+            if (tag == null && !string.IsNullOrWhiteSpace(taxonomy.Slug))
+            {
+                tag = await _db.Tags.FirstOrDefaultAsync(t => t.BlogId == model.BlogId && t.Slug == taxonomy.Slug).ConfigureAwait(false);
+            }
+            if (tag == null && !string.IsNullOrWhiteSpace(taxonomy.Title))
+            {
+                tag = await _db.Tags.FirstOrDefaultAsync(t => t.BlogId == model.BlogId && t.Title == taxonomy.Title).ConfigureAwait(false);
+            }
+            if (tag == null)
+            {
+                tag = new Tag
                 {
-                    await _db.Posts.AddAsync(post).ConfigureAwait(false);
-                }
-            }
-            else
-            {
-                post.LastModified = DateTime.Now;
-            }
-            // When saving a non-default language, preserve the main post columns
-            var origTitle = post.Title;
-            var origSlug = post.Slug;
-            var origExcerpt = post.Excerpt;
-            var origMetaTitle = post.MetaTitle;
-            var origMetaKeywords = post.MetaKeywords;
-            var origMetaDescription = post.MetaDescription;
-            var origOgTitle = post.OgTitle;
-            var origOgDescription = post.OgDescription;
-
-            post = _contentService.Transform<T>(model, type, post, languageId);
-
-            if (languageId.HasValue)
-            {
-                post.Title = origTitle;
-                post.Slug = origSlug;
-                post.Excerpt = origExcerpt;
-                post.MetaTitle = origMetaTitle;
-                post.MetaKeywords = origMetaKeywords;
-                post.MetaDescription = origMetaDescription;
-                post.OgTitle = origOgTitle;
-                post.OgDescription = origOgDescription;
-            }
-
-            // Set if comments should be enabled
-            post.EnableComments = model.EnableComments;
-            post.CloseCommentsAfterDays = model.CloseCommentsAfterDays;
-
-            // Update permissions
-            post.Permissions.Clear();
-            foreach (var permission in model.Permissions)
-            {
-                post.Permissions.Add(new PostPermission
-                {
-                    PostId = post.Id,
-                    Permission = permission
-                });
-            }
-
-            // Make sure foreign key is set for fields
-            if (!isDraft)
-            {
-                foreach (var field in post.Fields)
-                {
-                    if (field.PostId == Guid.Empty)
-                    {
-                        field.PostId = post.Id;
-                        await _db.PostFields.AddAsync(field).ConfigureAwait(false);
-                    }
-                }
-            }
-
-            if (isDraft)
-            {
-                post.Category = new Category
-                {
-                    Id = model.Category.Id,
+                    Id = taxonomy.Id != Guid.Empty ? taxonomy.Id : Guid.NewGuid(),
                     BlogId = model.BlogId,
-                    Title = model.Category.Title,
-                    Slug = model.Category.Slug
+                    Title = taxonomy.Title,
+                    Slug = Utils.GenerateSlug(taxonomy.Title),
+                    Created = DateTime.Now,
+                    LastModified = DateTime.Now
                 };
+                await _db.Tags.AddAsync(tag).ConfigureAwait(false);
             }
+            taxonomy.Id = tag.Id;
+            taxonomy.Title = tag.Title;
+            taxonomy.Slug = tag.Slug;
+        }
+    }
 
-            // Transform blocks
-            var blockModels = model.Blocks;
+    private static void NormalizeSlug<T>(T model) where T : Models.PostBase
+    {
+        model.Slug = string.IsNullOrWhiteSpace(model.Slug)
+            ? Utils.GenerateSlug(model.Title, false)
+            : Utils.GenerateSlug(model.Slug, false);
+    }
 
-            if (blockModels != null)
+    private async Task<Post> LoadOrCreatePostAsync<T>(T model, bool isDraft) where T : Models.PostBase
+    {
+        IQueryable<Post> query = _db.Posts;
+        if (isDraft)
+        {
+            query = query.AsNoTracking();
+        }
+
+        var post = await query.OrderBy(p => p.Id)
+            .Include(p => p.Permissions)
+            .Include(p => p.Blocks).ThenInclude(b => b.Block).ThenInclude(b => b.Fields).ThenInclude(f => f.Translations)
+            .Include(p => p.Fields).ThenInclude(f => f.Translations)
+            .Include(p => p.Tags).ThenInclude(t => t.Tag)
+            .Include(p => p.Translations)
+            .AsSplitQuery()
+            .FirstOrDefaultAsync(p => p.Id == model.Id)
+            .ConfigureAwait(false);
+
+        if (post == null)
+        {
+            post = new Post
             {
-                var blocks = _contentService.TransformBlocks(blockModels, languageId);
-                var current = blocks.Select(b => b.Id).ToArray();
-
-                // Delete removed blocks
-                var removed = post.Blocks
-                    .Where(b => !current.Contains(b.BlockId) && !b.Block.IsReusable && b.Block.ParentId == null)
-                    .Select(b => b.Block);
-                var removedItems = post.Blocks
-                    .Where(b => !current.Contains(b.BlockId) && b.Block.ParentId != null && removed.Select(p => p.Id).ToList().Contains(b.Block.ParentId.Value))
-                    .Select(b => b.Block);
-
-                if (!isDraft)
-                {
-                    _db.Blocks.RemoveRange(removed);
-                    _db.Blocks.RemoveRange(removedItems);
-                }
-
-                // Delete the old page blocks
-                post.Blocks.Clear();
-
-                // Now map the new block
-                for (var n = 0; n < blocks.Count; n++)
-                {
-                    IQueryable<Block> blockQuery = _db.Blocks;
-                    if (isDraft)
-                    {
-                        blockQuery = blockQuery.AsNoTracking();
-                    }
-
-                    var block = blockQuery
-                        .Include(b => b.Fields)
-                        .FirstOrDefault(b => b.Id == blocks[n].Id);
-
-                    if (block == null)
-                    {
-                        block = new Block
-                        {
-                            Id = blocks[n].Id != Guid.Empty ? blocks[n].Id : Guid.NewGuid(),
-                            Created = DateTime.Now
-                        };
-                        if (!isDraft)
-                        {
-                            await _db.Blocks.AddAsync(block).ConfigureAwait(false);
-                        }
-                    }
-                    block.ParentId = blocks[n].ParentId;
-                    block.CLRType = blocks[n].CLRType;
-                    block.IsReusable = blocks[n].IsReusable;
-                    block.Title = blocks[n].Title;
-                    block.LastModified = DateTime.Now;
-
-                    var currentFields = blocks[n].Fields.Select(f => f.FieldId).Distinct();
-                    var removedFields = block.Fields.Where(f => !currentFields.Contains(f.FieldId));
-
-                    if (!isDraft)
-                    {
-                        _db.BlockFields.RemoveRange(removedFields);
-                    }
-
-                    foreach (var newField in blocks[n].Fields)
-                    {
-                        var field = block.Fields.FirstOrDefault(f => f.FieldId == newField.FieldId);
-                        if (field == null)
-                        {
-                            field = new BlockField
-                            {
-                                Id = newField.Id != Guid.Empty ? newField.Id : Guid.NewGuid(),
-                                BlockId = block.Id,
-                                FieldId = newField.FieldId
-                            };
-                            if (!isDraft)
-                            {
-                                await _db.BlockFields.AddAsync(field).ConfigureAwait(false);
-                            }
-                            block.Fields.Add(field);
-                        }
-                        field.SortOrder = newField.SortOrder;
-                        field.CLRType = newField.CLRType;
-
-                        if (newField.Translations.Count > 0)
-                        {
-                            // Translatable field. Merge the translations for the
-                            // current language without touching the values stored
-                            // for the other languages.
-                            foreach (var newTranslation in newField.Translations)
-                            {
-                                var translation = field.Translations.FirstOrDefault(t => t.LanguageId == newTranslation.LanguageId);
-                                if (translation == null)
-                                {
-                                    translation = new PageBlockFieldTranslation
-                                    {
-                                        FieldId = field.Id,
-                                        LanguageId = newTranslation.LanguageId
-                                    };
-                                    if (!isDraft)
-                                    {
-                                        await _db.PageBlockFieldTranslations.AddAsync(translation).ConfigureAwait(false);
-                                    }
-                                    field.Translations.Add(translation);
-                                }
-                                translation.Value = newTranslation.Value;
-                            }
-                        }
-                        else
-                        {
-                            field.Value = newField.Value;
-                        }
-                    }
-
-                    // Create the post block
-                    var postBlock = new PostBlock
-                    {
-                        Id = Guid.NewGuid(),
-                        BlockId = block.Id,
-                        Block = block,
-                        PostId = post.Id,
-                        SortOrder = n
-                    };
-                    if (!isDraft)
-                    {
-                        await _db.PostBlocks.AddAsync(postBlock).ConfigureAwait(false);
-                    }
-                    post.Blocks.Add(postBlock);
-                }
-            }
-
-            // Remove tags
-            var removedTags = new List<PostTag>();
-            foreach (var tag in post.Tags)
-            {
-                if (!model.Tags.Any(t => t.Id == tag.TagId))
-                {
-                    removedTags.Add(tag);
-                }
-            }
-            foreach (var removed in removedTags)
-            {
-                post.Tags.Remove(removed);
-            }
-
-            // Add tags
-            foreach (var tag in model.Tags)
-            {
-                if (!post.Tags.Any(t => t.PostId == post.Id && t.TagId == tag.Id))
-                {
-                    var postTag = new PostTag
-                    {
-                        PostId = post.Id,
-                        TagId = tag.Id
-                    };
-
-                    if (isDraft)
-                    {
-                        postTag.Tag = new Tag
-                        {
-                            Id = tag.Id,
-                            BlogId = post.BlogId,
-                            Title = tag.Title,
-                            Slug = tag.Slug
-                        };
-                    }
-                    post.Tags.Add(postTag);
-                }
-            }
-
+                Id = model.Id != Guid.Empty ? model.Id : Guid.NewGuid(),
+                Created = DateTime.Now,
+                LastModified = DateTime.Now
+            };
+            model.Id = post.Id;
             if (!isDraft)
             {
-                await _db.SaveChangesAsync().ConfigureAwait(false);
-                await DeleteUnusedCategories(model.BlogId).ConfigureAwait(false);
-                await DeleteUnusedTags(model.BlogId).ConfigureAwait(false);
+                await _db.Posts.AddAsync(post).ConfigureAwait(false);
             }
-            else
+        }
+        else
+        {
+            post.LastModified = DateTime.Now;
+        }
+        return post;
+    }
+
+    private async Task ApplyPostSettingsAsync<T>(Post post, T model, bool isDraft) where T : Models.PostBase
+    {
+        post.EnableComments = model.EnableComments;
+        post.CloseCommentsAfterDays = model.CloseCommentsAfterDays;
+        post.Permissions.Clear();
+        foreach (var permission in model.Permissions)
+        {
+            post.Permissions.Add(new PostPermission { PostId = post.Id, Permission = permission });
+        }
+
+        if (!isDraft)
+        {
+            foreach (var field in post.Fields)
             {
-                var draft = await _db.PostRevisions
-                    .FirstOrDefaultAsync(r => r.PostId == post.Id && r.Created > lastModified)
-                    .ConfigureAwait(false);
-
-                if (draft == null)
+                if (field.PostId == Guid.Empty)
                 {
-                    draft = new PostRevision
-                    {
-                        Id = Guid.NewGuid(),
-                        PostId = post.Id
-                    };
-                    await _db.PostRevisions
-                        .AddAsync(draft)
-                        .ConfigureAwait(false);
+                    field.PostId = post.Id;
+                    await _db.PostFields.AddAsync(field).ConfigureAwait(false);
                 }
+            }
+        }
+        else
+        {
+            post.Category = new Category
+            {
+                Id = model.Category.Id,
+                BlogId = model.BlogId,
+                Title = model.Category.Title,
+                Slug = model.Category.Slug
+            };
+        }
+    }
 
-                draft.Data = JsonConvert.SerializeObject(post);
-                draft.Created = post.LastModified;
+    private async Task SaveBlocksAsync(Post post, IList<Piranha.Extend.Block> blockModels, Guid? languageId, bool isDraft)
+    {
+        if (blockModels == null)
+        {
+            return;
+        }
 
-                await _db.SaveChangesAsync().ConfigureAwait(false);
+        var blocks = _contentService.TransformBlocks(blockModels, languageId);
+        var current = blocks.Select(b => b.Id).ToArray();
+        var removed = post.Blocks
+            .Where(b => !current.Contains(b.BlockId) && !b.Block.IsReusable && b.Block.ParentId == null)
+            .Select(b => b.Block);
+        var removedItems = post.Blocks
+            .Where(b => !current.Contains(b.BlockId) && b.Block.ParentId != null && removed.Select(p => p.Id).ToList().Contains(b.Block.ParentId.Value))
+            .Select(b => b.Block);
+
+        if (!isDraft)
+        {
+            _db.Blocks.RemoveRange(removed);
+            _db.Blocks.RemoveRange(removedItems);
+        }
+        post.Blocks.Clear();
+
+        for (var n = 0; n < blocks.Count; n++)
+        {
+            await SaveBlockAsync(post, blocks[n], n, languageId, isDraft).ConfigureAwait(false);
+        }
+    }
+
+    private async Task SaveBlockAsync(Post post, Data.Block blockModel, int sortOrder, Guid? languageId, bool isDraft)
+    {
+        IQueryable<Block> query = _db.Blocks;
+        if (isDraft)
+        {
+            query = query.AsNoTracking();
+        }
+        var block = query.Include(b => b.Fields).FirstOrDefault(b => b.Id == blockModel.Id);
+        if (block == null)
+        {
+            block = new Block
+            {
+                Id = blockModel.Id != Guid.Empty ? blockModel.Id : Guid.NewGuid(),
+                Created = DateTime.Now
+            };
+            if (!isDraft)
+            {
+                await _db.Blocks.AddAsync(block).ConfigureAwait(false);
+            }
+        }
+        block.ParentId = blockModel.ParentId;
+        block.CLRType = blockModel.CLRType;
+        block.IsReusable = blockModel.IsReusable;
+        block.Title = blockModel.Title;
+        block.LastModified = DateTime.Now;
+
+        var currentFields = blockModel.Fields.Select(f => f.FieldId).Distinct();
+        if (!isDraft)
+        {
+            _db.BlockFields.RemoveRange(block.Fields.Where(f => !currentFields.Contains(f.FieldId)));
+        }
+        foreach (var newField in blockModel.Fields)
+        {
+            await SaveBlockFieldAsync(block, newField, isDraft).ConfigureAwait(false);
+        }
+
+        var postBlock = new PostBlock
+        {
+            Id = Guid.NewGuid(), BlockId = block.Id, Block = block, PostId = post.Id, SortOrder = sortOrder
+        };
+        if (!isDraft)
+        {
+            await _db.PostBlocks.AddAsync(postBlock).ConfigureAwait(false);
+        }
+        post.Blocks.Add(postBlock);
+    }
+
+    private async Task SaveBlockFieldAsync(Block block, BlockField newField, bool isDraft)
+    {
+        var field = block.Fields.FirstOrDefault(f => f.FieldId == newField.FieldId);
+        if (field == null)
+        {
+            field = new BlockField
+            {
+                Id = newField.Id != Guid.Empty ? newField.Id : Guid.NewGuid(), BlockId = block.Id, FieldId = newField.FieldId
+            };
+            if (!isDraft)
+            {
+                await _db.BlockFields.AddAsync(field).ConfigureAwait(false);
+            }
+            block.Fields.Add(field);
+        }
+        field.SortOrder = newField.SortOrder;
+        field.CLRType = newField.CLRType;
+        if (newField.Translations.Count > 0)
+        {
+            foreach (var newTranslation in newField.Translations)
+            {
+                var translation = field.Translations.FirstOrDefault(t => t.LanguageId == newTranslation.LanguageId);
+                if (translation == null)
+                {
+                    translation = new PageBlockFieldTranslation { FieldId = field.Id, LanguageId = newTranslation.LanguageId };
+                    if (!isDraft)
+                    {
+                        await _db.PageBlockFieldTranslations.AddAsync(translation).ConfigureAwait(false);
+                    }
+                    field.Translations.Add(translation);
+                }
+                translation.Value = newTranslation.Value;
+            }
+        }
+        else
+        {
+            field.Value = newField.Value;
+        }
+    }
+
+    private void SynchronizeTags<T>(Post post, T model, bool isDraft) where T : Models.PostBase
+    {
+        foreach (var removed in post.Tags.Where(t => !model.Tags.Any(mt => mt.Id == t.TagId)).ToList())
+        {
+            post.Tags.Remove(removed);
+        }
+        foreach (var tag in model.Tags)
+        {
+            if (!post.Tags.Any(t => t.PostId == post.Id && t.TagId == tag.Id))
+            {
+                var postTag = new PostTag { PostId = post.Id, TagId = tag.Id };
+                if (isDraft)
+                {
+                    postTag.Tag = new Tag { Id = tag.Id, BlogId = post.BlogId, Title = tag.Title, Slug = tag.Slug };
+                }
+                post.Tags.Add(postTag);
+            }
+        }
+    }
+
+    private async Task PersistPostAsync(Post post, Guid blogId, bool isDraft)
+    {
+        if (!isDraft)
+        {
+            await _db.SaveChangesAsync().ConfigureAwait(false);
+            await DeleteUnusedCategories(blogId).ConfigureAwait(false);
+            await DeleteUnusedTags(blogId).ConfigureAwait(false);
+            return;
+        }
+
+        var draft = await _db.PostRevisions
+            .FirstOrDefaultAsync(r => r.PostId == post.Id && r.Created > DateTime.MinValue)
+            .ConfigureAwait(false);
+        if (draft == null)
+        {
+            draft = new PostRevision { Id = Guid.NewGuid(), PostId = post.Id };
+            await _db.PostRevisions.AddAsync(draft).ConfigureAwait(false);
+        }
+        draft.Data = JsonConvert.SerializeObject(post);
+        draft.Created = post.LastModified;
+        await _db.SaveChangesAsync().ConfigureAwait(false);
+    }
+
+    private sealed class PostMetadata
+    {
+        private readonly string _title;
+        private readonly string _slug;
+        private readonly string _excerpt;
+        private readonly string _metaTitle;
+        private readonly string _metaKeywords;
+        private readonly string _metaDescription;
+        private readonly string _ogTitle;
+        private readonly string _ogDescription;
+
+        private PostMetadata(Post post)
+        {
+            _title = post.Title; _slug = post.Slug; _excerpt = post.Excerpt;
+            _metaTitle = post.MetaTitle; _metaKeywords = post.MetaKeywords; _metaDescription = post.MetaDescription;
+            _ogTitle = post.OgTitle; _ogDescription = post.OgDescription;
+        }
+
+        public static PostMetadata Capture(Post post) => new(post);
+
+        public void Restore(Post post, bool preserve)
+        {
+            if (preserve)
+            {
+                post.Title = _title; post.Slug = _slug; post.Excerpt = _excerpt;
+                post.MetaTitle = _metaTitle; post.MetaKeywords = _metaKeywords; post.MetaDescription = _metaDescription;
+                post.OgTitle = _ogTitle; post.OgDescription = _ogDescription;
             }
         }
     }

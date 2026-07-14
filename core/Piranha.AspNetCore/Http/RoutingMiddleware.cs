@@ -46,462 +46,482 @@ public class RoutingMiddleware : MiddlewareBase
     /// <returns>An async task</returns>
     public override async Task Invoke(HttpContext context, IApi api, IApplicationService service)
     {
-        var appConfig = new Config(api);
-
-        if (!IsHandled(context) && !IsManagerRequest(context.Request.Path.Value))
+        if (IsHandled(context) || IsManagerRequest(context.Request.Path.Value))
         {
-            var url = context.Request.Path.HasValue ? context.Request.Path.Value : "";
-            var segments = !string.IsNullOrEmpty(url) ? url.Substring(1).Split(new char[] { '/' }, StringSplitOptions.RemoveEmptyEntries) : new string[] { };
-            int pos = 0;
+            await _next.Invoke(context);
+            return;
+        }
 
-            _logger?.LogDebug($"Url: [{ url }]");
+        await RouteRequestAsync(context, api, service).ConfigureAwait(false);
+    }
 
-            //
-            // 1: Store raw url & request information
-            //
-            service.Request.Url = context.Request.Path.Value;
-            service.Request.Host = context.Request.Host.Host;
-            service.Request.Port = context.Request.Host.Port;
-            service.Request.Scheme = context.Request.Scheme;
+    private async Task RouteRequestAsync(HttpContext context, IApi api, IApplicationService service)
+    {
+        if (IsHandled(context) || IsManagerRequest(context.Request.Path.Value))
+        {
+            await _next.Invoke(context);
+            return;
+        }
 
-            //
-            // 2: Get the current site
-            //
-            Site site = null;
-            Guid? languageId = null;
+        var state = InitializeRoutingState(context, api, service);
 
-            var hostname = context.Request.Host.Host;
+        if (!await ResolveSiteAndLanguageAsync(state).ConfigureAwait(false) ||
+            (state.Segments.Length <= state.Position && !_options.UseStartpageRouting))
+        {
+            await _next.Invoke(context);
+            return;
+        }
 
-            if (_options.UseSiteRouting)
+        if (await TryHandleAliasAsync(state).ConfigureAwait(false))
+        {
+            return;
+        }
+
+        if (!await ResolvePageAsync(state).ConfigureAwait(false))
+        {
+            await _next.Invoke(context);
+            return;
+        }
+
+        await ResolvePostAsync(state).ConfigureAwait(false);
+        LogContent(state);
+
+        if (!await BuildRouteAsync(state).ConfigureAwait(false))
+        {
+            return;
+        }
+
+        ApplyRoute(state);
+        await _next.Invoke(context);
+    }
+
+    private RoutingState InitializeRoutingState(HttpContext context, IApi api, IApplicationService service)
+    {
+        var url = context.Request.Path.HasValue ? context.Request.Path.Value : "";
+        var segments = !string.IsNullOrEmpty(url)
+            ? url.Substring(1).Split(new char[] { '/' }, StringSplitOptions.RemoveEmptyEntries)
+            : new string[] { };
+
+        _logger?.LogDebug($"Url: [{ url }]");
+
+        service.Request.Url = context.Request.Path.Value;
+        service.Request.Host = context.Request.Host.Host;
+        service.Request.Port = context.Request.Host.Port;
+        service.Request.Scheme = context.Request.Scheme;
+
+        return new RoutingState
+        {
+            Context = context,
+            Api = api,
+            Service = service,
+            Config = new Config(api),
+            Segments = segments,
+            Hostname = context.Request.Host.Host
+        };
+    }
+
+    private async Task<bool> ResolveSiteAndLanguageAsync(RoutingState state)
+    {
+        if (_options.UseSiteRouting && state.Segments.Length > 0)
+        {
+            var prefixedHostname = $"{state.Hostname}/{state.Segments[0]}";
+            state.Site = await state.Api.Sites.GetByHostnameAsync(prefixedHostname).ConfigureAwait(false);
+
+            if (state.Site != null)
             {
-                // Try to get the requested site by hostname & prefix
-                if (segments.Length > 0)
-                {
-                    var prefixedHostname = $"{hostname}/{segments[0]}";
-                    site = await api.Sites.GetByHostnameAsync(prefixedHostname)
-                        .ConfigureAwait(false);
-
-                    if (site != null)
-                    {
-                        context.Request.Path = "/" + string.Join("/", segments.Skip(1));
-                        hostname = prefixedHostname;
-                        pos = 1;
-                    }
-                }
-
-                // Try to get the requested site by hostname
-                if (site == null)
-                {
-                    site = await api.Sites.GetByHostnameAsync(context.Request.Host.Host)
-                        .ConfigureAwait(false);
-                }
+                state.Context.Request.Path = "/" + string.Join("/", state.Segments.Skip(1));
+                state.Hostname = prefixedHostname;
+                state.Position = 1;
             }
+        }
 
-            // If we didn't find the site, get the default site
-            if (site == null)
+        if (_options.UseSiteRouting && state.Site == null)
+        {
+            state.Site = await state.Api.Sites.GetByHostnameAsync(state.Context.Request.Host.Host).ConfigureAwait(false);
+        }
+
+        state.Site ??= await state.Api.Sites.GetDefaultAsync().ConfigureAwait(false);
+        if (state.Site == null)
+        {
+            return false;
+        }
+
+        var hostnameLanguage = await state.Api.Languages.GetByHostnameAsync(state.Context.Request.Host.Host).ConfigureAwait(false);
+        var language = hostnameLanguage ?? await state.Api.Languages.GetByIdAsync(state.Site.LanguageId).ConfigureAwait(false);
+        state.LanguageId = language?.Id;
+
+        state.Service.Site.Id = state.Site.Id;
+        state.Service.Site.LanguageId = language?.Id ?? Guid.Empty;
+        state.Service.Site.Culture = language?.Culture;
+
+        var siteHost = GetMatchingHost(state.Site, state.Hostname);
+        state.Service.Site.Host = siteHost[0];
+        state.Service.Site.SitePrefix = siteHost[1];
+        state.Service.Site.Description.Title = state.Site.Title;
+        state.Service.Site.Description.Body = state.Site.Description;
+        state.Service.Site.Description.Logo = state.Site.Logo;
+
+        if (string.IsNullOrEmpty(state.Service.Site.Host))
+        {
+            state.Service.Site.Host = state.Context.Request.Host.Host;
+        }
+
+        if (state.Segments.Length > state.Position)
+        {
+            var languages = await state.Api.Languages.GetAllAsync().ConfigureAwait(false);
+            var matchedLanguage = languages.FirstOrDefault(l =>
+                l.Id != language?.Id &&
+                !string.IsNullOrEmpty(l.Culture) &&
+                (l.Culture.Split('-', '_')[0].Equals(state.Segments[state.Position], StringComparison.OrdinalIgnoreCase) ||
+                 l.Culture.Equals(state.Segments[state.Position], StringComparison.OrdinalIgnoreCase) ||
+                 l.Culture.Replace('-', '_').Equals(state.Segments[state.Position], StringComparison.OrdinalIgnoreCase)));
+
+            if (matchedLanguage != null)
             {
-                site = await api.Sites.GetDefaultAsync()
-                    .ConfigureAwait(false);
+                state.LanguageId = matchedLanguage.Id;
+                state.Service.Site.LanguageId = matchedLanguage.Id;
+                state.Service.Site.Culture = matchedLanguage.Culture;
+                state.Position++;
             }
+        }
 
-            if (site != null)
+        state.Service.Site.Sitemap = await state.Api.Sites.GetSitemapAsync(state.Site.Id, true, state.LanguageId).ConfigureAwait(false);
+
+        if (!string.IsNullOrEmpty(state.Service.Site.Culture))
+        {
+            var cultureInfo = new CultureInfo(state.Service.Site.Culture);
+            CultureInfo.CurrentCulture = CultureInfo.CurrentUICulture = cultureInfo;
+        }
+
+        return true;
+    }
+
+    private async Task<bool> TryHandleAliasAsync(RoutingState state)
+    {
+        if (_options.UseAliasRouting && state.Segments.Length > state.Position)
+        {
+            var alias = await state.Api.Aliases.GetByAliasUrlAsync(
+                $"/{ string.Join("/", state.Segments.Subset(state.Position)) }", state.Service.Site.Id);
+
+            if (alias != null)
             {
-                // A language hostname overrides the language configured on the site.
-                var hostnameLanguage = await api.Languages.GetByHostnameAsync(context.Request.Host.Host)
-                    .ConfigureAwait(false);
-
-                // Get the selected language
-                var language = hostnameLanguage ?? await api.Languages.GetByIdAsync(site.LanguageId)
-                    .ConfigureAwait(false);
-                languageId = language?.Id;
-
-                // Update application service
-                service.Site.Id = site.Id;
-                service.Site.LanguageId = language?.Id ?? Guid.Empty;
-                service.Site.Culture = language?.Culture;
-
-                // Set preferred hostname & prefix
-                var siteHost = GetMatchingHost(site, hostname);
-                service.Site.Host = siteHost[0];
-                service.Site.SitePrefix = siteHost[1];
-
-                // Set site description
-                service.Site.Description.Title = site.Title;
-                service.Site.Description.Body = site.Description;
-                service.Site.Description.Logo = site.Logo;
-
-                // Default to the request hostname
-                if (string.IsNullOrEmpty(service.Site.Host))
-                {
-                    service.Site.Host = context.Request.Host.Host;
-                }
-
-                //
-                // 2b: Detect language from URL prefix
-                //
-                if (segments.Length > pos)
-                {
-                    var languages = await api.Languages.GetAllAsync().ConfigureAwait(false);
-                    var matchedLanguage = languages.FirstOrDefault(l =>
-                        l.Id != language?.Id &&
-                        !string.IsNullOrEmpty(l.Culture) &&
-                        (l.Culture.Split('-', '_')[0].Equals(segments[pos], StringComparison.OrdinalIgnoreCase) ||
-                         l.Culture.Equals(segments[pos], StringComparison.OrdinalIgnoreCase) ||
-                         l.Culture.Replace('-', '_').Equals(segments[pos], StringComparison.OrdinalIgnoreCase)));
-
-                    if (matchedLanguage != null)
-                    {
-                        languageId = matchedLanguage.Id;
-                        service.Site.LanguageId = matchedLanguage.Id;
-                        service.Site.Culture = matchedLanguage.Culture;
-                        pos++;
-                    }
-                }
-
-                service.Site.Sitemap = await api.Sites.GetSitemapAsync(site.Id, true, languageId)
-                    .ConfigureAwait(false);
-
-                // Set current culture if specified in site
-                if (!string.IsNullOrEmpty(service.Site.Culture))
-                {
-                    var cultureInfo = new CultureInfo(service.Site.Culture);
-                    CultureInfo.CurrentCulture = CultureInfo.CurrentUICulture = cultureInfo;
-                }
+                state.Context.Response.Redirect(alias.RedirectUrl, alias.Type == RedirectType.Permanent);
+                return true;
             }
-            else
-            {
-                // There's no sites available, let the application finish
-                await _next.Invoke(context);
-                return;
-            }
+        }
 
-            //
-            // Check if we shouldn't handle empty requests for start page
-            //
-            if (segments.Length <= pos && !_options.UseStartpageRouting)
-            {
-                await _next.Invoke(context);
-                return;
-            }
+        return false;
+    }
 
-            //
-            // 3: Check for alias
-            //
-            if (_options.UseAliasRouting && segments.Length > pos)
+    private async Task<bool> ResolvePageAsync(RoutingState state)
+    {
+        if (state.Segments.Length > state.Position)
+        {
+            for (var n = state.Segments.Length; n > state.Position; n--)
             {
-                var alias = await api.Aliases.GetByAliasUrlAsync($"/{ string.Join("/", segments.Subset(pos)) }", service.Site.Id);
+                var slug = string.Join("/", state.Segments.Subset(state.Position, n - state.Position));
+                state.Page = await state.Api.Pages.GetBySlugAsync<PageBase>(slug, state.Site.Id, state.LanguageId).ConfigureAwait(false);
 
-                if (alias != null)
+                if (state.Page != null)
                 {
-                    context.Response.Redirect(alias.RedirectUrl, alias.Type == RedirectType.Permanent);
-                    return;
-                }
-            }
-
-            //
-            // 4: Get the current page
-            //
-            PageBase page = null;
-            PageType pageType = null;
-
-            if (segments.Length > pos)
-            {
-                // Scan for the most unique slug
-                for (var n = segments.Length; n > pos; n--)
-                {
-                    var slug = string.Join("/", segments.Subset(pos, n - pos));
-                    page = await api.Pages.GetBySlugAsync<PageBase>(slug, site.Id, languageId)
-                        .ConfigureAwait(false);
-
-                    if (page != null)
-                    {
-                        pos = n;
-                        break;
-                    }
-                }
-            }
-            else
-            {
-                page = await api.Pages.GetStartpageAsync<PageBase>(site.Id, languageId)
-                    .ConfigureAwait(false);
-            }
-
-            if (page != null)
-            {
-                if (!page.IsPublished)
-                {
-                    // If the page isn't published, and this isn't a request for a draft, skip the request
-                    if (!context.Request.Query.ContainsKey("draft") || context.Request.Query["draft"] != "true")
-                    {
-                        await _next.Invoke(context);
-                        return;
-                    }
-                }
-
-                pageType = App.PageTypes.GetById(page.TypeId);
-                service.PageId = page.Id;
-
-                // Only cache published pages
-                if (page.IsPublished)
-                {
-                    service.CurrentPage = page;
-                }
-            }
-
-            //
-            // 5: Get the current post
-            //
-            PostBase post = null;
-
-            if (_options.UsePostRouting)
-            {
-                if (page != null && pageType.IsArchive && segments.Length > pos)
-                {
-                    post = await api.Posts.GetBySlugAsync<PostBase>(page.Id, segments[pos])
-                        .ConfigureAwait(false);
-
-                    if (post != null)
-                    {
-                        pos++;
-                    }
-                }
-
-                if (post != null)
-                {
-                    App.PostTypes.GetById(post.TypeId);
-
-                    // Only cache published posts
-                    if (post.IsPublished)
-                    {
-                        service.CurrentPost = post;
-                    }
-                }
-            }
-
-            _logger?.LogDebug($"Found Site: [{ site.Id }]");
-            if (page != null)
-            {
-                _logger?.LogDebug($"Found Page: [{ page.Id }]");
-            }
-
-            if (post != null)
-            {
-                _logger?.LogDebug($"Found Post: [{ post.Id }]");
-            }
-
-            //
-            // 6: Route request
-            //
-            var route = new StringBuilder();
-            var query = new StringBuilder();
-
-            if (post != null)
-            {
-                if (string.IsNullOrWhiteSpace(post.RedirectUrl))
-                {
-                    // Handle HTTP caching
-                    if (HandleCache(context, site, post, appConfig.CacheExpiresPosts))
-                    {
-                        // Client has latest version
-                        return;
-                    }
-
-                    route.Append(post.Route ?? "/post");
-                    for (var n = pos; n < segments.Length; n++)
-                    {
-                        route.Append("/");
-                        route.Append(segments[n]);
-                    }
-
-                    query.Append("id=");
-                    query.Append(post.Id);
-                }
-                else
-                {
-                    _logger?.LogDebug($"Setting redirect: [{ post.RedirectUrl }]");
-
-                    context.Response.Redirect(post.RedirectUrl, post.RedirectType == RedirectType.Permanent);
-                    return;
-                }
-            }
-            else if (page != null && _options.UsePageRouting)
-            {
-                if (string.IsNullOrWhiteSpace(page.RedirectUrl))
-                {
-                    route.Append(page.Route ?? (pageType.IsArchive ? "/archive" : "/page"));
-
-                    // Set the basic query
-                    query.Append("id=");
-                    query.Append(page.Id);
-
-                    if (!page.ParentId.HasValue && page.SortOrder == 0)
-                    {
-                        query.Append("&startpage=true");
-                    }
-
-                    if (!pageType.IsArchive || !_options.UseArchiveRouting)
-                    {
-                        if (HandleCache(context, site, page, appConfig.CacheExpiresPages))
-                        {
-                            // Client has latest version.
-                            return;
-                        }
-
-                        // This is a regular page, append trailing segments
-                        for (var n = pos; n < segments.Length; n++)
-                        {
-                            route.Append("/");
-                            route.Append(segments[n]);
-                        }
-                    }
-                    else if (post == null)
-                    {
-                        // This is an archive, check for archive params
-                        int? year = null;
-                        bool foundCategory = false;
-                        bool foundTag = false;
-                        bool foundPage = false;
-
-                        for (var n = pos; n < segments.Length; n++)
-                        {
-                            if (segments[n] == "category" && !foundPage)
-                            {
-                                foundCategory = true;
-                                continue;
-                            }
-
-                            if (segments[n] == "tag" && !foundPage && !foundCategory)
-                            {
-                                foundTag = true;
-                                continue;
-                            }
-
-                            if (segments[n] == "page")
-                            {
-                                foundPage = true;
-                                continue;
-                            }
-
-                            if (foundCategory)
-                            {
-                                try
-                                {
-                                    var categoryId = (await api.Posts.GetCategoryBySlugAsync(page.Id, segments[n]).ConfigureAwait(false))?.Id;
-
-                                    if (categoryId.HasValue)
-                                    {
-                                        query.Append("&category=");
-                                        query.Append(categoryId);
-                                    }
-                                }
-                                finally
-                                {
-                                    foundCategory = false;
-                                }
-                            }
-
-                            if (foundTag)
-                            {
-                                try
-                                {
-                                    var tagId = (await api.Posts.GetTagBySlugAsync(page.Id, segments[n]).ConfigureAwait(false))?.Id;
-
-                                    if (tagId.HasValue)
-                                    {
-                                        query.Append("&tag=");
-                                        query.Append(tagId);
-                                    }
-                                }
-                                finally
-                                {
-                                    foundTag = false;
-                                }
-                            }
-
-                            if (foundPage)
-                            {
-                                try
-                                {
-                                    var pageNum = Convert.ToInt32(segments[n]);
-                                    query.Append("&page=");
-                                    query.Append(pageNum);
-                                    query.Append("&pagenum=");
-                                    query.Append(pageNum);
-                                }
-                                catch
-                                {
-                                    // We don't care about the exception, we just
-                                    // discard malformed input
-                                }
-                                // Page number should always be last, break the loop
-                                break;
-                            }
-
-                            if (!year.HasValue)
-                            {
-                                try
-                                {
-                                    year = Convert.ToInt32(segments[n]);
-
-                                    if (year.Value > DateTime.Now.Year)
-                                    {
-                                        year = DateTime.Now.Year;
-                                    }
-                                    query.Append("&year=");
-                                    query.Append(year);
-                                }
-                                catch
-                                {
-                                    // We don't care about the exception, we just
-                                    // discard malformed input
-                                }
-                            }
-                            else
-                            {
-                                try
-                                {
-                                    var month = Math.Max(Math.Min(Convert.ToInt32(segments[n]), 12), 1);
-                                    query.Append("&month=");
-                                    query.Append(month);
-                                }
-                                catch
-                                {
-                                    // We don't care about the exception, we just
-                                    // discard malformed input
-                                }
-                            }
-                        }
-                    }
-                }
-                else
-                {
-                    _logger?.LogDebug($"Setting redirect: [{ page.RedirectUrl }]");
-
-                    context.Response.Redirect(page.RedirectUrl, page.RedirectType == RedirectType.Permanent);
-                    return;
-                }
-            }
-
-            if (route.Length > 0)
-            {
-                var strRoute = route.ToString();
-                var strQuery = query.ToString();
-
-                _logger?.LogDebug($"Setting Route: [{ strRoute }?{ strQuery }]");
-
-                context.Request.Path = new PathString(strRoute);
-                if (context.Request.QueryString.HasValue)
-                {
-                    context.Request.QueryString =
-                        new QueryString(context.Request.QueryString.Value + "&" + strQuery);
-                }
-                else {
-                    context.Request.QueryString =
-                        new QueryString("?" + strQuery);
+                    state.Position = n;
+                    break;
                 }
             }
         }
-        await _next.Invoke(context);
+        else
+        {
+            state.Page = await state.Api.Pages.GetStartpageAsync<PageBase>(state.Site.Id, state.LanguageId).ConfigureAwait(false);
+        }
+
+        if (state.Page == null)
+        {
+            return true;
+        }
+
+        if (!state.Page.IsPublished &&
+            (!state.Context.Request.Query.ContainsKey("draft") || state.Context.Request.Query["draft"] != "true"))
+        {
+            return false;
+        }
+
+        state.PageType = App.PageTypes.GetById(state.Page.TypeId);
+        state.Service.PageId = state.Page.Id;
+
+        if (state.Page.IsPublished)
+        {
+            state.Service.CurrentPage = state.Page;
+        }
+
+        return true;
+    }
+
+    private async Task ResolvePostAsync(RoutingState state)
+    {
+        if (!_options.UsePostRouting || state.Page == null || !state.PageType.IsArchive || state.Segments.Length <= state.Position)
+        {
+            return;
+        }
+
+        state.Post = await state.Api.Posts.GetBySlugAsync<PostBase>(state.Page.Id, state.Segments[state.Position]).ConfigureAwait(false);
+        if (state.Post == null)
+        {
+            return;
+        }
+
+        state.Position++;
+        App.PostTypes.GetById(state.Post.TypeId);
+
+        if (state.Post.IsPublished)
+        {
+            state.Service.CurrentPost = state.Post;
+        }
+    }
+
+    private void LogContent(RoutingState state)
+    {
+        _logger?.LogDebug($"Found Site: [{ state.Site.Id }]");
+        if (state.Page != null)
+        {
+            _logger?.LogDebug($"Found Page: [{ state.Page.Id }]");
+        }
+
+        if (state.Post != null)
+        {
+            _logger?.LogDebug($"Found Post: [{ state.Post.Id }]");
+        }
+    }
+
+    private async Task<bool> BuildRouteAsync(RoutingState state)
+    {
+        if (state.Post != null)
+        {
+            if (!string.IsNullOrWhiteSpace(state.Post.RedirectUrl))
+            {
+                _logger?.LogDebug($"Setting redirect: [{ state.Post.RedirectUrl }]");
+                state.Context.Response.Redirect(state.Post.RedirectUrl, state.Post.RedirectType == RedirectType.Permanent);
+                return false;
+            }
+
+            if (HandleCache(state.Context, state.Site, state.Post, state.Config.CacheExpiresPosts))
+            {
+                return false;
+            }
+
+            state.Route.Append(state.Post.Route ?? "/post");
+            AppendTrailingSegments(state);
+            state.Query.Append("id=");
+            state.Query.Append(state.Post.Id);
+            return true;
+        }
+
+        if (state.Page == null || !_options.UsePageRouting)
+        {
+            return true;
+        }
+
+        if (!string.IsNullOrWhiteSpace(state.Page.RedirectUrl))
+        {
+            _logger?.LogDebug($"Setting redirect: [{ state.Page.RedirectUrl }]");
+            state.Context.Response.Redirect(state.Page.RedirectUrl, state.Page.RedirectType == RedirectType.Permanent);
+            return false;
+        }
+
+        state.Route.Append(state.Page.Route ?? (state.PageType.IsArchive ? "/archive" : "/page"));
+        state.Query.Append("id=");
+        state.Query.Append(state.Page.Id);
+
+        if (!state.Page.ParentId.HasValue && state.Page.SortOrder == 0)
+        {
+            state.Query.Append("&startpage=true");
+        }
+
+        if (!state.PageType.IsArchive || !_options.UseArchiveRouting)
+        {
+            if (HandleCache(state.Context, state.Site, state.Page, state.Config.CacheExpiresPages))
+            {
+                return false;
+            }
+
+            AppendTrailingSegments(state);
+        }
+        else if (state.Post == null)
+        {
+            await AppendArchiveParametersAsync(state).ConfigureAwait(false);
+        }
+
+        return true;
+    }
+
+    private void AppendTrailingSegments(RoutingState state)
+    {
+        for (var n = state.Position; n < state.Segments.Length; n++)
+        {
+            state.Route.Append("/");
+            state.Route.Append(state.Segments[n]);
+        }
+    }
+
+    private async Task AppendArchiveParametersAsync(RoutingState state)
+    {
+        int? year = null;
+        bool foundCategory = false;
+        bool foundTag = false;
+        bool foundPage = false;
+
+        for (var n = state.Position; n < state.Segments.Length; n++)
+        {
+            if (state.Segments[n] == "category" && !foundPage)
+            {
+                foundCategory = true;
+                continue;
+            }
+
+            if (state.Segments[n] == "tag" && !foundPage && !foundCategory)
+            {
+                foundTag = true;
+                continue;
+            }
+
+            if (state.Segments[n] == "page")
+            {
+                foundPage = true;
+                continue;
+            }
+
+            state.FoundCategory = foundCategory;
+            state.FoundTag = foundTag;
+            await AppendArchiveFilterAsync(state, n).ConfigureAwait(false);
+            foundCategory = state.FoundCategory;
+            foundTag = state.FoundTag;
+
+            if (foundPage)
+            {
+                try
+                {
+                    var pageNum = Convert.ToInt32(state.Segments[n]);
+                    state.Query.Append("&page=");
+                    state.Query.Append(pageNum);
+                    state.Query.Append("&pagenum=");
+                    state.Query.Append(pageNum);
+                }
+                catch
+                {
+                    // We don't care about the exception, we just discard malformed input.
+                }
+                break;
+            }
+
+            AppendArchiveDate(state, n, ref year);
+        }
+    }
+
+    private async Task AppendArchiveFilterAsync(RoutingState state, int index)
+    {
+        if (state.FoundCategory)
+        {
+            try
+            {
+                var categoryId = (await state.Api.Posts.GetCategoryBySlugAsync(state.Page.Id, state.Segments[index]).ConfigureAwait(false))?.Id;
+                if (categoryId.HasValue)
+                {
+                    state.Query.Append("&category=");
+                    state.Query.Append(categoryId);
+                }
+            }
+            finally
+            {
+                state.FoundCategory = false;
+            }
+        }
+
+        if (state.FoundTag)
+        {
+            try
+            {
+                var tagId = (await state.Api.Posts.GetTagBySlugAsync(state.Page.Id, state.Segments[index]).ConfigureAwait(false))?.Id;
+                if (tagId.HasValue)
+                {
+                    state.Query.Append("&tag=");
+                    state.Query.Append(tagId);
+                }
+            }
+            finally
+            {
+                state.FoundTag = false;
+            }
+        }
+    }
+
+    private void AppendArchiveDate(RoutingState state, int index, ref int? year)
+    {
+        if (!year.HasValue)
+        {
+            try
+            {
+                year = Convert.ToInt32(state.Segments[index]);
+                if (year.Value > DateTime.Now.Year)
+                {
+                    year = DateTime.Now.Year;
+                }
+                state.Query.Append("&year=");
+                state.Query.Append(year);
+            }
+            catch
+            {
+                // We don't care about the exception, we just discard malformed input.
+            }
+        }
+        else
+        {
+            try
+            {
+                var month = Math.Max(Math.Min(Convert.ToInt32(state.Segments[index]), 12), 1);
+                state.Query.Append("&month=");
+                state.Query.Append(month);
+            }
+            catch
+            {
+                // We don't care about the exception, we just discard malformed input.
+            }
+        }
+    }
+
+    private void ApplyRoute(RoutingState state)
+    {
+        if (state.Route.Length == 0)
+        {
+            return;
+        }
+
+        var strRoute = state.Route.ToString();
+        var strQuery = state.Query.ToString();
+        _logger?.LogDebug($"Setting Route: [{ strRoute }?{ strQuery }]");
+
+        state.Context.Request.Path = new PathString(strRoute);
+        state.Context.Request.QueryString = state.Context.Request.QueryString.HasValue
+            ? new QueryString(state.Context.Request.QueryString.Value + "&" + strQuery)
+            : new QueryString("?" + strQuery);
+    }
+
+    private sealed class RoutingState
+    {
+        public HttpContext Context { get; init; }
+        public IApi Api { get; init; }
+        public IApplicationService Service { get; init; }
+        public Config Config { get; init; }
+        public string[] Segments { get; init; }
+        public int Position { get; set; }
+        public string Hostname { get; set; }
+        public Site Site { get; set; }
+        public Guid? LanguageId { get; set; }
+        public PageBase Page { get; set; }
+        public PageType PageType { get; set; }
+        public PostBase Post { get; set; }
+        public bool FoundCategory { get; set; }
+        public bool FoundTag { get; set; }
+        public StringBuilder Route { get; } = new();
+        public StringBuilder Query { get; } = new();
     }
 
     /// <summary>
