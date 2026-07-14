@@ -5,7 +5,7 @@
 piranha.editor = {
     editors:[],
 
-    addInline: function (id, toolbarId) {
+    addInline: function () {
         console.log("No HTML editor registered.")
     },
     addInlineMarkdown: function (id, value, update) {
@@ -62,7 +62,7 @@ piranha.editor = {
 
         this.editors[id] = simplemde;
     },
-    remove: function (id) {
+    remove: function () {
         console.log("No HTML editor registered.")
     },
     removeMarkdown: function (id) {

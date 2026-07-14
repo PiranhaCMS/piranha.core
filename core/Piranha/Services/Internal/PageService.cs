@@ -407,7 +407,6 @@ internal sealed class PageService : IPageService
         return sorted;
     }
 
-
     /// <summary>
     /// Gets the page model with the specified slug.
     /// </summary>

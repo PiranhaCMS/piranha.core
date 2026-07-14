@@ -139,10 +139,10 @@ piranha.languageedit = new Vue({
                 }
             }
         },
-        setDefaultConfirm: function (item) {
+        setDefaultConfirm: function () {
             this.showDefaultInfo = false;
         },
-        setDefaultCancel: function (items) {
+        setDefaultCancel: function () {
             this.setDefault(this.originalDefault);
             this.currentDefault = this.originalDefault;
             this.showDefaultInfo = false;
@@ -158,7 +158,7 @@ piranha.languageedit = new Vue({
             this.currentDelete = null;
             this.showDeleteInfo = false;
         },
-        validate: function (item) {
+        validate: function () {
             isValid = true;
 
             for (var n = 0; n < this.items.length; n++) {

@@ -55,7 +55,7 @@ piranha.postpicker = new Vue({
         refresh: function () {
             this.load(this.currentSiteId, this.currentArchiveId);
         },
-        open: function (callback, siteId, archiveId, currentPostId) {
+        open: function (callback, siteId, archiveId) {
             this.search = '';
             this.callback = callback;
 

@@ -18,7 +18,7 @@ piranha.accessibility = new function () {
     //
     // Removes the currently focused block
     //
-    self.removeBlock = function (e) {
+    self.removeBlock = function () {
         var block = $(":focus").parents(".block");
 
         if (block.length === 1) {
@@ -67,7 +67,7 @@ piranha.accessibility = new function () {
             }
             // Pressed backspace, check for focused block
             else if (e.keyCode === 8) {
-                self.removeBlock(e);
+                self.removeBlock();
             }
         }
     });
@@ -240,17 +240,17 @@ piranha.dropzone = new function () {
 
                 // Default addedfile callback
                 if (!options.addedfile) {
-                    options.addedfile = function (file) { }
+                    options.addedfile = function () { }
                 }
 
                 // Default removedfile callback
                 if (!options.removedfile) {
-                    options.removedfile = function (file) { }
+                    options.removedfile = function () { }
                 }
 
                 // Default error callback
                 if (!options.error) {
-                    options.error = function (file) { }
+                    options.error = function () { }
                 }
 
                 // Default complete callback
@@ -403,7 +403,7 @@ Date.prototype.addDays = function(days) {
     date.setDate(date.getDate() + days);
     return date;
 }
-Date.prototype.toDateString = function(days) {
+Date.prototype.toDateString = function() {
     var date = new Date(this.valueOf());
 
     return date.getFullYear() + "-" +
@@ -1064,7 +1064,7 @@ piranha.postpicker = new Vue({
         refresh: function () {
             this.load(this.currentSiteId, this.currentArchiveId);
         },
-        open: function (callback, siteId, archiveId, currentPostId) {
+        open: function (callback, siteId, archiveId) {
             this.search = '';
             this.callback = callback;
 
@@ -1120,7 +1120,6 @@ piranha.preview = new Vue({
             piranha.preview.media = media;
             piranha.preview.show();
         },
-        //TODO: Rename loadAndOpen?
         open: function (mediaId) {
             piranha.preview.load(mediaId);
             piranha.preview.show();
@@ -1336,10 +1335,10 @@ piranha.languageedit = new Vue({
                 }
             }
         },
-        setDefaultConfirm: function (item) {
+        setDefaultConfirm: function () {
             this.showDefaultInfo = false;
         },
-        setDefaultCancel: function (items) {
+        setDefaultCancel: function () {
             this.setDefault(this.originalDefault);
             this.currentDefault = this.originalDefault;
             this.showDefaultInfo = false;
@@ -1355,7 +1354,7 @@ piranha.languageedit = new Vue({
             this.currentDelete = null;
             this.showDeleteInfo = false;
         },
-        validate: function (item) {
+        validate: function () {
             isValid = true;
 
             for (var n = 0; n < this.items.length; n++) {
@@ -1402,7 +1401,7 @@ piranha.resources = new function() {
 piranha.editor = {
     editors:[],
 
-    addInline: function (id, toolbarId) {
+    addInline: function () {
         console.log("No HTML editor registered.")
     },
     addInlineMarkdown: function (id, value, update) {
@@ -1459,7 +1458,7 @@ piranha.editor = {
 
         this.editors[id] = simplemde;
     },
-    remove: function (id) {
+    remove: function () {
         console.log("No HTML editor registered.")
     },
     removeMarkdown: function (id) {

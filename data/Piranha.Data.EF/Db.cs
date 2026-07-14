@@ -506,7 +506,6 @@ public abstract class Db<T> : DbContext, IDb where T : Db<T>
         mb.Entity<Data.Site>().HasOne(s => s.Language).WithMany().OnDelete(DeleteBehavior.Restrict);
         mb.Entity<Data.Site>().HasIndex(s => s.InternalId).IsUnique();
 
-
         mb.Entity<Data.SiteField>().ToTable("Piranha_SiteFields");
         mb.Entity<Data.SiteField>().Property(f => f.RegionId).HasMaxLength(64).IsRequired();
         mb.Entity<Data.SiteField>().Property(f => f.FieldId).HasMaxLength(64).IsRequired();

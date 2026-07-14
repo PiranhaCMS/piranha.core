@@ -388,21 +388,8 @@ public class PageService
     /// </summary>
     public async Task<PageTranslationExchangeImportResult> ImportTranslations(Guid id, PageTranslationExchangeModel document)
     {
-        if (document == null || document.FormatVersion != "1.0")
-        {
-            throw new ValidationException("The translation file format is not supported.");
-        }
-        if (document.PageId != id)
-        {
-            throw new ValidationException("The translation file belongs to a different page.");
-        }
-        if (document.SourceLanguage == null || document.TargetLanguage == null)
-        {
-            throw new ValidationException("The translation file must specify source and target languages.");
-        }
-
         var languages = (await _api.Languages.GetAllAsync()).ToList();
-        ValidateTranslationLanguages(languages, document.SourceLanguage.Id, document.TargetLanguage.Id);
+        ValidateTranslationDocument(id, document, languages);
 
         var defaultLanguage = languages.First(language => language.IsDefault);
         var structure = await GetById(id, true, defaultLanguage.Id);
@@ -416,13 +403,39 @@ public class PageService
         {
             throw new ValidationException("The page structure has changed since this translation file was exported. Export a new file before importing.");
         }
+        var writable = GetWritableTranslationUnits(target);
+        var result = ApplyTranslationUnits(document, writable);
+
+        await Save(target, true);
+        return result;
+    }
+
+    private void ValidateTranslationDocument(Guid id, PageTranslationExchangeModel document, IList<Language> languages)
+    {
+        if (document == null || document.FormatVersion != "1.0")
+        {
+            throw new ValidationException("The translation file format is not supported.");
+        }
+        if (document.PageId != id)
+        {
+            throw new ValidationException("The translation file belongs to a different page.");
+        }
+        if (document.SourceLanguage == null || document.TargetLanguage == null)
+        {
+            throw new ValidationException("The translation file must specify source and target languages.");
+        }
         if (document.Units == null || document.Units.Any(unit => unit == null || string.IsNullOrWhiteSpace(unit.Key)) ||
             document.Units.GroupBy(unit => unit.Key).Any(group => group.Count() > 1))
         {
             throw new ValidationException("The translation file contains duplicate or invalid text units.");
         }
 
-        var writable = GetWritableTranslationUnits(target);
+        ValidateTranslationLanguages(languages, document.SourceLanguage.Id, document.TargetLanguage.Id);
+    }
+
+    private PageTranslationExchangeImportResult ApplyTranslationUnits(PageTranslationExchangeModel document,
+        IDictionary<string, WritableTranslationUnit> writable)
+    {
         var result = new PageTranslationExchangeImportResult
         {
             TargetLanguageId = document.TargetLanguage.Id
@@ -440,14 +453,10 @@ public class PageService
             {
                 destination.SetValue(unit.Target);
                 result.Replaced++;
-                if (unit.Target.Length == 0)
-                {
-                    result.Cleared++;
-                }
+                result.Cleared += unit.Target.Length == 0 ? 1 : 0;
             }
         }
 
-        await Save(target, true);
         return result;
     }
 
