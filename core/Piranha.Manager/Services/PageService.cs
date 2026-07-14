@@ -327,6 +327,30 @@ public class PageService
         return null;
     }
 
+    /// <summary>
+    /// Gets a page edit model for every configured language.
+    /// </summary>
+    /// <param name="id">The page id</param>
+    /// <param name="useDraft">If draft content should be loaded</param>
+    /// <returns>The language-specific page edit models.</returns>
+    public async Task<PageTranslationEditModel> GetTranslationsById(Guid id, bool useDraft = true)
+    {
+        var result = new PageTranslationEditModel();
+        var languages = (await _api.Languages.GetAllAsync())
+            .OrderByDescending(language => language.IsDefault);
+
+        foreach (var language in languages)
+        {
+            var page = await GetById(id, useDraft, language.Id);
+
+            if (page != null)
+            {
+                result.Pages.Add(page);
+            }
+        }
+        return result;
+    }
+
     public async Task<PageEditModel> Detach(Guid id)
     {
         var page = await _api.Pages.GetByIdAsync(id);

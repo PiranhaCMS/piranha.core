@@ -15,6 +15,8 @@ piranha.pageedit = new Vue({
         languageId: null,
         languages: [],
         useTranslations: false,
+        translationMode: false,
+        translationModels: [],
         title: null,
         navigationTitle: null,
         slug: null,
@@ -200,9 +202,50 @@ piranha.pageedit = new Vue({
                 .catch(function (error) { console.log("error:", error );
             });
         },
+        loadTranslations: function (id) {
+            var self = this;
+
+            fetch(piranha.baseUrl + "manager/api/page/translations/" + id)
+                .then(function (response) { return response.json(); })
+                .then(function (result) {
+                    self.translationMode = true;
+                    self.translationModels = result.pages || [];
+
+                    if (self.translationModels.length > 0) {
+                        self.bind(self.translationModels[0]);
+                    }
+                })
+                .catch(function (error) { console.log("error:", error ); });
+        },
         switchLanguage: function (lang) {
+            if (this.translationMode) {
+                return;
+            }
             this.languageId = lang.id;
             this.load(this.id, lang.id);
+        },
+        languageFor: function (translation) {
+            return this.languages.find(function (language) { return language.id === translation.languageId; })
+                || { title: "", isDefault: false };
+        },
+        translationBlock: function (translation, referenceBlock, index) {
+            if (!translation.blocks) {
+                return null;
+            }
+
+            return translation.blocks.find(function (block) {
+                return block.meta.uid === referenceBlock.meta.uid;
+            }) || translation.blocks[index];
+        },
+        translationBlockUid: function (translation, block) {
+            return translation.languageId + "-" + block.meta.uid;
+        },
+        translationBlockName: function (block) {
+            var label = this.getBlockLabel(block);
+            return label === null || typeof label === "undefined" ? block.meta.name : label;
+        },
+        updateTranslationBlockTitle: function (translation, block, event) {
+            block.meta.title = event.title;
         },
         create: function (id, pageType) {
             var self = this;
@@ -260,16 +303,61 @@ piranha.pageedit = new Vue({
         save: function ()
         {
             this.saving = true;
+            if (this.translationMode) {
+                this.saveTranslations(false);
+                return;
+            }
             this.saveInternal(piranha.baseUrl + "manager/api/page/save");
         },
         saveDraft: function ()
         {
             this.savingDraft = true;
+            if (this.translationMode) {
+                this.saveTranslations(true);
+                return;
+            }
             this.saveInternal(piranha.baseUrl + "manager/api/page/save/draft");
+        },
+        saveTranslations: function (draft, unpublish) {
+            var self = this;
+            var route = piranha.baseUrl + "manager/api/page/save/translations" + (unpublish ? "/unpublish" : draft ? "/draft" : "");
+
+            fetch(route, {
+                method: "post",
+                headers: piranha.utils.antiForgeryHeaders(),
+                body: JSON.stringify({ pages: self.translationModels })
+            })
+            .then(function (response) { return response.json(); })
+            .then(function (result) {
+                if (result.status) {
+                    piranha.notifications.push(result.status);
+                }
+
+                if (result.status && result.status.type === "error") {
+                    return;
+                }
+
+                self.translationModels = result.pages || self.translationModels;
+                if (self.translationModels.length > 0) {
+                    self.bind(self.translationModels[0]);
+                }
+                self.eventBus.$emit("onSaved", self.state);
+            })
+            .catch(function (error) {
+                console.log("error:", error);
+            })
+            .finally(function () {
+                self.saving = false;
+                self.savingDraft = false;
+            });
         },
         unpublish: function ()
         {
             this.saving = true;
+            if (this.translationMode) {
+                this.saveTranslations(false, true);
+                return;
+            }
             this.saveInternal(piranha.baseUrl + "manager/api/page/save/unpublish");
         },
         saveInternal: function (route) {
@@ -520,12 +608,26 @@ piranha.pageedit = new Vue({
     created: function () {
     },
     updated: function () {
+        // Side-by-side mode intentionally does not render the legacy single-language
+        // block editor. Do not initialize sortable against a missing container.
+        if (this.translationMode) {
+            this.loading = false;
+            return;
+        }
+
+        var blockContainer = document.getElementById("content-blocks");
+        if (!blockContainer) {
+            this.loading = false;
+            return;
+        }
+
         if (this.loading)
         {
-            sortable("#content-blocks", {
+            var sortables = sortable(blockContainer, {
                 handle: ".handle",
                 items: ":not(.unsortable)"
-            })[0].addEventListener("sortupdate", function (e) {
+            });
+            sortables[0].addEventListener("sortupdate", function (e) {
                 if (piranha.pageedit.canEditBlockStructure) {
                     piranha.pageedit.moveBlock(e.detail.origin.index, e.detail.destination.index);
                 }

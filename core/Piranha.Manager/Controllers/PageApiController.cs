@@ -104,6 +104,19 @@ public class PageApiController : Controller
     }
 
     /// <summary>
+    /// Gets the page in every configured language for side-by-side editing.
+    /// </summary>
+    /// <param name="id">The unique page id</param>
+    /// <returns>The language-specific page edit models</returns>
+    [Route("translations/{id:Guid}")]
+    [HttpGet]
+    [Authorize(Policy = Permission.PagesEdit)]
+    public async Task<PageTranslationEditModel> GetTranslations(Guid id)
+    {
+        return await _service.GetTranslationsById(id);
+    }
+
+    /// <summary>
     /// Gets the info model for the page with the
     /// given id.
     /// </summary>
@@ -235,6 +248,39 @@ public class PageApiController : Controller
         await _hub?.Clients.All.SendAsync("Update", model.Id);
 
         return ret;
+    }
+
+    /// <summary>
+    /// Saves every language variant of a page as published content.
+    /// </summary>
+    [Route("save/translations")]
+    [HttpPost]
+    [Authorize(Policy = Permission.PagesPublish)]
+    public async Task<PageTranslationEditModel> SaveTranslations(PageTranslationEditModel model)
+    {
+        return await SaveTranslations(model, false);
+    }
+
+    /// <summary>
+    /// Saves every language variant of a page as draft content.
+    /// </summary>
+    [Route("save/translations/draft")]
+    [HttpPost]
+    [Authorize(Policy = Permission.PagesSave)]
+    public async Task<PageTranslationEditModel> SaveTranslationsDraft(PageTranslationEditModel model)
+    {
+        return await SaveTranslations(model, true);
+    }
+
+    /// <summary>
+    /// Unpublishes every language variant of a page.
+    /// </summary>
+    [Route("save/translations/unpublish")]
+    [HttpPost]
+    [Authorize(Policy = Permission.PagesPublish)]
+    public async Task<PageTranslationEditModel> UnpublishTranslations(PageTranslationEditModel model)
+    {
+        return await SaveTranslations(model, false, true);
     }
 
     /// <summary>
@@ -377,5 +423,66 @@ public class PageApiController : Controller
         };
 
         return ret;
+    }
+
+    /// <summary>
+    /// Saves all language variants.
+    /// </summary>
+    private async Task<PageTranslationEditModel> SaveTranslations(PageTranslationEditModel model, bool draft, bool unpublish = false)
+    {
+        if (model.Pages.Count == 0)
+        {
+            model.Status = new StatusMessage
+            {
+                Type = StatusMessage.Error,
+                Body = _localizer.Page["No translations were supplied"]
+            };
+            return model;
+        }
+
+        try
+        {
+            foreach (var page in model.Pages.OrderByDescending(page => page.Languages.FirstOrDefault(language => language.Id == page.LanguageId)?.IsDefault == true))
+            {
+                if (unpublish)
+                {
+                    page.Published = null;
+                }
+                else if (!draft && string.IsNullOrEmpty(page.Published))
+                {
+                    page.Published = DateTime.Now.ToString("yyyy-MM-dd HH:mm");
+                }
+                await _service.Save(page, draft);
+            }
+        }
+        catch (ValidationException e)
+        {
+            model.Status = new StatusMessage
+            {
+                Type = StatusMessage.Error,
+                Body = e.Message
+            };
+            return model;
+        }
+        catch
+        {
+            model.Status = new StatusMessage
+            {
+                Type = StatusMessage.Error,
+                Body = _localizer.Page["An error occured while saving the page"]
+            };
+            return model;
+        }
+
+        var pageId = model.Pages[0].Id;
+        var result = await _service.GetTranslationsById(pageId);
+        result.Status = new StatusMessage
+        {
+            Type = StatusMessage.Success,
+            Body = draft ? _localizer.Page["The page was successfully saved"] : unpublish ? _localizer.Page["The page was successfully unpublished"] : _localizer.Page["The page was successfully published"]
+        };
+
+        await _hub?.Clients.All.SendAsync("Update", pageId);
+        return result;
     }
 }

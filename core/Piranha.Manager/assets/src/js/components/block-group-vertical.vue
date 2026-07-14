@@ -10,7 +10,7 @@
                 <div class="form-group" :class="{ 'col-sm-6': field.meta.isHalfWidth, 'col-sm-12': !field.meta.isHalfWidth }" v-bind:key="field.meta.uid" v-for="field in model.fields">
                     <label>{{ field.meta.name }}</label>
                     <div v-if="field.meta.description != null" v-html="field.meta.description" class="field-description small text-muted"></div>
-                    <component v-bind:is="field.meta.component" v-bind:uid="field.meta.uid" v-bind:meta="field.meta" v-bind:toolbar="toolbar" v-bind:model="field.model"></component>
+                    <component v-bind:is="field.meta.component" v-bind:uid="uid + '-' + field.meta.uid" v-bind:meta="field.meta" v-bind:toolbar="toolbar" v-bind:model="field.model"></component>
                 </div>
             </div>
         </div>
@@ -43,7 +43,7 @@
                             </button>
                         </div>
                     </div>
-                    <component v-bind:is="child.meta.component" v-bind:uid="child.meta.uid" v-bind:toolbar="toolbar" v-bind:model="child.model" v-bind:can-edit-structure="canEditStructure" v-bind:can-edit-block-name="canEditBlockName"></component>
+                    <component v-bind:is="child.meta.component" v-bind:uid="uid + '-' + child.meta.uid" v-bind:toolbar="toolbar" v-bind:model="child.model" v-bind:can-edit-structure="canEditStructure" v-bind:can-edit-block-name="canEditBlockName"></component>
                 </div>
                 <a v-if="canEditStructure" href="#" class="block-add unsortable" v-on:click.prevent="piranha.blockpicker.open(addGroupBlock, index + 1, model.type)">
                     <hr>

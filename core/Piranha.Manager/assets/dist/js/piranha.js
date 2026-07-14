@@ -1259,7 +1259,7 @@ piranha.languageedit = new Vue({
                     if (result.status.type === "success") {
                         self.bind(result);
                     }
-                    
+
                     if (result.status !== 400) {
                         // Refresh language list
                         self.refreshLanguageList();

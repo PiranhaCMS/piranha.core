@@ -18,7 +18,11 @@
     {
         <script>
             piranha.permissions.load(function () {
-                piranha.pageedit.load("@RouteData.Values["id"]");
+                if (new URLSearchParams(window.location.search).get("translations") === "side-by-side") {
+                    piranha.pageedit.loadTranslations("@RouteData.Values["id"]");
+                } else {
+                    piranha.pageedit.load("@RouteData.Values["id"]");
+                }
                 $(".title input").focus();
             });
         </script>
@@ -105,7 +109,7 @@
         </div>
 
         <!-- Content navigation -->
-        <ul v-if="(useBlocks && (editors.length + contentRegions.length > 0)) || editors.length + contentRegions.length > 1 || (enableComments && (commentCount > 0 || pendingCommentCount > 0))" class="nav nav-pills nav-pills-card justify-content-center">
+        <ul v-if="!translationMode && ((useBlocks && (editors.length + contentRegions.length > 0)) || editors.length + contentRegions.length > 1 || (enableComments && (commentCount > 0 || pendingCommentCount > 0)))" class="nav nav-pills nav-pills-card justify-content-center">
             <li v-if="useBlocks" class="nav-item">
                 <a class="nav-link" v-on:click.prevent="selectRegion({ uid: 'uid-blocks' })" :class="{ active: selectedRegion.uid === 'uid-blocks' }" href="#">
                     <i class="fas fa-pen-alt"></i>@Localizer.General["Main content"]
@@ -129,8 +133,76 @@
             </li>
         </ul>
 
+        <!-- Side-by-side translation metadata -->
+        <div v-if="translationMode" class="translation-editor">
+            <div class="translation-editor__intro">
+                <i class="fas fa-language"></i>
+                @Localizer.Page["Edit translated page metadata side by side. Block structure remains managed in the default language."]
+            </div>
+            <div class="translation-editor__columns">
+                <section v-for="translation in translationModels" :key="translation.languageId" class="translation-editor__column" :class="{ 'translation-editor__column--default': languageFor(translation).isDefault }">
+                    <header>
+                        <strong>{{ languageFor(translation).title }}</strong>
+                        <span v-if="languageFor(translation).isDefault" class="badge badge-secondary">@Localizer.General["Default"]</span>
+                    </header>
+                    <div class="form-group">
+                        <label>@Localizer.Page["Your page title"]</label>
+                        <input v-model="translation.title" type="text" class="form-control form-control-lg" :placeholder="languageFor(translation).title">
+                    </div>
+                    <div class="form-group">
+                        <label>@Localizer.Page["Navigation title"]</label>
+                        <input v-model="translation.navigationTitle" type="text" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label>@Localizer.Page["Slug"]</label>
+                        <input v-model="translation.slug" type="text" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label>@Localizer.Page["Excerpt"]</label>
+                        <textarea v-model="translation.excerpt" class="form-control" rows="4"></textarea>
+                    </div>
+                </section>
+            </div>
+
+            <div v-if="translationModels.length > 0" class="translation-editor__block-list">
+                <article v-for="(referenceBlock, blockIndex) in translationModels[0].blocks" :key="referenceBlock.meta.uid" class="translation-editor__block-row">
+                    <header class="translation-editor__block-row-header">
+                        <i :class="referenceBlock.meta.icon"></i>
+                        <strong>{{ translationBlockName(referenceBlock) }}</strong>
+                        <span class="small text-muted">{{ referenceBlock.meta.title }}</span>
+                    </header>
+                    <div class="translation-editor__block-row-columns">
+                        <section v-for="translation in translationModels" :key="translation.languageId" class="translation-editor__block-cell">
+                            <div class="translation-editor__block-cell-language">{{ languageFor(translation).title }}</div>
+                            <template v-if="translationBlock(translation, referenceBlock, blockIndex)">
+                                <div :id="'tb-' + translationBlockUid(translation, translationBlock(translation, referenceBlock, blockIndex))" class="component-toolbar"></div>
+                                <div class="block" :class="translationBlock(translation, referenceBlock, blockIndex).meta.component">
+                                    <component v-if="!translationBlock(translation, referenceBlock, blockIndex).meta.isGroup"
+                                               :is="translationBlock(translation, referenceBlock, blockIndex).meta.component"
+                                               :uid="translationBlockUid(translation, translationBlock(translation, referenceBlock, blockIndex))"
+                                               :toolbar="'tb-' + translationBlockUid(translation, translationBlock(translation, referenceBlock, blockIndex))"
+                                               :model="translationBlock(translation, referenceBlock, blockIndex).model"
+                                               v-on:update-title="updateTranslationBlockTitle(translation, translationBlock(translation, referenceBlock, blockIndex), $event)"></component>
+                                    <component v-else
+                                               :is="translationBlock(translation, referenceBlock, blockIndex).meta.component"
+                                               :uid="translationBlockUid(translation, translationBlock(translation, referenceBlock, blockIndex))"
+                                               :toolbar="'tb-' + translationBlockUid(translation, translationBlock(translation, referenceBlock, blockIndex))"
+                                               :model="translationBlock(translation, referenceBlock, blockIndex)"
+                                               :can-edit-structure="false"
+                                               :can-edit-block-name="false"></component>
+                                </div>
+                            </template>
+                            <div v-else class="translation-editor__missing-block">
+                                @Localizer.Page["This block is missing in this language."]
+                            </div>
+                        </section>
+                    </div>
+                </article>
+            </div>
+        </div>
+
         <!-- Title -->
-        <div class="card">
+        <div v-if="!translationMode" class="card">
             <div class="card-body">
                 <div class="row">
                     <div class="col">
@@ -143,7 +215,7 @@
         </div>
 
         <!-- Blocks -->
-        <div class="card" :class="{ 'd-none': selectedRegion.uid != 'uid-blocks' }">
+        <div v-if="!translationMode" class="card" :class="{ 'd-none': selectedRegion.uid != 'uid-blocks' }">
             <div class="card-body" v-bind:class="{ readonly: isCopy }">
                 <div v-if="!canEditBlockStructure" class="alert alert-info">
                     @Localizer.Page["Block structure is managed in the default language. You can edit translated field values here."]
@@ -190,7 +262,7 @@
         </div>
 
         <!-- Custom Editors -->
-        <div class="card" :class="{ 'd-none': selectedRegion.uid != editor.uid }" v-for="editor in editors">
+        <div v-if="!translationMode" class="card" :class="{ 'd-none': selectedRegion.uid != editor.uid }" v-for="editor in editors">
             <div class="card-body">
                 <div class="region-center">
                     <component v-bind:is="editor.component" v-bind:uid="editor.uid" v-bind:id="id"></component>
@@ -199,7 +271,7 @@
         </div>
 
         <!-- Content Regions -->
-        <div class="card" :class="{ 'd-none': selectedRegion.uid != region.meta.uid }" v-for="region in contentRegions">
+        <div v-if="!translationMode" class="card" :class="{ 'd-none': selectedRegion.uid != region.meta.uid }" v-for="region in contentRegions">
             <div class="card-body">
                 <div class="region" :class="{ readonly: isCopy, 'region-center': region.meta.width === 'centered' }">
                     <region v-bind:content="'page'" v-bind:type="typeId" v-bind:model="region"></region>
@@ -209,5 +281,101 @@
         </div>
     </div>
 
-    <partial name="Partial/_PageSettings" />
+    <div v-if="!translationMode">
+        <partial name="Partial/_PageSettings" />
+    </div>
 </div>
+
+<style>
+    .translation-editor {
+        margin-bottom: 1.5rem;
+    }
+
+    .translation-editor__intro {
+        margin-bottom: 1rem;
+        padding: .75rem 1rem;
+        background: #edf5ff;
+        border-left: 4px solid #007bff;
+    }
+
+    .translation-editor__columns {
+        display: flex;
+        gap: 1rem;
+        overflow-x: auto;
+        padding-bottom: .75rem;
+        scroll-snap-type: x proximity;
+    }
+
+    .translation-editor__column {
+        flex: 0 0 min(26rem, 85vw);
+        padding: 1rem;
+        background: #fff;
+        border: 1px solid #dee2e6;
+        border-radius: .25rem;
+        scroll-snap-align: start;
+    }
+
+    .translation-editor__column--default {
+        border-top: 4px solid #007bff;
+    }
+
+    .translation-editor__column header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin: -.25rem 0 1rem;
+    }
+
+    .translation-editor__block-list {
+        margin-top: 1.5rem;
+        overflow-x: auto;
+        padding-bottom: .75rem;
+    }
+
+    .translation-editor__block-row {
+        margin-bottom: 1rem;
+        background: #fff;
+        border: 1px solid #dee2e6;
+        border-radius: .25rem;
+        overflow: hidden;
+        min-width: max-content;
+    }
+
+    .translation-editor__block-row-header {
+        display: flex;
+        gap: .5rem;
+        align-items: center;
+        padding: .65rem 1rem;
+        background: #f8f9fa;
+        border-bottom: 1px solid #dee2e6;
+    }
+
+    .translation-editor__block-row-columns {
+        display: flex;
+        min-width: max-content;
+    }
+
+    .translation-editor__block-cell {
+        flex: 0 0 min(26rem, 85vw);
+        min-width: 0;
+        padding: 1rem;
+        border-right: 1px solid #dee2e6;
+    }
+
+    .translation-editor__block-cell:last-child {
+        border-right: 0;
+    }
+
+    .translation-editor__block-cell-language {
+        margin: -.25rem 0 .75rem;
+        color: #6c757d;
+        font-size: .875rem;
+        font-weight: 600;
+    }
+
+    .translation-editor__missing-block {
+        padding: 1rem;
+        color: #6c757d;
+        font-style: italic;
+    }
+</style>

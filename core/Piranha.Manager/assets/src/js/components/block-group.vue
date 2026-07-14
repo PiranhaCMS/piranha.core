@@ -10,7 +10,7 @@
                 <div class="form-group" :class="{ 'col-sm-6': field.meta.isHalfWidth, 'col-sm-12': !field.meta.isHalfWidth }" v-bind:key="field.meta.id" v-for="field in model.fields">
                     <label>{{ field.meta.name }}</label>
                     <div v-if="field.meta.description != null" v-html="field.meta.description" class="field-description small text-muted"></div>
-                    <component v-bind:is="field.meta.component" v-bind:uid="field.meta.uid" v-bind:meta="field.meta" v-bind:toolbar="toolbar" v-bind:model="field.model"></component>
+                    <component v-bind:is="field.meta.component" v-bind:uid="uid + '-' + field.meta.uid" v-bind:meta="field.meta" v-bind:toolbar="toolbar" v-bind:model="field.model"></component>
                 </div>
             </div>
         </div>
@@ -44,7 +44,7 @@
                                 <input :value="getItemName(child)" v-on:input="setItemName(child, $event.target.value)" class="block-name" maxlength="128">
                             </div>
                         </div>
-                        <component v-bind:is="child.meta.component" v-bind:uid="child.meta.uid" v-bind:toolbar="toolbar" v-bind:model="child.model" v-bind:can-edit-structure="canEditStructure" v-bind:can-edit-block-name="canEditBlockName" v-on:update-title="updateTitle($event)"></component>
+                        <component v-bind:is="child.meta.component" v-bind:uid="uid + '-' + child.meta.uid" v-bind:toolbar="toolbar" v-bind:model="child.model" v-bind:can-edit-structure="canEditStructure" v-bind:can-edit-block-name="canEditBlockName" v-on:update-title="updateTitle($event)"></component>
                     </div>
                 </template>
             </div>
@@ -97,7 +97,7 @@ export default {
         },
         updateTitle: function (e) {
             for (var n = 0; n < this.model.items.length; n++) {
-                if (this.model.items[n].meta.uid === e.uid) {
+                if (e.uid === this.model.items[n].meta.uid || e.uid.endsWith("-" + this.model.items[n].meta.uid)) {
                     this.model.items[n].meta.title = e.title;
                     break;
                 }
