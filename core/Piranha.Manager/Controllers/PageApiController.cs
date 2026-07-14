@@ -9,9 +9,12 @@
  */
 
 using System.ComponentModel.DataAnnotations;
+using System.Text;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
+using Newtonsoft.Json;
 using Piranha.Manager.Models;
 using Piranha.Manager.Services;
 
@@ -114,6 +117,92 @@ public class PageApiController : Controller
     public async Task<PageTranslationEditModel> GetTranslations(Guid id)
     {
         return await _service.GetTranslationsById(id);
+    }
+
+    /// <summary>
+    /// Downloads one page's text in the Piranha translation exchange format.
+    /// </summary>
+    [Route("translation/export/{id:Guid}")]
+    [HttpGet]
+    [Authorize(Policy = Permission.PagesEdit)]
+    public async Task<IActionResult> ExportTranslations(Guid id, Guid sourceLanguageId, Guid targetLanguageId)
+    {
+        try
+        {
+            var document = await _service.ExportTranslations(id, sourceLanguageId, targetLanguageId);
+            var fileName = $"page-{id}-{document.SourceLanguage.Culture ?? document.SourceLanguage.Id.ToString()}-to-{document.TargetLanguage.Culture ?? document.TargetLanguage.Id.ToString()}.json";
+            var content = JsonConvert.SerializeObject(document, Formatting.Indented);
+
+            return File(Encoding.UTF8.GetBytes(content), "application/json", fileName);
+        }
+        catch (ValidationException exception)
+        {
+            return BadRequest(new StatusMessage
+            {
+                Type = StatusMessage.Error,
+                Body = exception.Message
+            });
+        }
+    }
+
+    /// <summary>
+    /// Imports target-language text from a Piranha translation exchange document.
+    /// </summary>
+    [Route("translation/import/{id:Guid}")]
+    [HttpPost]
+    [Consumes("multipart/form-data")]
+    [Authorize(Policy = Permission.PagesSave)]
+    public async Task<PageTranslationExchangeImportResult> ImportTranslations(Guid id, [FromForm] IFormFile file, [FromForm] Guid targetLanguageId)
+    {
+        var result = new PageTranslationExchangeImportResult();
+        try
+        {
+            if (file == null || file.Length == 0)
+            {
+                throw new ValidationException("Select a translation JSON file to import.");
+            }
+
+            using var reader = new StreamReader(file.OpenReadStream());
+            var document = JsonConvert.DeserializeObject<PageTranslationExchangeModel>(await reader.ReadToEndAsync());
+            if (document?.TargetLanguage?.Id != targetLanguageId)
+            {
+                throw new ValidationException("The translation file target language does not match the selected target language.");
+            }
+            result = await _service.ImportTranslations(id, document);
+            result.Status = new StatusMessage
+            {
+                Type = StatusMessage.Success,
+                Body = result.Cleared > 0
+                    ? $"Imported {result.Replaced} text values and cleared {result.Cleared} values."
+                    : $"Imported {result.Replaced} text values."
+            };
+            await _hub?.Clients.All.SendAsync("Update", id);
+        }
+        catch (ValidationException exception)
+        {
+            result.Status = new StatusMessage
+            {
+                Type = StatusMessage.Error,
+                Body = exception.Message
+            };
+        }
+        catch (JsonException)
+        {
+            result.Status = new StatusMessage
+            {
+                Type = StatusMessage.Error,
+                Body = "The selected file is not valid Piranha translation JSON."
+            };
+        }
+        catch
+        {
+            result.Status = new StatusMessage
+            {
+                Type = StatusMessage.Error,
+                Body = "An unexpected error occurred while importing the translation file."
+            };
+        }
+        return result;
     }
 
     /// <summary>

@@ -139,6 +139,34 @@
                 <i class="fas fa-language"></i>
                 @Localizer.Page["Edit translated page metadata side by side. Block structure remains managed in the default language."]
             </div>
+            <div class="translation-editor__exchange card card-body mb-3">
+                <div class="form-row align-items-end">
+                    <div class="form-group col-md-3 mb-md-0">
+                        <label for="translation-source-language">Source language</label>
+                        <select id="translation-source-language" v-model="translationSourceLanguageId" class="form-control">
+                            <option v-for="language in languages" :value="language.id">{{ language.title }}</option>
+                        </select>
+                    </div>
+                    <div class="form-group col-md-3 mb-md-0">
+                        <label for="translation-target-language">Target language</label>
+                        <select id="translation-target-language" v-model="translationTargetLanguageId" class="form-control">
+                            <option v-for="language in languages" :value="language.id">{{ language.title }}</option>
+                        </select>
+                    </div>
+                    <div class="col-md-auto mt-2 mt-md-0">
+                        <button type="button" class="btn btn-secondary" v-on:click="exportTranslationFile()">
+                            <i class="fas fa-file-export"></i> Export translation JSON
+                        </button>
+                    </div>
+                    <div class="col-md-auto mt-2 mt-md-0">
+                        <button type="button" class="btn btn-outline-primary" :disabled="importingTranslation" v-on:click="selectTranslationImportFile()">
+                            <i class="fas fa-file-import"></i> {{ importingTranslation ? 'Importing…' : 'Import translation JSON' }}
+                        </button>
+                        <input ref="translationImportFile" type="file" class="d-none" accept="application/json,.json" v-on:change="importTranslationFile($event)">
+                    </div>
+                </div>
+                <small class="form-text text-muted mt-2">Export source text for translation. Import replaces every included target text value, including existing block text; omitted values are kept and empty values clear text.</small>
+            </div>
             <div class="translation-editor__columns">
                 <section v-for="translation in translationModels" :key="translation.languageId" class="translation-editor__column" :class="{ 'translation-editor__column--default': languageFor(translation).isDefault }">
                     <header>

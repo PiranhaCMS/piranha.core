@@ -17,6 +17,9 @@ piranha.pageedit = new Vue({
         useTranslations: false,
         translationMode: false,
         translationModels: [],
+        translationSourceLanguageId: null,
+        translationTargetLanguageId: null,
+        importingTranslation: false,
         title: null,
         navigationTitle: null,
         slug: null,
@@ -213,6 +216,11 @@ piranha.pageedit = new Vue({
 
                     if (self.translationModels.length > 0) {
                         self.bind(self.translationModels[0]);
+                        self.translationSourceLanguageId = self.translationModels[0].languageId;
+                        var target = self.translationModels.find(function (model) {
+                            return model.languageId !== self.translationSourceLanguageId;
+                        });
+                        self.translationTargetLanguageId = target ? target.languageId : null;
                     }
                 })
                 .catch(function (error) { console.log("error:", error ); });
@@ -227,6 +235,64 @@ piranha.pageedit = new Vue({
         languageFor: function (translation) {
             return this.languages.find(function (language) { return language.id === translation.languageId; })
                 || { title: "", isDefault: false };
+        },
+        exportTranslationFile: function () {
+            if (!this.translationSourceLanguageId || !this.translationTargetLanguageId ||
+                this.translationSourceLanguageId === this.translationTargetLanguageId) {
+                piranha.notifications.push({ type: "error", body: "Choose different source and target languages." });
+                return;
+            }
+
+            var url = piranha.baseUrl + "manager/api/page/translation/export/" + this.id +
+                "?sourceLanguageId=" + encodeURIComponent(this.translationSourceLanguageId) +
+                "&targetLanguageId=" + encodeURIComponent(this.translationTargetLanguageId);
+            window.location.assign(url);
+        },
+        selectTranslationImportFile: function () {
+            if (!this.translationTargetLanguageId) {
+                piranha.notifications.push({ type: "error", body: "Choose a target language before importing." });
+                return;
+            }
+            this.$refs.translationImportFile.click();
+        },
+        importTranslationFile: function (event) {
+            var self = this;
+            var file = event.target.files[0];
+            event.target.value = "";
+            if (!file) {
+                return;
+            }
+
+            piranha.alert.open({
+                title: "Import translation",
+                body: "Every target value contained in this file will replace the existing translation. Empty target values will clear existing text.",
+                confirmCss: "btn-danger",
+                confirmIcon: "fas fa-file-import",
+                confirmText: "Import and overwrite",
+                onConfirm: function () {
+                    var data = new FormData();
+                    data.append("file", file);
+                    data.append("targetLanguageId", self.translationTargetLanguageId);
+                    self.importingTranslation = true;
+
+                    fetch(piranha.baseUrl + "manager/api/page/translation/import/" + self.id, {
+                        method: "post",
+                        headers: piranha.utils.antiForgeryHeaders(false),
+                        body: data
+                    })
+                    .then(function (response) { return response.json(); })
+                    .then(function (result) {
+                        if (result.status) {
+                            piranha.notifications.push(result.status);
+                        }
+                        if (!result.status || result.status.type !== "error") {
+                            self.loadTranslations(self.id);
+                        }
+                    })
+                    .catch(function (error) { console.log("error:", error); })
+                    .finally(function () { self.importingTranslation = false; });
+                }
+            });
         },
         translationBlock: function (translation, referenceBlock, index) {
             if (!translation.blocks) {

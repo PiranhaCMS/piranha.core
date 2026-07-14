@@ -11,6 +11,8 @@
 using System.Collections;
 using System.ComponentModel.DataAnnotations;
 using System.Dynamic;
+using System.Security.Cryptography;
+using System.Text;
 using Piranha.Extend;
 using Piranha.Extend.Fields;
 using Piranha.Manager.Extensions;
@@ -348,6 +350,104 @@ public class PageService
                 result.Pages.Add(page);
             }
         }
+        return result;
+    }
+
+    /// <summary>
+    /// Exports the text values of a page for one source and target language pair.
+    /// </summary>
+    public async Task<PageTranslationExchangeModel> ExportTranslations(Guid id, Guid sourceLanguageId, Guid targetLanguageId)
+    {
+        var languages = (await _api.Languages.GetAllAsync()).ToList();
+        ValidateTranslationLanguages(languages, sourceLanguageId, targetLanguageId);
+
+        var source = await GetById(id, true, sourceLanguageId);
+        var target = await GetById(id, true, targetLanguageId);
+        var defaultLanguage = languages.First(language => language.IsDefault);
+        var structure = await GetById(id, true, defaultLanguage.Id);
+
+        if (source == null || target == null || structure == null)
+        {
+            throw new ValidationException("The requested page could not be found.");
+        }
+
+        return new PageTranslationExchangeModel
+        {
+            PageId = source.Id,
+            SiteId = source.SiteId,
+            SourceLanguage = MapExchangeLanguage(languages.Single(language => language.Id == sourceLanguageId)),
+            TargetLanguage = MapExchangeLanguage(languages.Single(language => language.Id == targetLanguageId)),
+            ExportedAt = DateTime.UtcNow,
+            StructureHash = GetTranslationStructureHash(structure),
+            Units = CreateTranslationUnits(source, target)
+        };
+    }
+
+    /// <summary>
+    /// Imports supplied target-language text values into an existing page translation.
+    /// </summary>
+    public async Task<PageTranslationExchangeImportResult> ImportTranslations(Guid id, PageTranslationExchangeModel document)
+    {
+        if (document == null || document.FormatVersion != "1.0")
+        {
+            throw new ValidationException("The translation file format is not supported.");
+        }
+        if (document.PageId != id)
+        {
+            throw new ValidationException("The translation file belongs to a different page.");
+        }
+        if (document.SourceLanguage == null || document.TargetLanguage == null)
+        {
+            throw new ValidationException("The translation file must specify source and target languages.");
+        }
+
+        var languages = (await _api.Languages.GetAllAsync()).ToList();
+        ValidateTranslationLanguages(languages, document.SourceLanguage.Id, document.TargetLanguage.Id);
+
+        var defaultLanguage = languages.First(language => language.IsDefault);
+        var structure = await GetById(id, true, defaultLanguage.Id);
+        var target = await GetById(id, true, document.TargetLanguage.Id);
+
+        if (structure == null || target == null || structure.SiteId != document.SiteId)
+        {
+            throw new ValidationException("The translation file does not match the current page.");
+        }
+        if (!string.Equals(document.StructureHash, GetTranslationStructureHash(structure), StringComparison.Ordinal))
+        {
+            throw new ValidationException("The page structure has changed since this translation file was exported. Export a new file before importing.");
+        }
+        if (document.Units == null || document.Units.Any(unit => unit == null || string.IsNullOrWhiteSpace(unit.Key)) ||
+            document.Units.GroupBy(unit => unit.Key).Any(group => group.Count() > 1))
+        {
+            throw new ValidationException("The translation file contains duplicate or invalid text units.");
+        }
+
+        var writable = GetWritableTranslationUnits(target);
+        var result = new PageTranslationExchangeImportResult
+        {
+            TargetLanguageId = document.TargetLanguage.Id
+        };
+
+        foreach (var unit in document.Units)
+        {
+            if (!writable.TryGetValue(unit.Key, out var destination) ||
+                !string.Equals(unit.FieldType, destination.FieldType, StringComparison.Ordinal))
+            {
+                throw new ValidationException($"The translation unit '{unit.Key}' does not match the current page structure.");
+            }
+
+            if (unit.Target != null)
+            {
+                destination.SetValue(unit.Target);
+                result.Replaced++;
+                if (unit.Target.Length == 0)
+                {
+                    result.Cleared++;
+                }
+            }
+        }
+
+        await Save(target, true);
         return result;
     }
 
@@ -821,6 +921,251 @@ public class PageService
         }
 
         return clone;
+    }
+
+    private static void ValidateTranslationLanguages(IList<Language> languages, Guid sourceLanguageId, Guid targetLanguageId)
+    {
+        if (sourceLanguageId == targetLanguageId)
+        {
+            throw new ValidationException("The source and target language must be different.");
+        }
+        if (!languages.Any(language => language.Id == sourceLanguageId) ||
+            !languages.Any(language => language.Id == targetLanguageId))
+        {
+            throw new ValidationException("The translation file references a language that is not configured for this site.");
+        }
+    }
+
+    private static PageTranslationExchangeLanguage MapExchangeLanguage(Language language)
+    {
+        return new PageTranslationExchangeLanguage
+        {
+            Id = language.Id,
+            Title = language.Title,
+            Culture = language.Culture
+        };
+    }
+
+    private static string GetTranslationStructureHash(PageEditModel model)
+    {
+        var structure = CreateTranslationUnits(model, model)
+            .Select(unit => $"{unit.Key}|{unit.FieldType}");
+        var content = Encoding.UTF8.GetBytes(string.Join("\n", structure));
+        return Convert.ToHexString(SHA256.HashData(content)).ToLowerInvariant();
+    }
+
+    private static List<PageTranslationExchangeUnit> CreateTranslationUnits(PageEditModel source, PageEditModel target)
+    {
+        var units = new List<PageTranslationExchangeUnit>();
+
+        AddMetadataUnits(source, target, units);
+
+        foreach (var sourceRegion in source.Regions)
+        {
+            var targetRegion = target.Regions.FirstOrDefault(region => region.Meta.Id == sourceRegion.Meta.Id);
+            for (var itemIndex = 0; itemIndex < sourceRegion.Items.Count; itemIndex++)
+            {
+                var sourceItem = sourceRegion.Items[itemIndex];
+                var targetItem = targetRegion?.Items.ElementAtOrDefault(itemIndex);
+
+                foreach (var sourceField in sourceItem.Fields)
+                {
+                    var targetField = targetItem?.Fields.FirstOrDefault(field => field.Meta.Id == sourceField.Meta.Id);
+                    AddTextUnit(units,
+                        $"region:{sourceRegion.Meta.Id}:{itemIndex}:{sourceField.Meta.Id}",
+                        $"{sourceRegion.Meta.Name} / {sourceField.Meta.Name}",
+                        sourceField,
+                        targetField);
+                }
+            }
+        }
+
+        foreach (var sourceBlock in source.Blocks)
+        {
+            var sourceBlockId = GetBlockId(sourceBlock);
+            var targetBlock = target.Blocks.FirstOrDefault(block => GetBlockId(block) == sourceBlockId);
+            AddBlockTextUnits(units, sourceBlock, targetBlock, null);
+        }
+        return units;
+    }
+
+    private static void AddMetadataUnits(PageEditModel source, PageEditModel target, IList<PageTranslationExchangeUnit> units)
+    {
+        AddMetadataUnit(units, "title", "Page title", source.Title, target.Title);
+        AddMetadataUnit(units, "navigationTitle", "Navigation title", source.NavigationTitle, target.NavigationTitle);
+        AddMetadataUnit(units, "slug", "Slug", source.Slug, target.Slug);
+        AddMetadataUnit(units, "metaTitle", "Meta title", source.MetaTitle, target.MetaTitle);
+        AddMetadataUnit(units, "metaKeywords", "Meta keywords", source.MetaKeywords, target.MetaKeywords);
+        AddMetadataUnit(units, "metaDescription", "Meta description", source.MetaDescription, target.MetaDescription);
+        AddMetadataUnit(units, "ogTitle", "Open Graph title", source.OgTitle, target.OgTitle);
+        AddMetadataUnit(units, "ogDescription", "Open Graph description", source.OgDescription, target.OgDescription);
+        AddMetadataUnit(units, "excerpt", "Excerpt", source.Excerpt, target.Excerpt);
+    }
+
+    private static void AddMetadataUnit(IList<PageTranslationExchangeUnit> units, string key, string context, string source, string target)
+    {
+        units.Add(new PageTranslationExchangeUnit
+        {
+            Key = $"metadata:{key}",
+            Context = context,
+            FieldType = "metadata",
+            Source = source,
+            Target = target
+        });
+    }
+
+    private static void AddBlockTextUnits(IList<PageTranslationExchangeUnit> units, BlockModel sourceBlock, BlockModel targetBlock, Guid? parentId)
+    {
+        var blockId = GetBlockId(sourceBlock);
+        var prefix = $"block:{parentId?.ToString() ?? "root"}:{blockId}";
+        var sourceFields = GetBlockFields(sourceBlock);
+        var targetFields = targetBlock == null ? null : GetBlockFields(targetBlock);
+
+        foreach (var sourceField in sourceFields)
+        {
+            var targetField = targetFields?.FirstOrDefault(field => field.Meta.Id == sourceField.Meta.Id);
+            AddTextUnit(units,
+                $"{prefix}:{sourceField.Meta.Id}",
+                $"{GetBlockContext(sourceBlock)} / {sourceField.Meta.Name}",
+                sourceField,
+                targetField);
+        }
+
+        if (sourceBlock is BlockGroupModel sourceGroup)
+        {
+            foreach (var sourceChild in sourceGroup.Items)
+            {
+                var sourceChildId = GetBlockId(sourceChild);
+                var targetChild = (targetBlock as BlockGroupModel)?.Items
+                    .FirstOrDefault(block => GetBlockId(block) == sourceChildId);
+                AddBlockTextUnits(units, sourceChild, targetChild, blockId);
+            }
+        }
+    }
+
+    private static IList<FieldModel> GetBlockFields(BlockModel block)
+    {
+        return block switch
+        {
+            BlockGroupModel group => group.Fields,
+            BlockGenericModel generic => generic.Model,
+            BlockItemModel item when item.Model != null => ContentUtils.GetBlockFields(item.Model),
+            _ => new List<FieldModel>()
+        };
+    }
+
+    private static Guid GetBlockId(BlockModel block)
+    {
+        return block switch
+        {
+            BlockGroupModel group => group.Id,
+            BlockGenericModel generic => generic.Id,
+            BlockItemModel item when item.Model != null => item.Model.Id,
+            _ => Guid.Empty
+        };
+    }
+
+    private static string GetBlockContext(BlockModel block)
+    {
+        return block switch
+        {
+            BlockGroupModel group => group.Label ?? group.Meta.Name,
+            BlockGenericModel generic => generic.Label ?? generic.Meta.Name,
+            BlockItemModel item => item.Model?.Label ?? item.Meta.Name,
+            _ => "Block"
+        };
+    }
+
+    private static void AddTextUnit(IList<PageTranslationExchangeUnit> units, string key, string context, FieldModel source, FieldModel target)
+    {
+        if (source?.Model is not SimpleField<string> sourceField)
+        {
+            return;
+        }
+
+        units.Add(new PageTranslationExchangeUnit
+        {
+            Key = key,
+            Context = context,
+            FieldType = source.Model.GetType().FullName,
+            Source = sourceField.Value,
+            Target = (target?.Model as SimpleField<string>)?.Value
+        });
+    }
+
+    private static Dictionary<string, WritableTranslationUnit> GetWritableTranslationUnits(PageEditModel target)
+    {
+        var writable = new Dictionary<string, WritableTranslationUnit>();
+
+        AddWritableMetadata(writable, "title", value => target.Title = value);
+        AddWritableMetadata(writable, "navigationTitle", value => target.NavigationTitle = value);
+        AddWritableMetadata(writable, "slug", value => target.Slug = value);
+        AddWritableMetadata(writable, "metaTitle", value => target.MetaTitle = value);
+        AddWritableMetadata(writable, "metaKeywords", value => target.MetaKeywords = value);
+        AddWritableMetadata(writable, "metaDescription", value => target.MetaDescription = value);
+        AddWritableMetadata(writable, "ogTitle", value => target.OgTitle = value);
+        AddWritableMetadata(writable, "ogDescription", value => target.OgDescription = value);
+        AddWritableMetadata(writable, "excerpt", value => target.Excerpt = value);
+
+        foreach (var region in target.Regions)
+        {
+            for (var itemIndex = 0; itemIndex < region.Items.Count; itemIndex++)
+            {
+                foreach (var field in region.Items[itemIndex].Fields)
+                {
+                    AddWritableField(writable, $"region:{region.Meta.Id}:{itemIndex}:{field.Meta.Id}", field);
+                }
+            }
+        }
+
+        foreach (var block in target.Blocks)
+        {
+            AddWritableBlockFields(writable, block, null);
+        }
+        return writable;
+    }
+
+    private static void AddWritableMetadata(IDictionary<string, WritableTranslationUnit> writable, string key, Action<string> setValue)
+    {
+        writable.Add($"metadata:{key}", new WritableTranslationUnit("metadata", setValue));
+    }
+
+    private static void AddWritableBlockFields(IDictionary<string, WritableTranslationUnit> writable, BlockModel block, Guid? parentId)
+    {
+        var blockId = GetBlockId(block);
+        var prefix = $"block:{parentId?.ToString() ?? "root"}:{blockId}";
+        foreach (var field in GetBlockFields(block))
+        {
+            AddWritableField(writable, $"{prefix}:{field.Meta.Id}", field);
+        }
+
+        if (block is BlockGroupModel group)
+        {
+            foreach (var child in group.Items)
+            {
+                AddWritableBlockFields(writable, child, blockId);
+            }
+        }
+    }
+
+    private static void AddWritableField(IDictionary<string, WritableTranslationUnit> writable, string key, FieldModel field)
+    {
+        if (field?.Model is SimpleField<string> textField)
+        {
+            writable.Add(key, new WritableTranslationUnit(field.Model.GetType().FullName, value => textField.Value = value));
+        }
+    }
+
+    private sealed class WritableTranslationUnit
+    {
+        public WritableTranslationUnit(string fieldType, Action<string> setValue)
+        {
+            FieldType = fieldType;
+            SetValue = setValue;
+        }
+
+        public string FieldType { get; }
+        public Action<string> SetValue { get; }
     }
 
     private sealed class BlockStructure
