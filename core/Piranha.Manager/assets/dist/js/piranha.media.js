@@ -201,7 +201,10 @@ piranha.media = new Vue({
             fetch(piranha.baseUrl + "manager/api/media/folder/save", {
                 method: "post",
                 headers: piranha.utils.antiForgeryHeaders(),
-                body: JSON.stringify(folder)
+                body: JSON.stringify({
+                  id: folder.id,
+                  name: DOMPurify.sanitize(folder.name, {USE_PROFILES: {html: false}} )
+                })
             })
             .then(function (response) { return response.json(); })
             .then(function (result) {
