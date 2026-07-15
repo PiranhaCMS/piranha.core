@@ -271,7 +271,7 @@ piranha.pageedit = new Vue({
                 ogImage: {
                     id: self.ogImage.id
                 },
-                excerpt: self.excerpt,
+                excerpt: DOMPurify.sanitize(self.excerpt, {USE_PROFILES: {html: true}} ),
                 isHidden: self.isHidden,
                 published: self.published,
                 publishedTime: self.publishedTime,
@@ -334,7 +334,7 @@ piranha.pageedit = new Vue({
 
                 piranha.notifications.push(result.status);
             })
-            .catch(function (error) { 
+            .catch(function (error) {
                 console.log("error:", error );
             });
         },
@@ -352,7 +352,7 @@ piranha.pageedit = new Vue({
 
                 piranha.notifications.push(result.status);
             })
-            .catch(function (error) { 
+            .catch(function (error) {
                 console.log("error:", error );
             });
         },

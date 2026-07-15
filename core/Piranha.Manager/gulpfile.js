@@ -285,7 +285,7 @@ var js = [
     {
         name: "signalr.min.js",
         items: [
-            "node_modules/@aspnet/signalr/dist/browser/signalr.js"
+            "node_modules/@microsoft/signalr/dist/browser/signalr.js"
 
         ]
     }

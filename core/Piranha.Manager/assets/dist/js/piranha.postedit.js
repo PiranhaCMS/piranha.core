@@ -230,7 +230,7 @@ piranha.postedit = new Vue({
                 ogImage: {
                     id: self.ogImage.id
                 },
-                excerpt: self.excerpt,
+                excerpt: DOMPurify.sanitize(self.excerpt, {USE_PROFILES: {html: true}} ),
                 published: self.published,
                 redirectUrl: self.redirectUrl,
                 redirectType: self.redirectType,
@@ -300,7 +300,7 @@ piranha.postedit = new Vue({
 
                 piranha.notifications.push(result.status);
             })
-            .catch(function (error) { 
+            .catch(function (error) {
                 console.log("error:", error );
             });
         },
