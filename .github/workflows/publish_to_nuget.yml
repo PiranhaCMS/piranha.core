@@ -83,8 +83,8 @@ jobs:
         --description "Piranha CMS"
         --description-url "https://github.com/piranhacms/piranha.core"
         --azure-credential-type "azure-cli"
-        --azure-key-vault-url "${{ secrets.KEY_VAULT_URL }}" # This does not need to be a secret and is just a placeholder
-        --azure-key-vault-certificate "${{ secrets.KEY_VAULT_CERTIFICATE_ID }}" # This does not need to be a secret and is just a placeholder
+        --azure-key-vault-url "${{ secrets.KEY_VAULT_URL }}"
+        --azure-key-vault-certificate "${{ secrets.KEY_VAULT_CERTIFICATE_ID }}"
         --azure-key-vault-managed-identity
 
     # Sign symbol packages
@@ -97,8 +97,8 @@ jobs:
         --description "Piranha CMS"
         --description-url "https://github.com/piranhacms/piranha.core"
         --azure-credential-type "azure-cli"
-        --azure-key-vault-url "${{ secrets.KEY_VAULT_URL }}" # This does not need to be a secret and is just a placeholder
-        --azure-key-vault-certificate "${{ secrets.KEY_VAULT_CERTIFICATE_ID }}" # This does not need to be a secret and is just a placeholder
+        --azure-key-vault-url "${{ secrets.KEY_VAULT_URL }}"
+        --azure-key-vault-certificate "${{ secrets.KEY_VAULT_CERTIFICATE_ID }}"
         --azure-key-vault-managed-identity
 
     # Push to NuGet
