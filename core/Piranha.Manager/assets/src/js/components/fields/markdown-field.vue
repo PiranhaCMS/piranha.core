@@ -15,7 +15,7 @@ export default {
     },
     methods: {
         update: function (md) {
-            this.model.value = md;
+            this.model.value = DOMPurify.sanitize(md, {USE_PROFILES: {html: true}});
 
             // Tell parent that title has been updated
             if (this.meta && this.meta.notifyChange) {
