@@ -135,7 +135,7 @@ public class UserController : ManagerController
 
             if (!string.IsNullOrWhiteSpace(model.Password) && model.Password != model.PasswordConfirm)
             {
-                return BadRequest(GetErrorMessage(string.Format("{0} {1} - {2}", _localizer.Security["The new passwords does not match."], model.Password, model.PasswordConfirm)));
+                return BadRequest(GetErrorMessage(_localizer.Security["The new passwords does not match."]));
             }
 
             if (model.User.Id == Guid.Empty && string.IsNullOrWhiteSpace(model.Password))
