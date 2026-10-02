@@ -30,20 +30,18 @@ public class UserListModel
         };
 
         var roles = db.Roles
-            .ToList();
+            .ToDictionary(r => r.Id, r => r.Name);
+
+        var userRoles = db.UserRoles
+            .ToLookup(r => r.UserId);
 
         foreach (var user in model.Users)
         {
-            var userRoles = db.UserRoles
-                .Where(r => r.UserId == user.Id)
-                .ToList();
-
-            foreach (var userRole in userRoles)
+            foreach (var userRole in userRoles[user.Id])
             {
-                var role = roles.FirstOrDefault(r => r.Id == userRole.RoleId);
-                if (role != null)
+                if (roles.TryGetValue(userRole.RoleId, out var roleName))
                 {
-                    user.Roles.Add(role.Name);
+                    user.Roles.Add(roleName);
                 }
             }
         }
