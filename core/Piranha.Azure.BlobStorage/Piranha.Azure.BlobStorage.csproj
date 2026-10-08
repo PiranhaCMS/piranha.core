@@ -4,6 +4,7 @@
     <RootNamespace>Piranha.Azure</RootNamespace>
     <NoWarn>$(NoWarn);1591</NoWarn>
     <Description>Package for storing uploaded media assets on Azure Blob Storage</Description>
+	  <TargetFramework>net10.0</TargetFramework>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(GITHUB_ACTIONS)' == 'true'">

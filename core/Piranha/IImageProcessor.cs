@@ -18,18 +18,16 @@ public interface IImageProcessor
     /// <summary>
     /// Gets an image from the provided stream and returns its size.
     /// </summary>
-    /// <param name="stream">The image data stream</param>
-    /// <param name="width">The returned width</param>
-    /// <param name="height">The returned height</param>
-    void GetSize(Stream stream, out int width, out int height);
+    /// <param name="stream"></param>
+    /// <param name="onSize">onSize(width, height)</param>
+    void GetSize(Stream stream, Action<int, int> onSize);
 
     /// <summary>
-    /// Gets an image from the provided bytes and returns its size.
+    /// 
     /// </summary>
-    /// <param name="bytes">The image data</param>
-    /// <param name="width">The returned width</param>
-    /// <param name="height">The returned height</param>
-    void GetSize(byte[] bytes, out int width, out int height);
+    /// <param name="bytes"></param>
+    /// <param name="onSize">onSize(width, height)</param>
+    void GetSize(byte[] bytes, Action<int, int> onSize);
 
     /// <summary>
     /// Gets an image from the provided stream, crops it according

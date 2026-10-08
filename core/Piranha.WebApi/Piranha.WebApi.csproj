@@ -3,6 +3,7 @@
   <PropertyGroup>
     <NoWarn>$(NoWarn);1591</NoWarn>
     <Description>Web Api module for Piranha CMS</Description>
+    	  <TargetFramework>net10.0</TargetFramework>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(GITHUB_ACTIONS)' == 'true'">

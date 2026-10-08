@@ -32,7 +32,7 @@ public class DbFactory : IDesignTimeDbContextFactory<MySqlDb>
         var connectionString = "server=localhost;port=3306;database=piranha;uid=root;password=password";
 
         var builder = new DbContextOptionsBuilder<MySqlDb>();
-        builder.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString));
+        builder.UseMySQL(connectionString);
         return new MySqlDb(builder.Options);
     }
 }

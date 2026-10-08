@@ -16,13 +16,13 @@
 
 ## About
 
-Piranha CMS is a decoupled, cross-platform CMS built for `.NET8` and `Entity Framework Core`. It has a modular and extensible architecture and supports a multitude of hosting and deployment scenarios.
+Piranha CMS is a decoupled, cross-platform CMS built for `.NET10` and `Entity Framework Core`. It has a modular and extensible architecture and supports a multitude of hosting and deployment scenarios.
 
 ## Getting started
 
 ### Prerequisites
 
-* [.NET 8.0 SDK](https://dotnet.microsoft.com/en-us/download)
+* [.NET 10.0 SDK](https://dotnet.microsoft.com/en-us/download)
 * An IDE or Editor of your choice
 
 ### Create a new project from our templates

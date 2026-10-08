@@ -44,14 +44,11 @@ public class FileStorageSession : IStorageSession
     public async Task<bool> GetAsync(Media media, string filename, Stream stream)
     {
         var path = _storage.GetResourceName(media, filename);
-
         if (File.Exists(_basePath + path))
         {
-            using (var file = File.OpenRead(_basePath + path))
-            {
-                await file.CopyToAsync(stream).ConfigureAwait(false);
-                return true;
-            }
+            using var file = File.OpenRead(_basePath + path);
+            await file.CopyToAsync(stream).ConfigureAwait(false);
+            return true;
         }
         return false;
     }

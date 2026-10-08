@@ -1,0 +1,97 @@
+@{
+    Layout = null;
+}
+<!doctype html>
+<html lang="en">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+    <!-- Setup CSS -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400&family=Raleway:wght@700&display=swap">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Montserrat:300,400">
+
+    <style>
+        body {
+            background: #f4f4f4;
+            font-family: Lato,sans-serif;
+        }
+
+        h2 {
+            font-family: Raleway,sans-serif;
+            margin: 2rem 0;
+        }
+
+        code {
+            font-size: 82.5%;
+            margin: 0 .25rem;
+        }
+
+        a {
+            color: #06a3d8;
+        }
+        a:hover {
+            color: #0693c8;
+        }
+
+        img {
+            width: 25%;
+        }
+
+        .card {
+            border: 0 none;
+            margin-top: 5rem;
+            box-shadow: 0 .5rem 1rem rgba(0,0,0,.05);
+        }
+
+        .btn-primary {
+            background-color: #06a3d8;
+            border-color: #06a3d8;
+        }
+        .btn-primary:hover {
+            background-color: #0693c8;
+            border-color: #0693c8;
+        }
+    </style>
+
+    <title>Welcome to Piranha CMS</title>
+</head>
+<body>
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-7 col-sm-12 text-center">
+                <div class="card p-md-5">
+                    <div class="card-body">
+                        <p>
+                            <img src="https://piranhacms.org/assets/twitter-shield.png">
+                        </p>
+                        <h2>Welcome to Piranha CMS</h2>
+                        <p class="lead">
+                            Thanks for using Piranha CMS and choosing to start your project
+                            with our <strong>Web Template</strong> for Razor Pages.
+                        </p>
+                        <p>
+                            You can log into the admin panel at <code><a href="~/manager">~/manager</a></code>
+                            with the default credentials <code>admin/password</code>.
+                        </p>
+                        <p>
+                            If you want we can seed some data for you which will give you an
+                            example of how to create and structure with Piranha CMS. After you're
+                            done with the setup you can delete the <code>SetupController</code>
+                            and the <code>~/seed</code> directory from your project.
+                        </p>
+                        <p class="mt-5">
+                            <a href="@Url.Action("Seed")" class="btn btn-primary btn-sm">Seed some data</a>
+                            <a href="~/manager/login" class="btn btn-primary btn-sm">Take me to the manager</a>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

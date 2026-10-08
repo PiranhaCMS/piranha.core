@@ -21,7 +21,7 @@ builder.AddPiranha(options =>
     options.UseManager();
 
     options.UseFileStorage(naming: Piranha.Local.FileStorageNaming.UniqueFolderNames);
-    options.UseImageSharp();
+    options.UseSkiaSharp();
     options.UseTinyMCE();
     options.UseMemoryCache();
 
@@ -38,7 +38,6 @@ builder.AddPiranha(options =>
         o.UsePermission("WebUser", "Web User");
     });
      */
-
     /**
      * Here you can specify the login url for the front end
      * application. This does not affect the login url of

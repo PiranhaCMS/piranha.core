@@ -8,18 +8,17 @@
  *
  */
 
-using Piranha.ImageSharp;
-using SixLabors.ImageSharp.PixelFormats;
+using Piranha.SkiaSharp;
 using Xunit;
 
-namespace Piranha.Tests.ImageSharp;
+namespace Piranha.WithSkiaSharp.Tests.SkiaSharp;
 
 public class ProcessorTests
 {
     [Fact]
     public void GetSizeStream() {
         using var file = File.OpenRead("../../../Assets/HLD_Screenshot_01_mech_1080.png");
-        var processor = new ImageSharpProcessor();
+        var processor = new SkiaSharpProcessor();
 
         processor.GetSize(file, (width, height) =>
         {
@@ -34,7 +33,7 @@ public class ProcessorTests
         using var reader = new BinaryReader(file);
         var bytes = reader.ReadBytes((int)file.Length);
 
-        var processor = new ImageSharpProcessor();
+        var processor = new SkiaSharpProcessor();
 
         processor.GetSize(bytes, (width, height) =>
         {
@@ -46,7 +45,7 @@ public class ProcessorTests
     [Fact]
     public void Crop() {
         using var file = File.OpenRead("../../../Assets/HLD_Screenshot_01_mech_1080.png");
-        var processor = new ImageSharpProcessor();
+        var processor = new SkiaSharpProcessor();
 
         using var outStream = new MemoryStream();
         processor.Crop(file, outStream, 640, 480);
@@ -63,7 +62,7 @@ public class ProcessorTests
     [Fact]
     public void Scale() {
         using var file = File.OpenRead("../../../Assets/HLD_Screenshot_01_mech_1080.png");
-        var processor = new ImageSharpProcessor();
+        var processor = new SkiaSharpProcessor();
 
         using var outStream = new MemoryStream();
         processor.Scale(file, outStream, 960);
@@ -80,7 +79,7 @@ public class ProcessorTests
     [Fact]
     public void CropScale() {
         using var file = File.OpenRead("../../../Assets/HLD_Screenshot_01_mech_1080.png");
-        var processor = new ImageSharpProcessor();
+        var processor = new SkiaSharpProcessor();
 
         using var outStream = new MemoryStream();
         processor.CropScale(file, outStream, 640, 480);
