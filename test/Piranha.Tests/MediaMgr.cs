@@ -8,6 +8,8 @@
  *
  */
 
+using System.Globalization;
+using System.Threading;
 using Piranha.Runtime;
 using Xunit;
 
@@ -76,5 +78,27 @@ public class MediaMgr : BaseTests
     {
         var type = mgr.GetContentType("myaudio.wav");
         Assert.Equal("audio/wav", type);
+    }
+
+    [Fact]
+    public void GetContentTypeIsCultureInvariant()
+    {
+        var culture = Thread.CurrentThread.CurrentCulture;
+
+        try
+        {
+            // In Turkish culture "I".ToLower() is a dotless i.
+            Thread.CurrentThread.CurrentCulture = new CultureInfo("tr-TR");
+
+            mgr.Images.Add(".GIF", "image/gif");
+
+            Assert.Equal("image/gif", mgr.GetContentType("myimage.gif"));
+            Assert.Equal("image/gif", mgr.GetContentType("MYIMAGE.GIF"));
+            Assert.Equal(Models.MediaType.Image, mgr.GetMediaType("MYIMAGE.GIF"));
+        }
+        finally
+        {
+            Thread.CurrentThread.CurrentCulture = culture;
+        }
     }
 }

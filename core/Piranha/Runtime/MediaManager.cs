@@ -61,7 +61,7 @@ public class MediaManager
         {
             Add(new MediaTypeItem
             {
-                Extension = extension.ToLower(),
+                Extension = extension.ToLowerInvariant(),
                 ContentType = contentType,
                 AllowProcessing = allowProcessing.HasValue ? allowProcessing.Value : _allowProcessing
             });
@@ -167,7 +167,7 @@ public class MediaManager
     /// <returns>The media type</returns>
     public string GetContentType(string filename)
     {
-        var extension = Path.GetExtension(filename).ToLower();
+        var extension = Path.GetExtension(filename).ToLowerInvariant();
         MediaTypeItem item = null;
 
         if ((item = Documents.SingleOrDefault(t => t.Extension == extension)) != null)
@@ -202,7 +202,7 @@ public class MediaManager
     /// <returns>The media type item</returns>
     public MediaTypeItem GetItem(string filename)
     {
-        var extension = Path.GetExtension(filename).ToLower();
+        var extension = Path.GetExtension(filename).ToLowerInvariant();
         MediaTypeItem item = null;
 
         if ((item = Documents.SingleOrDefault(t => t.Extension == extension)) != null)
